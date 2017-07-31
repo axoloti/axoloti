@@ -138,16 +138,23 @@ alloc_ok:
 	iif.rem = rem;
 	for (ep_iter_init(&iep, &iif); iep.valid; ep_iter_next(&iep)) {
 		usbh_endpoint_descriptor_t * epdesc = (usbh_endpoint_descriptor_t *)ep_get(&iep);
-		if ((epdesc->bEndpointAddress & 0x80) && (epdesc->bmAttributes == USBH_EPTYPE_BULK)) {
-			uinfof("BULK IN endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+		if ((epdesc->bEndpointAddress & 0x80) &&
+				((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
+						(epdesc->bmAttributes == USBH_EPTYPE_INT))
+						) {
+			// some devices use BULK (UC33), some devices use INT endpoints (Launchpad Mini)
+			uinfof("IN endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
 			// Pretend it is an INT IN endpoint to avoid a NAK flood
 			epdesc->bmAttributes |= USBH_EPTYPE_INT;
 			usbhEPObjectInit(&midip->epin, dev, epdesc);
 			midip->epin.type = USBH_EPTYPE_INT;
 			usbhEPSetName(&midip->epin, "MIDI[IIN ]");
-		} else if (((epdesc->bEndpointAddress & 0x80) == 0)
-				&& (epdesc->bmAttributes == USBH_EPTYPE_BULK)) {
-			uinfof("BULK OUT endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+		} else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
+			((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
+					(epdesc->bmAttributes == USBH_EPTYPE_INT))
+					) {
+			// again, some devices use BULK, some devices use INT endpoints
+			uinfof("OUT endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
 			usbhEPObjectInit(&midip->epout, dev, epdesc);
 			usbhEPSetName(&midip->epout, "MIDI[IOUT]");
 		} else {
