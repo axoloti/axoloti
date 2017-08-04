@@ -258,6 +258,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/ui_nodes/short_value.c \
        ${FIRMWARE}/menu_content/adc_menu.c \
        ${FIRMWARE}/menu_content/food_menu.c \
+       ${FIRMWARE}/menu_content/loadpatch_menu.c \
        ${FIRMWARE}/menu_content/main_menu.c \
        ${FIRMWARE}/menu_content/midi_controller.c \
        ${FIRMWARE}/menu_content/sdcard_menu.c \

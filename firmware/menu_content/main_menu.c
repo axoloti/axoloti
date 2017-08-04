@@ -18,6 +18,7 @@
 
 #include "ui.h"
 #include "main_menu.h"
+#include "loadpatch_menu.h"
 #include "adc_menu.h"
 #include "food_menu.h"
 #include "midi_controller.h"
@@ -29,6 +30,7 @@
 // ------ Main menu stuff ------
 
 ui_node_t MainMenu[MainMenu_length] = {
+  { &nodeFunctionTable_loadpatch, "Load patch" },
   { &nodeFunctionTable_object_list, "Objects", .objList = {0,0}}, // at MAIN_MENU_INDEX_PATCH
   { &nodeFunctionTable_param_list, "Params", .paramList = {0,0}}, // at MAIN_MENU_INDEX_PARAMS
   { &nodeFunctionTable_node_list, "SDCard", .nodeList = {SdcMenu, SdcMenu_length}},

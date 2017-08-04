@@ -476,7 +476,53 @@ bool evtIsDown(input_event evt) {
 	return 0;
 }
 
-void processUIEvent(input_event evt) {
+static input_event btn_event = {.word = 0};
+static input_event enc_event[4] = {
+		{.fields={.quadrant=quadrant_topleft, .modifiers = 0, .value = 0, .button = btn_encoder}},
+		{.fields={.quadrant=quadrant_topright, .modifiers = 0, .value = 0, .button = btn_encoder}},
+		{.fields={.quadrant=quadrant_bottomleft, .modifiers = 0, .value = 0, .button = btn_encoder}},
+		{.fields={.quadrant=quadrant_bottomright, .modifiers = 0, .value = 0, .button = btn_encoder}}
+};
+
+void queueInputEventI(input_event evt) {
+	if ((evt.fields.button == btn_encoder) &&
+			(evt.fields.quadrant > 0) &&
+			(evt.fields.quadrant < 4)
+			) {
+		input_event *e = &enc_event[evt.fields.quadrant-1];
+		e->fields.value += evt.fields.value;
+		e->fields.modifiers += evt.fields.modifiers;
+	} else if (evt.fields.value == 0) {
+		// button release event takes priority
+		btn_event.word = evt.word;
+	} else if (evt.word) {
+		btn_event.word = evt.word;
+	} else {
+		// drop event
+	}
+}
+
+input_event getEvent(void) {
+	if (btn_event.word) {
+		input_event e;
+		e.word = btn_event.word;
+		btn_event.word = 0;
+		return e;
+	}
+	int i;
+	for (i=0;i<4;i++){
+		if (enc_event[i].fields.value) {
+			input_event e;
+			e.word = enc_event[i].word;
+			enc_event[i].fields.value = 0;
+			return e;
+		}
+	}
+	input_event e = {.word=0};
+	return e;
+}
+
+static void processUIEvent(input_event evt) {
 	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
 	if (head_node->functions && head_node->functions->handle_evt) {
 		eventmask_t resp_evt;
@@ -490,27 +536,20 @@ void processUIEvent(input_event evt) {
 		chEvtSignal(thd_ui2, nav_Back());
 }
 
-void processUIEventI(input_event evt) {
-	const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
-	if (head_node->functions && head_node->functions->handle_evt) {
-		eventmask_t resp_evt;
-		resp_evt = head_node->functions->handle_evt(head_node, evt);
-		if (resp_evt) {
-			chEvtSignalI(thd_ui2, resp_evt);
-		}
+void pollProcessUIEvent(void) {
+	input_event e = getEvent();
+	while (e.word) {
+		processUIEvent(e);
+		e = getEvent();
 	}
-	// ALWAYS handle back
-	if ((evt.fields.button == btn_X) && (evt.fields.quadrant == quadrant_main) && (evt.fields.value))
-		chEvtSignalI(thd_ui2, nav_Back());
 }
 
-static WORKING_AREA(waThreadUI2, 512);
+static WORKING_AREA(waThreadUI2, 1024);
 static THD_FUNCTION(ThreadUI2, arg) {
 	(void) (arg);
 	chRegSetThreadName("ui2");
 	while (1) {
 		eventmask_t evt = chEvtWaitOneTimeout(0xFFFFFFFF, MS2ST(16)); // ~ 60Hz refresh rate
-
 		const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
 		if (evt == lcd_dirty_flag_clearscreen) {
 			LCD_clear();

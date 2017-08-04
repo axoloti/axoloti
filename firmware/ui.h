@@ -188,7 +188,7 @@ extern int menu_stack_position;
 #define lcd_dirty_flag_usr5 (1<<9)
 #define lcd_dirty_flag_usr6 (1<<10)
 #define lcd_dirty_flag_usr7 (1<<11)
-
+#define lcd_dirty_flag_input (1<<30)
 
 extern uint32_t list_nav_down(const ui_node_t *node, int maxposition);
 extern uint32_t list_nav_up(const ui_node_t *node);
@@ -197,6 +197,5 @@ extern void update_list_nav(int current_menu_length);
 extern ui_node_t ObjMenu;
 extern ui_node_t ParamMenu;
 
-extern void processUIEvent(input_event evt);
 
 #endif

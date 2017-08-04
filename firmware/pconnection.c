@@ -77,6 +77,17 @@ static uint8_t bulk_rxbuf[64];
 
 #define BulkUsbTransmit(data,size) usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, size);
 
+msg_t BulkUsbTransmitPacket(const uint8_t * data, size_t size) {
+	msg_t res;
+	res = usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, size);
+	if (res != MSG_OK) return res;
+	if ((size & 0x3F) == 0) {
+		// append zero-length packet
+		res = usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, 0);
+	}
+	return res;
+}
+
 uint32_t offset;
 uint32_t value;
 
@@ -96,6 +107,7 @@ const uint32_t tx_hdr_log = 0x546F7841;           // "AxoT"
 const uint32_t tx_hdr_memrd32 = 0x796f7841;       // "Axoy"
 const uint32_t tx_hdr_memrdx = 0x726f7841;        // "Axor"
 const uint32_t tx_hdr_paramchange = 0x516F7841;   // "AxoQ"
+const uint32_t tx_hdr_fileinfo = 0x666F7841;      // "Axof"
 
 msg_t bulk_tx_ack(void) {
 	int ack[7];
@@ -167,32 +179,18 @@ msg_t bulk_tx_memrdx(void) {
     pckt.size = value;
     msg_t m = BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
     if (m!=MSG_OK) return m;
-    m = BulkUsbTransmit((const unsigned char* )(offset), value);
-    if (m!=MSG_OK) return m;
-	if ((value & 0x3F) == 0) {
-		// payload multiple of 64, transmit zero length packet to mark end
-		m = BulkUsbTransmit((const unsigned char* )(offset), 0);
-	}
+    m = BulkUsbTransmitPacket((const unsigned char* )(offset), value);
     return m;
 }
 
 msg_t bulk_tx_fileinfo(void) {
     char *msg = &((char*)fbuff)[0];
-    msg[0] = 'A';
-    msg[1] = 'x';
-    msg[2] = 'o';
-    msg[3] = 'f';
+    *((int32_t*)fbuff) = tx_hdr_fileinfo;
     *(int32_t *)(&msg[4]) = fno.fsize;
     *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
     strcpy(&msg[12], &FileName[6]);
     int l = strlen(&msg[12]) + 13;
-    msg_t m = BulkUsbTransmit((const unsigned char* )msg, l);
-    if (m!=MSG_OK) return m;
-	if ((value & 0x3F) == 0) {
-		// payload multiple of 64, transmit zero length packet to mark end
-		m = BulkUsbTransmit((const unsigned char* )(offset), 0);
-	}
-	return m;
+    return BulkUsbTransmitPacket((const unsigned char* )msg, l);
 }
 
 static FRESULT scan_files(char *path) {
@@ -235,10 +233,8 @@ static FRESULT scan_files(char *path) {
         int l = strlen(&msg[12]);
         msg[12+l] = '/';
         msg[13+l] = 0;
-        BulkUsbTransmit((const unsigned char* )msg, l+14);
-#if 0        // do not travel into subdirectories
+        BulkUsbTransmitPacket((const unsigned char* )msg, l+14);
         res = scan_files(path);
-#endif
         path[i] = 0;
         if (res != FR_OK) break;
       } else {
@@ -252,7 +248,7 @@ static FRESULT scan_files(char *path) {
         msg[12+i-1] = '/';
         strcpy(&msg[12+i], fn);
         int l = strlen(&msg[12]);
-        BulkUsbTransmit((const unsigned char* )msg, l+13);
+        BulkUsbTransmitPacket((const unsigned char* )msg, l+13);
       }
     }
   } else {
@@ -386,7 +382,6 @@ msg_t bulk_tx_logmessage(void) {
   size_t s;
   int cont = 1;
   int h = tx_hdr_log; // "AxoT"
-  error = BulkUsbTransmit((const unsigned char* )&h, 4);
   while(cont) {
 	  chSysLock();
 	  uint8_t *buf = obqGetFullBufferI(&logstream.obqueue,
@@ -395,9 +390,8 @@ msg_t bulk_tx_logmessage(void) {
 	  chSysUnlock();
 
 	  if (buf) {
-		  error = BulkUsbTransmit(buf, s);
-		  // check if null-terminated
-		  if (s && !buf[s-1]) cont = 0;
+		  error = BulkUsbTransmit((const unsigned char* )&h, 4);
+		  error = BulkUsbTransmitPacket(buf, s);
 		  chSysLock();
 		  obqReleaseEmptyBufferI(&logstream.obqueue);
 		  chSchRescheduleS();
@@ -860,7 +854,7 @@ static THD_FUNCTION(BulkReader, arg) {
       } else if (header == rcv_hdr_virtual_input_event) {
     	  // FIXME
     	  rcv_pckt_virtual_input_event_t *p = (rcv_pckt_virtual_input_event_t *)bulk_rxbuf;
-    	  processUIEvent(p->input_event);
+    	  //queueInputEvent(p->input_event);
       } else {
     	  // unidentified header!
     	  int i=100;
