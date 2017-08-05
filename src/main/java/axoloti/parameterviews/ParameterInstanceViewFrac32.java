@@ -81,6 +81,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_VALUE)) {
             Value v = (Value) evt.getNewValue();
             ctrl.setValue(v.getDouble());
+            UpdateUnit();
         }
     }    
 }
