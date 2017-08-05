@@ -1398,7 +1398,7 @@ public class USBBulkConnection_v2 extends IConnection {
                     }
                     System.out.println(">");
                 }
-                System.out.println("rx memrd recv'd sz=" + size);
+                //System.out.println("rx memrd recv'd sz=" + size);
                 byte memr[] = new byte[memReadLength];
                 rbuf.get(memr,0,memReadLength);
                 synchronized (readsync) {
