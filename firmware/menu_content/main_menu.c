@@ -22,6 +22,7 @@
 #include "adc_menu.h"
 #include "food_menu.h"
 #include "midi_controller.h"
+#include "midi_monitor.h"
 #include "sdcard_menu.h"
 #include "test_menu.h"
 
@@ -36,7 +37,8 @@ ui_node_t MainMenu[MainMenu_length] = {
   { &nodeFunctionTable_node_list, "SDCard", .nodeList = {SdcMenu, SdcMenu_length}},
   { &nodeFunctionTable_node_list, "ADCs", .nodeList = {ADCMenu, ADCMenu_length}},
   { &nodeFunctionTable_integer_value, "dsp%", .intValue = {&dspLoadPct, 0, 100}},
-  { &nodeFunctionTable_midicc, "MIDI" },
+  { &nodeFunctionTable_midicc, "MIDI controller" },
+  { &nodeFunctionTable_midimon, "MIDI monitor" },
   { &nodeFunctionTable_test, "Test" },
   { &nodeFunctionTable_node_list, "Food", .nodeList = {FoodMenu, FoodMenu_length}}
 };
