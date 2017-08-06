@@ -341,6 +341,7 @@ static THD_FUNCTION(ThreadDSP, arg) {
       codec_clearbuffer();
       StartPatch1();
     }
+    pollProcessUIEvent();
 #ifdef DEBUG_INT_ON_GPIO
 	palClearPad(GPIOA, 2);
 #endif

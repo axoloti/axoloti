@@ -19,10 +19,10 @@
 #ifndef UI_MENU_CONTENT_H
 #define UI_MENU_CONTENT_H
 
-#define MAIN_MENU_INDEX_PATCH 0
-#define MAIN_MENU_INDEX_PARAMS 1
+#define MAIN_MENU_INDEX_PATCH 1
+#define MAIN_MENU_INDEX_PARAMS 2
 
-#define MainMenu_length 8
+#define MainMenu_length 10
 extern ui_node_t MainMenu[MainMenu_length];
 
 void ui_deinit_patch(void);

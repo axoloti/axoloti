@@ -647,11 +647,13 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 IAxoObjectInstance o = i.getObjectInstance();
                 assert(o.getInletInstances().contains(i));
                 assert(getModel().getObjectInstances().contains(o));
+                assert(getNetFromInlet(i).getModel() == n);
             }
             for (OutletInstance i : n.getSources()) {
                 IAxoObjectInstance o = i.getObjectInstance();
                 assert(o.getOutletInstances().contains(i));
                 assert(getModel().getObjectInstances().contains(o));
+                assert(getNetFromOutlet(i).getModel() == n);
             }
         }
         for (IAxoObjectInstance o: getModel().getObjectInstances()){
@@ -818,7 +820,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
             return n;
         } else if (n1 == n2) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can''t connect: already connected");
             return null;
         } else if ((n1 != null) && (n2 == null)) {
             if (n1.getModel().getSources().length == 0) {
@@ -870,7 +872,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
             return n;
         } else if (n1 == n2) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: already connected");
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can''t connect: already connected");
         } else if ((n1 != null) && (n2 == null)) {
             n1.connectInlet(ol);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");

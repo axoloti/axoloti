@@ -109,6 +109,10 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void disconnect() {
         disp_addr = 0;
+        ClearSync();
+        ClearReadSync();
+        memReadHandler = null;
+        GoIdleState();
         if (connected) {
             disconnectRequested = true;
             connected = false;
@@ -644,7 +648,7 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void TransmitPing() {
         writeBytes(pingPckt);
-        if (disp_addr != 0)
+        if ((disp_addr != 0) && (disp_length!=0))
             TransmitMemoryRead(disp_addr, disp_length*4, new MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem) {
@@ -867,6 +871,10 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void TransmitMemoryRead(int addr, int length) {
+        if (length == 0) {
+            System.out.println("memrd size 0?");
+        }
+        memReadHandler = null;
         while (readsync.Pending) {
             try {
                 Thread.sleep(10);
@@ -896,6 +904,9 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void TransmitMemoryRead(int addr, int length, MemReadHandler handler) {
+        if (length == 0) {
+            System.out.println("memrd size 0?");
+        }
         while (readsync.Pending) {
             try {
                 Thread.sleep(10);
@@ -965,6 +976,7 @@ public class USBBulkConnection_v2 extends IConnection {
                                 processPacket(packetbuffer, packetbuffer.remaining());
                                 packetbuffer.rewind();
                                 packetbuffer.limit(0);
+                                GoIdleState();
                             }
                             break;
                             default: // non-zero length, not full, recvbuffer is a complete packet
@@ -972,20 +984,22 @@ public class USBBulkConnection_v2 extends IConnection {
                         }   break;
                     case LibUsb.ERROR_TIMEOUT:
                         if (state != ReceiverState.header) {
-                            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "timeout: " + state);
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "timeout: " + state);
                         }   break;
                     default:
                         String err = LibUsb.errorName(result);
-                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive error: " + err);
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "receive error: " + err);
                         packetbuffer.rewind();
                         packetbuffer.limit(0);
                         GoIdleState();
+                        disconnect();
                         break;
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
             MainFrame.mainframe.qcmdprocessor.Abort();
             MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
+            disconnect();
         }
     }
 
@@ -1232,8 +1246,9 @@ public class USBBulkConnection_v2 extends IConnection {
     final int tx_hdr_memrdx = 0x726f7841;       // "Axor"
     final int rx_hdr_displaypckt = 0x446F7841;  // "AxoD"
     final int rx_hdr_paramchange = 0x516F7841;  // "AxoQ" 
+    final int rx_hdr_fileinfo = 0x666F7841;    // "Axof" 
 
-    final boolean log_rx_diagnostics = true;
+    final boolean log_rx_diagnostics = false;
 
     void processPacket(ByteBuffer rbuf, int size) {
         if (size == 0) {
@@ -1247,6 +1262,9 @@ public class USBBulkConnection_v2 extends IConnection {
                     int header = rbuf.getInt();
                     switch (header) {
                         case tx_hdr_acknowledge: {
+                            if (false && log_rx_diagnostics) {
+                                System.out.println("rx hdr ack");
+                            }
                             int i0 = rbuf.getInt();
                             int i1 = rbuf.getInt();
                             int i2 = rbuf.getInt();
@@ -1258,6 +1276,9 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_memrd32: {
+                            if (true && log_rx_diagnostics) {
+                                System.out.println("rx hdr memrd32");
+                            }
                             memReadAddr = rbuf.getInt();
                             memReadValue = rbuf.getInt();
                             synchronized (readsync) {
@@ -1269,6 +1290,9 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_fwid: {
+                            if (true && log_rx_diagnostics) {
+                                System.out.println("rx hdr fwid");
+                            }
                             fwversion[0] = rbuf.get();
                             fwversion[1] = rbuf.get();
                             fwversion[2] = rbuf.get();
@@ -1291,6 +1315,9 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_log: {
+                            if (true && log_rx_diagnostics) {
+                                System.out.println("rx hdr log");
+                            }
                             if (size == 4) {
                                 state = ReceiverState.textPckt;
                                 break;
@@ -1310,7 +1337,7 @@ public class USBBulkConnection_v2 extends IConnection {
                         case tx_hdr_memrdx:
                             memReadAddr = rbuf.getInt();
                             memReadLength = rbuf.getInt();
-                            if (false && log_rx_diagnostics) {
+                            if (true && log_rx_diagnostics) {
                                 System.out.print("rx memrd addr=" + String.format("0x%08X", memReadAddr) + " le=" + memReadLength + " [");
                                 for (int i = 12; i < size; i++) {
                                     // this would be unexpected extra data...
@@ -1334,6 +1361,18 @@ public class USBBulkConnection_v2 extends IConnection {
                             RPacketParamChange(index, value, patchID);
                         }
                             break;
+                        case rx_hdr_fileinfo : {
+                            int sz = rbuf.getInt();
+                            int timestamp = rbuf.getInt();
+                            CharBuffer cb = Charset.forName("ISO-8859-1").decode(rbuf);
+                            String fname = cb.toString();
+                            // strip trailing null
+                            if (fname.charAt(fname.length() - 1) == (char) 0) {
+                                fname = fname.substring(0, fname.length() - 1);
+                            }
+                            SDCardInfo.getInstance().AddFile(fname, sz, timestamp);                            
+                        }
+                            break;
                         default:
                             System.out.println(String.format("lost header %8x", header));
                     }
@@ -1349,14 +1388,16 @@ public class USBBulkConnection_v2 extends IConnection {
                         Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                         GoIdleState();
                     } else {
-                        textRcvBuffer.append((char)b);                        
+                        if (textRcvBuffer.position() < textRcvBuffer.capacity()) {
+                            textRcvBuffer.append((char)b);                        
+                        }
                     }
                 }
                 GoIdleState();
             } break;
             case memread: {                
                 if (memReadLength < size) {
-                    System.out.print("memread barf:<");
+                    System.out.print("memread barf:" + memReadLength + ":" + size + "<");
                     rbuf.position(memReadLength);
                     while(rbuf.hasRemaining()) {
                         System.out.print("|"+(char)rbuf.get());
