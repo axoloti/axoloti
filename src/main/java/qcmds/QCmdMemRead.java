@@ -52,10 +52,14 @@ public class QCmdMemRead implements QCmdSerialTask {
     @Override
     public QCmd Do(IConnection connection) {
         synchronized (sync) {
-            connection.ClearReadSync();
-            connection.TransmitMemoryRead(addr, length, doneHandler);
-            connection.WaitReadSync();
-            result = connection.getMemReadBuffer();
+            if (length!=0) {
+                connection.ClearReadSync();
+                connection.TransmitMemoryRead(addr, length, doneHandler);
+                connection.WaitReadSync();
+                result = connection.getMemReadBuffer();
+            } else {
+                result = ByteBuffer.allocate(0);
+            }
             sync.ready = true;
             sync.notifyAll();
         }

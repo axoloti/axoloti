@@ -648,7 +648,7 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void TransmitPing() {
         writeBytes(pingPckt);
-        if (disp_addr != 0)
+        if ((disp_addr != 0) && (disp_length!=0))
             TransmitMemoryRead(disp_addr, disp_length*4, new MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem) {
@@ -871,6 +871,9 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void TransmitMemoryRead(int addr, int length) {
+        if (length == 0) {
+            System.out.println("memrd size 0?");
+        }
         memReadHandler = null;
         while (readsync.Pending) {
             try {
@@ -901,6 +904,9 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void TransmitMemoryRead(int addr, int length, MemReadHandler handler) {
+        if (length == 0) {
+            System.out.println("memrd size 0?");
+        }
         while (readsync.Pending) {
             try {
                 Thread.sleep(10);
@@ -1391,7 +1397,7 @@ public class USBBulkConnection_v2 extends IConnection {
             } break;
             case memread: {                
                 if (memReadLength < size) {
-                    System.out.print("memread barf:<");
+                    System.out.print("memread barf:" + memReadLength + ":" + size + "<");
                     rbuf.position(memReadLength);
                     while(rbuf.hasRemaining()) {
                         System.out.print("|"+(char)rbuf.get());
