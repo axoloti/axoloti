@@ -411,7 +411,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 + "* modulations are broken\n"
                 + "* prevent object to be moved to negative coordinates\n"
                 + "* zombie objects broken\n"
-                + "* sdfiles/modules are broken\n"
+                + "* modules are broken\n"
                 + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n");
     }
 

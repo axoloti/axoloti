@@ -238,7 +238,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     }
 
     @Override
-    public ArrayList<SDFileReference> GetDependendSDFiles() {
+    public ArrayList<SDFileReference> getFileDepends() {
         return null;
     }
 

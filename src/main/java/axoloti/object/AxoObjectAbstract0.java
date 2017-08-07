@@ -1,5 +1,6 @@
 package axoloti.object;
 
+import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.Display;
 import axoloti.inlets.Inlet;
@@ -96,5 +97,10 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
 
     @Override
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {        
+    }
+
+    @Override
+    public ArrayList<SDFileReference> getFileDepends() {
+        return new ArrayList<>();
     }
 }

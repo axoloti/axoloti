@@ -1,6 +1,7 @@
 package axoloti.object;
 
 import axoloti.Modulator;
+import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.displays.Display;
 import axoloti.inlets.Inlet;
@@ -11,6 +12,7 @@ import axoloti.outlets.Outlet;
 import axoloti.parameters.Parameter;
 import java.awt.Rectangle;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,4 +80,6 @@ public interface IAxoObject extends IModel {
     public File GetHelpPatchFile();
 
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex);
+
+    public ArrayList<SDFileReference> getFileDepends();
 }
