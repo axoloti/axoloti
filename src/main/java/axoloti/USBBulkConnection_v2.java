@@ -1322,6 +1322,8 @@ public class USBBulkConnection_v2 extends IConnection {
                             if (true && log_rx_diagnostics) {
                                 System.out.println("rx hdr log");
                             }
+                            textRcvBuffer.rewind();
+                            textRcvBuffer.limit(textRcvBuffer.capacity());
                             if (size == 4) {
                                 state = ReceiverState.textPckt;
                                 break;
@@ -1392,7 +1394,15 @@ public class USBBulkConnection_v2 extends IConnection {
                         Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                         GoIdleState();
                     } else {
-                        if (textRcvBuffer.position() < textRcvBuffer.capacity()) {
+                        if (textRcvBuffer.position() < textRcvBuffer.limit()) {
+                            textRcvBuffer.append((char)b);                        
+                        } else {
+                            System.out.println("textRcvBuffer overflow :" + (char)b);
+                            textRcvBuffer.limit(textRcvBuffer.position());
+                            textRcvBuffer.rewind();
+                            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
+                            textRcvBuffer.limit(textRcvBuffer.capacity());
+                            textRcvBuffer.rewind();
                             textRcvBuffer.append((char)b);                        
                         }
                     }
