@@ -540,7 +540,6 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 if (o.getY() < minY) {
                     minY = o.getY();
                 }
-                add_unlinked_objectinstance(o);
                 int newposx = o.getX();
                 int newposy = o.getY();
 
@@ -554,6 +553,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                     newposy += Constants.Y_GRID;
                 }
                 o.setLocation(new Point(newposx, newposy));
+                add_unlinked_objectinstance(o);
             }
             
             // TODO: review pasting nets!
