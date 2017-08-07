@@ -212,14 +212,20 @@ static THD_FUNCTION(ThreadDSP, arg) {
         // notify usbd output
         midi_output_buffer_notify(&midi_output_usbd);
       }
-      else if (patchStatus == STOPPING){
+      else if (patchStatus == STOPPING) {
         codec_clearbuffer();
         StopPatch1();
         patchStatus = STOPPED;
         codec_clearbuffer();
       }
-      else if (patchStatus == STOPPED){
+      else if (patchStatus == STOPPED) {
         codec_clearbuffer();
+        // flush midi input
+        midi_message_t midi_in;
+        msg_t msg;
+        do {
+        	msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
+        } while (msg == MSG_OK);
       }
       adc_convert();
       DspTime = (port_rt_get_counter_value() - tStart);
@@ -379,14 +385,39 @@ void start_dsp_thread(void) {
                                    ThreadDSP, NULL);
 }
 
+midi_clock_t midi_clock = {
+	.active = 0,
+	.period = 125,
+	.counter = 1,
+	.song_position = 0, // in 24 ppq counts
+};
+
 void computebufI(int32_t *inp, int32_t *outp) {
   int i;
   for (i = 0; i < 32; i++) {
     inbuf[i] = inp[i];
   }
   outbuf = outp;
-  chSysLockFromIsr()
-  ;
+  chSysLockFromIsr();
+  // generate midi clock in codec interrupt
+  // advantage: zero quarter note jitter
+  // no clock loss when audio computation suffers a buffer underrun
+  if (midi_clock.active) {
+	  // todo: clock regeneration?
+	  midi_clock.counter-=2;
+	  if (midi_clock.counter<=0) {
+		  midi_clock.counter += midi_clock.period;
+		  midi_clock.song_position++;
+		  midi_message_t m;
+		  m.bytes.ph = 0xF;
+		  m.bytes.b0 = MIDI_TIMING_CLOCK;
+		  m.bytes.b1 = 0;
+		  m.bytes.b2 = 0;
+		  // perhaps better not to queue
+		  midi_input_buffer_put(&midi_input_buffer, m);
+		  // todo: route to selected midi output ports
+	  }
+  }
   chEvtSignalI(pThreadDSP, (eventmask_t)1);
   chSysUnlockFromIsr();
 }

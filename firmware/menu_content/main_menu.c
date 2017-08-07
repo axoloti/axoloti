@@ -21,6 +21,7 @@
 #include "loadpatch_menu.h"
 #include "adc_menu.h"
 #include "food_menu.h"
+#include "midi_clock.h"
 #include "midi_controller.h"
 #include "midi_monitor.h"
 #include "sdcard_menu.h"
@@ -37,6 +38,7 @@ ui_node_t MainMenu[MainMenu_length] = {
   { &nodeFunctionTable_node_list, "SDCard", .nodeList = {SdcMenu, SdcMenu_length}},
   { &nodeFunctionTable_node_list, "ADCs", .nodeList = {ADCMenu, ADCMenu_length}},
   { &nodeFunctionTable_integer_value, "dsp%", .intValue = {&dspLoadPct, 0, 100}},
+  { &nodeFunctionTable_midiclock, "MIDI clock" },
   { &nodeFunctionTable_midicc, "MIDI controller" },
   { &nodeFunctionTable_midimon, "MIDI monitor" },
   { &nodeFunctionTable_test, "Test" },

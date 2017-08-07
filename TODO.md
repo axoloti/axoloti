@@ -21,3 +21,4 @@ for playing.
 * remove "chibios_migration.h" dependencies in firmware (in a separate commit)
   objects/patches probably still need it.
 * USB MSC sdcard mounter: does not restart into normal mode, when ejecting disk on host.
+* TODO: midi clock: output routing, slaving, midi clock config in GUI

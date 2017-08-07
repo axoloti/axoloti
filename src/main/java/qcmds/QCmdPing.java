@@ -58,7 +58,7 @@ public class QCmdPing implements QCmdSerialTask {
                 connection.disconnect();
                 return new QCmdDisconnect();
             } else {
-                return null;
+                return new QCmdDisconnect();
             }
         }
     }
