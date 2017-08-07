@@ -42,6 +42,15 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
 
     DialComponent pbenddial;
 
+    int getCable() {
+        return ((SpinnerNumberModel) jSpinnerCable.getModel()).getNumber().intValue() - 1;
+    }
+    
+    int getChannel() {
+        return ((SpinnerNumberModel) jSpinnerChannel.getModel()).getNumber().intValue() - 1;        
+    }
+        
+    
     public KeyboardFrame() {
         initComponents();
         setJMenuBar(new StandardMenubar());
@@ -49,12 +58,12 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         piano = new PianoComponent() {
             @Override
             public void KeyDown(int key) {
-                CConnection.GetConnection().SendMidi(0x90 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, jSliderVelocity.getValue());
+                CConnection.GetConnection().SendMidi(getCable(), 0x90 + getChannel(), key & 0x7F, jSliderVelocity.getValue());
             }
 
             @Override
             public void KeyUp(int key) {
-                CConnection.GetConnection().SendMidi(0x80 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, key & 0x7F, 80);
+                CConnection.GetConnection().SendMidi(getCable(), 0x80 + getChannel(), key & 0x7F, 80);
             }
 
         };
@@ -69,7 +78,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         pbenddial.addACtrlListener(new ACtrlListener() {
             @Override
             public void ACtrlAdjusted(ACtrlEvent e) {
-                CConnection.GetConnection().SendMidi(0xE0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
+                CConnection.GetConnection().SendMidi(getCable(), 0xE0 + getChannel(), 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
             }
 
             @Override
@@ -98,8 +107,12 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
-        jSpinner1 = new javax.swing.JSpinner();
+        jSpinnerChannel = new javax.swing.JSpinner();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
+        jLabel3 = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
+        jSpinnerCable = new javax.swing.JSpinner();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
         jLabel2 = new javax.swing.JLabel();
         jSliderVelocity = new javax.swing.JSlider();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
@@ -131,12 +144,23 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         jPanel1.add(jLabel1);
         jPanel1.add(filler1);
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 16, 1));
-        jSpinner1.setMaximumSize(null);
-        jSpinner1.setMinimumSize(null);
-        jSpinner1.setPreferredSize(new java.awt.Dimension(0, 25));
-        jPanel1.add(jSpinner1);
+        jSpinnerChannel.setModel(new javax.swing.SpinnerNumberModel(1, 1, 16, 1));
+        jSpinnerChannel.setMaximumSize(null);
+        jSpinnerChannel.setMinimumSize(null);
+        jSpinnerChannel.setPreferredSize(new java.awt.Dimension(0, 25));
+        jPanel1.add(jSpinnerChannel);
         jPanel1.add(filler2);
+
+        jLabel3.setText("Cable");
+        jPanel1.add(jLabel3);
+        jPanel1.add(filler5);
+
+        jSpinnerCable.setModel(new javax.swing.SpinnerNumberModel(1, 1, 16, 1));
+        jSpinnerCable.setMaximumSize(null);
+        jSpinnerCable.setMinimumSize(null);
+        jSpinnerCable.setPreferredSize(new java.awt.Dimension(0, 25));
+        jPanel1.add(jSpinnerCable);
+        jPanel1.add(filler6);
 
         jLabel2.setText("Velocity");
         jPanel1.add(jLabel2);
@@ -165,7 +189,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        CConnection.GetConnection().SendMidi(0xB0 + ((SpinnerNumberModel) jSpinner1.getModel()).getNumber().intValue() - 1, 0x7B, 80);
+        CConnection.GetConnection().SendMidi(getCable(), 0xB0 + getChannel(), 0x7B, 80);
         piano.clear();
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 
@@ -174,13 +198,17 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButtonAllNotesOff;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelKeyb;
     private javax.swing.JSlider jSliderVelocity;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinnerCable;
+    private javax.swing.JSpinner jSpinnerChannel;
     // End of variables declaration//GEN-END:variables
 
     @Override

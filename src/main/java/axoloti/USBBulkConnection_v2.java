@@ -463,16 +463,20 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
-    public void SendMidi(int m0, int m1, int m2) {
+    public void SendMidi(int cable, int m0, int m1, int m2) {
         if (isConnected()) {
-            byte[] data = new byte[7];
+            byte[] data = new byte[8];
             data[0] = 'A';
             data[1] = 'x';
             data[2] = 'o';
             data[3] = 'M';
-            data[4] = (byte) m0;
-            data[5] = (byte) m1;
-            data[6] = (byte) m2;
+            // CIN for everyting except sysex
+            int cin  = (m0 & 0xF0 ) >> 4;
+            int ph = ((cable & 0x0F) << 4) | cin;
+            data[4] = (byte) ph;
+            data[5] = (byte) m0;
+            data[6] = (byte) m1;
+            data[7] = (byte) m2;
             writeBytes(data);
         }
     }
