@@ -438,7 +438,7 @@ public class USBBulkConnection extends IConnection {
     }
 
     @Override
-    public void SendMidi(int m0, int m1, int m2) {
+    public void SendMidi(int cable, int m0, int m1, int m2) {
         if (isConnected()) {
             byte[] data = new byte[7];
             data[0] = 'A';

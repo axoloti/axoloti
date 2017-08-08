@@ -77,6 +77,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
         try {
             PatchViewSwing p = getPatchView();
             if (p != null) {
+                if (!axoObj.isValid()) axoObj.validate();
                 return SwingUtilities.convertPoint(jack, 5, 5, getPatchView().Layers);
             } else {
                 return getJackLocInCanvasHidden();

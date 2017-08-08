@@ -671,7 +671,7 @@ public class PatchModel extends AbstractModel {
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
         for (IAxoObjectInstance o : objectinstances) {
-            ArrayList<SDFileReference> f2 = o.GetDependendSDFiles();
+            ArrayList<SDFileReference> f2 = o.getFileDepends();
             if (f2 != null) {
                 files.addAll(f2);
             }

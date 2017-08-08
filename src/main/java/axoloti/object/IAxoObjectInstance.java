@@ -54,7 +54,7 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
 
     public void setLocation(Point p);
 
-    public ArrayList<SDFileReference> GetDependendSDFiles();
+    public ArrayList<SDFileReference> getFileDepends();
 
     public boolean isTypeWasAmbiguous();
 

@@ -272,7 +272,7 @@ static void paintUpdateBend(const gfxq *gfx, void *userdata) {
    gfx->drawNumber3D(4, 1, midiccdata.bend);
 }
 static void paintUpdateChannel(const gfxq *gfx, void *userdata) {
-   gfx->drawNumber3D(4, 1, midiccdata.channel);
+   gfx->drawNumber3D(4, 1, midiccdata.channel+1);
 }
 static void paintUpdateOct(const gfxq *gfx, void *userdata) {
    gfx->drawNumber3D(4, 1, midiccdata.shift);

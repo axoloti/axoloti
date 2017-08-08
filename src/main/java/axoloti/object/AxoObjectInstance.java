@@ -36,6 +36,7 @@ import axoloti.parameters.*;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -179,10 +180,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public ArrayList<SDFileReference> GetDependendSDFiles() {
-        return new ArrayList<>();
-        /* FIXME
-        ArrayList<SDFileReference> files = getType().filedepends;
+    public ArrayList<SDFileReference> getFileDepends() {
+        ArrayList<SDFileReference> files = getType().getFileDepends();
         if (files == null) {
             files = new ArrayList<SDFileReference>();
         } else {
@@ -207,7 +206,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
         }
         return files;
-        */
     }
 
     @Persist

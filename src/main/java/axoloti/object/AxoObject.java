@@ -743,4 +743,9 @@ public class AxoObject extends AxoObjectAbstract {
         firePropertyChange(ObjectController.OBJ_MIDI_CODE, prev_val, sMidiCode);
     }
 
+    @Override
+    public ArrayList<SDFileReference> getFileDepends() {
+        return filedepends;
+    }
+
 }

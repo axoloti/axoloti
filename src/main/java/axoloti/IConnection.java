@@ -41,7 +41,7 @@ public abstract class IConnection {
     abstract public void TransmitMemoryRead(int addr, int length);
     abstract public void TransmitMemoryRead1Word(int addr);    
     abstract public void SendUpdatedPreset(byte[] b);
-    abstract public void SendMidi(int m0, int m1, int m2);
+    abstract public void SendMidi(int cable, int m0, int m1, int m2);
     abstract public boolean AppendToQueue(QCmdSerialTask cmd);
     abstract public void TransmitGetFWVersion();
     abstract public void TransmitCopyToFlash();

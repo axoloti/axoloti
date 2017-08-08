@@ -406,14 +406,12 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         }
 
         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Known issues: \n"
-                + "* repainting issues\n"
                 + "* removing objects with parameter-on-parent broken\n"
                 + "* modulations are broken\n"
                 + "* prevent object to be moved to negative coordinates\n"
                 + "* zombie objects broken\n"
-                + "* sdfiles/modules are broken\n"
-                + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n"
-                + "* paste creates overlapping objects at original location");
+                + "* modules are broken\n"
+                + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n");
     }
 
     static boolean TestDir(String var, boolean write) {

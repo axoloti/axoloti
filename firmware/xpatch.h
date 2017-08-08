@@ -4,6 +4,8 @@ extern "C" {
 #include <parameter_functions.h>
 #include <axoloti_memory.h>
 #include <glcdfont.h>
+#include <chprintf.h>
+#include <string.h>
 }
 
 #include "patch_chunks.h"

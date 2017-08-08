@@ -92,6 +92,17 @@ typedef enum {
 
 extern volatile patchStatus_t patchStatus;
 
+// midi clock
+typedef struct {
+	int active;
+	int32_t period;
+	int32_t counter;
+	int32_t song_position;
+} midi_clock_t;
+
+extern midi_clock_t midi_clock;
+
+
 extern int8_t hid_buttons[8];
 extern int8_t hid_mouse_x;
 extern int8_t hid_mouse_y;

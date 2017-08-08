@@ -164,7 +164,7 @@ public class QCmdProcessor implements Runnable {
             try {
                 Thread.sleep(10);
                 t += 10;
-                if (t > 2000) {
+                if (t > 5000) {
                     throw new Exception("Queue timeout " + currentcmd);
                 }
             } catch (InterruptedException ex) {

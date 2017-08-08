@@ -58,7 +58,7 @@ __STATIC_INLINE void spilink_master_process1(spilink_data_t *tx, spilink_data_t 
 		input_event evt;
 		evt.word = ((int32_t *)rx->control_data)[0];
 		if (evt.word)
-			processUIEventI(evt);
+			queueInputEventI(evt);
 	}
 }
 
