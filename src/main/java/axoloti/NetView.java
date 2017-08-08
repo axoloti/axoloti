@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.geom.QuadCurve2D;
@@ -35,10 +36,7 @@ public class NetView extends JComponent implements INetView {
         this.patchView = patchView;
         this.controller = controller;
 
-        setSize(1, 1);
-        setLocation(0, 0);
         setOpaque(false);
-
         PostConstructor();
         updateBounds();
     }
@@ -140,9 +138,15 @@ public class NetView extends JComponent implements INetView {
             max_y = Math.max(max_y, p1.y);
         }
         int padding = 8;
+        Rectangle pbounds = getBounds();
         setBounds(min_x - padding, min_y - padding,
                 Math.max(1, max_x - min_x + (2 * padding)),
                 (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
+        Rectangle b2 = pbounds.union(getBounds());
+        if (getParent() != null) {
+            // schedule repaint in 5ms
+            getParent().repaint(5, b2.x, b2.y, b2.width, b2.height);
+        }
     }
 
     @Override
