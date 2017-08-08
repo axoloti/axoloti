@@ -415,11 +415,6 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return getModel().presetUpdatePending;
     }
 
-    Dimension GetSize() {
-        // hmmm don't know which view...
-        return new Dimension(500, 500); // patchView.GetSize();
-    }
-
     public void ShowCompileFail() {
         // TODO: fixme
         getModel().setLocked(false);

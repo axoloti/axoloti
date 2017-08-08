@@ -396,13 +396,13 @@ public class PatchViewPiccolo extends PatchView {
 
     public void validateObjects() {
         for (IAxoObjectInstanceView objectInstanceView : objectInstanceViews) {
-            objectInstanceView.validate();
+            //objectInstanceView.validate();
         }
     }
 
     public void validateNets() {
         for (INetView netView : netViews) {
-            netView.validate();
+            //netView.validate();
         }
     }
 

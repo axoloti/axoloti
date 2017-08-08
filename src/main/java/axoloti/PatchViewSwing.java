@@ -24,6 +24,7 @@ import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -48,7 +49,6 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JLayer;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
@@ -72,11 +72,6 @@ public class PatchViewSwing extends PatchView {
     public JPanel netLayerPanel = new JPanel(null);
     public JPanel selectionRectLayerPanel = new JPanel(null);
 
-//    JLayer<JComponent> objectLayer = new JLayer<JComponent>(objectLayerPanel);
-    JLayer<JComponent> draggedObjectLayer = new JLayer<JComponent>(draggedObjectLayerPanel);
-    JLayer<JComponent> netLayer = new JLayer<JComponent>(netLayerPanel);
-    JLayer<JComponent> selectionRectLayer = new JLayer<JComponent>(selectionRectLayerPanel);
-
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;
     Point panOrigin;
@@ -89,27 +84,22 @@ public class PatchViewSwing extends PatchView {
         Layers.setLocation(0, 0);
 
         JComponent[] layerComponents = {
-            /*objectLayer,*/ objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
-            selectionRectLayerPanel, draggedObjectLayer, netLayer, selectionRectLayer};
+            objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
+            selectionRectLayerPanel};
         for (JComponent c : layerComponents) {
             c.setLayout(null);
             c.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
             c.setLocation(0, 0);
             c.setOpaque(false);
-            //c.validate();
         }
 
         Layers.add(objectLayerPanel, new Integer(1));
-        Layers.add(netLayer, new Integer(2));
-        Layers.add(draggedObjectLayer, new Integer(3));
-        Layers.add(selectionRectLayer, new Integer(4));
+        Layers.add(netLayerPanel, new Integer(2));
+        Layers.add(draggedObjectLayerPanel, new Integer(3));
+        Layers.add(selectionRectLayerPanel, new Integer(4));
 
-//        objectLayer.setName("objectLayer");
-        draggedObjectLayer.setName("draggedObjectLayer");
-        netLayer.setName("netLayer");
         netLayerPanel.setName("netLayerPanel");
         selectionRectLayerPanel.setName("selectionRectLayerPanel");
-        selectionRectLayer.setName("selectionRectLayer");
 
         objectLayerPanel.setName(Constants.OBJECT_LAYER_PANEL);
         draggedObjectLayerPanel.setName(Constants.DRAGGED_OBJECT_LAYER_PANEL);
@@ -404,20 +394,20 @@ public class PatchViewSwing extends PatchView {
     void setCordsInBackground(boolean b) {
         if (b) {
             Layers.removeAll();
-            Layers.add(netLayer, new Integer(1));
+            Layers.add(netLayerPanel, new Integer(1));
             Layers.add(objectLayerPanel, new Integer(2));
-            Layers.add(draggedObjectLayer, new Integer(3));
-            Layers.add(selectionRectLayer, new Integer(4));
+            Layers.add(draggedObjectLayerPanel, new Integer(3));
+            Layers.add(selectionRectLayerPanel, new Integer(4));
         } else {
             Layers.removeAll();
             Layers.add(objectLayerPanel, new Integer(1));
-            Layers.add(netLayer, new Integer(2));
-            Layers.add(draggedObjectLayer, new Integer(3));
-            Layers.add(selectionRectLayer, new Integer(4));
+            Layers.add(netLayerPanel, new Integer(2));
+            Layers.add(draggedObjectLayerPanel, new Integer(3));
+            Layers.add(selectionRectLayerPanel, new Integer(4));
         }
     }
 
-    public void clampLayerSize(Dimension s) {
+    void clampLayerSize(Dimension s) {
         if (Layers.getParent() != null) {
             if (s.width < Layers.getParent().getWidth()) {
                 s.width = Layers.getParent().getWidth();
@@ -428,8 +418,22 @@ public class PatchViewSwing extends PatchView {
         }
     }
 
+    @Override
     public void AdjustSize() {
-        Dimension s = getController().GetSize();
+        int maxX = 0;
+        int maxY = 0;
+        for (Component c : objectLayerPanel.getComponents()) {
+            Rectangle r = c.getBounds();
+            int x = r.x + r.width;
+            if (x > maxX) {
+                maxX = x;
+            }
+            int y = r.y + r.height;
+            if (y > maxY) {
+                maxY = y;
+            }
+        }
+        Dimension s = new Dimension(maxX, maxY);
         clampLayerSize(s);
         if (!Layers.getSize().equals(s)) {
             Layers.setSize(s);
@@ -480,6 +484,8 @@ public class PatchViewSwing extends PatchView {
     public void add(IAxoObjectInstanceView v) {
         if (objectLayerPanel != null) {
             objectLayerPanel.add((AxoObjectInstanceViewAbstract) v);
+            v.resizeToGrid();
+            AdjustSize();
             v.repaint();
         }
     }

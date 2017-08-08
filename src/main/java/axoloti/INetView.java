@@ -25,6 +25,4 @@ public interface INetView extends IView {
     public void setVisible(boolean isVisible);
 
     public void repaint();
-
-    public void validate();
 }

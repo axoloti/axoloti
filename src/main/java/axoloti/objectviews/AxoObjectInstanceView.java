@@ -71,19 +71,17 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews, BoxLayout.LINE_AXIS));
         p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
-        p_ioletViews.setAlignmentY(TOP_ALIGNMENT);
 
         p_inletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_inletViews.setLayout(new BoxLayout(p_inletViews, BoxLayout.PAGE_AXIS));
-        p_inletViews.setAlignmentX(LEFT_ALIGNMENT);
         p_inletViews.setAlignmentY(TOP_ALIGNMENT);
 
         p_attributeViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_attributeViews.setLayout(new BoxLayout(p_attributeViews, BoxLayout.PAGE_AXIS));
-        
+        p_attributeViews.setAlignmentX(LEFT_ALIGNMENT);
+
         p_outletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_outletViews.setLayout(new BoxLayout(p_outletViews, BoxLayout.PAGE_AXIS));
-        p_outletViews.setAlignmentX(RIGHT_ALIGNMENT);
         p_outletViews.setAlignmentY(TOP_ALIGNMENT);
 
         p_parameterViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -178,28 +176,20 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         });
         add(InstanceLabel);
 
-        p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
-
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews, BoxLayout.LINE_AXIS));
         p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
-        p_ioletViews.setAlignmentY(TOP_ALIGNMENT);
-        p_inletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
         p_inletViews.setLayout(new BoxLayout(p_inletViews, BoxLayout.PAGE_AXIS));
-        p_inletViews.setAlignmentX(LEFT_ALIGNMENT);
         p_inletViews.setAlignmentY(TOP_ALIGNMENT);
-        p_outletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
+//        p_inletViews.setBorder(new LineBorder(Color.yellow));
 
         p_outletViews.setLayout(new BoxLayout(p_outletViews, BoxLayout.PAGE_AXIS));
-        p_outletViews.setAlignmentX(RIGHT_ALIGNMENT);
         p_outletViews.setAlignmentY(TOP_ALIGNMENT);
-        p_parameterViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         if (getType().getRotatedParams()) {
             p_parameterViews.setLayout(new BoxLayout(p_parameterViews, BoxLayout.LINE_AXIS));
         } else {
             p_parameterViews.setLayout(new BoxLayout(p_parameterViews, BoxLayout.PAGE_AXIS));
         }
-        p_displayViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
         if (getType().getRotatedParams()) {
             p_displayViews.setLayout(new BoxLayout(p_displayViews, BoxLayout.LINE_AXIS));
@@ -209,9 +199,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_displayViews.add(Box.createHorizontalGlue());
         p_parameterViews.add(Box.createHorizontalGlue());
 
-
         p_ioletViews.add(p_inletViews);
-        p_ioletViews.add(Box.createHorizontalGlue());
         p_ioletViews.add(p_outletViews);
         add(p_ioletViews);
         add(p_attributeViews);
@@ -222,6 +210,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         resizeToGrid();
         setVisible(true);
+        revalidate();
     }
     
     ArrayView<IInletInstanceView> inletInstanceViewSync = new ArrayView<IInletInstanceView>() {
@@ -236,9 +225,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             for (IInletInstanceView c : views) {
                 p_inletViews.add((Component) c);
             }
-            p_inletViews.doLayout();
             resizeToGrid();
-            p_inletViews.repaint();
         }
 
         @Override
@@ -258,9 +245,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             for (IOutletInstanceView c : views) {
                 p_outletViews.add((Component) c);
             }
-            p_outletViews.doLayout();
             resizeToGrid();
-            p_outletViews.repaint();
         }
 
         @Override

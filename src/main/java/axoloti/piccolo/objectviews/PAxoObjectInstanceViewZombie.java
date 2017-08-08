@@ -209,7 +209,6 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     private boolean layoutFinished = false;
 
-    @Override
     public void validate() {
         if (!layoutFinished) {
             finishLayout();

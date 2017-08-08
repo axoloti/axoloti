@@ -347,8 +347,9 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         getPatchView().objectLayerPanel.setComponentZOrder(this, 0);
     }
 
+    @Override
     public void resizeToGrid() {
-        doLayout();
+        revalidate();
         Dimension d = getPreferredSize();
         d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
