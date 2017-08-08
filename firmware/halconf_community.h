@@ -86,6 +86,7 @@
 #define HAL_USBH_PORT_DEBOUNCE_TIME                   200
 #define HAL_USBH_PORT_RESET_TIMEOUT                   500
 #define HAL_USBH_DEVICE_ADDRESS_STABILIZATION         20
+#define HAL_USBH_CONTROL_REQUEST_DEFAULT_TIMEOUT	  MS2ST(1000)
 
 /* MSD */
 #define HAL_USBH_USE_MSD                              FALSE
@@ -145,7 +146,7 @@
 #define USBH_DEBUG_ENABLE                             1
 #define USBH_DEBUG_USBHD                              USBHD2
 #define USBH_DEBUG_SD                                 SD2
-#define USBH_DEBUG_BUFFER                             2000 /* was 25000 */
+#define USBH_DEBUG_BUFFER                             1000 /* was 25000 */
 
 #define USBH_DEBUG_ENABLE_TRACE                       0
 #define USBH_DEBUG_ENABLE_INFO                        1
