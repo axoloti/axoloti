@@ -199,10 +199,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 f.Resolve(p);
             }
         }
-        for (AttributeInstance a : attributeInstances) {
-            ArrayList<SDFileReference> f2 = a.GetDependendSDFiles();
-            if (f2 != null) {
-                files.addAll(f2);
+        if (attributeInstances != null) {
+            for (AttributeInstance a : attributeInstances) {
+                ArrayList<SDFileReference> f2 = a.GetDependendSDFiles();
+                if (f2 != null) {
+                    files.addAll(f2);
+                }
             }
         }
         return files;
