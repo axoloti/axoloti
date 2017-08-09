@@ -26,6 +26,7 @@
 #include "midi_monitor.h"
 #include "sdcard_menu.h"
 #include "test_menu.h"
+#include "processes_menu.h"
 
 #include "patch.h"
 
@@ -41,6 +42,7 @@ ui_node_t MainMenu[MainMenu_length] = {
   { &nodeFunctionTable_midiclock, "MIDI clock" },
   { &nodeFunctionTable_midicc, "MIDI controller" },
   { &nodeFunctionTable_midimon, "MIDI monitor" },
+  { &nodeFunctionTable_processes, "Processes" },
   { &nodeFunctionTable_test, "Test" },
   { &nodeFunctionTable_node_list, "Food", .nodeList = {FoodMenu, FoodMenu_length}}
 };

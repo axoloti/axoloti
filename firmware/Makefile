@@ -255,6 +255,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/menu_content/midi_controller.c \
        ${FIRMWARE}/menu_content/midi_monitor.c \
        ${FIRMWARE}/menu_content/sdcard_menu.c \
+       ${FIRMWARE}/menu_content/processes_menu.c \
        ${FIRMWARE}/ui_nodes/test_menu.c
 
 

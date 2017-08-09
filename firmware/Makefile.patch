@@ -97,9 +97,9 @@ ${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
 	@echo LINK
 	@$(LD) $(LDFLAGS) ${BDIR}/xpatch.o ${MODULE_LINKDIR} ${MODULE_LINKLIB} -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
 	@echo BIN
-	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram1.bin
-	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram3.bin
-	@$(CP) -O binary --only-section=.sdram.data ${BDIR}/xpatch.elf ${BDIR}/xpatch.sdram.bin
+	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data -R .data.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram1.bin
+	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data --only-section=.data.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram3.bin
+	@$(CP) -O binary --only-section=.sdram.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sdram.bin
 #	@$(DFUSE_PACK) -b 0x00000000:${BDIR}/xpatch.sram1.bin -b 0x20020000:${BDIR}/xpatch.sram3.bin -b 0xC0000000:${BDIR}/xpatch.sdram.bin ${BDIR}/xpatch.dfu
 
 clean:
