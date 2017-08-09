@@ -36,7 +36,7 @@ public class ParameterInstanceViewFactory {
         } else if (model instanceof ParameterInstanceBin16) {
             view = new ParameterInstanceViewBin16(controller, obj);
         } else if (model instanceof ParameterInstanceBin1Momentary) {
-            return new ParameterInstanceViewBin1Momentary(controller, obj);
+            view = new ParameterInstanceViewBin1Momentary(controller, obj);
         } else if (model instanceof ParameterInstanceBin32) {
             view = new ParameterInstanceViewBin32(controller, obj);
         } else if (model instanceof ParameterInstanceFrac32SMap) {
