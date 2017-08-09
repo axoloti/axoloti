@@ -852,9 +852,10 @@ static THD_FUNCTION(BulkReader, arg) {
     	  }
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
       } else if (header == rcv_hdr_virtual_input_event) {
-    	  // FIXME
     	  rcv_pckt_virtual_input_event_t *p = (rcv_pckt_virtual_input_event_t *)bulk_rxbuf;
-    	  //queueInputEvent(p->input_event);
+    	  chSysLock();
+    	  queueInputEventI(p->input_event);
+    	  chSysUnlock();
       } else {
     	  // unidentified header!
     	  int i=100;
