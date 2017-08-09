@@ -27,6 +27,7 @@
 #include "crc32.h"
 #include "exceptions.h"
 #include "patch_chunk_reader.h"
+#include "usbh_patch.h"
 
 typedef void (*fptr_patch_init_t)(int32_t fwID);
 typedef void (*fptr_patch_dispose_t)(void);
@@ -101,11 +102,6 @@ typedef struct {
 } midi_clock_t;
 
 extern midi_clock_t midi_clock;
-
-
-extern int8_t hid_buttons[8];
-extern int8_t hid_mouse_x;
-extern int8_t hid_mouse_y;
 
 void InitPatch0(void);
 int StartPatch(void);

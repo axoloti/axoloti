@@ -2,6 +2,10 @@
 #include "hal.h"
 #include "usbh_midi_class.h"
 #include "midi_buffer.h"
+#if HAL_USBH_USE_HID
+#include "usbh/dev/hid.h"
+#endif
+#include "usbh_patch.h"
 
 /* notes:
  * * debugging is active on SD2
@@ -29,43 +33,20 @@ void usbhmidi_cb(USBHMIDIDriver *midip, uint16_t len) {
 
 USBHMIDIConfig midiconf[USBH_MIDI_CLASS_MAX_INSTANCES];
 
-static void ThreadTestMIDI(void *p) {
-	(void) p;
-
-    chRegSetThreadName("MIDIHost");
-    uint8_t i;
-
-    for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
-    	midiconf[i].cb_report = usbhmidi_cb;
-    	midiconf[i].report_buffer = usbh_midi_in_buf[i];
-    	midiconf[i].report_len = USBH_MIDI_BUFSIZE;
-    }
-
-    for (;;) {
-        for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
-            if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
-                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
-                usbhmidiStart(&USBHMIDID[i], &midiconf[i]);
-            }
-        }
-        chThdSleepMilliseconds(200);
-    }
-}
-
-static THD_WORKING_AREA(waTestMIDI, 900);
-
+#if HAL_USBH_USE_HID
 int8_t hid_buttons[8];
 int8_t hid_mouse_x;
 int8_t hid_mouse_y;
 
-#if HAL_USBH_USE_HID
-#include "usbh/dev/hid.h"
-#include "chprintf.h"
+usbh_hid_custom_report_callback_t *usbh_hid_custom_report_callback = 0;
 
-static THD_WORKING_AREA(waTestHID, 1024);
+void register_usbh_hid_custom_report_cb(usbh_hid_custom_report_callback_t *cb) {
+	usbh_hid_custom_report_callback = cb;
+}
 
-typedef void (usbh_hid_custom_callback_t)(uint8_t *hid_report, int len);
-usbh_hid_custom_callback_t *usbh_hid_custom_callback = 0;
+void unregister_usbh_hid_custom_report_cb(usbh_hid_custom_report_callback_t *cb) {
+	usbh_hid_custom_report_callback = 0;
+}
 
 static void _hid_report_callback(USBHHIDDriver *hidp, uint16_t len) {
     uint8_t *report = (uint8_t *)hidp->config->report_buffer;
@@ -96,8 +77,8 @@ static void _hid_report_callback(USBHHIDDriver *hidp, uint16_t len) {
                 report[7]);
                 */
     } else {
-    	if (usbh_hid_custom_callback)
-    		usbh_hid_custom_callback(report, len);
+    	if (usbh_hid_custom_report_callback)
+    		usbh_hid_custom_report_callback(report, len);
 //        usbDbgPrintf("Generic report, %d bytes", len);
     }
 }
@@ -105,10 +86,21 @@ static void _hid_report_callback(USBHHIDDriver *hidp, uint16_t len) {
 static USBH_DEFINE_BUFFER(uint8_t report[HAL_USBHHID_MAX_INSTANCES][8]);
 static USBHHIDConfig hidcfg[HAL_USBHHID_MAX_INSTANCES];
 
+#endif
 
-static void ThreadTestHID(void *p) {
-    (void)p;
+
+static void ThreadUSBHPnP(void *p) {
+	(void) p;
+
+    chRegSetThreadName("USBHPnP");
     uint8_t i;
+
+    for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
+    	midiconf[i].cb_report = usbhmidi_cb;
+    	midiconf[i].report_buffer = usbh_midi_in_buf[i];
+    	midiconf[i].report_len = USBH_MIDI_BUFSIZE;
+    }
+#if HAL_USBH_USE_HID
     static uint8_t kbd_led_states[HAL_USBHHID_MAX_INSTANCES];
 
     for (i = 0; i < HAL_USBHHID_MAX_INSTANCES; i++) {
@@ -117,47 +109,50 @@ static void ThreadTestHID(void *p) {
         hidcfg[i].report_buffer = report[i];
         hidcfg[i].report_len = 8;
     }
+#endif
 
     for (;;) {
-        for (i = 0; i < HAL_USBHHID_MAX_INSTANCES; i++) {
-            if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_ACTIVE) {
-                usbDbgPrintf("HID: Connected, HID%d", i);
-                usbhhidStart(&USBHHIDD[i], &hidcfg[i]);
-                if (usbhhidGetType(&USBHHIDD[i]) != USBHHID_DEVTYPE_GENERIC) {
-                    usbhhidSetIdle(&USBHHIDD[i], 0, 0);
-                }
-                kbd_led_states[i] = 1;
-            } else if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_READY) {
-                if (usbhhidGetType(&USBHHIDD[i]) == USBHHID_DEVTYPE_BOOT_KEYBOARD) {
-                    USBH_DEFINE_BUFFER(uint8_t val);
-                    val = kbd_led_states[i] << 1;
-                    if (val == 0x08) {
-                        val = 1;
-                    }
-                    usbhhidSetReport(&USBHHIDD[i], 0, USBHHID_REPORTTYPE_OUTPUT, &val, 1);
-                    kbd_led_states[i] = val;
-                }
+        for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
+            if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
+                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
+                usbhmidiStart(&USBHMIDID[i], &midiconf[i]);
             }
         }
-        chThdSleepMilliseconds(200);
-    }
-
-}
-#endif
-
-void MY_USBH_Init(void) {
-	chThdCreateStatic(waTestMIDI, sizeof(waTestMIDI), NORMALPRIO,
-			ThreadTestMIDI, 0);
 
 #if HAL_USBH_USE_HID
-    chThdCreateStatic(waTestHID, sizeof(waTestHID), NORMALPRIO, ThreadTestHID, 0);
+		for (i = 0; i < HAL_USBHHID_MAX_INSTANCES; i++) {
+			if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_ACTIVE) {
+				usbDbgPrintf("HID: Connected, HID%d", i);
+				usbhhidStart(&USBHHIDD[i], &hidcfg[i]);
+				if (usbhhidGetType(&USBHHIDD[i]) != USBHHID_DEVTYPE_GENERIC) {
+					usbhhidSetIdle(&USBHHIDD[i], 0, 0);
+				}
+				kbd_led_states[i] = 1;
+			} else if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_READY) {
+				if (usbhhidGetType(&USBHHIDD[i]) == USBHHID_DEVTYPE_BOOT_KEYBOARD) {
+					USBH_DEFINE_BUFFER(uint8_t val);
+					val = kbd_led_states[i] << 1;
+					if (val == 0x08) {
+						val = 1;
+					}
+					usbhhidSetReport(&USBHHIDD[i], 0, USBHHID_REPORTTYPE_OUTPUT, &val, 1);
+					kbd_led_states[i] = val;
+				}
+			}
+		}
 #endif
+		chThdSleepMilliseconds(200);
+	}
+}
+
+static THD_WORKING_AREA(waUSBHPnP, 900);
+
+void MY_USBH_Init(void) {
+	chThdCreateStatic(waUSBHPnP, sizeof(waUSBHPnP), NORMALPRIO, ThreadUSBHPnP,
+			0);
 
 	usbhStart(&USBHD2);
 	// enable power...
 	palSetPadMode(GPIOD, 7, PAL_MODE_OUTPUT_PUSHPULL);
 	palClearPad(GPIOD, 7);
 }
-
-
-
