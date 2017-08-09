@@ -3,16 +3,16 @@
 #include "usbh_midi_class.h"
 #include "midi_buffer.h"
 
-
 /* notes:
  * * debugging is active on SD2
  *   (ENABLE_SERIAL_DEBUG)
  * * midi output is not implemented yet
  * * compiled with ChibiOS-Contrib
- *   from https://github.com/dismirlian/ChibiOS-Contrib/commit/2e2e10417e4e2a6e2aec3493fd65859ad80e8c30
+ *   from https://github.com/ChibiOS/ChibiOS-Contrib
 */
 
-char usbh_midi_in_buf[64];
+#define USBH_MIDI_BUFSIZE 64
+static char usbh_midi_in_buf[USBH_MIDI_CLASS_MAX_INSTANCES][USBH_MIDI_BUFSIZE];
 
 void usbhmidi_cb(USBHMIDIDriver *midip, uint16_t len) {
 	int i;
@@ -27,46 +27,45 @@ void usbhmidi_cb(USBHMIDIDriver *midip, uint16_t len) {
 	}
 }
 
-USBHMIDIConfig midiconf = { usbhmidi_cb, usbh_midi_in_buf, 64 };
+USBHMIDIConfig midiconf[USBH_MIDI_CLASS_MAX_INSTANCES];
 
 static void ThreadTestMIDI(void *p) {
 	(void) p;
-	USBHMIDIDriver * const midipp = &USBHMIDID[0];
 
-	start: while (midipp->state != USBHMIDI_STATE_ACTIVE) {
-		chThdSleepMilliseconds(100);
-	}
+    chRegSetThreadName("MIDIHost");
+    uint8_t i;
 
-	usbDbgPuts("MIDI: Connected");
+    for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
+    	midiconf[i].cb_report = usbhmidi_cb;
+    	midiconf[i].report_buffer = usbh_midi_in_buf[i];
+    	midiconf[i].report_len = USBH_MIDI_BUFSIZE;
+    }
 
-	usbhmidiStart(midipp, &midiconf);
-
-	while (1) { // fixme: handle disconnect
-		// midipp->state == USBHMIDI_STATE_ACTIVE) {
-		chThdSleepMilliseconds(100);
-	}
-
-	usbhmidiStop(midipp, &midiconf);
-
-	usbDbgPuts("MIDI: restarting in 3s");
-	chThdSleepMilliseconds(3000);
-
-	goto start;
+    for (;;) {
+        for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
+            if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
+                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
+                usbhmidiStart(&USBHMIDID[i], &midiconf[i]);
+            }
+        }
+        chThdSleepMilliseconds(200);
+    }
 }
 
-static THD_WORKING_AREA(waTestMIDI, 1024);
-
+static THD_WORKING_AREA(waTestMIDI, 900);
 
 int8_t hid_buttons[8];
 int8_t hid_mouse_x;
 int8_t hid_mouse_y;
-
 
 #if HAL_USBH_USE_HID
 #include "usbh/dev/hid.h"
 #include "chprintf.h"
 
 static THD_WORKING_AREA(waTestHID, 1024);
+
+typedef void (usbh_hid_custom_callback_t)(uint8_t *hid_report, int len);
+usbh_hid_custom_callback_t *usbh_hid_custom_callback = 0;
 
 static void _hid_report_callback(USBHHIDDriver *hidp, uint16_t len) {
     uint8_t *report = (uint8_t *)hidp->config->report_buffer;
@@ -97,12 +96,15 @@ static void _hid_report_callback(USBHHIDDriver *hidp, uint16_t len) {
                 report[7]);
                 */
     } else {
+    	if (usbh_hid_custom_callback)
+    		usbh_hid_custom_callback(report, len);
 //        usbDbgPrintf("Generic report, %d bytes", len);
     }
 }
 
 static USBH_DEFINE_BUFFER(uint8_t report[HAL_USBHHID_MAX_INSTANCES][8]);
 static USBHHIDConfig hidcfg[HAL_USBHHID_MAX_INSTANCES];
+
 
 static void ThreadTestHID(void *p) {
     (void)p;
@@ -143,23 +145,15 @@ static void ThreadTestHID(void *p) {
 }
 #endif
 
-
-
-
 void MY_USBH_Init(void) {
-
-//	usbhmidiObjectInit(&USBHMIDID[0]);
 	chThdCreateStatic(waTestMIDI, sizeof(waTestMIDI), NORMALPRIO,
 			ThreadTestMIDI, 0);
-
 
 #if HAL_USBH_USE_HID
     chThdCreateStatic(waTestHID, sizeof(waTestHID), NORMALPRIO, ThreadTestHID, 0);
 #endif
 
-
 	usbhStart(&USBHD2);
-
 	// enable power...
 	palSetPadMode(GPIOD, 7, PAL_MODE_OUTPUT_PUSHPULL);
 	palClearPad(GPIOD, 7);
