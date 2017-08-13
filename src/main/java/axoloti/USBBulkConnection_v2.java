@@ -960,32 +960,18 @@ public class USBBulkConnection_v2 extends IConnection {
         @Override
         public void run() {
             ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
-            ByteBuffer packetbuffer = ByteBuffer.allocateDirect(32768);
             recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
-            packetbuffer.order(ByteOrder.LITTLE_ENDIAN);
             IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
+                recvbuffer.rewind();
                 int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
                 switch (result) {
                     case LibUsb.SUCCESS:
                         int sz = transfered.get(0);
                         recvbuffer.limit(sz);
-                        switch (sz) {
-                            case 64: // full recvbuffer, expect more buffers or zero-length-packet to terminate
-                                packetbuffer.put(recvbuffer);
-                                break;
-                            case 0: // zero-length-packet, packetbuffer is complete
-                            {
-                                packetbuffer.rewind();
-                                processPacket(packetbuffer, packetbuffer.remaining());
-                                packetbuffer.rewind();
-                                packetbuffer.limit(0);
-                                GoIdleState();
-                            }
-                            break;
-                            default: // non-zero length, not full, recvbuffer is a complete packet
-                                processPacket(recvbuffer, sz);
-                        }   break;
+                        recvbuffer.rewind();
+                        processPacket(recvbuffer, recvbuffer.remaining());
+                        break;
                     case LibUsb.ERROR_TIMEOUT:
                         if (state != ReceiverState.header) {
                             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "timeout: " + state);
@@ -993,8 +979,6 @@ public class USBBulkConnection_v2 extends IConnection {
                     default:
                         String err = LibUsb.errorName(result);
                         Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "receive error: " + err);
-                        packetbuffer.rewind();
-                        packetbuffer.limit(0);
                         GoIdleState();
                         disconnect();
                         break;
@@ -1410,9 +1394,10 @@ public class USBBulkConnection_v2 extends IConnection {
                 GoIdleState();
             } break;
             case memread: {                
-                if (memReadLength < size) {
+                if (memReadLength != size) {
                     System.out.print("memread barf:" + memReadLength + ":" + size + "<");
-                    rbuf.position(memReadLength);
+//                    rbuf.position(memReadLength);
+                    rbuf.rewind();
                     while(rbuf.hasRemaining()) {
                         System.out.print("|"+(char)rbuf.get());
                     }
