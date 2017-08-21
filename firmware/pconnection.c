@@ -82,7 +82,7 @@ msg_t BulkUsbTransmitPacket(const uint8_t * data, size_t size) {
 	res = usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, size);
 	if (res != MSG_OK) return res;
 	if ((size & 0x3F) == 0) {
-		// append zero-length packet
+		// multiple of 64 bytes, append zero-length packet
 		res = usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, 0);
 	}
 	return res;
@@ -450,24 +450,18 @@ static THD_FUNCTION(BulkWriter, arg) {
 		eventmask_t evt = chEvtWaitOne(0xFFFFFFFF);
 		msg_t msg=0;
 		switch (evt) {
-		case 1:
+		case evt_bulk_tx_ack:
 			msg = bulk_tx_ack();
 			exception_checkandreport();
 			break;
 		case evt_bulk_fw_ver:
 			msg = bulk_tx_fw_version();
-			if (msg == MSG_RESET) break;
-			msg = bulk_tx_ack();
 			break;
 		case evt_bulk_memrd32:
 			msg = bulk_tx_memrd32();
-			if (msg == MSG_RESET) break;
-			msg = bulk_tx_ack();
 			break;
 		case evt_bulk_memrdx:
 			msg = bulk_tx_memrdx();
-			if (msg == MSG_RESET) break;
-			msg = bulk_tx_ack();
 			break;
 		case evt_bulk_tx_fileinfo:
 			msg = bulk_tx_fileinfo();

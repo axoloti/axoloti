@@ -141,7 +141,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 try {
                     receiverThread.join();
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                    //Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -232,7 +232,7 @@ public class USBBulkConnection_v2 extends IConnection {
         disconnect();
         disconnectRequested = false;
         synchronized (sync) {
-            sync.Acked = true;
+            sync.ready = true;
             sync.notifyAll();
         }
         GoIdleState();
@@ -547,8 +547,7 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     class Sync {
-        boolean Acked = false;
-        boolean Pending = false;
+        boolean ready = true;
         ByteBuffer memReadBuffer;
     }
     
@@ -558,22 +557,22 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void ClearSync() {
         synchronized (sync) {
-            sync.Acked = false;
+            sync.ready = true;
         }
     }
 
     @Override
     public boolean WaitSync(int msec) {
         synchronized (sync) {
-            if (sync.Acked) {
-                return sync.Acked;
+            if (sync.ready) {
+                return sync.ready;
             }
             try {
                 sync.wait(msec);
             } catch (InterruptedException ex) {
                 //              Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
             }
-            return sync.Acked;
+            return sync.ready;
         }
     }
 
@@ -585,47 +584,31 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void ClearReadSync() {
         synchronized (readsync) {
-            readsync.Acked = false;
+            readsync.ready = true;
             readsync.memReadBuffer = null;
+            readsync.notifyAll();
         }
     }
 
     @Override
     public boolean WaitReadSync() {
-        synchronized (readsync) {
-            if (readsync.Acked) {
-                //System.out.println("nowait");
-                // TODO: should not need to sleep to obtain correct results...
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                return readsync.Acked;
-            }
-        }
-        for(int i=0;i<5;i++) {
-            synchronized (readsync) {
-                try {
-                    //System.out.println("wait");
+        int i=5;
+        while (!readsync.ready) {
+            try {
+                synchronized (readsync) {
                     readsync.wait(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "Sync wait interrupted");
                 }
-                if (readsync.Acked) break;
+                i--;
+                if (i==0) break;
+            } catch (InterruptedException ex) {
+                return true;
             }
         }
-        // TODO: should not need to sleep to obtain correct results...
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        if (!readsync.Acked) {
+        if (!readsync.ready) {
             System.out.println("sync: not ready!");
+            new Exception().printStackTrace(System.out);
         }
-        return readsync.Acked;
+        return readsync.ready;
     }
 
     private final byte[] startPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('s')};
@@ -878,15 +861,9 @@ public class USBBulkConnection_v2 extends IConnection {
         if (length == 0) {
             System.out.println("memrd size 0?");
         }
+        WaitReadSync();
+        readsync.ready = false;
         memReadHandler = null;
-        while (readsync.Pending) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        readsync.Pending = true;
         System.out.println(String.format("tx memrd addr=0x%08X le=%d",addr,length));
         byte[] data = new byte[12];
         data[0] = 'A';
@@ -901,9 +878,8 @@ public class USBBulkConnection_v2 extends IConnection {
         data[9] = (byte) (length >> 8);
         data[10] = (byte) (length >> 16);
         data[11] = (byte) (length >> 24);
-        ClearSync();
         writeBytes(data);
-        WaitSync();
+        WaitReadSync();
     }
 
     @Override
@@ -911,14 +887,8 @@ public class USBBulkConnection_v2 extends IConnection {
         if (length == 0) {
             System.out.println("memrd size 0?");
         }
-        while (readsync.Pending) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        readsync.Pending = true;
+        WaitReadSync();
+        readsync.ready = false;
         memReadHandler = handler;
         //System.out.println(String.format("tx memrd addr=0x%08X le=%d",addr,length));
         byte[] data = new byte[12];
@@ -934,13 +904,14 @@ public class USBBulkConnection_v2 extends IConnection {
         data[9] = (byte) (length >> 8);
         data[10] = (byte) (length >> 16);
         data[11] = (byte) (length >> 24);
-        ClearSync();
         writeBytes(data);
-        WaitSync();
+        WaitReadSync();
     }
     
     @Override
     public void TransmitMemoryRead1Word(int addr) {
+        WaitReadSync();
+        readsync.ready = false;
         byte[] data = new byte[8];
         data[0] = 'A';
         data[1] = 'x';
@@ -950,9 +921,8 @@ public class USBBulkConnection_v2 extends IConnection {
         data[5] = (byte) (addr >> 8);
         data[6] = (byte) (addr >> 16);
         data[7] = (byte) (addr >> 24);
-        ClearSync();
         writeBytes(data);
-        WaitSync();
+        WaitReadSync();
     }
 
     class Receiver implements Runnable {
@@ -1041,7 +1011,7 @@ public class USBBulkConnection_v2 extends IConnection {
 
     void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
         synchronized (sync) {
-            sync.Acked = true;
+            sync.ready = true;
             sync.notifyAll();
         }
         SwingUtilities.invokeLater(new Runnable() {
@@ -1270,8 +1240,7 @@ public class USBBulkConnection_v2 extends IConnection {
                             memReadAddr = rbuf.getInt();
                             memReadValue = rbuf.getInt();
                             synchronized (readsync) {
-                                readsync.Acked = true;
-                                readsync.Pending = false;
+                                readsync.ready = true;
                                 readsync.notifyAll();
                             }
                             GoIdleState();
@@ -1403,24 +1372,24 @@ public class USBBulkConnection_v2 extends IConnection {
                     }
                     System.out.println(">");
                 }
-                //System.out.println("rx memrd recv'd sz=" + size);
+                if (true && log_rx_diagnostics) {
+                    System.out.println("rx memrd recv'd sz=" + size);
+                }
                 byte memr[] = new byte[memReadLength];
                 rbuf.get(memr,0,memReadLength);
-                synchronized (readsync) {
-                    readsync.memReadBuffer = ByteBuffer.wrap(memr);
-                    readsync.memReadBuffer.order(ByteOrder.LITTLE_ENDIAN);
-                    readsync.memReadBuffer.rewind();
-                    readsync.Acked = true;
-                    readsync.Pending = false;
-                    readsync.notifyAll();
-                }
-                if (memReadHandler != null) {
+                ByteBuffer mrb = ByteBuffer.wrap(memr);
+                mrb.order(ByteOrder.LITTLE_ENDIAN);
+                mrb.rewind();
+                MemReadHandler mrh = memReadHandler;
+                if (mrh != null) {
                     try {
-//                        System.out.println("handler: " + memReadHandler.toString());
+                        if (true && log_rx_diagnostics) {
+                                System.out.println("handler: " + mrh.toString());
+                        }
                         SwingUtilities.invokeAndWait(new Runnable() {
                             @Override
                             public void run() {
-                                memReadHandler.Done(readsync.memReadBuffer);
+                                mrh.Done(mrb);
                             }
                         });
                     } catch (InterruptedException ex) {
@@ -1428,6 +1397,11 @@ public class USBBulkConnection_v2 extends IConnection {
                     } catch (InvocationTargetException ex) {
                         Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
+                synchronized (readsync) {
+                    readsync.memReadBuffer = mrb;
+                    readsync.ready = true;
+                    readsync.notifyAll();
                 }
                 memReadHandler = null;
                 GoIdleState();
