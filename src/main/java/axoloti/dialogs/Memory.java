@@ -197,7 +197,7 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
     }//GEN-LAST:event_jButtonDecActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        DocumentWindowList.UnregisterWindow(this);
+        Close();
     }//GEN-LAST:event_formWindowClosed
 
     @Override
@@ -236,8 +236,15 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         return this;
     }
 
+    public void Close() {
+        DocumentWindowList.UnregisterWindow(this);
+        CConnection.GetConnection().removeConnectionStatusListener(this);
+        dispose();
+    }
+
     @Override
     public boolean AskClose() {
+        Close();
         return false;
     }
 
