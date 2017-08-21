@@ -416,7 +416,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Known issues: \n"
                 + "* removing objects with parameter-on-parent broken\n"
                 + "* modulations are broken\n"
-                + "* prevent object to be moved to negative coordinates\n"
                 + "* zombie objects broken\n"
                 + "* modules are broken\n"
                 + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n");

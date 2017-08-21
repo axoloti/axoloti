@@ -385,6 +385,27 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         }
     }
 
+    public void fixNegativeObjectCoordinates() {
+        int minx = 0;
+        int miny = 0;
+        for (ObjectInstanceController o : objectInstanceControllers) {
+            Point p = o.getModel().getLocation();
+            if (p.x < minx) {
+                minx = p.x;
+            }
+            if (p.y < miny) {
+                miny = p.y;
+            }
+        }
+        if ((minx < 0) || (miny < 0)) {
+            for (ObjectInstanceController o : objectInstanceControllers) {
+                Point p = o.getModel().getLocation();
+                Point p1 = new Point(p.x - minx, p.y - miny);
+                o.setModelUndoableProperty(ObjectInstanceController.OBJ_LOCATION, p1);
+            }
+        }
+    }
+
     public String GetCurrentWorkingDirectory() {
         return getModel().GetCurrentWorkingDirectory();
     }
