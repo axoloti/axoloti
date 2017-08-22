@@ -3,6 +3,7 @@ package axoloti.dialogs;
 import axoloti.CConnection;
 import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindow;
+import axoloti.DocumentWindowList;
 import axoloti.IConnection;
 import axoloti.menus.StandardMenubar;
 import java.awt.Font;
@@ -14,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import qcmds.QCmdMemRead;
 
 /**
  *
@@ -27,10 +29,12 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
     public Memory() {
         initComponents();
         setJMenuBar(new StandardMenubar());
+        setTitle("Memory viewer");
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jTextFieldAddr.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setEditable(false);
+        DocumentWindowList.RegisterWindow(this);
     }
 
     /**
@@ -51,7 +55,12 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaMemoryContent = new javax.swing.JTextArea();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jPanel1.setPreferredSize(new java.awt.Dimension(20, 20));
 
@@ -137,20 +146,35 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         jTextFieldAddr.setText(String.format("0x%08x", addr));
         jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
         int length = 256;
-        CConnection.GetConnection().TransmitMemoryRead(addr, length, new IConnection.MemReadHandler() {
+        IConnection conn = CConnection.GetConnection();
+        conn.AppendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem) {
                 String s = "";
-                for (int i = 0; i < (length / 16); i++) {
-                    int v1 = mem.getInt();
-                    int v2 = mem.getInt();
-                    int v3 = mem.getInt();
-                    int v4 = mem.getInt();
-                    s += String.format("%08x : %08x %08x %08x %08x\n", addr + (i * 16), v1, v2, v3, v4);
+                if (mem != null) {
+                    for (int i = 0; i < (length / 16); i++) {
+                        ByteBuffer bc = mem.duplicate();
+                        int v1 = mem.getInt();
+                        int v2 = mem.getInt();
+                        int v3 = mem.getInt();
+                        int v4 = mem.getInt();
+                        String ascii = "";
+                        for (int j = 0; j < 16; j++) {
+                            char c = (char) bc.get();
+                            if (c < 32) {
+                                c = '.';
+                            }
+                            if (c > 128) {
+                                c = '.';
+                            }
+                            ascii += c;
+                        }
+                        s += String.format("%08x : %08x %08x %08x %08x  %s\n", addr + (i * 16), v1, v2, v3, v4, ascii);
+                    }
                 }
                 jTextAreaMemoryContent.setText(s);
             }
-        });
+        }));
     }
 
     int addr = 0;
@@ -172,16 +196,28 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         readmem(addr - 0x100);
     }//GEN-LAST:event_jButtonDecActionPerformed
 
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        Close();
+    }//GEN-LAST:event_formWindowClosed
+
     @Override
     public void actionPerformed(ActionEvent e) {
     }
 
+    void showConnect1(boolean connected) {
+        jButtonDec.setEnabled(connected);
+        jButtonInc.setEnabled(connected);
+        jButtonUpdate.setEnabled(connected);
+    }
+
     @Override
     public void ShowConnect() {
+        showConnect1(true);
     }
 
     @Override
     public void ShowDisconnect() {
+        showConnect1(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -200,8 +236,15 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         return this;
     }
 
+    public void Close() {
+        DocumentWindowList.UnregisterWindow(this);
+        CConnection.GetConnection().removeConnectionStatusListener(this);
+        dispose();
+    }
+
     @Override
     public boolean AskClose() {
+        Close();
         return false;
     }
 

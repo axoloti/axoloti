@@ -133,7 +133,7 @@ static uint32_t handleInputBend(input_event evt, void *userdata) {
 		if (evt.fields.modifiers & EVT_MODIFIER_SHIFT)
 			midiccdata.bend=-64;
 		else
-			midiccdata.bend++;
+			midiccdata.bend--;
 		midi_message_t m = {.bytes={0,
 				MIDI_PITCH_BEND + midiccdata.channel,
 				0,

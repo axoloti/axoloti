@@ -32,7 +32,10 @@ public class QCmdBringToDFUMode implements QCmdSerialTask {
 
     @Override
     public String GetDoneMessage() {
-        return "Done enabling DFU. Serial connection will now break, but firmware can be flashed with DFU.";
+        return "Done enabling DFU. The regular USB communication will now abort, "
+                + "and Axoloti Core will restart itself in \"rescue\" (DFU) mode."
+                + "\"Flash (rescue)\" will restart Axoloti Core again in normal mode when completed."
+                + "To leave \"rescue\" mode, power-cycle your Axoloti Core.";
     }
 
     @Override

@@ -71,6 +71,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+import midirouting.MidiRoutingTables;
+import midirouting.MidiRoutingTablesController;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
@@ -102,6 +104,9 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     FileManagerFrame filemanager;
     ThemeEditor themeEditor;
     AxolotiRemoteControl remote;
+
+    MidiRoutingTables mrt;
+    MidiRoutingTablesController mrtc;
     MidiRouting midirouting;
     QCmdProcessor qcmdprocessor;
     Thread qcmdprocessorThread;
@@ -257,10 +262,13 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         remote = new AxolotiRemoteControl();
         remote.setTitle("Remote");
         remote.setVisible(false);
-
-        midirouting = new MidiRouting();
+        
+        mrt = new MidiRoutingTables();
+        mrtc = new MidiRoutingTablesController(mrt, null, null);
+        midirouting = new MidiRouting(mrtc);
+        mrtc.addView(midirouting);
         midirouting.setTitle("MIDI Routing");
-        midirouting.setVisible(false);      
+        midirouting.setVisible(false);
 
         if (!prefs.getExpertMode()) {
             jMenuItemRefreshFWID.setVisible(false);
@@ -408,7 +416,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Known issues: \n"
                 + "* removing objects with parameter-on-parent broken\n"
                 + "* modulations are broken\n"
-                + "* prevent object to be moved to negative coordinates\n"
                 + "* zombie objects broken\n"
                 + "* modules are broken\n"
                 + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n");

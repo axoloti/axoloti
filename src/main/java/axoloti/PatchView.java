@@ -245,6 +245,7 @@ public abstract class PatchView extends PatchAbstractView {
                     p.y = ygrid * (p.y / ygrid);
                     o.changeLocation(p.x, p.y);
                 }
+                getController().fixNegativeObjectCoordinates();
                 AdjustSize();
             }
         } else {

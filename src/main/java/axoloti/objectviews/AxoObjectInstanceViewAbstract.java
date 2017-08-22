@@ -239,6 +239,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                 }
                 draggingObjects = null;
                 getPatchView().AdjustSize();
+                getController().getParent().fixNegativeObjectCoordinates();                
             }
             me.consume();
         }
