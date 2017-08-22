@@ -26,12 +26,22 @@ import axoloti.attribute.*;
 import axoloti.datatypes.DataType;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceFactory;
+import axoloti.inlets.Inlet;
+import axoloti.inlets.InletBool32;
+import axoloti.inlets.InletFrac32;
+import axoloti.inlets.InletFrac32Buffer;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceFactory;
+import axoloti.inlets.InletInt32;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
+import axoloti.outlets.Outlet;
+import axoloti.outlets.OutletBool32;
+import axoloti.outlets.OutletFrac32;
+import axoloti.outlets.OutletFrac32Buffer;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceFactory;
+import axoloti.outlets.OutletInt32;
 import axoloti.parameters.*;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -90,11 +100,64 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
         super(controller, patchModel, InstanceName1, location);
+        switch (typeName) {
+            case "patch/outlet a":
+                parentOutlet = new OutletFrac32Buffer(getInstanceName(), "");
+                break;
+            case "patch/outlet b":
+                parentOutlet = new OutletBool32(getInstanceName(), "");
+                break;
+            case "patch/outlet f":
+                parentOutlet = new OutletFrac32(getInstanceName(), "");
+                break;
+            case "patch/outlet i":
+                parentOutlet = new OutletInt32(getInstanceName(), "");
+                break;
+            default:
+                parentOutlet = null;
+                break;
+        }
+        switch (typeName) {
+            case "patch/inlet a":
+                parentInlet = new InletFrac32Buffer(getInstanceName(), "");
+                break;
+            case "patch/inlet b":
+                parentInlet = new InletBool32(getInstanceName(), "");
+                break;
+            case "patch/inlet f":
+                parentInlet = new InletFrac32(getInstanceName(), "");
+                break;
+            case "patch/inlet i":
+                parentInlet = new InletInt32(getInstanceName(), "");
+                break;
+            default:
+                parentInlet = null;
+        }
+        AxoObjectInstancePatcher aoip = getContainer();
+        if (aoip != null) {
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            if (parentInlet != null) {
+                ArrayList<Inlet> inlets = new ArrayList<>(aop.getInlets());
+                inlets.add(parentInlet);
+                aop.setInlets(inlets);
+            }
+            if (parentOutlet != null) {
+                ArrayList<Outlet> outlets = new ArrayList<>(aop.getOutlets());
+                outlets.add(parentOutlet);
+                aop.setOutlets(outlets);
+            }
+        }
     }
-   
+
     @Override
     public boolean setInstanceName(String s) {
         boolean result = super.setInstanceName(s);
+        if (parentInlet != null) {
+            parentInlet.setName(s);
+        }
+        if (parentOutlet != null) {
+            parentOutlet.setName(s);
+        }
         return result;
     }
 
@@ -162,6 +225,9 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return getType().sInitCode.length() != 0;
     }
 */
+
+    Outlet parentOutlet;
+    Inlet parentInlet;
 
     @Override
     public boolean providesModulationSource() {
@@ -288,6 +354,20 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public void Remove() {
         for (ParameterInstance p : getParameterInstances()) {
             p.Remove();
+        }
+        AxoObjectInstancePatcher aoip = getContainer();
+        if (aoip != null) {
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();        
+            if (parentInlet != null) {
+                ArrayList<Inlet> inlets = new ArrayList<>(aop.getInlets());
+                inlets.remove(parentInlet);
+                aop.setInlets(inlets);
+            }
+            if (parentOutlet != null) {
+                ArrayList<Outlet> outlets = new ArrayList<>(aop.getOutlets());
+                outlets.remove(parentOutlet);
+                aop.setOutlets(outlets);
+            }
         }
     }    
     

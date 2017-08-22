@@ -55,20 +55,7 @@ public class AxoObjectInstanceFactory {
         } else if (objm instanceof AxoObjectZombie) {
             obji = new AxoObjectInstanceZombie(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObject) {
-            String typeName = objm.getId();
-            if (typeName.equals("patch/outlet a")
-                    || typeName.equals("patch/outlet b")
-                    || typeName.equals("patch/outlet f")
-                    || typeName.equals("patch/outlet i")) {
-                obji = new AxoObjectInstanceOutlet(objc, patchModel, instanceName, location);
-            } else if (typeName.equals("patch/inlet a")
-                    || typeName.equals("patch/inlet b")
-                    || typeName.equals("patch/inlet f")
-                    || typeName.equals("patch/inlet i")) {
-                obji = new AxoObjectInstanceInlet(objc, patchModel, instanceName, location);
-            } else {
-                obji = new AxoObjectInstance(objc, patchModel, instanceName, location);
-            }
+            obji = new AxoObjectInstance(objc, patchModel, instanceName, location);
         } else {
             obji = null;
             throw new Error("unknown object type");
