@@ -494,6 +494,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jMenuItemPing = new javax.swing.JMenuItem();
         jMenuItemPanic = new javax.swing.JMenuItem();
         jMenuItemMemViewer = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItemMount = new javax.swing.JMenuItem();
         jMenuFirmware = new javax.swing.JMenu();
         jMenuItemFlashDefault = new javax.swing.JMenuItem();
@@ -655,6 +656,14 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             }
         });
         jMenuBoard.add(jMenuItemMemViewer);
+
+        jMenuItem1.setText("MIDI input monitor");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenuBoard.add(jMenuItem1);
 
         jMenuItemMount.setText("Enter card reader mode (disconnects editor)");
         jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
@@ -986,13 +995,17 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         } else {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read mounter firmware, please compile mounter firmware! (file: {0} )", fname);
         }
-
     }//GEN-LAST:event_jMenuItemMountActionPerformed
 
     private void jMenuItemMemViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMemViewerActionPerformed
         JFrame F = new axoloti.dialogs.Memory();
         F.setVisible(true);
     }//GEN-LAST:event_jMenuItemMemViewerActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JFrame F = new axoloti.dialogs.MidiMonitor();
+        F.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public void OpenURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
@@ -1044,6 +1057,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private javax.swing.JMenu jMenuBoard;
     private javax.swing.JMenu jMenuEdit;
     private javax.swing.JMenu jMenuFirmware;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemEnterDFU;
     private javax.swing.JMenuItem jMenuItemFCompile;

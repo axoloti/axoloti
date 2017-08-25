@@ -21,7 +21,7 @@ public class ChunkParser {
         while (bb.remaining() > 0) {
             ChunkData c = new ChunkData(bb);
             list.add(c);
-            System.out.println("parser " + FourCC.Format(c.fourcc.getInt()));
+            c.dumpHead();
         }
     }
 
