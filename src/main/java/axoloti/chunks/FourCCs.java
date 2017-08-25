@@ -20,4 +20,5 @@ public class FourCCs {
     static public final FourCC FW_MIDI_INPUT_ROUTING = new FourCC('M', 'I', 'R', 'O');
     static public final FourCC FW_MIDI_OUTPUT_ROUTING = new FourCC('M', 'O', 'R', 'O');
 
+    static public final FourCC FW_MIDI_INPUT_BUFFER = new FourCC('M', 'I', 'B', '1');
 }

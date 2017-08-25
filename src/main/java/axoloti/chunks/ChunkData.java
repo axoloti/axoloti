@@ -21,4 +21,23 @@ public class ChunkData {
         data = ByteBuffer.wrap(b);
         data.order(ByteOrder.LITTLE_ENDIAN);
     }
+
+    public void dumpHead() {
+        System.out.println("chunk head " + FourCC.Format(fourcc.getInt()));
+        System.out.print("chunk data: ");
+        ByteBuffer d = data.duplicate();
+        d.rewind();
+        d.order(ByteOrder.LITTLE_ENDIAN);
+        for (int j = 0; j < 4; j++) {
+            if (d.remaining() < 4) {
+                break;
+            }
+            System.out.print(String.format("%08X ", d.getInt()));
+        }
+        if (d.remaining() < 4) {
+            System.out.println();
+        } else {
+            System.out.println("...");
+        }
+    }
 }

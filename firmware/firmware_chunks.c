@@ -19,11 +19,13 @@
 #include "firmware_chunks.h"
 
 #include "fourcc.h"
+#include "chunks/midi_buffer.h"
 #include "chunks/midi_input_routing.h"
 #include "chunks/midi_output_routing.h"
 #include "chunks/lcd_framebuffer.h"
 #include "chunks/gpio_adc.h"
 
+#include "midi.h"
 #include "midi_routing.h"
 #include "serial_midi.h"
 #include "usbh_midi_core.h"
@@ -39,6 +41,7 @@ typedef struct {
 	chunk_midi_output_routing_t midi_output_routing;
 	chunk_gpio_adc_t gpio_adc;
 	chunk_lcd_framebuffer_t lcd_framebuffer;
+	chunk_midi_buffer_t midi_input_buffer;
 } chunk_firmware_chunks_t;
 
 #define fourcc_fw_root  FOURCC('A','X','R','1')
@@ -86,6 +89,10 @@ const chunk_fw_root_t chunk_fw_root = {
 			.height = LCDHEIGHT,
 			.pixeltype = 0,
 			.data = (uint8_t *)lcd_buffer
+		},
+		.midi_input_buffer = {
+			.header = CHUNK_HEADER(midi_buffer),
+			.data = &midi_input_buffer
 		}
 	}
 };
