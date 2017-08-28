@@ -54,7 +54,11 @@ const signed char SysMsgLengthLookup[16] = {-1, // 0xf0=sysex start. may vary
     3 // 0xff= not reset, but a META-EVENT, which is always 3 bytes
     };
 
-midi_input_remap_t midi_inputmap_serial = {MIDI_DEVICE_DIN , MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE};
+midi_input_remap_t midi_inputmap_serial = {
+		.name = "DIN",
+		.nports = 1,
+		.portmap = {{MIDI_DEVICE_DIN , MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE}}
+};
 
 unsigned char MidiByte0;
 unsigned char MidiByte1;
@@ -68,11 +72,10 @@ inline uint8_t SMidi_calcCIN(uint8_t b0) {
     return (b0 & 0xF0 ) >> 4;
 }
 
-
 __STATIC_INLINE void dispatch_midi_input(midi_message_t m) {
   int i=0;
   for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
-	  int virtual_port = midi_inputmap_serial[i];
+	  int virtual_port = midi_inputmap_serial.portmap[0][i];
 	  if (virtual_port == MIDI_DEVICE_INPUTMAP_NONE) break;
 	  m.fields.port = virtual_port;
 	  midi_input_buffer_put(&midi_input_buffer, m);

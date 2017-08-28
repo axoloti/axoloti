@@ -23,13 +23,11 @@
 #include "fourcc.h"
 #include "midi_routing.h"
 
-#define fourcc_midi_input_routing FOURCC('M','I','R','O')
+#define fourcc_midi_input_routing FOURCC('M','I','R','2')
 
 typedef struct {
 	chunk_header_t header;
-	char *name;
-	int nports;
-	midi_input_remap_t *routing_table;
+	midi_input_remap_t * (routing_table[4]);
 } chunk_midi_input_routing_t;
 
 #endif

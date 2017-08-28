@@ -35,9 +35,7 @@
 
 // ------ firmware chunks ---------------------------------------------
 typedef struct {
-	chunk_midi_input_routing_t midi_input_routing_din;
-	chunk_midi_input_routing_t midi_input_routing_usbh;
-	chunk_midi_input_routing_t midi_input_routing_usbd;
+	chunk_midi_input_routing_t midi_input_routing;
 	chunk_midi_output_routing_t midi_output_routing;
 	chunk_gpio_adc_t gpio_adc;
 	chunk_lcd_framebuffer_t lcd_framebuffer;
@@ -54,23 +52,9 @@ typedef struct {
 const chunk_fw_root_t chunk_fw_root = {
 	.header = CHUNK_HEADER(fw_root),
 	.fw_chunks = {
-		.midi_input_routing_din = {
+		.midi_input_routing = {
 			.header = CHUNK_HEADER(midi_input_routing),
-			.name = "DIN",
-			.nports = 1,
-			.routing_table = &midi_inputmap_serial
-		},
-		.midi_input_routing_usbh = {
-			.header = CHUNK_HEADER(midi_input_routing),
-			.name = "USB Host",
-			.nports = 16,
-			.routing_table = &midi_inputmap_usbh[0]
-		},
-		.midi_input_routing_usbd = {
-			.header = CHUNK_HEADER(midi_input_routing),
-			.name = "USB Device",
-			.nports = 1,
-			.routing_table = &midi_inputmap_usbd
+			.routing_table = {&midi_inputmap_serial, &midi_inputmap_usbd, &midi_inputmap_usbh1, &midi_inputmap_usbh2}
 		},
 		.midi_output_routing = {
 			.header = CHUNK_HEADER(midi_output_routing),

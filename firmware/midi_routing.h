@@ -53,6 +53,10 @@ extern midi_output_routing_t midi_output_routing_table[16][MIDI_TARGETS_PER_VPOR
 
 #define MIDI_DEVICE_INPUTMAP_NONE -1
 
-typedef int8_t midi_input_remap_t[MIDI_INPUT_REMAP_ENTRIES];
+typedef struct {
+	char *name;
+	int nports;
+	int8_t portmap[][MIDI_INPUT_REMAP_ENTRIES];
+} midi_input_remap_t;
 
 #endif

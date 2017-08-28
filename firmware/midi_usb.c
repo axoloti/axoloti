@@ -34,7 +34,11 @@
 
 midi_output_buffer_t midi_output_usbd;
 
-midi_input_remap_t midi_inputmap_usbd = {MIDI_DEVICE_USB_DEVICE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE};
+midi_input_remap_t midi_inputmap_usbd = {
+		"USB device",
+		1,
+		{{MIDI_DEVICE_USB_DEVICE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE}}
+};
 
 thread_t * thd_midi_Writer;
 thread_t * thd_midi_Reader;
@@ -86,7 +90,7 @@ static THD_FUNCTION(MidiReader, arg) {
 
 		    	  int i=0;
 		    	  for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
-		    		  int virtual_port = midi_inputmap_usbd[i];
+		    		  int virtual_port = midi_inputmap_usbd.portmap[0][i];
 		    		  if (virtual_port == MIDI_DEVICE_INPUTMAP_NONE) break;
 		    		  midi_usbd_rxbuf[i].fields.port = virtual_port;
 					  midi_input_buffer_put(&midi_input_buffer, midi_usbd_rxbuf[i]);

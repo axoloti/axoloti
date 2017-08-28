@@ -19,11 +19,14 @@ public class MidiRoutingTables extends AbstractModel {
 
     public void readFromTarget() {
         IConnection conn = CConnection.GetConnection();
-        ChunkData[] chunk_inputs = conn.GetFWChunks().GetAll(FourCCs.FW_MIDI_INPUT_ROUTING);
-        MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[chunk_inputs.length];
-        for (int i = 0; i < chunk_inputs.length; i++) {
+        ChunkData chunk_input = conn.GetFWChunks().GetOne(FourCCs.FW_MIDI_INPUT_ROUTING);
+        chunk_input.data.rewind();
+        int n_interfaces = chunk_input.data.remaining()/4;
+        MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[n_interfaces];
+        for (int i = 0; i < n_interfaces; i++) {
             cirs[i] = new MidiInputRoutingTable();
-            cirs[i].retrieve(conn, chunk_inputs[i]);
+            int addr = chunk_input.data.getInt();
+            cirs[i].retrieve(conn, addr);
         }
         setInputRoutingTable(cirs);
         outputRoutingTable.readOutputMapping();

@@ -17,7 +17,7 @@ public class FourCCs {
 
     static public final FourCC FW_GPIO_ADC = new FourCC('G', 'A', 'D', 'C');
     static public final FourCC FW_LCD_FRAMEBUFFER = new FourCC('L', 'C', 'D', 'F');
-    static public final FourCC FW_MIDI_INPUT_ROUTING = new FourCC('M', 'I', 'R', 'O');
+    static public final FourCC FW_MIDI_INPUT_ROUTING = new FourCC('M', 'I', 'R', '2');
     static public final FourCC FW_MIDI_OUTPUT_ROUTING = new FourCC('M', 'O', 'R', 'O');
 
     static public final FourCC FW_MIDI_INPUT_BUFFER = new FourCC('M', 'I', 'B', '1');

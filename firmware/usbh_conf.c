@@ -2,6 +2,7 @@
 #include "hal.h"
 #include "usbh_midi_class.h"
 #include "midi_buffer.h"
+#include "midi_usbh.h"
 #if HAL_USBH_USE_HID
 #include "usbh/dev/hid.h"
 #endif
@@ -14,24 +15,36 @@
  * * compiled with ChibiOS-Contrib
  *   from https://github.com/ChibiOS/ChibiOS-Contrib
 */
+typedef struct {
+	USBHMIDIConfig config;
+	midi_input_remap_t *mapping;
+} USBHMIDIConfig_ext;
 
-#define USBH_MIDI_BUFSIZE 64
-static char usbh_midi_in_buf[USBH_MIDI_CLASS_MAX_INSTANCES][USBH_MIDI_BUFSIZE];
 
-void usbhmidi_cb(USBHMIDIDriver *midip, uint16_t len) {
+static void usbhmidi_cb(USBHMIDIConfig *midic, uint32_t *buf, int len) {
+	USBHMIDIConfig_ext *midic_ext = (USBHMIDIConfig_ext *)midic;
 	int i;
-	char *buf = midip->config->report_buffer;
-	for (i = 0; i < len; i += 4) {
-		if (buf[i]) {
+	for (i = 0; i < len; i ++) {
+		if (*buf) {
 			midi_message_t m;
-			m.word = *(uint32_t *) &buf[i];
-			usbh_midi_dispatch(m);
+			m.word = *buf;
+			usbh_midi_dispatch(m, midic_ext->mapping->portmap);
+			buf++;
 			//usbDbgPuts("cb!");
 		}
 	}
 }
 
-USBHMIDIConfig midiconf[USBH_MIDI_CLASS_MAX_INSTANCES];
+static void usbmidi_disconnect(USBHMIDIConfig *midic) {
+	USBHMIDIConfig_ext *midic_ext = (USBHMIDIConfig_ext *)midic;
+	midic_ext->mapping->nports=0;
+}
+
+USBHMIDIConfig_ext USBHMIDIC[USBH_MIDI_CLASS_MAX_INSTANCES] = {
+		{.config = {usbhmidi_cb,usbmidi_disconnect}, .mapping = &midi_inputmap_usbh1},
+		{.config = {usbhmidi_cb,usbmidi_disconnect}, .mapping = &midi_inputmap_usbh2}
+};
+
 
 #if HAL_USBH_USE_HID
 int8_t hid_buttons[8];
@@ -96,9 +109,8 @@ static void ThreadUSBHPnP(void *p) {
     uint8_t i;
 
     for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
-    	midiconf[i].cb_report = usbhmidi_cb;
-    	midiconf[i].report_buffer = usbh_midi_in_buf[i];
-    	midiconf[i].report_len = USBH_MIDI_BUFSIZE;
+		USBHMIDID[i].config = (USBHMIDIConfig *)&USBHMIDIC[i];
+    	USBHMIDIC[i].config.cb_report = usbhmidi_cb;
     }
 #if HAL_USBH_USE_HID
     static uint8_t kbd_led_states[HAL_USBHHID_MAX_INSTANCES];
@@ -115,7 +127,9 @@ static void ThreadUSBHPnP(void *p) {
         for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
             if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
                 usbDbgPrintf("MIDI: Connected, MIDI%d", i);
-                usbhmidiStart(&USBHMIDID[i], &midiconf[i]);
+                usbhmidiStart(&USBHMIDID[i]);
+                midi_inputmap_usbh[i]->name = USBHMIDID[i].name;
+                midi_inputmap_usbh[i]->nports = USBHMIDID[i].nInputPorts;
             }
         }
 

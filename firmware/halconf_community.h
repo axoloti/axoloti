@@ -149,22 +149,22 @@
 #define USBH_DEBUG_BUFFER                             1000 /* was 25000 */
 
 #define USBH_DEBUG_ENABLE_TRACE                       0
-#define USBH_DEBUG_ENABLE_INFO                        1
+#define USBH_DEBUG_ENABLE_INFO                        0
 #define USBH_DEBUG_ENABLE_WARNINGS                    1
 #define USBH_DEBUG_ENABLE_ERRORS                      1
 
 #define USBH_LLD_DEBUG_ENABLE_TRACE                   0
-#define USBH_LLD_DEBUG_ENABLE_INFO                    1
+#define USBH_LLD_DEBUG_ENABLE_INFO                    0
 #define USBH_LLD_DEBUG_ENABLE_WARNINGS                1
 #define USBH_LLD_DEBUG_ENABLE_ERRORS                  1
 
 #define USBHHUB_DEBUG_ENABLE_TRACE                    0
-#define USBHHUB_DEBUG_ENABLE_INFO                     1
+#define USBHHUB_DEBUG_ENABLE_INFO                     0
 #define USBHHUB_DEBUG_ENABLE_WARNINGS                 1
 #define USBHHUB_DEBUG_ENABLE_ERRORS                   1
 
 #define USBHHID_DEBUG_ENABLE_TRACE                    0
-#define USBHHID_DEBUG_ENABLE_INFO                     1
+#define USBHHID_DEBUG_ENABLE_INFO                     0
 #define USBHHID_DEBUG_ENABLE_WARNINGS                 1
 #define USBHHID_DEBUG_ENABLE_ERRORS                   1
 

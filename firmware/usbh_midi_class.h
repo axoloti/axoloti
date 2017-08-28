@@ -1,34 +1,3 @@
-#if 0
-/*===========================================================================*/
-/* External declarations.                                                    */
-/*===========================================================================*/
-
-extern const usbh_classdriverinfo_t usbhmidiClassDriverInfo;
-
-extern USBHMIDIDriver USBHMIDID[HAL_USBHMIDI_MAX_INSTANCES];
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-	/* MIDI Driver */
-	void usbhmidiObjectInit(USBHMIDIDriver *midip);
-
-	static inline usbhmidi_state_t usbhmidiGetState(USBHMIDIDriver *midip) {
-		return midip->state;
-	}
-
-	void usbhmidiStart(USBHMIDIDriver *midip, const USBHMIDIConfig *cfg);
-
-	/* global initializer */
-	void usbhmidiInit(void);
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-
-
-/************************ ****************** *****END OF FILE****/
 
 
 /*
@@ -57,13 +26,13 @@ extern "C" {
 /*===========================================================================*/
 #define USBH_MIDI_CLASS_MAX_INSTANCES                  2
 #define USBH_MIDI_DEBUG_ENABLE_TRACE                    0
-#define USBH_MIDI_DEBUG_ENABLE_INFO                     1
+#define USBH_MIDI_DEBUG_ENABLE_INFO                     0
 #define USBH_MIDI_DEBUG_ENABLE_WARNINGS                 1
 #define USBH_MIDI_DEBUG_ENABLE_ERRORS                   1
 
 
-#define USB_AUDIO_CLASS 0x01
-#define USB_MIDISTREAMING_SubCLASS 0x03
+#define USBH_MIDI_BUFSIZE 64
+
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
@@ -85,12 +54,12 @@ typedef enum {
 typedef struct USBHMIDIDriver USBHMIDIDriver;
 typedef struct USBHMIDIConfig USBHMIDIConfig;
 
-typedef void (*usbhmidi_report_callback)(USBHMIDIDriver *midip, uint16_t len);
+typedef void (*usbhmidi_report_callback)(USBHMIDIConfig *midic,  uint32_t *buf, int len);
+typedef void (*usbhmidi_disconnect_callback)(USBHMIDIConfig *midic);
 
 struct USBHMIDIConfig {
 	usbhmidi_report_callback cb_report;
-	void *report_buffer;
-	uint16_t report_len;
+	usbhmidi_disconnect_callback cb_disconnect;
 };
 
 struct USBHMIDIDriver {
@@ -106,7 +75,13 @@ struct USBHMIDIDriver {
 
 	usbh_urb_t in_urb;
 
-	const USBHMIDIConfig *config;
+	uint8_t report_buffer[USBH_MIDI_BUFSIZE];
+
+	char name[32];
+	int nInputPorts;
+	int nOutputPorts;
+
+	USBHMIDIConfig *config;
 };
 
 
@@ -125,6 +100,7 @@ extern USBHMIDIDriver USBHMIDID[USBH_MIDI_CLASS_MAX_INSTANCES];
 extern "C" {
 #endif
 	/* API goes here */
+void usbhmidiStart(USBHMIDIDriver *midip);
 
 #ifdef __cplusplus
 }

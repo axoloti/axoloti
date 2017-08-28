@@ -181,33 +181,14 @@ public class MidiRouting extends javax.swing.JFrame implements ConnectionStatusL
     class MidiInputRoutingTableView implements IView<MidiInputRoutingTableController> {
 
         final MidiInputRoutingTableController controller;
-        final int row;
 
-        public MidiInputRoutingTableView(MidiInputRoutingTableController controller, int row) {
+        public MidiInputRoutingTableView(MidiInputRoutingTableController controller) {
             this.controller = controller;
-            this.row = row;
         }
 
         @Override
         public void modelPropertyChange(PropertyChangeEvent evt) {
-            if (controller.getModel().getMapping() == null) {
-                return;
-            }
-            DefaultTableModel tm_in = (DefaultTableModel) table_midi_in_routing.getModel();
-            for (int k = 1; k < 17; k++) {
-                tm_in.setValueAt(false, row, k);
-            }
-            if (controller.getModel().getMapping().length > 1) {
-                tm_in.setValueAt(controller.getModel().getPortName() + " #" + 0 + " ->", row, 0);
-            } else {
-                tm_in.setValueAt(controller.getModel().getPortName() + " ->", row, 0);
-            }
-            for (int j = 0; j < 4; j++) {
-                int dest = controller.getModel().getMapping()[0][j];
-                if (dest != -1) {
-                    tm_in.setValueAt(true, row, dest + 1);
-                }
-            }
+            populateInputTable();
         }
 
         @Override
@@ -228,9 +209,7 @@ public class MidiRouting extends javax.swing.JFrame implements ConnectionStatusL
         mirtvs = new MidiInputRoutingTableView[mrts.getInputRoutingTables().length];
         int i = 0;
         for (MidiInputRoutingTableController mirtc : mrts.inputRoutingTablesController) {
-            Object[] rowdata = new Object[17];
-            tm_in.addRow(rowdata);
-            mirtvs[i] = new MidiInputRoutingTableView(mirtc, i);
+            mirtvs[i] = new MidiInputRoutingTableView(mirtc);
             mirtc.addView(mirtvs[i]);
             i++;
         }
@@ -239,6 +218,37 @@ public class MidiRouting extends javax.swing.JFrame implements ConnectionStatusL
             table_midi_in_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
         }
         table_midi_in_routing.doLayout();
+    }
+    
+    private void populateInputTable(){
+        int row = 0;
+        DefaultTableModel tm_in = (DefaultTableModel) table_midi_in_routing.getModel();
+        tm_in.setRowCount(0);
+        for(MidiInputRoutingTableView v: mirtvs) {
+            if (v == null) continue;
+            if (v.controller.getModel().getMapping() == null) continue;
+            for(int i = 0; i<v.controller.getModel().getMapping().length; i++) {
+
+                Object[] rowdata = new Object[17];
+                tm_in.addRow(rowdata);
+
+                for (int k = 1; k < 17; k++) {
+                    tm_in.setValueAt(false, row, k);
+                }
+                if (v.controller.getModel().getMapping().length > 1) {
+                    tm_in.setValueAt(v.controller.getModel().getPortName() + " #" + i + " ->", row, 0);
+                } else {
+                    tm_in.setValueAt(v.controller.getModel().getPortName() + " ->", row, 0);
+                }
+                for (int j = 0; j < 4; j++) {
+                    int dest = v.controller.getModel().getMapping()[i][j];
+                    if (dest != -1) {
+                        tm_in.setValueAt(true, row, dest + 1);
+                    }
+                }
+                row++;
+            }        
+        }        
     }
 
     final int ntargets = 4;
