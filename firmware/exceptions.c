@@ -371,10 +371,6 @@ void dbg_set_i(int i) {
 }
 
 void terminator(void) {
-#ifdef INFINITE_LOOP_ON_FAULTS
-  for (;;)
-  ;
-#else
   // float usb inputs, hope the host notices detach...
   palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
   palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
@@ -390,8 +386,12 @@ void terminator(void) {
     }
   }
 
+  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+	  // software breakpoint
+	  asm("BKPT 255");
+  }
+
   NVIC_SystemReset();
-#endif
 }
 
 void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {

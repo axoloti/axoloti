@@ -1031,6 +1031,42 @@ public class USBBulkConnection_v2 extends IConnection {
         });
     }
 
+    void Acknowledge_v2(
+            int DSPLoad, 
+            int PatchID, 
+            int Voltages, 
+            int patchIndex, 
+            int sdcardPresent,
+            float inLevel1,
+            float inLevel2,
+            float outLevel1,
+            float outLevel2,
+            int underruns         
+    ) {
+        synchronized (sync) {
+            sync.ready = true;
+            sync.notifyAll();
+        }
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (patch != null) {
+                    if ((getPatchModel().GetIID() != PatchID) && getPatchModel().getLocked()) {
+                        patch.getController().setLocked(false);
+                    } else {
+                        patch.getController().setDspLoad(DSPLoad);
+                    }
+                }
+                MainFrame.mainframe.showPatchIndex(patchIndex);
+                MainFrame.mainframe.showLevels(inLevel1, inLevel2, outLevel1, outLevel2);
+                MainFrame.mainframe.showUnderruns(underruns);
+                targetProfile.setVoltages(Voltages);
+                SetSDCardPresent(sdcardPresent != 0);
+            }
+        });
+    }
+    
+    
     void RPacketParamChange(final int index, final int value, final int patchID) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -1204,7 +1240,7 @@ public class USBBulkConnection_v2 extends IConnection {
     final int tx_hdr_memrdx = 0x726f7841;       // "Axor"
     final int rx_hdr_displaypckt = 0x446F7841;  // "AxoD"
     final int rx_hdr_paramchange = 0x516F7841;  // "AxoQ" 
-    final int rx_hdr_fileinfo = 0x666F7841;    // "Axof" 
+    final int rx_hdr_fileinfo = 0x666F7841;     // "Axof" 
 
     final boolean log_rx_diagnostics = false;
 
@@ -1223,13 +1259,28 @@ public class USBBulkConnection_v2 extends IConnection {
                             if (false && log_rx_diagnostics) {
                                 System.out.println("rx hdr ack");
                             }
-                            int i0 = rbuf.getInt();
-                            int i1 = rbuf.getInt();
-                            int i2 = rbuf.getInt();
-                            int i3 = rbuf.getInt();
-                            int i4 = rbuf.getInt();
-                            int i5 = rbuf.getInt();
-                            Acknowledge(i1, i2, i3, i4, i5);
+                            int ackversion = rbuf.getInt();
+                            if (ackversion==0) {
+                                int i1 = rbuf.getInt();
+                                int i2 = rbuf.getInt();
+                                int i3 = rbuf.getInt();
+                                int i4 = rbuf.getInt();
+                                int i5 = rbuf.getInt();
+    //                            System.out.println(String.format("vu %08X",i0));                            
+                                Acknowledge(i1, i2, i3, i4, i5);
+                            } else if (ackversion==1) {
+                                int i1 = rbuf.getInt();
+                                int i2 = rbuf.getInt();
+                                int i3 = rbuf.getInt();
+                                int i4 = rbuf.getInt();
+                                int i5 = rbuf.getInt();
+                                float vuIn1 = rbuf.getFloat();
+                                float vuIn2 = rbuf.getFloat();
+                                float vuOut1 = rbuf.getFloat();
+                                float vuOut2 = rbuf.getFloat();
+                                int underruns = rbuf.getInt();                                
+                                Acknowledge_v2(i1, i2, i3, i4, i5, vuIn1, vuIn2, vuOut1, vuOut2, underruns);
+                            }
                             GoIdleState();
                         }
                         break;
