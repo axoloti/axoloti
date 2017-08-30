@@ -39,6 +39,7 @@
 #include "watchdog.h"
 #include "sysmon.h"
 #include "firmware_chunks.h"
+#include "axoloti_math.h"
 
 //#define DEBUG_SERIAL 1
 
@@ -101,28 +102,38 @@ uint32_t value;
 #define evt_bulk_tx_dirlist (1<<7)
 #define evt_bulk_tx_paramchange (1<<8)
 
-const uint32_t tx_hdr_acknowledge = 0x416F7841;   // "AxoA"
-const uint32_t tx_hdr_fwid = 0x566f7841;          // "AxoV"
-const uint32_t tx_hdr_log = 0x546F7841;           // "AxoT"
-const uint32_t tx_hdr_memrd32 = 0x796f7841;       // "Axoy"
-const uint32_t tx_hdr_memrdx = 0x726f7841;        // "Axor"
-const uint32_t tx_hdr_paramchange = 0x516F7841;   // "AxoQ"
-const uint32_t tx_hdr_fileinfo = 0x666F7841;      // "Axof"
+#define tx_hdr_acknowledge 0x416F7841   // "AxoA"
+#define tx_hdr_fwid        0x566f7841   // "AxoV"
+#define tx_hdr_log         0x546F7841   // "AxoT"
+#define tx_hdr_memrd32     0x796f7841   // "Axoy"
+#define tx_hdr_memrdx      0x726f7841   // "Axor"
+#define tx_hdr_paramchange 0x516F7841   // "AxoQ"
+#define tx_hdr_fileinfo    0x666F7841   // "Axof"
+
+tx_pckt_ack_v2_t tx_pckt_ack_v2 = {
+		.header = tx_hdr_acknowledge,
+		.version = 1,
+		.dspload = 0,
+		.patchID = 0,
+		.voltage = 0,
+		.loadPatchIndex = -1,
+		.fs_ready = 0,
+		.vu_input = {0,0},
+		.vu_output = {0,0},
+		.underruns = 0
+};
 
 msg_t bulk_tx_ack(void) {
-	int ack[7];
-	ack[0] = tx_hdr_acknowledge;
-	ack[1] = 0; // reserved
-	ack[2] = dspLoadPct;
-	ack[3] = patchMeta.patchID;
-	ack[4] = sysmon_getVoltage10() + (sysmon_getVoltage50() << 16);
+	tx_pckt_ack_v2.dspload = dspLoadPct;
+	tx_pckt_ack_v2.patchID = patchMeta.patchID;
+	tx_pckt_ack_v2.voltage = sysmon_getVoltage10() + (sysmon_getVoltage50() << 16);
 	if (patchStatus) {
-		ack[5] = UNINITIALIZED;
+		tx_pckt_ack_v2.loadPatchIndex = UNINITIALIZED;
 	} else {
-		ack[5] = loadPatchIndex;
+		tx_pckt_ack_v2.loadPatchIndex = loadPatchIndex;
 	}
-	ack[6] = fs_ready;
-	return BulkUsbTransmit((const unsigned char* )&ack[0], 7 * 4);
+	tx_pckt_ack_v2.fs_ready = fs_ready;
+	return BulkUsbTransmit((const unsigned char* )&tx_pckt_ack_v2, sizeof(tx_pckt_ack_v2));
 }
 
 typedef struct {
@@ -540,24 +551,24 @@ typedef struct {
 	input_event input_event;
 } rcv_pckt_virtual_input_event_t;
 
-const uint32_t rcv_hdr_ping = 0x706f7841; // "Axop"
-const uint32_t rcv_hdr_getfwid = 0x566f7841; // "AxoV"
-const uint32_t rcv_hdr_memrd32 = 0x796f7841; // "Axoy"
-const uint32_t rcv_hdr_memrdx = 0x726f7841; // "Axor"
-const uint32_t rcv_hdr_stop = 0x536f7841; // "AxoS"
-const uint32_t rcv_hdr_start = 0x736f7841; // "Axos"
-const uint32_t rcv_hdr_memwr = 0x576f7841; // "AxoW"
-const uint32_t rcv_hdr_paramchange = 0x506f7841; // "AxoP"
-const uint32_t rcv_hdr_midi = 0x4D6f7841; // "AxoM"
-const uint32_t rcv_hdr_fs_create = 0x436f7841; // "AxoC"
-const uint32_t rcv_hdr_fs_dirlist = 0x646f7841; // "Axod"
-const uint32_t rcv_hdr_copy_to_flash = 0x466f7841; // "AxoF"
-const uint32_t rcv_hdr_activate_dfu = 0x446f7841; // "AxoD"
-const uint32_t rcv_hdr_fs_close = 0x636f7841; // "Axoc"
-const uint32_t rcv_hdr_fs_append = 0x416f7841; // "AxoA"
-const uint32_t rcv_hdr_preset_apply = 0x546f7841; // "AxoT"
-const uint32_t rcv_hdr_preset_write = 0x526f7841; // "AxoR"
-const uint32_t rcv_hdr_virtual_input_event = 0x426f7841; // "AxoB"
+#define rcv_hdr_ping           0x706f7841 // "Axop"
+#define rcv_hdr_getfwid        0x566f7841 // "AxoV"
+#define rcv_hdr_memrd32        0x796f7841 // "Axoy"
+#define rcv_hdr_memrdx         0x726f7841 // "Axor"
+#define rcv_hdr_stop           0x536f7841 // "AxoS"
+#define rcv_hdr_start          0x736f7841 // "Axos"
+#define rcv_hdr_memwr          0x576f7841 // "AxoW"
+#define rcv_hdr_paramchange    0x506f7841 // "AxoP"
+#define rcv_hdr_midi           0x4D6f7841 // "AxoM"
+#define rcv_hdr_fs_create      0x436f7841 // "AxoC"
+#define rcv_hdr_fs_dirlist     0x646f7841 // "Axod"
+#define rcv_hdr_copy_to_flash  0x466f7841 // "AxoF"
+#define rcv_hdr_activate_dfu   0x446f7841 // "AxoD"
+#define rcv_hdr_fs_close       0x636f7841 // "Axoc"
+#define rcv_hdr_fs_append      0x416f7841 // "AxoA"
+#define rcv_hdr_preset_apply   0x546f7841 // "AxoT"
+#define rcv_hdr_preset_write   0x526f7841 // "AxoR"
+#define rcv_hdr_virtual_input_event  0x426f7841 // "AxoB"
 
 void ManipulateFile(void) {
   sdcard_attemptMountIfUnmounted();

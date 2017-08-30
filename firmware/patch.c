@@ -181,6 +181,7 @@ static int StartPatch1(void) {
   }
   patchStatus = RUNNING;
   ui_init_patch();
+  tx_pckt_ack_v2.underruns = 0;
   return 0;
 }
 
@@ -235,10 +236,39 @@ static THD_FUNCTION(ThreadDSP, arg) {
         // clear output buffers
         // and give other processes a chance
         codec_clearbuffer();
+        tx_pckt_ack_v2.underruns++;
         //      LogTextMessage("dsp overrun");
         // dsp overrun penalty,
         // keeping cooperative with lower priority threads
         chThdSleepMilliseconds(1);
+      }
+      if (dspLoadPct < 95) {
+    	  // RMS input/output level computation
+    	  int32_t *psi = inbuf;
+    	  int32_t *pso = outbuf;
+    	  float vu_accf0 = tx_pckt_ack_v2.vu_input[0];
+    	  float vu_accf1 = tx_pckt_ack_v2.vu_input[1];
+    	  float vu_accf2 = tx_pckt_ack_v2.vu_output[0];
+    	  float vu_accf3 = tx_pckt_ack_v2.vu_output[1];
+    	  for(int i=0;i<BUFSIZE;i++) {
+    		  float s0 = *psi++;
+    		  float s1 = *psi++;
+    		  float s2 = *pso++;
+    		  float s3 = *pso++;
+    		  vu_accf0 += s0*s0;
+    		  vu_accf1 += s1*s1;
+    		  vu_accf2 += s2*s2;
+    		  vu_accf3 += s3*s3;
+    	  }
+    	  float g = 1.0f/128;
+    	  vu_accf0 -= g*vu_accf0;
+    	  vu_accf1 -= g*vu_accf1;
+    	  vu_accf2 -= g*vu_accf2;
+    	  vu_accf3 -= g*vu_accf3;
+    	  tx_pckt_ack_v2.vu_input[0] = vu_accf0;
+    	  tx_pckt_ack_v2.vu_input[1] = vu_accf1;
+    	  tx_pckt_ack_v2.vu_output[0] = vu_accf2;
+    	  tx_pckt_ack_v2.vu_output[1] = vu_accf3;
       }
       spilink_clear_audio_tx();
     }

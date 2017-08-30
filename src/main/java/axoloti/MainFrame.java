@@ -464,7 +464,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabelIcon = new javax.swing.JLabel();
@@ -477,6 +476,19 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelPatch = new javax.swing.JLabel();
         jLabelSDCardPresent = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jPanel5 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabelVuIn1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabelVuIn2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabelVuOut1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabelVuOut2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabelUnderruns = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
         jPanelProgress = new javax.swing.JPanel();
@@ -507,8 +519,6 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         windowMenu1 = new axoloti.menus.WindowMenu();
         helpMenu1 = new axoloti.menus.HelpMenu();
 
-        jLabel1.setText("jLabel1");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Axoloti");
         setMinimumSize(new java.awt.Dimension(200, 200));
@@ -520,6 +530,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
+        jPanel2.setPreferredSize(new java.awt.Dimension(272, 0));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
@@ -566,6 +577,45 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jPanel2.add(jPanel1);
         jPanel2.add(filler3);
+
+        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jPanel4.setLayout(new java.awt.GridLayout(5, 2));
+
+        jLabel1.setText("in L");
+        jPanel4.add(jLabel1);
+
+        jLabelVuIn1.setText("0");
+        jPanel4.add(jLabelVuIn1);
+
+        jLabel2.setText("in R");
+        jPanel4.add(jLabel2);
+
+        jLabelVuIn2.setText("0");
+        jPanel4.add(jLabelVuIn2);
+
+        jLabel3.setText("out L");
+        jPanel4.add(jLabel3);
+
+        jLabelVuOut1.setText("0");
+        jPanel4.add(jLabelVuOut1);
+
+        jLabel4.setText("out R");
+        jPanel4.add(jLabel4);
+
+        jLabelVuOut2.setText("0");
+        jPanel4.add(jLabelVuOut2);
+
+        jLabel5.setText("underruns");
+        jPanel4.add(jLabel5);
+
+        jLabelUnderruns.setText("0");
+        jPanel4.add(jLabelUnderruns);
+
+        jPanel5.add(jPanel4);
+        jPanel5.add(filler2);
+
+        jPanel2.add(jPanel5);
 
         getContentPane().add(jPanel2);
 
@@ -1040,19 +1090,29 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.menus.FileMenu fileMenu;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private axoloti.menus.HelpMenu helpMenu1;
     private javax.swing.JButton jButtonClear;
     private javax.swing.JCheckBox jCheckBoxConnect;
     private javax.swing.JPopupMenu.Separator jDevSeparator;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelCPUID;
     private javax.swing.JLabel jLabelFirmwareID;
     private javax.swing.JLabel jLabelIcon;
     private javax.swing.JLabel jLabelPatch;
     private javax.swing.JLabel jLabelProgress;
     private javax.swing.JLabel jLabelSDCardPresent;
+    private javax.swing.JLabel jLabelUnderruns;
     private javax.swing.JLabel jLabelVoltages;
+    private javax.swing.JLabel jLabelVuIn1;
+    private javax.swing.JLabel jLabelVuIn2;
+    private javax.swing.JLabel jLabelVuOut1;
+    private javax.swing.JLabel jLabelVuOut2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuBoard;
     private javax.swing.JMenu jMenuEdit;
@@ -1075,6 +1135,8 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPaneLog;
@@ -1299,4 +1361,28 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelSDCardPresent.setText("no SDCard");
         jMenuItemMount.setEnabled(false);
     }
+
+    void showLevels(float inLevel1, float inLevel2, float outLevel1, float outLevel2) {
+        double r = 10*Math.log10(Math.pow(2.0,73));
+        double inLevel1dB = 10*Math.log10(Math.abs(inLevel1) + 1) - r;
+        double inLevel2dB = 10*Math.log10(Math.abs(inLevel2) + 1) - r;
+        double outLevel1dB = 10*Math.log10(Math.abs(outLevel1) + 1) - r;
+        double outLevel2dB = 10*Math.log10(Math.abs(outLevel2) + 1) - r;
+//        jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
+//        jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
+//        int in2 = inLevel1>>16;
+//        int in1 = inLevel1 & 0x7F;
+//        jLabelVuIn1.setText(String.format("%08X %.2f %.2f %.2f", inLevel1, 6.0 - 3.0*(in1), 3.0*(in2/4.0), 8.0 - 3.0*(in1) - 3.0*(in2/4.0)));
+        
+//        jLabelVuIn2.setText(String.format("%08X", inLevel2));
+        jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
+        jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
+        jLabelVuOut1.setText(String.format("%3.1f", outLevel1dB));
+        jLabelVuOut2.setText(String.format("%3.1f", outLevel2dB));
+    }
+
+    void showUnderruns(int underruns) {
+        jLabelUnderruns.setText(Integer.toString(underruns));
+    }
+
 }
