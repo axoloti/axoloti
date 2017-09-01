@@ -20,16 +20,13 @@
 #define MIDI_ROUTING_H
 
 #define MIDI_VPORTS 16
-#define MIDI_TARGETS_PER_VPORT 4
 
-#define MIDI_DEVICE_OUTPUTMAP_NONE MIDI_DEVICE_OMNI
 
 typedef struct {
-	int8_t midi_device_t;
-	int8_t port;
+	char *name;
+	int nports;
+	int32_t bmvports[/*nports*/]; // nports long, bitmap: for every vport, 1: output, 0: ignore
 } midi_output_routing_t;
-
-extern midi_output_routing_t midi_output_routing_table[16][MIDI_TARGETS_PER_VPORT];
 
 /* -------
  * MIDI input port mapping
@@ -49,14 +46,11 @@ extern midi_output_routing_t midi_output_routing_table[16][MIDI_TARGETS_PER_VPOR
  *
  * how to trap midi/break feedback loops?
  */
-#define MIDI_INPUT_REMAP_ENTRIES 4
-
-#define MIDI_DEVICE_INPUTMAP_NONE -1
 
 typedef struct {
 	char *name;
 	int nports;
-	int8_t portmap[][MIDI_INPUT_REMAP_ENTRIES];
+	int32_t bmvports[/*nports*/]; // bitmap: for every vport, 1: output, 0: ignore
 } midi_input_remap_t;
 
 #endif

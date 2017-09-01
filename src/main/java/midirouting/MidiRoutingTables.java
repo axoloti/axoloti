@@ -14,22 +14,42 @@ public class MidiRoutingTables extends AbstractModel {
 
     MidiInputRoutingTable[] inputRoutingTables;
     public MidiInputRoutingTableController[] inputRoutingTablesController;
-    MidiOutputRoutingTable outputRoutingTable = new MidiOutputRoutingTable();
-    public MidiOutputRoutingTableController outputRoutingTableController = new MidiOutputRoutingTableController(outputRoutingTable, null, null);
+    MidiOutputRoutingTable[] outputRoutingTables;
+    public MidiOutputRoutingTableController[] outputRoutingTablesController;
 
     public void readFromTarget() {
         IConnection conn = CConnection.GetConnection();
         ChunkData chunk_input = conn.GetFWChunks().GetOne(FourCCs.FW_MIDI_INPUT_ROUTING);
         chunk_input.data.rewind();
-        int n_interfaces = chunk_input.data.remaining()/4;
-        MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[n_interfaces];
-        for (int i = 0; i < n_interfaces; i++) {
+        int n_input_interfaces = chunk_input.data.remaining() / 4;
+        MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[n_input_interfaces];
+        for (int i = 0; i < n_input_interfaces; i++) {
             cirs[i] = new MidiInputRoutingTable();
             int addr = chunk_input.data.getInt();
             cirs[i].retrieve(conn, addr);
         }
         setInputRoutingTable(cirs);
-        outputRoutingTable.readOutputMapping();
+
+        ChunkData chunk_output = conn.GetFWChunks().GetOne(FourCCs.FW_MIDI_OUTPUT_ROUTING);
+        chunk_output.data.rewind();
+        int n_output_interfaces = chunk_output.data.remaining() / 4;
+        MidiOutputRoutingTable[] cors = new MidiOutputRoutingTable[n_output_interfaces];
+        for (int i = 0; i < n_output_interfaces; i++) {
+            cors[i] = new MidiOutputRoutingTable();
+            int addr = chunk_output.data.getInt();
+            cors[i].retrieve(conn, addr);
+        }
+        setOutputRoutingTable(cors);
+    }
+
+    public void applyToTarget() {
+        IConnection conn = CConnection.GetConnection();
+        for (MidiInputRoutingTable mirt : inputRoutingTables) {
+            mirt.apply(conn);
+        }
+        for (MidiOutputRoutingTable mort : outputRoutingTables) {
+            mort.apply(conn);
+        }
     }
 
     public MidiInputRoutingTable[] getInputRoutingTables() {
@@ -51,14 +71,18 @@ public class MidiRoutingTables extends AbstractModel {
                 null, routingTable);
     }
 
-    public MidiOutputRoutingTable getOutputRoutingTable() {
-        return outputRoutingTable;
+    public MidiOutputRoutingTable[] getOutputRoutingTable() {
+        return outputRoutingTables;
     }
 
-    public void setOutputRoutingTable(MidiOutputRoutingTable routingTable) {
-        this.outputRoutingTable = routingTable;
+    public void setOutputRoutingTable(MidiOutputRoutingTable[] routingTable) {
+        this.outputRoutingTables = routingTable;
         if (routingTable != null) {
-            outputRoutingTableController = new MidiOutputRoutingTableController(routingTable, null, null);
+            outputRoutingTablesController = new MidiOutputRoutingTableController[routingTable.length];
+            for (int i = 0; i < routingTable.length; i++) {
+                MidiOutputRoutingTable mirt = routingTable[i];
+                outputRoutingTablesController[i] = new MidiOutputRoutingTableController(mirt, null, null);
+            }
         } else {
             inputRoutingTablesController = null;
         }

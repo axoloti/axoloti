@@ -1,10 +1,12 @@
 package midirouting;
 
+import axoloti.CConnection;
 import axoloti.IConnection;
-import axoloti.chunks.ChunkData;
 import axoloti.mvc.AbstractModel;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import qcmds.QCmdMemRead;
+import qcmds.QCmdWriteMem;
 
 /**
  *
@@ -12,43 +14,41 @@ import qcmds.QCmdMemRead;
  */
 public class MidiInputRoutingTable extends AbstractModel {
 
-    final int destinations_per_port = 4;
     String portname;
-    int vports[][];
+    int vports[];
+    int addr;
+
+    private int getTableAddr() {
+        return addr + 8;
+    }
 
     void retrieve(IConnection conn, int addr) {
+        this.addr = addr;
         conn.AppendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem1) {
                 int name_addr = mem1.getInt();
-                System.out.println(String.format("name_addr = %08X", name_addr));
-
                 conn.AppendToQueue(new QCmdMemRead(name_addr, 60, new IConnection.MemReadHandler() {
                     @Override
                     public void Done(ByteBuffer mem) {
                         String c = "";
                         byte b = mem.get();
                         while (b != 0) {
+//                            System.out.println(String.format("%02X %c",(int)b, (char)b));
                             c += (char) b;
                             b = mem.get();
                         }
-                        System.out.println(String.format("port_name = %s", c));
                         setPortName(c);
 
                         int nports = mem1.getInt();
-                        System.out.println(String.format("nports = %d", nports));
-                        int table_addr = addr + 8;
-                        System.out.println(String.format("table_addr = %08X", table_addr));
-                        conn.AppendToQueue(new QCmdMemRead(table_addr, nports*4, new IConnection.MemReadHandler() {
+                        conn.AppendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
                             @Override
                             public void Done(ByteBuffer mem) {
-                                int vports1[][] = new int[nports][destinations_per_port];
+                                int vports1[] = new int[nports];
                                 for (int i = 0; i < nports; i++) {
-                                    for (int j = 0; j < destinations_per_port; j++) {
-                                        vports1[i][j] = mem.get();
-                                    }
+                                    vports1[i] = mem.getInt();
+                                    System.out.println(String.format("MidiInputRouting %s:%d map %08X ", getPortName(), i, vports1[i]));
                                 }
-                                System.out.println("input " + portname + " table addr " + String.format("0x%08X", table_addr));
                                 setMapping(vports1);
                             }
                         }));
@@ -56,6 +56,20 @@ public class MidiInputRoutingTable extends AbstractModel {
                 }));
             }
         }));
+    }
+
+    public void apply(IConnection conn) {
+        if ((vports != null) && (vports.length != 0)) {
+            byte[] b = new byte[vports.length * 4];
+            ByteBuffer bb = ByteBuffer.wrap(b);
+            bb.order(ByteOrder.LITTLE_ENDIAN);
+            int i = 0;
+            for (int v : vports) {
+                bb.putInt(v);
+                System.out.println(String.format("set inputMap %s %d %08X", portname, i++, v));
+            }
+            conn.AppendToQueue(new QCmdWriteMem(getTableAddr(), b));
+        }
     }
 
     public String getPortName() {
@@ -69,12 +83,16 @@ public class MidiInputRoutingTable extends AbstractModel {
                 null, portname);
     }
 
-    public int[][] getMapping() {
+    public int[] getMapping() {
         return vports;
     }
 
-    public void setMapping(int[][] vports) {
-        this.vports = vports;
+    public void setMapping(int[] vports) {
+        if (this.vports != vports) {
+            this.vports = vports;
+            IConnection conn = CConnection.GetConnection();
+            apply(conn);
+        }
         firePropertyChange(
                 MidiInputRoutingTableController.MIRT_MAPPING,
                 null, vports);

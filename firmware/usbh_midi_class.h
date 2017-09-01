@@ -101,6 +101,7 @@ extern "C" {
 #endif
 	/* API goes here */
 void usbhmidiStart(USBHMIDIDriver *midip);
+msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size);
 
 #ifdef __cplusplus
 }

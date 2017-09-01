@@ -258,7 +258,7 @@ void exception_checkandreport(void) {
       LogTextMessage("sdram overflow by %d bytes",exceptiondump->r0);
     }
     else if (exceptiondump->type == usbh_midi_ringbuffer_overflow) {
-      LogTextMessage("usb host midi output ringbuffer overflow");
+      LogTextMessage("midi output overflow");
     }
     else if (exceptiondump->type == halt) {
       LogTextMessage("Panic: %s",exceptiondump->r0);

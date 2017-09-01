@@ -85,6 +85,7 @@ msg_t midi_output_buffer_put(midi_output_buffer_t *obj, midi_message_t midi) {
 	}
 	obj->buf[next] = midi;
 	obj->write_index = next;
+	obj->notify(obj);
 	return MSG_OK;
 }
 

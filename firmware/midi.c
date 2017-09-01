@@ -25,66 +25,30 @@
 #include "midi_usb.h"
 #include "patch.h"
 #include "midi_buffer.h"
+#include "usbh_conf.h"
 
 midi_input_buffer_t midi_input_buffer;
 
-// output routing table
-midi_output_routing_t midi_output_routing_table[MIDI_VPORTS][MIDI_TARGETS_PER_VPORT] = {
-// virtual output port 0 to DIN
-		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 1 to USB device (PC)
-		{{MIDI_DEVICE_USB_DEVICE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 2 to USB host (usb-midi device on host port), port 0
-		{{MIDI_DEVICE_USB_HOST, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 3 to everything DIN, USBD port 0, USBH
-		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_USB_DEVICE, 0},{MIDI_DEVICE_USB_HOST, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 4 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 5 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 6 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 7 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 8 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 9 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 10 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 11 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 12 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 13 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// virtual output port 14 to nowhere
-		{{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}, {MIDI_DEVICE_OUTPUTMAP_NONE, 0}},
-// let's use virtual output port 15 for midi clock, to everywhere
-		{{MIDI_DEVICE_DIN, 0},{MIDI_DEVICE_USB_DEVICE, 0},{MIDI_DEVICE_USB_HOST, 0},{MIDI_DEVICE_OUTPUTMAP_NONE, 0}}
-};
-
 void MidiSendVirtual(midi_message_t m) {
 	int vport = m.fields.port;
-	midi_output_routing_t *port_routing = &midi_output_routing_table[vport][0];
+	int vportmask = 1<<vport;
+	if (midi_outputmap_din.bmvports[0] & vportmask) {
+		midi_output_buffer_put(&midi_output_din, m);
+	}
 	int i;
-	for(i=0;i<MIDI_TARGETS_PER_VPORT;i++) {
-		switch (port_routing->midi_device_t) {
-		case MIDI_DEVICE_OUTPUTMAP_NONE:
-			break;
-		case MIDI_DEVICE_DIN:
-			serial_MidiSend(m);
-		break;
-		case MIDI_DEVICE_USB_DEVICE:
-			m.fields.port = port_routing->port;
-			midi_output_buffer_put(&midi_output_usbd,m);
-		break;
-		case MIDI_DEVICE_USB_HOST:
-			m.fields.port = port_routing->port;
-			midi_output_buffer_put(&midi_output_usbh,m);
-			break;
+	for (i=0;i<midi_outputmap_usbh1.nports;i++)
+		if (midi_outputmap_usbh1.bmvports[i] & vportmask) {
+			m.fields.port = i;
+			midi_output_buffer_put(&USBHMIDIC[0].out_buffer, m);
 		}
-		port_routing++;
+	for (i=0;i<midi_outputmap_usbh2.nports;i++)
+		if (midi_outputmap_usbh2.bmvports[i] & vportmask) {
+			m.fields.port = i;
+			midi_output_buffer_put(&USBHMIDIC[1].out_buffer, m);
+		}
+	if (midi_outputmap_usbd.bmvports[0] & vportmask) {
+		m.fields.port = 0;
+		midi_output_buffer_put(&midi_output_usbd, m);
 	}
 }
 
@@ -102,7 +66,7 @@ inline uint8_t Midi_calcPH(uint8_t port, uint8_t b0) {
 
 // legacy API, ignore port arg, use dev number as virtual port number
 void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
-	int virtualport = dev;
+	int virtualport = port;
 	midi_message_t m;
 	m.bytes.b0 = b0;
 	m.bytes.ph = Midi_calcPH(virtualport,b0);
@@ -110,7 +74,7 @@ void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
 }
 
 void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
-	int virtualport = dev;
+	int virtualport = port;
 	midi_message_t m;
 	m.bytes.b0 = b0;
 	m.bytes.b1 = b1;
@@ -119,7 +83,7 @@ void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
 }
 
 void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
-	int virtualport = dev;
+	int virtualport = port;
 	volatile midi_message_t m;
 	m.bytes.b0 = b0;
 	m.bytes.b1 = b1;
@@ -129,14 +93,13 @@ void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t 
 }
 
 void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len) {
-	int virtualport = dev;
+	int virtualport = port-1;
 	MidiSendSysExVirtual(virtualport,bytes,len);
 }
 
 void midi_init(void) {
     midi_input_buffer_objinit(&midi_input_buffer);
     serial_midi_init();
-    usbh_midi_init();
 }
 
 int  MidiGetOutputBufferPending(midi_device_t dev)

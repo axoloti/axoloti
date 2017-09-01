@@ -26,7 +26,7 @@
 
 #include "chibios_migration.h"
 
-static unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80=note off, 3 bytes
+const unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80=note off, 3 bytes
                                                3, // 0x90=note on, 3 bytes
                                                3, // 0xa0=poly pressure, 3 bytes
                                                3, // 0xb0=control change, 3 bytes
@@ -54,18 +54,23 @@ const signed char SysMsgLengthLookup[16] = {-1, // 0xf0=sysex start. may vary
     3 // 0xff= not reset, but a META-EVENT, which is always 3 bytes
     };
 
-midi_input_remap_t midi_inputmap_serial = {
+midi_input_remap_t midi_inputmap_din = {
 		.name = "DIN",
 		.nports = 1,
-		.portmap = {{MIDI_DEVICE_DIN , MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE}}
+		.bmvports = {0b00000001}
 };
 
-unsigned char MidiByte0;
-unsigned char MidiByte1;
-unsigned char MidiByte2;
-unsigned char MidiCurData;
-unsigned char MidiNumData;
-unsigned char MidiInChannel;
+midi_output_routing_t midi_outputmap_din = {
+			.name = "DIN",
+			.nports = 1,
+			.bmvports = {1}
+};
+
+static unsigned char MidiByte0;
+static unsigned char MidiByte1;
+static unsigned char MidiByte2;
+static unsigned char MidiCurData;
+static unsigned char MidiNumData;
 
 // CIN for everyting except sysex
 inline uint8_t SMidi_calcCIN(uint8_t b0) {
@@ -73,16 +78,18 @@ inline uint8_t SMidi_calcCIN(uint8_t b0) {
 }
 
 __STATIC_INLINE void dispatch_midi_input(midi_message_t m) {
-  int i=0;
-  for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
-	  int virtual_port = midi_inputmap_serial.portmap[0][i];
-	  if (virtual_port == MIDI_DEVICE_INPUTMAP_NONE) break;
-	  m.fields.port = virtual_port;
-	  midi_input_buffer_put(&midi_input_buffer, m);
-  }
+	  int portmap = midi_inputmap_din.bmvports[0];
+	  int v;
+	  for (v=0;v<16;v++) {
+		  if (portmap & 1) {
+			  m.fields.port = v;
+			  midi_input_buffer_put(&midi_input_buffer, m);
+		  }
+		  portmap = portmap>>1;
+	  }
 }
 
-void serial_MidiInByteHandler(uint8_t data) {
+static void serial_MidiInByteHandler(uint8_t data) {
   int8_t len;
   if (data & 0x80) {
     len = StatusLengthLookup[data >> 4];
@@ -143,30 +150,6 @@ void serial_MidiInByteHandler(uint8_t data) {
 
 // Midi OUT
 
-void serial_MidiSend1(uint8_t b0) {
-	midi_message_t m;
-	m.bytes.b0 = b0;
-	m.fields.cin = b0>>4;
-	serial_MidiSend(m);
-}
-
-void serial_MidiSend2(uint8_t b0, uint8_t b1) {
-	midi_message_t m;
-	m.bytes.b0 = b0;
-	m.bytes.b1 = b1;
-	m.fields.cin = b0>>4;
-	serial_MidiSend(m);
-}
-
-void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
-	midi_message_t m;
-	m.bytes.b0 = b0;
-	m.bytes.b1 = b1;
-	m.bytes.b2 = b2;
-	m.fields.cin = b0>>4;
-	serial_MidiSend(m);
-}
-
 void serial_MidiSend(midi_message_t midimsg) {
 	// TODO: implement sysex
 	// TODO: running status
@@ -191,6 +174,31 @@ void serial_MidiSend(midi_message_t midimsg) {
 	}
 }
 
+
+void serial_MidiSend1(uint8_t b0) {
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.fields.cin = b0>>4;
+	serial_MidiSend(m);
+}
+
+void serial_MidiSend2(uint8_t b0, uint8_t b1) {
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.fields.cin = b0>>4;
+	serial_MidiSend(m);
+}
+
+void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
+	midi_message_t m;
+	m.bytes.b0 = b0;
+	m.bytes.b1 = b1;
+	m.bytes.b2 = b2;
+	m.fields.cin = b0>>4;
+	serial_MidiSend(m);
+}
+
 int serial_MidiGetOutputBufferPending(void) {
   return chOQGetFullI(&SDMIDI.oqueue);
 }
@@ -199,15 +207,40 @@ int serial_MidiGetOutputBufferPending(void) {
 static const SerialConfig sdMidiCfg = {31250, // baud
     0, 0, 0};
 
-static WORKING_AREA(waThreadMidi, 256) CCM;
-static THD_FUNCTION(ThreadMidi, arg) {
+static WORKING_AREA(waThreadMidiIn, 256);
+static THD_FUNCTION(ThreadMidiIn, arg) {
   (void)arg;
-  chRegSetThreadName("midi");
+  chRegSetThreadName("midi_din_in");
   while (1) {
     char ch;
     ch = sdGet(&SDMIDI);
     serial_MidiInByteHandler(ch);
   }
+}
+
+midi_output_buffer_t midi_output_din;
+
+static WORKING_AREA(waThreadMidiOut, 256);
+static THD_FUNCTION(ThreadMidiOut, arg) {
+	(void) arg;
+	chRegSetThreadName("midi_din_out");
+	while (1) {
+		eventmask_t evt = chEvtWaitOne(1);
+		(void) evt;
+		midi_message_t m;
+		msg_t r;
+		r = midi_output_buffer_get(&midi_output_din, &m);
+		while (r == MSG_OK ) {
+			serial_MidiSend(m);
+			r = midi_output_buffer_get(&midi_output_din, &m);
+		}
+	}
+}
+
+static thread_t * thd_midi_din_writer;
+
+static void notify(void *obj) {
+  chEvtSignal(thd_midi_din_writer,1);
 }
 
 void serial_midi_init(void) {
@@ -221,6 +254,9 @@ void serial_midi_init(void) {
   palSetPadMode(GPIOG, 14, PAL_MODE_ALTERNATE(8) | PAL_STM32_OTYPE_OPENDRAIN);
 
   sdStart(&SDMIDI, &sdMidiCfg);
-  chThdCreateStatic(waThreadMidi, sizeof(waThreadMidi), NORMALPRIO, ThreadMidi,
+  chThdCreateStatic(waThreadMidiIn, sizeof(waThreadMidiIn), NORMALPRIO, ThreadMidiIn,
                     NULL);
+  thd_midi_din_writer = chThdCreateStatic(waThreadMidiOut, sizeof(waThreadMidiOut), NORMALPRIO, ThreadMidiOut,
+                    NULL);
+  midi_output_buffer_objinit(&midi_output_din, notify);
 }

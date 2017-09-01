@@ -323,12 +323,6 @@ alloc_ok:
 					epdesc->bEndpointAddress, epdesc->bmAttributes);
 		}
 	}
-//	if (midip->epin.status != USBH_EPSTATUS_CLOSED) {
-//		goto deinit;
-//	}
-//	if (midip->epout.status != USBH_EPSTATUS_CLOSED) {
-//		goto deinit;
-//	}
 
 	midip->state = USBHMIDI_STATE_ACTIVE;
 
@@ -444,4 +438,14 @@ void usbhmidiStop(USBHMIDIDriver *midip) {
 	midip->nInputPorts = 0;
 
 	midip->name[0] = 0;
+}
+
+msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
+	if (midip->state != USBHMIDI_STATE_READY)
+		return;
+	int actual_len;
+	msg_t status = usbhBulkTransfer(&midip->epout, buffer,
+			size, &actual_len, MS2ST(1000));
+	if (status == USBH_URBSTATUS_OK) return MSG_OK;
+	return status;
 }

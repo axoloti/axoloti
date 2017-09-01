@@ -66,7 +66,6 @@ typedef void (*midi_output_buffer_notify_t)(void *obj);
 typedef struct {
 	volatile int32_t read_index;
 	volatile int32_t write_index;
-	size_t size;
 	midi_output_buffer_notify_t notify;
 	midi_message_t buf[MIDI_RING_BUFFER_SIZE];
 } midi_output_buffer_t;

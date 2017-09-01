@@ -37,16 +37,21 @@ midi_output_buffer_t midi_output_usbd;
 midi_input_remap_t midi_inputmap_usbd = {
 		"USB device",
 		1,
-		{{MIDI_DEVICE_USB_DEVICE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE, MIDI_DEVICE_INPUTMAP_NONE}}
+		{0b00000010}
 };
 
-thread_t * thd_midi_Writer;
-thread_t * thd_midi_Reader;
+midi_output_routing_t midi_outputmap_usbd = {
+			.name = "USB device",
+			.nports = 1,
+			.bmvports = {0b00000010}
+};
 
+static thread_t * thd_usbd_midi_out;
+static thread_t * thd_usbd_midi_in;
 
-static THD_WORKING_AREA(waMidiWriter, 128);
-static THD_FUNCTION(MidiWriter, arg) {
-  chRegSetThreadName("usbdmidiw");
+static THD_WORKING_AREA(waUsbd_midi_out, 128);
+static THD_FUNCTION(usbd_midi_out, arg) {
+  chRegSetThreadName("usbd_midi_out");
   // TODO: implement...
 	while (true) {
 		eventmask_t evt = chEvtWaitOne(1);
@@ -69,9 +74,9 @@ static THD_FUNCTION(MidiWriter, arg) {
 	}
 }
 
-static THD_WORKING_AREA(waMidiReader, 512);
-static THD_FUNCTION(MidiReader, arg) {
-	chRegSetThreadName("usbdmidir");
+static THD_WORKING_AREA(waUsbd_midi_in, 256);
+static THD_FUNCTION(usbd_midi_in, arg) {
+	chRegSetThreadName("usbd_midi_in");
 	while (true) {
 		static midi_message_t midi_usbd_rxbuf[16];
 		// fits 64 byte usb packet
@@ -87,15 +92,15 @@ static THD_FUNCTION(MidiReader, arg) {
 						midi_usbd_rxbuf[i].bytes.b1,
 						midi_usbd_rxbuf[i].bytes.b2);
 #endif
-
-		    	  int i=0;
-		    	  for (i=0;i<MIDI_INPUT_REMAP_ENTRIES;i++) {
-		    		  int virtual_port = midi_inputmap_usbd.portmap[0][i];
-		    		  if (virtual_port == MIDI_DEVICE_INPUTMAP_NONE) break;
-		    		  midi_usbd_rxbuf[i].fields.port = virtual_port;
-					  midi_input_buffer_put(&midi_input_buffer, midi_usbd_rxbuf[i]);
+	    		  int portmap = midi_inputmap_usbd.bmvports[0];
+	    		  int v;
+		    	  for (v=0;v<16;v++) {
+		    		  if (portmap & 1) {
+						  midi_usbd_rxbuf[i].fields.port = v;
+						  midi_input_buffer_put(&midi_input_buffer, midi_usbd_rxbuf[i]);
+		    		  }
+		    		  portmap = portmap>>1;
 		    	  }
-
 			}
 		} else {
 			chThdSleepMilliseconds(1000);
@@ -103,26 +108,15 @@ static THD_FUNCTION(MidiReader, arg) {
 	}
 }
 
-void midi_usb_MidiSend1(uint8_t port, uint8_t b0) {
-
-}
-
-void midi_usb_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1) {
-  // TODO: implement...
-}
-
-void midi_usb_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
-  // TODO: implement...
-}
 
 static void notify(void *obj) {
-  chEvtSignal(thd_midi_Writer,1);
+  chEvtSignal(thd_usbd_midi_out,1);
 }
 
 void midi_usb_init(void) {
 	midi_output_buffer_objinit(&midi_output_usbd, notify);
-	thd_midi_Writer = chThdCreateStatic(waMidiWriter, sizeof(waMidiWriter), NORMALPRIO, MidiWriter, NULL);
-	thd_midi_Reader =  chThdCreateStatic(waMidiReader, sizeof(waMidiReader), NORMALPRIO, MidiReader, NULL);
+	thd_usbd_midi_out = chThdCreateStatic(waUsbd_midi_out, sizeof(waUsbd_midi_out), NORMALPRIO, usbd_midi_out, NULL);
+	thd_usbd_midi_in =  chThdCreateStatic(waUsbd_midi_in, sizeof(waUsbd_midi_in), NORMALPRIO, usbd_midi_in, NULL);
 }
 
 

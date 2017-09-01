@@ -36,10 +36,9 @@ extern midi_output_buffer_t midi_output_usbd;
 
 extern midi_input_remap_t midi_inputmap_usbd;
 
+extern midi_output_routing_t midi_outputmap_usbd;
+
 void midi_usb_init(void);
-void midi_usb_MidiSend1(uint8_t port, uint8_t b0);
-void midi_usb_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
-void midi_usb_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 
 #endif /* MIDI_USB_H */
 

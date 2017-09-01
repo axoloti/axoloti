@@ -54,12 +54,11 @@ const chunk_fw_root_t chunk_fw_root = {
 	.fw_chunks = {
 		.midi_input_routing = {
 			.header = CHUNK_HEADER(midi_input_routing),
-			.routing_table = {&midi_inputmap_serial, &midi_inputmap_usbd, &midi_inputmap_usbh1, &midi_inputmap_usbh2}
+			.routing_table = {&midi_inputmap_din, &midi_inputmap_usbd, &midi_inputmap_usbh1, &midi_inputmap_usbh2}
 		},
 		.midi_output_routing = {
 			.header = CHUNK_HEADER(midi_output_routing),
-			.ntargets = MIDI_TARGETS_PER_VPORT,
-			.routing_table = &midi_output_routing_table[0][0]
+			.routing_table = {&midi_outputmap_din, &midi_outputmap_usbd, &midi_outputmap_usbh1, &midi_outputmap_usbh2}
 		},
 		.gpio_adc = {
 			.header = CHUNK_HEADER(gpio_adc),
