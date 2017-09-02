@@ -439,19 +439,14 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
     void flashUsingSDRam(String fname_flasher, String pname) {
         updateLinkFirmwareID();
-        File f = new File(fname_flasher);
         File p = new File(pname);
-        if (f.canRead()) {
-            if (p.canRead()) {
-                qcmdprocessor.AppendToQueue(new QCmdStop());
-                qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam(p));
-                qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-                qcmdprocessor.AppendToQueue(new QCmdStartFlasher());
-            } else {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", pname);
-            }
+        if (p.canRead()) {
+            qcmdprocessor.AppendToQueue(new QCmdStop());
+            qcmdprocessor.AppendToQueue(new QCmdUploadFWSDRam(p));
+            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(fname_flasher));
+            qcmdprocessor.AppendToQueue(new QCmdStartFlasher());
         } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read flasher, please compile firmware! (file: {0} )", fname_flasher);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", pname);
         }
     }
 
@@ -1005,7 +1000,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
     }//GEN-LAST:event_jMenuItemFlashDFUActionPerformed
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFlashSDRActionPerformed
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
         flashUsingSDRam(fname, pname);
     }//GEN-LAST:event_jMenuItemFlashSDRActionPerformed
@@ -1029,22 +1024,17 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
             prefs.SavePrefs();
         }
 
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
         flashUsingSDRam(fname, pname);
     }//GEN-LAST:event_jMenuItemFlashDefaultActionPerformed
 
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMountActionPerformed
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter.bin";
-        File f = new File(fname);
-        if (f.canRead()) {
-            qcmdprocessor.AppendToQueue(new QCmdStop());
-            qcmdprocessor.AppendToQueue(new QCmdUploadPatch(f));
-            qcmdprocessor.AppendToQueue(new QCmdStartMounter());
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
-        } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read mounter firmware, please compile mounter firmware! (file: {0} )", fname);
-        }
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter";
+        qcmdprocessor.AppendToQueue(new QCmdStop());
+        qcmdprocessor.AppendToQueue(new QCmdUploadPatch(fname));
+        qcmdprocessor.AppendToQueue(new QCmdStartMounter());
+        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
     }//GEN-LAST:event_jMenuItemMountActionPerformed
 
     private void jMenuItemMemViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMemViewerActionPerformed
@@ -1303,7 +1293,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
         if (s == 0) {
-            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher.bin";
+            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
             String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
             flashUsingSDRam(fname, pname);
         }
@@ -1368,17 +1358,11 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         double inLevel2dB = 10*Math.log10(Math.abs(inLevel2) + 1) - r;
         double outLevel1dB = 10*Math.log10(Math.abs(outLevel1) + 1) - r;
         double outLevel2dB = 10*Math.log10(Math.abs(outLevel2) + 1) - r;
-//        jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
-//        jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
-//        int in2 = inLevel1>>16;
-//        int in1 = inLevel1 & 0x7F;
-//        jLabelVuIn1.setText(String.format("%08X %.2f %.2f %.2f", inLevel1, 6.0 - 3.0*(in1), 3.0*(in2/4.0), 8.0 - 3.0*(in1) - 3.0*(in2/4.0)));
-        
-//        jLabelVuIn2.setText(String.format("%08X", inLevel2));
         jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
         jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
-        jLabelVuOut1.setText(String.format("%3.1f", outLevel1dB));
-        jLabelVuOut2.setText(String.format("%3.1f", outLevel2dB));
+        int mininf = -130;
+        jLabelVuOut1.setText(outLevel1dB>mininf?String.format("%3.1f", outLevel1dB):"-inf");
+        jLabelVuOut2.setText(outLevel2dB>mininf?String.format("%3.1f", outLevel2dB):"-inf");
     }
 
     void showUnderruns(int underruns) {

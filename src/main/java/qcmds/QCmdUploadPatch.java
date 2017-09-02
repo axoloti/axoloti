@@ -32,14 +32,14 @@ import java.util.logging.Logger;
  */
 public class QCmdUploadPatch implements QCmdSerialTask {
 
-    File f;
+    final String basepath;
 
     public QCmdUploadPatch() {
-        f = null;
+        basepath = System.getProperty(Axoloti.HOME_DIR)+"/build/xpatch";
     }
 
-    public QCmdUploadPatch(File f) {
-        this.f = f;
+    public QCmdUploadPatch(String basepath) {
+        this.basepath = basepath;
     }
 
     @Override
@@ -81,23 +81,16 @@ public class QCmdUploadPatch implements QCmdSerialTask {
     public QCmd Do(IConnection connection) {
         connection.ClearSync();
         try {
-            if (f == null) {
-                // from now on there can be multiple segments!
-                String buildDir=System.getProperty(Axoloti.HOME_DIR)+"/build";
-                f = new File(buildDir + "/xpatch.sram1.bin");
-                File f2 = new File(buildDir + "/xpatch.sram3.bin");
-                File f3 = new File(buildDir + "/xpatch.sdram.bin");
-                Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath() + " " + f2.getAbsolutePath());
-                UploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
-                if (f2.length() > 0)
-                    UploadBinFile(connection, f2, connection.getTargetProfile().getSRAM3Addr());
-                if (f3.length() > 0)
-                    UploadBinFile(connection, f3, connection.getTargetProfile().getSDRAMAddr());
-            } else {
-                // for flasher and mounter trojan patch binaries
-                Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath());
-                UploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
-            }
+            // from now on there can be multiple segments!
+            File f = new File(basepath + ".sram1.bin");
+            File f2 = new File(basepath + ".sram3.bin");
+            File f3 = new File(basepath + ".sdram.bin");
+            Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath() + " " + f2.getAbsolutePath());
+            UploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
+            if (f2.length() > 0)
+                UploadBinFile(connection, f2, connection.getTargetProfile().getSRAM3Addr());
+            if (f3.length() > 0)
+                UploadBinFile(connection, f3, connection.getTargetProfile().getSDRAMAddr());
             return this;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);

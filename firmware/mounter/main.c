@@ -24,6 +24,7 @@
 #include "usbcfg.h"
 #include "hal_usb_msd.h"
 #include "axoloti_board.h"
+#include "fourcc.h"
 
 static uint8_t blkbuf[512];
 
@@ -37,6 +38,24 @@ static void usbActivity(bool active)
         palClearPad(LED1_PORT, LED1_PIN);
 }
 #endif
+
+BaseSequentialStream *GlobalDebugChannel;
+
+static const SerialConfig sercfg = {
+    115200,
+    0,
+    0,
+    0
+};
+
+void halt(const char *reason) {
+	  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		  // debugger connected, software breakpoint
+		  __asm("BKPT 255");
+	  }
+	  (void)reason;
+	  NVIC_SystemReset();
+}
 
 int main(void)
 {
@@ -59,6 +78,13 @@ int main(void)
 #endif
 
     chSysInit();
+
+    sdStart(&SD2, &sercfg);
+    // SD2 for serial debug output
+      palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7) | PAL_MODE_INPUT); // RX
+      palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL); // TX
+      palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7)); // TX
+    GlobalDebugChannel = (BaseSequentialStream *)&SD2;
 
     palSetPadMode(GPIOA, 11, PAL_MODE_ALTERNATE(10));
     palSetPadMode(GPIOA, 12, PAL_MODE_ALTERNATE(10));
@@ -99,21 +125,11 @@ int main(void)
 
   /*
    * Normal main() thread activity, in this demo it does nothing except
-   * sleeping in a loop and check the button state.
+   * sleeping in a loop.
    */
   while (true) {
     chThdSleepMilliseconds(100);
-    // Todo: reset when card is unmounted by host...
-    /*
-    if (USBMSD1.state == USB_MSD_STOP) {
-        chThdSleepMilliseconds(100);
-        NVIC_SystemReset();
-    }
-    if (USBMSD1.scsi_target.state == SCSI_TRGT_STOP) {
-        chThdSleepMilliseconds(1);
-        NVIC_SystemReset();
-    }
-    */
+    // To check/improve: do a system reset when card is unmounted by host...
   }
 
   msdStop(&USBMSD1);
@@ -121,9 +137,55 @@ int main(void)
 
 extern void Reset_Handler(void);
 
-__attribute__ ((section (".entry_section"))) void entryfn (int fwid) {
-	(void)fwid;
-	SCB->VTOR = CORTEX_VTOR_INIT;
+void patch_init(int32_t fwID) {
+	(void)fwID;
 	Reset_Handler();
 }
 
+typedef void (*fptr_patch_init_t)(int32_t fwID);
+// stripped function signatures, won't get there anyway...
+typedef void (*fptr_patch_dispose_t)(void);
+typedef void (*fptr_patch_dsp_process_t)(void);
+typedef void (*fptr_patch_midi_in_handler_t)(void);
+typedef void (*fptr_patch_applyPreset_t)(void);
+
+#define fourcc_patch_meta FOURCC('P','T','C','H')
+typedef struct {
+	chunk_header_t header;
+	int32_t patchID;
+	char patchname[64];
+} chunk_patch_meta_t;
+
+#define fourcc_patch_functions FOURCC('P','F','U','N')
+typedef struct {
+	chunk_header_t header;
+	fptr_patch_init_t fptr_patch_init;
+	fptr_patch_dispose_t fptr_patch_dispose;
+	fptr_patch_dsp_process_t fptr_dsp_process;
+	fptr_patch_midi_in_handler_t fptr_MidiInHandler;
+	fptr_patch_applyPreset_t fptr_applyPreset;
+} chunk_patch_functions_t;
+
+#define fourcc_patch_root FOURCC('A','X','P','T')
+typedef struct {
+	chunk_header_t header;
+	chunk_patch_meta_t patch_meta;
+	chunk_patch_functions_t patch_functions;
+} chunk_patch_root_t;
+
+chunk_patch_root_t patch_root_chunk = {
+		header : CHUNK_HEADER(patch_root),
+		patch_meta : {
+			header : CHUNK_HEADER(patch_meta),
+			patchID : 0,
+			patchname : {'f','l','a','s','h','e','r'}
+		},
+		patch_functions : {
+			header : CHUNK_HEADER(patch_functions),
+					fptr_patch_init: patch_init,
+					fptr_patch_dispose: 0,
+					fptr_dsp_process: 0,
+					fptr_MidiInHandler: 0,
+					fptr_applyPreset: 0,
+		},
+};

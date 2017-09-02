@@ -29,7 +29,7 @@
 #include "crc32.h"
 #include "sdram.h"
 #include "exceptions.h"
-#include "flash.h"
+#include "fourcc.h"
 
 #define AXOLOTICONTROL FALSE
 #define SERIALDEBUG TRUE
@@ -103,6 +103,130 @@ void setErrorFlag(int error){
 	}
 }
 
+
+
+void prvGetRegistersFromStack( uint32_t *pulFaultStackAddress )
+{
+/* These are volatile to try and prevent the compiler/linker optimising them
+away as the variables never actually get used.  If the debugger won't show the
+values of the variables, make them global my moving their declaration outside
+of this function. */
+volatile uint32_t r0;
+volatile uint32_t r1;
+volatile uint32_t r2;
+volatile uint32_t r3;
+volatile uint32_t r12;
+volatile uint32_t lr; /* Link register. */
+volatile uint32_t pc; /* Program counter. */
+volatile uint32_t psr;/* Program status register. */
+
+    r0 = pulFaultStackAddress[ 0 ];
+    r1 = pulFaultStackAddress[ 1 ];
+    r2 = pulFaultStackAddress[ 2 ];
+    r3 = pulFaultStackAddress[ 3 ];
+
+    r12 = pulFaultStackAddress[ 4 ];
+    lr = pulFaultStackAddress[ 5 ];
+    pc = pulFaultStackAddress[ 6 ];
+    psr = pulFaultStackAddress[ 7 ];
+
+    /* When the following line is hit, the variables contain the register values. */
+   asm("BKPT 255");
+   for( ;; );
+}
+
+void HardFault_Handler(void) {
+    __asm volatile
+    (
+        " tst lr, #4                                                \n"
+        " ite eq                                                    \n"
+        " mrseq r0, msp                                             \n"
+        " mrsne r0, psp                                             \n"
+        " ldr r1, [r0, #24]                                         \n"
+        " ldr r2, handler2_address_const                            \n"
+        " bx r2                                                     \n"
+        " handler2_address_const: .word prvGetRegistersFromStack    \n"
+    );
+}
+void MemManage_Handler(void) {
+	  asm("BKPT 255");
+}
+void BusFault_Handler(void) {
+	  asm("BKPT 255");
+}
+void UsageFault_Handler(void) {
+	  asm("BKPT 255");
+}
+
+
+void watchdog_feed(void) {
+#if WATCHDOG_ENABLED
+  if ((WWDG->CR & WWDG_CR_T) != WWDG_CR_T)
+    WWDG->CR = WWDG_CR_T;
+#endif
+}
+
+int flash_WaitForLastOperation(void) {
+  while (FLASH->SR == FLASH_SR_BSY) {
+    WWDG->CR = WWDG_CR_T;
+  }
+  return FLASH->SR;
+}
+
+void flash_Erase_sector1(int sector) {
+  // assume VDD>2.7V
+  FLASH->CR &= ~FLASH_CR_PSIZE;
+  FLASH->CR |= FLASH_CR_PSIZE_1;
+  FLASH->CR &= ~FLASH_CR_SNB;
+  FLASH->CR |= FLASH_CR_SER | (sector << 3);
+  FLASH->CR |= FLASH_CR_STRT;
+  flash_WaitForLastOperation();
+
+  FLASH->CR &= (~FLASH_CR_SER);
+  FLASH->CR &= ~FLASH_CR_SER;
+  flash_WaitForLastOperation();
+}
+
+int flash_Erase_sector(int sector) {
+  // interrupts would cause flash execution, stall
+  // and cause watchdog trigger
+  chSysLock();
+  flash_Erase_sector1(sector);
+  chSysUnlock();
+  return 0;
+}
+
+int flash_ProgramWord(uint32_t Address, uint32_t Data) {
+  int status;
+
+  flash_WaitForLastOperation();
+
+  /* if the previous operation is completed, proceed to program the new data */
+  FLASH->CR &= ~FLASH_CR_PSIZE;
+  FLASH->CR |= FLASH_CR_PSIZE_1;
+  FLASH->CR |= FLASH_CR_PG;
+
+  *(__IO uint32_t*)Address = Data;
+
+  /* Wait for last operation to be completed */
+  status = flash_WaitForLastOperation();
+
+  /* if the program operation is completed, disable the PG Bit */
+  FLASH->CR &= (~FLASH_CR_PG);
+
+  watchdog_feed();
+
+  /* Return the Program Status */
+  return status;
+}
+
+void flash_unlock(void) {
+  // unlock sequence
+  FLASH->KEYR = 0x45670123;
+  FLASH->KEYR = 0xCDEF89AB;
+}
+
+
 int main(void) {
   watchdog_feed();
   halInit();
@@ -123,7 +247,6 @@ int main(void) {
 #endif
   chSysInit();
   watchdog_feed();
-  configSDRAM();
 
 #ifdef SERIALDEBUG
 // SD2 for serial debug output
@@ -145,6 +268,10 @@ int main(void) {
   if ((sdram8[0] != 'f') || (sdram8[1] != 'l') || (sdram8[2] != 'a')
       || (sdram8[3] != 's') || (sdram8[4] != 'c') || (sdram8[5] != 'o')
       || (sdram8[6] != 'p') || (sdram8[7] != 'y')) {
+	  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		  // debugger connected, software breakpoint
+		  asm("BKPT 255");
+	  }
     DispayAbortErr(1);
   }
   DBGPRINTCHAR('b');
@@ -153,6 +280,10 @@ int main(void) {
   uint32_t fcrc = sdram32[3];
 
   if (flength > 1 * 1024 * 1024) {
+	  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		  // debugger connected, software breakpoint
+		  asm("BKPT 255");
+	  }
     DispayAbortErr(2);
   }
 
@@ -168,6 +299,10 @@ int main(void) {
   DBGPRINTHEX(fcrc);
 
   if (ccrc != fcrc) {
+	  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		  // debugger connected, software breakpoint
+		  asm("BKPT 255");
+	  }
     DispayAbortErr(3);
   }
 
@@ -181,9 +316,9 @@ int main(void) {
 
   for (i = 0; i < 12; i++) {
     flash_Erase_sector(i);
-    LCD_drawStringN(0, 3, "Erased sector", 128);
-    LCD_drawNumber3D(80, 3, i);
-    refresh_LCD();
+//    LCD_drawStringN(0, 3, "Erased sector", 128);
+//    LCD_drawNumber3D(80, 3, i);
+//    refresh_LCD();
     palWritePad(LED2_PORT,LED2_PIN,1);
     chThdSleepMilliseconds(100);
     palWritePad(LED2_PORT,LED2_PIN,0);
@@ -203,6 +338,10 @@ int main(void) {
   DBGPRINTHEX(fcrc);
 
   if (ccrc != fcrc) {
+	  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		  // debugger connected, software breakpoint
+		  asm("BKPT 255");
+	  }
     DispayAbortErr(4);
   }
 
@@ -240,6 +379,10 @@ int main(void) {
   DBGPRINTHEX(fcrc);
 
   if (ccrc != fcrc) {
+	  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		  // debugger connected, software breakpoint
+		  asm("BKPT 255");
+	  }
     DispayAbortErr(5);
   }
 
@@ -262,8 +405,56 @@ int main(void) {
 
 extern void Reset_Handler(void);
 
-__attribute__ ((section (".entry_section"))) void entryfn (int fwid) {
-	(void)fwid;
-	SCB->VTOR = CORTEX_VTOR_INIT;
+void patch_init(int32_t fwID) {
+	(void)fwID;
 	Reset_Handler();
 }
+
+typedef void (*fptr_patch_init_t)(int32_t fwID);
+
+// stripped function signatures, won't get there anyway...
+typedef void (*fptr_patch_dispose_t)(void);
+typedef void (*fptr_patch_dsp_process_t)(void);
+typedef void (*fptr_patch_midi_in_handler_t)(void);
+typedef void (*fptr_patch_applyPreset_t)(void);
+
+#define fourcc_patch_meta FOURCC('P','T','C','H')
+typedef struct {
+	chunk_header_t header;
+	int32_t patchID;
+	char patchname[64];
+} chunk_patch_meta_t;
+
+#define fourcc_patch_functions FOURCC('P','F','U','N')
+typedef struct {
+	chunk_header_t header;
+	fptr_patch_init_t fptr_patch_init;
+	fptr_patch_dispose_t fptr_patch_dispose;
+	fptr_patch_dsp_process_t fptr_dsp_process;
+	fptr_patch_midi_in_handler_t fptr_MidiInHandler;
+	fptr_patch_applyPreset_t fptr_applyPreset;
+} chunk_patch_functions_t;
+
+#define fourcc_patch_root FOURCC('A','X','P','T')
+typedef struct {
+	chunk_header_t header;
+	chunk_patch_meta_t patch_meta;
+	chunk_patch_functions_t patch_functions;
+} chunk_patch_root_t;
+
+chunk_patch_root_t patch_root_chunk = {
+		header : CHUNK_HEADER(patch_root),
+		patch_meta : {
+			header : CHUNK_HEADER(patch_meta),
+			patchID : 0,
+			patchname : {'f','l','a','s','h','e','r'}
+		},
+		patch_functions : {
+			header : CHUNK_HEADER(patch_functions),
+					fptr_patch_init: patch_init,
+					fptr_patch_dispose: 0,
+					fptr_dsp_process: 0,
+					fptr_MidiInHandler: 0,
+					fptr_applyPreset: 0,
+		},
+};

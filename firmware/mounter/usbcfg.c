@@ -188,6 +188,8 @@ static const USBEndpointConfig ep1config = {
   NULL
 };
 
+static int isConfigured = 0;
+
 /*
  * Handles the USB driver global events.
  */
@@ -195,6 +197,12 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 
   switch (event) {
   case USB_EVENT_RESET:
+	  if (isConfigured) {
+		  // 'd like to do a full reset when unmounting the volume
+		  // hmmm, does not seem to be effective...
+		  chThdSleepMilliseconds(100);
+		  NVIC_SystemReset();
+	  }
     return;
   case USB_EVENT_ADDRESS:
     return;
@@ -205,6 +213,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
        must be used.*/
     usbInitEndpointI(usbp, USBD1_DATA_REQUEST_EP, &ep1config);
     chSysUnlockFromISR();
+    isConfigured = 1;
     return;
   case USB_EVENT_UNCONFIGURED:
     return;
