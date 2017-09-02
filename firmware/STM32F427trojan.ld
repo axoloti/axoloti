@@ -17,7 +17,8 @@
  */
 
 /*
- * FRANKENSTEIN ST32F427 memory setup, bootloading into patch
+ * The "trojan" linker pretends to be a regular patch binary but escapes into
+ * an independent RTOS environment.
  * 
  */
 
@@ -60,6 +61,8 @@ SECTIONS
 {
     .entry_section : 
     {
+		LONG(0x32787861) /* signature "axx2"  */
+		LONG(patch_root_chunk)
         *(.entry_section)
         *(.entry_section.*)
         LONG(0)

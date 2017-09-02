@@ -23,6 +23,11 @@ ifeq ($(USE_LINK_GC),)
   USE_LINK_GC = no
 endif
 
+# Linker extra options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = --print-memory-usage
+endif
+
 # If enabled, this option allows to compile the application in THUMB mode.
 ifeq ($(USE_THUMB),)
   USE_THUMB = yes
@@ -90,6 +95,8 @@ CSRC = $(STARTUPSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
        $(STREAMSSRC) \
+       $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
+       $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
        ../glcdfont.c \
        ../axoloti_control.c \
        ../axoloti_board.c \
@@ -221,9 +228,28 @@ ULIBS =
 
 
 VPATH = .
+
 #
 # End of user defines
 ##############################################################################
 
 RULESPATH = $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk
+
+SPLITFILES := $(BUILDDIR)/$(PROJECT).sram1.bin \
+            $(BUILDDIR)/$(PROJECT).sram3.bin \
+            $(BUILDDIR)/$(PROJECT).sdram.bin
+
+%.sram1.bin: %.elf
+	@echo Creating $@
+	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data -R .data.* $< $@
+
+%.sram3.bin: %.elf
+	@echo Creating $@
+	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data --only-section=.data.* $< $@
+
+%.sdram.bin: %.elf
+	@echo Creating $@
+	@$(CP) -O binary --only-section=.sdram.* $< $@
+	
+POST_MAKE_ALL_RULE_HOOK: $(SPLITFILES)
