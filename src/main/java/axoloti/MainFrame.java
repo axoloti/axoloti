@@ -1358,17 +1358,11 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         double inLevel2dB = 10*Math.log10(Math.abs(inLevel2) + 1) - r;
         double outLevel1dB = 10*Math.log10(Math.abs(outLevel1) + 1) - r;
         double outLevel2dB = 10*Math.log10(Math.abs(outLevel2) + 1) - r;
-//        jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
-//        jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
-//        int in2 = inLevel1>>16;
-//        int in1 = inLevel1 & 0x7F;
-//        jLabelVuIn1.setText(String.format("%08X %.2f %.2f %.2f", inLevel1, 6.0 - 3.0*(in1), 3.0*(in2/4.0), 8.0 - 3.0*(in1) - 3.0*(in2/4.0)));
-        
-//        jLabelVuIn2.setText(String.format("%08X", inLevel2));
         jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
         jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
-        jLabelVuOut1.setText(String.format("%3.1f", outLevel1dB));
-        jLabelVuOut2.setText(String.format("%3.1f", outLevel2dB));
+        int mininf = -130;
+        jLabelVuOut1.setText(outLevel1dB>mininf?String.format("%3.1f", outLevel1dB):"-inf");
+        jLabelVuOut2.setText(outLevel2dB>mininf?String.format("%3.1f", outLevel2dB):"-inf");
     }
 
     void showUnderruns(int underruns) {
