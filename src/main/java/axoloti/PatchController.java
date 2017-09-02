@@ -267,6 +267,22 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return codegen;
     }
 
+    public void UploadToFlash() {
+        try {
+            WriteCode();
+            QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
+            qcmdprocessor.WaitQueueFinished();
+            IConnection conn = CConnection.GetConnection();
+            byte[] bb = PatchFileBinary.getPatchFileBinary();
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteMem(conn.getTargetProfile().getSDRAMAddr(), bb));
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
+        } catch (Exception ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void UploadToSDCard(String sdfilename) {
         try {
             WriteCode();

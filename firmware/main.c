@@ -120,14 +120,13 @@ int main(void) {
 	// TODO: maybe only skip startup patch when exception was caused by startup patch
     // and button S2 is not pressed
 
-    if (fs_ready){
+    if (fs_ready) {
       LoadPatchStartSD();
     }
     // if no patch booting or running yet
     // try loading from flash
     if (patchStatus == STOPPED) {
-    	// disabled, need to re-implement...
-        // LoadPatchStartFlash();
+        LoadPatchStartFlash();
     }
   }
 

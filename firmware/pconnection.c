@@ -40,6 +40,7 @@
 #include "sysmon.h"
 #include "firmware_chunks.h"
 #include "axoloti_math.h"
+#include "sdram.h"
 
 //#define DEBUG_SERIAL 1
 
@@ -649,7 +650,7 @@ void ManipulateFile(void) {
 void CopyPatchToFlash(void) {
   flash_unlock();
   flash_Erase_sector(11);
-  int src_addr = PATCHMAINLOC;
+  int src_addr = SDRAM_BANK_ADDR;
   int flash_addr = PATCHFLASHLOC;
   int c;
   for (c = 0; c < PATCHFLASHSIZE;) {
@@ -659,7 +660,7 @@ void CopyPatchToFlash(void) {
     c += 4;
   }
   // verify
-  src_addr = PATCHMAINLOC;
+  src_addr = SDRAM_BANK_ADDR;
   flash_addr = PATCHFLASHLOC;
   int err = 0;
   for (c = 0; c < PATCHFLASHSIZE;) {
@@ -670,9 +671,7 @@ void CopyPatchToFlash(void) {
     c += 4;
   }
   if (err) {
-    while (1) {
-      // flash verify fail
-    }
+	  chSysHalt("Flashing failed");
   }
 }
 
