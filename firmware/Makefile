@@ -281,8 +281,8 @@ endif
 ifneq (,$(findstring WARPS,$(AXO_OPT_MODULES)))
 # $(info including WARPS)
 WARPS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp 
 
+       # ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp 
        # ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
        # ${MUTABLE_INSTRUMENTS}/warps/dsp/modulator.cpp \
        # ${MUTABLE_INSTRUMENTS}/warps/dsp/oscillator.cpp \
@@ -292,23 +292,24 @@ endif
 ifneq (,$(findstring ELEMENTS,$(AXO_OPT_MODULES)))
 #$(info including ELEMENTS)
 ELEMENTS_SRC = \
-       ${FIRMWARE}/axoloti_mi.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/multistage_envelope.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/ominous_voice.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/resonator.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/string.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/tube.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/part.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/voice.cpp 
+
+       # ${FIRMWARE}/axoloti_mi.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/dsp/multistage_envelope.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/dsp/ominous_voice.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/dsp/resonator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/dsp/string.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/dsp/tube.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/part.cpp \
+       # ${MUTABLE_INSTRUMENTS}/elements/voice.cpp 
 endif
 
 ifneq (,$(findstring CLOUDS,$(AXO_OPT_MODULES)))
 # $(info including CLOUDS)
 CLOUDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp 
 
+       # ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp 
        # ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
        # ${MUTABLE_INSTRUMENTS}/clouds/dsp/mu_law.cpp \
        # ${MUTABLE_INSTRUMENTS}/clouds/dsp/granular_processor.cpp \
