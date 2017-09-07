@@ -272,10 +272,11 @@ CSRC = $(STARTUPSRC) \
 ifneq (,$(findstring BRAIDS,$(AXO_OPT_MODULES)))
 #$(info including BRAIDS)
 BRAIDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/digital_oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/macro_oscillator.cpp 
+
+       # ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
+       # ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/braids/digital_oscillator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/braids/macro_oscillator.cpp 
 endif
 
 ifneq (,$(findstring WARPS,$(AXO_OPT_MODULES)))
@@ -321,20 +322,22 @@ endif
 ifneq (,$(findstring RINGS,$(AXO_OPT_MODULES)))
 #$(info  including RINGS)
 RINGS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp 
+
+       # ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp 
 endif
 
 ifneq (,$(findstring STREAMS,$(AXO_OPT_MODULES)))
 #$(info including STREAMS)
 STREAMS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/streams/streams_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/compressor.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/envelope.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/follower.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/lorenz_generator.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/processor.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/svf.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/vactrol.cpp 
+
+       # ${MUTABLE_INSTRUMENTS}/streams/streams_resources.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/compressor.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/envelope.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/follower.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/lorenz_generator.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/processor.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/svf.cpp \
+       # ${MUTABLE_INSTRUMENTS}/streams/vactrol.cpp 
 endif
 
 #$(info including base MI)
