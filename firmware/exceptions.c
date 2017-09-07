@@ -26,7 +26,7 @@
 #include "exceptions.h"
 
 __attribute__ ((naked))
-void report_exception(void) {
+static void report_exception(void) {
 
   __asm volatile
   (
@@ -370,7 +370,7 @@ void dbg_set_i(int i) {
   exceptiondump->i = i;
 }
 
-void terminator(void) {
+static void terminator(void) {
   // float usb inputs, hope the host notices detach...
   palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
   palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);

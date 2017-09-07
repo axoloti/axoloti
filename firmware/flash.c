@@ -20,14 +20,14 @@
 #include "watchdog.h"
 
 
-__attribute__ ((section (".data"))) int flash_WaitForLastOperation(void) {
+static __attribute__ ((section (".data"))) int flash_WaitForLastOperation(void) {
   while (FLASH->SR == FLASH_SR_BSY) {
     WWDG->CR = WWDG_CR_T;
   }
   return FLASH->SR;
 }
 
-__attribute__ ((section (".data"))) void flash_Erase_sector1(int sector) {
+static __attribute__ ((section (".data"))) void flash_Erase_sector1(int sector) {
   // assume VDD>2.7V
   FLASH->CR &= ~FLASH_CR_PSIZE;
   FLASH->CR |= FLASH_CR_PSIZE_1;
