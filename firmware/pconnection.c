@@ -40,23 +40,23 @@
 #include "sysmon.h"
 #include "firmware_chunks.h"
 #include "axoloti_math.h"
+#include "sdram.h"
 
 //#define DEBUG_SERIAL 1
 
-uint32_t fwid;
+static uint32_t fwid;
 
-thread_t * thd_bulk_Writer;
-thread_t * thd_bulk_Reader;
+static thread_t * thd_bulk_Writer;
+static thread_t * thd_bulk_Reader;
 
 static int isConnected = 0;
 
+static char FileName[256];
+static FIL pFile;
+static int pFileSize;
+static FILINFO fno;
 
-char FileName[256];
-FIL pFile;
-int pFileSize;
-FILINFO fno;
-
-void CloseFile(void) {
+static void CloseFile(void) {
   FRESULT err;
   err = f_close(&pFile);
   if (err != FR_OK) {
@@ -78,7 +78,7 @@ static uint8_t bulk_rxbuf[64];
 
 #define BulkUsbTransmit(data,size) usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, size);
 
-msg_t BulkUsbTransmitPacket(const uint8_t * data, size_t size) {
+static msg_t BulkUsbTransmitPacket(const uint8_t * data, size_t size) {
 	msg_t res;
 	res = usbTransmit(&USBD1, USBD2_DATA_REQUEST_EP, data, size);
 	if (res != MSG_OK) return res;
@@ -89,8 +89,8 @@ msg_t BulkUsbTransmitPacket(const uint8_t * data, size_t size) {
 	return res;
 }
 
-uint32_t offset;
-uint32_t value;
+static uint32_t offset;
+static uint32_t value;
 
 // in order of high to low priority
 #define evt_bulk_tx_ack  (1<<0)
@@ -123,7 +123,7 @@ tx_pckt_ack_v2_t tx_pckt_ack_v2 = {
 		.underruns = 0
 };
 
-msg_t bulk_tx_ack(void) {
+static msg_t bulk_tx_ack(void) {
 	tx_pckt_ack_v2.dspload = dspLoadPct;
 	tx_pckt_ack_v2.patchID = patchMeta.patchID;
 	tx_pckt_ack_v2.voltage = sysmon_getVoltage10() + (sysmon_getVoltage50() << 16);
@@ -143,7 +143,7 @@ typedef struct {
 	uint8_t patch_mainloc[4];
 } tx_pckt_fwversion_t;
 
-msg_t bulk_tx_fw_version(void) {
+static msg_t bulk_tx_fw_version(void) {
 	tx_pckt_fwversion_t pckt;
     pckt.header = tx_hdr_fwid;
 	pckt.version[0] = FWVERSION1; // major
@@ -169,7 +169,7 @@ typedef struct {
 	uint32_t value;
 } tx_pckt_memrd32_t;
 
-msg_t bulk_tx_memrd32(void) {
+static msg_t bulk_tx_memrd32(void) {
     tx_pckt_memrd32_t pckt;
     pckt.header = tx_hdr_memrd32;
     pckt.offset = offset;
@@ -183,7 +183,7 @@ typedef struct {
 	uint32_t size;
 } tx_pckt_memrdx_t;
 
-msg_t bulk_tx_memrdx(void) {
+static msg_t bulk_tx_memrdx(void) {
     tx_pckt_memrdx_t pckt;
     pckt.header = tx_hdr_memrdx;
     pckt.offset = offset;
@@ -194,7 +194,7 @@ msg_t bulk_tx_memrdx(void) {
     return m;
 }
 
-msg_t bulk_tx_fileinfo(void) {
+static msg_t bulk_tx_fileinfo(void) {
     char *msg = &((char*)fbuff)[0];
     *((int32_t*)fbuff) = tx_hdr_fileinfo;
     *(int32_t *)(&msg[4]) = fno.fsize;
@@ -268,7 +268,7 @@ static FRESULT scan_files(char *path) {
   return res;
 }
 
-void bulk_tx_dirlist(void) {
+static void bulk_tx_dirlist(void) {
   FATFS *fsp;
   uint32_t clusters;
   FRESULT err;
@@ -343,7 +343,7 @@ typedef struct {
   _log_stream_data
 } LogStream;
 
-void logObjectInit(LogStream *msp);
+static void logObjectInit(LogStream *msp);
 
 
 static size_t writes(void *ip, const uint8_t *bp, size_t n) {
@@ -380,15 +380,14 @@ static void obnotify(io_buffers_queue_t *bqp) {
     chEvtSignalI(thd_bulk_Writer,evt_bulk_tx_logmessage);
 }
 
-void logObjectInit(LogStream *msp) {
+static void logObjectInit(LogStream *msp) {
   msp->vmt    = &vmt;
   obqObjectInit(&msp->obqueue, msp->ob,
                 LOG_BUFFERS_SIZE, LOG_BUFFERS_NUMBER,
                 obnotify, msp);
 }
 
-
-msg_t bulk_tx_logmessage(void) {
+static msg_t bulk_tx_logmessage(void) {
   msg_t error = 0;
   size_t s;
   int cont = 1;
@@ -431,7 +430,7 @@ typedef struct {
   int32_t index;
 } tx_pckt_paramchange;
 
-msg_t bulk_tx_paramchange(void) {
+static msg_t bulk_tx_paramchange(void) {
 	msg_t r = 0;
 	if (!patchStatus) {
 		unsigned int i;
@@ -570,7 +569,7 @@ typedef struct {
 #define rcv_hdr_preset_write   0x526f7841 // "AxoR"
 #define rcv_hdr_virtual_input_event  0x426f7841 // "AxoB"
 
-void ManipulateFile(void) {
+static void ManipulateFile(void) {
   sdcard_attemptMountIfUnmounted();
   if (FileName[0]) {
     // backwards compatibility
@@ -646,10 +645,10 @@ void ManipulateFile(void) {
   }
 }
 
-void CopyPatchToFlash(void) {
+static void CopyPatchToFlash(void) {
   flash_unlock();
   flash_Erase_sector(11);
-  int src_addr = PATCHMAINLOC;
+  int src_addr = SDRAM_BANK_ADDR;
   int flash_addr = PATCHFLASHLOC;
   int c;
   for (c = 0; c < PATCHFLASHSIZE;) {
@@ -659,7 +658,7 @@ void CopyPatchToFlash(void) {
     c += 4;
   }
   // verify
-  src_addr = PATCHMAINLOC;
+  src_addr = SDRAM_BANK_ADDR;
   flash_addr = PATCHFLASHLOC;
   int err = 0;
   for (c = 0; c < PATCHFLASHSIZE;) {
@@ -670,9 +669,7 @@ void CopyPatchToFlash(void) {
     c += 4;
   }
   if (err) {
-    while (1) {
-      // flash verify fail
-    }
+	  chSysHalt("Flashing failed");
   }
 }
 

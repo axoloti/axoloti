@@ -259,76 +259,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/ui_nodes/test_menu.c
 
 
-#optional modules
-ifneq (,$(findstring BRAIDS,$(AXO_OPT_MODULES)))
-#$(info including BRAIDS)
-BRAIDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/digital_oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/macro_oscillator.cpp 
-endif
-
-ifneq (,$(findstring WARPS,$(AXO_OPT_MODULES)))
-# $(info including WARPS)
-WARPS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp 
-
-       # ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
-       # ${MUTABLE_INSTRUMENTS}/warps/dsp/modulator.cpp \
-       # ${MUTABLE_INSTRUMENTS}/warps/dsp/oscillator.cpp \
-       # ${MUTABLE_INSTRUMENTS}/warps/dsp/vocoder.cpp 
-endif
-
-ifneq (,$(findstring ELEMENTS,$(AXO_OPT_MODULES)))
-#$(info including ELEMENTS)
-ELEMENTS_SRC = \
-       ${FIRMWARE}/axoloti_mi.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/multistage_envelope.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/ominous_voice.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/resonator.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/string.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/tube.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/part.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/voice.cpp 
-endif
-
-ifneq (,$(findstring CLOUDS,$(AXO_OPT_MODULES)))
-# $(info including CLOUDS)
-CLOUDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp 
-
-       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
-       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/mu_law.cpp \
-       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/granular_processor.cpp \
-       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/frame_transformation.cpp \
-       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/phase_vocoder.cpp \
-       # ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/stft.cpp 
-endif
-
-ifneq (,$(findstring RINGS,$(AXO_OPT_MODULES)))
-#$(info  including RINGS)
-RINGS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp 
-endif
-
-ifneq (,$(findstring STREAMS,$(AXO_OPT_MODULES)))
-#$(info including STREAMS)
-STREAMS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/streams/streams_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/compressor.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/envelope.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/follower.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/lorenz_generator.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/processor.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/svf.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/vactrol.cpp 
-endif
-
 #$(info including base MI)
-
 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -336,14 +267,7 @@ endif
 CPPSRC = \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/units.cpp \
        ${MUTABLE_INSTRUMENTS}/stmlib/dsp/atan.cpp \
-       ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
-       ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp \
-       ${BRAIDS_SRC} \
-       ${WARPS_SRC} \
-       ${ELEMENTS_SRC} \
-       ${CLOUDS_SRC} \
-       ${RINGS_SRC} \
-       ${STREAMS_SRC}
+       ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp 
 
  
 	   

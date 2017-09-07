@@ -13,7 +13,6 @@ connecting a midi controller that uses all sorts of midi messages conflicting
 with "play". One virtual input port can be used to merge all regular midi ports 
 for playing.
 
-* TODO: implement binary image loader for startup patch in flash
 * TODO: test midi I/O extensively : help invited
 * TODO: implement sysex rx/tx: help invited
 * TODO: load/store midi routing config from sdcard: help invited

@@ -135,11 +135,11 @@ typedef struct _Parameter {
 } Parameter_t;
 
 // separate array of parameter names
-// otherwise duplicates are required for polyphonic sub-patches
+// this avoids duplicates for polyphonic sub-patches
 typedef struct {
 	  char name[MAX_PARAMETER_NAME_LENGTH];
 	  // parameter name, not null terminated
-	  // using 8 characters makes it easier for embedded modification
+	  // using 8 characters avoids memory allocation for embedded modification
 	  // and just twice the space of a pointer to somewhere else
 	  // also, a "string compare" boils down to 2 int32 compares rather
 	  // than a loop...

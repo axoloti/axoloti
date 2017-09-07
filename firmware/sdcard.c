@@ -138,6 +138,40 @@ typedef struct {
 	// uint8_t[length-4]
 } bin_segment_t;
 
+int bin_loader_flash(uint8_t *startloc, uint32_t size) {
+	volatile bin_header_t *pre = (bin_header_t *)startloc;
+	volatile bin_segment_t *elem = (bin_segment_t *)(startloc + sizeof(bin_header_t));
+
+	  // TODO: check signature...
+	  volatile int nelements = pre->nsegments;
+	  // support only up to 255 elements...
+	  if (nelements > 255) return -4;
+	  if (!nelements) return -5; // zero elements?
+
+	  // clear target sections for diagnostics
+	  memset((char *)0x20000000, 0x66, 64*1024); // sram1
+	  memset((char *)0x20020000, 0x66, 64*1024); // sram3
+	  memset((char *)0xC0000000, 0x66, 64*1024); // sdram
+
+	  while (1) {
+		  uint32_t remaining_length = elem->length - 4;
+		  uint8_t * ptarget_offset = (uint8_t * )elem->addr;
+		  memcpy(ptarget_offset, ((uint8_t * )elem) + sizeof(bin_segment_t), remaining_length);
+		  uint8_t * flashpos = ((uint8_t * )elem) + sizeof(bin_segment_t) + remaining_length;
+		  // element complete...
+		  nelements--;
+		  if (!nelements) break; // done
+		  // next segment header
+		  elem = (bin_segment_t *)flashpos;
+		  // TODO: validate addr/size by region
+		  if (!((ptarget_offset == (void *)0x0) ||
+				  (ptarget_offset == (void *)0x20000000) ||
+				  (ptarget_offset == (void *)0x20020000) ||
+				  (ptarget_offset == (void *)0xC0000000))) chSysHalt("DFUADDR");
+	  }
+	  return 0;
+}
+
 static int bin_loader_f(FIL *FileObject) {
 	  FRESULT err;
 	  uint32_t bytes_read;

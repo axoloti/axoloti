@@ -282,9 +282,8 @@ static THD_FUNCTION(ThreadDSP, arg) {
         if (!res) StartPatch1();
       }
       else if (loadPatchIndex == START_FLASH) {
-        // patch in flash sector 11
-        memcpy((uint8_t *)PATCHMAINLOC, (uint8_t *)PATCHFLASHLOC,
-               PATCHFLASHSIZE);
+    	*(uint32_t *)PATCHMAINLOC = 0;
+    	bin_loader_flash(PATCHFLASHLOC, PATCHFLASHSIZE);
         if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
             && (*(uint32_t *)PATCHMAINLOC != 0)) {
           StartPatch1();

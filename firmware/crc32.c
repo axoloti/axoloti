@@ -22,7 +22,7 @@
 #include "hal.h"
 #include "exceptions.h"
 
-uint32_t revbit(uint32_t data) {
+static uint32_t revbit(uint32_t data) {
   uint32_t result;
   __ASM
   volatile ("rbit %0, %1" : "=r" (result) : "r" (data));
