@@ -57,6 +57,8 @@ then
     cd ${PLATFORM_ROOT}/../chibios_${CH_VERSION}
     rm -rf community
     git clone https://github.com/ChibiOS/ChibiOS-Contrib.git community
+    cd community 
+    git checkout 5a9ac0f9406bf4a6f11fe03e62b7b0f4cb94a3d6
 else
     echo "chibios directory already present, skipping..."
 fi
