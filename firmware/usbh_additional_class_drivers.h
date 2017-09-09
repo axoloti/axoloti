@@ -22,12 +22,13 @@
 
 /* Declarations */
 extern const usbh_classdriverinfo_t usbhMidiClassDriverInfo;
+extern const usbh_classdriverinfo_t usbhVirusClassDriverInfo;
 
 
 
 /* Comma separated list of additional class drivers */
 #define HAL_USBH_ADDITIONAL_CLASS_DRIVERS \
-	&usbhMidiClassDriverInfo,
+	&usbhMidiClassDriverInfo, &usbhVirusClassDriverInfo, 
 
 
 #endif

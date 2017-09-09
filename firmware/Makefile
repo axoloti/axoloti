@@ -228,7 +228,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
        ${FIRMWARE}/usbh_midi_class.c \
-       ${FIRMWARE}/usbh_vendor.c \
+       ${FIRMWARE}/usbh_virus_class.c \
        ${FIRMWARE}/usbh_conf.c \
        ${FIRMWARE}/serial_midi.c \
        ${FIRMWARE}/spilink.c \

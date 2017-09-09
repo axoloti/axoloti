@@ -49,7 +49,7 @@
 #include "usbh/internal.h"
 
 #if USBH_MIDI_DEBUG_ENABLE_TRACE
-#define udbgf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define udbgf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
 #define udbg(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define udbgf(f, ...)  do {} while(0)
@@ -57,7 +57,7 @@
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_INFO
-#define uinfof(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define uinfof(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
 #define uinfo(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uinfof(f, ...)  do {} while(0)
@@ -65,7 +65,7 @@
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_WARNINGS
-#define uwarnf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define uwarnf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
 #define uwarn(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uwarnf(f, ...)  do {} while(0)
@@ -73,121 +73,29 @@
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_ERRORS
-#define uerrf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
+#define uerrf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
 #define uerr(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uerrf(f, ...)  do {} while(0)
 #define uerr(f, ...)   do {} while(0)
 #endif
 
-
-/*===========================================================================*/
-/* USB Class driver loader for MIDI Class  						 		 	 */
-/*===========================================================================*/
-
-#define USB_AUDIO_CLASS 0x01
-#define USB_MIDISTREAMING_SubCLASS 0x03
-
-/*
-* Definitions from the USB_MIDI_ or usb_midi_ namespace come from:
-* "Universal Serial Bus Class Definitions for MIDI Devices, Revision 1.0"
-*/
-
-/* Appendix A.1: MS Class-Specific Interface Descriptor Subtypes */
-#define USB_MIDI_SUBTYPE_MS_DESCRIPTOR_UNDEFINED 0x00
-#define USB_MIDI_SUBTYPE_MS_HEADER              0x01
-#define USB_MIDI_SUBTYPE_MIDI_IN_JACK           0x02
-#define USB_MIDI_SUBTYPE_MIDI_OUT_JACK          0x03
-#define USB_MIDI_SUBTYPE_MIDI_ELEMENT           0x04
-
-/* Appendix A.2: MS Class-Specific Endpoint Descriptor Subtypes */
-#define USB_MIDI_SUBTYPE_DESCRIPTOR_UNDEFINED   0x00
-#define USB_MIDI_SUBTYPE_MS_GENERAL             0x01
-
-/* Appendix A.3: MS MIDI IN and OUT Jack types */
-#define USB_MIDI_JACK_TYPE_UNDEFINED            0x00
-#define USB_MIDI_JACK_TYPE_EMBEDDED             0x01
-#define USB_MIDI_JACK_TYPE_EXTERNAL             0x02
-
-/* Appendix A.5.1 Endpoint Control Selectors */
-#define USB_MIDI_EP_CONTROL_UNDEFINED           0x00
-#define USB_MIDI_ASSOCIATION_CONTROL            0x01
-
 USBHMIDIDriver USBHMIDID[USBH_MIDI_CLASS_MAX_INSTANCES];
 
 
-typedef struct {
-	uint8_t bLength;
-	uint8_t bDescriptorType;
-	uint8_t bDescriptorSubtype;
-	uint16_t bcdMSC;
-	uint16_t wTotalLength;
-} __attribute__((packed)) ms_interface_header_descriptor_t;
-
-typedef struct {
-	uint8_t bLength;
-	uint8_t bDescriptorType;
-	uint8_t bDescriptorSubType;
-	uint8_t bNumEmbMIDIJack;
-	uint8_t baAssocJackID[0];
-} __attribute__((packed)) ms_bulk_data_endpoint_descriptor_t;
-
-typedef struct {
-	uint8_t bLength;
-	uint8_t bDescriptorType;
-	uint8_t bDescriptorSubtype;
-	uint8_t bJackType;
-	uint8_t bJackID;
-	uint8_t iJack;
-} midi_in_jack_descriptor_t;
-
-typedef struct {
-	uint8_t baSourceID;
-	uint8_t BaSourcePin;
-} midi_jack_descriptor_pin_t;
-
-typedef struct {
-	uint8_t bLength;
-	uint8_t bDescriptorType;
-	uint8_t bDescriptorSubtype;
-	uint8_t bJackType;
-	uint8_t bJackID;
-	uint8_t bNrInputPins;
-	midi_jack_descriptor_pin_t output_pins[0];
-} midi_out_jack_descriptor_t;
-
-typedef struct {
-	uint8_t bLength;
-	uint8_t bDescriptorType;
-	uint8_t bDescriptorSubtype;
-	uint8_t bElementID;
-	uint8_t bNrInputPins;
-	midi_jack_descriptor_pin_t input_pins[0];
-} midi_element_descriptor_t;
-
-typedef struct {
-	uint8_t bNrOutputPins;
-	uint8_t bInTerminalLink;
-	uint8_t bOutTerminalLink;
-	uint8_t bElCapsSize;
-	uint8_t bmElementCaps[0];
-} midi_element_descriptor_part2_t;
-
-static void _init(void);
-static usbh_baseclassdriver_t *_load(usbh_device_t *dev, const uint8_t *descriptor, uint16_t rem);
-static void _unload(usbh_baseclassdriver_t *drv);
 
 static const usbh_classdriver_vmt_t class_driver_vmt = {
-	_init,
-	_load,
-	_unload
+	midi_class_init,
+	midi_class_load,
+	midi_class_unload
 };
 
 const usbh_classdriverinfo_t usbhMidiClassDriverInfo = {
 	"MIDI", &class_driver_vmt
 };
 
-static usbh_baseclassdriver_t *_load(usbh_device_t *dev, const uint8_t *descriptor, uint16_t rem) {
+usbh_baseclassdriver_t *midi_class_load(usbh_device_t *dev, const uint8_t *descriptor, uint16_t rem) {
+	uinfof("midi class load");
 	int i;
 	USBHMIDIDriver *midip;
 	(void)dev;
@@ -350,7 +258,7 @@ static void _stop_locked(USBHMIDIDriver *midip) {
 		midip->config->cb_disconnect(midip->config);
 }
 
-static void _unload(usbh_baseclassdriver_t *drv) {
+void midi_class_unload(usbh_baseclassdriver_t *drv) {
 	USBHMIDIDriver *const midip = (USBHMIDIDriver *)drv;
 	_stop_locked(midip);
 	midip->state = USBHMIDI_STATE_STOP;
@@ -363,7 +271,7 @@ static void _object_init(USBHMIDIDriver *midip) {
 	midip->state = USBHMIDI_STATE_STOP;
 }
 
-static void _init(void) {
+void midi_class_init(void) {
 	uint8_t i;
 	for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
 		_object_init(&USBHMIDID[i]);
@@ -395,6 +303,8 @@ static void _in_cb(usbh_urb_t *urb) {
 	usbhURBObjectResetI(&midip->in_urb);
 	usbhURBSubmitI(&midip->in_urb);
 }
+
+
 
 void usbhmidiStart(USBHMIDIDriver *midip) {
 	osalDbgCheck(midip);
@@ -442,8 +352,10 @@ void usbhmidiStop(USBHMIDIDriver *midip) {
 
 msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
 	if (midip->state != USBHMIDI_STATE_READY)
-		return;
-	int actual_len;
+		return -1;
+
+	LogTextMessage("usbhmidi_sendbuffer : sending %02x bytes",size);
+	uint32_t actual_len;
 	msg_t status = usbhBulkTransfer(&midip->epout, buffer,
 			size, &actual_len, MS2ST(1000));
 	if (status == USBH_URBSTATUS_OK) return MSG_OK;
