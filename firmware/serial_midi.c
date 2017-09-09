@@ -151,10 +151,22 @@ static void serial_MidiInByteHandler(uint8_t data) {
 // Midi OUT
 
 void serial_MidiSend(midi_message_t midimsg) {
-	// TODO: implement sysex
 	// TODO: running status
 	// TODO: skip other messages when sysex is in progress
 	switch(midimsg.fields.cin){
+  case 0x4: // sysex start/continue
+    sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+    break;
+  case 0x5: // end 1 byte
+    sdWrite(&SDMIDI, &midimsg.bytes.b0, 1);
+    break;
+  case 0x6: // end 2 byte
+    sdWrite(&SDMIDI, &midimsg.bytes.b0, 2);
+    break;
+  case 0x7: // end 3 byte
+    sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+    break;
+
 	case 0x8: // note-off
 	case 0x9: // note-on
 	case 0xA: // PolyKeyPress

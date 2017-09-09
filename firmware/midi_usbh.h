@@ -14,9 +14,6 @@ extern midi_input_remap_t midi_inputmap_usbh2;
 extern midi_output_routing_t midi_outputmap_usbh1;
 extern midi_output_routing_t midi_outputmap_usbh2;
 
-// external midi interface
-//void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len);
-
 int  usbh_MidiGetOutputBufferPending(void);
 int  usbh_MidiGetOutputBufferAvailable(void);
 

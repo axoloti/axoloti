@@ -52,8 +52,61 @@ void MidiSendVirtual(midi_message_t m) {
 	}
 }
 
+#define CIN_SYSEX_START_CONTINUE 0x04
+#define CIN_SYSEX_END_1 0x05
+#define CIN_SYSEX_END_2 0x06
+#define CIN_SYSEX_END_3 0x07
+
+
 void MidiSendSysExVirtual(uint8_t port, uint8_t bytes[], uint8_t len) {
-	// TODO: implement
+    uint8_t cn = ((( port - 1) & 0x0F) << 4);
+    uint8_t cin = CIN_SYSEX_START_CONTINUE;
+    uint8_t ph = cin | cn;
+    int i = 0;
+    for(i = 0; i < (len - 3); i += 3) {
+		midi_message_t contm;
+		contm.bytes.ph = ph;
+		contm.bytes.b0 = bytes[i];
+		contm.bytes.b1 = bytes[i + 1];
+		contm.bytes.b2 = bytes[i + 2];
+		MidiSendVirtual(contm);
+    }
+
+    int res = len - i;
+
+	midi_message_t endm;
+    // end the sysex message, with 1, 2 or 3 bytes
+    switch (res)  {
+	    case 1 : {
+	        cin = CIN_SYSEX_END_1;
+	        ph = cin | cn;
+			endm.bytes.ph = ph;
+			endm.bytes.b0 = bytes[i];
+			endm.bytes.b1 = 0;
+			endm.bytes.b2 = 0;
+			break;
+		}
+	    case 2 :  {
+	        cin = CIN_SYSEX_END_2;
+	        ph = cin | cn;
+			endm.bytes.ph = ph;
+			endm.bytes.b0 = bytes[i];
+			endm.bytes.b1 = bytes[i + 1];
+			endm.bytes.b2 = 0;
+			break;
+		}
+	    case 3 :  {
+	        cin = CIN_SYSEX_END_3;
+	        ph = cin | cn;
+			endm.bytes.ph = ph;
+			endm.bytes.b0 = bytes[i];
+			endm.bytes.b1 = bytes[i + 1];
+			endm.bytes.b2 = bytes[i + 2];
+			break;
+		}
+	}
+
+	MidiSendVirtual(endm);
 }
 
 // pack header CN | CIN
