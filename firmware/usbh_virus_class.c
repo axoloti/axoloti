@@ -12,6 +12,7 @@
 #include "midi_routing.h"
 #include "usbh_conf.h"
 
+void LogTextMessage(const char* format, ...);
 
 #if USBH_MIDI_DEBUG_ENABLE_TRACE
 #define udbgf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
@@ -61,20 +62,21 @@ usbh_baseclassdriver_t *virus_load(usbh_device_t *dev, const uint8_t *descriptor
             USB_VENDOR_CLASS_ID, USB_VENDOR_subCLASS_ID, -1) != HAL_SUCCESS) {
         return NULL;
     }
-
-
-    uinfof("Access Virus detected");
-
     int i;
     USBHMIDIDriver *midip;
     (void)dev;
 
     const usbh_interface_descriptor_t * const ifdesc = (const usbh_interface_descriptor_t *)descriptor;
 
-    if ((ifdesc->bAlternateSetting != 0)
+    // we are only interested in interface 3, endpoint 5 and 85
+    if (       ifdesc->bInterfaceNumber != 3
+            || (ifdesc->bAlternateSetting != 0)
             || (ifdesc->bNumEndpoints < 1)) {
         return NULL;
     }
+
+
+    uinfof("Access Virus detected");
 
     /* alloc driver */
     for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
@@ -92,53 +94,17 @@ usbh_baseclassdriver_t *virus_load(usbh_device_t *dev, const uint8_t *descriptor
 alloc_ok:
     /* initialize the driver's variables */
     midip->ifnum = ifdesc->bInterfaceNumber;
+    // usbhStdReqSetInterface(dev,midip->ifnum,0);
     midip->nOutputPorts = 0;
     midip->nInputPorts = 0;
 
-    /* parse the configuration descriptor */
-    if_iterator_t iif;
-    generic_iterator_t iep;
-    iif.iad = 0;
-    iif.curr = descriptor;
-    iif.rem = rem;
-    generic_iterator_t ics;
 
-    for (cs_iter_init(&ics, (generic_iterator_t *)&iif); ics.valid; cs_iter_next(&ics)) {
-        switch(ics.curr[2]) {
-        case USB_MIDI_SUBTYPE_MS_HEADER: {
-            ms_interface_header_descriptor_t *intf_hdr = (ms_interface_header_descriptor_t *)&ics.curr[0];
-            uinfof("    Midi interface header, version = %4X",
-                    intf_hdr->bcdMSC);
-        } break;
-        case USB_MIDI_SUBTYPE_MIDI_IN_JACK: {
-            midi_in_jack_descriptor_t *in_jack_desc = (midi_in_jack_descriptor_t *)&ics.curr[0];
-            uinfof("    Midi In jack, bJackType = %d, bJackID = %d, iJack=%d",
-                    in_jack_desc->bJackType,in_jack_desc->bJackID,in_jack_desc->iJack);
-//          char name[32];
-//          bool res = usbhStdReqGetStringDescriptor(dev, in_jack_desc->iJack, dev->langID0, sizeof(name), (uint8_t *)name);
-//          if (res) {
-//              uinfof("    name %s", name);
-//          } else {
-//              uinfof("    noname");
-//          }
-        } break;
-        case USB_MIDI_SUBTYPE_MIDI_OUT_JACK: {
-            midi_out_jack_descriptor_t *out_jack_desc = (midi_out_jack_descriptor_t *)ics.curr;
-            uinfof("    Midi Out jack, bJackType = %d, bJackID = %d, bNrInputPins=%d",
-                    out_jack_desc->bJackType,out_jack_desc->bJackID,out_jack_desc->bNrInputPins);
-        } break;
-        default:
-            uinfof("    Midi Class-Specific descriptor, Length=%d, Type=%02x",
-                    ics.curr[0], ics.curr[1]);
-            int j;
-            for(j=2;j<ics.curr[0];j++)
-                uinfof("  %02X", ics.curr[j]);
-            }
-
-    }
-
+    // based on usbh_midi_class
+    // but we can remove the logging and checking of config, since we know what the virus has available.
     bool found = false;
 
+    if_iterator_t iif;
+    generic_iterator_t iep;
     iif.iad = 0;
     iif.curr = descriptor;
     iif.rem = rem;
@@ -149,60 +115,38 @@ alloc_ok:
                         (epdesc->bmAttributes == USBH_EPTYPE_INT))
                         ) {
             // some devices use BULK (UC33), some devices use INT endpoints (Launchpad Mini)
-            uinfof("IN endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+            uinfof("IN endpoint found: interface %02x bEndpointAddress=%02x", midip->ifnum, epdesc->bEndpointAddress);
 
-            // for (cs_iter_init(&ics, &iep); ics.valid; cs_iter_next(&ics)) {
-            //     ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)ics.curr;
-            //     if (ms_ep_desc->bDescriptorSubType == USB_MIDI_SUBTYPE_MS_GENERAL) {
-            //         uinfof("    Midi IN endpoint descriptor, bNumEmbMIDIJack=%d",
-            //                 ms_ep_desc->bNumEmbMIDIJack);
-            //         int j;
-            //         for(j=0;j<ms_ep_desc->bNumEmbMIDIJack;j++)
-            //             uinfof("    baAssocJackID =  %02X", ms_ep_desc->baAssocJackID[j]);
-            //         midip->nInputPorts = ms_ep_desc->bNumEmbMIDIJack;
-            //     } else {
-            //         uinfof("    Midi IN endpoint descriptor??? %02x", ms_ep_desc->bDescriptorSubType);
-            //     }
-            // }
-
-
-            midip->nInputPorts = epdesc->bEndpointAddress == 0x85;
-
-            // Pretend it is an INT IN endpoint to avoid a NAK flood
-            epdesc->bmAttributes |= USBH_EPTYPE_INT;
-            usbhEPObjectInit(&midip->epin, dev, epdesc);
-            midip->epin.type = USBH_EPTYPE_INT;
-            usbhEPSetName(&midip->epin, "MIDI[IIN ]");
+            if(epdesc->bEndpointAddress == 0x85)  {
+                uinfof("Virus input found %02x", epdesc->bEndpointAddress);
+                midip->nInputPorts = 2;
+                // Pretend it is an INT IN endpoint to avoid a NAK flood
+                epdesc->bmAttributes |= USBH_EPTYPE_INT;
+                usbhEPObjectInit(&midip->epin, dev, epdesc);
+                midip->epin.type = USBH_EPTYPE_INT;
+                usbhEPSetName(&midip->epin, "MIDI[IIN ]");
+            }
         } else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
             ((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
                     (epdesc->bmAttributes == USBH_EPTYPE_INT))
                     ) {
             // again, some devices use BULK, some devices use INT endpoints
-            uinfof("OUT endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+            uinfof("OUT endpoint found: interface %02x bEndpointAddress=%02x", midip->ifnum, epdesc->bEndpointAddress);
 
-            // for (cs_iter_init(&ics, &iep); ics.valid; cs_iter_next(&ics)) {
-            //     ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)ics.curr;
-            //     if (ms_ep_desc->bDescriptorSubType == USB_MIDI_SUBTYPE_MS_GENERAL) {
-            //         uinfof("    Midi OUT endpoint descriptor, bNumEmbMIDIJack=%d",
-            //                 ms_ep_desc->bNumEmbMIDIJack);
-            //         int j;
-            //         for(j=0;j<ms_ep_desc->bNumEmbMIDIJack;j++)
-            //             uinfof("    baAssocJackID =  %02X", ms_ep_desc->baAssocJackID[j]);
-            //         midip->nOutputPorts = ms_ep_desc->bNumEmbMIDIJack;
-            //     } else {
-            //         uinfof("    Midi OUT endpoint descriptor??? %02x", ms_ep_desc->bDescriptorSubType );
-            //     }
-            // }
-
-            // midip->nOutputPorts =  1;
-            // found = true;
-            midip->nOutputPorts =  epdesc->bEndpointAddress == 0x05;
             if(epdesc->bEndpointAddress == 0x05)  {
+                uinfof("Virus output found %02x", epdesc->bEndpointAddress);
+                midip->nOutputPorts =  2;
                 found = true;
+
+                // we have to force to bulk, since that is all thats supported in usbhBulkTransfer
+                // (Virus reports USBH_EPTYPE_INT)
+
+                // epdesc->bmAttributes |= USBH_EPTYPE_BULK;
+                usbhEPObjectInit(&midip->epout, dev, epdesc);
+                midip->epout.type = USBH_EPTYPE_BULK;
+                usbhEPSetName(&midip->epout, "MIDI[IOUT]");
             }
 
-            usbhEPObjectInit(&midip->epout, dev, epdesc);
-            usbhEPSetName(&midip->epout, "MIDI[IOUT]");
 
         } else {
             uinfof("unsupported endpoint found: bEndpointAddress=%02x, bmAttributes=%02x",
@@ -213,28 +157,56 @@ alloc_ok:
     if(!found ) return NULL;
 
     midip->state = USBHMIDI_STATE_ACTIVE;
+
+
+    // now we have to send the magic seq to switch virus to midi usb mode
+    LogTextMessage("Virus : Connected, MIDI");
+
+    // usbhmidiStart , opens the endpoints needed to send data 
+    // this is usually called in usbh_conf... but seem ok here, 
+    // this  sets state to READY, so usb_conf wont do it again
+    usbhmidiStart(midip);
+
+    // additional start code usually done in usbhconf
+    USBHMIDIConfig_ext* config = (USBHMIDIConfig_ext *)midip->config;
+    config->in_mapping->name = midip->name;
+    config->in_mapping->nports = midip->nInputPorts;
+    config->out_mapping->name = midip->name;
+    config->out_mapping->nports = midip->nOutputPorts;
+
+    // now try to sent the data
     uinfof("Switch Virus to USB");
+    static uint8_t seq[] = { 0x4e, 0x73, 0x52, 0x01 }; 
 
-    // doesnt work, seems buffer is initialised after this, so message is never sent
-    // if we put this in start, then it does get sent BUT... usbBulkTranser panics
-    // so... something is not liked about the virus endpoint!?
-    // note: if this is in start, and i connect another device, I get no error
-    // so remaining problems are:
-    // 1) why does the bulk transfer panic? ... need to check interface description from virus
-    // 2) need to trigger this in start, which is called in usbconf.c based on status
-    // ....( it maybe we can call start here, as we got the same bulk panic, but thats not the issue)
-    midi_message_t m;
-    m.bytes.ph = 0x4e;
-    m.bytes.b0 = 0x73;
-    m.bytes.b1 = 0x52;
-    m.bytes.b2 = 0x01;
-    midi_output_buffer_t *b = &((USBHMIDIConfig_ext *)midip->config)->out_buffer;
-    midi_output_buffer_put(b,m);
+    // unfortunately this times out
+    usbhmidi_sendbuffer(midip,seq,sizeof(seq));
 
-    return (usbh_baseclassdriver_t *)midip;
+    /// soo... I tried just submitting urb, so as not to cancel the request
+    // usbh_urb_t urb;
+    // usbhURBObjectInit(&urb, &midip->epout, 0, 0, seq, sizeof(seq));
+    // osalSysLock();
+    // usbhURBSubmitI(&urb);
+    // osalSysUnlock();
+
+    // both the above sometimes we see on virus it establish connection, 
+    // but then it immediately drops!
+
+    // this was an attempt using the queue.. I think this has same issue after start
+    // but you have to becareful as the output buffer seems to be reset on device connection
+
+    // midi_message_t m;
+    // m.bytes.ph = 0x4e;
+    // m.bytes.b0 = 0x73;
+    // m.bytes.b1 = 0x52;
+    // m.bytes.b2 = 0x01;
+    // midi_output_buffer_t *b = &((USBHMIDIConfig_ext *)midip->config)->out_buffer;
+    // midi_output_buffer_put(b,m);
+
+    return (usbh_baseclassdriver_t *) midip;
 }
 
 void virus_unload(usbh_baseclassdriver_t *drv) {
+    uinfof("Virus unloading");
     midi_class_unload(drv);
 }
 

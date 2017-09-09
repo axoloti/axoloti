@@ -95,7 +95,6 @@ const usbh_classdriverinfo_t usbhMidiClassDriverInfo = {
 };
 
 usbh_baseclassdriver_t *midi_class_load(usbh_device_t *dev, const uint8_t *descriptor, uint16_t rem) {
-	uinfof("midi class load");
 	int i;
 	USBHMIDIDriver *midip;
 	(void)dev;
@@ -324,11 +323,13 @@ void usbhmidiStart(USBHMIDIDriver *midip) {
 	usbhEPOpen(&midip->epin);
 	usbhEPOpen(&midip->epout);
 
+
 	osalSysLock();
 	usbhURBSubmitI(&midip->in_urb);
 	osalSysUnlock();
 
 	midip->state = USBHMIDI_STATE_READY;
+
 }
 
 void usbhmidiStop(USBHMIDIDriver *midip) {
@@ -351,13 +352,18 @@ void usbhmidiStop(USBHMIDIDriver *midip) {
 }
 
 msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
-	if (midip->state != USBHMIDI_STATE_READY)
+	if (midip->state != USBHMIDI_STATE_READY) {
+		LogTextMessage("usbhmidi_sendbuffer : device not ready");
 		return -1;
+	}
 
 	LogTextMessage("usbhmidi_sendbuffer : sending %02x bytes",size);
 	uint32_t actual_len;
 	msg_t status = usbhBulkTransfer(&midip->epout, buffer,
 			size, &actual_len, MS2ST(1000));
+	LogTextMessage("usbhmidi_sendbuffer : sent %02x bytes",actual_len);
 	if (status == USBH_URBSTATUS_OK) return MSG_OK;
+	LogTextMessage("usbhmidi_sendbuffer : errored with %d ",status);
+
 	return status;
 }
