@@ -1282,6 +1282,6 @@ extern "C" {
 #endif
 #endif /* _FROM_ASM_ */
 
-#define BOARD_OTG_NOVBUSSENS 1
+#define BOARD_OTG_NOVBUSSENS
 
 #endif /* _BOARD_H_ */
