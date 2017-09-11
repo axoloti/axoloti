@@ -137,7 +137,7 @@
 #define HAL_USBH_USE_HUB                              TRUE
 
 #define HAL_USBHHUB_MAX_INSTANCES                     1
-#define HAL_USBHHUB_MAX_PORTS                         6
+#define HAL_USBHHUB_MAX_PORTS                         8
 
 #define HAL_USBH_USE_ADDITIONAL_CLASS_DRIVERS		  TRUE
 

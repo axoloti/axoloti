@@ -15,7 +15,7 @@
 void LogTextMessage(const char* format, ...);
 
 #if USBH_MIDI_DEBUG_ENABLE_TRACE
-#define udbgf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define udbgf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define udbg(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define udbgf(f, ...)  do {} while(0)
@@ -23,7 +23,7 @@ void LogTextMessage(const char* format, ...);
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_INFO
-#define uinfof(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define uinfof(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define uinfo(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uinfof(f, ...)  do {} while(0)
@@ -31,7 +31,7 @@ void LogTextMessage(const char* format, ...);
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_WARNINGS
-#define uwarnf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define uwarnf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define uwarn(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uwarnf(f, ...)  do {} while(0)
@@ -39,7 +39,7 @@ void LogTextMessage(const char* format, ...);
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_ERRORS
-#define uerrf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define uerrf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define uerr(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uerrf(f, ...)  do {} while(0)
@@ -143,7 +143,7 @@ alloc_ok:
 
                 // epdesc->bmAttributes |= USBH_EPTYPE_BULK;
                 usbhEPObjectInit(&midip->epout, dev, epdesc);
-                midip->epout.type = USBH_EPTYPE_BULK;
+                // midip->epout.type = USBH_EPTYPE_BULK;
                 usbhEPSetName(&midip->epout, "MIDI[IOUT]");
             }
 
@@ -165,6 +165,7 @@ alloc_ok:
     // usbhmidiStart , opens the endpoints needed to send data 
     // this is usually called in usbh_conf... but seem ok here, 
     // this  sets state to READY, so usb_conf wont do it again
+#if 1
     usbhmidiStart(midip);
 
     // additional start code usually done in usbhconf
@@ -180,6 +181,7 @@ alloc_ok:
 
     // unfortunately this times out
     usbhmidi_sendbuffer(midip,seq,sizeof(seq));
+#endif
 
     /// soo... I tried just submitting urb, so as not to cancel the request
     // usbh_urb_t urb;

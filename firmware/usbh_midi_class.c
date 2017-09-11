@@ -49,7 +49,7 @@
 #include "usbh/internal.h"
 
 #if USBH_MIDI_DEBUG_ENABLE_TRACE
-#define udbgf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define udbgf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define udbg(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define udbgf(f, ...)  do {} while(0)
@@ -57,7 +57,7 @@
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_INFO
-#define uinfof(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define uinfof(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define uinfo(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uinfof(f, ...)  do {} while(0)
@@ -65,7 +65,7 @@
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_WARNINGS
-#define uwarnf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define uwarnf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define uwarn(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uwarnf(f, ...)  do {} while(0)
@@ -73,7 +73,7 @@
 #endif
 
 #if USBH_MIDI_DEBUG_ENABLE_ERRORS
-#define uerrf(f, ...)  LogTextMessage(f, ##__VA_ARGS__)
+#define uerrf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)
 #define uerr(f, ...)  usbDbgPuts(f, ##__VA_ARGS__)
 #else
 #define uerrf(f, ...)  do {} while(0)
@@ -353,17 +353,17 @@ void usbhmidiStop(USBHMIDIDriver *midip) {
 
 msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
 	if (midip->state != USBHMIDI_STATE_READY) {
-		LogTextMessage("usbhmidi_sendbuffer : device not ready");
+		uinfof("usbhmidi_sendbuffer : device not ready");
 		return -1;
 	}
 
-	LogTextMessage("usbhmidi_sendbuffer : sending %02x bytes",size);
+	uinfof("usbhmidi_sendbuffer : sending %02x bytes",size);
 	uint32_t actual_len;
 	msg_t status = usbhBulkTransfer(&midip->epout, buffer,
 			size, &actual_len, MS2ST(1000));
-	LogTextMessage("usbhmidi_sendbuffer : sent %02x bytes",actual_len);
+	uinfof("usbhmidi_sendbuffer : sent %02x bytes",actual_len);
 	if (status == USBH_URBSTATUS_OK) return MSG_OK;
-	LogTextMessage("usbhmidi_sendbuffer : errored with %d ",status);
+	uinfof("usbhmidi_sendbuffer : errored with %d ",status);
 
 	return status;
 }

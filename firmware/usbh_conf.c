@@ -174,8 +174,7 @@ static void ThreadUSBHPnP(void *p) {
     for (;;) {
         for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
             if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
-                // usbDbgPrintf("MIDI: Connected, MIDI%d", i);
-                LogTextMessage("MIDI: Connected, MIDI%d", i);
+                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
                 usbhmidiStart(&USBHMIDID[i]);
                 USBHMIDIC[i].in_mapping->name = USBHMIDID[i].name;
 				USBHMIDIC[i].in_mapping->nports = USBHMIDID[i].nInputPorts;
