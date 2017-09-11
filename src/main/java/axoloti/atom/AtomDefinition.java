@@ -47,6 +47,16 @@ abstract public class AtomDefinition extends AbstractModel {
         this.description = description;
     }
 
+    public static final String ATOM_NAME = "Name";
+    public static final String ATOM_DESCRIPTION = "Description";
+
+    public static final String[] PROPERTY_NAMES = {ATOM_NAME, ATOM_DESCRIPTION};
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTY_NAMES;
+    }
+
     final public String getName() {
         return name;
     }
@@ -55,7 +65,7 @@ abstract public class AtomDefinition extends AbstractModel {
         String old_value = this.name;
         this.name = name;
         firePropertyChange(
-                AtomDefinitionController.ATOM_NAME,
+                ATOM_NAME,
                 old_value, name);
     }
 
@@ -70,7 +80,7 @@ abstract public class AtomDefinition extends AbstractModel {
         String old_value = this.description;
         this.description = description;
         firePropertyChange(
-                AtomDefinitionController.ATOM_DESCRIPTION,
+                ATOM_DESCRIPTION,
                 old_value, description);
     }
 

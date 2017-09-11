@@ -14,17 +14,4 @@ public class MidiInputRoutingTableController extends AbstractController<MidiInpu
         super(model, documentRoot, parent);
     }
 
-    public final static String MIRT_PORTNAME = "PortName";
-    public final static String MIRT_MAPPING = "Mapping";
-
-    public final static String[] PROPERTYNAMES = new String[]{
-        MIRT_PORTNAME,
-        MIRT_MAPPING
-    };
-
-    @Override
-    public String[] getPropertyNames() {
-        return PROPERTYNAMES;
-    }
-
 }

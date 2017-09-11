@@ -1,8 +1,10 @@
 package axoloti.attributeviews;
 
 import axoloti.atom.AtomDefinitionController;
+import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceSpinner;
+import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.control.ACtrlEvent;
 import components.control.ACtrlListener;
@@ -72,15 +74,15 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         super.modelPropertyChange(evt);
         String propertyName = evt.getPropertyName();
         if (propertyName.equals(
-                AttributeInstanceController.ELEMENT_ATTR_VALUE)) {
+                AttributeInstance.ELEMENT_ATTR_VALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setValue(newValue);
         } else if (propertyName.equals(
-                AtomDefinitionController.ATOM_MAXVALUE)) {
+                AxoAttributeSpinner.ATOM_MAXVALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setMax(newValue);
         } else if (propertyName.equals(
-                AtomDefinitionController.ATOM_MINVALUE)) {
+                AxoAttributeSpinner.ATOM_MINVALUE)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setMin(newValue);
         }

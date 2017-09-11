@@ -9,6 +9,7 @@ import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import axoloti.outlets.IOutletInstanceView;
@@ -275,7 +276,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     void handleInstanceNameEditorAction() {
         String s = InstanceNameTF.getText();
         getController().addMetaUndo("edit object name");
-        getController().setModelUndoableProperty(ObjectInstanceController.OBJ_INSTANCENAME, s);
+        getController().setModelUndoableProperty(AxoObjectInstance.OBJ_INSTANCENAME, s);
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }
@@ -405,7 +406,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_LOCATION)) {
+        if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_LOCATION)) {
             Point newValue = (Point) evt.getNewValue();
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
@@ -426,10 +427,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                     }
                 }
             }
-        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INSTANCENAME)) {
+        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_INSTANCENAME)) {
             String s = (String) evt.getNewValue();
             showInstanceName(s);
-        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_SELECTED)) {
+        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_SELECTED)) {
             showSelected((Boolean)evt.getNewValue());
         }
     }

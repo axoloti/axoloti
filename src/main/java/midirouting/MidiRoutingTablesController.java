@@ -14,17 +14,4 @@ public class MidiRoutingTablesController extends AbstractController<MidiRoutingT
         super(model, documentRoot, parent);
     }
 
-    public final static String MRTS_INPUT = "InputRoutingTables";
-    public final static String MRTS_OUTPUT = "OutputRoutingTable";
-
-    public final static String[] PROPERTYNAMES = new String[]{
-        MRTS_INPUT,
-        MRTS_OUTPUT
-    };
-
-    @Override
-    public String[] getPropertyNames() {
-        return PROPERTYNAMES;
-    }
-
 }

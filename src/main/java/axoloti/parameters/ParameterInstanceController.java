@@ -15,22 +15,6 @@ import java.util.ArrayList;
  */
 public class ParameterInstanceController extends AbstractController<ParameterInstance, IParameterInstanceView, ObjectInstanceController> {
 
-    public static final String ELEMENT_PARAM_VALUE = "Value";
-    public static final String ELEMENT_PARAM_ON_PARENT = "OnParent";
-    public static final String ELEMENT_PARAM_MIDI_CC = "MidiCC";
-    public static final String ELEMENT_PARAM_PRESETS = "Presets";
-//    public static final String ELEMENT_PARAM_PARAM_ON_PARENT = "ParamOnParent";
-
-    public static String[] propertyNames = {ELEMENT_PARAM_VALUE, 
-        ELEMENT_PARAM_ON_PARENT,
-//        ELEMENT_PARAM_PARAM_ON_PARENT,
-        ELEMENT_PARAM_MIDI_CC, 
-        ELEMENT_PARAM_PRESETS};
-
-    @Override
-    public String[] getPropertyNames() {
-        return propertyNames;
-    }
     
     public ParameterInstanceController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
         super(model, documentRoot, parent);
@@ -45,7 +29,7 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
             ArrayList<Preset> new_presets = new ArrayList<Preset>();
             Preset p = new Preset(index, value);
             new_presets.add(p);
-            setModelUndoableProperty(ELEMENT_PARAM_PRESETS, new_presets);
+            setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_PRESETS, new_presets);
             return p;
         }
         Preset p = getModel().GetPreset(index);
@@ -55,7 +39,7 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
         }
         Preset pnew = new Preset(index, value);
         new_presets.add(pnew);
-        setModelUndoableProperty(ELEMENT_PARAM_PRESETS, new_presets);
+        setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_PRESETS, new_presets);
         return pnew;
     }
 
@@ -64,16 +48,16 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
         if (p != null) {
             ArrayList<Preset> presets = (ArrayList<Preset>) getModel().getPresets().clone();
             presets.remove(p);
-            setModelUndoableProperty(ELEMENT_PARAM_PRESETS, presets);
+            setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_PRESETS, presets);
         }
     }
 
     public void applyDefaultValue() {
         Value d = (getModel().parameter).getDefaultValue();
         if (d != null) {
-            setModelUndoableProperty(ELEMENT_PARAM_VALUE, d);
+            setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_VALUE, d);
         } else {
-            setModelUndoableProperty(ELEMENT_PARAM_VALUE, d);
+            setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_VALUE, d);
         }
     }    
 

@@ -84,7 +84,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         String oldvalue = this.objName;
         this.objName = objName;
         firePropertyChange(
-                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                AttributeInstance.ELEMENT_ATTR_VALUE,
                 oldvalue, this.objName);
     }
 

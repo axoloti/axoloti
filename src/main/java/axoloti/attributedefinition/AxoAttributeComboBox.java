@@ -36,6 +36,9 @@ public class AxoAttributeComboBox extends AxoAttribute {
     @ElementList(required = false)
     public List<String> CEntries = new ArrayList<>();
 
+    public static final String ATOM_MENUENTRIES = "MenuEntries";
+    public static final String ATOM_CENTRIES = "CEntries";    
+
     public AxoAttributeComboBox() {
     }
 
@@ -52,7 +55,7 @@ public class AxoAttributeComboBox extends AxoAttribute {
     public void setMenuEntries(ArrayList<String> MenuEntries) {
         List<String> oldVal = this.MenuEntries;
         this.MenuEntries = MenuEntries;
-        firePropertyChange(AtomDefinitionController.ATOM_MENUENTRIES, oldVal, MenuEntries);
+        firePropertyChange(ATOM_MENUENTRIES, oldVal, MenuEntries);
     }
 
     public List<String> getCEntries() {
@@ -62,7 +65,7 @@ public class AxoAttributeComboBox extends AxoAttribute {
     public void setCEntries(ArrayList<String> CEntries) {
         List<String> oldVal = this.CEntries;
         this.CEntries = CEntries;
-        firePropertyChange(AtomDefinitionController.ATOM_CENTRIES, oldVal, CEntries);
+        firePropertyChange(ATOM_CENTRIES, oldVal, CEntries);
     }
 
     static public final String TypeName = "combo";

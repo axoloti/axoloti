@@ -193,7 +193,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         this.value = value;
         needsTransmit = true;
         firePropertyChange(
-            ParameterInstanceController.ELEMENT_PARAM_VALUE,
+            ParameterInstance.ELEMENT_PARAM_VALUE,
             oldvalue, value);
         if (paramOnParent != null) {
             paramOnParent.setDefaultValue(value);

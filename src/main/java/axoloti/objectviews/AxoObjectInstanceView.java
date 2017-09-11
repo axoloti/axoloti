@@ -316,15 +316,15 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_INLET_INSTANCES)) {
+        if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_INLET_INSTANCES)) {
             inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().inletInstanceControllers);
-        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_OUTLET_INSTANCES)) {
+        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_OUTLET_INSTANCES)) {
             outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().outletInstanceControllers);
-        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_ATTRIBUTE_INSTANCES)) {
+        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES)) {
             attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().attributeInstanceControllers);
-        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_PARAMETER_INSTANCES)) {
+        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_PARAMETER_INSTANCES)) {
             parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().parameterInstanceControllers);
-        } else if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_DISPLAY_INSTANCES)) {
+        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_DISPLAY_INSTANCES)) {
             displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().displayInstanceControllers);
         }
     }

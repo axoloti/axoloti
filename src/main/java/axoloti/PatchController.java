@@ -57,44 +57,6 @@ import java.util.Set;
 
 public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
 
-    public final static String PATCH_LOCKED = "Locked";
-    public final static String PATCH_FILENAME = "FileNamePath";
-    public final static String PATCH_DSPLOAD = "DspLoad";
-    public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
-    public final static String PATCH_NETS = "Nets";
-    public final static String PATCH_AUTHOR = "Author";
-    public final static String PATCH_LICENSE = "License";
-    public final static String PATCH_ATTRIBUTIONS = "Attributions";
-    public final static String PATCH_SUBPATCHMODE = "SubPatchMode";
-    public final static String PATCH_NPRESETENTRIES = "NPresetEntries";
-    public final static String PATCH_NPRESETS = "NPresets";
-    public final static String PATCH_NMODULATIONSOURCES = "NModulationSources";
-    public final static String PATCH_NMODULATIONTARGETSPERSOURCE = "NModulationTargetsPerSource";
-    public final static String PATCH_MIDICHANNEL = "MidiChannel";
-    public final static String PATCH_MIDISELECTOR = "MidiSelector";
-
-    public final static String[] PROPERTYNAMES = new String[]{
-        PATCH_LOCKED,
-        PATCH_FILENAME,
-        PATCH_DSPLOAD,
-        PATCH_OBJECTINSTANCES,
-        PATCH_NETS,
-        PATCH_AUTHOR,
-        PATCH_LICENSE,
-        PATCH_ATTRIBUTIONS,
-        PATCH_SUBPATCHMODE,
-        PATCH_NPRESETENTRIES,
-        PATCH_NPRESETS,
-        PATCH_NMODULATIONSOURCES,
-        PATCH_NMODULATIONTARGETSPERSOURCE,
-        PATCH_MIDICHANNEL,
-        PATCH_MIDISELECTOR
-    };
-
-    @Override
-    public String[] getPropertyNames() {
-        return PROPERTYNAMES;
-    }
 
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot, ObjectInstancePatcherController parentController) {
         super(model, documentRoot, parentController);
@@ -105,7 +67,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         // Now it is the time to cleanup the model, replace object instances with linked objects
         ArrayList<IAxoObjectInstance> unlinked_object_instances = new ArrayList<>(model.objectinstances);
         model.objectinstances.clear();
-        objectInstanceControllers = new ArrayController<ObjectInstanceController, IAxoObjectInstance, PatchController>(this, PATCH_OBJECTINSTANCES) {
+        objectInstanceControllers = new ArrayController<ObjectInstanceController, IAxoObjectInstance, PatchController>(this, PatchModel.PATCH_OBJECTINSTANCES) {
 
             @Override
             public ObjectInstanceController createController(IAxoObjectInstance model, AbstractDocumentRoot documentRoot, PatchController parent) {
@@ -122,7 +84,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         for (IAxoObjectInstance unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
         }
-        netControllers = new ArrayController<NetController, Net, PatchController>(this, PATCH_NETS) {
+        netControllers = new ArrayController<NetController, Net, PatchController>(this, PatchModel.PATCH_NETS) {
 
             @Override
             public NetController createController(Net model, AbstractDocumentRoot documentRoot, PatchController parent) {
@@ -337,7 +299,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public void setFileNamePath(String FileNamePath) {
-        setModelProperty(PATCH_FILENAME, FileNamePath);
+        setModelProperty(PatchModel.PATCH_FILENAME, FileNamePath);
     }
 
     public boolean delete(IAxoObjectInstance o) {
@@ -417,7 +379,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             for (ObjectInstanceController o : objectInstanceControllers) {
                 Point p = o.getModel().getLocation();
                 Point p1 = new Point(p.x - minx, p.y - miny);
-                o.setModelUndoableProperty(ObjectInstanceController.OBJ_LOCATION, p1);
+                o.setModelUndoableProperty(AxoObjectInstance.OBJ_LOCATION, p1);
             }
         }
     }
@@ -789,11 +751,11 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public void setLocked(boolean locked) {
-        setModelProperty(PATCH_LOCKED, (Boolean) locked);
+        setModelProperty(PatchModel.PATCH_LOCKED, (Boolean) locked);
     }
 
     void setDspLoad(int DSPLoad) {
-        setModelProperty(PATCH_DSPLOAD, (Integer) DSPLoad);
+        setModelProperty(PatchModel.PATCH_DSPLOAD, (Integer) DSPLoad);
     }
 
     // ------------- new objectinstances MVC stuff
@@ -803,9 +765,9 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
-        if (propertyName.equals(PATCH_OBJECTINSTANCES)) {
+        if (propertyName.equals(PatchModel.PATCH_OBJECTINSTANCES)) {
             objectInstanceControllers.syncControllers();
-        } else  if (propertyName.equals(PATCH_NETS)) {
+        } else  if (propertyName.equals(PatchModel.PATCH_NETS)) {
             netControllers.syncControllers();
         }
         super.propertyChange(evt);

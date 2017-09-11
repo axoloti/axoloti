@@ -5,8 +5,8 @@ import axoloti.Preset;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
-import static axoloti.parameters.ParameterInstanceController.ELEMENT_PARAM_VALUE;
 import axoloti.parameters.ParameterInstanceFrac32;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,7 +63,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         if (getModel().getValue().getDouble() != getControlComponent().getValue()) {
             if (getController() != null) {
                 ValueFrac32 vf32 = new ValueFrac32(getControlComponent().getValue());
-                getController().setModelUndoableProperty(ELEMENT_PARAM_VALUE, vf32);
+                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_VALUE, vf32);
             }
         } else {
             return false;
@@ -78,7 +78,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_VALUE)) {
+        if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_VALUE)) {
             Value v = (Value) evt.getNewValue();
             ctrl.setValue(v.getDouble());
             UpdateUnit();

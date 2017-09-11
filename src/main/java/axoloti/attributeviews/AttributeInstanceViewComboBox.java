@@ -3,6 +3,7 @@ package axoloti.attributeviews;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.AttributeInstanceComboBox;
 import axoloti.attribute.AttributeInstanceController;
+import axoloti.attributedefinition.AxoAttributeComboBox;
 import axoloti.objectviews.AxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.DropDownComponent;
@@ -64,7 +65,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_MENUENTRIES)) {
+        if (evt.getPropertyName().equals(AxoAttributeComboBox.ATOM_MENUENTRIES)) {
             comboBox.setItems((List<String>) evt.getNewValue());
         }
     }

@@ -4,6 +4,7 @@ import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import components.AssignMidiCCComponent;
@@ -127,7 +128,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_PRESETS)) {
+        if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_PRESETS)) {
             presetAssign.repaint();
         }
     }

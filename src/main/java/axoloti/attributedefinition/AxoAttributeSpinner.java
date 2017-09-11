@@ -47,6 +47,10 @@ public class AxoAttributeSpinner extends AxoAttribute {
         this.DefaultValue = DefaultValue;
     }
 
+    public static final String ATOM_MINVALUE = "MinValue";
+    public static final String ATOM_MAXVALUE = "MaxValue";
+    public static final String ATOM_DEFAULTVALUE = "DefaultValue";
+
     public static final String TypeName = "spinner";
 
     @Override
@@ -57,9 +61,9 @@ public class AxoAttributeSpinner extends AxoAttribute {
     @Override
     public List<String> getEditableFields() {
         List l = super.getEditableFields();
-        l.add(AtomDefinitionController.ATOM_MINVALUE);
-        l.add(AtomDefinitionController.ATOM_MAXVALUE);
-        l.add(AtomDefinitionController.ATOM_DEFAULTVALUE);
+        l.add(ATOM_MINVALUE);
+        l.add(ATOM_MAXVALUE);
+        l.add(ATOM_DEFAULTVALUE);
         return l;
     }
 
@@ -78,19 +82,19 @@ public class AxoAttributeSpinner extends AxoAttribute {
     public void setMinValue(Integer MinValue) {
         Integer oldValue = this.MinValue;
         this.MinValue = MinValue;
-        firePropertyChange(AtomDefinitionController.ATOM_MINVALUE, oldValue, MinValue);
+        firePropertyChange(ATOM_MINVALUE, oldValue, MinValue);
     }
 
     public void setMaxValue(Integer MaxValue) {
         Integer oldValue = this.MaxValue;
         this.MaxValue = MaxValue;
-        firePropertyChange(AtomDefinitionController.ATOM_MAXVALUE, oldValue, MaxValue);
+        firePropertyChange(ATOM_MAXVALUE, oldValue, MaxValue);
     }
 
     public void setDefaultValue(Integer DefaultValue) {
         Integer oldValue = this.DefaultValue;
         this.DefaultValue = DefaultValue;
-        firePropertyChange(AtomDefinitionController.ATOM_DEFAULTVALUE, oldValue, DefaultValue);
+        firePropertyChange(ATOM_DEFAULTVALUE, oldValue, DefaultValue);
     }
 
 }

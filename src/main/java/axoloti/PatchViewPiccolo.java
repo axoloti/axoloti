@@ -478,7 +478,7 @@ public class PatchViewPiccolo extends PatchView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
                 canvas.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {

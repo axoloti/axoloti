@@ -17,6 +17,7 @@
  */
 package axoloti.displays;
 
+import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.mvc.AbstractModel;
@@ -89,8 +90,8 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)
+                || evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),

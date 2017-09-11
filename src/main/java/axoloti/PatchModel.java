@@ -714,13 +714,52 @@ public class PatchModel extends AbstractModel {
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, 
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
 
-    // ------------- new MVC methods
-
     private String StringDenull(String s){
         if (s == null) return "";
         return s;
     }
 
+    // ------------- new MVC methods
+
+    public final static String PATCH_LOCKED = "Locked";
+    public final static String PATCH_FILENAME = "FileNamePath";
+    public final static String PATCH_DSPLOAD = "DspLoad";
+    public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
+    public final static String PATCH_NETS = "Nets";
+    public final static String PATCH_AUTHOR = "Author";
+    public final static String PATCH_LICENSE = "License";
+    public final static String PATCH_ATTRIBUTIONS = "Attributions";
+    public final static String PATCH_SUBPATCHMODE = "SubPatchMode";
+    public final static String PATCH_NPRESETENTRIES = "NPresetEntries";
+    public final static String PATCH_NPRESETS = "NPresets";
+    public final static String PATCH_NMODULATIONSOURCES = "NModulationSources";
+    public final static String PATCH_NMODULATIONTARGETSPERSOURCE = "NModulationTargetsPerSource";
+    public final static String PATCH_MIDICHANNEL = "MidiChannel";
+    public final static String PATCH_MIDISELECTOR = "MidiSelector";
+
+    public final static String[] PROPERTYNAMES = new String[]{
+        PATCH_LOCKED,
+        PATCH_FILENAME,
+        PATCH_DSPLOAD,
+        PATCH_OBJECTINSTANCES,
+        PATCH_NETS,
+        PATCH_AUTHOR,
+        PATCH_LICENSE,
+        PATCH_ATTRIBUTIONS,
+        PATCH_SUBPATCHMODE,
+        PATCH_NPRESETENTRIES,
+        PATCH_NPRESETS,
+        PATCH_NMODULATIONSOURCES,
+        PATCH_NMODULATIONTARGETSPERSOURCE,
+        PATCH_MIDICHANNEL,
+        PATCH_MIDISELECTOR
+    };
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTYNAMES;
+    }    
+    
     public String getFileNamePath() {
         if (FileNamePath == null) {
             return "";
@@ -732,7 +771,7 @@ public class PatchModel extends AbstractModel {
         String oldValue = this.FileNamePath;
         this.FileNamePath = FileNamePath;
         firePropertyChange(
-                PatchController.PATCH_FILENAME,
+                PATCH_FILENAME,
                 oldValue, FileNamePath);
     }
 
@@ -743,7 +782,7 @@ public class PatchModel extends AbstractModel {
     public void setLocked(Boolean locked) {
         this.locked = locked;
         firePropertyChange(
-                PatchController.PATCH_LOCKED,
+                PATCH_LOCKED,
                 null, locked);
     }
 
@@ -755,7 +794,7 @@ public class PatchModel extends AbstractModel {
         Integer oldvalue = this.dspLoad;
         this.dspLoad = dspLoad;
         firePropertyChange(
-                PatchController.PATCH_DSPLOAD,
+                PATCH_DSPLOAD,
                 oldvalue, dspLoad);
     }
 
@@ -767,7 +806,7 @@ public class PatchModel extends AbstractModel {
         List<IAxoObjectInstance> old_value = this.objectinstances;
         this.objectinstances = objectinstances;
         firePropertyChange(
-                PatchController.PATCH_OBJECTINSTANCES,
+                PATCH_OBJECTINSTANCES,
                 old_value, objectinstances);
     }
 
@@ -779,7 +818,7 @@ public class PatchModel extends AbstractModel {
         List<Net> old_value = this.nets;
         this.nets = nets;
         firePropertyChange(
-                PatchController.PATCH_NETS,
+                PATCH_NETS,
                 old_value, nets);
     }
 
@@ -790,7 +829,7 @@ public class PatchModel extends AbstractModel {
     public void setAuthor(String Author) {
         getSettings().Author = Author;
         firePropertyChange(
-                PatchController.PATCH_AUTHOR,
+                PATCH_AUTHOR,
                 null, Author);
     }
 
@@ -801,7 +840,7 @@ public class PatchModel extends AbstractModel {
     public void setLicense(String License) {
         getSettings().License = License;
         firePropertyChange(
-                PatchController.PATCH_LICENSE,
+                PATCH_LICENSE,
                 null, License);
     }
 
@@ -812,7 +851,7 @@ public class PatchModel extends AbstractModel {
     public void setAttributions(String Attributions) {
         getSettings().Attributions = Attributions;
         firePropertyChange(
-                PatchController.PATCH_ATTRIBUTIONS,
+                PATCH_ATTRIBUTIONS,
                 null, Attributions);
     }
 
@@ -838,7 +877,7 @@ public class PatchModel extends AbstractModel {
             aop.setAttributes(ps);
         }
         firePropertyChange(
-                PatchController.PATCH_SUBPATCHMODE,
+                PATCH_SUBPATCHMODE,
                 null, mode);
     }
 
@@ -852,7 +891,7 @@ public class PatchModel extends AbstractModel {
     public void setNPresetEntries(Integer n) {
         settings.NPresetEntries = n;
         firePropertyChange(
-                PatchController.PATCH_NPRESETENTRIES,
+                PATCH_NPRESETENTRIES,
                 null, n);
     }
 
@@ -866,7 +905,7 @@ public class PatchModel extends AbstractModel {
     public void setNPresets(Integer n) {
         settings.NPresets = n;
         firePropertyChange(
-                PatchController.PATCH_NPRESETS,
+                PATCH_NPRESETS,
                 null, n);
     }
 
@@ -880,7 +919,7 @@ public class PatchModel extends AbstractModel {
     public void setNModulationSources(Integer n) {
         settings.NModulationSources = n;
         firePropertyChange(
-                PatchController.PATCH_NMODULATIONSOURCES,
+                PATCH_NMODULATIONSOURCES,
                 null, n);
     }
 
@@ -894,7 +933,7 @@ public class PatchModel extends AbstractModel {
     public void setNModulationTargetsPerSource(Integer n) {
         settings.NModulationTargetsPerSource = n;
         firePropertyChange(
-                PatchController.PATCH_NMODULATIONTARGETSPERSOURCE,
+                PATCH_NMODULATIONTARGETSPERSOURCE,
                 null, n);
     }
 
@@ -908,7 +947,7 @@ public class PatchModel extends AbstractModel {
     public void setMidiChannel(Integer n) {
         settings.MidiChannel = n;
         firePropertyChange(
-                PatchController.PATCH_MIDICHANNEL,
+                PATCH_MIDICHANNEL,
                 null, n);
     }
 
@@ -943,7 +982,7 @@ public class PatchModel extends AbstractModel {
             aop.setAttributes(ps);
         }
         firePropertyChange(
-                PatchController.PATCH_MIDISELECTOR,
+                PATCH_MIDISELECTOR,
                 null, b);
     }
 

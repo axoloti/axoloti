@@ -3,6 +3,7 @@ package axoloti.outlets;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
@@ -75,9 +76,9 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
             label.setText((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             setToolTipText((String) evt.getNewValue());
         }
     }

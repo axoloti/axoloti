@@ -11,6 +11,10 @@ public abstract class AbstractModel implements IModel {
 
     protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
+    public String[] getPropertyNames() {
+        return new String[]{};
+    }
+
     @Override
     final public void addPropertyChangeListener(PropertyChangeListener listener) {
 //        System.out.println("addPropertyChangeListener " + this.toString() + " " + listener.toString() + " " + Arrays.toString(Thread.currentThread().getStackTrace()));

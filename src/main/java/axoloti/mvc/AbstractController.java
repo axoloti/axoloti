@@ -28,17 +28,13 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         }
     }
 
-    public String[] getPropertyNames() {
-        return new String[]{};
-    }
-
     // to be called in controller.createView()
     final public void addView(View view) {
         if (view != null) {
             if (registeredViews.contains(view)) {
                 System.out.println("view already added : " + view.toString());
             } else {
-                for (String propertyName : getPropertyNames()) {
+                for (String propertyName : getModel().getPropertyNames()) {
                     Object propertyValue = getModelProperty(propertyName);
                     PropertyChangeEvent evt = new PropertyChangeEvent(model, propertyName, null, propertyValue);
                     view.modelPropertyChange(evt);

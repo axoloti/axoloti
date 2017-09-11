@@ -52,6 +52,20 @@ public class MidiRoutingTables extends AbstractModel {
         }
     }
 
+
+    public final static String MRTS_INPUT = "InputRoutingTables";
+    public final static String MRTS_OUTPUT = "OutputRoutingTable";
+
+    public final static String[] PROPERTYNAMES = new String[]{
+        MRTS_INPUT,
+        MRTS_OUTPUT
+    };
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTYNAMES;
+    }
+
     public MidiInputRoutingTable[] getInputRoutingTables() {
         return inputRoutingTables;
     }
@@ -67,7 +81,7 @@ public class MidiRoutingTables extends AbstractModel {
         } else {
             inputRoutingTablesController = null;
         }
-        firePropertyChange(MidiRoutingTablesController.MRTS_INPUT,
+        firePropertyChange(MRTS_INPUT,
                 null, routingTable);
     }
 
@@ -86,7 +100,7 @@ public class MidiRoutingTables extends AbstractModel {
         } else {
             inputRoutingTablesController = null;
         }
-        firePropertyChange(MidiRoutingTablesController.MRTS_OUTPUT,
+        firePropertyChange(MRTS_OUTPUT,
                 null, routingTable);
     }
 

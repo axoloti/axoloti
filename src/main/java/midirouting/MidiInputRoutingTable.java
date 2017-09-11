@@ -72,6 +72,19 @@ public class MidiInputRoutingTable extends AbstractModel {
         }
     }
 
+    public final static String MIRT_PORTNAME = "PortName";
+    public final static String MIRT_MAPPING = "Mapping";
+
+    public final static String[] PROPERTYNAMES = new String[]{
+        MIRT_PORTNAME,
+        MIRT_MAPPING
+    };
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTYNAMES;
+    }
+
     public String getPortName() {
         return portname;
     }
@@ -79,7 +92,7 @@ public class MidiInputRoutingTable extends AbstractModel {
     public void setPortName(String portname) {
         this.portname = portname;
         firePropertyChange(
-                MidiInputRoutingTableController.MIRT_PORTNAME,
+                MIRT_PORTNAME,
                 null, portname);
     }
 
@@ -94,7 +107,7 @@ public class MidiInputRoutingTable extends AbstractModel {
             apply(conn);
         }
         firePropertyChange(
-                MidiInputRoutingTableController.MIRT_MAPPING,
+                MIRT_MAPPING,
                 null, vports);
     }
 }

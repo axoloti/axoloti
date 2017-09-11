@@ -624,7 +624,7 @@ public abstract class PatchView extends PatchAbstractView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
                 for (IAxoObjectInstanceView o : objectInstanceViews) {
                     o.Unlock();
@@ -634,9 +634,9 @@ public abstract class PatchView extends PatchAbstractView {
                     o.Lock();
                 }
             }
-        } else if (evt.getPropertyName().equals(PatchController.PATCH_OBJECTINSTANCES)) {
+        } else if (evt.getPropertyName().equals(PatchModel.PATCH_OBJECTINSTANCES)) {
             objectInstanceViews = objectInstanceViewSync.Sync(objectInstanceViews, getController().objectInstanceControllers);
-        } else if (evt.getPropertyName().equals(PatchController.PATCH_NETS)) {
+        } else if (evt.getPropertyName().equals(PatchModel.PATCH_NETS)) {
             netViews = netViewSync.Sync(netViews, getController().netControllers);
         }
     }

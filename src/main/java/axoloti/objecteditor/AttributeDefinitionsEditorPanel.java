@@ -20,6 +20,7 @@ package axoloti.objecteditor;
 import axoloti.attributedefinition.AttributeTypes;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 
 /**
@@ -29,7 +30,7 @@ import axoloti.object.ObjectController;
 public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAttribute> {
 
     public AttributeDefinitionsEditorPanel(ObjectController controller) {
-        super(controller, ObjectController.OBJ_ATTRIBUTES, AttributeTypes.getTypes());
+        super(controller, AxoObject.OBJ_ATTRIBUTES, AttributeTypes.getTypes());
     }
 
     @Override

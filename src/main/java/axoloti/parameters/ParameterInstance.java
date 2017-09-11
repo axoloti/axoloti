@@ -20,6 +20,7 @@ package axoloti.parameters;
 import axoloti.Modulation;
 import axoloti.PatchModel;
 import axoloti.Preset;
+import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.Value;
@@ -97,6 +98,24 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
         }
     }
 
+    public static final String ELEMENT_PARAM_VALUE = "Value";
+    public static final String ELEMENT_PARAM_ON_PARENT = "OnParent";
+    public static final String ELEMENT_PARAM_MIDI_CC = "MidiCC";
+    public static final String ELEMENT_PARAM_PRESETS = "Presets";
+//    public static final String ELEMENT_PARAM_PARAM_ON_PARENT = "ParamOnParent";
+
+    public static String[] propertyNames = {
+        ELEMENT_PARAM_VALUE, 
+        ELEMENT_PARAM_ON_PARENT,
+//        ELEMENT_PARAM_PARAM_ON_PARENT,
+        ELEMENT_PARAM_MIDI_CC, 
+        ELEMENT_PARAM_PRESETS};
+
+    @Override
+    public String[] getPropertyNames() {
+        return propertyNames;
+    }
+
     public String GetCName() {
         return parameter.GetCName();
     }
@@ -162,7 +181,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
 
     public void setValue(Value value) {
 
-        firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_VALUE, null, value);
+        firePropertyChange(ELEMENT_PARAM_VALUE, null, value);
     }
 
     public void SetValueRaw(int v) {
@@ -300,13 +319,13 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
         String propertyName = evt.getPropertyName();
-        if (propertyName.equals(AtomDefinitionController.ATOM_NAME)) {
+        if (propertyName.equals(AtomDefinition.ATOM_NAME)) {
             updateParamOnParent();
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),
                     evt.getNewValue());
-        } else if (propertyName.equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (propertyName.equals(AtomDefinition.ATOM_DESCRIPTION)) {
             firePropertyChange(
                     evt.getPropertyName(),
                     evt.getOldValue(),
@@ -331,7 +350,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
             this.MidiCC = null;
         }
         this.MidiCC = MidiCC;
-        firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC, prevValue, MidiCC);
+        firePropertyChange(ParameterInstance.ELEMENT_PARAM_MIDI_CC, prevValue, MidiCC);
     }
 
     public Boolean getOnParent() {
@@ -392,7 +411,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
             setParamOnParent(null);
         }
         firePropertyChange(
-                ParameterInstanceController.ELEMENT_PARAM_ON_PARENT,
+                ParameterInstance.ELEMENT_PARAM_ON_PARENT,
                 oldValue, onParent);
     }
 
@@ -407,7 +426,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     public void setPresets(ArrayList<Preset> presets) {
         ArrayList<Preset> prevValue = this.presets;
         this.presets = presets;
-        firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_PRESETS, prevValue, this.presets);
+        firePropertyChange(ParameterInstance.ELEMENT_PARAM_PRESETS, prevValue, this.presets);
     }
 
     public String getName() {
@@ -417,7 +436,7 @@ public abstract class ParameterInstance<T extends Parameter> extends AbstractMod
     public void setName(String name) {
         String prevValue = this.name;
         this.name = name;
-        firePropertyChange(AtomDefinitionController.ATOM_NAME, prevValue, name);
+        firePropertyChange(AtomDefinition.ATOM_NAME, prevValue, name);
     }
 
     public void Remove(){

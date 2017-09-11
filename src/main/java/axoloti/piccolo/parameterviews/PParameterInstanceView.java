@@ -145,7 +145,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         m_onParent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getController().setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT, !op);
+                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_ON_PARENT, !op);
             }
         });
 

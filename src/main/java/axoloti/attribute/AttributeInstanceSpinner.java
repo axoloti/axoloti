@@ -48,9 +48,9 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_MAXVALUE)) {
+        if (evt.getPropertyName().equals(AxoAttributeSpinner.ATOM_MAXVALUE)) {
             setMaxValue((Integer) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_MINVALUE)) {
+        } else if (evt.getPropertyName().equals(AxoAttributeSpinner.ATOM_MINVALUE)) {
             setMinValue((Integer) evt.getNewValue());
         }
     }
@@ -62,7 +62,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     public void setMinValue(Integer MinValue) {
         Integer prevVal = this.MinValue;
         this.MinValue = MinValue;
-        firePropertyChange(AtomDefinitionController.ATOM_MINVALUE, prevVal, MinValue);
+        firePropertyChange(AxoAttributeSpinner.ATOM_MINVALUE, prevVal, MinValue);
     }
 
     public Integer getMaxValue() {
@@ -72,7 +72,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     public void setMaxValue(Integer MaxValue) {
         Integer prevVal = this.MaxValue;
         this.MaxValue = MaxValue;
-        firePropertyChange(AtomDefinitionController.ATOM_MAXVALUE, prevVal, MaxValue);
+        firePropertyChange(AxoAttributeSpinner.ATOM_MAXVALUE, prevVal, MaxValue);
     }
 
 }

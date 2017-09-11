@@ -1,6 +1,7 @@
 package axoloti.objectviews;
 
 import axoloti.PatchViewSwing;
+import axoloti.object.AxoObjectInstance;
 import axoloti.object.AxoObjectInstanceComment;
 import axoloti.object.ObjectInstanceController;
 import components.LabelComponent;
@@ -87,7 +88,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
     void handleInstanceNameEditorAction() {
         String s = InstanceNameTF.getText();
         getController().addMetaUndo("edit comment");
-        getController().setModelUndoableProperty(ObjectInstanceController.OBJ_COMMENT, s);
+        getController().setModelUndoableProperty(AxoObjectInstance.OBJ_COMMENT, s);
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }
@@ -144,7 +145,7 @@ public class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ObjectInstanceController.OBJ_COMMENT)) {
+        if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_COMMENT)) {
             InstanceLabel.setText((String) evt.getNewValue());
             resizeToGrid();
         }
