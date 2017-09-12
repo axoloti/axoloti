@@ -192,14 +192,19 @@ static usbh_baseclassdriver_t *_load(usbh_device_t *dev, const uint8_t *descript
 	USBHMIDIDriver *midip;
 	(void)dev;
 
-	if (_usbh_match_descriptor(descriptor, rem, USBH_DT_INTERFACE,
+	if (_usbh_match_descriptor(descriptor, rem, -1,
 			USB_AUDIO_CLASS, USB_MIDISTREAMING_SubCLASS, -1) != HAL_SUCCESS)
 		return NULL;
 
 	const usbh_interface_descriptor_t * const ifdesc = (const usbh_interface_descriptor_t *)descriptor;
 
-	if ((ifdesc->bAlternateSetting != 0)
-			|| (ifdesc->bNumEndpoints < 1)) {
+	if (ifdesc->bNumEndpoints < 1) {
+		uerr("MIDI: no endpoints");
+		return NULL;
+	}
+
+	if (rem == 0) {
+		uerr("MIDI: descriptor empty");
 		return NULL;
 	}
 
@@ -222,105 +227,124 @@ alloc_ok:
 	midip->nOutputPorts = 0;
 	midip->nInputPorts = 0;
 
-	/* parse the configuration descriptor */
+	const usbh_ia_descriptor_t *iad = (const usbh_ia_descriptor_t *)descriptor;
+	generic_iterator_t iep, icfg, ics;
 	if_iterator_t iif;
-	generic_iterator_t iep;
-	iif.iad = 0;
-	iif.curr = descriptor;
-	iif.rem = rem;
-	generic_iterator_t ics;
 
-	for (cs_iter_init(&ics, (generic_iterator_t *)&iif); ics.valid; cs_iter_next(&ics)) {
-		switch(ics.curr[2]) {
-		case USB_MIDI_SUBTYPE_MS_HEADER: {
-			ms_interface_header_descriptor_t *intf_hdr = (ms_interface_header_descriptor_t *)&ics.curr[0];
-			uinfof("    Midi interface header, version = %4X",
-					intf_hdr->bcdMSC);
-		} break;
-		case USB_MIDI_SUBTYPE_MIDI_IN_JACK: {
-			midi_in_jack_descriptor_t *in_jack_desc = (midi_in_jack_descriptor_t *)&ics.curr[0];
-			uinfof("    Midi In jack, bJackType = %d, bJackID = %d, iJack=%d",
-					in_jack_desc->bJackType,in_jack_desc->bJackID,in_jack_desc->iJack);
-//			char name[32];
-//			bool res = usbhStdReqGetStringDescriptor(dev, in_jack_desc->iJack, dev->langID0, sizeof(name), (uint8_t *)name);
-//			if (res) {
-//				uinfof("    name %s", name);
-//			} else {
-//				uinfof("    noname");
-//			}
-		} break;
-		case USB_MIDI_SUBTYPE_MIDI_OUT_JACK: {
-			midi_out_jack_descriptor_t *out_jack_desc = (midi_out_jack_descriptor_t *)ics.curr;
-			uinfof("    Midi Out jack, bJackType = %d, bJackID = %d, bNrInputPins=%d",
-					out_jack_desc->bJackType,out_jack_desc->bJackID,out_jack_desc->bNrInputPins);
-		} break;
-		default:
-			uinfof("    Midi Class-Specific descriptor, Length=%d, Type=%02x",
-					ics.curr[0], ics.curr[1]);
-			int j;
-			for(j=2;j<ics.curr[0];j++)
-				uinfof("  %02X", ics.curr[j]);
-			}
-
-	}
-
-	iif.iad = 0;
+	uinfof("    Midi descriptor, Length=%d, Hdr=%08x", rem, *(int32_t * )descriptor);
+#if 0 // scan the whole configuration
+	cfg_iter_init(&icfg, dev->fullConfigurationDescriptor,
+			dev->basicConfigDesc.wTotalLength);
+	for (if_iter_init(&iif, &icfg); iif.valid; if_iter_next(&iif)) {
+#else // or like in the usbh_custom_class.c
+	iif.iad = iad;
 	iif.curr = descriptor;
 	iif.rem = rem;
 	for (ep_iter_init(&iep, &iif); iep.valid; ep_iter_next(&iep)) {
-		usbh_endpoint_descriptor_t * epdesc = (usbh_endpoint_descriptor_t *)ep_get(&iep);
-		if ((epdesc->bEndpointAddress & 0x80) &&
-				((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
-						(epdesc->bmAttributes == USBH_EPTYPE_INT))
-						) {
-			// some devices use BULK (UC33), some devices use INT endpoints (Launchpad Mini)
-			uinfof("IN endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
-
-			for (cs_iter_init(&ics, &iep); ics.valid; cs_iter_next(&ics)) {
-				ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)ics.curr;
-				if (ms_ep_desc->bDescriptorSubType == USB_MIDI_SUBTYPE_MS_GENERAL) {
-					uinfof("    Midi IN endpoint descriptor, bNumEmbMIDIJack=%d",
-							ms_ep_desc->bNumEmbMIDIJack);
+#endif
+		const usbh_interface_descriptor_t *const ifdesc = if_get(&iif);
+		uinfof("    Midi descriptorx, Hdr=%08x", *(int32_t * )ifdesc);
+		if ((ifdesc->bInterfaceClass == USB_AUDIO_CLASS) &&
+				(ifdesc->bInterfaceSubClass == USB_MIDISTREAMING_SubCLASS)) {
+			for (cs_iter_init(&ics, (generic_iterator_t *)&iif); ics.valid; cs_iter_next(&ics)) {
+				switch(ics.curr[2]) {
+				case USB_MIDI_SUBTYPE_MS_HEADER: {
+					ms_interface_header_descriptor_t *intf_hdr = (ms_interface_header_descriptor_t *)&ics.curr[0];
+					uinfof("    Midi interface header, version = %4X",
+							intf_hdr->bcdMSC);
+				} break;
+				case USB_MIDI_SUBTYPE_MIDI_IN_JACK: {
+					midi_in_jack_descriptor_t *in_jack_desc = (midi_in_jack_descriptor_t *)&ics.curr[0];
+					uinfof("    Midi In jack, bJackType = %d, bJackID = %d, iJack=%d",
+							in_jack_desc->bJackType,in_jack_desc->bJackID,in_jack_desc->iJack);
+		//			char name[32];
+		//			bool res = usbhStdReqGetStringDescriptor(dev, in_jack_desc->iJack, dev->langID0, sizeof(name), (uint8_t *)name);
+		//			if (res) {
+		//				uinfof("    name %s", name);
+		//			} else {
+		//				uinfof("    noname");
+		//			}
+				} break;
+				case USB_MIDI_SUBTYPE_MIDI_OUT_JACK: {
+					midi_out_jack_descriptor_t *out_jack_desc = (midi_out_jack_descriptor_t *)ics.curr;
+					uinfof("    Midi Out jack, bJackType = %d, bJackID = %d, bNrInputPins=%d",
+							out_jack_desc->bJackType,out_jack_desc->bJackID,out_jack_desc->bNrInputPins);
+				} break;
+				default:
+					uinfof("    Midi Class-Specific descriptor, Length=%d, Type=%02x",
+							ics.curr[0], ics.curr[1]);
 					int j;
-					for(j=0;j<ms_ep_desc->bNumEmbMIDIJack;j++)
-						uinfof("    baAssocJackID =  %02X", ms_ep_desc->baAssocJackID[j]);
-					midip->nInputPorts = ms_ep_desc->bNumEmbMIDIJack;
-				} else {
-					uinfof("    Midi IN endpoint descriptor???");
+					for(j=2;j<ics.curr[0];j++)
+						uinfof("  %02X", ics.curr[j]);
 				}
 			}
+			// sleep to flush debug output
+			chThdSleepMilliseconds(10);
 
-			// Pretend it is an INT IN endpoint to avoid a NAK flood
-			epdesc->bmAttributes |= USBH_EPTYPE_INT;
-			usbhEPObjectInit(&midip->epin, dev, epdesc);
-			midip->epin.type = USBH_EPTYPE_INT;
-			usbhEPSetName(&midip->epin, "MIDI[IIN ]");
-		} else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
-			((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
-					(epdesc->bmAttributes == USBH_EPTYPE_INT))
-					) {
-			// again, some devices use BULK, some devices use INT endpoints
-			uinfof("OUT endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+			for (ep_iter_init(&iep, &iif); iep.valid; ep_iter_next(&iep)) {
+				const usbh_endpoint_descriptor_t *const epdesc = ep_get(&iep);
+				if ((epdesc->bEndpointAddress & 0x80) &&
+						((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
+								(epdesc->bmAttributes == USBH_EPTYPE_INT))
+								) {
+					// some devices use BULK (UC33), some devices use INT endpoints (Launchpad Mini)
+					uinfof("IN endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
 
-			for (cs_iter_init(&ics, &iep); ics.valid; cs_iter_next(&ics)) {
-				ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)ics.curr;
-				if (ms_ep_desc->bDescriptorSubType == USB_MIDI_SUBTYPE_MS_GENERAL) {
-					uinfof("    Midi OUT endpoint descriptor, bNumEmbMIDIJack=%d",
-							ms_ep_desc->bNumEmbMIDIJack);
-					int j;
-					for(j=0;j<ms_ep_desc->bNumEmbMIDIJack;j++)
-						uinfof("    baAssocJackID =  %02X", ms_ep_desc->baAssocJackID[j]);
-					midip->nOutputPorts = ms_ep_desc->bNumEmbMIDIJack;
+					for (cs_iter_init(&ics, &iep); ics.valid; cs_iter_next(&ics)) {
+						ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)ics.curr;
+						if (ms_ep_desc->bDescriptorSubType == USB_MIDI_SUBTYPE_MS_GENERAL) {
+							uinfof("    Midi IN endpoint descriptor, bNumEmbMIDIJack=%d",
+									ms_ep_desc->bNumEmbMIDIJack);
+							int j;
+							for(j=0;j<ms_ep_desc->bNumEmbMIDIJack;j++)
+								uinfof("    baAssocJackID =  %02X", ms_ep_desc->baAssocJackID[j]);
+							midip->nInputPorts = ms_ep_desc->bNumEmbMIDIJack;
+						} else {
+							uinfof("    Midi IN endpoint descriptor???");
+						}
+					}
+
+					// Pretend it is an INT IN endpoint to avoid a NAK flood
+					usbh_endpoint_descriptor_t *epdesc2 = (usbh_endpoint_descriptor_t *)epdesc;
+					epdesc2->bmAttributes |= USBH_EPTYPE_INT;
+					usbhEPObjectInit(&midip->epin, dev, epdesc);
+					midip->epin.type = USBH_EPTYPE_INT;
+					usbhEPSetName(&midip->epin, "MIDI[IIN ]");
+				} else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
+					((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
+							(epdesc->bmAttributes == USBH_EPTYPE_INT))
+							) {
+					// again, some devices use BULK, some devices use INT endpoints
+					uinfof("OUT endpoint found: bEndpointAddress=%02x", epdesc->bEndpointAddress);
+
+					for (cs_iter_init(&ics, &iep); ics.valid; cs_iter_next(&ics)) {
+						ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)ics.curr;
+						if (ms_ep_desc->bDescriptorSubType == USB_MIDI_SUBTYPE_MS_GENERAL) {
+							uinfof("    Midi OUT endpoint descriptor, bNumEmbMIDIJack=%d",
+									ms_ep_desc->bNumEmbMIDIJack);
+							int j;
+							for(j=0;j<ms_ep_desc->bNumEmbMIDIJack;j++)
+								uinfof("    baAssocJackID =  %02X", ms_ep_desc->baAssocJackID[j]);
+							midip->nOutputPorts = ms_ep_desc->bNumEmbMIDIJack;
+						} else {
+							uinfof("    Midi OUT endpoint descriptor???");
+						}
+					}
+
+					usbhEPObjectInit(&midip->epout, dev, epdesc);
+					usbhEPSetName(&midip->epout, "MIDI[IOUT]");
 				} else {
-					uinfof("    Midi OUT endpoint descriptor???");
+					uinfof("unsupported endpoint found: bEndpointAddress=%02x, bmAttributes=%02x",
+							epdesc->bEndpointAddress, epdesc->bmAttributes);
 				}
+				// sleep to flush debug output
+				chThdSleepMilliseconds(10);
+
 			}
 
-			usbhEPObjectInit(&midip->epout, dev, epdesc);
-			usbhEPSetName(&midip->epout, "MIDI[IOUT]");
 		} else {
-			uinfof("unsupported endpoint found: bEndpointAddress=%02x, bmAttributes=%02x",
-					epdesc->bEndpointAddress, epdesc->bmAttributes);
+			uwarnf("MIDI: Skipping Interface %d",
+					ifdesc->bInterfaceNumber);
 		}
 	}
 
@@ -336,9 +360,10 @@ static void _stop_locked(USBHMIDIDriver *midip) {
 		return;
 
 	osalDbgCheck(midip->state == USBHMIDI_STATE_READY);
-
-	usbhEPClose(&midip->epin);
-	usbhEPClose(&midip->epout);
+	if (midip->epin.device)
+		usbhEPClose(&midip->epin);
+	if (midip->epout.device)
+		usbhEPClose(&midip->epout);
 
 	midip->nOutputPorts = 0;
 	midip->nInputPorts = 0;
@@ -407,16 +432,20 @@ void usbhmidiStart(USBHMIDIDriver *midip) {
 	usbhDeviceReadString(midip->dev, &midip->name[0], sizeof(midip->name), midip->dev->devDesc.iProduct, midip->dev->langID0);
 
 	/* init the URBs */
-	usbhURBObjectInit(&midip->in_urb, &midip->epin, _in_cb, midip,
-			midip->report_buffer, USBH_MIDI_BUFSIZE);
+	if (midip->epin.device != 0) {
+		usbhURBObjectInit(&midip->in_urb, &midip->epin, _in_cb, midip,
+				midip->report_buffer, USBH_MIDI_BUFSIZE);
 
-	/* open the bulk IN/OUT endpoints */
-	usbhEPOpen(&midip->epin);
-	usbhEPOpen(&midip->epout);
+		/* open the bulk IN/OUT endpoints */
+		usbhEPOpen(&midip->epin);
 
-	osalSysLock();
-	usbhURBSubmitI(&midip->in_urb);
-	osalSysUnlock();
+		osalSysLock();
+		usbhURBSubmitI(&midip->in_urb);
+		osalSysUnlock();
+	}
+	if (midip->epout.device != 0) {
+		usbhEPOpen(&midip->epout);
+	}
 
 	midip->state = USBHMIDI_STATE_READY;
 }
