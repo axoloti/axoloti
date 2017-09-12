@@ -103,9 +103,11 @@ alloc_ok:
     // but we can remove the logging and checking of config, since we know what the virus has available.
     bool found = false;
 
+    generic_iterator_t iep, icfg, ics;
     if_iterator_t iif;
-    generic_iterator_t iep;
-    iif.iad = 0;
+
+    // generic_iterator_t iep;
+    iif.iad = (const usbh_ia_descriptor_t *)descriptor;
     iif.curr = descriptor;
     iif.rem = rem;
     for (ep_iter_init(&iep, &iif); iep.valid; ep_iter_next(&iep)) {
@@ -159,14 +161,16 @@ alloc_ok:
     midip->state = USBHMIDI_STATE_ACTIVE;
 
 
-    // now we have to send the magic seq to switch virus to midi usb mode
-    LogTextMessage("Virus : Connected, MIDI");
 
     // usbhmidiStart , opens the endpoints needed to send data 
     // this is usually called in usbh_conf... but seem ok here, 
     // this  sets state to READY, so usb_conf wont do it again
-#if 1
     usbhmidiStart(midip);
+
+    //usbhStart:usbhDeviceReadString not working, so force name for now
+    strcpy(midip->name,"Virus");
+    // now we have to send the magic seq to switch virus to midi usb mode
+    LogTextMessage("Virus : Connected");
 
     // additional start code usually done in usbhconf
     USBHMIDIConfig_ext* config = (USBHMIDIConfig_ext *)midip->config;
@@ -179,30 +183,7 @@ alloc_ok:
     uinfof("Switch Virus to USB");
     static uint8_t seq[] = { 0x4e, 0x73, 0x52, 0x01 }; 
 
-    // unfortunately this times out
     usbhmidi_sendbuffer(midip,seq,sizeof(seq));
-#endif
-
-    /// soo... I tried just submitting urb, so as not to cancel the request
-    // usbh_urb_t urb;
-    // usbhURBObjectInit(&urb, &midip->epout, 0, 0, seq, sizeof(seq));
-    // osalSysLock();
-    // usbhURBSubmitI(&urb);
-    // osalSysUnlock();
-
-    // both the above sometimes we see on virus it establish connection, 
-    // but then it immediately drops!
-
-    // this was an attempt using the queue.. I think this has same issue after start
-    // but you have to becareful as the output buffer seems to be reset on device connection
-
-    // midi_message_t m;
-    // m.bytes.ph = 0x4e;
-    // m.bytes.b0 = 0x73;
-    // m.bytes.b1 = 0x52;
-    // m.bytes.b2 = 0x01;
-    // midi_output_buffer_t *b = &((USBHMIDIConfig_ext *)midip->config)->out_buffer;
-    // midi_output_buffer_put(b,m);
 
     return (usbh_baseclassdriver_t *) midip;
 }
