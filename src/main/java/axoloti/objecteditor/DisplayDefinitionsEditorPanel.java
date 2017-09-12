@@ -17,10 +17,10 @@
  */
 package axoloti.objecteditor;
 
-import axoloti.attributedefinition.AttributeTypes;
 import axoloti.displays.Display;
 import axoloti.displays.DisplayTypes;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 
 /**
@@ -30,7 +30,7 @@ import axoloti.object.ObjectController;
 public class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
 
     public DisplayDefinitionsEditorPanel(ObjectController controller) {
-        super(controller, ObjectController.OBJ_DISPLAYS, DisplayTypes.getTypes());
+        super(controller, AxoObject.OBJ_DISPLAYS, DisplayTypes.getTypes());
     }
 
     @Override

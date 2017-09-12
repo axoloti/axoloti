@@ -79,7 +79,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
         this.value = value;
         needsTransmit = true;
         firePropertyChange(
-                ParameterInstanceController.ELEMENT_PARAM_VALUE,
+                ParameterInstance.ELEMENT_PARAM_VALUE,
                 oldvalue, value);
     }
 }

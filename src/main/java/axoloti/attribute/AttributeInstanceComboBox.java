@@ -67,7 +67,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
         selection = getModel().getMenuEntries().get(selectedIndex);
         this.selection = selection;
         firePropertyChange(
-                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                AttributeInstance.ELEMENT_ATTR_VALUE,
                 oldvalue, this.selection);
     }
 
@@ -92,8 +92,8 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_CENTRIES)
-                || evt.getPropertyName().equals(AtomDefinitionController.ATOM_MENUENTRIES)) {
+        if (evt.getPropertyName().equals(AxoAttributeComboBox.ATOM_CENTRIES)
+                || evt.getPropertyName().equals(AxoAttributeComboBox.ATOM_MENUENTRIES)) {
             firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }

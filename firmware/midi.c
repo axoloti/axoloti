@@ -59,7 +59,7 @@ void MidiSendVirtual(midi_message_t m) {
 
 
 void MidiSendSysExVirtual(uint8_t port, uint8_t bytes[], uint8_t len) {
-    uint8_t cn = ((( port - 1) & 0x0F) << 4);
+    uint8_t cn = ((port & 0x0F) << 4);
     uint8_t cin = CIN_SYSEX_START_CONTINUE;
     uint8_t ph = cin | cn;
     int i = 0;

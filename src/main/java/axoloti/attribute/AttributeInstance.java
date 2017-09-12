@@ -18,6 +18,7 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
+import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
@@ -52,6 +53,14 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         axoObj = axoObj1;
     }
 
+    public static final String ELEMENT_ATTR_VALUE = "Value";
+    public static final String[] PROPERTY_NAMES = {ELEMENT_ATTR_VALUE};
+
+    @Override
+    public String[] getPropertyNames() {
+        return PROPERTY_NAMES;
+    }    
+
     public abstract String CValue();
 
     public abstract void CopyValueFrom(AttributeInstance a1);
@@ -78,9 +87,9 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
             setName((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
@@ -97,7 +106,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     public void setName(String attributeName) {
         String preVal = this.attributeName;
         this.attributeName = attributeName;
-        firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, attributeName);
+        firePropertyChange(AtomDefinition.ATOM_NAME, preVal, attributeName);
     }
 
     public String getDescription() {

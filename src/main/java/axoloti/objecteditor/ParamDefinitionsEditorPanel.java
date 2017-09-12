@@ -18,6 +18,7 @@
 package axoloti.objecteditor;
 
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 import axoloti.parameters.Parameter;
 import axoloti.parameters.ParameterTypes;
@@ -29,7 +30,7 @@ import axoloti.parameters.ParameterTypes;
 public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
 
     public ParamDefinitionsEditorPanel(ObjectController controller) {
-        super(controller, ObjectController.OBJ_PARAMETERS, ParameterTypes.getTypes());
+        super(controller, AxoObject.OBJ_PARAMETERS, ParameterTypes.getTypes());
     }
 
     @Override

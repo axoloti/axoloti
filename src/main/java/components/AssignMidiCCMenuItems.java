@@ -18,6 +18,7 @@
 package components;
 
 import axoloti.dialogs.MidiAssignments;
+import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -91,10 +92,10 @@ public class AssignMidiCCMenuItems implements ActionListener {
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             Integer i = Integer.parseInt(s.substring(2));
-            parameterInstanceController.setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC, i);
+            parameterInstanceController.setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_MIDI_CC, i);
         } else if (s.equals("none")) {
             Integer v = -1;
-            parameterInstanceController.setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC, v);
+            parameterInstanceController.setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_MIDI_CC, v);
         }        
     }
 }

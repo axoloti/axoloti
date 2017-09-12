@@ -446,7 +446,7 @@ public class PatchViewSwing extends PatchView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
                 Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {

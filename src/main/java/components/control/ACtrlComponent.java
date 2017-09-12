@@ -124,6 +124,7 @@ public abstract class ACtrlComponent extends JComponent {
     void fireEvent() {
         Object[] listeners = listenerList.getListenerList();
         for (int i = 0; i < listeners.length; i += 2) {
+            // TOD: check why += 2?
             if (listeners[i] == ACtrlListener.class) {
                 ((ACtrlListener) listeners[i + 1]).ACtrlAdjusted(
                         new ACtrlEvent(this, getValue()));
@@ -134,6 +135,7 @@ public abstract class ACtrlComponent extends JComponent {
     void fireEventAdjustmentBegin() {
         Object[] listeners = listenerList.getListenerList();
         for (int i = 0; i < listeners.length; i += 2) {
+            // TODO: check why += 2?
             if (listeners[i] == ACtrlListener.class) {
                 ((ACtrlListener) listeners[i + 1]).ACtrlAdjustmentBegin(
                         new ACtrlEvent(this, getValue()));
@@ -144,6 +146,7 @@ public abstract class ACtrlComponent extends JComponent {
     void fireEventAdjustmentFinished() {
         Object[] listeners = listenerList.getListenerList();
         for (int i = 0; i < listeners.length; i += 2) {
+            // TODO: check why += 2?
             if (listeners[i] == ACtrlListener.class) {
                 ((ACtrlListener) listeners[i + 1]).ACtrlAdjustmentFinished(
                         new ACtrlEvent(this, getValue()));

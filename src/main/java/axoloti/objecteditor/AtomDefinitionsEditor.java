@@ -327,7 +327,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         assert (value instanceof String);
                         getController().addMetaUndo("edit " + getAtomTypeName() + " name");
                         AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
-                        ox.setModelUndoableProperty(AtomDefinitionController.ATOM_NAME, value);
+                        ox.setModelUndoableProperty(AtomDefinition.ATOM_NAME, value);
                     }
                     break;
                     case 1:
@@ -350,7 +350,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         assert (value instanceof String);
                         getController().addMetaUndo("edit " + getAtomTypeName() + " description");
                         AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
-                        ox.setModelUndoableProperty(AtomDefinitionController.ATOM_DESCRIPTION, value);
+                        ox.setModelUndoableProperty(AtomDefinition.ATOM_DESCRIPTION, value);
                     }
                     break;
                 }
@@ -465,6 +465,13 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                             try {
                                 getController().addMetaUndo("edit " + field);
                                 o.setModelUndoableProperty(field, Integer.parseInt((String) value));
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else if (v instanceof Double) {
+                            try {
+                                getController().addMetaUndo("edit " + field);
+                                o.setModelUndoableProperty(field, Double.parseDouble((String) value));
                             } catch (IllegalArgumentException ex) {
                                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
                             }

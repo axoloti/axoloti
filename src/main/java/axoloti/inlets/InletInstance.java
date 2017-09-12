@@ -17,6 +17,7 @@
  */
 package axoloti.inlets;
 
+import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
@@ -81,6 +82,14 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         RefreshName();
     }
 
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{
+            AtomDefinition.ATOM_NAME,
+            AtomDefinition.ATOM_DESCRIPTION
+        };
+    }
+
     public DataType getDataType() {
         return getModel().getDatatype();
     }
@@ -119,9 +128,9 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
             setName((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
@@ -138,7 +147,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     public void setName(String inletname) {
         String preVal = this.inletname;
         this.inletname = inletname;
-        firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, inletname);
+        firePropertyChange(AtomDefinition.ATOM_NAME, preVal, inletname);
     }
 
     public String getDescription() {

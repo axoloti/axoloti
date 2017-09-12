@@ -55,7 +55,7 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         String oldvalue = this.tableName;
         this.tableName = tableName;
         firePropertyChange(
-                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                AttributeInstance.ELEMENT_ATTR_VALUE,
                 oldvalue, this.tableName);
     }
 

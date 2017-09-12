@@ -416,10 +416,10 @@ public class MidiRouting extends javax.swing.JFrame implements ConnectionStatusL
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
-            case MidiRoutingTablesController.MRTS_INPUT:
+            case MidiRoutingTables.MRTS_INPUT:
                 refreshInputs();
                 break;
-            case MidiRoutingTablesController.MRTS_OUTPUT:
+            case MidiRoutingTables.MRTS_OUTPUT:
                 refreshOutputs();
                 break;
         }

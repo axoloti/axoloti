@@ -1178,15 +1178,15 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PatchController.PATCH_LOCKED)) {
+        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
             if ((Boolean)evt.getNewValue() == false) {
                 setLive(false);
             } else {
                 setLive(true);
             }
-        } else if (evt.getPropertyName().equals(PatchController.PATCH_DSPLOAD)) {
+        } else if (evt.getPropertyName().equals(PatchModel.PATCH_DSPLOAD)) {
             ShowDSPLoad((Integer)evt.getNewValue());
-        } else if (evt.getPropertyName().equals(PatchController.PATCH_FILENAME)) {
+        } else if (evt.getPropertyName().equals(PatchModel.PATCH_FILENAME)) {
             this.setTitle((String)evt.getNewValue());
         }
     }

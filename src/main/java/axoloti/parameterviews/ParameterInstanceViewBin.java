@@ -2,12 +2,10 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
 import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
-import static axoloti.parameters.ParameterInstanceController.ELEMENT_PARAM_VALUE;
-import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 
 abstract class ParameterInstanceViewBin extends ParameterInstanceView {
@@ -42,7 +40,7 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
         } else if (getModel().getValue().getInt() != (int) getControlComponent().getValue()) {
             if (controller != null) {
                 ValueInt32 vi32 = new ValueInt32((int)getControlComponent().getValue());
-                getController().setModelUndoableProperty(ELEMENT_PARAM_VALUE, vi32);
+                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_VALUE, vi32);
             }
         } else {
             return false;
@@ -53,7 +51,7 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_VALUE)) {
+        if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_VALUE)) {
             ValueInt32 v = (ValueInt32)evt.getNewValue();
             ctrl.setValue(v.getInt());
         }

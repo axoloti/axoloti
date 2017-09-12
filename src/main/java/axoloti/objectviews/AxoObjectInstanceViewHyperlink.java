@@ -11,6 +11,7 @@ import components.control.PulseButtonComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 

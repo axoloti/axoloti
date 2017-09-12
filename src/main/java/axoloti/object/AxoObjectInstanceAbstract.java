@@ -301,7 +301,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         this.InstanceName = InstanceName;
 
         firePropertyChange(
-                ObjectInstanceController.OBJ_INSTANCENAME,
+                AxoObjectInstance.OBJ_INSTANCENAME,
                 oldvalue, this.InstanceName);
         for (ParameterInstance p : getParameterInstances()) {
             p.updateParamOnParent();
@@ -318,7 +318,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     public void setSelected(Boolean selected) {
         Boolean prev_value = this.selected;
         this.selected = selected;
-        firePropertyChange(ObjectInstanceController.OBJ_SELECTED, prev_value, selected);
+        firePropertyChange(AxoObjectInstance.OBJ_SELECTED, prev_value, selected);
     }
 
     @Override
@@ -328,7 +328,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         x = p.x;
         y = p.y;
         firePropertyChange(
-                ObjectInstanceController.OBJ_LOCATION,
+                AxoObjectInstance.OBJ_LOCATION,
                 oldvalue, p);
     }
 

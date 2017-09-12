@@ -2,7 +2,7 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.atom.AtomDefinitionController;
+import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
@@ -147,7 +147,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
                 } else {
                     getController().addMetaUndo("clear parameter on parameter of " + getModel().getName());
                 }
-                getController().setModelUndoableProperty(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT, !op);
+                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_ON_PARENT, !op);
             }
         });
 
@@ -253,14 +253,14 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             setToolTipText((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_ON_PARENT)) {
+        } else if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_ON_PARENT)) {
             showOnParent((Boolean)evt.getNewValue());
-        } else if (evt.getPropertyName().equals(ParameterInstanceController.ELEMENT_PARAM_MIDI_CC)) {
+        } else if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_MIDI_CC)) {
             Integer v = (Integer) evt.getNewValue();
             if (midiAssign != null) {
                 if (v != null) {

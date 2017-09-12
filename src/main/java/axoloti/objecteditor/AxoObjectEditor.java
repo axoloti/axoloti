@@ -89,27 +89,27 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
-        if (propertyName.equals(ObjectController.OBJ_AUTHOR)) {
+        if (propertyName.equals(AxoObject.OBJ_AUTHOR)) {
             jTextFieldAuthor.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_LICENSE)) {
+        } else if (propertyName.equals(AxoObject.OBJ_LICENSE)) {
             jTextFieldLicense.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_DESCRIPTION)) {
+        } else if (propertyName.equals(AxoObject.OBJ_DESCRIPTION)) {
             jTextDesc.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_HELPPATCH)) {
+        } else if (propertyName.equals(AxoObject.OBJ_HELPPATCH)) {
             jTextFieldHelp.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_LOCAL_DATA)) {
+        } else if (propertyName.equals(AxoObject.OBJ_LOCAL_DATA)) {
             jTextAreaLocalData.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_INIT_CODE)) {
+        } else if (propertyName.equals(AxoObject.OBJ_INIT_CODE)) {
             jTextAreaInitCode.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_KRATE_CODE)) {
+        } else if (propertyName.equals(AxoObject.OBJ_KRATE_CODE)) {
             jTextAreaKRateCode.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_SRATE_CODE)) {
+        } else if (propertyName.equals(AxoObject.OBJ_SRATE_CODE)) {
             jTextAreaSRateCode.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_DISPOSE_CODE)) {
+        } else if (propertyName.equals(AxoObject.OBJ_DISPOSE_CODE)) {
             jTextAreaDisposeCode.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_MIDI_CODE)) {
+        } else if (propertyName.equals(AxoObject.OBJ_MIDI_CODE)) {
             jTextAreaMidiCode.setText((String) evt.getNewValue());
-        } else if (propertyName.equals(ObjectController.OBJ_ID)) {
+        } else if (propertyName.equals(AxoObject.OBJ_ID)) {
             setTitle((String) evt.getNewValue());
         }
         updateReferenceXML();
@@ -212,7 +212,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_AUTHOR, jTextFieldAuthor.getText());
+                SetUndoablePropString(AxoObject.OBJ_AUTHOR, jTextFieldAuthor.getText());
             }
         });
 
@@ -223,7 +223,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_LICENSE, jTextFieldLicense.getText());
+                SetUndoablePropString(AxoObject.OBJ_LICENSE, jTextFieldLicense.getText());
             }
         });
 
@@ -234,7 +234,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_HELPPATCH, jTextFieldHelp.getText().trim());
+                SetUndoablePropString(AxoObject.OBJ_HELPPATCH, jTextFieldHelp.getText().trim());
             }
         });
 
@@ -245,7 +245,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_DESCRIPTION, jTextDesc.getText());
+                SetUndoablePropString(AxoObject.OBJ_DESCRIPTION, jTextDesc.getText());
             }
         });
 
@@ -257,7 +257,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_LOCAL_DATA, CleanString(jTextAreaLocalData.getText()));
+                SetUndoablePropString(AxoObject.OBJ_LOCAL_DATA, CleanString(jTextAreaLocalData.getText()));
             }
         });
         jTextAreaInitCode.addFocusListener(new FocusListener() {
@@ -267,7 +267,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_INIT_CODE, CleanString(jTextAreaInitCode.getText()));
+                SetUndoablePropString(AxoObject.OBJ_INIT_CODE, CleanString(jTextAreaInitCode.getText()));
             }
         });
         jTextAreaKRateCode.addFocusListener(new FocusListener() {
@@ -277,7 +277,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_KRATE_CODE, CleanString(jTextAreaKRateCode.getText()));
+                SetUndoablePropString(AxoObject.OBJ_KRATE_CODE, CleanString(jTextAreaKRateCode.getText()));
             }
         });
         jTextAreaSRateCode.addFocusListener(new FocusListener() {
@@ -287,7 +287,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_SRATE_CODE, CleanString(jTextAreaSRateCode.getText()));
+                SetUndoablePropString(AxoObject.OBJ_SRATE_CODE, CleanString(jTextAreaSRateCode.getText()));
             }
         });
         jTextAreaDisposeCode.addFocusListener(new FocusListener() {
@@ -297,7 +297,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_DISPOSE_CODE, CleanString(jTextAreaDisposeCode.getText()));
+                SetUndoablePropString(AxoObject.OBJ_DISPOSE_CODE, CleanString(jTextAreaDisposeCode.getText()));
             }
         });
         jTextAreaMidiCode.addFocusListener(new FocusListener() {
@@ -307,7 +307,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(ObjectController.OBJ_MIDI_CODE, CleanString(jTextAreaMidiCode.getText()));
+                SetUndoablePropString(AxoObject.OBJ_MIDI_CODE, CleanString(jTextAreaMidiCode.getText()));
             }
         });
         rSyntaxTextAreaXML.setEditable(false);

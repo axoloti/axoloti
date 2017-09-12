@@ -17,6 +17,7 @@
  */
 package axoloti.outlets;
 
+import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
@@ -128,13 +129,21 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
             setName((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
 
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{
+            AtomDefinition.ATOM_NAME,
+            AtomDefinition.ATOM_DESCRIPTION
+        };
+    }    
+    
     public String getName() {
         return outletname;
     }
@@ -142,7 +151,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     public void setName(String outletname) {
         String preVal = this.outletname;
         this.outletname = outletname;
-        firePropertyChange(AtomDefinitionController.ATOM_NAME, preVal, outletname);
+        firePropertyChange(AtomDefinition.ATOM_NAME, preVal, outletname);
     }
 
     @Override

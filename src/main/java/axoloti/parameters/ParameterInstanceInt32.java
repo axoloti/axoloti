@@ -104,7 +104,7 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
         this.value = value;
         needsTransmit = true;
         firePropertyChange(
-                ParameterInstanceController.ELEMENT_PARAM_VALUE,
+                ParameterInstance.ELEMENT_PARAM_VALUE,
                 oldvalue, value);
     }
 

@@ -1,6 +1,5 @@
 package axoloti.object;
 
-import axoloti.MainFrame;
 import axoloti.PatchController;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
@@ -18,9 +17,6 @@ import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,28 +24,6 @@ import java.util.logging.Logger;
  */
 public class ObjectInstanceController extends AbstractController<IAxoObjectInstance, IView, PatchController> {
 
-    public static final String OBJ_LOCATION = "Location";
-    public static final String OBJ_SELECTED = "Selected";
-    public static final String OBJ_INSTANCENAME = "InstanceName";
-    public static final String OBJ_PARAMETER_INSTANCES = "ParameterInstances";
-    public static final String OBJ_ATTRIBUTE_INSTANCES = "AttributeInstances";
-    public static final String OBJ_INLET_INSTANCES = "InletInstances";
-    public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
-    public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
-    public static final String OBJ_COMMENT = "CommentText";
-
-    @Override
-    public String[] getPropertyNames() {
-        return new String[]{
-            OBJ_LOCATION,
-            OBJ_SELECTED,
-            OBJ_INSTANCENAME,
-            OBJ_PARAMETER_INSTANCES,
-            OBJ_ATTRIBUTE_INSTANCES,
-            OBJ_INLET_INSTANCES,
-            OBJ_OUTLET_INSTANCES,
-            OBJ_DISPLAY_INSTANCES};
-    }
 
     public final ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController> attributeInstanceControllers;
     public final ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController> parameterInstanceControllers;
@@ -60,7 +34,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
     public ObjectInstanceController(IAxoObjectInstance model, AbstractDocumentRoot documentRoot, PatchController parent) {
         super(model, documentRoot, parent);
 
-        attributeInstanceControllers = new ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController>(this, OBJ_ATTRIBUTE_INSTANCES) {
+        attributeInstanceControllers = new ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES) {
 
             @Override
             public AttributeInstanceController createController(AttributeInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
@@ -71,7 +45,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
             public void disposeController(AttributeInstanceController controller) {
             }
         };
-        parameterInstanceControllers = new ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController>(this, OBJ_PARAMETER_INSTANCES) {
+        parameterInstanceControllers = new ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_PARAMETER_INSTANCES) {
 
             @Override
             public ParameterInstanceController createController(ParameterInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
@@ -82,7 +56,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
             public void disposeController(ParameterInstanceController controller) {
             }
         };
-        inletInstanceControllers = new ArrayController<InletInstanceController, InletInstance, ObjectInstanceController>(this, OBJ_INLET_INSTANCES) {
+        inletInstanceControllers = new ArrayController<InletInstanceController, InletInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_INLET_INSTANCES) {
 
             @Override
             public InletInstanceController createController(InletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
@@ -96,7 +70,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
                 }
             }
         };
-        outletInstanceControllers = new ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController>(this, OBJ_OUTLET_INSTANCES) {
+        outletInstanceControllers = new ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_OUTLET_INSTANCES) {
 
             @Override
             public OutletInstanceController createController(OutletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
@@ -108,7 +82,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
                 getParent().disconnect(controller.getModel());
             }
         };
-        displayInstanceControllers = new ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController>(this, OBJ_DISPLAY_INSTANCES) {
+        displayInstanceControllers = new ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_DISPLAY_INSTANCES) {
 
             @Override
             public DisplayInstanceController createController(DisplayInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
@@ -124,22 +98,22 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
     public void changeLocation(int x, int y) {
         if ((getModel().getX() != x) || (getModel().getY() != y)) {
             Point p = new Point(x, y);
-            setModelUndoableProperty(OBJ_LOCATION, p);
+            setModelUndoableProperty(AxoObjectInstance.OBJ_LOCATION, p);
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String propertyName = evt.getPropertyName();
-        if (propertyName.equals(OBJ_PARAMETER_INSTANCES)) {
+        if (propertyName.equals(AxoObjectInstance.OBJ_PARAMETER_INSTANCES)) {
             parameterInstanceControllers.syncControllers();
-        } else if (propertyName.equals(OBJ_ATTRIBUTE_INSTANCES)) {
+        } else if (propertyName.equals(AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES)) {
             attributeInstanceControllers.syncControllers();
-        } else if (propertyName.equals(OBJ_DISPLAY_INSTANCES)) {
+        } else if (propertyName.equals(AxoObjectInstance.OBJ_DISPLAY_INSTANCES)) {
             displayInstanceControllers.syncControllers();
-        } else if (propertyName.equals(OBJ_INLET_INSTANCES)) {
+        } else if (propertyName.equals(AxoObjectInstance.OBJ_INLET_INSTANCES)) {
             inletInstanceControllers.syncControllers();
-        } else if (propertyName.equals(OBJ_OUTLET_INSTANCES)) {
+        } else if (propertyName.equals(AxoObjectInstance.OBJ_OUTLET_INSTANCES)) {
             outletInstanceControllers.syncControllers();
         }
         super.propertyChange(evt);

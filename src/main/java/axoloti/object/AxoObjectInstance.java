@@ -372,6 +372,31 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }    
     
         /* MVC clean code below here */
+    
+
+    public static final String OBJ_LOCATION = "Location";
+    public static final String OBJ_SELECTED = "Selected";
+    public static final String OBJ_INSTANCENAME = "InstanceName";
+    public static final String OBJ_PARAMETER_INSTANCES = "ParameterInstances";
+    public static final String OBJ_ATTRIBUTE_INSTANCES = "AttributeInstances";
+    public static final String OBJ_INLET_INSTANCES = "InletInstances";
+    public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
+    public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
+    public static final String OBJ_COMMENT = "CommentText";
+
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{
+            OBJ_LOCATION,
+            OBJ_SELECTED,
+            OBJ_INSTANCENAME,
+            OBJ_PARAMETER_INSTANCES,
+            OBJ_ATTRIBUTE_INSTANCES,
+            OBJ_INLET_INSTANCES,
+            OBJ_OUTLET_INSTANCES,
+            OBJ_DISPLAY_INSTANCES};
+    }
+    
     @Override
     public List<InletInstance> getInletInstances() {
         if (inletInstances == null) {
@@ -383,7 +408,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     void setInletInstances(ArrayList<InletInstance> inletInstances) {
         List<InletInstance> oldval = this.inletInstances;
         this.inletInstances = inletInstances;
-        firePropertyChange(ObjectInstanceController.OBJ_INLET_INSTANCES, oldval, inletInstances);
+        firePropertyChange(OBJ_INLET_INSTANCES, oldval, inletInstances);
     }
 
     @Override
@@ -397,7 +422,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
         List<OutletInstance> oldval = this.outletInstances;
         this.outletInstances = outletInstances;
-        firePropertyChange(ObjectInstanceController.OBJ_OUTLET_INSTANCES, oldval, outletInstances);
+        firePropertyChange(OBJ_OUTLET_INSTANCES, oldval, outletInstances);
     }
 
     @Override
@@ -411,7 +436,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
         List<ParameterInstance> oldval = this.parameterInstances;
         this.parameterInstances = parameterInstances;
-        firePropertyChange(ObjectInstanceController.OBJ_PARAMETER_INSTANCES, oldval, parameterInstances);
+        firePropertyChange(OBJ_PARAMETER_INSTANCES, oldval, parameterInstances);
     }
 
     @Override
@@ -425,7 +450,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     void setAttributeInstances(List<AttributeInstance> attributeInstances) {
         List<AttributeInstance> oldval = this.attributeInstances;
         this.attributeInstances = attributeInstances;
-        firePropertyChange(ObjectInstanceController.OBJ_ATTRIBUTE_INSTANCES, oldval, attributeInstances);
+        firePropertyChange(OBJ_ATTRIBUTE_INSTANCES, oldval, attributeInstances);
     }
 
     @Override
@@ -439,7 +464,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     void setDisplayInstances(List<DisplayInstance> displayInstances) {
         List<DisplayInstance> oldval = this.displayInstances;
         this.displayInstances = displayInstances;
-        firePropertyChange(ObjectInstanceController.OBJ_DISPLAY_INSTANCES, oldval, displayInstances);
+        firePropertyChange(OBJ_DISPLAY_INSTANCES, oldval, displayInstances);
     }
 
     ArrayView<OutletInstance> outletInstanceSync = new ArrayView<OutletInstance>() {
@@ -529,15 +554,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(ObjectController.OBJ_ATTRIBUTES)) {
+        if (evt.getPropertyName().equals(AxoObject.OBJ_ATTRIBUTES)) {
             attributeInstances = attributeInstanceSync.Sync(attributeInstances, getController().attrs);
-        } else if (evt.getPropertyName().equals(ObjectController.OBJ_PARAMETERS)) {
+        } else if (evt.getPropertyName().equals(AxoObject.OBJ_PARAMETERS)) {
             parameterInstances = parameterInstanceSync.Sync(parameterInstances, getController().params);
-        } else if (evt.getPropertyName().equals(ObjectController.OBJ_DISPLAYS)) {
+        } else if (evt.getPropertyName().equals(AxoObject.OBJ_DISPLAYS)) {
             displayInstances = displayInstanceSync.Sync(displayInstances, getController().disps);
-        } else if (evt.getPropertyName().equals(ObjectController.OBJ_INLETS)) {
+        } else if (evt.getPropertyName().equals(AxoObject.OBJ_INLETS)) {
             inletInstances = inletInstanceSync.Sync(inletInstances, getController().inlets);
-        } else if (evt.getPropertyName().equals(ObjectController.OBJ_OUTLETS)) {
+        } else if (evt.getPropertyName().equals(AxoObject.OBJ_OUTLETS)) {
             outletInstances = outletInstanceSync.Sync(outletInstances, getController().outlets);
         }
     }

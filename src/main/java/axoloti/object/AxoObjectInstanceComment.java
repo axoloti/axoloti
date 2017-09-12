@@ -79,7 +79,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
         String oldvalue = this.commentText;
         this.commentText = commentText;
         firePropertyChange(
-                ObjectInstanceController.OBJ_COMMENT,
+                AxoObjectInstance.OBJ_COMMENT,
                 oldvalue, commentText);
     }
 

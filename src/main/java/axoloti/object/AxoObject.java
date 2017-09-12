@@ -587,8 +587,53 @@ public class AxoObject extends AxoObjectAbstract {
 
     /* MVC code */
 
-    private String StringDenull(String s){
-        if (s == null) return "";
+    public static final String OBJ_ID = "Id";
+    public static final String OBJ_DESCRIPTION = "Description";
+    public static final String OBJ_LICENSE = "License";
+    public static final String OBJ_PATH = "Path";
+    public static final String OBJ_AUTHOR = "Author";
+    public static final String OBJ_HELPPATCH = "HelpPatch";
+
+    public static final String OBJ_INLETS = "Inlets";
+    public static final String OBJ_OUTLETS = "Outlets";
+    public static final String OBJ_ATTRIBUTES = "Attributes";
+    public static final String OBJ_PARAMETERS = "Parameters";
+    public static final String OBJ_DISPLAYS = "Displays";
+
+    public static final String OBJ_INIT_CODE = "InitCode";
+    public static final String OBJ_DISPOSE_CODE = "DisposeCode";
+    public static final String OBJ_LOCAL_DATA = "LocalData";
+    public static final String OBJ_KRATE_CODE = "KRateCode";
+    public static final String OBJ_SRATE_CODE = "SRateCode";
+    public static final String OBJ_MIDI_CODE = "MidiCode";
+
+    @Override
+    public String[] getPropertyNames() {
+        return new String[]{
+            OBJ_ID,
+            OBJ_DESCRIPTION,
+            OBJ_LICENSE,
+            OBJ_PATH,
+            OBJ_AUTHOR,
+            OBJ_HELPPATCH,
+            OBJ_INLETS,
+            OBJ_OUTLETS,
+            OBJ_ATTRIBUTES,
+            OBJ_PARAMETERS,
+            OBJ_DISPLAYS,
+            OBJ_INIT_CODE,
+            OBJ_DISPOSE_CODE,
+            OBJ_LOCAL_DATA,
+            OBJ_KRATE_CODE,
+            OBJ_SRATE_CODE,
+            OBJ_MIDI_CODE
+        };
+    }
+
+    private String StringDenull(String s) {
+        if (s == null) {
+            return "";
+        }
         return s;
     }
 
@@ -600,7 +645,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setHelpPatch(String helpPatch) {
         String prev_val = this.helpPatch;
         this.helpPatch = helpPatch;
-        firePropertyChange(ObjectController.OBJ_HELPPATCH, prev_val, helpPatch);
+        firePropertyChange(OBJ_HELPPATCH, prev_val, helpPatch);
     }
     
     @Override
@@ -612,7 +657,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setInlets(ArrayList<Inlet> inlets) {
         List<Inlet> old_val = this.inlets;
         this.inlets = inlets;
-        firePropertyChange(ObjectController.OBJ_INLETS, old_val, inlets);
+        firePropertyChange(OBJ_INLETS, old_val, inlets);
     }
 
     @Override
@@ -624,7 +669,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setOutlets(ArrayList<Outlet> outlets) {
         List<Outlet> old_val = this.outlets;
         this.outlets = outlets;
-        firePropertyChange(ObjectController.OBJ_OUTLETS, old_val, outlets);
+        firePropertyChange(OBJ_OUTLETS, old_val, outlets);
     }
 
     @Override
@@ -636,7 +681,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setParameters(ArrayList<Parameter> parameters) {
         List<Parameter> old_val = this.params;
         this.params = parameters;
-        firePropertyChange(ObjectController.OBJ_PARAMETERS, old_val, parameters);
+        firePropertyChange(OBJ_PARAMETERS, old_val, parameters);
     }
 
     @Override
@@ -648,7 +693,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setAttributes(ArrayList<AxoAttribute> attributes) {
         List<AxoAttribute> old_val = this.attributes;
         this.attributes = attributes;
-        firePropertyChange(ObjectController.OBJ_ATTRIBUTES, old_val, attributes);
+        firePropertyChange(OBJ_ATTRIBUTES, old_val, attributes);
     }
 
     @Override
@@ -660,7 +705,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setDisplays(ArrayList<Display> displays) {
         List<Display> old_val = this.displays;
         this.displays = displays;
-        firePropertyChange(ObjectController.OBJ_DISPLAYS, old_val, displays);
+        firePropertyChange(OBJ_DISPLAYS, old_val, displays);
     }
 
     public Boolean getRotatedParams() {
@@ -685,7 +730,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setInitCode(String sInitCode) {
         String prev_val = this.sInitCode;
         this.sInitCode = sInitCode;
-        firePropertyChange(ObjectController.OBJ_INIT_CODE, prev_val, sInitCode);
+        firePropertyChange(OBJ_INIT_CODE, prev_val, sInitCode);
     }
 
     @Override
@@ -696,7 +741,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setDisposeCode(String sDisposeCode) {
         String prev_val = this.sDisposeCode;
         this.sDisposeCode = sDisposeCode;
-        firePropertyChange(ObjectController.OBJ_DISPOSE_CODE, prev_val, sDisposeCode);
+        firePropertyChange(OBJ_DISPOSE_CODE, prev_val, sDisposeCode);
     }
 
     @Override
@@ -707,7 +752,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setLocalData(String sLocalData) {
         String prev_val = this.sLocalData;
         this.sLocalData = sLocalData;
-        firePropertyChange(ObjectController.OBJ_LOCAL_DATA, prev_val, sLocalData);
+        firePropertyChange(OBJ_LOCAL_DATA, prev_val, sLocalData);
     }
 
     @Override
@@ -718,7 +763,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setKRateCode(String sKRateCode) {
         String prev_val = this.sKRateCode;
         this.sKRateCode = sKRateCode;
-        firePropertyChange(ObjectController.OBJ_KRATE_CODE, prev_val, sKRateCode);
+        firePropertyChange(OBJ_KRATE_CODE, prev_val, sKRateCode);
     }
 
     @Override
@@ -729,7 +774,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setSRateCode(String sSRateCode) {
         String prev_val = this.sSRateCode;
         this.sSRateCode = sSRateCode;
-        firePropertyChange(ObjectController.OBJ_SRATE_CODE, prev_val, sSRateCode);
+        firePropertyChange(OBJ_SRATE_CODE, prev_val, sSRateCode);
     }
 
     @Override
@@ -740,7 +785,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setMidiCode(String sMidiCode) {
         String prev_val = this.sMidiCode;
         this.sMidiCode = sMidiCode;
-        firePropertyChange(ObjectController.OBJ_MIDI_CODE, prev_val, sMidiCode);
+        firePropertyChange(OBJ_MIDI_CODE, prev_val, sMidiCode);
     }
 
     @Override

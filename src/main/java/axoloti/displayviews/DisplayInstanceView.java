@@ -1,6 +1,6 @@
 package axoloti.displayviews;
 
-import axoloti.atom.AtomDefinitionController;
+import axoloti.atom.AtomDefinition;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import components.LabelComponent;
@@ -39,10 +39,10 @@ abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceVie
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_NAME)) {
+        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomDefinitionController.ATOM_DESCRIPTION)) {
+        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
             setToolTipText((String) evt.getNewValue());
         }
     }

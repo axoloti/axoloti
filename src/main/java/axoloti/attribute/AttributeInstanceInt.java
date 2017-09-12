@@ -54,7 +54,7 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
         Integer oldvalue = this.value;
         this.value = value;
         firePropertyChange(
-                AttributeInstanceController.ELEMENT_ATTR_VALUE,
+                AttributeInstance.ELEMENT_ATTR_VALUE,
                 oldvalue, value);
     }
 

@@ -44,6 +44,10 @@ public class AxoAttributeInt32 extends AxoAttribute {
         this.DefaultValue = DefaultValue;
     }
 
+    public static final String ATOM_MINVALUE = "MinValue";
+    public static final String ATOM_MAXVALUE = "MaxValue";
+    public static final String ATOM_DEFAULTVALUE = "DefaultValue";
+
     public Integer getMinValue() {
         return MinValue;
     }
@@ -59,19 +63,19 @@ public class AxoAttributeInt32 extends AxoAttribute {
     public void setMinValue(Integer MinValue) {
         Integer oldValue = this.MinValue;
         this.MinValue = MinValue;
-        firePropertyChange(AtomDefinitionController.ATOM_MINVALUE, oldValue, MinValue);
+        firePropertyChange(ATOM_MINVALUE, oldValue, MinValue);
     }
 
     public void setMaxValue(Integer MaxValue) {
         Integer oldValue = this.MaxValue;
         this.MaxValue = MaxValue;
-        firePropertyChange(AtomDefinitionController.ATOM_MAXVALUE, oldValue, MaxValue);
+        firePropertyChange(ATOM_MAXVALUE, oldValue, MaxValue);
     }
 
     public void setDefaultValue(Integer DefaultValue) {
         Integer oldValue = this.DefaultValue;
         this.DefaultValue = DefaultValue;
-        firePropertyChange(AtomDefinitionController.ATOM_DEFAULTVALUE, oldValue, DefaultValue);
+        firePropertyChange(ATOM_DEFAULTVALUE, oldValue, DefaultValue);
     }
 
     static public final String TypeName = "int";

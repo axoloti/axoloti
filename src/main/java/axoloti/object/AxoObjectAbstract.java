@@ -179,7 +179,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         String oldvalue = this.id;
         this.id = id;
         firePropertyChange(
-                ObjectController.OBJ_ID,
+                AxoObject.OBJ_ID,
                 oldvalue, id);
     }
 
@@ -192,7 +192,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         String oldvalue = this.sDescription;
         this.sDescription = sDescription;
         firePropertyChange(
-                ObjectController.OBJ_DESCRIPTION,
+                AxoObject.OBJ_DESCRIPTION,
                 oldvalue, sDescription);
     }
 
@@ -205,7 +205,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         String oldvalue = this.sLicense;
         this.sLicense = sLicense;
         firePropertyChange(
-                ObjectController.OBJ_LICENSE,
+                AxoObject.OBJ_LICENSE,
                 oldvalue, sLicense);
     }
 
@@ -218,7 +218,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         String oldvalue = this.sPath;
         this.sPath = sPath;
         firePropertyChange(
-                ObjectController.OBJ_PATH,
+                AxoObject.OBJ_PATH,
                 oldvalue, sPath);
     }
 
@@ -231,7 +231,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         String oldvalue = this.sAuthor;
         this.sAuthor = sAuthor;
         firePropertyChange(
-                ObjectController.OBJ_AUTHOR,
+                AxoObject.OBJ_AUTHOR,
                 oldvalue, sAuthor);
     }
 
