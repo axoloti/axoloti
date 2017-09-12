@@ -308,6 +308,8 @@ alloc_ok:
 					usbh_endpoint_descriptor_t *epdesc2 = (usbh_endpoint_descriptor_t *)epdesc;
 					epdesc2->bmAttributes |= USBH_EPTYPE_INT;
 					usbhEPObjectInit(&midip->epin, dev, epdesc);
+					// but disable FRMOR interrupt, otherwise BULK type EP halts sometimes
+					midip->epin.hcintmsk &= ~HCINTMSK_FRMORM;
 					midip->epin.type = USBH_EPTYPE_INT;
 					usbhEPSetName(&midip->epin, "MIDI[IIN ]");
 				} else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
