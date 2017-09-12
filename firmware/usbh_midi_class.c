@@ -387,13 +387,10 @@ msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
 		return -1;
 	}
 
-	uinfof("usbhmidi_sendbuffer : sending %02x bytes",size);
 	uint32_t actual_len;
 	msg_t status = usbhBulkTransfer(&midip->epout, buffer,
 			size, &actual_len, MS2ST(1000));
-	uinfof("usbhmidi_sendbuffer : sent %02x bytes",actual_len);
 	if (status == USBH_URBSTATUS_OK) return MSG_OK;
-	uinfof("usbhmidi_sendbuffer : errored with %d ",status);
 
 	return status;
 }
