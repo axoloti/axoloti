@@ -26,6 +26,14 @@ then
     7z x ./fatfs-0.10b-patched.7z
     cd ../../
     mv ${ARDIR} ../..
+
+    echo "fixing ChibiOS community from ChibiOS-Contrib"
+    cd ${PLATFORM_ROOT}/../chibios_${CH_VERSION}
+    rm -rf community
+    git clone https://github.com/axoloti/ChibiOS-Contrib.git community
+    cd community 
+    git checkout patch-1
+
     cd "${PLATFORM_ROOT}"
 else
     echo "chibios directory already present, skipping..."
