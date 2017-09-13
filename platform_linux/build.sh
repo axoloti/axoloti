@@ -87,7 +87,7 @@ mkdir -p "${PLATFORM_ROOT}/src"
 
 
 CH_VERSION=16.1.8
-if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
+if [ ! -d "${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=ChibiOS_${CH_VERSION}
@@ -107,10 +107,10 @@ then
 
 
     echo "fixing ChibiOS community from ChibiOS-Contrib"
-    cd ${PLATFORM_ROOT}/../chibios_${CH_VERSION}
+    cd ${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}
     rm -rf community
     git clone https://github.com/axoloti/ChibiOS-Contrib.git community
-    cd community 
+    cd community
     git checkout patch-1
 
 else

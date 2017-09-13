@@ -26,9 +26,9 @@ public class MidiControllerNames {
     static String[] ccnames = {
         "Bank select", // 0
         "Modulation",
-        "Breath",
+        "Breath controller",
         "",
-        "Foot",
+        "Foot controller",
         "Portamento time",
         "Data entry",
         "Main volume",
