@@ -349,8 +349,7 @@ void usbhmidiStart(USBHMIDIDriver *midip) {
 	}
 	if (midip->epin.device != 0) {
 		usbhURBObjectInit(&midip->in_urb, &midip->epin, _in_cb, midip,
-				midip->report_buffer, USBH_MIDI_BUFSIZE);
-
+                midip->report_buffer, midip->epin.wMaxPacketSize);
 		/* open the bulk IN endpoint */
 		usbhEPOpen(&midip->epin);
 
@@ -375,7 +374,7 @@ msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
 	}
 
 	uint32_t actual_len;
-	msg_t status = usbhSyncrhonousTransfer(&midip->epout, buffer,
+	msg_t status = usbhSynchronousTransfer(&midip->epout, buffer,
 			size, &actual_len, MS2ST(1000));
 	if (status == USBH_URBSTATUS_OK) return MSG_OK;
 
