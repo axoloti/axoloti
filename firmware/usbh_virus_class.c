@@ -123,9 +123,12 @@ alloc_ok:
                 uinfof("Virus input found %02x", epdesc->bEndpointAddress);
                 midip->nInputPorts = 2;
                 // Pretend it is an INT IN endpoint to avoid a NAK flood
-                epdesc->bmAttributes |= USBH_EPTYPE_INT;
-                usbhEPObjectInit(&midip->epin, dev, epdesc);
-                midip->epin.type = USBH_EPTYPE_INT;
+                usbh_endpoint_descriptor_t *epdesc2 = (usbh_endpoint_descriptor_t *)epdesc;
+                epdesc2->bmAttributes |= USBH_EPTYPE_INT;
+                usbhEPObjectInit(&midip->epin, dev, epdesc2);
+                // but disable FRMOR interrupt, otherwise BULK type EP halts sometimes
+//                  midip->epin.hcintmsk &= ~HCINTMSK_FRMORM;
+//                  midip->epin.type = USBH_EPTYPE_INT;
                 usbhEPSetName(&midip->epin, "MIDI[IIN ]");
             }
         } else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
@@ -140,12 +143,7 @@ alloc_ok:
                 midip->nOutputPorts =  2;
                 found = true;
 
-                // we have to force to bulk, since that is all thats supported in usbhBulkTransfer
-                // (Virus reports USBH_EPTYPE_INT)
-
-                // epdesc->bmAttributes |= USBH_EPTYPE_BULK;
                 usbhEPObjectInit(&midip->epout, dev, epdesc);
-                // midip->epout.type = USBH_EPTYPE_BULK;
                 usbhEPSetName(&midip->epout, "MIDI[IOUT]");
             }
 

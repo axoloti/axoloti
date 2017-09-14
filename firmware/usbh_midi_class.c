@@ -375,7 +375,7 @@ msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
 	}
 
 	uint32_t actual_len;
-	msg_t status = usbhBulkTransfer(&midip->epout, buffer,
+	msg_t status = usbhSyncrhonousTransfer(&midip->epout, buffer,
 			size, &actual_len, MS2ST(1000));
 	if (status == USBH_URBSTATUS_OK) return MSG_OK;
 
