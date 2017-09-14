@@ -25,8 +25,8 @@
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
 #define USBH_MIDI_CLASS_MAX_INSTANCES                  2
-#define USBH_MIDI_DEBUG_ENABLE_TRACE                    1
-#define USBH_MIDI_DEBUG_ENABLE_INFO                     1
+#define USBH_MIDI_DEBUG_ENABLE_TRACE                    0
+#define USBH_MIDI_DEBUG_ENABLE_INFO                     0
 #define USBH_MIDI_DEBUG_ENABLE_WARNINGS                 1
 #define USBH_MIDI_DEBUG_ENABLE_ERRORS                   1
 
@@ -173,6 +173,8 @@ struct USBHMIDIDriver {
 	int nOutputPorts;
 
 	USBHMIDIConfig *config;
+
+	semaphore_t sem;
 };
 
 

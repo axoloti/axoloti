@@ -214,10 +214,10 @@ alloc_ok:
 					// Pretend it is an INT IN endpoint to avoid a NAK flood
 					usbh_endpoint_descriptor_t *epdesc2 = (usbh_endpoint_descriptor_t *)epdesc;
 					epdesc2->bmAttributes |= USBH_EPTYPE_INT;
-					usbhEPObjectInit(&midip->epin, dev, epdesc);
+					usbhEPObjectInit(&midip->epin, dev, epdesc2);
 					// but disable FRMOR interrupt, otherwise BULK type EP halts sometimes
-					midip->epin.hcintmsk &= ~HCINTMSK_FRMORM;
-					midip->epin.type = USBH_EPTYPE_INT;
+//					midip->epin.hcintmsk &= ~HCINTMSK_FRMORM;
+//					midip->epin.type = USBH_EPTYPE_INT;
 					usbhEPSetName(&midip->epin, "MIDI[IIN ]");
 				} else if (((epdesc->bEndpointAddress & 0x80) == 0) &&
 					((epdesc->bmAttributes == USBH_EPTYPE_BULK) ||
@@ -269,25 +269,23 @@ static void _stop_locked(USBHMIDIDriver *midip) {
 		return;
 
 	osalDbgCheck(midip->state == USBHMIDI_STATE_READY);
-	if (midip->epin.device)
-		usbhEPClose(&midip->epin);
-	if (midip->epout.device)
-		usbhEPClose(&midip->epout);
 
+	if (midip->epin.status != USBH_EPSTATUS_UNINITIALIZED)
+		usbhEPClose(&midip->epin);
+	if (midip->epout.status != USBH_EPSTATUS_UNINITIALIZED)
+		usbhEPClose(&midip->epout);
 	midip->nOutputPorts = 0;
 	midip->nInputPorts = 0;
 	midip->name[0] = 0;
-
 	midip->state = USBHMIDI_STATE_ACTIVE;
-
-	if (midip->config->cb_disconnect)
-		midip->config->cb_disconnect(midip->config);
 }
 
 void midi_class_unload(usbh_baseclassdriver_t *drv) {
 	USBHMIDIDriver *const midip = (USBHMIDIDriver *)drv;
+	chSemWait(&midip->sem);
 	_stop_locked(midip);
 	midip->state = USBHMIDI_STATE_STOP;
+	chSemSignal(&midip->sem);
 }
 
 static void _object_init(USBHMIDIDriver *midip) {
@@ -295,6 +293,7 @@ static void _object_init(USBHMIDIDriver *midip) {
 //	memset(midip, 0, sizeof(*midip));
 	midip->info = &usbhMidiClassDriverInfo;
 	midip->state = USBHMIDI_STATE_STOP;
+	chSemObjectInit(&midip->sem, 1);
 }
 
 void midi_class_init(void) {
@@ -321,7 +320,7 @@ static void _in_cb(usbh_urb_t *urb) {
 		return;
 	case USBH_URBSTATUS_ERROR:
 		uwarn("MIDI: URB IN error");
-		return;
+		break;
 	default:
 		uerrf("MIDI: URB IN status unexpected = %d", urb->status);
 		break;
@@ -334,51 +333,39 @@ static void _in_cb(usbh_urb_t *urb) {
 
 void usbhmidiStart(USBHMIDIDriver *midip) {
 	osalDbgCheck(midip);
-	osalDbgCheck((midip->state == USBHMIDI_STATE_ACTIVE)
-			|| (midip->state == USBHMIDI_STATE_READY));
 
-	if (midip->state == USBHMIDI_STATE_READY)
+	chSemWait(&midip->sem);
+	if (midip->state == USBHMIDI_STATE_READY) {
+		chSemSignal(&midip->sem);
 		return;
+	}
+
+	osalDbgCheck(midip->state == USBHMIDI_STATE_ACTIVE);
 
 	usbhDeviceReadString(midip->dev, &midip->name[0], sizeof(midip->name), midip->dev->devDesc.iProduct, midip->dev->langID0);
 
-	/* init the URBs */
+	if (midip->epout.device != 0) {
+		usbhEPOpen(&midip->epout);
+	}
 	if (midip->epin.device != 0) {
 		usbhURBObjectInit(&midip->in_urb, &midip->epin, _in_cb, midip,
 				midip->report_buffer, USBH_MIDI_BUFSIZE);
 
-		/* open the bulk IN/OUT endpoints */
+		/* open the bulk IN endpoint */
 		usbhEPOpen(&midip->epin);
 
-		osalSysLock();
-		usbhURBSubmitI(&midip->in_urb);
-		osalSysUnlock();
-	}
-	if (midip->epout.device != 0) {
-		usbhEPOpen(&midip->epout);
+		usbhURBSubmit(&midip->in_urb);
 	}
 
 	midip->state = USBHMIDI_STATE_READY;
-
+	chSemSignal(&midip->sem);
 }
 
+
 void usbhmidiStop(USBHMIDIDriver *midip) {
-	osalDbgCheck((midip->state == USBHMIDI_STATE_ACTIVE)
-			|| (midip->state == USBHMIDI_STATE_READY));
-
-	if (midip->state != USBHMIDI_STATE_READY)
-		return;
-
-	osalSysLock();
-	usbhEPCloseS(&midip->epin);
-	usbhEPCloseS(&midip->epout);
-	midip->state = USBHMIDI_STATE_ACTIVE;
-	osalSysUnlock();
-
-	midip->nOutputPorts = 0;
-	midip->nInputPorts = 0;
-
-	midip->name[0] = 0;
+	chSemWait(&midip->sem);
+	_stop_locked(midip);
+	chSemSignal(&midip->sem);
 }
 
 msg_t usbhmidi_sendbuffer(USBHMIDIDriver *midip, uint8_t *buffer, int size) {
