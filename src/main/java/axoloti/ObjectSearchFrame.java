@@ -82,6 +82,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         this.root = PopulateJTree(MainFrame.axoObjects.ObjectTree, root1);
         tm = new DefaultTreeModel(this.root);
         jTree1.setModel(tm);
+        jTree1.setShowsRootHandles(true);
         jTree1.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
