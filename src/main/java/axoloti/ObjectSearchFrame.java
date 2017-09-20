@@ -366,7 +366,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             jPanel1.removeAll();
             jPanel1.add(objectInstanceView);
             objectInstanceView.resizeToGrid();
-            jPanel1.revalidate();
+            jPanel1.repaint();  //reqd, as removed object may be smaller than new object
            
             IAxoObject t = objectInstanceView.getModel().getType();
             if (t != null) {
