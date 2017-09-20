@@ -79,7 +79,9 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
 
             @Override
             public void disposeController(OutletInstanceController controller) {
-                getParent().disconnect(controller.getModel());
+                if (getParent() != null) {
+                    getParent().disconnect(controller.getModel());
+                }
             }
         };
         displayInstanceControllers = new ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_DISPLAY_INSTANCES) {
