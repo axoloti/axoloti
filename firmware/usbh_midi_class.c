@@ -139,7 +139,7 @@ alloc_ok:
 	if_iterator_t iif;
 
 	uinfof("    Midi descriptor, Length=%d, Hdr=%08x", rem, *(int32_t * )descriptor);
-#if 0 // scan the whole configuration
+#if 0 // scan the whole configuration, solves issue #408 the wrong way
 	cfg_iter_init(&icfg, dev->fullConfigurationDescriptor,
 			dev->basicConfigDesc.wTotalLength);
 	for (if_iter_init(&iif, &icfg); iif.valid; if_iter_next(&iif)) {
