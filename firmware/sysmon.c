@@ -162,11 +162,10 @@ void errorFlagClearAll(void) {
   errorflags = 0;
 }
 
-uint16_t sysmon_getVoltage50(void){
+uint16_t sysmon_getVoltage50(void) {
   return voltage_50;
 }
 
-uint16_t sysmon_getVoltage10(void){
-  return adcvalues[15];
+uint16_t sysmon_getVoltage10(void) {
+  return ADC1->JDR1;
 }
-
