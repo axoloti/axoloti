@@ -113,9 +113,9 @@ static I2C_HandleTypeDef    ADAU1961_i2c_handle;
   */
 static void ADAU_I2C_Init(void)
 {
-  if(HAL_I2C_GetState(&ADAU1961_i2c_handle) == HAL_I2C_STATE_RESET)
+  if (HAL_I2C_GetState(&ADAU1961_i2c_handle) == HAL_I2C_STATE_RESET)
   {
-    /* DISCOVERY_I2Cx peripheral configuration */
+    /* I2Cx peripheral configuration */
 	ADAU1961_i2c_handle.Init.ClockSpeed = 100000;
     ADAU1961_i2c_handle.Init.DutyCycle = I2C_DUTYCYCLE_2;
     ADAU1961_i2c_handle.Init.OwnAddress1 = 0x33;
@@ -135,6 +135,8 @@ static void ADAU_I2C_Init(void)
             | PAL_STM32_PUDR_PULLUP);
 
     rccEnableI2C3(FALSE);
+    nvicEnableVector(I2C3_EV_IRQn, STM32_I2C_I2C3_IRQ_PRIORITY);
+    nvicEnableVector(I2C3_ER_IRQn, STM32_I2C_I2C3_IRQ_PRIORITY);
 
     HAL_I2C_Init(&ADAU1961_i2c_handle);
   }
@@ -148,15 +150,30 @@ int HAL_RCC_GetPCLK1Freq(void) {
 	return STM32_PCLK1;
 }
 
+OSAL_IRQ_HANDLER(STM32_I2C3_EVENT_HANDLER) {
+  OSAL_IRQ_PROLOGUE();
+  HAL_I2C_EV_IRQHandler(&ADAU1961_i2c_handle);
+  OSAL_IRQ_EPILOGUE();
+}
+
+OSAL_IRQ_HANDLER(STM32_I2C3_ERROR_HANDLER) {
+  OSAL_IRQ_PROLOGUE();
+  HAL_I2C_ER_IRQHandler(&ADAU1961_i2c_handle);
+  OSAL_IRQ_EPILOGUE();
+}
+
 #define TIMEOUT 1000000
 
 void ADAU1961_WriteRegister(uint16_t RegisterAddr, uint8_t RegisterValue) {
+	// interrupt version
   i2ctxbuf[0] = RegisterAddr >> 8;
   i2ctxbuf[1] = RegisterAddr;
   i2ctxbuf[2] = RegisterValue;
   chThdSleepMilliseconds(10);
-  HAL_StatusTypeDef r = HAL_I2C_Master_Transmit(&ADAU1961_i2c_handle,ADAU1961_I2C_ADDR<<1,i2ctxbuf,3,TIMEOUT);
+  HAL_StatusTypeDef r = HAL_I2C_Master_Transmit_IT(&ADAU1961_i2c_handle, ADAU1961_I2C_ADDR<<1, i2ctxbuf,3);
+  // should suspend thread and resume when transmit is done...
   if (r != HAL_OK) chSysHalt("CodecI2CWrite");
+  // but for now we just sleep a little and assume transmission is finished after...
   chThdSleepMilliseconds(10);
 }
 
