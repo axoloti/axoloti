@@ -206,6 +206,11 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public PatchViewCodegen WriteCode() {
+        String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
+        return WriteCode(buildDir + "/xpatch");
+    }
+
+    public PatchViewCodegen WriteCode(String file_basename) {
 //        String c = GenerateCode3();
         getModel().CreateIID();
         if (USE_EXECUTION_ORDER) {
@@ -213,11 +218,10 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         } else {
             getModel().SortByPosition();
         }
-        PatchViewCodegen codegen = new PatchViewCodegen(this);               
+        PatchViewCodegen codegen = new PatchViewCodegen(this);
         String c = codegen.GenerateCode4();
         try {
-            String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
-            FileOutputStream f = new FileOutputStream(buildDir + "/xpatch.cpp");
+            FileOutputStream f = new FileOutputStream(file_basename + ".cpp");
             f.write(c.getBytes());
             f.close();
         } catch (FileNotFoundException ex) {

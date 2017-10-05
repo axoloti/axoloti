@@ -1,5 +1,3 @@
-CCFLAGS = -nostdlib -fno-exceptions -fno-rtti -mcpu=cortex-m4 -O3 -fomit-frame-pointer -falign-functions=16 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wunused-parameter -DCORTEX_USE_FPU=TRUE -DTHUMB_PRESENT -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb -DTHUMB -std=c++11 -DARM_MATH_CM4 -D__FPU_PRESENT -fno-math-errno -fno-threadsafe-statics -fno-use-cxa-atexit -Wno-unused-parameter -fpermissive
-LDFLAGS = -nostartfiles -Tramlink.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mno-thumb-interwork -Wl,--print-memory-usage
 
 #-mcpu=cortex-m4   
 #-mno-thumb-interwork 
@@ -29,14 +27,19 @@ CMSIS = ${axoloti_release}/CMSIS
 SPACE := 
 SPACE += 
 BDIR=$(subst $(SPACE),\ ,${axoloti_home}/build)
-# theoretically should be this...., but CSRC expansion cannot cope with escape spaces
-#FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
-FIRMWARE=.
+# theoretically should be this...., 
+# but CSRC expansion cannot cope with escape spaces [is this still an issue?]
+FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
+# FIRMWARE=.
+
+CCFLAGS = -nostdlib -fno-exceptions -fno-rtti -mcpu=cortex-m4 -O3 -fomit-frame-pointer -falign-functions=16 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wunused-parameter -DCORTEX_USE_FPU=TRUE -DTHUMB_PRESENT -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb -DTHUMB -std=c++11 -DARM_MATH_CM4 -D__FPU_PRESENT -fno-math-errno -fno-threadsafe-statics -fno-use-cxa-atexit -Wno-unused-parameter -fpermissive
+LDFLAGS = -nostartfiles -T${FIRMWARE}/ramlink.ld -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mno-thumb-interwork -Wl,--print-memory-usage
+
 
 $(info BDIR = ${BDIR})
 $(info FIRMWARE = ${FIRMWARE})
 
-include board.mk
+include ${axoloti_firmware}/board.mk
 include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
 # HAL-OSAL files (optional).
 include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
@@ -61,8 +64,19 @@ INCDIR = ${CMSIS}/Include \
 # Paths
 IINCDIR   = $(patsubst %,-I%,$(INCDIR) $(DINCDIR) $(UINCDIR))
 LLIBDIR   = $(patsubst %,-L%,$(DLIBDIR) $(ULIBDIR))
-           
-all: ${BDIR}/xpatch.bin
+XPATCH ?= ${BDIR}/xpatch
+# $(info XPATCH = ${XPATCH})
+
+#allin := $(patsubst %.cpp,%.all,$(wildcard *.cpp))
+allin = $(shell find . -name "*.cpp"|sed 's: :\\ :g')
+# $(info allin = ${allin})
+# $(info allindir = $(patsubst %.cpp,%.all,$(allin)))
+
+all : ${XPATCH}.all
+
+allindir : $(patsubst %.cpp,%.all,$(allin))
+
+.SECONDARY:
 
 #generate modules dependancy and link parameters
 #MODULE_LIBS = ${BDIR}/libtest.a
@@ -88,21 +102,44 @@ ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axolo
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
+%.o: %.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
+	@echo compiling ${<}
+	@$(CPP) $(CCFLAGS) -H $(MODULE_BINC) $(MODULE_INC) $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c "$<" -o "$@" 
 
-${BDIR}/xpatch.bin: ${BDIR}/xpatch.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
-	@echo RM
-	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.sram1.bin ${BDIR}/xpatch.sram3.bin ${BDIR}/xpatch.sdram.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst
-	@echo APP
-	@$(CPP) $(CCFLAGS) -H $(MODULE_BINC) $(MODULE_INC) $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c ${BDIR}/xpatch.cpp -o ${BDIR}/xpatch.o 
-	@echo LINK
-	@$(LD) $(LDFLAGS) ${BDIR}/xpatch.o ${MODULE_LINKDIR} ${MODULE_LINKLIB} -Wl,-Map=${BDIR}/xpatch.map,--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o ${BDIR}/xpatch.elf
-	@echo BIN
-	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data -R .data.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram1.bin
-	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data --only-section=.data.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sram3.bin
-	@$(CP) -O binary --only-section=.sdram.* ${BDIR}/xpatch.elf ${BDIR}/xpatch.sdram.bin
-#	@$(DFUSE_PACK) -b 0x00000000:${BDIR}/xpatch.sram1.bin -b 0x20020000:${BDIR}/xpatch.sram3.bin -b 0xC0000000:${BDIR}/xpatch.sdram.bin ${BDIR}/xpatch.dfu
+#@echo RM1
+#@rm1 -f $@.o $@.elf $@.bin $@.sram1.bin $@.sram3.bin $@.sdram.bin $@.d $@.map $@.lst
 
-clean:
-	@rm -f ${BDIR}/xpatch.o ${BDIR}/xpatch.elf ${BDIR}/xpatch.bin ${BDIR}/xpatch.d ${BDIR}/xpatch.map ${BDIR}/xpatch.lst ${BDIR}/xpatch.h.gch
+%.elf: %.o
+	@echo linking $(@:.o=)
+	@$(LD) $(LDFLAGS) "$<" ${MODULE_LINKDIR} ${MODULE_LINKLIB} -Wl,-Map="$(@:.elf=.map)",--cref,--just-symbols=${FIRMWARE}/build/axoloti.elf -o "$@"
+
+%.sram1.bin: %.elf
+	@echo creating $@
+	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data -R .data.* "$<" "$@"
+
+%.sram3.bin: %.elf
+	@echo creating $@
+	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data --only-section=.data.* "$<" "$@"
+
+%.sdram.bin: %.elf
+	@echo creating $@
+	@$(CP) -O binary --only-section=.sdram.* "$<" "$@"
+
+%.all : %.sram1.bin %.sram3.bin %.sdram.bin
+	@echo done $(@:.all=)
+
+%.clean :
+	@rm -f ${XPATCH}.o 
+	@rm -f ${XPATCH}.elf
+	@rm -f ${XPATCH}.sram1.bin
+	@rm -f ${XPATCH}.sram3.bin
+	@rm -f ${XPATCH}.sdram.bin
+	@rm -f ${XPATCH}.d
+	@rm -f ${XPATCH}.map
+	@rm -f ${XPATCH}.lst
+
+clean: ${XPATCH}.clean
+	@echo CLEAN
+
 
 	

@@ -840,7 +840,19 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         if (fLib == null) {
             return false;
         }
-        return runTestDir(new File(fLib.getLocalLocation() + "patches"));
+        File testDirName = new File("test");
+        if (!testDirName.isDirectory()) {
+            testDirName.mkdir();
+        }
+        testDirName = new File("test/" + fLib.getId());
+        if (!testDirName.isDirectory()) {
+            testDirName.mkdir();
+        }
+        testDirName = new File("test/" + fLib.getId() + "/patches/");
+        if (!testDirName.isDirectory()) {
+            testDirName.mkdir();
+        }
+        return runTestDir(new File(fLib.getLocalLocation() + "patches"), "test/" + fLib.getId());
     }
 
     public boolean runObjectTests() {
@@ -848,18 +860,35 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         if (fLib == null) {
             return false;
         }
-        return runTestDir(new File(fLib.getLocalLocation() + "objects"));
+        File testDirName = new File("test");
+        if (!testDirName.isDirectory()) {
+            testDirName.mkdir();
+        }
+        testDirName = new File("test/" + fLib.getId());
+        if (!testDirName.isDirectory()) {
+            testDirName.mkdir();
+        }
+        testDirName = new File("test/" + fLib.getId() + "/objects/");
+        if (!testDirName.isDirectory()) {
+            testDirName.mkdir();
+        }
+        return runTestDir(new File(fLib.getLocalLocation() + "objects"), "test/" + fLib.getId());
     }
 
     public boolean runFileTest(String patchName) {
-        return runTestDir(new File(patchName));
+        return runTestDir(new File(patchName), "");
     }
 
-    private boolean runTestDir(File f) {
+    private boolean runTestDir(File f, String targetPath) {
         if (!f.exists()) {
             return true;
         }
         if (f.isDirectory()) {
+            targetPath += File.separator + f.getName();
+            File testDirName = new File(targetPath);
+            if (!testDirName.isDirectory()) {
+                testDirName.mkdir();
+            }
             File[] files = f.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {
@@ -877,17 +906,17 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
                 }
             });
             for (File s : files) {
-                if (!runTestDir(s) && stopOnFirstFail) {
+                if (!runTestDir(s, targetPath) && stopOnFirstFail) {
                     return false;
                 }
             }
             return true;
         }
 
-        return runTestCompile(f);
+        return runTestCompile(f, targetPath);
     }
 
-    private boolean runTestCompile(File f) {
+    private boolean runTestCompile(File f, String destinationPath) {
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing {0}", f.getPath());
 
         Strategy strategy = new AnnotationStrategy();
@@ -895,26 +924,16 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController(patchModel, null, null); /* fixme: null */
-            patchController.WriteCode();
-            qcmdprocessor.WaitQueueFinished();
-            Thread.sleep(500);
-            for(String module : patchController.getModel().getModules()) {
-                qcmdprocessor.AppendToQueue(
-                        new QCmdCompileModule(patchController,
-                                module,
-                                patchController.getModel().getModuleDir(module)
-                        ));
+            PatchController patchController = new PatchController(patchModel, null, null);
+            /* fixme: null */
+            String basename = f.getName();
+            File testDirName = new File(destinationPath);
+            if (!testDirName.isDirectory()) {
+                testDirName.mkdir();
             }
-            QCmdCompilePatch cp = new QCmdCompilePatch(patchController);
-            patchController.GetQCmdProcessor().AppendToQueue(cp);
-            qcmdprocessor.WaitQueueFinished();
-            Thread.sleep(2500);
-            status = cp.success();
-            if (status == false) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: {0}", f.getPath());
-            }
-            return status;
+            String outFileName = destinationPath + File.separator + basename.substring(0, basename.lastIndexOf('.'));
+            patchController.WriteCode(outFileName);
+            return true;
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath(), ex);
             return false;
