@@ -65,12 +65,26 @@ import org.simpleframework.xml.core.Persister;
 @Root(name = "patch-1.0")
 public class PatchViewSwing extends PatchView {
 
+    class JPanelAbsoluteLayout extends JPanel {
+
+        JPanelAbsoluteLayout() {
+            super(null);
+        }
+
+        @Override
+        public void remove(Component comp) {
+            // a null layout does not cause a repaint when removing a component?
+            super.remove(comp);
+            repaint(comp.getBounds());
+        }
+    }
+
     public PatchLayeredPane Layers = new PatchLayeredPane();
 
-    public JPanel objectLayerPanel = new JPanel(null);
-    public JPanel draggedObjectLayerPanel = new JPanel(null);
-    public JPanel netLayerPanel = new JPanel(null);
-    public JPanel selectionRectLayerPanel = new JPanel(null);
+    public JPanel objectLayerPanel = new JPanelAbsoluteLayout();
+    public JPanel draggedObjectLayerPanel = new JPanelAbsoluteLayout();
+    public JPanel netLayerPanel = new JPanelAbsoluteLayout();
+    public JPanel selectionRectLayerPanel = new JPanelAbsoluteLayout();
 
     SelectionRectangle selectionrectangle = new SelectionRectangle();
     Point selectionRectStart;

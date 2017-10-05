@@ -93,7 +93,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         //setMaximumSize(new Dimension(Short.MAX_VALUE,
         //        Short.MAX_VALUE));
 
-//        setFocusable(true);
+        setFocusable(true);
         Titlebar.removeAll();
         Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
         Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
@@ -119,6 +119,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     @Override
     public void mouseClicked(MouseEvent me) {
         if (getPatchView() != null) {
+            grabFocus();
             if (me.getClickCount() == 1) {
                 if (me.isShiftDown()) {
                     getModel().setSelected(!getModel().getSelected());
@@ -186,6 +187,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     ArrayList<AxoObjectInstanceViewAbstract> draggingObjects = null;
 
     protected void handleMousePressed(MouseEvent me) {
+        grabFocus();
         if (getPatchView() != null) {
             if (me.isPopupTrigger()) {
                 JPopupMenu p = CreatePopupMenu();
