@@ -57,7 +57,7 @@ SECTIONS {
     {
         * (.sram2);
         * (.sram2.*);
-    } > SRAM
+    } > SRAM2
    
     .bss (NOLOAD): ALIGN(4) SUBALIGN(4)
     {
