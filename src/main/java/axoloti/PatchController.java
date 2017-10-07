@@ -242,6 +242,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             qcmdprocessor.WaitQueueFinished();
             IConnection conn = CConnection.GetConnection();
             byte[] bb = PatchFileBinary.getPatchFileBinary();
+            // TODO: add test if it really fits in the flash partition, issue #409
             qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteMem(conn.getTargetProfile().getSDRAMAddr(), bb));
             qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
         } catch (Exception ex) {
