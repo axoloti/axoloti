@@ -49,6 +49,7 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
 
     byte dst[] = new byte[n];
     int idst[] = new int[n];
+    int[] value;
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
@@ -56,6 +57,7 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         for (int i = 0; i < n; i++) {
             idst[i] = dst[i];//&0xff;
         }
+        setValue(idst);
     }
 
     @Override
@@ -73,11 +75,12 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
 
     @Override
     public Object getValue() {
-        return null; // TODO
+        return value;
     }
 
-    public void setValue(Object v) {
-        // TODO
+    public void setValue(int[] value) {
+        this.value = value;
+        firePropertyChange(DisplayInstanceController.DISP_VALUE, null, value);
     }
 
 }

@@ -46,8 +46,7 @@ public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayIn
     }
 
     public void setValue(Double newValue) {
-        Double oldvalue = value;
         value = newValue;
-        firePropertyChange(DisplayInstanceController.DISP_VALUE, oldvalue, value);
+        firePropertyChange(DisplayInstanceController.DISP_VALUE, null, value);
     }
 }

@@ -43,8 +43,7 @@ public abstract class DisplayInstanceInt32<T extends Display> extends DisplayIns
     }
 
     public void setValue(Integer newValue) {
-        Integer oldvalue = value;
         value = newValue;
-        firePropertyChange(DisplayInstanceController.DISP_VALUE, oldvalue, value);
+        firePropertyChange(DisplayInstanceController.DISP_VALUE, null, value);
     }
 }
