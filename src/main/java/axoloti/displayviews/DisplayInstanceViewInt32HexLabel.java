@@ -16,9 +16,9 @@ class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
     void PostConstructor() {
         super.PostConstructor();
 
-        readout = new LabelComponent("0xxxxxxxxx");
+        readout = new LabelComponent("xxxxxxxxxxx");
         add(readout);
-        readout.setSize(80, 18);
+        readout.setSize(getSize());
     }
 
     @Override
