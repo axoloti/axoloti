@@ -25,7 +25,7 @@ IF %ERRORLEVEL% NEQ 0 (
 	GOTO fail
 )
 
-arm-none-eabi-gcc -v 2>&1 | FIND /i "6-20117-q1-update" > NUL
+arm-none-eabi-gcc -v 2>&1 | FIND /i "6-2017-q1-update" > NUL
 IF %ERRORLEVEL% NEQ 0 (
    ECHO GCC version not ok:
    arm-none-eabi-gcc -v
