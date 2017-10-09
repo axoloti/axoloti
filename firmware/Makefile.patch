@@ -86,28 +86,31 @@ allindir : $(patsubst %.cpp,%.all,$(allin))
 # MODULES = test
 # MODULE_DIRS = ../module
 
-$(info using MODULES = ${MODULES})
-
-MODULE_INC = $(foreach MODULE_DIR, ${MODULE_DIRS}, -I$(MODULE_DIR))
-MODULE_BINC = $(foreach MODULE, ${MODULES}, -I${BDIR}/modules/$(MODULE))
-MODULE_LIBS = $(foreach MODULE, ${MODULES}, ${BDIR}/modules/$(MODULE)/lib$(MODULE).a)
-MODULE_LINKDIR = $(patsubst %,-L ${BDIR}/modules/% ,$(MODULES))
-MODULE_LINKLIB = $(patsubst %,-l%,$(MODULES))
-
-$(info MODULE_INC  = ${MODULE_INC})
-$(info MODULE_LIBS = ${MODULE_LIBS})
-$(info MODULE_LINKDIR = ${MODULE_LINKDIR})
 
 ${BDIR}/xpatch.h.gch: ${FIRMWARE}/xpatch.h ${FIRMWARE}/patch.h ${FIRMWARE}/axoloti.h ${FIRMWARE}/parameter_functions.h ${FIRMWARE}/axoloti_math.h ${FIRMWARE}/axoloti_filters.h ${FIRMWARE}/build/axoloti.elf
 	@echo "Build precompiled header"
 	$(CPP) $(CCFLAGS) $(IINCDIR) -Winvalid-pch -MD -MP -c ${FIRMWARE}/xpatch.h  -o ${BDIR}/xpatch.h.gch
 
 %.o: %.cpp ${MODULE_LIBS} ${BDIR}/xpatch.h.gch
+	$(eval MODULES := $(shell sed -n 's/^\/\/$$MODULES=\(.*\)/\1/gp' $<))
+	$(eval MODULE_DIRS := $(shell sed -n 's/^\/\/$$MODULE_DIRS=\(.*\)/\1/gp' $<))
+	$(info using MODULES = ${MODULES})
+	$(eval MODULE_INC = $(foreach MODULE_DIR, ${MODULE_DIRS}, -I$(MODULE_DIR)))
+	$(eval MODULE_BINC = $(foreach MODULE, ${MODULES}, -I${BDIR}/modules/$(MODULE)))
+	$(eval MODULE_LIBS = $(foreach MODULE, ${MODULES}, ${BDIR}/modules/$(MODULE)/lib$(MODULE).a))
+	$(eval MODULE_LINKDIR = $(patsubst %,-L ${BDIR}/modules/% ,$(MODULES)))
+	$(eval MODULE_LINKLIB = $(patsubst %,-l%,$(MODULES)))
+	$(info MODULE_INC  = ${MODULE_INC})
+	$(info MODULE_LIBS = ${MODULE_LIBS})
+	$(info MODULE_LINKDIR = ${MODULE_LINKDIR})
 	@echo compiling ${<}
 	@$(CPP) $(CCFLAGS) -H $(MODULE_BINC) $(MODULE_INC) $(IINCDIR) -Winvalid-pch -MD -MP --include ${BDIR}/xpatch.h -c "$<" -o "$@" 
 
 #@echo RM1
 #@rm1 -f $@.o $@.elf $@.bin $@.sram1.bin $@.sram3.bin $@.sdram.bin $@.d $@.map $@.lst
+
+
+# FIXME: resolve MODULE_LINKDIR and MODULE_LINKLIB in .elf recipe
 
 %.elf: %.o
 	@echo linking $(@:.o=)

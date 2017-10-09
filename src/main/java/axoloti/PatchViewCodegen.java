@@ -755,6 +755,20 @@ public class PatchViewCodegen extends PatchAbstractView {
     String GenerateCode4() {
         String c = "";
 
+        Set<String> moduleSet = getModel().getModules();
+        if (moduleSet != null) {
+            String modules = "";
+            String moduleDirs = "";
+            for (String m : moduleSet) {
+                modules += m + " ";
+                moduleDirs
+                        += getModel().getModuleDir(m)
+                        + " ";
+            }
+            c += "//$MODULES=" + modules + "\n";
+            c += "//$MODULE_DIRS=" + moduleDirs + "\n";
+        }
+
         c += generateIncludes();
         c += "\n";
         c += generateModules();
