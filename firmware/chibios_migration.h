@@ -28,4 +28,5 @@
 #define CH_USE_REGISTRY CH_CFG_USE_REGISTRY
 #define chRegGetThreadName chRegGetThreadNameX
 #define THD_STATE_NAMES CH_STATE_NAMES
+#define hal_lld_get_counter_value port_rt_get_counter_value
 #endif
