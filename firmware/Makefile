@@ -130,6 +130,11 @@ CMSIS = ${axoloti_release}/CMSIS/
 LDSCRIPT= STM32F427xG.ld
 
 CMSIS_SRC = \
+       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_fast_q31.c \
+       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_init_q31.c \
+       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.c
+
+CMSIS_SRC1 = \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_f32.c \
        ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_q15.c \
@@ -256,7 +261,8 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/menu_content/midi_monitor.c \
        ${FIRMWARE}/menu_content/sdcard_menu.c \
        ${FIRMWARE}/menu_content/processes_menu.c \
-       ${FIRMWARE}/ui_nodes/test_menu.c
+       ${FIRMWARE}/ui_nodes/test_menu.c \
+       $(CMSIS_SRC)
 
 
 #$(info including base MI)
