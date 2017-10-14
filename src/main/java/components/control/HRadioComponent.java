@@ -158,14 +158,7 @@ public class HRadioComponent extends ACtrlComponent {
     static final Stroke strokeThin = new BasicStroke(1);
     static final Stroke strokeThick = new BasicStroke(2);
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    void paintComponent1(Graphics2D g2) {
         if (isEnabled()) {
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);
         } else {
@@ -186,8 +179,18 @@ public class HRadioComponent extends ACtrlComponent {
 
         if (isEnabled()) {
             g2.fillOval((int) value * bsize + 2, 2, bsize - 3, bsize - 3);
-        } else {
         }
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        paintComponent1(g2);
     }
 
     @Override
