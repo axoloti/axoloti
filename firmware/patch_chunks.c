@@ -22,6 +22,7 @@ static void readchunk_patch_display_meta(chunk_patch_display_meta_t *chunk) {
 static void readchunk_patch_parameter(chunk_patch_parameter_t *chunk) {
 	patchMeta.params = chunk->pParams;
 	patchMeta.nparams = chunk->nparams;
+	patchMeta.param_names = chunk->pParam_names;
 }
 
 static void readchunk_patch_ui_objects(chunk_patch_ui_objects_t *chunk) {
