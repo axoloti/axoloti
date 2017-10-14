@@ -14,6 +14,7 @@ typedef void (*fsetEncoder)(int x);
 
 typedef struct {
 	fdrawStringN drawStringN;
+	fdrawStringN drawStringInvN;
 	fdrawChar drawChar;
 	fdrawNumber drawNumber3D;
 	fsetEncoder setEncoderOne;

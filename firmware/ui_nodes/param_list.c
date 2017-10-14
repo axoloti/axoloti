@@ -1,90 +1,181 @@
 #include "../ui.h"
 #include "ui_nodes_common.h"
+#include "patch.h"
+#include "qgfx.h"
+#include "chprintf.h"
+#include "glcdfont.h"
+
+static bool canNavigateUp(void) {
+	return (menu_stack[menu_stack_position].currentpos >= 4);
+}
+
+static bool canNavigateDown(void) {
+	return ((menu_stack[menu_stack_position].currentpos + 4) < patchMeta.nparams);
+}
+
+int value_from_input_event(input_event evt) {
+	switch (evt.fields.button) {
+	case btn_encoder:
+		return evt.fields.value;
+	case btn_up:
+		return 1;
+	case btn_down:
+		return -1;
+	default:
+		return 0;
+	}
+}
 
 static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
-	if (evtIsUp(evt))
-		return list_nav_up(node);
-	int n = node->paramList.nparams;
-	if (evtIsDown(evt))
-		return list_nav_down(node, n);
-	if (n > 0) {
-		Parameter_t *p =
-				&node->paramList.params[menu_stack[menu_stack_position].currentpos];
-		if (evtIsEnter(evt)) {
-			ParamMenu.param.param = p;
-			ParamMenu.param.param_name =
-					&node->paramList.param_names[menu_stack[menu_stack_position].currentpos];
-			return ui_enter_node(&ParamMenu);
+	if (!evt.fields.value)
+		return 0;
+	if (evt.fields.quadrant == quadrant_main) {
+		if (evt.fields.button == btn_up) {
+			if (canNavigateUp()) {
+				menu_stack[menu_stack_position].currentpos -= 4;
+				return -1;
+			}
+		} else if (evt.fields.button == btn_down) {
+			if (canNavigateDown()) {
+				menu_stack[menu_stack_position].currentpos += 4;
+				return -1;
+			}
 		}
-		if ((evt.fields.button == btn_encoder)
-				&& (evt.fields.quadrant == quadrant_topright))
-			ProcessEncoderParameter(p, evt.fields.value);
-		ProcessStepButtonsParameter(p);
+	} else {
+		int q = evt.fields.quadrant - quadrant_topleft;
+		int i = q + menu_stack[menu_stack_position].currentpos;
+		if (i < patchMeta.nparams) {
+			int v = value_from_input_event(evt);
+			if (v) {
+				Parameter_t *p = &patchMeta.params[i];
+				ProcessEncoderParameter(p, v);
+				return lcd_dirty_flag_usr1 << q;
+			}
+		}
 	}
 	return 0;
 }
 
-static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
-	Parameter_t *params = node->paramList.params;
-	Parameter_name_t *param_names = node->paramList.param_names;
-	const int current_menu_position = menu_stack[menu_stack_position].currentpos;
-	int l = node->paramList.nparams;
-	if (flags & lcd_dirty_flag_listnav) {
-		update_list_nav(l);
-		return;
+void drawParamValue1(const gfxq *gfx, Parameter_t *param) {
+	// TODO: other parameter types
+	switch (param->type) {
+	case param_type_bin_1bit_momentary:
+	case param_type_bin_1bit_toggle:
+		if (param->d.intt.value) {
+			gfx->drawStringN(3, 1, "on", 8);
+		} else {
+			gfx->drawStringN(3, 1, "off", 8);
+		}
+		break;
+	case param_type_bin_16bits:
+//	   LCD_drawBitField2(x, line, param->d.intt.value, 16);
+		break;
+	case param_type_bin_32bits:
+//	   LCD_drawBitField(x, line, param->d.intt.value, 32);
+		break;
+	case param_type_int: {
+		char s[9];
+		chsnprintf(&s[0], 8, "%7d", param->d.intt.value);
+		gfx->drawStringN(3, 1, s, 8);
 	}
-	int offset = 0;
-	if (current_menu_position > 3)
-		offset = current_menu_position - 3;
-	if ((l - current_menu_position) < 3)
-		offset = l - 6;
-	if (l < STATUSROW)
-		offset = 0;
-	if (l > 0)
-		ShowParameterOnButtonArrayLEDs(LED_STEPS,
-				&params[current_menu_position]);
-	LCD_drawChar(LCD_COL_RIGHT, 3, '-');
-	LCD_drawChar(LCD_COL_RIGHT, 5, '+');
-	int line;
-	for (line = 0; line < (STATUSROW - 1); line++) {
-		if (offset + line < l) {
-			if (offset + line == current_menu_position) {
-				LCD_drawStringInvN(LCD_COL_INDENT, line + 1,
-						param_names[offset + line].name,
-						MAX_PARAMETER_NAME_LENGTH);
-				LCD_drawStringInvN(
-				LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH, line + 1, "",
-						3);
-				drawParamValueInv(line + 1, LCD_VALUE_POSITION,
-						&params[offset + line]);
-			} else {
-				LCD_drawStringN(LCD_COL_INDENT, line + 1,
-						param_names[offset + line].name,
-						MAX_PARAMETER_NAME_LENGTH);
-				LCD_drawStringN(
-				LCD_COL_INDENT + 3 * MAX_PARAMETER_NAME_LENGTH, line + 1, "",
-						3);
-				drawParamValue(line + 1, LCD_VALUE_POSITION,
-						&params[offset + line]);
+		break;
+	case param_type_frac_sq27:
+	case param_type_frac_uq27: {
+		char s[9];
+		chsnprintf(&s[0], 8, "%2.2f", (1.0f / (1 << 21)) * param->d.frac.value);
+		gfx->drawStringN(3, 1, s, 8);
+		chsnprintf(&s[0], 8, "%08X", param->d.frac.value);
+		gfx->drawStringN(3, 2, s, 8);
+	}
+		break;
+	default: {
+		char s[8];
+		chsnprintf(&s[0], 8, "%08X", param->d.frac.value);
+		gfx->drawStringN(3, 1, s, 8);
+	}
+		break;
+	}
+}
+
+static void fpaint_screen_update(const struct ui_node * node, uint32_t flag) {
+	unsigned int i = menu_stack[menu_stack_position].currentpos;
+	switch (flag) {
+	case 0: {
+		int q = 0;
+		while ((i < patchMeta.nparams) && (q < 4)) {
+			Parameter_t *p = &patchMeta.params[i];
+			if (p->signals & 0x00000004) {
+				p->signals &= ~0x00000004;
+				chEvtAddEvents(lcd_dirty_flag_usr1 << q);
 			}
-		} else
-			// blank
-			LCD_drawStringN(LCD_COL_INDENT, line + 1, "", 19);
+			i++;
+			q++;
+		}
 	}
-	LCD_drawStringInv(LCD_COL_ENTER, STATUSROW, "ENTER");
-}
-
-static void fpaint_line_initial(const struct ui_node * node, int y, uint32_t flags) {
-	LCD_drawStringN(LCD_COL_EQ, y, "     $", LCD_COL_EQ_LENGTH);
-}
-
-static void fpaint_line_initial_inv(const struct ui_node * node, int y, uint32_t flags) {
-	LCD_drawStringInvN(LCD_COL_EQ, y, "     $", LCD_COL_EQ_LENGTH);
+		break;
+	case lcd_dirty_flag_initial: {
+		int q = 0;
+		while ((i < patchMeta.nparams) && (q < 4)) {
+			gfx_Q[q++].drawStringInvN(3, 0,
+					(const char *) &patchMeta.param_names[i++], 8);
+		}
+		if (canNavigateUp()) {
+			LCD_drawChar(0, 7, CHAR_ARROW_UP);
+		}
+		if (canNavigateDown()) {
+			LCD_drawChar(10, 7, CHAR_ARROW_DOWN);
+		}
+	}
+		break;
+	case lcd_dirty_flag_usr0: {
+	}
+		break;
+	case lcd_dirty_flag_usr1: {
+		if (i >= patchMeta.nparams)
+			break;
+		Parameter_t *p = &patchMeta.params[i];
+		drawParamValue1(&gfx_Q[0], p);
+		ShowParameterOnEncoderLEDRing(LED_RING_TOPLEFT, p);
+	}
+		break;
+	case lcd_dirty_flag_usr2: {
+		i += 1;
+		if (i >= patchMeta.nparams)
+			break;
+		Parameter_t *p = &patchMeta.params[i];
+		drawParamValue1(&gfx_Q[1], p);
+		ShowParameterOnEncoderLEDRing(LED_RING_TOPRIGHT, p);
+	}
+		break;
+	case lcd_dirty_flag_usr3: {
+		i += 2;
+		if (i >= patchMeta.nparams)
+			break;
+		Parameter_t *p = &patchMeta.params[i];
+		drawParamValue1(&gfx_Q[2], p);
+		ShowParameterOnEncoderLEDRing(LED_RING_BOTTOMLEFT, p);
+	}
+		break;
+	case lcd_dirty_flag_usr4: {
+		i += 3;
+		if (i >= patchMeta.nparams)
+			break;
+		Parameter_t *p = &patchMeta.params[i];
+		drawParamValue1(&gfx_Q[3], p);
+		ShowParameterOnEncoderLEDRing(LED_RING_BOTTOMRIGHT, p);
+	}
+		break;
+	case lcd_dirty_flag_usr5: {
+	}
+		break;
+	default:
+		break;
+	}
 }
 
 const nodeFunctionTable nodeFunctionTable_param_list = {
 		fhandle_evt,
 		fpaint_screen_update,
-		fpaint_line_initial,
-		fpaint_line_initial_inv
+		0,
+		0
 };

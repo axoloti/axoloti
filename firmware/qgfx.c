@@ -13,6 +13,21 @@ static void fdrawStringNQ3(int x, int line, const char *string, int n) {
 static void fdrawStringNQ4(int x, int line, const char *string, int n) {
 	LCD_drawStringN(63-x-3*n,line+4,string,n);
 }
+
+static void fdrawStringInvNQ1(int x, int line, const char *string, int n) {
+	LCD_drawStringInvN(x, line+1,string,n);
+}
+static void fdrawStringInvNQ2(int x, int line, const char *string, int n) {
+	LCD_drawStringInvN(63-x-3*n,line+1,string,n);
+}
+static void fdrawStringInvNQ3(int x, int line, const char *string, int n) {
+	LCD_drawStringInvN(x,line+4,string,n);
+}
+static void fdrawStringInvNQ4(int x, int line, const char *string, int n) {
+	LCD_drawStringInvN(63-x-3*n,line+4,string,n);
+}
+
+
 static void fdrawCharQ1(int x, int line, const char ch) {
 	LCD_drawChar(x, line+1, ch);
 }
@@ -51,8 +66,8 @@ static void fsetEncoderQ4(int x) {
 }
 
 const gfxq gfx_Q[QGFX_QUADRANTS] = {
-	{fdrawStringNQ1, fdrawCharQ1, fdrawNumberQ1, fsetEncoderQ1},
-	{fdrawStringNQ2, fdrawCharQ2, fdrawNumberQ2, fsetEncoderQ2},
-	{fdrawStringNQ3, fdrawCharQ3, fdrawNumberQ3, fsetEncoderQ3},
-	{fdrawStringNQ4, fdrawCharQ4, fdrawNumberQ4, fsetEncoderQ4}
+	{fdrawStringNQ1, fdrawStringInvNQ1, fdrawCharQ1, fdrawNumberQ1, fsetEncoderQ1},
+	{fdrawStringNQ2, fdrawStringInvNQ2, fdrawCharQ2, fdrawNumberQ2, fsetEncoderQ2},
+	{fdrawStringNQ3, fdrawStringInvNQ3, fdrawCharQ3, fdrawNumberQ3, fsetEncoderQ3},
+	{fdrawStringNQ4, fdrawStringInvNQ4, fdrawCharQ4, fdrawNumberQ4, fsetEncoderQ4}
 };
