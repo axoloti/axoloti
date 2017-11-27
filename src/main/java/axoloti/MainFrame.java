@@ -470,7 +470,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelVoltages = new javax.swing.JLabel();
         jLabelPatch = new javax.swing.JLabel();
         jLabelSDCardPresent = new javax.swing.JLabel();
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0), new java.awt.Dimension(32767, 0));
         jPanel5 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -580,7 +580,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabel1.setText("in L");
         jPanel4.add(jLabel1);
 
-        jLabelVuIn1.setText("0");
+        jLabelVuIn1.setText("0           ");
         jPanel4.add(jLabelVuIn1);
 
         jLabel2.setText("in R");
@@ -601,7 +601,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
         jLabelVuOut2.setText("0");
         jPanel4.add(jLabelVuOut2);
 
-        jLabel5.setText("underruns");
+        jLabel5.setText("underruns ");
         jPanel4.add(jLabel5);
 
         jLabelUnderruns.setText("0");
@@ -616,6 +616,7 @@ public final class MainFrame extends javax.swing.JFrame implements ActionListene
 
         jScrollPaneLog.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPaneLog.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPaneLog.setPreferredSize(new java.awt.Dimension(32767, 32767));
 
         jTextPaneLog.setEditable(false);
         jScrollPaneLog.setViewportView(jTextPaneLog);
