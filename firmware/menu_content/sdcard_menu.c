@@ -36,8 +36,10 @@ void EnterMenuFormat(void) {
 		ui_enter_node(&SdcFormatOK);
 }
 
-#define SdcMenu_length 2
+// TODO: Write - compose/modify a patchname...
+
 const ui_node_t SdcMenu[SdcMenu_length] = {
   { &nodeFunctionTable_node_list, "Load patch", .nodeList = {&PatchLoadMenu, PatchLoadMenu_length}},
-  { &nodeFunctionTable_action_function, "Format", .fnctn = {&EnterMenuFormat}}
+  { &nodeFunctionTable_action_function, "Format", .fnctn = {&EnterMenuFormat}},
+  { &nodeFunctionTable_action_function, "Write", .fnctn = {&WritePatch}}
 };

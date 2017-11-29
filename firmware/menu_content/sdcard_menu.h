@@ -3,7 +3,7 @@
 
 #include "../ui.h"
 
-#define SdcMenu_length 2
+#define SdcMenu_length 3
 extern const ui_node_t SdcMenu[SdcMenu_length];
 
 #endif

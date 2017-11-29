@@ -123,6 +123,7 @@ void LoadPatchStartSD(void);
 void LoadPatchStartFlash(void);
 void LoadPatchIndexed(uint32_t index);
 loadPatchIndex_t GetIndexOfCurrentPatch(void);
+void WritePatch(void);
 
 void codec_clearbuffer(void);
 

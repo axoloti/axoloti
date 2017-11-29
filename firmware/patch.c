@@ -70,6 +70,11 @@ static WORKING_AREA(waThreadDSP, 7200) CCM;
 static Thread *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 
+#define THREAD_DSP_EVT_MASK_COMPUTE ((eventmask_t)1)
+#define THREAD_DSP_EVT_MASK_LOAD ((eventmask_t)2)
+#define THREAD_DSP_EVT_MASK_START ((eventmask_t)4)
+#define THREAD_DSP_EVT_MASK_WRITE ((eventmask_t)8)
+
 static int GetNumberOfThreads(void){
   int i=1;
   Thread *thd1 = chRegFirstThread();
@@ -191,8 +196,13 @@ static THD_FUNCTION(ThreadDSP, arg) {
   codec_clearbuffer();
   while (1) {
     // codec dsp cycle
-    eventmask_t evt = chEvtWaitOne((eventmask_t)7);
-    if (evt == 1) {
+    eventmask_t evt = chEvtWaitOne(
+    		THREAD_DSP_EVT_MASK_COMPUTE
+    		| THREAD_DSP_EVT_MASK_LOAD
+			| THREAD_DSP_EVT_MASK_START
+			| THREAD_DSP_EVT_MASK_WRITE);
+
+    if (evt == THREAD_DSP_EVT_MASK_COMPUTE) {
       static unsigned int tStart;
       tStart = port_rt_get_counter_value();
       watchdog_feed();
@@ -272,7 +282,7 @@ static THD_FUNCTION(ThreadDSP, arg) {
       }
       spilink_clear_audio_tx();
     }
-    else if (evt == 2) {
+    else if (evt == THREAD_DSP_EVT_MASK_LOAD) {
       // load patch event
       codec_clearbuffer();
       StopPatch1();
@@ -371,10 +381,16 @@ static THD_FUNCTION(ThreadDSP, arg) {
         cont: ;
       }
     }
-    else if (evt == 4) {
+    else if (evt == THREAD_DSP_EVT_MASK_START) {
       // start patch
       codec_clearbuffer();
       StartPatch1();
+    }
+    else if (evt == THREAD_DSP_EVT_MASK_WRITE) {
+    	// write patch
+        codec_clearbuffer();
+        StopPatch1();
+    	sdcard_bin_writer("written");
     }
     pollProcessUIEvent();
 #ifdef DEBUG_INT_ON_GPIO
@@ -397,7 +413,7 @@ void StopPatch(void) {
 }
 
 int StartPatch(void) {
-  chEvtSignal(pThreadDSP, (eventmask_t)4);
+  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_START);
   while ((patchStatus != RUNNING) && (patchStatus != STARTFAILED)) {
     chThdSleepMilliseconds(1);
   }
@@ -447,7 +463,7 @@ void computebufI(int32_t *inp, int32_t *outp) {
 		  // todo: route to selected midi output ports
 	  }
   }
-  chEvtSignalI(pThreadDSP, (eventmask_t)1);
+  chEvtSignalI(pThreadDSP, THREAD_DSP_EVT_MASK_COMPUTE);
   chSysUnlockFromIsr();
 }
 
@@ -462,29 +478,33 @@ void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
 void LoadPatch(const char *name) {
   strcpy(loadFName, name);
   loadPatchIndex = BY_FILENAME;
-  chEvtSignal(pThreadDSP, (eventmask_t)2);
+  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
 }
 
 void LoadPatchStartSD(void) {
   if (!palReadPad(SW2_PORT, SW2_PIN)) {
 	  strcpy(loadFName, "/START.BIN");
 	  loadPatchIndex = START_SD;
-	  chEvtSignal(pThreadDSP, (eventmask_t)2);
+	  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
 	  chThdSleepMilliseconds(50);
   }
 }
 
 void LoadPatchStartFlash(void) {
   loadPatchIndex = START_FLASH;
-  chEvtSignal(pThreadDSP, (eventmask_t)2);
+  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
 }
 
 void LoadPatchIndexed(uint32_t index) {
   loadPatchIndex = index;
   loadFName[0] = 0;
-  chEvtSignal(pThreadDSP, (eventmask_t)2);
+  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
 }
 
 loadPatchIndex_t GetIndexOfCurrentPatch(void) {
   return loadPatchIndex;
+}
+
+void WritePatch(void) {
+  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_WRITE);
 }
