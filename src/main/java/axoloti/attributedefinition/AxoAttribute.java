@@ -22,6 +22,7 @@ package axoloti.attributedefinition;
  * @author Johannes Taelman
  */
 import axoloti.atom.AtomDefinition;
+import axoloti.property.Property;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
     }
 
     @Override
-    public List<String> getEditableFields() {
-        return new ArrayList<String>();
+    public List<Property> getEditableFields() {
+        return new ArrayList<>();
     }
 }

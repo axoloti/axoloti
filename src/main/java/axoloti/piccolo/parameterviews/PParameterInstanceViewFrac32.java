@@ -1,7 +1,7 @@
 package axoloti.piccolo.parameterviews;
 
 import axoloti.Modulation;
-import axoloti.Preset;
+import axoloti.PresetDouble;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32;
@@ -28,7 +28,7 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
         if (getModel().getModulators() != null) {
             List<Modulation> modulators = getModel().getModulators();
             for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue().getDouble());
+                System.out.println("mod amount " + m.getValue());
                 m.PostConstructor(getModel());
             }
         }
@@ -43,7 +43,7 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
             public void actionPerformed(ActionEvent e) {
                 //getModel().applyDefaultValue();
                 updateV();
-                getControlComponent().setValue(getModel().getValue().getDouble());
+                getControlComponent().setValue(getModel().getValue());
                 handleAdjustment();
             }
         });
@@ -52,11 +52,11 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
 
     @Override
     public boolean handleAdjustment() {
-        Preset p = getModel().GetPreset(presetEditActive);
+        PresetDouble p = getModel().getPreset(presetEditActive);
         if (p != null) {
-            p.value = new ValueFrac32(getControlComponent().getValue());
-        } else if (getModel().getValue().getDouble() != getControlComponent().getValue()) {
-            getModel().getValue().setDouble(getControlComponent().getValue());
+            p.setValue(getControlComponent().getValue());
+        } else if (getModel().getValue() != getControlComponent().getValue()) {
+            getModel().setValue(new ValueFrac32(getControlComponent().getValue()));
             getModel().setNeedsTransmit(true);
             UpdateUnit();
         } else {

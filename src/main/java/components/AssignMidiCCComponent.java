@@ -20,6 +20,8 @@ package components;
 import axoloti.Theme;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
+import axoloti.property.MidiCCProperty;
+import axoloti.propertyViewSwingMenu.AssignMidiCCMenuItems;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -75,8 +77,8 @@ public class AssignMidiCCComponent extends JComponent {
 
     void doPopup() {
         JPopupMenu sub1 = new JPopupMenu();
-        // FIXME!
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstanceController, sub1);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstanceController, (MidiCCProperty) ParameterInstance.MIDI_CC);
+        sub1.add(assignMidiCCMenuItems);
         sub1.show(this, 0, getHeight() - 1);
     }
 

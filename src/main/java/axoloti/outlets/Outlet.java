@@ -17,11 +17,10 @@
  */
 package axoloti.outlets;
 
-import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
-import axoloti.object.AxoObjectInstance;
+import axoloti.property.Property;
 import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public abstract class Outlet extends AtomDefinition implements Cloneable {
     }
 
     @Override
-    public List<String> getEditableFields() {
-        return new ArrayList<String>();
+    public List<Property> getEditableFields() {
+        return new ArrayList<>();
     }
 }

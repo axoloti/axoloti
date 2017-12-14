@@ -18,11 +18,9 @@
 package axoloti.attribute;
 
 import axoloti.SDFileReference;
-import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectInstance;
 import static axoloti.utils.CharEscape.CharEscape;
 import components.LabelComponent;
@@ -34,7 +32,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstance<T extends AxoAttribute> extends AbstractModel implements AtomInstance<T> {
+public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInstance<T> {
 
     @Attribute
     String attributeName;
@@ -52,14 +50,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         this.controller = controller;
         axoObj = axoObj1;
     }
-
-    public static final String ELEMENT_ATTR_VALUE = "Value";
-    public static final String[] PROPERTY_NAMES = {ELEMENT_ATTR_VALUE};
-
-    @Override
-    public String[] getPropertyNames() {
-        return PROPERTY_NAMES;
-    }    
 
     public abstract String CValue();
 
@@ -82,15 +72,11 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
         return null;
     }
 
-    public void Close() {
-    }
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        super.modelPropertyChange(evt);
+        if (AxoAttribute.NAME.is(evt)) {
             setName((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
-            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
 
@@ -106,11 +92,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends Abstract
     public void setName(String attributeName) {
         String preVal = this.attributeName;
         this.attributeName = attributeName;
-        firePropertyChange(AtomDefinition.ATOM_NAME, preVal, attributeName);
-    }
-
-    public String getDescription() {
-        return getModel().getDescription();
+        firePropertyChange(NAME, preVal, attributeName);
     }
 
 }

@@ -9,14 +9,14 @@ import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.IView;
+import axoloti.mvc.array.ArrayController;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceController;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
-import axoloti.mvc.IView;
-import axoloti.mvc.array.ArrayController;
 
 /**
  *
@@ -106,16 +106,15 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        String propertyName = evt.getPropertyName();
-        if (propertyName.equals(AxoObjectInstance.OBJ_PARAMETER_INSTANCES)) {
+        if (AxoObjectInstance.OBJ_PARAMETER_INSTANCES.is(evt)) {
             parameterInstanceControllers.syncControllers();
-        } else if (propertyName.equals(AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES.is(evt)) {
             attributeInstanceControllers.syncControllers();
-        } else if (propertyName.equals(AxoObjectInstance.OBJ_DISPLAY_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_DISPLAY_INSTANCES.is(evt)) {
             displayInstanceControllers.syncControllers();
-        } else if (propertyName.equals(AxoObjectInstance.OBJ_INLET_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_INLET_INSTANCES.is(evt)) {
             inletInstanceControllers.syncControllers();
-        } else if (propertyName.equals(AxoObjectInstance.OBJ_OUTLET_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_OUTLET_INSTANCES.is(evt)) {
             outletInstanceControllers.syncControllers();
         }
         super.propertyChange(evt);

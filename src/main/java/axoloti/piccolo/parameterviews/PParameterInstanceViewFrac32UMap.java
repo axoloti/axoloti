@@ -1,8 +1,8 @@
 package axoloti.piccolo.parameterviews;
 
 import axoloti.Preset;
+import axoloti.PresetDouble;
 import axoloti.Theme;
-import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import axoloti.piccolo.PatchPNode;
@@ -72,7 +72,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     public void updateV() {
         super.updateV();
         if (ctrl != null) {
-            ctrl.setValue(getModel().getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
     }
 
@@ -108,17 +108,17 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            PresetDouble p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
+                ctrl.setValue(p.getValue());
             } else {
                 setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue().getDouble());
+                ctrl.setValue(getModel().getValue());
             }
         } else {
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
         updatePresetAssignVisibility();
     }
@@ -146,7 +146,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     }
 
     @Override
-    public Preset AddPreset(int index, Value value) {
+    public Preset AddPreset(int index, Object value) {
         Preset p = getController().AddPreset(index, value);
         updatePresetAssignVisibility();
         return p;

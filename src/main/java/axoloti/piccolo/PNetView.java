@@ -253,4 +253,9 @@ public class PNetView extends PatchPNode implements INetView {
     public AbstractController getController() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void dispose() {
+    }
+
 }

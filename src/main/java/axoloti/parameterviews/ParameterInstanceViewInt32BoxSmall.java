@@ -18,6 +18,6 @@ class ParameterInstanceViewInt32BoxSmall extends ParameterInstanceViewInt32Box {
 
     @Override
     public NumberBoxComponent CreateControl() {
-        return new NumberBoxComponent(0.0, getModel().getMin(), getModel().getMax(), 1.0, 12, 12);
+        return new NumberBoxComponent(0.0, getModel().getMinValue(), getModel().getMaxValue(), 1.0, 12, 12);
     }
 }

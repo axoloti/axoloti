@@ -18,6 +18,8 @@
 package axoloti.object;
 
 import axoloti.PatchModel;
+import axoloti.property.Property;
+import axoloti.property.StringPropertyNull;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.Attribute;
@@ -34,6 +36,8 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
 
     @Attribute(name = "text", required = false)
     private String commentText;
+
+    public final static Property COMMENT = new StringPropertyNull("CommentText", AxoObjectInstanceComment.class);
 
     AxoObjectInstanceComment() {
         if (InstanceName != null) {
@@ -79,7 +83,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
         String oldvalue = this.commentText;
         this.commentText = commentText;
         firePropertyChange(
-                AxoObjectInstance.OBJ_COMMENT,
+                COMMENT,
                 oldvalue, commentText);
     }
 
@@ -101,6 +105,10 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
         if (unlinked_object_instance instanceof AxoObjectInstanceComment) {
             setCommentText(((AxoObjectInstanceComment) unlinked_object_instance).getCommentText());
         }
+    }
+
+    @Override
+    public void dispose() {
     }
 
 }

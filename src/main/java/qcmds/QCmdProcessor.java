@@ -19,9 +19,9 @@ package qcmds;
 
 import axoloti.IConnection;
 import axoloti.MainFrame;
-import axoloti.PatchController;
 import axoloti.CConnection;
 import axoloti.PatchViewCodegen;
+import axoloti.utils.Preferences;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -49,7 +49,7 @@ public class QCmdProcessor implements Runnable {
         public void run() {
             while (true) {
                 try {
-                    Thread.sleep(MainFrame.prefs.getPollInterval());
+                    Thread.sleep(Preferences.getPreferences().getPollInterval());
                 } catch (InterruptedException ex) {
                     Logger.getLogger(QCmdProcessor.class.getName()).log(Level.SEVERE, null, ex);
                 }

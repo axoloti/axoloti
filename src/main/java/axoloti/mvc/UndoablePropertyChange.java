@@ -1,5 +1,6 @@
 package axoloti.mvc;
 
+import axoloti.property.Property;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
@@ -13,12 +14,12 @@ public class UndoablePropertyChange implements UndoableEdit {
     Object new_value;
     final Object old_value;
     final AbstractController controller;
-    final String propertyName;
+    final Property property;
 
-    public UndoablePropertyChange(AbstractController controller, String propertyName, Object old_value, Object new_value) {
+    public UndoablePropertyChange(AbstractController controller, Property property, Object old_value, Object new_value) {
         this.new_value = new_value;
         this.controller = controller;
-        this.propertyName = propertyName;
+        this.property = property;
         this.old_value = old_value;
         //System.out.println("undoablePropChange: " + propertyName + " : " + ((new_value!=null)?new_value.toString() : "null"));
     }
@@ -27,8 +28,8 @@ public class UndoablePropertyChange implements UndoableEdit {
         return controller;
     }
 
-    public String getPropertyName() {
-        return propertyName;
+    public Property getProperty() {
+        return property;
     }
 
     public Object getNewValue() {
@@ -37,7 +38,7 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public void undo() throws CannotUndoException {
-        controller.setModelProperty(propertyName, old_value);
+        controller.setModelProperty(property, old_value);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
-        controller.setModelProperty(propertyName, new_value);
+        controller.setModelProperty(property, new_value);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class UndoablePropertyChange implements UndoableEdit {
         if (anAbsEdit.getController() != controller) {
             return false;
         }
-        if (!propertyName.equals(anAbsEdit.getPropertyName())) {
+        if (!(property == anAbsEdit.getProperty())) {
             return false;
         }
         new_value = anAbsEdit.getNewValue();
@@ -92,11 +93,11 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public String getUndoPresentationName() {
-        return "Undo change " + propertyName;
+        return "Undo change " + property.getFriendlyName();
     }
 
     @Override
     public String getRedoPresentationName() {
-        return "Redo change " + propertyName;
+        return "Redo change " + property.getFriendlyName();
     }
 }

@@ -24,10 +24,11 @@ package axoloti;
 import axoloti.chunks.ChunkParser;
 import axoloti.chunks.FourCC;
 import axoloti.dialogs.USBPortSelectionDlg;
-import static axoloti.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.displays.DisplayInstance;
 import axoloti.parameters.ParameterInstance;
 import axoloti.targetprofile.axoloti_core;
+import axoloti.utils.Preferences;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -66,24 +67,20 @@ public class USBBulkConnection_v2 extends IConnection {
     private final BlockingQueue<QCmdSerialTask> queueSerialTask;
     private String cpuid;
     private axoloti_core targetProfile;
-    private final Context context;
     private DeviceHandle handle;
-    private final short bulkVID = (short) 0x16C0;
-    private final short bulkPID = (short) 0x0442;
     private final int interfaceNumber = 2;
+    private String firmwareID;
+    private final TargetController controller;
 
-    protected USBBulkConnection_v2() {
+    protected USBBulkConnection_v2(TargetController controller) {
+        this.controller = controller;
         this.sync = new Sync();
         this.readsync = new Sync();
         this.patch = null;
         disconnectRequested = false;
         connected = false;
         queueSerialTask = new ArrayBlockingQueue<QCmdSerialTask>(10);
-        context = new Context();
-        int result = LibUsb.init(context);
-        if (result != LibUsb.SUCCESS) {
-            throw new LibUsbException("Unable to initialize libusb.", result);
-        }
+
     }
 
     @Override
@@ -134,7 +131,7 @@ public class USBBulkConnection_v2 extends IConnection {
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
             ClearSync();
             ClearReadSync();
-            MainFrame.mainframe.getQcmdprocessor().Panic();
+            QCmdProcessor.getQCmdProcessor().Panic();
 
             if (receiverThread.isAlive()) {
                 receiverThread.interrupt();
@@ -158,68 +155,6 @@ public class USBBulkConnection_v2 extends IConnection {
         }
     }
 
-    public DeviceHandle OpenDeviceHandle() {
-        // Read the USB device list
-        DeviceList list = new DeviceList();
-        int result = LibUsb.getDeviceList(context, list);
-        if (result < 0) {
-            throw new LibUsbException("Unable to get device list", result);
-        }
-
-        try {
-            // Iterate over all devices and scan for the right one
-            for (Device d : list) {
-                DeviceDescriptor descriptor = new DeviceDescriptor();
-                result = LibUsb.getDeviceDescriptor(d, descriptor);
-                if (result != LibUsb.SUCCESS) {
-                    throw new LibUsbException("Unable to read device descriptor", result);
-                }
-                if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
-                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "USB device found");
-                    DeviceHandle h = new DeviceHandle();
-                    result = LibUsb.open(d, h);
-                    if (result < 0) {
-                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, ErrorString(result));
-                    } else {
-                        String serial = LibUsb.getStringDescriptor(h, descriptor.iSerialNumber());
-                        if (cpuid != null) {
-                            if (serial.equals(cpuid)) {
-                                return h;
-                            }
-                        } else {
-                            return h;
-                        }
-                        LibUsb.close(h);
-                    }
-                }
-            }
-            // or else pick the first one
-            for (Device d : list) {
-                DeviceDescriptor descriptor = new DeviceDescriptor();
-                result = LibUsb.getDeviceDescriptor(d, descriptor);
-                if (result != LibUsb.SUCCESS) {
-                    throw new LibUsbException("Unable to read device descriptor", result);
-                }
-                if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
-                    Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "USB device found");
-                    DeviceHandle h = new DeviceHandle();
-                    result = LibUsb.open(d, h);
-                    if (result < 0) {
-                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, ErrorString(result));
-                    } else {
-                        return h;
-                    }
-                }
-            }
-        } finally {
-            // Ensure the allocated device list is freed
-            //LibUsb.freeDeviceList(list, true);
-        }
-        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "No available USB device found with matching PID/VID");
-        // Device not found
-        return null;
-    }
-
     private byte[] bb2ba(ByteBuffer bb) {
         bb.rewind();
         byte[] r = new byte[bb.remaining()];
@@ -228,7 +163,7 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
-    public boolean connect() {
+    public boolean connect(String _cpuid) {
         disconnect();
         disconnectRequested = false;
         synchronized (sync) {
@@ -236,18 +171,15 @@ public class USBBulkConnection_v2 extends IConnection {
             sync.notifyAll();
         }
         GoIdleState();
-        if (cpuid == null) {
-            cpuid = MainFrame.prefs.getComPortName();
-        }
         targetProfile = new axoloti_core();
-        handle = OpenDeviceHandle();
+        handle = OpenDeviceHandle(_cpuid);
         if (handle == null) {
             return false;
         }
 
         try //devicePath = Usb.DeviceToPath(device);
         {
-            QCmdProcessor qcmdp = MainFrame.mainframe.getQcmdprocessor();
+            QCmdProcessor qcmdp = QCmdProcessor.getQCmdProcessor();
             qcmdp.Panic();
             int result = LibUsb.claimInterface(handle, interfaceNumber);
             if (result != LibUsb.SUCCESS) {
@@ -499,24 +431,15 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void SelectPort() {
-        USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, cpuid);
+        USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true, cpuid, getController());
         spsDlg.setVisible(true);
         cpuid = spsDlg.getCPUID();
-        String name = MainFrame.prefs.getBoardName(cpuid);
+        String name = Preferences.getPreferences().getBoardName(cpuid);
         if (name == null) {
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "port: {0}", cpuid);
         } else {
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "port: {0} name: {1}", new Object[]{cpuid, name});
         }
-    }
-
-    static private USBBulkConnection_v2 conn = null;
-
-    public static IConnection GetConnection() {
-        if (conn == null) {
-            conn = new USBBulkConnection_v2();
-        }
-        return conn;
     }
 
     @Override
@@ -544,6 +467,24 @@ public class USBBulkConnection_v2 extends IConnection {
         ClearSync();
         writeBytes(data);
         WaitSync();
+    }
+
+    @Override
+    public String getFWID() {
+        return firmwareID;
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+    }
+
+    @Override
+    public TargetController getController() {
+        return controller;
+    }
+
+    @Override
+    public void dispose() {
     }
 
     class Sync {
@@ -955,8 +896,8 @@ public class USBBulkConnection_v2 extends IConnection {
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
-            MainFrame.mainframe.qcmdprocessor.Abort();
-            MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
+            QCmdProcessor.getQCmdProcessor().Abort();
+            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdShowDisconnect());
             disconnect();
         }
     }
@@ -977,8 +918,8 @@ public class USBBulkConnection_v2 extends IConnection {
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "transmitter: thread stopped");
-            MainFrame.mainframe.qcmdprocessor.Abort();
-            MainFrame.mainframe.qcmdprocessor.AppendToQueue(new QCmdShowDisconnect());
+            QCmdProcessor.getQCmdProcessor().Abort();
+            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdShowDisconnect());
         }
     }
 
@@ -1024,8 +965,7 @@ public class USBBulkConnection_v2 extends IConnection {
                         patch.getController().setDspLoad(DSPLoad);
                     }
                 }
-                MainFrame.mainframe.showPatchIndex(patchIndex);
-                targetProfile.setVoltages(Voltages);
+//                MainFrame.mainframe.showPatchIndex(patchIndex);
                 SetSDCardPresent(sdcardPresent != 0);
             }
         });
@@ -1057,15 +997,33 @@ public class USBBulkConnection_v2 extends IConnection {
                         patch.getController().setDspLoad(DSPLoad);
                     }
                 }
-                MainFrame.mainframe.showPatchIndex(patchIndex);
-                MainFrame.mainframe.showLevels(inLevel1, inLevel2, outLevel1, outLevel2);
-                MainFrame.mainframe.showUnderruns(underruns);
-                targetProfile.setVoltages(Voltages);
+                // MainFrame.mainframe.showPatchIndex(patchIndex);
+
+                TargetRTInfo rtinfo = new TargetRTInfo();
+                rtinfo.inLevel1 = inLevel1;
+                rtinfo.inLevel2 = inLevel2;
+                rtinfo.outLevel1 = outLevel1;
+                rtinfo.outLevel2 = outLevel2;
+                rtinfo.underruns = underruns;
+                int vref = Voltages & 0xFFFF;
+                int v50i = (Voltages >> 16) & 0xFFFF;
+                if (vref != 0) {
+                    rtinfo.vdd = 1.21f * (float) (4096) / (float) (vref);
+                    rtinfo.v50 = 2.0f * rtinfo.vdd * (float) (v50i + 1) / 4096.0f;
+                    rtinfo.voltageAlert = false;
+                    if ((rtinfo.vdd < 3.0) || (rtinfo.vdd > 3.6)) {
+                        rtinfo.voltageAlert = true;
+                    }
+                    if ((rtinfo.v50 > 5.5) || (rtinfo.v50 < 4.5)) {
+                        rtinfo.voltageAlert = true;
+                    }
+                }
+                getController().getModel().setRTInfo(rtinfo);
+                getController().getModel().setPatchIndex(patchIndex);
                 SetSDCardPresent(sdcardPresent != 0);
             }
         });
     }
-    
     
     void RPacketParamChange(final int index, final int value, final int patchID) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -1097,7 +1055,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 }
 
                 if (!pi.getNeedsTransmit()) {
-                    pi.SetValueRaw(value);
+                    pi.setValue(pi.int32ToVal(value));
                 }
 
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
@@ -1318,7 +1276,7 @@ public class USBBulkConnection_v2 extends IConnection {
                             String sFwcrc = String.format("%08X", fwcrc);
                             Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
                                     fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
-                            MainFrame.mainframe.setFirmwareID(sFwcrc);
+                            firmwareID = sFwcrc;
                             GoIdleState();
                         }
                         break;

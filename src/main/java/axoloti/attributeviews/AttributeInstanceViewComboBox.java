@@ -33,7 +33,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
             @Override
             public void SelectionChanged() {
                 getController().addMetaUndo("edit attribute " + getModel().getName());
-                getController().changeValue(comboBox.getSelectedItem());
+                getController().setModelUndoableProperty(AttributeInstanceComboBox.ATTR_VALUE,comboBox.getSelectedItem());
             }
         });
         add(comboBox);
@@ -65,7 +65,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AxoAttributeComboBox.ATOM_MENUENTRIES)) {
+        if (AxoAttributeComboBox.ATOM_MENUENTRIES.is(evt)) {
             comboBox.setItems((List<String>) evt.getNewValue());
         }
     }

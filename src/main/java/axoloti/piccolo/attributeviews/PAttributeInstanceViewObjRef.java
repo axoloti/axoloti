@@ -58,7 +58,7 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getController().changeValue(TFObjName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE,TFObjName.getText());
             }
 
             @Override

@@ -56,14 +56,14 @@ public class PAssignPresetPanel extends PatchPCanvas {
             ctrl.setPresetCanvas(this);
             ctrls.add(ctrl);
             ctrl.addPCtrlListener(ctrlListener);
-            Preset p = parameterInstanceView.getModel().GetPreset(i + 1);
+            Preset p = parameterInstanceView.getModel().getPreset(i + 1);
             if (p != null) {
                 cb.setValue(1);
-                ctrl.setValue(p.value.getDouble());
+                ctrl.setValue((Double)p.getValue());
             } else {
                 cb.setValue(0);
                 ctrl.setEnabled(false);
-                ctrl.setValue(parameterInstanceView.getModel().getValue().getDouble());
+                //ctrl.setValue(parameterInstanceView.getModel().getValue());
             }
             row.addChild(ctrl);
             container.addChild(row);
@@ -87,12 +87,12 @@ public class PAssignPresetPanel extends PatchPCanvas {
             boolean selected = Boolean.parseBoolean(s[1]);
             System.out.println(data);
             if (selected) {
-                parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getModel().getValue());
+                //parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getModel().getValue());
                 ctrls.get(i).setEnabled(true);
-                ctrls.get(i).setValue(parameterInstanceView.getModel().GetPreset(i + 1).value.getDouble()); // TBC!!!
+                ctrls.get(i).setValue((Double) parameterInstanceView.getModel().getPreset(i + 1).getValue()); // 
             } else {
                 ctrls.get(i).setEnabled(false);
-                parameterInstanceView.RemovePreset(i + 1);
+                parameterInstanceView.getController().RemovePreset(i + 1);
             }
             PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
             patchModel.presetUpdatePending = true;
@@ -112,9 +112,9 @@ public class PAssignPresetPanel extends PatchPCanvas {
                     if (parameterInstanceView.getModel().getValue() instanceof ValueInt32) {
                         parameterInstanceView.getController().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
                     } else if (parameterInstanceView.getModel().getValue() instanceof ValueFrac32) {
-                        parameterInstanceView.AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
-                    }
+                        parameterInstanceView.getController().AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
                 }
+            }
             }
             parameterInstanceView.getModel().getObjectInstance().getPatchModel().presetUpdatePending = true;
         }

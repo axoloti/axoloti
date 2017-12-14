@@ -22,7 +22,11 @@ import axoloti.inlets.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.outlets.OutletInstance;
+import axoloti.property.DestinationArrayProperty;
+import axoloti.property.Property;
+import axoloti.property.SourceArrayProperty;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.asList;
 import java.util.List;
@@ -177,6 +181,8 @@ public class Net extends AbstractModel {
             return null;
         }
     }
+    public final static Property NET_SOURCES = new SourceArrayProperty("Sources", Net.class);
+    public final static Property NET_DESTINATIONS = new DestinationArrayProperty("Destinations", Net.class);
 
     public OutletInstance[] getSources() {
         return sources;
@@ -187,7 +193,7 @@ public class Net extends AbstractModel {
         this.sources = sources;
         validate();
         firePropertyChange(
-                NetController.NET_SOURCES,
+                NET_SOURCES,
                 old_value, sources);
     }
 
@@ -200,7 +206,15 @@ public class Net extends AbstractModel {
         this.dests = dests;
         validate();
         firePropertyChange(
-                NetController.NET_DESTINATIONS,
+                NET_DESTINATIONS,
                 old_value, dests);
+    }
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+        l.add(NET_SOURCES);
+        l.add(NET_DESTINATIONS);
+        return l;
     }
 }

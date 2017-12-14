@@ -1,11 +1,10 @@
 package axoloti.dialogs;
 
 import axoloti.Axoloti;
-import axoloti.MainFrame;
-import static axoloti.MainFrame.prefs;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.Preferences;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +65,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         }
         jTypeCombo.setSelectedItem(library.getType());
 
-        boolean expert = MainFrame.prefs.getExpertMode() || Axoloti.isDeveloper();
+        boolean expert = Preferences.getPreferences().getExpertMode() || Axoloti.isDeveloper();
         boolean lockDown
                 = !expert
                 && ((AxolotiLibrary.FACTORY_ID.equals(library.getId()))
@@ -399,7 +398,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
     private void jSelectDirBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSelectDirBtnActionPerformed
         String dir = jLocalDir.getText();
         if (dir == null || dir.length() == 0) {
-            dir = prefs.getCurrentFileDirectory();
+            dir = Preferences.getPreferences().getCurrentFileDirectory();
         }
 
         File seldir = new File(dir).getParentFile();

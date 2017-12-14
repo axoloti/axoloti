@@ -17,8 +17,6 @@ import java.util.logging.Logger;
  */
 public class NetController extends AbstractController<Net, INetView, PatchController> {
 
-    public final static String NET_SOURCES = "Sources";
-    public final static String NET_DESTINATIONS = "Destinations";
 
     public NetController(Net model, AbstractDocumentRoot documentRoot, PatchController parent) {
         super(model, documentRoot, parent);
@@ -72,7 +70,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         }
         ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
         n.add(inlet);
-        setModelUndoableProperty(NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
+        setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
     }
 
     public void connectOutlet(OutletInstance outlet) {
@@ -81,7 +79,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         }
         ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
         n.add(outlet);
-        setModelUndoableProperty(NET_SOURCES, n.toArray(new OutletInstance[]{}));
+        setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
     void disconnect(InletInstance inlet) {
@@ -90,7 +88,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         }
         ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
         n.remove(inlet);
-        setModelUndoableProperty(NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
+        setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
     }
 
     void disconnect(OutletInstance outlet) {
@@ -99,7 +97,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         }
         ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
         n.remove(outlet);
-        setModelUndoableProperty(NET_SOURCES, n.toArray(new OutletInstance[]{}));
+        setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
     public boolean NeedsLatch() {

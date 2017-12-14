@@ -3,8 +3,13 @@ package midirouting;
 import axoloti.CConnection;
 import axoloti.IConnection;
 import axoloti.mvc.AbstractModel;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 import qcmds.QCmdMemRead;
 import qcmds.QCmdWriteMem;
 
@@ -22,7 +27,7 @@ public class MidiOutputRoutingTable extends AbstractModel {
         return addr + 8;
     }
 
-    void retrieve(IConnection conn, int addr) {
+    public void retrieve(IConnection conn, int addr) {
         this.addr = addr;
         conn.AppendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
             @Override
@@ -72,17 +77,15 @@ public class MidiOutputRoutingTable extends AbstractModel {
         }
     }
 
-    public final static String MIRT_PORTNAME = "PortName";
-    public final static String MIRT_MAPPING = "Mapping";
-
-    public final static String[] PROPERTYNAMES = new String[]{
-        MIRT_PORTNAME,
-        MIRT_MAPPING
-    };
+    public final static Property MORT_PORTNAME = new StringProperty("PortName", MidiOutputRoutingTable.class);
+    public final static Property MORT_MAPPING = new ObjectProperty("Mapping", int[].class, MidiOutputRoutingTable.class);
 
     @Override
-    public String[] getPropertyNames() {
-        return PROPERTYNAMES;
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+        l.add(MORT_PORTNAME);
+        l.add(MORT_MAPPING);
+        return l;
     }
 
     public String getPortName() {
@@ -92,7 +95,7 @@ public class MidiOutputRoutingTable extends AbstractModel {
     public void setPortName(String portname) {
         this.portname = portname;
         firePropertyChange(
-                MIRT_PORTNAME,
+                MORT_PORTNAME,
                 null, portname);
     }
 
@@ -107,7 +110,7 @@ public class MidiOutputRoutingTable extends AbstractModel {
             apply(conn);
         }
         firePropertyChange(
-                MIRT_MAPPING,
+                MORT_MAPPING,
                 null, vports);
     }
 }

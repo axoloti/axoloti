@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import qcmds.QCmdProcessor;
 
 /**
  *
@@ -89,7 +90,7 @@ public class AxoObjectFromPatch extends AxoObject {
     @Override
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (pf == null) {
-            pf = new PatchFrame(patchController, MainFrame.mainframe.getQcmdprocessor());
+            pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         }
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);

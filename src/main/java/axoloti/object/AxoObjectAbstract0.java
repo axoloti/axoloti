@@ -6,6 +6,7 @@ import axoloti.displays.Display;
 import axoloti.inlets.Inlet;
 import axoloti.outlets.Outlet;
 import axoloti.parameters.Parameter;
+import axoloti.property.Property;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -23,6 +24,13 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
 
     public AxoObjectAbstract0(String id, String sDescription) {
         super(id, sDescription);
+    }
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+//        l.add()
+        return l;       
     }
 
     @Override

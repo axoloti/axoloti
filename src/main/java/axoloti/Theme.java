@@ -1,9 +1,9 @@
 package axoloti;
 
 import static axoloti.FileUtils.axtFileFilter;
-import static axoloti.MainFrame.prefs;
 import axoloti.object.AxoObjects;
 import axoloti.utils.ColorConverter;
+import axoloti.utils.Preferences;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -171,7 +171,7 @@ public class Theme {
     public Color Patch_Border = new Color(0.0f, 0.0f, 0.0f, 0.1f);
 
     private File FileChooserSave(JFrame frame) {
-        final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
+        final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(FileUtils.axtFileFilter);
 
@@ -251,7 +251,7 @@ public class Theme {
     }
 
     public JFileChooser GetFileChooser() {
-        JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+        JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(axtFileFilter);
         return fc;
@@ -261,14 +261,14 @@ public class Theme {
         JFileChooser fc = GetFileChooser();
         int returnVal = fc.showOpenDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
-            prefs.SavePrefs();
+            Preferences.getPreferences().setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
+            Preferences.getPreferences().SavePrefs();
             File f = fc.getSelectedFile();
             if (axtFileFilter.accept(f)) {
                 try {
                     FileInputStream inputStream = new FileInputStream(f);
                     currentTheme = Theme.SERIALIZER.read(Theme.class, inputStream);
-                    MainFrame.prefs.setThemePath(f.getAbsolutePath());
+                    Preferences.getPreferences().setThemePath(f.getAbsolutePath());
                 } catch (Exception ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Unable to open theme {0}", new Object[]{ex});
                 }
@@ -281,7 +281,7 @@ public class Theme {
         if (fileToBeSaved != null) {
             try {
                 Theme.SERIALIZER.write(this, fileToBeSaved);
-                MainFrame.prefs.setThemePath(fileToBeSaved.getAbsolutePath());
+                Preferences.getPreferences().setThemePath(fileToBeSaved.getAbsolutePath());
             } catch (Exception e) {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, e);
             }
@@ -290,12 +290,12 @@ public class Theme {
 
     public static void loadDefaultTheme() {
         currentTheme = new Theme();
-        MainFrame.prefs.setThemePath(null);
+        Preferences.getPreferences().setThemePath(null);
     }
 
     public static Theme getCurrentTheme() {
         if (currentTheme == null) {
-            String themePath = MainFrame.prefs.getThemePath();
+            String themePath = Preferences.getPreferences().getThemePath();
             if (themePath == null) {
                 loadDefaultTheme();
             } else {

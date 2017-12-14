@@ -10,8 +10,6 @@ import axoloti.object.ObjectController;
  */
 public class AtomDefinitionController extends AbstractController<AtomDefinition, AtomInstance, ObjectController> {
 
-
-
     public AtomDefinitionController(AtomDefinition model, AbstractDocumentRoot documentRoot, ObjectController parent) {
         super(model, documentRoot, parent);
     }

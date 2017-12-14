@@ -17,7 +17,6 @@
  */
 package axoloti.attribute;
 
-import axoloti.StringRef;
 import axoloti.TextEditor;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeTextEditor;
@@ -32,24 +31,11 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
 
     public TextEditor editor;
 
-    final StringRef sRef = new StringRef();
-
-    @Element(data = true, name = "sText", required = false)
-    String getSText() {
-        return sRef.s;
-    }
+    @Element(data = true, required = false)
+    String sText;
 
     AttributeInstanceTextEditor() {
         super();
-    }
-
-    public AttributeInstanceTextEditor(@Element(name = "sText", required = false) String s) {
-        super(null, null);
-        if (s == null) {
-            sRef.s = "";
-        } else {
-            sRef.s = s;
-        }
     }
 
     AttributeInstanceTextEditor(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
@@ -58,25 +44,22 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
 
     @Override
     public String CValue() {
-        return sRef.s;
+        return sText;
     }
 
     @Override
     public String getValue() {
-        return sRef.s;
+        return sText;
     }
 
     @Override
     public void setValue(String sText) {
-        sRef.s = sText;
-    }
-
-    public StringRef getStringRef() {
-        return sRef;
+        this.sText = sText;
     }
 
     @Override
-    public void Close() {
+    public void dispose() {
+        super.dispose();
         if (editor != null) {
             editor.Close();
         }

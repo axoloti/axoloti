@@ -76,5 +76,8 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }
+    @Override
+    public void dispose() {
+    }
 
 }

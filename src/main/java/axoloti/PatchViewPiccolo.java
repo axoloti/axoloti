@@ -11,6 +11,7 @@ import axoloti.piccolo.PatchPCanvas;
 import axoloti.piccolo.PatchPNode;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import axoloti.utils.Preferences;
 import components.piccolo.PFocusable;
 import components.piccolo.control.PCtrlComponentAbstract;
 import components.piccolo.control.PDropDownComponent;
@@ -94,7 +95,7 @@ public class PatchViewPiccolo extends PatchView {
         @Override
         public void keyReleased(PInputEvent e) {
             if (KeyUtils.isControlOrCommand(e.getKeyCode())
-                    && MainFrame.prefs.getMouseWheelPan()) {
+                    && Preferences.getPreferences().getMouseWheelPan()) {
                 canvas.getScrollPane().setWheelScrollingEnabled(true);
             }
         }
@@ -292,11 +293,6 @@ public class PatchViewPiccolo extends PatchView {
 
     }
 
-    @Override
-    public void Close() {
-        super.Close();
-    }
-
     private boolean cordsInBackground = false;
 
     public void updateNetZPosition() {
@@ -478,7 +474,7 @@ public class PatchViewPiccolo extends PatchView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
+        if (PatchModel.PATCH_LOCKED.is(evt)) {
             if ((Boolean)evt.getNewValue() == false) {
                 canvas.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
@@ -486,4 +482,9 @@ public class PatchViewPiccolo extends PatchView {
             }            
         }
     }
+
+    @Override
+    public void dispose() {
+    }
+
 }

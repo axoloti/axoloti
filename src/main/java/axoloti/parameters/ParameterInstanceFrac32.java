@@ -19,31 +19,36 @@ package axoloti.parameters;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueFrac32;
+import axoloti.PresetDouble;
 import axoloti.object.AxoObjectInstance;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extends ParameterInstance<Tx> {
+public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extends ParameterInstance<Tx, Double> {
 
     @Attribute(name = "value", required = false)
     public double getValuex() {
-        return value.getDouble();
+        return value;
     }
     @ElementList(required = false)
     ArrayList<Modulation> modulators;
 
-    // was final
-    ValueFrac32 value = new ValueFrac32();
+    @ElementListUnion({
+        @ElementList(entry = "Preset", type = PresetDouble.class, inline = false, required = false)
+    })
+    ArrayList<PresetDouble> presets;
+
+    Double value = 0.0;
 
     public ParameterInstanceFrac32(@Attribute(name = "value") double v) {
-        value.setDouble(v);
+        value = v;
     }
 
     public ParameterInstanceFrac32() {
@@ -62,11 +67,49 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public void setValue(Value value) {
-        setValue((ValueFrac32)value);
-        //this.value.setRaw(value.getRaw());
+    public ByteBuffer getValueBB() {
+        ByteBuffer bb = super.getValueBB();
+        bb.putInt((int) ((1 << 21) * (double) value));
+        return bb;
     }
 
+    @Override
+    public int valToInt32(Double v) {
+        int f2i = 1 << 21;
+        return (int) Math.round(v * f2i);
+    }
+
+    @Override
+    public Double int32ToVal(int v) {
+        double i2f = 1.0 / (1 << 21);
+        return v * i2f;
+    }
+
+    @Override
+    public PresetDouble presetFactory(int index, Double value) {
+        return new PresetDouble(index, value);
+    }
+
+    @Override
+    public ArrayList<PresetDouble> getPresets() {
+        if (presets != null) {
+            return presets;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void setPresets(Object presets) {
+        ArrayList<PresetDouble> prevValue = getPresets();
+        this.presets = (ArrayList<PresetDouble>) presets;
+        firePropertyChange(PRESETS, prevValue, this.presets);
+    }
+
+    @Override
+    public PresetDouble getPreset(int i) {
+        return (PresetDouble) super.getPreset(i);
+    }
 
     public void updateModulation(int index, double amount) {
         //System.out.println("updatemodulation1:" + index);
@@ -97,7 +140,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             n.source = modulator.objinst;
             n.sourceName = modulator.objinst.getInstanceName();
             n.modName = modulator.name;
-            n.getValue().setDouble(amount);
+            n.setValue(amount);
             n.destination = this;
             axoObjectInstance.getPatchModel().updateModulation(n);
         } else {
@@ -152,10 +195,10 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
                 + ", unit: " + parameter.GetCUnit()
                 + ", signals: 0"
                 + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
-        int v = GetValueRaw();
+        double v = getValue();
         s += ", d: { frac: { finalvalue: 0"
-                + ", value: " + v
-                + ", modvalue: " + v
+                + ", value: " + valToInt32(v)
+                + ", modvalue: " + valToInt32(v)
                 + ", offset: " + GetCOffset()
                 + ", multiplier: " + GetCMultiplier()
                 + "}}},\n";
@@ -180,24 +223,30 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }
-    
-    /*****/
-    
+
+    /**
+     * **
+     */
     @Override
-    public ValueFrac32 getValue() {
-        return value;
+    public Double getValue() {
+        if (value == null) {
+            return 0.0;
+        } else {
+            return value;
+        }
     }
 
-    public void setValue(ValueFrac32 value) {
-        ValueFrac32 oldvalue = this.value;
-        this.value = value;
+    @Override
+    public void setValue(Object value) {
+        Double oldvalue = this.value;
+        this.value = (Double)value;
         needsTransmit = true;
         firePropertyChange(
-            ParameterInstance.ELEMENT_PARAM_VALUE,
-            oldvalue, value);
+                VALUE,
+                oldvalue, value);
         if (paramOnParent != null) {
-            paramOnParent.setDefaultValue(value);
-        }        
+            paramOnParent.setDefaultValue((Double)value);
+        }
     }
-    
+
 }

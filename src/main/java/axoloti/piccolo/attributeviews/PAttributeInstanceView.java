@@ -4,7 +4,6 @@ import axoloti.PatchView;
 import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attributeviews.IAttributeInstanceView;
-import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.PatchPNode;
 import components.piccolo.PLabelComponent;
@@ -45,7 +44,6 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
         }
     }
 
-    @Override
     public PatchView getPatchView() {
         return axoObjectInstanceView.getPatchView();
     }
@@ -64,4 +62,9 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     public AttributeInstanceController getController() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void dispose() {
+    }
+
 }

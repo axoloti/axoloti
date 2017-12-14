@@ -1,6 +1,7 @@
 package axoloti;
 
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.Preferences;
 import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -41,7 +42,7 @@ public class Synonyms {
     static void load() {
         Serializer serializer = new Persister();
         try {
-            AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+            AxolotiLibrary lib = Preferences.getPreferences().getLibrary(AxolotiLibrary.FACTORY_ID);
             if(lib != null) {
                 instance = serializer.read(Synonyms.class, new File(lib.getLocalLocation() + filename));
             } else {

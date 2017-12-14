@@ -27,14 +27,16 @@ import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IView;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
 import axoloti.utils.CharEscape;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
-import java.util.List;
 
 /**
  *
@@ -280,6 +282,12 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     }
 
     /* MVC clean methods*/
+    public static final Property OBJ_PARAMETER_INSTANCES = new ObjectProperty("ParameterInstances", List.class, AxoObjectInstanceAbstract.class);
+    public static final Property OBJ_ATTRIBUTE_INSTANCES = new ObjectProperty("AttributeInstances", List.class, AxoObjectInstanceAbstract.class);
+    public static final Property OBJ_INLET_INSTANCES = new ObjectProperty("InletInstances", List.class, AxoObjectInstanceAbstract.class);
+    public static final Property OBJ_OUTLET_INSTANCES = new ObjectProperty("OutletInstances", List.class, AxoObjectInstanceAbstract.class);
+    public static final Property OBJ_DISPLAY_INSTANCES = new ObjectProperty("DisplayInstances", List.class, AxoObjectInstanceAbstract.class);
+
     @Override
     public String getInstanceName() {
         return InstanceName;
@@ -342,17 +350,32 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     @Override
     abstract public List<InletInstance> getInletInstances();
 
+    public void setInletInstances(List<InletInstance> x) {
+    }
+
     @Override
     abstract public List<OutletInstance> getOutletInstances();
+
+    public void setOutletInstances(List<OutletInstance> x) {
+    }
 
     @Override
     abstract public List<ParameterInstance> getParameterInstances();
 
+    public void setParameterInstances(List<ParameterInstance> x) {
+    }
+
     @Override
     abstract public List<AttributeInstance> getAttributeInstances();
 
+    public void setAttributeInstances(List<AttributeInstance> x) {
+    }
+
     @Override
     abstract public List<DisplayInstance> getDisplayInstances();
+
+    public void setDisplayInstances(List<DisplayInstance> x) {
+    }
 
     @Override
     abstract public InletInstance GetInletInstance(String n);

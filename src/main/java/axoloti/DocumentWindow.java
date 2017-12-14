@@ -27,11 +27,14 @@ import javax.swing.JFrame;
  */
 public interface DocumentWindow {
 
-    JFrame GetFrame();
+    JFrame getFrame();
 
-    public boolean AskClose(); // return true when cancelling an unsaved close
+    /*    
+    // return true when cancelling an unsaved close
+     */
+    public boolean askClose();
 
     public File getFile();
 
-    public ArrayList<DocumentWindow> GetChildDocuments();
+    public ArrayList<DocumentWindow> getChildDocuments();
 }

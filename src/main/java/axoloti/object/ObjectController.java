@@ -6,10 +6,10 @@ import axoloti.displays.Display;
 import axoloti.inlets.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.outlets.Outlet;
-import axoloti.parameters.Parameter;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
+import axoloti.outlets.Outlet;
+import axoloti.parameters.Parameter;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -86,16 +86,15 @@ public class ObjectController extends AbstractController<IAxoObject, IView, Abst
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        String propertyName = evt.getPropertyName();
-        if (propertyName.equals(AxoObject.OBJ_INLETS)) {
+        if (AxoObject.OBJ_INLETS.is(evt)) {
             inlets.syncControllers();
-        } else if (propertyName.equals(AxoObject.OBJ_OUTLETS)) {
+        } else if (AxoObject.OBJ_OUTLETS.is(evt)) {
             outlets.syncControllers();
-        } else if (propertyName.equals(AxoObject.OBJ_ATTRIBUTES)) {
+        } else if (AxoObject.OBJ_ATTRIBUTES.is(evt)) {
             attrs.syncControllers();
-        } else if (propertyName.equals(AxoObject.OBJ_PARAMETERS)) {
+        } else if (AxoObject.OBJ_PARAMETERS.is(evt)) {
             params.syncControllers();
-        } else if (propertyName.equals(AxoObject.OBJ_DISPLAYS)) {
+        } else if (AxoObject.OBJ_DISPLAYS.is(evt)) {
             disps.syncControllers();
         }
         super.propertyChange(evt);

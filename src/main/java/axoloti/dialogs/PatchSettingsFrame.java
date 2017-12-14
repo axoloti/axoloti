@@ -21,12 +21,11 @@ import axoloti.DocumentWindow;
 import axoloti.PatchController;
 import axoloti.PatchModel;
 import axoloti.SubPatchMode;
-import axoloti.mvc.IView;
+import axoloti.menus.StandardMenubar;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -35,7 +34,7 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Johannes Taelman
  */
-public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWindow, IView<PatchController> {
+public class PatchSettingsFrame extends AJFrame<PatchController> {
 
     final PatchController patchController;
 
@@ -47,13 +46,13 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     /**
      * Creates new form PatchSettingsFrame
      *
-     * @param settings settings to load/save
      */
-    public PatchSettingsFrame(PatchController patchController) {
+    public PatchSettingsFrame(DocumentWindow parentDocumentWindow, PatchController patchController) {
+        super(parentDocumentWindow);
         initComponents();
         this.patchController = patchController;
         setTitle("settings");
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
+        setJMenuBar(new StandardMenubar());
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMinimum(1);
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMaximum(16);
         ((SpinnerNumberModel) jSpinnerNumPresets.getModel()).setMinimum(0);
@@ -64,6 +63,21 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
         ((SpinnerNumberModel) jSpinnerModulationSources.getModel()).setMaximum(64);
         ((SpinnerNumberModel) jSpinnerModulationTargets.getModel()).setMinimum(0);
         ((SpinnerNumberModel) jSpinnerModulationTargets.getModel()).setMaximum(64);
+        /*
+        // test of the PropertyTable class ("inspector")
+        PropertyTable p = new PropertyTable(patchController, asList(new Property[]{
+            PatchModel.PATCH_AUTHOR,
+            PatchModel.PATCH_ATTRIBUTIONS,
+            PatchModel.PATCH_MIDICHANNEL,
+            PatchModel.PATCH_NMODULATIONSOURCES,
+            PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE,
+            PatchModel.PATCH_NPRESETS,
+            PatchModel.PATCH_NPRESETENTRIES,
+            PatchModel.PATCH_MIDISELECTOR
+        }));
+        patchController.addView(p);
+        jScrollPane1.setViewportView(p);
+         */
     }
 
     /**
@@ -108,7 +122,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
 
         jLabel1.setText("MIDI Channel");
 
-        jSpinnerMidiChannel.setModel(new javax.swing.SpinnerNumberModel(0, 0, 15, 1));
+        jSpinnerMidiChannel.setModel(new javax.swing.SpinnerNumberModel(1, 1, 16, 1));
         jSpinnerMidiChannel.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSpinnerMidiChannelStateChanged(evt);
@@ -425,12 +439,12 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public JFrame GetFrame() {
+    public JFrame getFrame() {
         return this;
     }
 
     @Override
-    public boolean AskClose() {
+    public boolean askClose() {
         return false;
     }
 
@@ -440,7 +454,7 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
     }
 
     @Override
-    public ArrayList<DocumentWindow> GetChildDocuments() {
+    public ArrayList<DocumentWindow> getChildDocuments() {
         return null;
     }
 
@@ -450,14 +464,13 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        String propName = evt.getPropertyName();
-        if (propName.equals(PatchModel.PATCH_AUTHOR)) {
+        if (PatchModel.PATCH_AUTHOR.is(evt)) {
             jTextFieldAuthor.setText((String) evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_LICENSE)) {
+        } else if (PatchModel.PATCH_LICENSE.is(evt)) {
             jComboBoxLicense.setSelectedItem((String) evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_ATTRIBUTIONS)) {
+        } else if (PatchModel.PATCH_ATTRIBUTIONS.is(evt)) {
             jTextFieldAttributions.setText((String) evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_SUBPATCHMODE)) {
+        } else if (PatchModel.PATCH_SUBPATCHMODE.is(evt)) {
             switch ((SubPatchMode)evt.getNewValue()) {
             case no:
                 jComboBoxMode.setSelectedIndex(0);
@@ -478,17 +491,17 @@ public class PatchSettingsFrame extends javax.swing.JFrame implements DocumentWi
                 jComboBoxMode.setSelectedIndex(5);
                 break;
         }
-        } else if (propName.equals(PatchModel.PATCH_NPRESETENTRIES)) {
+        } else if (PatchModel.PATCH_NPRESETENTRIES.is(evt)) {
             ((SpinnerNumberModel) jSpinnerPresetEntries.getModel()).setValue(evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_NPRESETS)) {
+        } else if (PatchModel.PATCH_NPRESETS.is(evt)) {
             ((SpinnerNumberModel) jSpinnerNumPresets.getModel()).setValue(evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_NMODULATIONSOURCES)) {
+        } else if (PatchModel.PATCH_NMODULATIONSOURCES.is(evt)) {
             ((SpinnerNumberModel) jSpinnerModulationSources.getModel()).setValue(evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE)) {
+        } else if (PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE.is(evt)) {
             ((SpinnerNumberModel) jSpinnerModulationTargets.getModel()).setValue(evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_MIDICHANNEL)) {
+        } else if (PatchModel.PATCH_MIDICHANNEL.is(evt)) {
             ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setValue(evt.getNewValue());
-        } else if (propName.equals(PatchModel.PATCH_MIDISELECTOR)) {
+        } else if (PatchModel.PATCH_MIDISELECTOR.is(evt)) {
             jCheckBoxHasChannelAttrib.setSelected((Boolean)evt.getNewValue());
         } else {
         }

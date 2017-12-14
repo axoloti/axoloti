@@ -17,9 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
-import org.simpleframework.xml.Attribute;
-
 /**
  *
  * @author Johannes Taelman
@@ -30,18 +27,9 @@ public class ParameterInstanceBin32 extends ParameterInstanceInt32 {
         super();
     }
 
-    public ParameterInstanceBin32(@Attribute(name = "value") int v) {
-        super(v);
-    }
-
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         return "";
-    }
-
-    @Override
-    public void setValue(Value value) {
-        super.setValue(value);
     }
 
 }

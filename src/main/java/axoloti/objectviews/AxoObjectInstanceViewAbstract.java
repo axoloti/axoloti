@@ -351,6 +351,15 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
         getPatchView().objectLayerPanel.setComponentZOrder(this, 0);
     }
 
+    /*
+    @Override public void validate() {
+        super.validate();
+        Dimension d = getPreferredSize();        
+//        setBounds();
+        repaint();
+    }
+    */
+    
     @Override
     public void resizeToGrid() {
         revalidate();
@@ -408,7 +417,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_LOCATION)) {
+        if (AxoObjectInstance.OBJ_LOCATION.is(evt)) {
             Point newValue = (Point) evt.getNewValue();
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
@@ -429,10 +438,10 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
                     }
                 }
             }
-        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_INSTANCENAME)) {
+        } else if (AxoObjectInstance.OBJ_INSTANCENAME.is(evt)) {
             String s = (String) evt.getNewValue();
             showInstanceName(s);
-        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_SELECTED)) {
+        } else if (AxoObjectInstance.OBJ_SELECTED.is(evt)) {
             showSelected((Boolean)evt.getNewValue());
         }
     }
@@ -443,7 +452,7 @@ public class AxoObjectInstanceViewAbstract extends JPanel implements MouseListen
     }
 
     @Override
-    public void dispose() {        
+    public void dispose() {
     }
 
 }

@@ -24,7 +24,7 @@ public class PParameterInstanceViewBin1 extends PParameterInstanceViewBin {
 
     @Override
     public void updateV() {
-        ctrl.setValue(parameterInstance.getValue().getInt());
+        ctrl.setValue(getModel().getValue());
     }
 
     @Override

@@ -57,4 +57,8 @@ public class AxoObjectInstanceCommentCodegenView implements IAxoObjectInstanceCo
         return "";
     }
 
+    @Override
+    public void dispose() {
+    }
+
 }

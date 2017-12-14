@@ -324,4 +324,7 @@ typedef struct ui_object {
         return "";
     }    
     
+    @Override
+    public void dispose() {
+    }
 }

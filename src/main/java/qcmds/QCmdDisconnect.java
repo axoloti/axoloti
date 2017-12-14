@@ -17,8 +17,6 @@
  */
 package qcmds;
 
-import axoloti.MainFrame;
-
 /**
  *
  * @author Johannes Taelman
@@ -35,7 +33,6 @@ public class QCmdDisconnect implements QCmdGUITask {
 
     @Override
     public String GetDoneMessage() {
-        MainFrame.mainframe.WarnedAboutFWCRCMismatch = false;
         return "Done disconnect";
     }
 
@@ -43,6 +40,5 @@ public class QCmdDisconnect implements QCmdGUITask {
     public void DoGUI(QCmdProcessor processor) {
         processor.ClearQueue();
         processor.serialconnection.disconnect();
-        MainFrame.mainframe.ShowDisconnect();
     }
 }

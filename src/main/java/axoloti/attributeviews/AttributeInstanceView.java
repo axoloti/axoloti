@@ -1,6 +1,5 @@
 package axoloti.attributeviews;
 
-import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomInstanceView;
@@ -42,21 +41,16 @@ public abstract class AttributeInstanceView extends AtomInstanceView implements 
     }
 
     @Override
-    public PatchViewSwing getPatchView() {
-        return (PatchViewSwing) axoObjectInstanceView.getPatchView();
-    }
-
-    @Override
     public AttributeInstance getModel() {
         return getController().getModel();
     }
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        if (AttributeInstance.NAME.is(evt)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
+        } else if (AttributeInstance.DESCRIPTION.is(evt)) {
             setToolTipText((String) evt.getNewValue());
         }
     }

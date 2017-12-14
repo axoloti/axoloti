@@ -21,7 +21,6 @@ import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractModel;
 import axoloti.object.IAxoObjectInstance;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
@@ -32,7 +31,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "source")
-public class OutletInstance<T extends Outlet> extends AbstractModel implements Comparable<OutletInstance>, AtomInstance<T> {
+public class OutletInstance<T extends Outlet> extends AtomInstance<T> implements Comparable<OutletInstance> {
 
     @Attribute(name = "outlet", required = false)
     String outletname;
@@ -128,21 +127,12 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        if (AtomDefinition.NAME.is(evt)) {
             setName((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
-            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
-
-    @Override
-    public String[] getPropertyNames() {
-        return new String[]{
-            AtomDefinition.ATOM_NAME,
-            AtomDefinition.ATOM_DESCRIPTION
-        };
-    }    
     
     public String getName() {
         return outletname;
@@ -151,7 +141,7 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
     public void setName(String outletname) {
         String preVal = this.outletname;
         this.outletname = outletname;
-        firePropertyChange(AtomDefinition.ATOM_NAME, preVal, outletname);
+        firePropertyChange(AtomDefinition.NAME, preVal, outletname);
     }
 
     @Override
@@ -159,7 +149,4 @@ public class OutletInstance<T extends Outlet> extends AbstractModel implements C
         return controller;
     }
 
-    public String getDescription() {
-        return getModel().getDescription();
-    }
 }

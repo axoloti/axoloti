@@ -63,11 +63,16 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     @Override
     public void setValue(String selection) {
         String oldvalue = this.selection;
-        int selectedIndex = getIndex(selection);
-        selection = getModel().getMenuEntries().get(selectedIndex);
-        this.selection = selection;
+        if (getModel().getMenuEntries().isEmpty()) {
+            // no menu entries present
+            this.selection = null;
+        } else {
+            int selectedIndex = getIndex(selection);
+            selection = getModel().getMenuEntries().get(selectedIndex);
+            this.selection = selection;
+        }
         firePropertyChange(
-                AttributeInstance.ELEMENT_ATTR_VALUE,
+                ATTR_VALUE,
                 oldvalue, this.selection);
     }
 
@@ -92,11 +97,11 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AxoAttributeComboBox.ATOM_CENTRIES)
-                || evt.getPropertyName().equals(AxoAttributeComboBox.ATOM_MENUENTRIES)) {
-            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+        if (AxoAttributeComboBox.ATOM_CENTRIES.is(evt)) {
+            firePropertyChange(AxoAttributeComboBox.ATOM_CENTRIES, evt.getOldValue(), evt.getNewValue());
+        } else if (AxoAttributeComboBox.ATOM_MENUENTRIES.is(evt)) {
+            firePropertyChange(AxoAttributeComboBox.ATOM_MENUENTRIES, evt.getOldValue(), evt.getNewValue());
         }
     }
-    
-    
+
 }

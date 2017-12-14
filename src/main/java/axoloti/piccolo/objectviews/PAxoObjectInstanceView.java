@@ -1,16 +1,11 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.MainFrame;
-import axoloti.Net;
 import axoloti.PatchViewPiccolo;
 import axoloti.PatchViewSwing;
 import axoloti.Theme;
-import axoloti.attribute.AttributeInstance;
-import axoloti.attributedefinition.AxoAttribute;
 import axoloti.attributeviews.AttributeInstanceView;
 import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.displays.Display;
-import axoloti.displays.DisplayInstance;
 import axoloti.displayviews.IDisplayInstanceView;
 import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.Inlet;
@@ -22,8 +17,6 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.Outlet;
 import axoloti.outlets.OutletInstance;
-import axoloti.parameters.Parameter;
-import axoloti.parameters.ParameterInstance;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.piccolo.PatchPNode;
 import axoloti.piccolo.attributeviews.PAttributeInstanceView;
@@ -31,6 +24,7 @@ import axoloti.piccolo.displayviews.PDisplayInstanceView;
 import axoloti.piccolo.inlets.PInletInstanceView;
 import axoloti.piccolo.outlets.POutletInstanceView;
 import axoloti.piccolo.parameterviews.PParameterInstanceView;
+import axoloti.utils.Preferences;
 import components.piccolo.PLabelComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
@@ -362,7 +356,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             });
             popup.add(popm_help);
         }
-        if (MainFrame.prefs.getExpertMode()) {
+        if (Preferences.getPreferences().getExpertMode()) {
             JMenuItem popm_adapt = new JMenuItem("adapt homonym");
             popm_adapt.addActionListener(new ActionListener() {
                 @Override

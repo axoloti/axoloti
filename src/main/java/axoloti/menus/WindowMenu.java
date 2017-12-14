@@ -100,11 +100,11 @@ public class WindowMenu extends JMenu {
 
     static void PopulateDocuments(JMenu jMenuWindow, String prefix, ArrayList<DocumentWindow> dwl) {
         for (DocumentWindow p : dwl) {
-            JFrame frame = p.GetFrame();
+            JFrame frame = p.getFrame();
             WindowMenuItem wmi = new WindowMenuItem(frame, prefix + frame.getTitle());
             jMenuWindow.add(wmi);
-            if (p.GetChildDocuments() != null) {
-                PopulateDocuments(jMenuWindow, "> " + prefix, p.GetChildDocuments());
+            if (p.getChildDocuments() != null) {
+                PopulateDocuments(jMenuWindow, "> " + prefix, p.getChildDocuments());
             }
         }
     }

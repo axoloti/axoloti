@@ -11,13 +11,8 @@ import axoloti.object.ObjectInstanceController;
  */
 public class AttributeInstanceController extends AbstractController<AttributeInstance, IAttributeInstanceView, ObjectInstanceController> {
 
-
     public AttributeInstanceController(AttributeInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
         super(model, documentRoot, parent);
-    }
-
-    public void changeValue(Object value) {
-        setModelUndoableProperty(AttributeInstance.ELEMENT_ATTR_VALUE, value);
     }
 
 }

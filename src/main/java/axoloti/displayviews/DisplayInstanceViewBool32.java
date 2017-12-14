@@ -1,5 +1,6 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import components.displays.LedstripComponent;
 import java.beans.PropertyChangeEvent;
@@ -25,7 +26,7 @@ class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
             int i = (Integer) evt.getNewValue();
             readout.setValue(i > 0 ? 1 : 0);
         }

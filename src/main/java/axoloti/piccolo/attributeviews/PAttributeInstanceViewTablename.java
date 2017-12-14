@@ -56,7 +56,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
         TFtableName.addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void keyTyped(PInputEvent ke) {
-                TFtableName.transferFocus(ke, getPatchView());
+                //TFtableName.transferFocus(ke, getPatchView());
             }
 
             @Override

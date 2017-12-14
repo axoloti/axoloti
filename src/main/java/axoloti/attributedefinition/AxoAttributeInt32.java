@@ -17,7 +17,8 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.atom.AtomDefinitionController;
+import axoloti.property.IntegerProperty;
+import axoloti.property.Property;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -44,9 +45,9 @@ public class AxoAttributeInt32 extends AxoAttribute {
         this.DefaultValue = DefaultValue;
     }
 
-    public static final String ATOM_MINVALUE = "MinValue";
-    public static final String ATOM_MAXVALUE = "MaxValue";
-    public static final String ATOM_DEFAULTVALUE = "DefaultValue";
+    static final Property ATOM_MINVALUE = new IntegerProperty("MinValue", AxoAttributeInt32.class, "Minimum");
+    static final Property ATOM_MAXVALUE = new IntegerProperty("MaxValue", AxoAttributeInt32.class, "Maximum");
+    static final Property ATOM_DEFAULTVALUE = new IntegerProperty("DefaultValue", AxoAttributeInt32.class, "Default");
 
     public Integer getMinValue() {
         return MinValue;
@@ -86,11 +87,11 @@ public class AxoAttributeInt32 extends AxoAttribute {
     }
 
     @Override
-    public List<String> getEditableFields() {
+    public List<Property> getEditableFields() {
         List l = super.getEditableFields();
-        l.add("MinValue");
-        l.add("MaxValue");
-        l.add("DefaultValue");
+        l.add(ATOM_MINVALUE);
+        l.add(ATOM_MAXVALUE);
+        l.add(ATOM_DEFAULTVALUE);
         return l;
     }
 }

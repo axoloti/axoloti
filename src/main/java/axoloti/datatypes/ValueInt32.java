@@ -18,37 +18,32 @@
 package axoloti.datatypes;
 
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
 
 /**
  *
  * @author Johannes Taelman
  */
-@Root
+//@Root
 public class ValueInt32 extends Value {
 
-    @Attribute(name = "i")
-    private int v;
+    @Attribute
+    private int i;
 
     public ValueInt32() {
+        i = 0;
     }
 
     public ValueInt32(int v) {
-        this.v = v;
+        this.i = v;
     }
 
     public ValueInt32(Value vv) {
-        v = ((ValueInt32) vv).v;
-    }
-
-    @Override
-    public void setInt(int val) {
-        this.v = val;
+        i = ((ValueInt32) vv).i;
     }
 
     @Override
     public int getInt() {
-        return v;
+        return i;
     }
 
     @Override
@@ -62,18 +57,8 @@ public class ValueInt32 extends Value {
     }
 
     @Override
-    public void setFrac(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public double getDouble() {
-        return (double) v;
-    }
-
-    @Override
-    public void setDouble(double d) {
-        v = (int) d;
+        return (double) i;
     }
 
     @Override
@@ -82,8 +67,7 @@ public class ValueInt32 extends Value {
     }
 
     @Override
-    public void setRaw(int i) {
-        setInt(i);
+    public String toString() {
+        return Integer.toString(i);
     }
-
 }

@@ -1,13 +1,13 @@
 package axoloti.attributeviews;
 
+import axoloti.DocumentWindow;
 import axoloti.TextEditor;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceTextEditor;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.ButtonComponent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
@@ -25,23 +25,9 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
     void showEditor() {
         if (getModel().editor == null) {
-            getModel().editor = new TextEditor(getModel().getStringRef(), null);
-            // FIXME: null DocumentWindow arg, was: 
-            // getPatchView().getPatchController().getPatchFrame());
+            DocumentWindow dw = (DocumentWindow) SwingUtilities.getWindowAncestor(this);
+            getModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getController(), dw);
             getModel().editor.setTitle(getController().getParent().getModel().getInstanceName() + "/" + getModel().getModel().getName());
-            getModel().editor.addWindowFocusListener(new WindowFocusListener() {
-                @Override
-                public void windowGainedFocus(WindowEvent e) {
-                    //getModel().setValueBeforeAdjustment(getModel().getStringRef().s);
-                }
-
-                @Override
-                public void windowLostFocus(WindowEvent e) {
-                    //if (!getModel().getValueBeforeAdjustment().equals(getModel().getStringRef().s)) {
-                    //     getModel().getObjectInstance().getPatchModel().setDirty();
-                    // }
-                }
-            });
         }
         getModel().editor.setState(java.awt.Frame.NORMAL);
         getModel().editor.setVisible(true);
@@ -81,4 +67,11 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
             getModel().editor.SetText(sText);
         }
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+    }
+
 }

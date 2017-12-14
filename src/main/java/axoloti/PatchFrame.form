@@ -369,9 +369,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="DSP load "/>
           </Properties>
-          <Events>
-            <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="jLabel1AncestorAdded"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JProgressBar" name="jProgressBarDSPLoad">
           <Properties>

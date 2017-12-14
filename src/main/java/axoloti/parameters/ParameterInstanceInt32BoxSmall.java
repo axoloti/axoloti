@@ -17,8 +17,6 @@
  */
 package axoloti.parameters;
 
-import org.simpleframework.xml.Attribute;
-
 /**
  *
  * @author Johannes Taelman
@@ -26,10 +24,6 @@ import org.simpleframework.xml.Attribute;
 public class ParameterInstanceInt32BoxSmall extends ParameterInstanceInt32Box {
 
     public ParameterInstanceInt32BoxSmall() {
-    }
-
-    public ParameterInstanceInt32BoxSmall(@Attribute(name = "value") int v) {
-        super(v);
     }
 
 }

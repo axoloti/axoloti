@@ -4,7 +4,6 @@ import axoloti.Preset;
 import axoloti.Theme;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
 import components.control.VSliderComponent;
 
 class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32U {
@@ -25,17 +24,17 @@ class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            Preset p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
+                ctrl.setValue((Double)p.getValue());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue().getDouble());
+                ctrl.setValue(getModel().getValue());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
         if ((getModel().getPresets() != null) && (!getModel().getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);

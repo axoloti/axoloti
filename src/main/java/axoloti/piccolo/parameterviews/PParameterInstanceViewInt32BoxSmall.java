@@ -18,7 +18,7 @@ public class PParameterInstanceViewInt32BoxSmall extends PParameterInstanceViewI
 
     @Override
     public PNumberBoxComponent CreateControl() {
-        return new PNumberBoxComponent(0.0, getModel().getMin(),
-                getModel().getMax(), 1.0, 12, 12, axoObjectInstanceView);
+        return new PNumberBoxComponent(0.0, getModel().getMinValue(),
+                getModel().getMaxValue(), 1.0, 12, 12, axoObjectInstanceView);
     }
 }

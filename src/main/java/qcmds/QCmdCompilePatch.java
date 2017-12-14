@@ -57,7 +57,7 @@ public class QCmdCompilePatch extends QCmdShellTask {
     public String[] GetEnv() {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(super.GetEnv()));
-        
+        /*
         Set<String> moduleSet = this.patchController.getModel().getModules();
         if(moduleSet!=null) {
             String modules = "";
@@ -71,7 +71,7 @@ public class QCmdCompilePatch extends QCmdShellTask {
             list.add("MODULES=" + modules);
             list.add("MODULE_DIRS=" + moduleDirs);
         }
-        
+        */
         String vars[] = new String[list.size()];
         list.toArray(vars);
         return vars;

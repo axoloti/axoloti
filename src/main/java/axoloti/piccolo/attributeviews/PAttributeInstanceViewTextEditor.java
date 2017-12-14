@@ -4,8 +4,6 @@ import axoloti.TextEditor;
 import axoloti.attribute.AttributeInstanceTextEditor;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import components.piccolo.control.PButtonComponent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 
 public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
@@ -19,7 +17,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
     }
 
     void showEditor() {
-        if (editor == null) {
+        if (editor == null) {/*
             editor = new TextEditor(attributeInstance.getStringRef(), null);
             // fixme DocumentWindow null arg was: getPatchView().getPatchController().getPatchFrame());
             editor.setTitle(attributeInstance.getObjectInstance().getInstanceName() + "/" + attributeInstance.getModel().getName());
@@ -35,7 +33,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
                     //    attributeInstance.getObjectInstance().getPatchModel().setDirty();
                     //}
                 }
-            });
+            });*/
         }
         editor.setState(java.awt.Frame.NORMAL);
         editor.setVisible(true);

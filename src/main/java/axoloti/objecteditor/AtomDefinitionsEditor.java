@@ -17,14 +17,15 @@
  */
 package axoloti.objecteditor;
 
-import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
-import axoloti.datatypes.ValueFrac32;
-import axoloti.datatypes.ValueInt32;
+import axoloti.atom.AtomDefinitionController;
+import axoloti.mvc.IView;
+import axoloti.mvc.array.ArrayController;
+import axoloti.object.ObjectController;
+import axoloti.property.Property;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,9 +42,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
-import axoloti.mvc.IView;
-import axoloti.mvc.array.ArrayController;
-import axoloti.object.ObjectController;
 
 /**
  *
@@ -54,104 +52,27 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
 
     final T[] AtomDefinitionsList;
     private AtomDefinitionController o;
-    final String atomfield;
+    final Property prop;
     final ObjectController objcontroller;
     JPanel parentPanel;
 
-    public AtomDefinitionsEditor(ObjectController objcontroller, String atomfield, T[] atomDefinitionsList) {
+    public AtomDefinitionsEditor(ObjectController objcontroller, Property atomfield, T[] atomDefinitionsList) {
         this.objcontroller = objcontroller;
-        this.atomfield = atomfield;
+        this.prop = atomfield;
         this.AtomDefinitionsList = atomDefinitionsList;
     }
 
     @Override
-    public ObjectController getController(){
+    public ObjectController getController() {
         return objcontroller;
     }
-    
+
     abstract String getDefaultName();
 
     abstract String getAtomTypeName();
 
     abstract ArrayController getTController();
-   
-    static String StringArrayToString(ArrayList<String> va) {
-        // items quoted, separated by comma
-        // quote characters escaped with backslash
-        String s = "";
-        boolean first = true;
-        for (String s1 : va) {
-            if (!first) {
-                s += ", ";
-            }
-            String s2 = s1.replaceAll("\\\\", "\\\\\\");
-            s2 = s2.replaceAll("\"", "\\\\\"");
-            s += "\"" + s2 + "\"";
-            first = false;
-        }
-        return s;
-    }
 
-    static ArrayList<String> StringToStringArrayList(String s) {
-        // items separated by comma
-        // items can be within quotes
-        // backlash to escape quote character
-        ArrayList<String> l = new ArrayList<String>();
-        int si = 0;
-        int se = 0;
-        boolean quoted = false;
-        boolean escaped = false;
-        String e = "";
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (!escaped) {
-                switch (c) {
-                    case '\"':
-                        if (!quoted) {
-                            quoted = true;
-                            e = e.trim();
-                            si = i;
-                        } else {
-                            quoted = false;
-                            se = i;
-                        }
-                        break;
-                    case ',':
-                        if (!quoted) {
-                            if (i == 0) {
-                                l.add("");
-                                si = 1;
-                            } else if (se > si) {
-                                // quoted
-                                l.add(e);
-                                si = i + 1;
-                                e = "";
-                            } else {
-                                l.add(e);
-                                si = i + 1;
-                                e = "";
-                            }
-                        } else {
-                            e += c;
-                        }
-                        break;
-                    case '\\':
-                        escaped = true;
-                        break;
-                    default:
-                        e += c;
-                }
-            } else {
-                e += c;
-                escaped = false;
-            }
-        }
-        if (e.length() > 0) {
-            l.add(e);
-        }
-        return l;
-    }
-    
     ActionListener actionListenerMoveUp = new ActionListener() {
 
         @Override
@@ -162,11 +83,11 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             }
             getController().addMetaUndo("move " + getAtomTypeName());
 
-            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
             T elem = n.get(row);
             n.remove(row);
             n.add(row - 1, elem);
-            objcontroller.setModelUndoableProperty(atomfield, n);
+            objcontroller.setModelUndoableProperty(prop, n);
 
             jTable1.setRowSelectionInterval(row - 1, row - 1);
         }
@@ -181,13 +102,13 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             if (row < 0) {
                 return;
             }
-            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
             if (row > (n.size() - 1)) {
                 return;
             }
             T o = n.remove(row);
             n.add(row + 1, o);
-            objcontroller.setModelUndoableProperty(atomfield, n);
+            objcontroller.setModelUndoableProperty(prop, n);
 
             jTable1.setRowSelectionInterval(row + 1, row + 1);
         }
@@ -202,9 +123,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             }
             if (jTable1.getRowCount() >= row) {
                 getController().addMetaUndo("remove " + getAtomTypeName());
-                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
                 n.remove(row);
-                objcontroller.setModelUndoableProperty(atomfield, n);
+                objcontroller.setModelUndoableProperty(prop, n);
             }
             if (row > 0) {
                 jTable1.setRowSelectionInterval(row - 1, row - 1);
@@ -224,7 +145,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                 while (true) {
                     i++;
                     boolean free = true;
-                    for (T a : (List<T>) objcontroller.getModelProperty(atomfield)) {
+                    for (T a : (List<T>) objcontroller.getModelProperty(prop)) {
                         if (a.getName().equals(getDefaultName() + i)) {
                             free = false;
                         }
@@ -235,9 +156,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                 }
                 o2.setName(getDefaultName() + i);
                 getController().addMetaUndo("add " + getAtomTypeName());
-                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
                 n.add(o2);
-                objcontroller.setModelUndoableProperty(atomfield, n);
+                objcontroller.setModelUndoableProperty(prop, n);
                 UpdateTable2();
             } catch (InstantiationException ex) {
                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,7 +167,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             }
         }
     };
-
 
     void initComponents(JPanel parentPanel) {
         this.parentPanel = parentPanel;
@@ -312,12 +232,12 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
 
             @Override
             public int getRowCount() {
-                return ((List<T>)objcontroller.getModelProperty(atomfield)).size();
+                return ((List<T>) objcontroller.getModelProperty(prop)).size();
             }
 
             @Override
             public void setValueAt(Object value, int rowIndex, int columnIndex) {
-                List<T> list = (List<T>)objcontroller.getModelProperty(atomfield);
+                List<T> list = (List<T>) objcontroller.getModelProperty(prop);
                 T atomDefinitionController = list.get(rowIndex);
                 if (atomDefinitionController == null) {
                     return;
@@ -327,7 +247,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         assert (value instanceof String);
                         getController().addMetaUndo("edit " + getAtomTypeName() + " name");
                         AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
-                        ox.setModelUndoableProperty(AtomDefinition.ATOM_NAME, value);
+                        ox.setModelUndoableProperty(AtomDefinition.NAME, value);
                     }
                     break;
                     case 1:
@@ -336,9 +256,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                             j.setName(GetAtomDefinition(rowIndex).getName());
                             j.setDescription(GetAtomDefinition(rowIndex).getDescription());
                             getController().addMetaUndo("change " + getAtomTypeName() + " type");
-                            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(atomfield));
+                            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
                             n.set(rowIndex, j);
-                            objcontroller.setModelUndoableProperty(atomfield, n);
+                            objcontroller.setModelUndoableProperty(prop, n);
                             UpdateTable2();
                         } catch (InstantiationException ex) {
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -350,14 +270,14 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         assert (value instanceof String);
                         getController().addMetaUndo("edit " + getAtomTypeName() + " description");
                         AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
-                        ox.setModelUndoableProperty(AtomDefinition.ATOM_DESCRIPTION, value);
+                        ox.setModelUndoableProperty(AtomDefinition.DESCRIPTION, value);
                     }
                     break;
                 }
             }
 
             T GetAtomDefinition(int rowIndex) {
-                List<T> list = (List<T>)objcontroller.getModelProperty(atomfield);
+                List<T> list = (List<T>) objcontroller.getModelProperty(prop);
                 if (rowIndex < list.size()) {
                     return (T) list.get(rowIndex);
                 } else {
@@ -368,7 +288,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 Object returnValue = null;
-                List<T> list = (List<T>)objcontroller.getModelProperty(atomfield);
+                List<T> list = (List<T>) objcontroller.getModelProperty(prop);
 
                 switch (columnIndex) {
                     case 0:
@@ -404,7 +324,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                     UpdateTable2();
                 } else {
                     jButtonMoveUp.setEnabled(row > 0);
-                    jButtonMoveDown.setEnabled(row < ((List<T>)objcontroller.getModelProperty(atomfield)).size() - 1);
+                    jButtonMoveDown.setEnabled(row < ((List<T>) objcontroller.getModelProperty(prop)).size() - 1);
                     jButtonRemove.setEnabled(true);
                     jTable2.removeEditor();
                     UpdateTable2();
@@ -438,109 +358,52 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
 
             @Override
             public int getRowCount() {
-                if (fields == null) {
+                if (properties == null) {
                     return 0;
                 }
-                return fields.size();
+                return properties.size();
             }
 
             @Override
             public void setValueAt(Object value, int rowIndex, int columnIndex) {
-                if (fields == null) {
+                if (properties == null) {
                     return;
                 }
                 if (o == null) {
                     return;
                 }
-                String field = fields.get(rowIndex);
+                Property property = properties.get(rowIndex);
                 switch (columnIndex) {
                     case 0:
                         assert (false);
                         break;
                     case 1:
-                        //Field f = getController().get(rowIndex).fields.get(rowIndex);
-                        Object v = o.getModelProperty(field);
-                        Type t = v.getClass();
-                        if (v instanceof Integer) {
-                            try {
-                                getController().addMetaUndo("edit " + field);
-                                o.setModelUndoableProperty(field, Integer.parseInt((String) value));
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else if (v instanceof Double) {
-                            try {
-                                getController().addMetaUndo("edit " + field);
-                                o.setModelUndoableProperty(field, Double.parseDouble((String) value));
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else if (v instanceof ArrayList) {
-                            try {
-                                String s = (String) value;
-                                o.setModelUndoableProperty(field, StringToStringArrayList(s));
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else if (v instanceof ValueInt32) {
-                            try {
-                                ValueInt32 v2 = new ValueInt32(Integer.parseInt((String) value));
-                                getController().addMetaUndo("edit " + field);
-                                o.setModelUndoableProperty(field, v2);
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else if (v instanceof ValueFrac32) {
-                            try {
-                                ValueFrac32 v2 = new ValueFrac32(Double.parseDouble((String) value));
-                                getController().addMetaUndo("edit " + field);
-                                o.setModelUndoableProperty(field, v2);
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else if (v instanceof String) {
-                            try {
-                                getController().addMetaUndo("edit " + field);
-                                o.setModelUndoableProperty(field, value);
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
+                        //Field f = getController().get(rowIndex).fields.get(rowIndex);                        
+                        Class c = property.getType();
+                        String svalue = (String) value;
+                        Object newValue = property.StringToObj(svalue);
+                        o.setModelUndoableProperty(property, newValue);
                         break;
                 }
             }
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                if (fields == null) {
+                if (properties == null) {
                     return null;
                 }
                 if (o == null) {
                     return null;
                 }
-                String field = fields.get(rowIndex);
+                Property prop = properties.get(rowIndex);
                 Object returnValue = null;
                 switch (columnIndex) {
                     case 0:
-                        returnValue = field;
+                        returnValue = prop.getFriendlyName();
                         break;
                     case 1: {
                         try {
-                            Object v = o.getModelProperty(field);
-                            if (v == null) {
-                                return "";
-                            } else if (v instanceof ArrayList) {
-                                ArrayList<String> va = (ArrayList<String>) v;
-                                returnValue = StringArrayToString(va);
-                            } else if (v instanceof ValueInt32) {
-                                ValueInt32 vi = (ValueInt32) v;
-                                returnValue = String.valueOf(vi.getInt());
-                            } else if (v instanceof ValueFrac32) {
-                                ValueFrac32 vi = (ValueFrac32) v;
-                                returnValue = String.valueOf(vi.getDouble());
-                            } else {
-                                returnValue = v.toString();
-                            }
+                            returnValue = prop.getAsString(o.getModel());
                         } catch (IllegalArgumentException ex) {
                             return "illegal argument";
                         }
@@ -562,16 +425,16 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
         jScrollPane2.setViewportView(jTable2);
     }
 
-    List<String> fields;
+    List<Property> properties;
 
     void UpdateTable2() {
         jButtonRemove.setEnabled(jTable1.getRowCount() > 0);
-        fields = null;
-        List<T> list = (List<T>) objcontroller.getModelProperty(atomfield);
+        properties = null;
+        List<T> list = (List<T>) objcontroller.getModelProperty(prop);
         int row = jTable1.getSelectedRow();
         if (row != -1 && (row < list.size())) {
             o = (AtomDefinitionController) getTController().get(row);
-            fields = o.getModel().getEditableFields();
+            properties = o.getModel().getEditableFields();
         }
         ((AbstractTableModel) jTable2.getModel()).fireTableDataChanged();
     }
@@ -597,10 +460,15 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().contains(atomfield)) {
+        if (prop.is(evt)) {
             if (jTable1 != null) {
                 jTable1.tableChanged(new TableModelEvent(jTable1.getModel()));
             }
         }
     }
+
+    @Override
+    public void dispose() {
+    }
+
 }

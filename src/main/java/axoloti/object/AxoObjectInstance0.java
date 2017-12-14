@@ -6,6 +6,7 @@ import axoloti.displays.DisplayInstance;
 import axoloti.inlets.InletInstance;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
+import axoloti.property.Property;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,12 @@ public abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
 
     @Override
     public void Remove() {
+    }
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+        return l;
     }
 
 }

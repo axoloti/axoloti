@@ -20,6 +20,8 @@ package axoloti.attribute;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.object.AxoObjectInstance;
+import axoloti.property.IntegerProperty;
+import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -30,6 +32,10 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
 
     Integer MinValue;
     Integer MaxValue;
+
+    public static final Property MINVALUE = new IntegerProperty("MinValue", AttributeInstanceSpinner.class, "Minimum");
+    public static final Property MAXVALUE = new IntegerProperty("MaxValue", AttributeInstanceSpinner.class, "Maximum");
+//    public static final Property DEFAULTVALUE = new IntegerProperty("DefaultValue",AttributeInstanceSpinner.class, "Default");
 
     AttributeInstanceSpinner() {
         super();
@@ -48,9 +54,9 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AxoAttributeSpinner.ATOM_MAXVALUE)) {
+        if (AxoAttributeSpinner.ATOM_MAXVALUE.is(evt)) {
             setMaxValue((Integer) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AxoAttributeSpinner.ATOM_MINVALUE)) {
+        } else if (AxoAttributeSpinner.ATOM_MINVALUE.is(evt)) {
             setMinValue((Integer) evt.getNewValue());
         }
     }
@@ -62,7 +68,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     public void setMinValue(Integer MinValue) {
         Integer prevVal = this.MinValue;
         this.MinValue = MinValue;
-        firePropertyChange(AxoAttributeSpinner.ATOM_MINVALUE, prevVal, MinValue);
+        firePropertyChange(MINVALUE, prevVal, MinValue);
     }
 
     public Integer getMaxValue() {
@@ -72,7 +78,7 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     public void setMaxValue(Integer MaxValue) {
         Integer prevVal = this.MaxValue;
         this.MaxValue = MaxValue;
-        firePropertyChange(AxoAttributeSpinner.ATOM_MAXVALUE, prevVal, MaxValue);
+        firePropertyChange(MAXVALUE, prevVal, MaxValue);
     }
 
 }

@@ -17,7 +17,9 @@
  */
 package axoloti.parameters;
 
-import org.simpleframework.xml.Attribute;
+import static axoloti.parameters.ParameterInstance.MIDI_CC;
+import axoloti.property.Property;
+import java.util.List;
 
 /**
  *
@@ -28,8 +30,11 @@ public class ParameterInstanceInt32HRadio extends ParameterInstanceInt32 {
     public ParameterInstanceInt32HRadio() {
     }
 
-    public ParameterInstanceInt32HRadio(@Attribute(name = "value") int v) {
-        super(v);
+    @Override
+    public List<Property> getEditableFields() {
+        List<Property> l = super.getEditableFields();
+        l.add(MIDI_CC);
+        return l;
     }
 
     @Override

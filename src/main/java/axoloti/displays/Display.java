@@ -19,6 +19,8 @@ package axoloti.displays;
 
 import axoloti.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
+import axoloti.property.BooleanProperty;
+import axoloti.property.Property;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,8 @@ public abstract class Display<T extends DisplayInstance> extends AtomDefinition 
 
     @Attribute(required = false)
     public Boolean noLabel;
+
+    public final static Property NOLABEL = new BooleanProperty("NoLabel", Display.class, "Hide label");
 
     public Display() {
     }
@@ -70,7 +74,26 @@ public abstract class Display<T extends DisplayInstance> extends AtomDefinition 
     }
 
     @Override
-    public List<String> getEditableFields() {
-        return new ArrayList<String>();
+    public List<Property> getEditableFields() {
+        List<Property> l = new ArrayList<>();
+        l.add(NOLABEL);
+        return l;
     }
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = super.getProperties();
+        l.add(NOLABEL);
+        return l;
+    }
+
+    public Boolean getNoLabel() {
+        return noLabel;
+    }
+
+    public void setNoLabel(Boolean noLabel) {
+        this.noLabel = noLabel;
+        firePropertyChange(NOLABEL, null, noLabel);
+    }
+
 }

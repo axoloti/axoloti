@@ -13,7 +13,7 @@ public class PParameterInstanceViewBin1Momentary extends PParameterInstanceViewB
 
     @Override
     public void updateV() {
-        ctrl.setValue(parameterInstance.getValue().getInt());
+        ctrl.setValue(getModel().getValue());
     }
 
     @Override

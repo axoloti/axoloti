@@ -17,7 +17,6 @@
  */
 package generatedobjects;
 
-import axoloti.MainFrame;
 import axoloti.attributedefinition.AxoAttribute;
 import axoloti.inlets.Inlet;
 import axoloti.inlets.InletFrac32;
@@ -338,7 +337,7 @@ public class gentools {
             f = new File(path);
             fn = f.getName();
             String objPath = null;
-            for (String s : Preferences.LoadPreferences().getObjectSearchPath()) {
+            for (String s : Preferences.getPreferences().getObjectSearchPath()) {
                 if (path.startsWith(s)) {
                     objPath = path.substring(s.length() + 1);
                     break;
@@ -714,7 +713,7 @@ public class gentools {
     }
 
     static String getObjDir() {
-        AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+        AxolotiLibrary lib = Preferences.getPreferences().getLibrary(AxolotiLibrary.FACTORY_ID);
         String objdir = "objects/";
         if (lib != null) {
             objdir = lib.getLocalLocation() + objdir;

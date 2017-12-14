@@ -60,7 +60,7 @@ public class UndoableEditGroup implements UndoableEdit {
         }
         UndoablePropertyChange lastEdit = elements.get(elements.size() - 1);
         if ((lastEdit.getController() == anAbsEdit.getController())
-                && (lastEdit.getPropertyName().equals(anAbsEdit.getPropertyName()))) {
+                && (lastEdit.getProperty() == anAbsEdit.getProperty())) {
             lastEdit.new_value = anAbsEdit.getNewValue();
             return true;
         } else {
@@ -87,14 +87,14 @@ public class UndoableEditGroup implements UndoableEdit {
     @Override
     public String getUndoPresentationName() {
         if (elements.size() == 1)
-            return "Undo " + actionName + " : " + elements.get(0).getPropertyName();
+            return "Undo " + actionName + " : " + elements.get(0).getProperty().getFriendlyName();
         return "Undo " + actionName;
     }
 
     @Override
     public String getRedoPresentationName() {
         if (elements.size() == 1)
-            return "Redo " + actionName + " : " + elements.get(0).getPropertyName();
+            return "Redo " + actionName + " : " + elements.get(0).getProperty().getFriendlyName();
         return "Redo " + actionName;
     }
 

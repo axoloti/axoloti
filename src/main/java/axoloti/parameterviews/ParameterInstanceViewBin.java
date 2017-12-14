@@ -1,10 +1,10 @@
 package axoloti.parameterviews;
 
-import axoloti.Preset;
+import axoloti.PresetInt;
 import axoloti.Theme;
-import axoloti.datatypes.ValueInt32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameters.ParameterInstanceBin;
 import axoloti.parameters.ParameterInstanceController;
 import java.beans.PropertyChangeEvent;
 
@@ -15,32 +15,37 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
     }
 
     @Override
+    public ParameterInstanceBin getModel() {
+        return (ParameterInstanceBin)controller.getModel();
+    }
+
+    @Override
     public void ShowPreset(int i) {
         presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            PresetInt p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                getControlComponent().setValue(p.value.getDouble());
+                getControlComponent().setValue(p.getValue());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                getControlComponent().setValue(getModel().getValue().getDouble());
+                getControlComponent().setValue(getModel().getValue());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            getControlComponent().setValue(getModel().getValue().getDouble());
+            getControlComponent().setValue(getModel().getValue());
         }
     }
 
     @Override
     public boolean handleAdjustment() {
-        Preset p = getModel().GetPreset(presetEditActive);
+        PresetInt p = getModel().getPreset(presetEditActive);
         if (p != null) {
-            p.value = new ValueInt32((int) getControlComponent().getValue());
-        } else if (getModel().getValue().getInt() != (int) getControlComponent().getValue()) {
+            p.setValue((int) getControlComponent().getValue());
+        } else if (getModel().getValue() != (int) getControlComponent().getValue()) {
             if (controller != null) {
-                ValueInt32 vi32 = new ValueInt32((int)getControlComponent().getValue());
-                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_VALUE, vi32);
+                Integer vi32 = (int)getControlComponent().getValue();
+                getController().setModelUndoableProperty(ParameterInstance.VALUE, vi32);
             }
         } else {
             return false;
@@ -51,9 +56,9 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_VALUE)) {
-            ValueInt32 v = (ValueInt32)evt.getNewValue();
-            ctrl.setValue(v.getInt());
+        if (ParameterInstanceBin.VALUE.is(evt)) {
+            Integer v = (Integer)evt.getNewValue();
+            ctrl.setValue(v);
         }
     }
 }

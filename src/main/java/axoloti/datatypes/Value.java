@@ -20,7 +20,6 @@ package axoloti.datatypes;
 /**
  *
  * @author Johannes Taelman
- * @param <dt> data type
  */
 public abstract class Value implements Comparable {
 
@@ -36,13 +35,6 @@ public abstract class Value implements Comparable {
 
     public abstract double getDouble();
 
-    public abstract void setInt(int i);
-
-    public abstract void setFrac(int frac);
-
-    public abstract void setDouble(double d);
-
     public abstract int getRaw();
 
-    public abstract void setRaw(int i);
 }

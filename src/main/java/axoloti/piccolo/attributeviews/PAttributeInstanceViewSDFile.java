@@ -59,7 +59,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
         TFFileName.addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void keyTyped(PInputEvent ke) {
-                TFFileName.transferFocus(ke, getPatchView());
+                //TFFileName.transferFocus(ke, getPatchView());
             }
 
             @Override

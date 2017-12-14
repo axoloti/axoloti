@@ -17,13 +17,11 @@
  */
 package axoloti.object;
 
-import axoloti.Net;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.Synonyms;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attribute.*;
-import axoloti.datatypes.DataType;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceFactory;
 import axoloti.inlets.Inlet;
@@ -43,14 +41,16 @@ import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceFactory;
 import axoloti.outlets.OutletInt32;
 import axoloti.parameters.*;
+import axoloti.property.BooleanProperty;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persist;
 
@@ -79,7 +79,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "bin16", type = ParameterInstanceBin16.class, inline = true, required = false),
         @ElementList(entry = "bin32", type = ParameterInstanceBin32.class, inline = true, required = false),
         @ElementList(entry = "bool32.tgl", type = ParameterInstanceBin1.class, inline = true, required = false),
-        @ElementList(entry = "bool32.mom", type = ParameterInstanceBin1Momentary.class, inline = true, required = false)})
+        @ElementList(entry = "bool32.mom", type = ParameterInstanceBin1Momentary.class, inline = true, required = false)
+    })
     List<ParameterInstance> parameterInstances = new ArrayList<>();
     @Path("attribs")
     @ElementListUnion({
@@ -296,32 +297,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public Rectangle editorBounds;
     public Integer editorActiveTabIndex;
 
-    public void ObjectModified(Object src) {
-        if (getPatchModel() != null) {
-            if (!getPatchModel().getLocked()) {
-            } else {
-            }
-        }
-
-        try {
-            AxoObject o = (AxoObject) src;
-            if (o.editor != null && o.editor.getBounds() != null) {
-                editorBounds = o.editor.getBounds();
-                editorActiveTabIndex = o.editor.getActiveTabIndex();
-                // FIXME
-                // this.getType().editorBounds = editorBounds;
-                // this.getType().editorActiveTabIndex = editorActiveTabIndex;
-            }
-        } catch (ClassCastException ex) {
-        }
-    }
-
     @Override
-    public void Close() {
-        super.Close();
-        for (AttributeInstance a : attributeInstances) {
-            a.Close();
-        }
+    public void dispose() {
     }
 
     @Override
@@ -353,7 +330,19 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public void Remove() {
         for (ParameterInstance p : getParameterInstances()) {
-            p.Remove();
+            p.dispose();
+        }
+        for (AttributeInstance p : getAttributeInstances()) {
+            p.dispose();
+        }
+        for (DisplayInstance p : getDisplayInstances()) {
+            p.dispose();
+        }
+        for (InletInstance p : getInletInstances()) {
+            p.dispose();
+        }
+        for (OutletInstance p : getOutletInstances()) {
+            p.dispose();
         }
         AxoObjectInstancePatcher aoip = getContainer();
         if (aoip != null) {
@@ -372,29 +361,25 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }    
     
         /* MVC clean code below here */
-    
 
-    public static final String OBJ_LOCATION = "Location";
-    public static final String OBJ_SELECTED = "Selected";
-    public static final String OBJ_INSTANCENAME = "InstanceName";
-    public static final String OBJ_PARAMETER_INSTANCES = "ParameterInstances";
-    public static final String OBJ_ATTRIBUTE_INSTANCES = "AttributeInstances";
-    public static final String OBJ_INLET_INSTANCES = "InletInstances";
-    public static final String OBJ_OUTLET_INSTANCES = "OutletInstances";
-    public static final String OBJ_DISPLAY_INSTANCES = "DisplayInstances";
-    public static final String OBJ_COMMENT = "CommentText";
+    public static final Property OBJ_LOCATION = new ObjectProperty("Location", Point.class, AxoObjectInstance.class);
+    public static final Property OBJ_SELECTED = new BooleanProperty("Selected", AxoObjectInstance.class);
+    public static final Property OBJ_INSTANCENAME = new StringProperty("InstanceName", AxoObjectInstance.class);
+//    public static final Property OBJ_PARAMETER_INSTANCES = new ObjectProperty("ParameterInstances", new ArrayList<ParameterInstance>().getClass(), AxoObjectInstance.class);
+//    public static final Property OBJ_COMMENT = new StringPropertyNull("CommentText", AxoObjectInstance.class);
 
     @Override
-    public String[] getPropertyNames() {
-        return new String[]{
-            OBJ_LOCATION,
-            OBJ_SELECTED,
-            OBJ_INSTANCENAME,
-            OBJ_PARAMETER_INSTANCES,
-            OBJ_ATTRIBUTE_INSTANCES,
-            OBJ_INLET_INSTANCES,
-            OBJ_OUTLET_INSTANCES,
-            OBJ_DISPLAY_INSTANCES};
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+        l.add(OBJ_LOCATION);
+        l.add(OBJ_SELECTED);
+        l.add(OBJ_INSTANCENAME);
+        l.add(OBJ_PARAMETER_INSTANCES);
+        l.add(OBJ_ATTRIBUTE_INSTANCES);
+        l.add(OBJ_INLET_INSTANCES);
+        l.add(OBJ_OUTLET_INSTANCES);
+        l.add(OBJ_DISPLAY_INSTANCES);
+        return l;
     }
     
     @Override
@@ -405,7 +390,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return inletInstances;
     }
 
-    void setInletInstances(ArrayList<InletInstance> inletInstances) {
+    public void setInletInstances(List<InletInstance> inletInstances) {
         List<InletInstance> oldval = this.inletInstances;
         this.inletInstances = inletInstances;
         firePropertyChange(OBJ_INLET_INSTANCES, oldval, inletInstances);
@@ -419,7 +404,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return outletInstances;
     }
 
-    void setOutletInstances(ArrayList<OutletInstance> outletInstances) {
+    public void setOutletInstances(List<OutletInstance> outletInstances) {
         List<OutletInstance> oldval = this.outletInstances;
         this.outletInstances = outletInstances;
         firePropertyChange(OBJ_OUTLET_INSTANCES, oldval, outletInstances);
@@ -433,7 +418,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return parameterInstances;
     }
 
-    void setParameterInstances(ArrayList<ParameterInstance> parameterInstances) {
+    public void setParameterInstances(List parameterInstances) {
         List<ParameterInstance> oldval = this.parameterInstances;
         this.parameterInstances = parameterInstances;
         firePropertyChange(OBJ_PARAMETER_INSTANCES, oldval, parameterInstances);
@@ -447,7 +432,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return attributeInstances;
     }
 
-    void setAttributeInstances(List<AttributeInstance> attributeInstances) {
+    public void setAttributeInstances(List<AttributeInstance> attributeInstances) {
         List<AttributeInstance> oldval = this.attributeInstances;
         this.attributeInstances = attributeInstances;
         firePropertyChange(OBJ_ATTRIBUTE_INSTANCES, oldval, attributeInstances);
@@ -461,7 +446,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return displayInstances;
     }
 
-    void setDisplayInstances(List<DisplayInstance> displayInstances) {
+    public void setDisplayInstances(List<DisplayInstance> displayInstances) {
         List<DisplayInstance> oldval = this.displayInstances;
         this.displayInstances = displayInstances;
         firePropertyChange(OBJ_DISPLAY_INSTANCES, oldval, displayInstances);
@@ -554,16 +539,17 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AxoObject.OBJ_ATTRIBUTES)) {
+        if (AxoObject.OBJ_ATTRIBUTES.is(evt)) {
             attributeInstances = attributeInstanceSync.Sync(attributeInstances, getController().attrs);
-        } else if (evt.getPropertyName().equals(AxoObject.OBJ_PARAMETERS)) {
+        } else if (AxoObject.OBJ_PARAMETERS.is(evt)) {
             parameterInstances = parameterInstanceSync.Sync(parameterInstances, getController().params);
-        } else if (evt.getPropertyName().equals(AxoObject.OBJ_DISPLAYS)) {
+        } else if (AxoObject.OBJ_DISPLAYS.is(evt)) {
             displayInstances = displayInstanceSync.Sync(displayInstances, getController().disps);
-        } else if (evt.getPropertyName().equals(AxoObject.OBJ_INLETS)) {
+        } else if (AxoObject.OBJ_INLETS.is(evt)) {
             inletInstances = inletInstanceSync.Sync(inletInstances, getController().inlets);
-        } else if (evt.getPropertyName().equals(AxoObject.OBJ_OUTLETS)) {
+        } else if (AxoObject.OBJ_OUTLETS.is(evt)) {
             outletInstances = outletInstanceSync.Sync(outletInstances, getController().outlets);
         }
     }
+
 }

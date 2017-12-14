@@ -21,9 +21,8 @@ import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32UMap;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
 import components.control.HSliderComponent;
+import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -60,11 +59,11 @@ public class PAssignModulatorMenuItems {
                 List<Modulation> modulators = parameterInstanceView.getModel().getModulators();
                 for (Modulation n : modulators) {
                     if (m.Modulations.contains(n)) {
-                        System.out.println("modulation restored " + n.getValue().getDouble());
-                        hsl.setValue(n.getValue().getDouble());
+                        System.out.println("modulation restored " + n.getValue());
+                        hsl.setValue(n.getValue());
                     }
                 }
-            }
+            }/*
             hsl.addACtrlListener(new ACtrlListener() {
                 @Override
                 public void ACtrlAdjusted(ACtrlEvent e) {
@@ -85,7 +84,12 @@ public class PAssignModulatorMenuItems {
                         //parameterInstanceView.getModel().SetDirty();
                     }
                 }
-            });
+
+                @Override
+                public void PropertyChanged(PropertyChangeEvent evt) {
+                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                }
+            });*/
             hsls.add(hsl);
             p.add(hsl);
             parent.add(p);

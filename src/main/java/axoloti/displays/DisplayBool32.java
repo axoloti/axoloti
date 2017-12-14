@@ -43,5 +43,4 @@ public class DisplayBool32 extends Display {
     public String getTypeName() {
         return TypeName;
     }
-
 }

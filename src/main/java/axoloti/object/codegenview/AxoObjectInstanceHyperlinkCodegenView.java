@@ -57,4 +57,8 @@ public class AxoObjectInstanceHyperlinkCodegenView implements IAxoObjectInstance
         return "";
     }
 
+    @Override
+    public void dispose() {
+    }
+
 }

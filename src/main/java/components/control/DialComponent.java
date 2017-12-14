@@ -23,6 +23,7 @@ import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import axoloti.utils.Preferences;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
@@ -37,9 +38,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.text.ParseException;
 
 /**
  *
@@ -97,7 +98,7 @@ public class DialComponent extends ACtrlComponent {
             double v;
             if ((MousePressedBtn == MouseEvent.BUTTON1)) {
                 this.robotMoveToCenter();
-                if (MainFrame.prefs.getMouseDialAngular()) {
+                if (Preferences.getPreferences().getMouseDialAngular()) {
                     int y = e.getY();
                     int x = e.getX();
                     int radius = Math.min(getSize().width, getSize().height) / 2 - layoutTick;

@@ -1,15 +1,12 @@
 package axoloti.attributeviews;
 
-import axoloti.atom.AtomDefinitionController;
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
+import components.control.ACtrlComponent;
 import components.control.NumberBoxComponent;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
@@ -38,19 +35,14 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         }
         spinner = new NumberBoxComponent(value, getModel().getModel().getMinValue(), getModel().getModel().getMaxValue(), 1.0);
         add(spinner);
-        spinner.addACtrlListener(new ACtrlListener() {
+        spinner.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                controller.changeValue((Integer) (int) spinner.getValue());
-            }
-
-            @Override
-            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-                getController().addMetaUndo("edit attribute " + getModel().getName());
-            }
-
-            @Override
-            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
+                    getController().addMetaUndo("edit attribute " + getModel().getName());
+                } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
+                    controller.setModelUndoableProperty(AttributeInstanceSpinner.ATTR_VALUE,(Integer) (int) spinner.getValue());
+                }
             }
         });
     }
@@ -72,17 +64,13 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        String propertyName = evt.getPropertyName();
-        if (propertyName.equals(
-                AttributeInstance.ELEMENT_ATTR_VALUE)) {
+        if (AttributeInstanceSpinner.ATTR_VALUE.is(evt)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setValue(newValue);
-        } else if (propertyName.equals(
-                AxoAttributeSpinner.ATOM_MAXVALUE)) {
+        } else if (AttributeInstanceSpinner.MAXVALUE.is(evt)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setMax(newValue);
-        } else if (propertyName.equals(
-                AxoAttributeSpinner.ATOM_MINVALUE)) {
+        } else if (AttributeInstanceSpinner.MINVALUE.is(evt)) {
             Integer newValue = (Integer) evt.getNewValue();
             spinner.setMin(newValue);
         }

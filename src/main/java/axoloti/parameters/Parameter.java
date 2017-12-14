@@ -17,11 +17,12 @@
  */
 package axoloti.parameters;
 
-import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomDefinition;
+import axoloti.atom.AtomDefinitionController;
 import axoloti.datatypes.DataType;
-import axoloti.datatypes.Value;
 import axoloti.object.AxoObjectInstance;
+import axoloti.property.BooleanProperty;
+import axoloti.property.Property;
 import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;
 import java.io.ByteArrayInputStream;
@@ -41,15 +42,14 @@ import org.simpleframework.xml.core.Persister;
  */
 public abstract class Parameter<T extends ParameterInstance> extends AtomDefinition implements Cloneable {
 
-//    @Attribute(required = false)
-//    Value<dt> defaultVal;
     @Attribute(required = false)
     public Boolean noLabel;
+
+    public final static Property NOLABEL = new BooleanProperty("NoLabel", Parameter.class, "Hide label");
 
     public String PropagateToChild;
 
     public String CType() {
-        // fixme
         return "int";
     }
 
@@ -72,6 +72,7 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
     public ParameterInstance CreateInstance(AxoObjectInstance o) {
         ParameterInstance pi = InstanceFactory();
         AtomDefinitionController c = createController(null, null);
+        pi.setController(c);
         c.addView(pi);
         pi.axoObjectInstance = o;
         pi.name = getName();
@@ -80,7 +81,7 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
         return pi;
     }
 
-    abstract public Value getDefaultValue();
+    abstract public Object getDefaultValue();
 
     public abstract T InstanceFactory();
 
@@ -112,8 +113,10 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
     }
 
     @Override
-    public List<String> getEditableFields() {
-        return new ArrayList<String>();
+    public List<Property> getEditableFields() {
+        List<Property> l = new ArrayList<>();
+        l.add(NOLABEL);
+        return l;
     }
 
     public String GetCType() {
@@ -123,4 +126,14 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
     public String GetCUnit() {
         return "param_unit_abstract";
     }
+
+    public Boolean getNoLabel() {
+        return noLabel;
+    }
+
+    public void setNoLabel(Boolean noLabel) {
+        this.noLabel = noLabel;
+        firePropertyChange(NOLABEL, null, this.noLabel);
+    }
+
 }

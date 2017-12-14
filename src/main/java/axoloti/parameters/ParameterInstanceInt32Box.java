@@ -17,38 +17,13 @@
  */
 package axoloti.parameters;
 
-import org.simpleframework.xml.Attribute;
-
 /**
  *
  * @author Johannes Taelman
  */
 public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
 
-    private int min = 0;
-    private int max = 64;
-
     public ParameterInstanceInt32Box() {
-    }
-
-    public ParameterInstanceInt32Box(@Attribute(name = "value") int v) {
-        super(v);
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
     }
 
     @Override

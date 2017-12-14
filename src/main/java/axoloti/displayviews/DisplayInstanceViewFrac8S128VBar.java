@@ -1,5 +1,6 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import axoloti.displays.DisplayInstanceFrac8S128VBar;
 import components.VGraphComponent;
@@ -28,7 +29,7 @@ class DisplayInstanceViewFrac8S128VBar extends DisplayInstanceView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
             vgraph.setValue(getModel().getIDst());
         }
     }

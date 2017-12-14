@@ -1,6 +1,5 @@
 package axoloti.displayviews;
 
-import axoloti.atom.AtomDefinition;
 import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import components.LabelComponent;
@@ -23,11 +22,7 @@ abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceVie
 
     void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        if ((getModel().getModel().noLabel == null) || (getModel().getModel().noLabel == false)) {
-            label = new LabelComponent(getModel().getModel().getName());
-        } else {
-            label = new LabelComponent("");
-        }
+        label = new LabelComponent("");
         add(label);
         setSize(getPreferredSize());
     }
@@ -39,11 +34,22 @@ abstract class DisplayInstanceView extends JPanel implements IDisplayInstanceVie
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        if (DisplayInstance.NAME.is(evt)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
+        } else if (DisplayInstance.NOLABEL.is(evt)) {
+            Boolean b = (Boolean) evt.getNewValue();
+            if (b == null) {
+                b = false;
+            }
+            label.setVisible(!b);
+        } else if (DisplayInstance.DESCRIPTION.is(evt)) {
             setToolTipText((String) evt.getNewValue());
         }
     }
+
+    @Override
+    public void dispose() {
+    }
+
 }

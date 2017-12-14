@@ -35,7 +35,7 @@ public class LibraryMenu extends JMenu {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                for (AxolotiLibrary lib1 : Preferences.LoadPreferences().getLibraries() ) {
+                for (AxolotiLibrary lib1 : Preferences.getPreferences().getLibraries() ) {
                     JMenu plib = new JMenu(lib1.getId());
                     PopulatePatchMenu(plib, lib1.getLocalLocation() + "/patches/", ".axp");
                     add(plib);                    

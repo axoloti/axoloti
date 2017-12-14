@@ -1,13 +1,12 @@
 package axoloti.piccolo;
 
-import axoloti.MainFrame;
 import axoloti.PatchViewPiccolo;
 import axoloti.PatchViewportView;
 import axoloti.Theme;
+import axoloti.utils.Preferences;
 import java.awt.event.InputEvent;
 import javax.swing.JComponent;
 import org.piccolo2d.PNode;
-import org.piccolo2d.util.PDebug;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.extras.swing.PScrollPane;
@@ -113,7 +112,7 @@ public class PatchPCanvas extends PSwingCanvas implements PatchViewportView {
     public PScrollPane getScrollPane() {
         if (scrollPane == null) {
             scrollPane = new PScrollPane();
-            scrollPane.setWheelScrollingEnabled(MainFrame.prefs.getMouseWheelPan());
+            scrollPane.setWheelScrollingEnabled(Preferences.getPreferences().getMouseWheelPan());
         }
         return scrollPane;
     }

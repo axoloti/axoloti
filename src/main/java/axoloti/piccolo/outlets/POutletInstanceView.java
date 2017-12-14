@@ -98,4 +98,8 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     public OutletInstanceController getController() {
         return controller;
     }
+
+    @Override
+    public void dispose() {
+    }
 }

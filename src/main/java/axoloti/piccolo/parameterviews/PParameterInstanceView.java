@@ -88,10 +88,10 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
             valuelbl.addInputEventListener(new PBasicInputEventHandler() {
                 @Override
                 public void mouseClicked(PInputEvent e) {
-                    parameterInstance.setSelectedConv(parameterInstance.getSelectedConv() + 1);
-                    if (parameterInstance.getSelectedConv() >= parameterInstance.getConvs().length) {
-                        parameterInstance.setSelectedConv(0);
-                    }
+//                    parameterInstance.setSelectedConv(parameterInstance.getSelectedConv() + 1);
+//                    if (parameterInstance.getSelectedConv() >= parameterInstance.getConvs().length) {
+//                        parameterInstance.setSelectedConv(0);
+//                    }
                     UpdateUnit();
 
                 }
@@ -145,7 +145,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         m_onParent.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_ON_PARENT, !op);
+                getController().setModelUndoableProperty(ParameterInstance.ON_PARENT, !op);
             }
         });
 
@@ -209,7 +209,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
     void UpdateUnit() {
         if (parameterInstance.getConvs() != null) {
-            valuelbl.setText(parameterInstance.getConvs()[parameterInstance.getSelectedConv()].ToReal(parameterInstance.getValue()));
+            valuelbl.setText("");//parameterInstance.getConvs()[parameterInstance.getSelectedConv()].ToReal(parameterInstance.getValue()));
         }
     }
 
@@ -228,10 +228,10 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         }
     }
 
-    public void SetValueRaw(int v) {
-        parameterInstance.SetValueRaw(v);
-        updateV();
-    }
+//    public void SetValueRaw(int v) {
+//        parameterInstance.SetValueRaw(v);
+//        updateV();
+//    }
 
     public abstract void ShowPreset(int i);
 
@@ -243,14 +243,14 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
     public void IncludeInPreset() {
         if (presetEditActive > 0) {
-            Preset p = parameterInstance.GetPreset(presetEditActive);
+            Preset p = parameterInstance.getPreset(presetEditActive);
             if (p != null) {
                 return;
             }
             if (parameterInstance.getPresets() == null) {
                 parameterInstance.setPresets(new ArrayList<Preset>());
             }
-            p = new Preset(presetEditActive, parameterInstance.getValue());
+            p = getModel().presetFactory(presetEditActive, parameterInstance.getValue());
             parameterInstance.getPresets().add(p);
         }
         ShowPreset(presetEditActive);
@@ -258,7 +258,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
     public void ExcludeFromPreset() {
         if (presetEditActive > 0) {
-            Preset p = parameterInstance.GetPreset(presetEditActive);
+            Preset p = parameterInstance.getPreset(presetEditActive);
             if (p != null) {
                 parameterInstance.getPresets().remove(p);
                 if (parameterInstance.getPresets().isEmpty()) {
@@ -282,7 +282,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         return parameterInstance;
     }
 
-    public Preset AddPreset(int index, Value value) {
+    public Preset AddPreset(int index, Object value) {
         return getController().AddPreset(index, value);
     }
 
@@ -310,6 +310,9 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     @Override
     public ParameterInstanceController getController() {
         return controller;
+    }
+    @Override
+    public void dispose() {
     }
 
 }

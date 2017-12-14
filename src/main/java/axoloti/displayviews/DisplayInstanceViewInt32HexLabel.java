@@ -1,5 +1,6 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -24,7 +25,7 @@ class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
             int i = (Integer) evt.getNewValue();
             readout.setText(String.format("0x%08X", i));
         }

@@ -1,5 +1,6 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import components.displays.ScopeComponent;
 import java.beans.PropertyChangeEvent;
@@ -24,7 +25,7 @@ class DisplayInstanceViewFrac32SChart extends DisplayInstanceViewFrac32 {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
             scope.setValue((Double) evt.getNewValue());
         }
     }

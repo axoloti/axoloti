@@ -17,13 +17,13 @@ public class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 
 
     @Override
     public void updateV() {
-        ctrl.setValue(getModel().getValue().getInt());
+        ctrl.setValue(getModel().getValue());
     }
 
     @Override
     public PNumberBoxComponent CreateControl() {
-        PNumberBoxComponent n = new PNumberBoxComponent(0.0, getModel().getMin(),
-                getModel().getMax(), 1.0, axoObjectInstanceView);
+        PNumberBoxComponent n = new PNumberBoxComponent(0.0, getModel().getMinValue(),
+                getModel().getMaxValue(), 1.0, axoObjectInstanceView);
         return n;
     }
 

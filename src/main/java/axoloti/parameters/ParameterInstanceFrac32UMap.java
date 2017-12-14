@@ -17,7 +17,8 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
+import axoloti.property.Property;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -32,6 +33,13 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
 
     public ParameterInstanceFrac32UMap(@Attribute(name = "value") double v) {
         super(v);
+    }
+
+    @Override
+    public List<Property> getEditableFields() {
+        List<Property> l = super.getEditableFields();
+        l.add(MIDI_CC);
+        return l;
     }
 
     String pfunction;

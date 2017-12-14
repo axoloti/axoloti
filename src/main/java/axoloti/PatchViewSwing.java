@@ -17,8 +17,8 @@
  */
 package axoloti;
 
-import axoloti.object.IAxoObjectInstance;
 import axoloti.object.AxoObjects;
+import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -460,7 +460,7 @@ public class PatchViewSwing extends PatchView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
+        if (PatchModel.PATCH_LOCKED.is(evt)) {
             if ((Boolean)evt.getNewValue() == false) {
                 Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
@@ -518,10 +518,16 @@ public class PatchViewSwing extends PatchView {
         }
     }
 
+    @Override
     public void add(INetView view) {
         if (netLayerPanel != null) {
             netLayerPanel.add((NetView) view);
         }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
     }
 
 }

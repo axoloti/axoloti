@@ -17,14 +17,13 @@
  */
 package axoloti.dialogs;
 
-import axoloti.ConnectionStatusListener;
-import axoloti.MainFrame;
 import axoloti.CConnection;
 import axoloti.IConnection;
+import axoloti.TargetController;
+import axoloti.TargetModel;
 import axoloti.VirtualInputEvent;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
-import axoloti.menus.StandardMenubar;
 import components.RControlButtonWithLed;
 import components.RControlColorLed;
 import components.RControlEncoder;
@@ -37,13 +36,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.InputMap;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import qcmds.QCmdMemRead;
@@ -54,7 +52,7 @@ import qcmds.QCmdVirtualInputEvent;
  *
  * @author Johannes Taelman
  */
-public class AxolotiRemoteControl extends javax.swing.JFrame implements ConnectionStatusListener {
+public class AxolotiRemoteControl extends TJFrame {
 
     JPanel jPanel1;
     JPanel jPanel2;
@@ -69,10 +67,9 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
      * TODO: (low priority) add virtual LEDs
      *
      */
-    public AxolotiRemoteControl() {
+    public AxolotiRemoteControl(TargetController controller) {
+        super(controller);
         initComponents();
-        setJMenuBar(new StandardMenubar());
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         JPanel jPanelY = new JPanel();
         jPanelY.setLayout(new BoxLayout(jPanelY, BoxLayout.Y_AXIS));
         JPanel jPanelX1 = new JPanel();
@@ -106,7 +103,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
                     dirty = false;
                     g2d.drawImage(bImage, 0, 0, 256, 128, null);
                 }
-                super.paintIcon(c, g, x, y); //To change body of generated methods, choose Tools | Templates.
+                super.paintIcon(c, g, x, y);
             }
 
         };
@@ -165,7 +162,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         encoders[0] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
@@ -179,7 +176,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         encoders[1] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
@@ -193,7 +190,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         encoders[2] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
@@ -207,7 +204,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         encoders[3] = new RControlEncoder() {
             @Override
             public void DoRotation(int ticks) {
-                QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
@@ -234,21 +231,27 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         jPanelX2.setLayout(new BoxLayout(jPanelX2, BoxLayout.X_AXIS));
         btn = new JButton("↑");
         btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_MAIN));
+        buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("↓");
         btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_MAIN));
+        buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("F");
         btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_F, VirtualInputEvent.QUADRANT_MAIN));
+        buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("⇧");
         btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_S, VirtualInputEvent.QUADRANT_MAIN));
+        buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("✗");
         btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_X, VirtualInputEvent.QUADRANT_MAIN));
+        buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("✓");
         btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_E, VirtualInputEvent.QUADRANT_MAIN));
+        buttons.add(btn);
         jPanelX2.add(btn);
         jPanelY.add(jPanelX2);
         JPanel jPanelX3 = new JPanel();
@@ -265,7 +268,6 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
         }
 
         add(jPanelY);
-        CConnection.GetConnection().addConnectionStatusListener(this);
     }
 
     VirtualInputEvent KeyToVirtualEvent(KeyEvent e, boolean pressed) {
@@ -286,16 +288,12 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     }
 
     @Override
-    public void ShowConnect() {
-        for (JButton btn : buttons) {
-            btn.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void ShowDisconnect() {
-        for (JButton btn : buttons) {
-            btn.setEnabled(false);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (TargetModel.CONNECTION.is(evt)) {
+            boolean b = evt.getNewValue() != null;
+            for (JButton btn : buttons) {
+                btn.setEnabled(b);
+            }
         }
     }
 
@@ -315,7 +313,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
 
         @Override
         public void mousePressed(MouseEvent e) {
-            QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+            QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
             processor.AppendToQueue(new QCmdVirtualInputEvent(
                     new VirtualInputEvent(
                             button,
@@ -328,7 +326,7 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+            QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
             processor.AppendToQueue(new QCmdVirtualInputEvent(
                     new VirtualInputEvent(
                             button,
@@ -370,12 +368,12 @@ public class AxolotiRemoteControl extends javax.swing.JFrame implements Connecti
     }// </editor-fold>//GEN-END:initComponents
 
     void tx(VirtualInputEvent evt) {
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         processor.AppendToQueue(new QCmdVirtualInputEvent(evt));
     }
 
     public void refreshFB() {
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         ChunkData framebuffer = CConnection.GetConnection().GetFWChunks().GetOne(FourCCs.FW_LCD_FRAMEBUFFER);
         framebuffer.data.rewind();
         int width = framebuffer.data.getInt();

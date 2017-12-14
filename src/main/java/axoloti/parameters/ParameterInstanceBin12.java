@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -37,11 +36,6 @@ public class ParameterInstanceBin12 extends ParameterInstanceBin {
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         return "";
-    }
-
-    @Override
-    public void setValue(Value value) {
-        super.setValue(value);
     }
 
 }

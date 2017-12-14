@@ -17,20 +17,22 @@
  */
 package axoloti.displays;
 
-import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
-import axoloti.mvc.AbstractModel;
+import axoloti.property.ObjectProperty;
+import axoloti.property.PropagatedProperty;
+import axoloti.property.Property;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance<T extends Display> extends AbstractModel implements AtomInstance<T> {
+public abstract class DisplayInstance<T extends Display> extends AtomInstance<T> {
 
     @Attribute
     String name;
@@ -41,6 +43,9 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     protected int offset;
 
     AtomDefinitionController controller;
+
+    public static final Property DISP_VALUE = new ObjectProperty("Value", Object.class, DisplayInstance.class);
+    public static final PropagatedProperty NOLABEL = new PropagatedProperty(Display.NOLABEL, DisplayInstance.class);
 
     public DisplayInstance(AtomDefinitionController controller) {
         this.controller = controller;
@@ -85,17 +90,19 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     }
 
     public abstract Object getValue();
-//    abstract void setValue(Object o);
+    public abstract void setValue(Object o);
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
         // triggered by a model definition change, triggering instance view changes
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)
-                || evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
-            firePropertyChange(
-                    evt.getPropertyName(),
-                    evt.getOldValue(),
-                    evt.getNewValue());
+        final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{NOLABEL};
+        for (PropagatedProperty p : propagateProperties) {
+            if (p.is(evt)) {
+                firePropertyChange(p,
+                        evt.getOldValue(),
+                        evt.getNewValue());
+            }
         }
     }
 
@@ -103,4 +110,12 @@ public abstract class DisplayInstance<T extends Display> extends AbstractModel i
     public AtomDefinitionController getController() {
         return controller;
     }
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = super.getProperties();
+        l.add(NOLABEL);
+        return l;
+    }
+
 }

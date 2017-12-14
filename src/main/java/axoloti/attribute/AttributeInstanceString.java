@@ -19,9 +19,10 @@ package axoloti.attribute;
 
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttribute;
-import axoloti.attributeviews.IAttributeInstanceView;
 import axoloti.object.AxoObjectInstance;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
+import java.util.List;
 
 /**
  *
@@ -35,6 +36,15 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
 
     AttributeInstanceString(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         super(controller, axoObj1);
+    }
+
+    public static final StringProperty ATTR_VALUE = new StringProperty("Value", AttributeInstanceString.class);
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = super.getProperties();
+        l.add(ATTR_VALUE);
+        return l;
     }
 
     public abstract String getValue();

@@ -21,7 +21,6 @@ import axoloti.atom.AtomDefinition;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.atom.AtomInstance;
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractModel;
 import axoloti.object.IAxoObjectInstance;
 import java.beans.PropertyChangeEvent;
 import org.simpleframework.xml.*;
@@ -32,7 +31,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "dest")
-public class InletInstance<T extends Inlet> extends AbstractModel implements AtomInstance<T> {
+public class InletInstance<T extends Inlet> extends AtomInstance<T> {
 
     @Attribute(name = "inlet", required = false)
     protected String inletname;
@@ -82,14 +81,6 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
         RefreshName();
     }
 
-    @Override
-    public String[] getPropertyNames() {
-        return new String[]{
-            AtomDefinition.ATOM_NAME,
-            AtomDefinition.ATOM_DESCRIPTION
-        };
-    }
-
     public DataType getDataType() {
         return getModel().getDatatype();
     }
@@ -128,10 +119,9 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        super.modelPropertyChange(evt);
+        if (AtomDefinition.NAME.is(evt)) {
             setName((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
-            firePropertyChange(evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
     }
 
@@ -147,10 +137,7 @@ public class InletInstance<T extends Inlet> extends AbstractModel implements Ato
     public void setName(String inletname) {
         String preVal = this.inletname;
         this.inletname = inletname;
-        firePropertyChange(AtomDefinition.ATOM_NAME, preVal, inletname);
+        firePropertyChange(NAME, preVal, inletname);
     }
 
-    public String getDescription() {
-        return getModel().getDescription();
-    }
 }

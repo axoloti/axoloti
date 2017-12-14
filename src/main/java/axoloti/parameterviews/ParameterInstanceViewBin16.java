@@ -1,8 +1,6 @@
 package axoloti.parameterviews;
 
-import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin16;
 import axoloti.parameters.ParameterInstanceController;
 import components.control.CheckboxComponent;
 

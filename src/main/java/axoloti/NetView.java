@@ -52,7 +52,7 @@ public class NetView extends JComponent implements INetView {
             if (ov == null) {
                 throw new Error("no corresponding outlet instance view found");
             }
-            for (IOutletInstanceView o2: ov.getOutletInstanceViews()) {
+            for (IOutletInstanceView o2 : ov.getOutletInstanceViews()) {
                 if (o2.getController().getModel() == i) {
                     source.add(o2);
                     break;
@@ -65,7 +65,7 @@ public class NetView extends JComponent implements INetView {
             if (ov == null) {
                 throw new Error("no corresponding inlet instance view found");
             }
-            for (IInletInstanceView o2: ov.getInletInstanceViews()) {
+            for (IInletInstanceView o2 : ov.getInletInstanceViews()) {
                 if (o2.getController().getModel() == i) {
                     dest.add(o2);
                     break;
@@ -239,8 +239,8 @@ public class NetView extends JComponent implements INetView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if ((evt.getPropertyName().equals(NetController.NET_SOURCES))
-                || (evt.getPropertyName().equals(NetController.NET_DESTINATIONS))) {
+        if (Net.NET_SOURCES.is(evt)
+                || Net.NET_DESTINATIONS.is(evt)) {
             PostConstructor();
             updateBounds();
             repaint();
@@ -250,5 +250,9 @@ public class NetView extends JComponent implements INetView {
     @Override
     public AbstractController getController() {
         return controller;
+    }
+
+    @Override
+    public void dispose() {
     }
 }

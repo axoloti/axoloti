@@ -40,4 +40,7 @@ public abstract class PDisplayInstanceView extends PatchPNode implements IDispla
     public AbstractController getController() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    @Override
+    public void dispose() {
+    }
 }

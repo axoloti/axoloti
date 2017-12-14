@@ -52,9 +52,10 @@ public class SDCardInfo {
         this.sectorsize = sectorsize;
         files.clear();
         busy = true;
-        if ((MainFrame.mainframe != null) && (MainFrame.mainframe.filemanager != null)) {
-            MainFrame.mainframe.filemanager.refresh();
-        }
+//      TODO!!!
+//        if ((MainFrame.mainframe != null) && (MainFrame.mainframe.filemanager != null)) {
+//            MainFrame.mainframe.filemanager.refresh();
+//        }
     }
 
     public synchronized ArrayList<SDFileInfo> getFiles() {
@@ -103,13 +104,15 @@ public class SDCardInfo {
         if (sdf != null) {
             sdf.size = size;
             sdf.timestamp = date;
-            MainFrame.mainframe.filemanager.refresh();
+// TODO!!!MVC
+//            MainFrame.mainframe.filemanager.refresh();
             return;
         }
         sdf = new SDFileInfo(fname, date, size);
         files.add(sdf);
 //        Logger.getLogger(SDCardInfo.class.getName()).log(Level.SEVERE, "file added " + files.size() + ":" + fname);
-        MainFrame.mainframe.filemanager.refresh();
+// TODO!!!MVC
+//        MainFrame.mainframe.filemanager.refresh();
     }
 
     public synchronized void Delete(String fname) {
@@ -123,7 +126,8 @@ public class SDCardInfo {
         }
         if (f1 != null) {
             files.remove(f1);
-            MainFrame.mainframe.filemanager.refresh();
+// TODO!!!MVC
+//            MainFrame.mainframe.filemanager.refresh();
         }
     }
 

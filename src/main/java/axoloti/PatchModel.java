@@ -33,7 +33,14 @@ import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.outlets.OutletInstance;
 import axoloti.parameters.ParameterInstance;
+import axoloti.property.BooleanProperty;
+import axoloti.property.IntegerProperty;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
+import axoloti.property.StringPropertyNull;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.Preferences;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -248,7 +255,7 @@ public class PatchModel extends AbstractModel {
         Serializer serializer = new Persister(strategy);
         try {
             serializer.write(this, f);
-            MainFrame.prefs.addRecentFile(f.getAbsolutePath());
+            Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -273,11 +280,22 @@ public class PatchModel extends AbstractModel {
 
 
     void refreshIndexes() {
-        // FIXME
+        /* // Why would we need an index in objectinstances?
+        if (objectinstances == null) {
+            return;
+        }
+        for (int i = 0; i < objectinstances.size(); i++) {
+            IAxoObjectInstance o = objectinstances.get(i);
+            o.
+        }
+         */
     }
 
     void SortByPosition() {
+        ArrayList<IAxoObjectInstance> clone = new ArrayList<>();
+        clone.addAll(objectinstances);
         Collections.sort(this.objectinstances);
+        setObjectinstances(clone);
         refreshIndexes();
     }
 
@@ -425,7 +443,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public String getModuleDir(String module) {
-        for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
+        for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
             File f = new File(lib.getLocalLocation() + "modules/" + module);
             if (f.exists() && f.isDirectory()) {
                 return lib.getLocalLocation() + "modules/" + module;
@@ -575,10 +593,10 @@ public class PatchModel extends AbstractModel {
         for (IAxoObjectInstance o : objectinstances) {
             for (ParameterInstance param : o.getParameterInstances()) {
                 ParameterInstance p7 = (ParameterInstance) param;
-                Preset p = p7.GetPreset(i);
+                Preset p = p7.getPreset(i);
                 if (p != null) {
                     pdata[index * 2] = p7.getIndex();
-                    pdata[index * 2 + 1] = p.value.getRaw();
+                    pdata[index * 2 + 1] = 0;// FIXME p.value.getRaw();
                     index++;
                     if (index == getNPresetEntries()) {
                         Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", getNPresetEntries());
@@ -668,6 +686,11 @@ public class PatchModel extends AbstractModel {
         return notes;
     }
 
+    public void setNotes(String notes) {
+        this.notes = notes;
+        firePropertyChange(PATCH_NOTES, null, notes);
+    }
+
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
         for (IAxoObjectInstance o : objectinstances) {
@@ -721,44 +744,43 @@ public class PatchModel extends AbstractModel {
 
     // ------------- new MVC methods
 
-    public final static String PATCH_LOCKED = "Locked";
-    public final static String PATCH_FILENAME = "FileNamePath";
-    public final static String PATCH_DSPLOAD = "DspLoad";
-    public final static String PATCH_OBJECTINSTANCES = "Objectinstances";
-    public final static String PATCH_NETS = "Nets";
-    public final static String PATCH_AUTHOR = "Author";
-    public final static String PATCH_LICENSE = "License";
-    public final static String PATCH_ATTRIBUTIONS = "Attributions";
-    public final static String PATCH_SUBPATCHMODE = "SubPatchMode";
-    public final static String PATCH_NPRESETENTRIES = "NPresetEntries";
-    public final static String PATCH_NPRESETS = "NPresets";
-    public final static String PATCH_NMODULATIONSOURCES = "NModulationSources";
-    public final static String PATCH_NMODULATIONTARGETSPERSOURCE = "NModulationTargetsPerSource";
-    public final static String PATCH_MIDICHANNEL = "MidiChannel";
-    public final static String PATCH_MIDISELECTOR = "MidiSelector";
-
-    public final static String[] PROPERTYNAMES = new String[]{
-        PATCH_LOCKED,
-        PATCH_FILENAME,
-        PATCH_DSPLOAD,
-        PATCH_OBJECTINSTANCES,
-        PATCH_NETS,
-        PATCH_AUTHOR,
-        PATCH_LICENSE,
-        PATCH_ATTRIBUTIONS,
-        PATCH_SUBPATCHMODE,
-        PATCH_NPRESETENTRIES,
-        PATCH_NPRESETS,
-        PATCH_NMODULATIONSOURCES,
-        PATCH_NMODULATIONTARGETSPERSOURCE,
-        PATCH_MIDICHANNEL,
-        PATCH_MIDISELECTOR
-    };
+    public final static Property PATCH_LOCKED = new BooleanProperty("Locked", PatchModel.class);
+    public final static Property PATCH_FILENAME = new StringPropertyNull("FileNamePath", PatchModel.class);
+    public final static Property PATCH_DSPLOAD = new IntegerProperty("DspLoad", PatchModel.class);
+    public final static Property PATCH_OBJECTINSTANCES = new ObjectProperty("Objectinstances", ArrayList.class, PatchModel.class);
+    public final static Property PATCH_NETS = new ObjectProperty("Nets", ArrayList.class, PatchModel.class);
+    public final static Property PATCH_AUTHOR = new StringPropertyNull("Author", PatchModel.class);
+    public final static Property PATCH_LICENSE = new StringPropertyNull("License", PatchModel.class);
+    public final static Property PATCH_ATTRIBUTIONS = new StringPropertyNull("Attributions", PatchModel.class);
+    public final static Property PATCH_SUBPATCHMODE = new ObjectProperty("SubPatchMode", SubPatchMode.class, PatchModel.class);
+    public final static Property PATCH_NPRESETENTRIES = new IntegerProperty("NPresetEntries", PatchModel.class);
+    public final static Property PATCH_NPRESETS = new IntegerProperty("NPresets", PatchModel.class);
+    public final static Property PATCH_NMODULATIONSOURCES = new IntegerProperty("NModulationSources", PatchModel.class);
+    public final static Property PATCH_NMODULATIONTARGETSPERSOURCE = new IntegerProperty("NModulationTargetsPerSource", PatchModel.class);
+    public final static Property PATCH_MIDICHANNEL = new IntegerProperty("MidiChannel", PatchModel.class);
+    public final static Property PATCH_MIDISELECTOR = new BooleanProperty("MidiSelector", PatchModel.class);
+    public final static StringProperty PATCH_NOTES = new StringProperty("Notes", PatchModel.class);
 
     @Override
-    public String[] getPropertyNames() {
-        return PROPERTYNAMES;
-    }    
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+        l.add(PATCH_LOCKED);
+        l.add(PATCH_FILENAME);
+        l.add(PATCH_DSPLOAD);
+        l.add(PATCH_OBJECTINSTANCES);
+        l.add(PATCH_NETS);
+        l.add(PATCH_AUTHOR);
+        l.add(PATCH_LICENSE);
+        l.add(PATCH_ATTRIBUTIONS);
+        l.add(PATCH_SUBPATCHMODE);
+        l.add(PATCH_NPRESETENTRIES);
+        l.add(PATCH_NPRESETS);
+        l.add(PATCH_NMODULATIONSOURCES);
+        l.add(PATCH_NMODULATIONTARGETSPERSOURCE);
+        l.add(PATCH_MIDICHANNEL);
+        l.add(PATCH_MIDISELECTOR);
+        return l;
+    }
     
     public String getFileNamePath() {
         if (FileNamePath == null) {

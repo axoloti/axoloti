@@ -4,6 +4,7 @@ import axoloti.NetController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IModel;
+import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,29 +22,29 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
     public abstract void disposeController(T controller);
 
     final P parent;
-    final String propertyName;
+    final Property property;
     
-    public ArrayController(P parent, String propertyName) {
+    public ArrayController(P parent, Property property) {
         this.parent = parent;
-        this.propertyName = propertyName;
+        this.property = property;
         subcontrollers = new ArrayList<>();
         syncControllers();
     }
 
     public void add(M m) {
-        ArrayList<M> n = new ArrayList<>(((List<M>)parent.getModelProperty(propertyName)));
+        ArrayList<M> n = new ArrayList<>(((List<M>) parent.getModelProperty(property)));
         if (n.contains(m)) {
             System.out.println("array already contains model :" + m.toString());
         }
         n.add(m);
-        parent.setModelUndoableProperty(propertyName, n);
+        parent.setModelUndoableProperty(property, n);
     }
 
     public boolean remove(M m) {
-        ArrayList<M> n = new ArrayList<>(((List<M>)parent.getModelProperty(propertyName)));
+        ArrayList<M> n = new ArrayList<>(((List<M>) parent.getModelProperty(property)));
         boolean r = n.remove(m);
         if (r) {
-            parent.setModelUndoableProperty(propertyName, n);
+            parent.setModelUndoableProperty(property, n);
         } else {
             throw new Error("model did not contain " + m);
         }
@@ -52,7 +53,7 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
 
     public final void syncControllers() {
         ArrayList<T> subcontrollers2 = (ArrayList<T>) subcontrollers.clone();
-        List<M> models = (List<M>)parent.getModelProperty(propertyName);
+        List<M> models = (List<M>) parent.getModelProperty(property);
         for (T c: subcontrollers2) {
             M m = (M)c.getModel();
             if (!models.contains(m)) {
@@ -77,7 +78,8 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(propertyName)) {
+        if (property.is(evt)) {
+            // TODO : change to comparing properties
             syncControllers();
         }
     }
@@ -95,13 +97,13 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
         if (row < 0) {
             return;
         }
-        ArrayList<M> n = new ArrayList<>(((List<M>)parent.getModelProperty(propertyName)));
+        ArrayList<M> n = new ArrayList<>(((List<M>) parent.getModelProperty(property)));
         if (row > (n.size() - 1)) {
             return;
         }
         M o = n.remove(row);
         n.add(row + 1, o);
-        parent.setModelUndoableProperty(propertyName, n.toArray());
+        parent.setModelUndoableProperty(property, n.toArray());
     }
 
     public int indexOf(NetController netController) {

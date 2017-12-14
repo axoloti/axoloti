@@ -15,17 +15,15 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package components;
+package axoloti.propertyViewSwingMenu;
 
-import axoloti.dialogs.MidiAssignments;
-import axoloti.parameters.ParameterInstance;
-import axoloti.parameters.ParameterInstanceController;
+import axoloti.mvc.AbstractController;
+import axoloti.property.MidiCCProperty;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
-import javax.swing.JMenuItem;
+import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -33,12 +31,17 @@ import javax.swing.JRadioButton;
  *
  * @author Johannes Taelman
  */
-public class AssignMidiCCMenuItems implements ActionListener {
+public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
     
-    final ParameterInstanceController parameterInstanceController;
+    final MidiCCProperty property;
+    final AbstractController ctrl;
 
-    public AssignMidiCCMenuItems(final ParameterInstanceController parameterInstanceController, JComponent parent) {
-        this.parameterInstanceController = parameterInstanceController;
+    public AssignMidiCCMenuItems(AbstractController ctrl, MidiCCProperty property) {
+        super();
+        this.property = property;
+        this.ctrl = ctrl;
+        setText("Midi CC");
+        
         /*
         JMenuItem m = new JMenuItem("Assign...");
         m.addActionListener(new ActionListener() {
@@ -59,8 +62,7 @@ public class AssignMidiCCMenuItems implements ActionListener {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
-        int cc = parameterInstanceController.getModel().getMidiCC();
-        parent.add(p);
+        Integer cc = property.get(ctrl.getModel());
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 8; j++) {
                 int k = i + j * 16;
@@ -85,6 +87,7 @@ public class AssignMidiCCMenuItems implements ActionListener {
                 }
             }
         }
+        add(p);        
     }
 
     @Override
@@ -92,10 +95,10 @@ public class AssignMidiCCMenuItems implements ActionListener {
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             Integer i = Integer.parseInt(s.substring(2));
-            parameterInstanceController.setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_MIDI_CC, i);
+            ctrl.setModelUndoableProperty(property, i);
         } else if (s.equals("none")) {
             Integer v = -1;
-            parameterInstanceController.setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_MIDI_CC, v);
+            ctrl.setModelUndoableProperty(property, v);
         }        
     }
 }

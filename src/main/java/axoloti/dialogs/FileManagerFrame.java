@@ -17,27 +17,28 @@
  */
 package axoloti.dialogs;
 
-import axoloti.ConnectionStatusListener;
-import axoloti.MainFrame;
-import static axoloti.MainFrame.prefs;
+import axoloti.CConnection;
 import axoloti.SDCardInfo;
 import axoloti.SDFileInfo;
-import axoloti.CConnection;
+import axoloti.TargetController;
+import axoloti.TargetModel;
+import axoloti.utils.Preferences;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -47,24 +48,20 @@ import qcmds.QCmdGetFileList;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadFile;
-import axoloti.SDCardMountStatusListener;
-import javax.swing.SwingUtilities;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class FileManagerFrame extends javax.swing.JFrame implements ConnectionStatusListener, SDCardMountStatusListener {
+public class FileManagerFrame extends TJFrame {
 
     /**
      * Creates new form FileManagerFrame
      */
-    public FileManagerFrame() {
+    public FileManagerFrame(TargetController controller) {
+        super(controller);
         initComponents();
         fileMenu1.initComponents();
-        CConnection.GetConnection().addConnectionStatusListener(this);
-        CConnection.GetConnection().addSDCardMountStatusListener(this);
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jLabelSDInfo.setText("");
 
         jFileTable.setModel(new AbstractTableModel() {
@@ -159,7 +156,7 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
                 try {
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                    QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+                    QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
                     if (CConnection.GetConnection().isConnected()) {
                         for (File f : droppedFiles) {
                             System.out.println(f.getName());
@@ -372,10 +369,10 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
             }
         }
         if (CConnection.GetConnection().isConnected()) {
-            final JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+            final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
+                Preferences.getPreferences().setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
                 File f = fc.getSelectedFile();
                 if (f != null) {
                     if (!f.canRead()) {
@@ -393,8 +390,6 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }//GEN-LAST:event_formWindowActivated
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        CConnection.GetConnection().removeConnectionStatusListener(this);
-        CConnection.GetConnection().removeSDCardMountStatusListener(this);
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -475,24 +470,13 @@ public class FileManagerFrame extends javax.swing.JFrame implements ConnectionSt
     }
 
     @Override
-    public void ShowConnect() {
-        ShowConnect(true);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (TargetModel.CONNECTION.is(evt)) {
+            ShowConnect(evt.getNewValue() != null);
+        } else if (TargetModel.HAS_SDCARD.is(evt)) {
+            Boolean b = (Boolean) evt.getNewValue();
+            ShowConnect(b);
+        }
     }
 
-    @Override
-    public void ShowDisconnect() {
-        ShowConnect(false);
-        SDCardInfo.getInstance().SetInfo(0, 0, 0);
-    }
-
-    @Override
-    public void ShowSDCardMounted() {
-        ShowConnect(true);
-    }
-
-    @Override
-    public void ShowSDCardUnmounted() {
-        ShowConnect(false);
-        SDCardInfo.getInstance().SetInfo(0, 0, 0);        
-    }
 }

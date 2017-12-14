@@ -1,6 +1,7 @@
 package axoloti.parameters;
 
-import axoloti.datatypes.ValueInt32;
+import axoloti.property.IntegerProperty;
+import axoloti.property.Property;
 
 /**
  *
@@ -15,12 +16,16 @@ public abstract class ParameterInt32<T extends ParameterInstanceInt32> extends P
         super(name);
     }
 
+    public final static Property VALUE_MIN = new IntegerProperty("MinValue", ParameterInt32.class, "Minimum");
+    public final static Property VALUE_MAX = new IntegerProperty("MaxValue", ParameterInt32.class, "Maximum");
+    
     public abstract Integer getMinValue();
-
+    public abstract void setMinValue(Integer v);
     public abstract Integer getMaxValue();
+    public abstract void setMaxValue(Integer v);
 
     @Override
-    public ValueInt32 getDefaultValue() {
-        return new ValueInt32(0);
+    public Integer getDefaultValue() {
+        return 0;
     }
 }

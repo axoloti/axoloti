@@ -17,15 +17,14 @@
  */
 package axoloti.dialogs;
 
-import axoloti.ConnectionStatusListener;
-import axoloti.CConnection;
-import axoloti.menus.StandardMenubar;
+import axoloti.TargetController;
+import axoloti.TargetModel;
 import components.PianoComponent;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
+import components.control.ACtrlComponent;
 import components.control.DialComponent;
 import java.awt.Dimension;
-import javax.swing.ImageIcon;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
 
@@ -33,7 +32,7 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Johannes Taelman
  */
-public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatusListener {
+public class KeyboardFrame extends TJFrame {
 
     /**
      * Creates new form PianoFrame
@@ -51,19 +50,18 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
     }
         
     
-    public KeyboardFrame() {
+    public KeyboardFrame(TargetController controller) {
+        super(controller);
         initComponents();
-        setJMenuBar(new StandardMenubar());
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         piano = new PianoComponent() {
             @Override
             public void KeyDown(int key) {
-                CConnection.GetConnection().SendMidi(getCable(), 0x90 + getChannel(), key & 0x7F, jSliderVelocity.getValue());
+                getController().getModel().getConnection().SendMidi(getCable(), 0x90 + getChannel(), key & 0x7F, jSliderVelocity.getValue());
             }
 
             @Override
             public void KeyUp(int key) {
-                CConnection.GetConnection().SendMidi(getCable(), 0x80 + getChannel(), key & 0x7F, 80);
+                getController().getModel().getConnection().SendMidi(getCable(), 0x80 + getChannel(), key & 0x7F, 80);
             }
 
         };
@@ -75,23 +73,16 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
         piano.setVisible(true);
         jPanelKeyb.add(piano);
         pbenddial = new DialComponent(0.0, -64, 64, 1);
-        pbenddial.addACtrlListener(new ACtrlListener() {
+        pbenddial.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                CConnection.GetConnection().SendMidi(getCable(), 0xE0 + getChannel(), 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
-            }
-
-            @Override
-            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-            }
-
-            @Override
-            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
+                    getController().getModel().getConnection().SendMidi(getCable(), 0xE0 + getChannel(), 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
+                }
             }
         });
         jPanel1.add(new JLabel("bend"));
         jPanel1.add(pbenddial);
-        CConnection.GetConnection().addConnectionStatusListener(this);        
     }
 
     /**
@@ -189,7 +180,7 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        CConnection.GetConnection().SendMidi(getCable(), 0xB0 + getChannel(), 0x7B, 80);
+        getController().getModel().getConnection().SendMidi(getCable(), 0xB0 + getChannel(), 0x7B, 80);
         piano.clear();
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 
@@ -211,17 +202,15 @@ public class KeyboardFrame extends javax.swing.JFrame implements ConnectionStatu
     private javax.swing.JSpinner jSpinnerChannel;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void ShowConnect() {
-        piano.clear();
-        piano.setEnabled(true);
-        pbenddial.setEnabled(true);
-    }
 
     @Override
-    public void ShowDisconnect() {
-        piano.clear();
-        piano.setEnabled(false);
-        pbenddial.setEnabled(false);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (TargetModel.CONNECTION.is(evt)) {
+            piano.clear();
+            boolean b = evt.getNewValue() != null;
+            piano.setEnabled(b);
+            pbenddial.setEnabled(b);
+        }
     }
+
 }

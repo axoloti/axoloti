@@ -40,17 +40,22 @@ public class Modulation {
         return value.getDouble();
     }
 
-    final ValueFrac32 value = new ValueFrac32();
+    ValueFrac32 value;
 
     public Modulation(@Attribute(name = "value") double v) {
-        value.setDouble(v);
+        value = new ValueFrac32(v);
     }
 
     public Modulation() {
+        value = null;
     }
 
-    public ValueFrac32 getValue() {
-        return value;
+    public Double getValue() {
+        return value.getDouble();
+    }
+
+    public void setValue(Double value) {
+        this.value = new ValueFrac32(value);
     }
 
     public void PostConstructor(ParameterInstanceFrac32 p) {

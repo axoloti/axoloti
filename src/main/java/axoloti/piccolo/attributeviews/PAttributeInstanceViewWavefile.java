@@ -34,7 +34,7 @@ public class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
         TFwaveFilename.addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void keyTyped(PInputEvent ke) {
-                TFwaveFilename.transferFocus(ke, getPatchView());
+                //TFwaveFilename.transferFocus(ke, getPatchView());
             }
 
             @Override

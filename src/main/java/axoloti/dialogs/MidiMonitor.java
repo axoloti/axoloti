@@ -1,43 +1,35 @@
 package axoloti.dialogs;
 
-import axoloti.CConnection;
-import axoloti.ConnectionStatusListener;
-import axoloti.DocumentWindow;
-import axoloti.DocumentWindowList;
 import axoloti.IConnection;
+import axoloti.TargetController;
+import axoloti.TargetModel;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
-import axoloti.menus.StandardMenubar;
+import axoloti.utils.MidiControllerNames;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import qcmds.QCmdMemRead;
-import axoloti.utils.MidiControllerNames;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import qcmds.QCmdMemRead;
 
 /**
  *
  * @author jtaelman
  */
-public class MidiMonitor extends javax.swing.JFrame implements ActionListener, ConnectionStatusListener, DocumentWindow {
+public class MidiMonitor extends TJFrame implements ActionListener {
 
     /**
      * Creates new form Memory
      */
-    public MidiMonitor() {
+    public MidiMonitor(TargetController controller) {
+        super(controller);
         initComponents();
-        setJMenuBar(new StandardMenubar());
         setTitle("MIDI input monitor");
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jMidiMonitorTable.setFont(Font.getFont(Font.MONOSPACED));
         //jTextAreaMemoryContent.setEditable(false);
-        DocumentWindowList.RegisterWindow(this);
 
         jMidiMonitorTable.setModel(new AbstractTableModel() {
             private String[] columnNames = {"Port", "Channel", "Data (hex)", "Event"};//, "Test Info"};
@@ -196,6 +188,13 @@ public class MidiMonitor extends javax.swing.JFrame implements ActionListener, C
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (TargetModel.CONNECTION.is(evt)) {
+            showConnect1(evt.getNewValue() != null);
+        }
+    }
 
     class midi_message {
 
@@ -396,7 +395,7 @@ public class MidiMonitor extends javax.swing.JFrame implements ActionListener, C
     void update() {
         jMidiMonitorTable.setFont(new Font("monospaced", Font.PLAIN, 12));
         int length = 256;
-        IConnection conn = CConnection.GetConnection();
+        IConnection conn = getController().getModel().getConnection();
         ChunkData chunk_midibuff = conn.GetFWChunks().GetOne(FourCCs.FW_MIDI_INPUT_BUFFER);
         chunk_midibuff.data.rewind();
         int addr = chunk_midibuff.data.getInt();
@@ -422,7 +421,7 @@ public class MidiMonitor extends javax.swing.JFrame implements ActionListener, C
     }
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        Close();
+        dispose();
     }//GEN-LAST:event_formWindowClosed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
@@ -438,16 +437,6 @@ public class MidiMonitor extends javax.swing.JFrame implements ActionListener, C
         jButtonUpdate.setEnabled(connected);
     }
 
-    @Override
-    public void ShowConnect() {
-        showConnect1(true);
-    }
-
-    @Override
-    public void ShowDisconnect() {
-        showConnect1(false);
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonUpdate;
     private javax.swing.JTable jMidiMonitorTable;
@@ -455,30 +444,4 @@ public class MidiMonitor extends javax.swing.JFrame implements ActionListener, C
     private javax.swing.JPanel jUpdatePanel;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public JFrame GetFrame() {
-        return this;
-    }
-
-    public void Close() {
-        DocumentWindowList.UnregisterWindow(this);
-        CConnection.GetConnection().removeConnectionStatusListener(this);
-        dispose();
-    }
-
-    @Override
-    public boolean AskClose() {
-        Close();
-        return false;
-    }
-
-    @Override
-    public File getFile() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<DocumentWindow> GetChildDocuments() {
-        return null;
-    }
 }

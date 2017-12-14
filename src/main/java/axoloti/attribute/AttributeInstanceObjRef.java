@@ -17,7 +17,6 @@
  */
 package axoloti.attribute;
 
-import axoloti.SubPatchMode;
 import axoloti.atom.AtomDefinitionController;
 import axoloti.attributedefinition.AxoAttributeObjRef;
 import axoloti.object.AxoObjectInstance;
@@ -84,7 +83,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         String oldvalue = this.objName;
         this.objName = objName;
         firePropertyChange(
-                AttributeInstance.ELEMENT_ATTR_VALUE,
+                ATTR_VALUE,
                 oldvalue, this.objName);
     }
 

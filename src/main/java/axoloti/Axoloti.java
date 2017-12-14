@@ -242,7 +242,7 @@ public class Axoloti {
             System.err.println("chibios directory is invalid");
         }
 
-        Preferences prefs = Preferences.LoadPreferences();
+        Preferences prefs = Preferences.getPreferences();
         if (versionedHome) {
             String fwDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
             if (!fwDir.startsWith(System.getProperty(RELEASE_DIR)) && !fwDir.startsWith(System.getProperty(HOME_DIR))) {
@@ -326,7 +326,7 @@ public class Axoloti {
 
         if (cmdLineOnly) {
             try {
-                MainFrame frame = new MainFrame(args);
+                MainFrame frame = new MainFrame(args, TargetModel.getTargetController());
                 AxoObjects objs = new AxoObjects();
                 objs.LoadAxoObjects();
                 if (SplashScreen.getSplashScreen() != null) {
@@ -362,7 +362,7 @@ public class Axoloti {
                 @Override
                 public void run() {
                     try {
-                        MainFrame frame = new MainFrame(args);
+                        MainFrame frame = new MainFrame(args, TargetModel.getTargetController());
                         frame.setVisible(true);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -2,14 +2,13 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstanceFrac32UMap;
 import components.AssignMidiCCComponent;
-import components.AssignMidiCCMenuItems;
 import components.AssignModulatorComponent;
+import components.AssignModulatorMenuItems;
 import components.AssignPresetComponent;
 import components.control.DialComponent;
 import java.awt.Graphics;
@@ -74,17 +73,17 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            Preset p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
+                ctrl.setValue((Double)p.getValue());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue().getDouble());
+                ctrl.setValue(getModel().getValue());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
         /*
          if ((presets != null) && (!presets.isEmpty())) {
@@ -98,12 +97,9 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     @Override
     public void populatePopup(JPopupMenu m) {
         super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        new AssignMidiCCMenuItems(getController(), m1);
-        m.add(m1);
         JMenu m2 = new JMenu("Modulation");
         // FIXME : reintroduce midi/modulation popup menu
-//        new AssignModulatorMenuItems(this, m2);
+        new AssignModulatorMenuItems(getModel(), m2);
         m.add(m2);
     }
 
@@ -128,7 +124,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_PRESETS)) {
+        if (ParameterInstance.PRESETS.is(evt)) {
             presetAssign.repaint();
         }
     }

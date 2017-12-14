@@ -17,8 +17,8 @@
  */
 package axoloti;
 
-import static axoloti.MainFrame.prefs;
 import axoloti.dialogs.PatchBank;
+import axoloti.utils.Preferences;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -134,7 +134,7 @@ public class FileUtils {
     };
 
     public static JFileChooser GetFileChooser() {
-        JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+        JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh", "axs", "axb"));
         fc.addChoosableFileFilter(axpFileFilter);
@@ -148,12 +148,12 @@ public class FileUtils {
         JFileChooser fc = GetFileChooser();
         int returnVal = fc.showOpenDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
-            prefs.SavePrefs();
+            Preferences.getPreferences().setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
+            Preferences.getPreferences().SavePrefs();
             File f = fc.getSelectedFile();
             for (DocumentWindow dw : DocumentWindowList.GetList()) {
                 if (f.equals(dw.getFile())) {
-                    JFrame frame1 = dw.GetFrame();
+                    JFrame frame1 = dw.getFrame();
                     frame1.setVisible(true);
                     frame1.setState(java.awt.Frame.NORMAL);
                     frame1.toFront();
@@ -164,10 +164,10 @@ public class FileUtils {
                     || axsFileFilter.accept(f)
                     || axhFileFilter.accept(f)) {
                 PatchViewSwing.OpenPatch(f);
-                MainFrame.prefs.addRecentFile(f.getAbsolutePath());
+                Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             } else if (axbFileFilter.accept(f)) {
                 PatchBank.OpenBank(f);
-                MainFrame.prefs.addRecentFile(f.getAbsolutePath());
+                Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             }
         }
     }

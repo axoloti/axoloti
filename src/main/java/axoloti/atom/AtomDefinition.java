@@ -21,6 +21,10 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.ObjectController;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
+import axoloti.property.StringPropertyNull;
+import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -47,14 +51,15 @@ abstract public class AtomDefinition extends AbstractModel {
         this.description = description;
     }
 
-    public static final String ATOM_NAME = "Name";
-    public static final String ATOM_DESCRIPTION = "Description";
-
-    public static final String[] PROPERTY_NAMES = {ATOM_NAME, ATOM_DESCRIPTION};
+    public static final Property NAME = new StringProperty("Name", AtomDefinition.class);
+    public static final Property DESCRIPTION = new StringPropertyNull("Description", AtomDefinition.class);
 
     @Override
-    public String[] getPropertyNames() {
-        return PROPERTY_NAMES;
+    public List<Property> getProperties() {
+        ArrayList<Property> l = new ArrayList<>();
+        l.add(NAME);
+        l.add(DESCRIPTION);
+        return l;
     }
 
     final public String getName() {
@@ -65,7 +70,7 @@ abstract public class AtomDefinition extends AbstractModel {
         String old_value = this.name;
         this.name = name;
         firePropertyChange(
-                ATOM_NAME,
+                NAME,
                 old_value, name);
     }
 
@@ -80,13 +85,13 @@ abstract public class AtomDefinition extends AbstractModel {
         String old_value = this.description;
         this.description = description;
         firePropertyChange(
-                ATOM_DESCRIPTION,
+                DESCRIPTION,
                 old_value, description);
     }
 
     abstract public String getTypeName();
 
-    abstract public List<String> getEditableFields();
+    abstract public List<Property> getEditableFields();
 
     // FIXME: violating the MVC pattern for now and use a singleton controller for this model
     private AtomDefinitionController atomController = null;

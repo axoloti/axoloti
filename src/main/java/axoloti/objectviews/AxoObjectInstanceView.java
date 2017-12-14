@@ -1,6 +1,5 @@
 package axoloti.objectviews;
 
-import axoloti.MainFrame;
 import axoloti.PatchViewSwing;
 import axoloti.Theme;
 import axoloti.attribute.AttributeInstanceController;
@@ -27,6 +26,7 @@ import axoloti.outlets.OutletInstanceViewFactory;
 import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameterviews.IParameterInstanceView;
 import axoloti.parameterviews.ParameterInstanceViewFactory;
+import axoloti.utils.Preferences;
 import components.LabelComponent;
 import components.PopupIcon;
 import java.awt.Component;
@@ -101,7 +101,16 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     public void PostConstructor() {
         super.PostConstructor();
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));/* {
+            @Override
+            public Dimension preferredLayoutSize(Container target) {
+                Dimension d = super.preferredLayoutSize(target);
+                d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
+                d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
+                return d;
+            }
+            
+        });*/
 
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
@@ -316,15 +325,15 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_INLET_INSTANCES)) {
+        if (AxoObjectInstance.OBJ_INLET_INSTANCES.is(evt)) {
             inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().inletInstanceControllers);
-        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_OUTLET_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_OUTLET_INSTANCES.is(evt)) {
             outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().outletInstanceControllers);
-        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES.is(evt)) {
             attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().attributeInstanceControllers);
-        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_PARAMETER_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_PARAMETER_INSTANCES.is(evt)) {
             parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().parameterInstanceControllers);
-        } else if (evt.getPropertyName().equals(AxoObjectInstance.OBJ_DISPLAY_INSTANCES)) {
+        } else if (AxoObjectInstance.OBJ_DISPLAY_INSTANCES.is(evt)) {
             displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().displayInstanceControllers);
         }
     }
@@ -367,7 +376,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             });
             popup.add(popm_help);
         }
-        if (MainFrame.prefs.getExpertMode()) {
+        if (Preferences.getPreferences().getExpertMode()) {
             JMenuItem popm_adapt = new JMenuItem("adapt homonym");
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
@@ -445,28 +454,4 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         return parameterInstanceViews;
     }
 
-    @Override
-    @Deprecated
-    public void addParameterInstanceView(IParameterInstanceView view) {
-    }
-
-    @Override
-    @Deprecated
-    public void addAttributeInstanceView(IAttributeInstanceView view) {
-    }
-
-    @Override
-    @Deprecated
-    public void addDisplayInstanceView(IDisplayInstanceView view) {
-    }
-
-    @Override
-    @Deprecated
-    public void addOutletInstanceView(IOutletInstanceView view) {
-    }
-
-    @Override
-    @Deprecated
-    public void addInletInstanceView(IInletInstanceView view) {
-    }
 }

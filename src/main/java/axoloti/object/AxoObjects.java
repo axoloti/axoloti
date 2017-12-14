@@ -17,8 +17,8 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
 import axoloti.utils.AxolotiLibrary;
+import axoloti.utils.Preferences;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -161,7 +161,7 @@ public class AxoObjects {
         if (prefix.length() == 0 && folder.getName().equals("objects")) {
             try {
                 String libpath = folder.getParentFile().getCanonicalPath() + File.separator;
-                for (AxolotiLibrary lib : MainFrame.prefs.getLibraries()) {
+                for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
                     if (lib.getLocalLocation().equals(libpath)) {
                         id = lib.getId();
                         break;
@@ -348,7 +348,7 @@ public class AxoObjects {
                 ObjectTree = new AxoObjectTreeNode("/");
                 ObjectList = new ArrayList<IAxoObject>();
                 ObjectUUIDMap = new HashMap<String, IAxoObject>();
-                String spath[] = MainFrame.prefs.getObjectSearchPath();
+                String spath[] = Preferences.getPreferences().getObjectSearchPath();
                 if (spath != null) {
                     for (String path : spath) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);

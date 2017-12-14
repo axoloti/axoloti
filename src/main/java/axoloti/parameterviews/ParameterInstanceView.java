@@ -2,26 +2,26 @@ package axoloti.parameterviews;
 
 import axoloti.Preset;
 import axoloti.Theme;
-import axoloti.atom.AtomDefinition;
-import axoloti.datatypes.Value;
 import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceController;
 import axoloti.parameters.ParameterInstance;
+import axoloti.parameters.ParameterInstanceController;
+import axoloti.property.Property;
+import axoloti.propertyViewSwingMenu.ViewFactory;
 import components.AssignMidiCCComponent;
 import components.AssignPresetMenuItems;
 import components.LabelComponent;
 import components.control.ACtrlComponent;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -50,36 +50,24 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         this.axoObjectInstanceView = axoObjectInstanceView;
     }
 
+    @Override
     public ParameterInstance getModel() {
         return controller.getModel();
     }
 
+    @Override
     public void PostConstructor() {
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
-        JPanel lbls = null;
-        if ((((getModel().getModel().noLabel == null) || (getModel().getModel().noLabel == false))) && (getModel().getConvs() != null)) {
-            lbls = new JPanel();
-            lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));
-            this.add(lbls);
-        }
-
-        if ((getModel().getModel().noLabel == null) || (getModel().getModel().noLabel == false)) {
-            label.setText(getModel().getModel().getName());
-        }
-        if (lbls != null) {
-            lbls.add(label);
-        } else {
-            add(label);
-        }
+        JPanel lbls = new JPanel();
+        lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));
+        this.add(lbls);
+        label.setText(getModel().getModel().getName());
+        lbls.add(label);
 
         if (getModel().getConvs() != null) {
-            if (lbls != null) {
-                lbls.add(valuelbl);
-            } else {
-                add(valuelbl);
-            }
+            lbls.add(valuelbl);
             Dimension d = new Dimension(50, 10);
             valuelbl.setMinimumSize(d);
             valuelbl.setPreferredSize(d);
@@ -88,11 +76,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
             valuelbl.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    getModel().setSelectedConv(getModel().getSelectedConv() + 1);
-                    if (getModel().getSelectedConv() >= getModel().getConvs().length) {
-                        getModel().setSelectedConv(0);
-                    }
-                    UpdateUnit();
+                    getModel().cycleConversions();
                 }
             });
             UpdateUnit();
@@ -102,29 +86,25 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
 
         add(getControlComponent());
         getControlComponent().addMouseListener(popupMouseListener);
-        getControlComponent().addACtrlListener(new ACtrlListener() {
-            @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                boolean changed = handleAdjustment();
-                getController().getModel().setNeedsTransmit(true);
-            }
 
+        getControlComponent().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-                getController().addMetaUndo("change parameter " + getModel().getName());
-            }
-            
-            @Override
-            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
+                    getController().addMetaUndo("change parameter " + getModel().getName());
+                } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
+                    boolean changed = handleAdjustment();
+                    getController().getModel().setNeedsTransmit(true);
+                }
             }
         });
     }
 
-    void showOnParent(boolean onParent){
-        if (getModel().getOnParent()) {
-            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
+    void showOnParent(Boolean onParent) {
+        if (onParent == null || onParent == false) {
+            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
         } else {
-            setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);               
+            setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         }
     }
 
@@ -134,23 +114,15 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         m.show(this, 0, getHeight());
     }
 
+    @Override
     public void populatePopup(JPopupMenu m) {
-        final JCheckBoxMenuItem m_onParent = new JCheckBoxMenuItem("parameter on parent");
-        boolean op = getModel().getOnParent();
-        m_onParent.setSelected(op);
-        m.add(m_onParent);
-        m_onParent.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                if (op) {
-                    getController().addMetaUndo("set parameter on parameter of " + getModel().getName());
-                } else {
-                    getController().addMetaUndo("clear parameter on parameter of " + getModel().getName());
-                }
-                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_ON_PARENT, !op);
+        List<Property> ps = getModel().getEditableFields();
+        for (Property p : ps) {
+            Component mi = ViewFactory.createMenuItemView(controller, p);
+            if (mi != null) {
+                m.add(mi);
             }
-        });
-
+        }
         JMenu m_preset = new JMenu("Preset");
         // AssignPresetMenuItems, does stuff in ctor
         AssignPresetMenuItems assignPresetMenuItems = new AssignPresetMenuItems(this, m_preset);
@@ -163,6 +135,7 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
      */
     abstract public ACtrlComponent getControlComponent();
 
+    @Override
     abstract public boolean handleAdjustment();
 
     public abstract ACtrlComponent CreateControl();
@@ -202,33 +175,37 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
     }
 
     void UpdateUnit() {
-        if (getModel().getConvs() != null) {
-            valuelbl.setText(getModel().getConvs()[getModel().getSelectedConv()].ToReal(getModel().getValue()));
-        }
+//        if (getModel().getConvs() != null) {
+//            valuelbl.setText(getModel().getConversion().ToReal(
+//                    getModel().getValue().));
+//        }
     }
 
+    @Override
     public abstract void ShowPreset(int i);
 
     public int presetEditActive = 0;
 
+    @Override
     public void IncludeInPreset() {
         if (presetEditActive > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            Preset p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 return;
             }
             if (getModel().getPresets() == null) {
                 getModel().setPresets(new ArrayList<Preset>());
             }
-            p = new Preset(presetEditActive, getModel().getValue());
+            p = getModel().presetFactory(presetEditActive, getModel().getValue());
             getModel().getPresets().add(p);
         }
         ShowPreset(presetEditActive);
     }
 
+    @Override
     public void ExcludeFromPreset() {
         if (presetEditActive > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            Preset p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 getModel().getPresets().remove(p);
                 if (getModel().getPresets().isEmpty()) {
@@ -239,28 +216,20 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
         ShowPreset(presetEditActive);
     }
 
-    final public Preset AddPreset(int index, Value value) {
-        return getController().AddPreset(index, value);
-    }
-
-    final public void RemovePreset(int index) {
-        getController().RemovePreset(index);
-    }
-
     public IAxoObjectInstanceView getAxoObjectInstanceView() {
         return axoObjectInstanceView;
     }
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        if (ParameterInstance.NAME.is(evt)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
+        } else if (ParameterInstance.DESCRIPTION.is(evt)) {
             setToolTipText((String) evt.getNewValue());
-        } else if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_ON_PARENT)) {
-            showOnParent((Boolean)evt.getNewValue());
-        } else if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_MIDI_CC)) {
+        } else if (ParameterInstance.ON_PARENT.is(evt)) {
+            showOnParent((Boolean) evt.getNewValue());
+        } else if (ParameterInstance.MIDI_CC.is(evt)) {
             Integer v = (Integer) evt.getNewValue();
             if (midiAssign != null) {
                 if (v != null) {
@@ -269,6 +238,17 @@ public abstract class ParameterInstanceView extends JPanel implements ActionList
                     midiAssign.setCC(-1);
                 }
             }
+        } else if (ParameterInstance.NOLABEL.is(evt)) {
+            Boolean b = (Boolean) evt.getNewValue();
+            if (b == null) {
+                b = false;
+            }
+            label.setVisible(!b);
         }
     }
+
+    @Override
+    public void dispose() {
+    }
+
 }

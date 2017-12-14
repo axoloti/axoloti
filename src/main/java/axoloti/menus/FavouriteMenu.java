@@ -27,6 +27,6 @@ import java.io.File;
 public class FavouriteMenu extends PopulatePatchMenuDynamic {
 
     public FavouriteMenu() {
-        super("hello", new File(Preferences.LoadPreferences().getFavouriteDir()), ".axp");
+        super("hello", new File(Preferences.getPreferences().getFavouriteDir()), ".axp");
     }
 }

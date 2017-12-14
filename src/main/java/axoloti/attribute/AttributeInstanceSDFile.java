@@ -67,7 +67,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         String oldvalue = this.fileName;
         this.fileName = tableName;
         firePropertyChange(
-                AttributeInstance.ELEMENT_ATTR_VALUE,
+                ATTR_VALUE,
                 oldvalue, this.fileName);
     }
 

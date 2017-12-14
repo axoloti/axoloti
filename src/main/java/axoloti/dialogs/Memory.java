@@ -1,40 +1,32 @@
 package axoloti.dialogs;
 
-import axoloti.CConnection;
-import axoloti.ConnectionStatusListener;
-import axoloti.DocumentWindow;
-import axoloti.DocumentWindowList;
 import axoloti.IConnection;
-import axoloti.menus.StandardMenubar;
+import axoloti.TargetController;
+import axoloti.TargetModel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.beans.PropertyChangeEvent;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import qcmds.QCmdMemRead;
 
 /**
  *
  * @author jtaelman
  */
-public class Memory extends javax.swing.JFrame implements ActionListener, ConnectionStatusListener, DocumentWindow {
+public class Memory extends TJFrame implements ActionListener {
 
     /**
      * Creates new form Memory
      */
-    public Memory() {
+    public Memory(TargetController controller) {
+        super(controller);
         initComponents();
-        setJMenuBar(new StandardMenubar());
         setTitle("Memory viewer");
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         jTextFieldAddr.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setEditable(false);
-        DocumentWindowList.RegisterWindow(this);
     }
 
     /**
@@ -146,7 +138,7 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         jTextFieldAddr.setText(String.format("0x%08x", addr));
         jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
         int length = 256;
-        IConnection conn = CConnection.GetConnection();
+        IConnection conn = getController().getModel().getConnection();
         conn.AppendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
             @Override
             public void Done(ByteBuffer mem) {
@@ -197,7 +189,7 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
     }//GEN-LAST:event_jButtonDecActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        Close();
+        dispose();
     }//GEN-LAST:event_formWindowClosed
 
     @Override
@@ -208,16 +200,6 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
         jButtonDec.setEnabled(connected);
         jButtonInc.setEnabled(connected);
         jButtonUpdate.setEnabled(connected);
-    }
-
-    @Override
-    public void ShowConnect() {
-        showConnect1(true);
-    }
-
-    @Override
-    public void ShowDisconnect() {
-        showConnect1(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -231,30 +213,12 @@ public class Memory extends javax.swing.JFrame implements ActionListener, Connec
     private javax.swing.JTextField jTextFieldAddr;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public JFrame GetFrame() {
-        return this;
-    }
-
-    public void Close() {
-        DocumentWindowList.UnregisterWindow(this);
-        CConnection.GetConnection().removeConnectionStatusListener(this);
-        dispose();
-    }
 
     @Override
-    public boolean AskClose() {
-        Close();
-        return false;
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (TargetModel.CONNECTION.is(evt)) {
+            showConnect1(evt.getNewValue() != null);
+        }
     }
 
-    @Override
-    public File getFile() {
-        return null;
-    }
-
-    @Override
-    public ArrayList<DocumentWindow> GetChildDocuments() {
-        return null;
-    }
 }

@@ -3,7 +3,6 @@ package axoloti.inlets;
 import axoloti.INetView;
 import axoloti.MainFrame;
 import axoloti.Theme;
-import axoloti.atom.AtomDefinition;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.JackInputComponent;
@@ -82,10 +81,10 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(AtomDefinition.ATOM_NAME)) {
+        if (InletInstance.NAME.is(evt)) {
             label.setText((String) evt.getNewValue());
             doLayout();
-        } else if (evt.getPropertyName().equals(AtomDefinition.ATOM_DESCRIPTION)) {
+        } else if (InletInstance.DESCRIPTION.is(evt)) {
             setToolTipText((String) evt.getNewValue());
         }
     }
@@ -95,4 +94,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
         return controller;
     }
 
+    @Override
+    public void dispose() {
+    }
 }

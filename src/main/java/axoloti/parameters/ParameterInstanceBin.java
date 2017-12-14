@@ -1,28 +1,37 @@
 package axoloti.parameters;
 
-import axoloti.datatypes.ValueInt32;
+import axoloti.PresetInt;
 import axoloti.object.AxoObjectInstance;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
 
 /**
  *
  * @author jtaelman
  */
-public abstract class ParameterInstanceBin<T extends ParameterBin> extends ParameterInstance<T> {
+public abstract class ParameterInstanceBin<T extends ParameterBin> extends ParameterInstance<T, Integer> {
 
-    ValueInt32 value = new ValueInt32();
+    Integer value = 0;
 
     @Attribute(name = "value", required = false)
     public int getValuex() {
-        return value.getInt();
+        return value;
     }
+
+    @ElementListUnion({
+        @ElementList(entry = "Preset", type = PresetInt.class, inline = false, required = false)
+    })
+    ArrayList<PresetInt> presets;
 
     public ParameterInstanceBin() {
         super();
     }
 
     public ParameterInstanceBin(@Attribute(name = "value") int v) {
-        value.setInt(v);
+        value = v;
     }
 
     public ParameterInstanceBin(T param, AxoObjectInstance axoObj1) {
@@ -39,6 +48,42 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     }
 
     @Override
+    public int valToInt32(Integer v) {
+        return (int) v;
+    }
+
+    @Override
+    public Integer int32ToVal(int v) {
+        return v;
+    }
+
+    @Override
+    public PresetInt presetFactory(int index, Integer value) {
+        return new PresetInt(index, value);
+    }
+
+    @Override
+    public ArrayList<PresetInt> getPresets() {
+        if (presets != null) {
+            return presets;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void setPresets(Object presets) {
+        ArrayList<PresetInt> prevValue = getPresets();
+        this.presets = (ArrayList<PresetInt>) presets;
+        firePropertyChange(ParameterInstance.PRESETS, prevValue, this.presets);
+    }
+
+    @Override
+    public PresetInt getPreset(int i) {
+        return (PresetInt) super.getPreset(i);
+    }
+
+    @Override
     public String valueName(String vprefix) {
         return PExName(vprefix) + ".d.bin.value";
     }
@@ -51,7 +96,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
                 + ", unit: " + parameter.GetCUnit()
                 + ", signals: 0"
                 + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
-        int v = GetValueRaw();
+        int v = getValue();
         s += ", d: { bin: { finalvalue: 0"
                 + ", value: " + v
                 + ", modvalue: " + v
@@ -70,16 +115,24 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     }
 
     @Override
-    public ValueInt32 getValue() {
+    public ByteBuffer getValueBB() {
+        ByteBuffer bb = super.getValueBB();
+        bb.putInt(value);
+        return bb;
+    }
+
+    @Override
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(ValueInt32 value) {
-        ValueInt32 oldvalue = this.value;
-        this.value = value;
+    @Override
+    public void setValue(Object value) {
+        Integer oldvalue = this.value;
+        this.value = (Integer)value;
         needsTransmit = true;
         firePropertyChange(
-                ParameterInstance.ELEMENT_PARAM_VALUE,
+                ParameterInstance.VALUE,
                 oldvalue, value);
     }
 }

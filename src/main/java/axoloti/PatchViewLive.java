@@ -1,7 +1,7 @@
 package axoloti;
 
-import java.beans.PropertyChangeEvent;
 import axoloti.mvc.IView;
+import java.beans.PropertyChangeEvent;
 
 /**
  *
@@ -25,4 +25,7 @@ public class PatchViewLive implements IView<PatchController> {
         return controller;
     }
     
+    @Override
+    public void dispose() {
+    }
 }

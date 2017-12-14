@@ -3,8 +3,13 @@ package midirouting;
 import axoloti.CConnection;
 import axoloti.IConnection;
 import axoloti.mvc.AbstractModel;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 import qcmds.QCmdMemRead;
 import qcmds.QCmdWriteMem;
 
@@ -22,7 +27,7 @@ public class MidiInputRoutingTable extends AbstractModel {
         return addr + 8;
     }
 
-    void retrieve(IConnection conn, int addr) {
+    public void retrieve(IConnection conn, int addr) {
         this.addr = addr;
         conn.AppendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
             @Override
@@ -39,8 +44,8 @@ public class MidiInputRoutingTable extends AbstractModel {
                             b = mem.get();
                         }
                         setPortName(c);
-
                         int nports = mem1.getInt();
+                        System.out.println("portname1:" + c + ":" + nports);
                         conn.AppendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
                             @Override
                             public void Done(ByteBuffer mem) {
@@ -72,17 +77,15 @@ public class MidiInputRoutingTable extends AbstractModel {
         }
     }
 
-    public final static String MIRT_PORTNAME = "PortName";
-    public final static String MIRT_MAPPING = "Mapping";
-
-    public final static String[] PROPERTYNAMES = new String[]{
-        MIRT_PORTNAME,
-        MIRT_MAPPING
-    };
+    public final static Property MIRT_PORTNAME = new StringProperty("PortName", MidiInputRoutingTable.class);
+    public final static Property MIRT_MAPPING = new ObjectProperty("Mapping", int[].class,  MidiInputRoutingTable.class);
 
     @Override
-    public String[] getPropertyNames() {
-        return PROPERTYNAMES;
+    public List<Property> getProperties() {
+        List<Property> l = new ArrayList<>();
+        l.add(MIRT_PORTNAME);
+        l.add(MIRT_MAPPING);
+        return l;
     }
 
     public String getPortName() {

@@ -5,13 +5,13 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceHyperlink;
 import axoloti.object.ObjectInstanceController;
 import components.LabelComponent;
-import components.control.ACtrlEvent;
-import components.control.ACtrlListener;
+import components.control.ACtrlComponent;
 import components.control.PulseButtonComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 
@@ -33,20 +33,14 @@ public class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstrac
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         button = new PulseButtonComponent();
-        button.addACtrlListener(new ACtrlListener() {
+        button.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void ACtrlAdjusted(ACtrlEvent e) {
-                if (e.getValue() == 1.0) {
-                    getModel().Launch();
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
+                    if (evt.getNewValue().equals(1.0)) {
+                        getModel().Launch();
+                    }
                 }
-            }
-
-            @Override
-            public void ACtrlAdjustmentBegin(ACtrlEvent e) {
-            }
-
-            @Override
-            public void ACtrlAdjustmentFinished(ACtrlEvent e) {
             }
         });
         add(button);

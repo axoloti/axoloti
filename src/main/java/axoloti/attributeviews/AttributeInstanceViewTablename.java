@@ -1,6 +1,5 @@
 package axoloti.attributeviews;
 
-import axoloti.attribute.AttributeInstance;
 import axoloti.attribute.AttributeInstanceController;
 import axoloti.attribute.AttributeInstanceTablename;
 import axoloti.objectviews.IAxoObjectInstanceView;
@@ -44,7 +43,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getController().changeValue(TFtableName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
             }
 
             @Override
@@ -71,7 +70,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().changeValue(TFtableName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
             }
         });
     }

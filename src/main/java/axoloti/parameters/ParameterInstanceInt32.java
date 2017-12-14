@@ -17,34 +17,69 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueInt32;
+import axoloti.PresetInt;
 import axoloti.object.AxoObjectInstance;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends ParameterInstance<T> {
-
-    // was final
-    ValueInt32 value = new ValueInt32();
+public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends ParameterInstance<T, Integer> {
 
     @Attribute(name = "value", required = false)
-    public int getValuex() {
-        return value.getInt();
-    }
+    Integer value = 0;
+
+    @ElementListUnion({
+        @ElementList(entry = "Preset", type = PresetInt.class, inline = false, required = false)
+    })
+    ArrayList<PresetInt> presets;
 
     public ParameterInstanceInt32() {
     }
 
-    public ParameterInstanceInt32(@Attribute(name = "value") int v) {
-        value.setInt(v);
-    }
-
     public ParameterInstanceInt32(T param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
+    }
+
+    @Override
+    public int valToInt32(Integer v) {
+        return (int) v;
+    }
+
+    @Override
+    public Integer int32ToVal(int v) {
+        return v;
+    }
+
+    @Override
+    public PresetInt presetFactory(int index, Integer value) {
+        return new PresetInt(index, value);
+    }
+
+    @Override
+    public ArrayList<PresetInt> getPresets() {
+        if (presets != null) {
+            return presets;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void setPresets(Object presets) {
+        ArrayList<PresetInt> prevValue = getPresets();
+        this.presets = (ArrayList<PresetInt>) presets;
+        firePropertyChange(ParameterInstance.PRESETS, prevValue, this.presets);
+    }
+
+    @Override
+    public PresetInt getPreset(int i) {
+        return (PresetInt) super.getPreset(i);
     }
 
     @Override
@@ -53,12 +88,12 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
                 + ", unit: " + parameter.GetCUnit()
                 + ", signals: 0"
                 + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
-        int v = GetValueRaw();
+        int v = getValue();
         s += ", d: { intt: { finalvalue: 0"
                 + ", value: " + v
                 + ", modvalue: " + v
                 + ", minimum: " + parameter.getMinValue()
-                + ", maximum: " + (parameter.getMaxValue() - 1 /* TODO: FIXME */)
+                + ", maximum: " + parameter.getMaxValue()
                 + "}}},\n";
         return s;
     }
@@ -78,11 +113,6 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     }
 
     @Override
-    public void setValue(Value value) {
-        setValue((ValueInt32)value);
-    }
-
-    @Override
     public void CopyValueFrom(ParameterInstance p) {
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceInt32) {
@@ -95,17 +125,35 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
      * **
      */
     @Override
-    public ValueInt32 getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(ValueInt32 value) {
-        ValueInt32 oldvalue = this.value;
-        this.value = value;
+    @Override
+    public void setValue(Object value) {
+        Integer oldvalue = this.value;
+        this.value = (Integer)value;
         needsTransmit = true;
         firePropertyChange(
-                ParameterInstance.ELEMENT_PARAM_VALUE,
+                ParameterInstance.VALUE,
                 oldvalue, value);
     }
 
+    public Integer getMinValue() {
+        return getModel().getMinValue();
+    }
+
+    public Integer getMaxValue() {
+        return getModel().getMaxValue();
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInt32.VALUE_MIN.is(evt)) {
+            firePropertyChange(ParameterInt32.VALUE_MIN, evt.getOldValue(), evt.getNewValue());
+        } else if (ParameterInt32.VALUE_MAX.is(evt)) {
+            firePropertyChange(ParameterInt32.VALUE_MAX, evt.getOldValue(), evt.getNewValue());
+        }
+    }
 }

@@ -11,9 +11,9 @@ import javax.swing.undo.UndoManager;
  */
 public class AbstractDocumentRoot {
 
-    UndoManager undoManager = new UndoManager();
+    private UndoManager undoManager = new UndoManager();
 
-    public UndoManager getUndoManager() {
+    UndoManager getUndoManager() {
         return undoManager;
     }
 
@@ -23,7 +23,7 @@ public class AbstractDocumentRoot {
         undoListeners.add(uel);
     }
 
-    public void fireUndoListeners(UndoableEditEvent e) {
+    void fireUndoListeners(UndoableEditEvent e) {
         for (UndoableEditListener uel : undoListeners) {
             uel.undoableEditHappened(e);
         }

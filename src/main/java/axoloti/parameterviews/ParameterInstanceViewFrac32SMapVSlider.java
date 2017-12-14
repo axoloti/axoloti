@@ -30,17 +30,17 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().GetPreset(presetEditActive);
+            Preset p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
+                ctrl.setValue((Double)p.getValue());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue().getDouble());
+                ctrl.setValue(getModel().getValue());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
         if ((getModel().getPresets() != null) && (!getModel().getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);

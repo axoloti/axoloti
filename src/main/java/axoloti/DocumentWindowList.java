@@ -28,7 +28,9 @@ public class DocumentWindowList {
     static ArrayList<DocumentWindow> list = new ArrayList<DocumentWindow>();
 
     static public void RegisterWindow(DocumentWindow w) {
-        list.add(w);
+        if (!list.contains(w)) {
+            list.add(w);
+        }
     }
 
     static public void UnregisterWindow(DocumentWindow w) {

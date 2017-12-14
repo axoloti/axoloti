@@ -28,22 +28,33 @@ import org.simpleframework.xml.ElementUnion;
  *
  * @author Johannes Taelman
  */
-public class Preset {
+public abstract class Preset<DT> {
 
     @Attribute
     public int index;
-
+/*
     @ElementUnion({
         @Element(name = "i", type = ValueInt32.class),
         @Element(name = "f", type = ValueFrac32.class)
     })
     public Value value;
+*/
+    
+    public DT v;
 
     public Preset() {
     }
 
-    public Preset(int index, Value value) {
+    public Preset(int index, DT value) {
         this.index = index;
-        this.value = value;
+        this.v = value;
+    }
+  
+    public void setValue(DT value){
+        this.v = value;
+    }
+    
+    public DT getValue() {
+        return v;
     }
 }

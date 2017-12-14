@@ -11,13 +11,11 @@ import axoloti.object.ObjectInstanceController;
  */
 public class DisplayInstanceController extends AbstractController<DisplayInstance, IDisplayInstanceView, ObjectInstanceController> {
 
-    public static final String DISP_VALUE = "Value";
-
     public DisplayInstanceController(DisplayInstance model, AbstractDocumentRoot documentRoot, AbstractController parent) {
         super(model, documentRoot, (ObjectInstanceController) parent);
     }
 
     void setValue(Object value) {
-        setModelProperty(DISP_VALUE, value);
+        setModelProperty(DisplayInstance.DISP_VALUE, value);
     }
 }

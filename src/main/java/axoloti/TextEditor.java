@@ -17,10 +17,15 @@
  */
 package axoloti;
 
+import axoloti.dialogs.AJFrame;
+import axoloti.menus.StandardMenubar;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.IView;
+import axoloti.property.StringProperty;
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.*;
@@ -29,21 +34,23 @@ import org.fife.ui.rtextarea.*;
  *
  * @author Johannes Taelman
  */
-public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
+public class TextEditor extends AJFrame implements IView, DocumentWindow {
 
-    StringRef s;
+    StringProperty stringProperty;
     RSyntaxTextArea textArea;
-    final DocumentWindow parent;
+    final AbstractController controller;
 
     /**
      * Creates new form TextEditor
      *
-     * @param s initial string
+     * @param stringProperty initial string
      */
-    public TextEditor(StringRef s, DocumentWindow parent) {
+    public TextEditor(StringProperty stringProperty, AbstractController controller, DocumentWindow parent) {
+        super(parent);
         initComponents();
-        this.parent = parent;
-        this.s = s;
+        setJMenuBar(new StandardMenubar());
+        this.controller = controller;
+        this.stringProperty = stringProperty;
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
         textArea.setCodeFoldingEnabled(true);
@@ -52,8 +59,7 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
         cp.add(sp);
         textArea.setVisible(true);
         setContentPane(cp);
-        textArea.setText(s.s);
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
+        textArea.setText(stringProperty.get(controller.getModel()));
     }
 
     public void SetText(String s) {
@@ -65,7 +71,6 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
     }
 
     public void Close() {
-        parent.GetChildDocuments().remove(this);
         dispose();
     }
 
@@ -82,14 +87,6 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 
         setMinimumSize(new java.awt.Dimension(256, 128));
         setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
-            }
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
-            }
-        });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
             }
@@ -125,31 +122,22 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 //        System.out.println("txt changed (lost focus)");
-//        attr.sText = jEditorPane1.getText();
-        s.s = textArea.getText();
+        controller.setModelUndoableProperty(stringProperty, textArea.getText());
     }//GEN-LAST:event_formWindowLostFocus
-
-    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
-        parent.GetChildDocuments().remove(this);
-    }//GEN-LAST:event_formComponentHidden
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        parent.GetChildDocuments().add(this);
-    }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cp;
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public JFrame GetFrame() {
+    public JFrame getFrame() {
         return this;
     }
 
     @Override
-    public boolean AskClose() {
+    public boolean askClose() {
         Close();
-        return false; //TBC
+        return false;
     }
 
     @Override
@@ -158,7 +146,26 @@ public class TextEditor extends javax.swing.JFrame implements DocumentWindow {
     }
 
     @Override
-    public ArrayList<DocumentWindow> GetChildDocuments() {
+    public ArrayList<DocumentWindow> getChildDocuments() {
         return null;
     }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (stringProperty.is(evt)) {
+            SetText(stringProperty.get(controller.getModel()));
+        }
+    }
+
+    @Override
+    public AbstractController getController() {
+        return controller;
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        getController().removeView(this);
+    }
+
 }

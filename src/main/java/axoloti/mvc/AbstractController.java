@@ -1,22 +1,19 @@
 package axoloti.mvc;
 
+import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
 public abstract class AbstractController<Model extends IModel, View extends IView, ParentController extends AbstractController> implements PropertyChangeListener {
 
-    final private ArrayList<View> registeredViews = new ArrayList<View>();
+    private final ArrayList<View> registeredViews = new ArrayList<View>();
     private final Model model;
     private final ParentController parent;
-    final AbstractDocumentRoot documentRoot;
+    private final AbstractDocumentRoot documentRoot;
 
     public AbstractController(Model model, AbstractDocumentRoot documentRoot, ParentController parent) {
         model.addPropertyChangeListener(this);
@@ -34,9 +31,9 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
             if (registeredViews.contains(view)) {
                 System.out.println("view already added : " + view.toString());
             } else {
-                for (String propertyName : getModel().getPropertyNames()) {
-                    Object propertyValue = getModelProperty(propertyName);
-                    PropertyChangeEvent evt = new PropertyChangeEvent(model, propertyName, null, propertyValue);
+                for (Property property : getModel().getProperties()) {
+                    Object propertyValue = property.get(getModel());
+                    PropertyChangeEvent evt = new PropertyChangeEvent(model, property.getName(), null, propertyValue);
                     view.modelPropertyChange(evt);
                 }
                 registeredViews.add(view);
@@ -48,7 +45,8 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
 
     final public void removeView(View view) {
         if (!registeredViews.contains(view)) {
-            throw new Error("view was not attached to controller" + view.toString());
+// TODO: trace double removal of AJFrame's
+//            throw new Error("view was not attached to controller :" + view.toString());
         }
         registeredViews.remove(view);
     }
@@ -82,73 +80,34 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
      * the property in question. If it isn't, a NoSuchMethodException is thrown,
      * which the method ignores.
      *
-     * @param propertyName = The name of the property.
+     * @param property = The property.
      * @param newValue = An object that represents the new value of the
      * property.
      */
-    protected void setModelProperty(String propertyName, Object newValue) {
-
-        try {
-
-            Method method = model.getClass().
-                    getMethod("set" + propertyName, new Class[]{
-                        newValue.getClass()
-                    }
-                    );
-            method.invoke(model, newValue);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex.getCause());
-//                System.out.println(ex.getMessage() + " " + ex.getCause().toString());
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    protected void setModelProperty(Property property, Object newValue) {
+        property.set(getModel(), newValue);
     }
 
-    public Object getModelProperty(String propertyName) {
-        try {
-
-            Method method = model.getClass().
-                    getMethod("get" + propertyName, new Class[]{});
-            Object val = method.invoke(model);
-            return val;
-
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex.getCause());
-//                System.out.println(ex.getMessage() + " " + ex.getCause().toString());
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+    public Object getModelProperty(Property property) {
+        return property.get(getModel());
     }
 
     public void addMetaUndo(String actionName) {
         if (documentRoot == null) return;
         documentRoot.getUndoManager().addEdit(new UndoableEditGroup(actionName));
     }
-    
-    public void setModelUndoableProperty(String propertyName, Object newValue) {
+
+    public void setModelUndoableProperty(Property property, Object newValue) {
         if (getUndoManager() == null) {
             //System.out.println("no undomanager");
-            setModelProperty(propertyName, newValue);
+            property.set(getModel(),newValue);
         } else {
-            Object old_val = getModelProperty(propertyName);
-            if (old_val == null) {
-                System.out.println("Property method get" + propertyName + " returned null, this is illegal for undoable property changes.");
-                throw new Error("Property method get" + propertyName + " returned null, this is illegal for undoable property changes.");
-            }            
+            Object old_val = property.get(getModel());
             if (old_val == newValue) {
                 return;
             }
-            setModelProperty(propertyName, newValue);
-            UndoableEdit uedit = new UndoablePropertyChange(this, propertyName, old_val, newValue);
+            property.set(getModel(), newValue);
+            UndoableEdit uedit = new UndoablePropertyChange(this, property, old_val, newValue);
             getUndoManager().addEdit(uedit);
             if (documentRoot != null) {
                 documentRoot.fireUndoListeners(new UndoableEditEvent(this, uedit));

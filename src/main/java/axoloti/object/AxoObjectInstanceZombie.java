@@ -25,6 +25,7 @@ import axoloti.inlets.InletInstanceZombie;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceZombie;
 import axoloti.parameters.ParameterInstance;
+import axoloti.property.Property;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
@@ -116,4 +117,13 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     @Override
     public void Remove() {
     }    
+
+    @Override
+    public List<Property> getProperties() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    public void dispose() {
+    }
+
 }

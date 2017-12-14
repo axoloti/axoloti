@@ -28,131 +28,10 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Board"/>
           </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemSelectCom">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Select Device..."/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemSelectComActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFConnect">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Connect"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFConnectActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFDisconnect">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Disconnect"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFDisconnectActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemPing">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Ping"/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemPingActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemPanic">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Panic"/>
-                <Property name="enabled" type="boolean" value="false"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemPanicActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemMemViewer">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="New memory viewer"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemMemViewerActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="MIDI input monitor"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemMount">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Enter card reader mode (disconnects editor)"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemMountActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenuFirmware">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Firmware"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDefault">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Flash"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashDefaultActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashDFU">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Flash (Rescue)"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashDFUActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemRefreshFWID">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Refresh Firmware ID"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemRefreshFWIDActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JPopupMenu$Separator" name="jDevSeparator">
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFCompile">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Compile"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFCompileActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEnterDFU">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Enter Rescue mode"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEnterDFUActionPerformed"/>
-                  </Events>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemFlashSDR">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Flash (User)"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemFlashSDRActionPerformed"/>
-                  </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-          </SubComponents>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.menus.TargetMenu(getController())"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="getController().addView((axoloti.menus.TargetMenu)jMenuBoard);"/>
+          </AuxValues>
         </Menu>
         <Menu class="axoloti.menus.WindowMenu" name="windowMenu1">
         </Menu>
@@ -271,7 +150,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelVoltages">
               <Properties>
-                <Property name="text" type="java.lang.String" value="volt"/>
+                <Property name="text" type="java.lang.String" value="5V : 5.00V VDD : 3.30V "/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelPatch">
@@ -306,63 +185,12 @@
           </Layout>
           <SubComponents>
             <Container class="javax.swing.JPanel" name="jPanel4">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.dialogs.TargetRTInfo(getController())"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="getController().addView((axoloti.dialogs.TargetRTInfo)jPanel4);"/>
+              </AuxValues>
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                <Property name="columns" type="int" value="2"/>
-                <Property name="rows" type="int" value="5"/>
-              </Layout>
-              <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="in L"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabelVuIn1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="0           "/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="in R"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabelVuIn2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="0"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="out L"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabelVuOut1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="0"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel4">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="out R"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabelVuOut2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="0"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel5">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="underruns "/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabelUnderruns">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="0"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
             </Container>
             <Component class="javax.swing.Box$Filler" name="filler2">
             </Component>

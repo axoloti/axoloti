@@ -1,6 +1,7 @@
 package axoloti.piccolo.parameterviews;
 
 import axoloti.Preset;
+import axoloti.PresetDouble;
 import axoloti.Theme;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceFrac32UMapVSlider;
@@ -20,7 +21,7 @@ public class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceV
     @Override
     public void updateV() {
         if (ctrl != null) {
-            ctrl.setValue(parameterInstance.getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
     }
 
@@ -31,17 +32,17 @@ public class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceV
     public void ShowPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = parameterInstance.GetPreset(presetEditActive);
+            PresetDouble p = getModel().getPreset(presetEditActive);
             if (p != null) {
                 setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue(p.value.getDouble());
+                ctrl.setValue(p.getValue());
             } else {
                 setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(parameterInstance.getValue().getDouble());
+                ctrl.setValue(getModel().getValue());
             }
         } else {
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(parameterInstance.getValue().getDouble());
+            ctrl.setValue(getModel().getValue());
         }
         if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);

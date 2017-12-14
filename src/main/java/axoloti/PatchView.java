@@ -28,8 +28,6 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
@@ -108,27 +106,6 @@ public abstract class PatchView extends PatchAbstractView {
         getController().setFileNamePath(FileNamePath);
     }
 
-    TextEditor NotesFrame;
-
-    void ShowNotesFrame() {
-        if (NotesFrame == null) {
-            NotesFrame = new TextEditor(new StringRef(), getPatchFrame());
-            NotesFrame.setTitle("notes");
-            NotesFrame.SetText(getController().getModel().notes);
-            NotesFrame.addFocusListener(new FocusListener() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    getController().getModel().notes = NotesFrame.GetText();
-                }
-            });
-        }
-        NotesFrame.setVisible(true);
-        NotesFrame.toFront();
-    }
 
     public ObjectSearchFrame osf;
 
@@ -163,7 +140,7 @@ public abstract class PatchView extends PatchAbstractView {
     }
 
     public void ShowCompileFail() {
-        setLocked(false);
+        getController().setLocked(false);
     }
 
     public abstract void add(IAxoObjectInstanceView v);
@@ -348,9 +325,6 @@ public abstract class PatchView extends PatchAbstractView {
     }
 
     void PreSerialize() {
-        if (NotesFrame != null) {
-            getController().getModel().notes = NotesFrame.GetText();
-        }
         // FIXME
         //getController().getModel().windowPos = getPatchFrame().getBounds();
     }
@@ -399,7 +373,7 @@ public abstract class PatchView extends PatchAbstractView {
     public static PatchFrame OpenPatchInvisible(File f) {
         for (DocumentWindow dw : DocumentWindowList.GetList()) {
             if (f.equals(dw.getFile())) {
-                JFrame frame1 = dw.GetFrame();
+                JFrame frame1 = dw.getFrame();
                 if (frame1 instanceof PatchFrame) {
                     return (PatchFrame) frame1;
                 } else {
@@ -448,20 +422,9 @@ public abstract class PatchView extends PatchAbstractView {
         //repaint();
     }
 
-    public void Close() {
-        setLocked(false);
-        /*
-        IAxoObjectInstanceView c[] = (IAxoObjectInstanceView[])objectInstanceViews.getSubViews().toArray();
-        for (IAxoObjectInstanceView o : c) {
-            o.getModel().Close();
-        }*/
-        if (NotesFrame != null) {
-            NotesFrame.dispose();
-        }
-//        if ((getController().getSettings() != null)
-//                && (getController().getSettings().editor != null)) {
-//            getController().getSettings().editor.dispose();
-//        }
+    @Override
+    public void dispose() {
+        getController().setLocked(false);
     }
 
     public Dimension GetSize() {
@@ -563,10 +526,6 @@ public abstract class PatchView extends PatchAbstractView {
         return getController().isLocked();
     }
 
-    public void setLocked(boolean locked) {
-        getController().setLocked(locked);
-    }
-
     public void ShowPreset(int i) {
         // TODO: reconstruct preset logic
         /*
@@ -624,7 +583,7 @@ public abstract class PatchView extends PatchAbstractView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PatchModel.PATCH_LOCKED)) {
+        if (PatchModel.PATCH_LOCKED.is(evt)) {
             if ((Boolean)evt.getNewValue() == false) {
                 for (IAxoObjectInstanceView o : objectInstanceViews) {
                     o.Unlock();
@@ -634,9 +593,9 @@ public abstract class PatchView extends PatchAbstractView {
                     o.Lock();
                 }
             }
-        } else if (evt.getPropertyName().equals(PatchModel.PATCH_OBJECTINSTANCES)) {
+        } else if (PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
             objectInstanceViews = objectInstanceViewSync.Sync(objectInstanceViews, getController().objectInstanceControllers);
-        } else if (evt.getPropertyName().equals(PatchModel.PATCH_NETS)) {
+        } else if (PatchModel.PATCH_NETS.is(evt)) {
             netViews = netViewSync.Sync(netViews, getController().netControllers);
         }
     }

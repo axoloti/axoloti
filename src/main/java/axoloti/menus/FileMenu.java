@@ -192,7 +192,7 @@ public class FileMenu extends JMenu {
         add(jMenuQuit);
 
         jMenuRegenerateObjects.setVisible(false);
-        if (!Preferences.LoadPreferences().getExpertMode()) {
+        if (!Preferences.getPreferences().getExpertMode()) {
             jMenuAutoTest.setVisible(false);
         }
     }
@@ -264,7 +264,7 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuSyncActionPerformed(java.awt.event.ActionEvent evt) {
-        for (AxolotiLibrary lib : Preferences.LoadPreferences().getLibraries()) {
+        for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
             lib.sync();
         }
         axoObjects.LoadAxoObjects();

@@ -2,10 +2,7 @@ package axoloti.parameterviews;
 
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
-import components.AssignMidiCCMenuItems;
 import components.control.CheckboxComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
 
 class ParameterInstanceViewBin12 extends ParameterInstanceViewBin {
 
@@ -27,12 +24,4 @@ class ParameterInstanceViewBin12 extends ParameterInstanceViewBin {
         return (CheckboxComponent) ctrl;
     }
 
-    @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        // assignMidiCCMenuItems, does stuff in ctor
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(getController(), m1);
-        m.add(m1);
-    }
 }

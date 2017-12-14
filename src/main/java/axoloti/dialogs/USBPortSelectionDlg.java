@@ -17,7 +17,8 @@
  */
 package axoloti.dialogs;
 
-import axoloti.MainFrame;
+import axoloti.TargetController;
+import axoloti.mvc.IView;
 import static axoloti.usb.Usb.DeviceToPath;
 import static axoloti.usb.Usb.PID_AXOLOTI;
 import static axoloti.usb.Usb.PID_AXOLOTI_SDCARD;
@@ -27,6 +28,7 @@ import static axoloti.usb.Usb.VID_STM;
 import axoloti.utils.OSDetect;
 import static axoloti.utils.OSDetect.getOS;
 import axoloti.utils.Preferences;
+import java.beans.PropertyChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -44,7 +46,7 @@ import org.usb4java.LibUsbException;
  *
  * @author Johannes Taelman
  */
-public class USBPortSelectionDlg extends javax.swing.JDialog {
+public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<TargetController> {
 
     private String cpuid;
     private final String defCPUID;
@@ -53,6 +55,8 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
     private final String sAxolotiCore = "Axoloti Core";
     private final String sAxolotiSDCard = "Axoloti SDCard reader";
 
+    private final TargetController controller;
+
     /**
      * Creates new form USBPortSelectionDlg
      *
@@ -60,8 +64,9 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
      * @param modal is modal
      * @param defCPUID default port name
      */
-    public USBPortSelectionDlg(java.awt.Frame parent, boolean modal, String defCPUID) {
+    public USBPortSelectionDlg(java.awt.Frame parent, boolean modal, String defCPUID, TargetController controller) {
         super(parent, modal);
+        this.controller = controller;
         initComponents();
         System.out.println("default cpuid: " + defCPUID);
         this.defCPUID = defCPUID;
@@ -86,25 +91,26 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                 }
             }
         });
-        
+
         jTable1.getModel().addTableModelListener(new TableModelListener() {
 
             @Override
             public void tableChanged(TableModelEvent e) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
-                if(column!=0) return;
-                
-                TableModel model = (TableModel)e.getSource();
+                if (column != 0) {
+                    return;
+                }
+
+                TableModel model = (TableModel) e.getSource();
                 String name = (String) model.getValueAt(row, column);
                 String cpuid = (String) ((DefaultTableModel) jTable1.getModel()).getValueAt(row, 3);
-                Preferences prefs = MainFrame.mainframe.prefs;
-                prefs.setBoardName(cpuid,name);
+                Preferences prefs = Preferences.getPreferences();
+                prefs.setBoardName(cpuid, name);
                 prefs.SavePrefs();
             }
         });
-        
-        
+
     }
 
     public static String ErrorString(int result) {
@@ -154,17 +160,17 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                             if (result < 0) {
                                 if (getOS() == OSDetect.OS.WIN) {
                                     if (result == LibUsb.ERROR_NOT_SUPPORTED) {
-                                        model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : wrong driver installed"});
+                                        model.addRow(new String[]{"", sDFUBootloader, DeviceToPath(device), "not accesseable : wrong driver installed"});
                                     } else if (result == LibUsb.ERROR_ACCESS) {
-                                        model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : busy?"});
+                                        model.addRow(new String[]{"", sDFUBootloader, DeviceToPath(device), "not accesseable : busy?"});
                                     } else {
-                                        model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
+                                        model.addRow(new String[]{"", sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
                                     }
                                 } else {
-                                    model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
+                                    model.addRow(new String[]{"", sDFUBootloader, DeviceToPath(device), "not accesseable : " + result});
                                 }
                             } else {
-                                model.addRow(new String[]{"",sDFUBootloader, DeviceToPath(device), "driver OK, CPU ID indeterminate"});
+                                model.addRow(new String[]{"", sDFUBootloader, DeviceToPath(device), "driver OK, CPU ID indeterminate"});
                                 LibUsb.close(handle);
                             }
                         }
@@ -172,16 +178,18 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
                         DeviceHandle handle = new DeviceHandle();
                         result = LibUsb.open(device, handle);
                         if (result < 0) {
-                            model.addRow(new String[]{"",sAxolotiCore, DeviceToPath(device), ErrorString(result)});
+                            model.addRow(new String[]{"", sAxolotiCore, DeviceToPath(device), ErrorString(result)});
                         } else {
                             String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
-                            String name = MainFrame.prefs.getBoardName(serial);
-                            if(name==null) name = "";
-                            model.addRow(new String[]{name,sAxolotiCore, DeviceToPath(device), serial});
+                            String name = Preferences.getPreferences().getBoardName(serial);
+                            if (name == null) {
+                                name = "";
+                            }
+                            model.addRow(new String[]{name, sAxolotiCore, DeviceToPath(device), serial});
                             LibUsb.close(handle);
                         }
                     } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI_SDCARD) {
-                        model.addRow(new String[]{"",sAxolotiSDCard, DeviceToPath(device), "unmount disk to connect"});
+                        model.addRow(new String[]{"", sAxolotiSDCard, DeviceToPath(device), "unmount disk to connect"});
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);
@@ -330,22 +338,21 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-      if (evt.getClickCount() == 2) {
-          onSelect();
-      }
+        if (evt.getClickCount() == 2) {
+            onSelect();
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void onSelect() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         int selRow = 0;
-        if (jTable1.getSelectedRowCount() > 0 ) {
+        if (jTable1.getSelectedRowCount() > 0) {
             selRow = jTable1.getSelectedRow();
             cpuid = (String) model.getValueAt(selRow, 3);
         }
-        setVisible(false);        
+        setVisible(false);
     }
-    
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancel;
@@ -354,4 +361,13 @@ public class USBPortSelectionDlg extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+    }
+
+    @Override
+    public TargetController getController() {
+        return controller;
+    }
 }

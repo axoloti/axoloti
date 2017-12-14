@@ -1,5 +1,6 @@
 package axoloti.displayviews;
 
+import axoloti.displays.DisplayInstance;
 import axoloti.displays.DisplayInstanceController;
 import components.displays.VBarComponentDB;
 import java.beans.PropertyChangeEvent;
@@ -23,7 +24,7 @@ class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(DisplayInstanceController.DISP_VALUE)) {
+        if (DisplayInstance.DISP_VALUE.is(evt)) {
             vbar.setValue((Double) evt.getNewValue());
         }
     }

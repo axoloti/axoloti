@@ -48,6 +48,10 @@ import javax.swing.TransferHandler;
  */
 public abstract class ACtrlComponent extends JComponent {
 
+    public final static String PROP_VALUE_ADJ_BEGIN = "prop_value_begin";
+    public final static String PROP_VALUE_ADJ_END = "prop_value_end";
+    public final static String PROP_VALUE = "prop_value";
+
     protected Color customBackgroundColor;
 
     public ACtrlComponent() {
@@ -113,45 +117,16 @@ public abstract class ACtrlComponent extends JComponent {
 
     abstract void keyReleased(KeyEvent ke);
 
-    public void addACtrlListener(ACtrlListener listener) {
-        listenerList.add(ACtrlListener.class, listener);
-    }
-
-    public void removeACtrlListener(ACtrlListener listener) {
-        listenerList.remove(ACtrlListener.class, listener);
-    }
-
     void fireEvent() {
-        Object[] listeners = listenerList.getListenerList();
-        for (int i = 0; i < listeners.length; i += 2) {
-            // TOD: check why += 2?
-            if (listeners[i] == ACtrlListener.class) {
-                ((ACtrlListener) listeners[i + 1]).ACtrlAdjusted(
-                        new ACtrlEvent(this, getValue()));
-            }
-        }
+        firePropertyChange(PROP_VALUE, null, (Double) getValue());
     }
 
     void fireEventAdjustmentBegin() {
-        Object[] listeners = listenerList.getListenerList();
-        for (int i = 0; i < listeners.length; i += 2) {
-            // TODO: check why += 2?
-            if (listeners[i] == ACtrlListener.class) {
-                ((ACtrlListener) listeners[i + 1]).ACtrlAdjustmentBegin(
-                        new ACtrlEvent(this, getValue()));
-            }
-        }
+        firePropertyChange(PROP_VALUE_ADJ_BEGIN, null, null);
     }
 
     void fireEventAdjustmentFinished() {
-        Object[] listeners = listenerList.getListenerList();
-        for (int i = 0; i < listeners.length; i += 2) {
-            // TODO: check why += 2?
-            if (listeners[i] == ACtrlListener.class) {
-                ((ACtrlListener) listeners[i + 1]).ACtrlAdjustmentFinished(
-                        new ACtrlEvent(this, getValue()));
-            }
-        }
+        firePropertyChange(PROP_VALUE_ADJ_END, null, null);
     }
 
     void SetupTransferHandler() {

@@ -1,7 +1,9 @@
 package axoloti.mvc;
 
+import axoloti.property.Property;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 /**
  *
@@ -11,9 +13,8 @@ public abstract class AbstractModel implements IModel {
 
     protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    public String[] getPropertyNames() {
-        return new String[]{};
-    }
+    @Override
+    public abstract List<Property> getProperties();
 
     @Override
     final public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -27,9 +28,9 @@ public abstract class AbstractModel implements IModel {
     }
 
     @Override
-    final public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+    final public void firePropertyChange(Property property, Object oldValue, Object newValue) {
 //        System.out.println("firePropertyChange " + propertyName + " " + newValue.toString() + " (" + propertyChangeSupport.getPropertyChangeListeners().length + ")" + this.toString());
-        propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+        propertyChangeSupport.firePropertyChange(property.getName(), oldValue, newValue);
     }
 
 }

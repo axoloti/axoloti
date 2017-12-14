@@ -17,7 +17,9 @@
  */
 package axoloti.parameters;
 
-import org.simpleframework.xml.Attribute;
+import static axoloti.parameters.ParameterInstance.MIDI_CC;
+import axoloti.property.Property;
+import java.util.List;
 
 /**
  *
@@ -28,14 +30,17 @@ public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
     public ParameterInstanceInt32VRadio() {
     }
 
-    public ParameterInstanceInt32VRadio(@Attribute(name = "value") int v) {
-        super(v);
+    @Override
+    public List<Property> getEditableFields() {
+        List<Property> l = super.getEditableFields();
+        l.add(MIDI_CC);
+        return l;
     }
 
     @Override
     public String GenerateCodeMidiHandler(String vprefix) {
         // hmm this is only one possible behavior - could also map to full MIDI range...
-        int max = ((ParameterInt32VRadio) parameter).MaxValue.getInt();
+        int max = ((ParameterInt32VRadio) parameter).getMaxValue();
         return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 

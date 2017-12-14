@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import static axoloti.Axoloti.CHIBIOS_DIR;
-import static axoloti.Axoloti.FIRMWARE_DIR;
 import axoloti.Modulator;
 import axoloti.SDFileReference;
 import axoloti.attributedefinition.AxoAttribute;
@@ -108,6 +107,10 @@ import axoloti.parameters.ParameterInt32Box;
 import axoloti.parameters.ParameterInt32BoxSmall;
 import axoloti.parameters.ParameterInt32HRadio;
 import axoloti.parameters.ParameterInt32VRadio;
+import axoloti.property.BooleanProperty;
+import axoloti.property.Property;
+import axoloti.property.StringProperty;
+import axoloti.property.StringPropertyNull;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -306,6 +309,7 @@ public class AxoObject extends AxoObjectAbstract {
         }
     }
 
+    @Override
     public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
         if (editor == null) {
             ObjectController ctrl = createController(null, null);
@@ -586,48 +590,43 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     /* MVC code */
+    
+    public static final Property OBJ_ID = new StringProperty("Id", AxoObject.class);
+    public static final Property OBJ_DESCRIPTION = new StringPropertyNull("Description", AxoObject.class);
+    public static final Property OBJ_LICENSE = new StringPropertyNull("License", AxoObject.class);
+    public static final Property OBJ_PATH = new StringPropertyNull("Path", AxoObject.class);
+    public static final Property OBJ_AUTHOR = new StringPropertyNull("Author", AxoObject.class);
+    public static final Property OBJ_HELPPATCH = new StringPropertyNull("HelpPatch", AxoObject.class);
+    public static final Property OBJ_ROTATEDPARAMS = new BooleanProperty("RotatedParams", AxoObject.class, "bbb");
 
-    public static final String OBJ_ID = "Id";
-    public static final String OBJ_DESCRIPTION = "Description";
-    public static final String OBJ_LICENSE = "License";
-    public static final String OBJ_PATH = "Path";
-    public static final String OBJ_AUTHOR = "Author";
-    public static final String OBJ_HELPPATCH = "HelpPatch";
-
-    public static final String OBJ_INLETS = "Inlets";
-    public static final String OBJ_OUTLETS = "Outlets";
-    public static final String OBJ_ATTRIBUTES = "Attributes";
-    public static final String OBJ_PARAMETERS = "Parameters";
-    public static final String OBJ_DISPLAYS = "Displays";
-
-    public static final String OBJ_INIT_CODE = "InitCode";
-    public static final String OBJ_DISPOSE_CODE = "DisposeCode";
-    public static final String OBJ_LOCAL_DATA = "LocalData";
-    public static final String OBJ_KRATE_CODE = "KRateCode";
-    public static final String OBJ_SRATE_CODE = "SRateCode";
-    public static final String OBJ_MIDI_CODE = "MidiCode";
+    public static final Property OBJ_INIT_CODE = new StringPropertyNull("InitCode", AxoObject.class);
+    public static final Property OBJ_DISPOSE_CODE = new StringPropertyNull("DisposeCode", AxoObject.class);
+    public static final Property OBJ_LOCAL_DATA = new StringPropertyNull("LocalData", AxoObject.class);
+    public static final Property OBJ_KRATE_CODE = new StringPropertyNull("KRateCode", AxoObject.class);
+    public static final Property OBJ_SRATE_CODE = new StringPropertyNull("SRateCode", AxoObject.class);
+    public static final Property OBJ_MIDI_CODE = new StringPropertyNull("MidiCode", AxoObject.class);
 
     @Override
-    public String[] getPropertyNames() {
-        return new String[]{
-            OBJ_ID,
-            OBJ_DESCRIPTION,
-            OBJ_LICENSE,
-            OBJ_PATH,
-            OBJ_AUTHOR,
-            OBJ_HELPPATCH,
-            OBJ_INLETS,
-            OBJ_OUTLETS,
-            OBJ_ATTRIBUTES,
-            OBJ_PARAMETERS,
-            OBJ_DISPLAYS,
-            OBJ_INIT_CODE,
-            OBJ_DISPOSE_CODE,
-            OBJ_LOCAL_DATA,
-            OBJ_KRATE_CODE,
-            OBJ_SRATE_CODE,
-            OBJ_MIDI_CODE
-        };
+    public List<Property> getProperties() {
+        List<Property> l =  new ArrayList<>();
+        l.add(OBJ_ID);
+        l.add(OBJ_DESCRIPTION);
+        l.add(OBJ_LICENSE);
+        l.add(OBJ_PATH);
+        l.add(OBJ_AUTHOR);
+        l.add(OBJ_HELPPATCH);
+        l.add(OBJ_INLETS);
+        l.add(OBJ_OUTLETS);
+        l.add(OBJ_ATTRIBUTES);
+        l.add(OBJ_PARAMETERS);
+        l.add(OBJ_DISPLAYS);
+        l.add(OBJ_INIT_CODE);
+        l.add(OBJ_DISPOSE_CODE);
+        l.add(OBJ_LOCAL_DATA);
+        l.add(OBJ_KRATE_CODE);
+        l.add(OBJ_SRATE_CODE);
+        l.add(OBJ_MIDI_CODE);
+        return l;
     }
 
     private String StringDenull(String s) {
@@ -654,6 +653,7 @@ public class AxoObject extends AxoObjectAbstract {
         return inlets;
     }
 
+    @Override
     public void setInlets(ArrayList<Inlet> inlets) {
         List<Inlet> old_val = this.inlets;
         this.inlets = inlets;
@@ -666,6 +666,7 @@ public class AxoObject extends AxoObjectAbstract {
         return outlets;
     }
 
+    @Override
     public void setOutlets(ArrayList<Outlet> outlets) {
         List<Outlet> old_val = this.outlets;
         this.outlets = outlets;
@@ -678,6 +679,7 @@ public class AxoObject extends AxoObjectAbstract {
         return params;
     }
 
+    @Override
     public void setParameters(ArrayList<Parameter> parameters) {
         List<Parameter> old_val = this.params;
         this.params = parameters;
@@ -690,6 +692,7 @@ public class AxoObject extends AxoObjectAbstract {
         return attributes;
     }
 
+    @Override
     public void setAttributes(ArrayList<AxoAttribute> attributes) {
         List<AxoAttribute> old_val = this.attributes;
         this.attributes = attributes;
@@ -702,12 +705,14 @@ public class AxoObject extends AxoObjectAbstract {
         return displays;
     }
 
+    @Override
     public void setDisplays(ArrayList<Display> displays) {
         List<Display> old_val = this.displays;
         this.displays = displays;
         firePropertyChange(OBJ_DISPLAYS, old_val, displays);
     }
 
+    @Override
     public Boolean getRotatedParams() {
         if (rotatedParams == null) {
             return false;
@@ -719,7 +724,7 @@ public class AxoObject extends AxoObjectAbstract {
     public void setRotatedParams(Boolean rotatedParams) {
         Boolean prev_value = this.rotatedParams;
         this.rotatedParams = rotatedParams;
-        // FIXME: property
+        firePropertyChange(OBJ_ROTATEDPARAMS, prev_value, rotatedParams);
     }
 
     @Override

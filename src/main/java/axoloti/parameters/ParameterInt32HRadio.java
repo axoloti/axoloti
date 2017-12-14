@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.ValueInt32;
+import axoloti.property.Property;
 import java.security.MessageDigest;
 import java.util.List;
 import org.simpleframework.xml.Element;
@@ -49,7 +50,7 @@ public class ParameterInt32HRadio extends ParameterInt32<ParameterInstanceInt32H
     @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
-        md.update(("int32.hradio" + MaxValue.getInt()).getBytes());
+        md.update(("int32.hradio" + MaxValue).getBytes());
     }
 
     static public final String TypeName = "int32.hradio";
@@ -60,9 +61,9 @@ public class ParameterInt32HRadio extends ParameterInt32<ParameterInstanceInt32H
     }
 
     @Override
-    public List<String> getEditableFields() {
+    public List<Property> getEditableFields() {
         List l = super.getEditableFields();
-        l.add("MaxValue");
+        l.add(VALUE_MAX);
         return l;
     }
 
@@ -80,4 +81,15 @@ public class ParameterInt32HRadio extends ParameterInt32<ParameterInstanceInt32H
     public Integer getMaxValue() {
         return MaxValue.getInt();
     }
+
+    @Override
+    public void setMaxValue(Integer max) {
+        this.MaxValue = new ValueInt32(max);
+        firePropertyChange(VALUE_MAX, null, max);
+    }
+
+    @Override
+    public void setMinValue(Integer v) {
+    }
+
 }

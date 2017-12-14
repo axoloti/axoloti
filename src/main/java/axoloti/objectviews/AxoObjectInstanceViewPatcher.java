@@ -1,12 +1,12 @@
 package axoloti.objectviews;
 
-import axoloti.MainFrame;
 import axoloti.PatchFrame;
 import axoloti.PatchViewSwing;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.ObjectInstanceController;
 import axoloti.object.ObjectInstancePatcherController;
 import components.ButtonComponent;
+import qcmds.QCmdProcessor;
 
 public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
@@ -29,7 +29,7 @@ public class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     public void initSubpatchFrame() {
         if (pf == null) {
-            pf = new PatchFrame(getController().getSubPatchController(), MainFrame.mainframe.getQcmdprocessor());
+            pf = new PatchFrame(getController().getSubPatchController(), QCmdProcessor.getQCmdProcessor());
             getController().getSubPatchController().addView(pf);
         }
     }

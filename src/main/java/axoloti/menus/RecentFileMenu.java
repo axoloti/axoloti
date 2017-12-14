@@ -18,6 +18,7 @@
 package axoloti.menus;
 
 import axoloti.MainFrame;
+import axoloti.utils.Preferences;
 import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -35,7 +36,7 @@ public class RecentFileMenu extends JMenu {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                ArrayList<String> r = MainFrame.prefs.getRecentFiles();
+                ArrayList<String> r = Preferences.getPreferences().getRecentFiles();
                 for (String s : r) {
                     JMenuItem mi = new JMenuItem(s);
                     mi.setActionCommand("open:" + s);

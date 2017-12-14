@@ -35,7 +35,7 @@ import java.awt.event.MouseEvent;
 public class HRadioComponent extends ACtrlComponent {
 
     double value;
-    final int n;
+    int n;
     int bsize = 12;
 
     public HRadioComponent(int value, int n) {
@@ -44,27 +44,40 @@ public class HRadioComponent extends ACtrlComponent {
         this.value = 0;//value;
         this.n = n;
         bsize = 12;
-        Dimension d = new Dimension(bsize * n + 2, bsize + 2);
-        setSize(d);
-        setPreferredSize(d);
-        setMaximumSize(d);
-        setMinimumSize(d);
-        SetupTransferHandler();
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return new Dimension(bsize * n + 2, bsize + 2);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(bsize * n + 2, bsize + 2);
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return new Dimension(bsize * n + 2, bsize + 2);
     }
 
     private boolean dragAction = false;
 
-    int mousePosToVal(int x, int y){
+    int mousePosToVal(int x, int y) {
         int i = x / bsize;
-        if (i<0) return 0;
-        if (i>n-1) return n-1;
+        if (i < 0) {
+            return 0;
+        }
+        if (i > n - 1) {
+            return n - 1;
+        }
         return i;
     }
-    
+
     @Override
     protected void mouseDragged(MouseEvent e) {
         if (dragAction) {
-            fireValue(mousePosToVal(e.getX(),e.getY()));
+            fireValue(mousePosToVal(e.getX(), e.getY()));
         }
     }
 
@@ -74,7 +87,7 @@ public class HRadioComponent extends ACtrlComponent {
             grabFocus();
             if (e.getButton() == 1) {
                 fireEventAdjustmentBegin();
-                fireValue(mousePosToVal(e.getX(),e.getY()));
+                fireValue(mousePosToVal(e.getX(), e.getY()));
                 dragAction = true;
             }
             e.consume();
@@ -211,6 +224,12 @@ public class HRadioComponent extends ACtrlComponent {
         return value;
     }
 
+    public void setMax(int n) {
+        this.n = n;
+        setSize(getPreferredSize());
+        revalidate();
+//        doLayout();
+    }
 
     @Override
     void keyReleased(KeyEvent ke) {

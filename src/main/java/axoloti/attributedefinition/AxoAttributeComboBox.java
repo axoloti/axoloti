@@ -17,9 +17,8 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.atom.AtomDefinitionController;
-import axoloti.attribute.AttributeInstanceComboBox;
-import axoloti.object.AxoObjectInstance;
+import axoloti.property.Property;
+import axoloti.property.StringListProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,8 +35,8 @@ public class AxoAttributeComboBox extends AxoAttribute {
     @ElementList(required = false)
     public List<String> CEntries = new ArrayList<>();
 
-    public static final String ATOM_MENUENTRIES = "MenuEntries";
-    public static final String ATOM_CENTRIES = "CEntries";    
+    public static final Property ATOM_MENUENTRIES = new StringListProperty("MenuEntries", AxoAttributeComboBox.class, "Menu entries");
+    public static final Property ATOM_CENTRIES = new StringListProperty("CEntries", AxoAttributeComboBox.class, "C++ entries");
 
     public AxoAttributeComboBox() {
     }
@@ -76,10 +75,10 @@ public class AxoAttributeComboBox extends AxoAttribute {
     }
 
     @Override
-    public List<String> getEditableFields() {
+    public List<Property> getEditableFields() {
         List l = super.getEditableFields();
-        l.add("MenuEntries");
-        l.add("CEntries");
+        l.add(ATOM_MENUENTRIES);
+        l.add(ATOM_CENTRIES);
         return l;
     }
 

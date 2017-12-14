@@ -5,7 +5,6 @@ import axoloti.inlets.IInletInstanceView;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceController;
 import axoloti.inlets.InletInstancePopupMenu;
-import axoloti.mvc.AbstractController;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import components.piccolo.PJackInputComponent;
@@ -98,5 +97,9 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     @Override
     public InletInstanceController getController() {
         return controller;
+    }
+
+    @Override
+    public void dispose() {
     }
 }

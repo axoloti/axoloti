@@ -8,6 +8,7 @@ import axoloti.piccolo.PUtils;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import axoloti.utils.Preferences;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
@@ -73,7 +74,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
             double v;
             if ((MousePressedBtn == MouseEvent.BUTTON1)) {
                 this.robotMoveToCenter();
-                if (MainFrame.prefs.getMouseDialAngular()) {
+                if (Preferences.getPreferences().getMouseDialAngular()) {
                     int radius = (int) Math.min(getSize().width, getSize().height) / 2 - layoutTick;
                     double th = Math.atan2(e.getPosition().getX() - radius, radius - e.getPosition().getY());
                     v = min + (max - min) * (th + 0.75 * Math.PI) / (1.5 * Math.PI);

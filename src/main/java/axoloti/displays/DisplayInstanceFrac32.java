@@ -18,7 +18,6 @@
 package axoloti.displays;
 
 import axoloti.atom.AtomDefinitionController;
-import axoloti.datatypes.ValueFrac32;
 import java.nio.ByteBuffer;
 
 /**
@@ -35,9 +34,8 @@ public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayIn
 
     @Override
     public void ProcessByteBuffer(ByteBuffer bb) {
-        ValueFrac32 f = new ValueFrac32();
-        f.setRaw(bb.getInt());
-        setValue(f.getDouble());
+        int i = bb.getInt();
+        setValue(i*1.0/(1 << 21));
     }
 
     @Override
@@ -45,8 +43,8 @@ public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayIn
         return value;
     }
 
-    public void setValue(Double newValue) {
-        value = newValue;
-        firePropertyChange(DisplayInstanceController.DISP_VALUE, null, value);
+    public void setValue(Object newValue) {
+        value = (Double) newValue;
+        firePropertyChange(DISP_VALUE, null, value);
     }
 }

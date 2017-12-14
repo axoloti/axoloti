@@ -30,6 +30,7 @@ public class ValueFrac32 extends Value {
     private double v;
 
     public ValueFrac32() {
+        v = 0.0;
     }
 
     public ValueFrac32(Value vv) {
@@ -38,11 +39,6 @@ public class ValueFrac32 extends Value {
 
     public ValueFrac32(double v) {
         this.v = v;
-    }
-
-    @Override
-    public void setInt(int i) {
-        this.v = i;
     }
 
     @Override
@@ -61,18 +57,8 @@ public class ValueFrac32 extends Value {
     }
 
     @Override
-    public void setFrac(int i) {
-        v = ((double) i) / (double) (1 << 21);
-    }
-
-    @Override
     public double getDouble() {
         return v;
-    }
-
-    @Override
-    public void setDouble(double d) {
-        v = d;
     }
 
     @Override
@@ -81,7 +67,8 @@ public class ValueFrac32 extends Value {
     }
 
     @Override
-    public void setRaw(int i) {
-        setFrac(i);
+    public String toString() {
+        return Double.toString(v);
     }
+
 }

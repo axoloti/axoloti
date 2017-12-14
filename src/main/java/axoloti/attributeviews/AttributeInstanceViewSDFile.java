@@ -6,11 +6,13 @@ import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.utils.Constants;
 import components.ButtonComponent;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -65,12 +67,12 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         TFFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().changeValue(TFFileName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,TFFileName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().changeValue(TFFileName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,TFFileName.getText());
             }
         });
         ButtonChooseFile = new ButtonComponent("choose");
@@ -78,11 +80,11 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
             @Override
             public void OnPushed() {
                 JFileChooser fc = new JFileChooser(getController().getParent().getParent().getModel().GetCurrentWorkingDirectory());
-                int returnVal = fc.showOpenDialog(null // FIXME: parent frame
-                );
+                Window window = SwingUtilities.getWindowAncestor(AttributeInstanceViewSDFile.this);
+                int returnVal = fc.showOpenDialog(window);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = getModel().toRelative(fc.getSelectedFile());
-                    getController().changeValue(f);
+                    getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,f);
                 }
             }
         });

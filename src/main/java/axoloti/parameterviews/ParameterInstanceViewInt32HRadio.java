@@ -2,12 +2,10 @@ package axoloti.parameterviews;
 
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstanceController;
-import axoloti.parameters.ParameterInstanceInt32HRadio;
+import axoloti.parameters.ParameterInt32;
 import axoloti.parameters.ParameterInt32HRadio;
-import components.AssignMidiCCMenuItems;
 import components.control.HRadioComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
+import java.beans.PropertyChangeEvent;
 
 class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
@@ -17,7 +15,7 @@ class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
     @Override
     public HRadioComponent CreateControl() {
-        return new HRadioComponent(0, ((ParameterInt32HRadio) getModel().getModel()).MaxValue.getInt());
+        return new HRadioComponent(0, ((ParameterInt32HRadio) getModel().getModel()).getMaxValue());
     }
 
     @Override
@@ -26,10 +24,11 @@ class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
     }
 
     @Override
-    public void populatePopup(JPopupMenu m) {
-        super.populatePopup(m);
-        JMenu m1 = new JMenu("Midi CC");
-        new AssignMidiCCMenuItems(getController(), m1);
-        m.add(m1);
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInt32.VALUE_MAX.is(evt)) {
+            getControlComponent().setMax((Integer) evt.getNewValue());
+        }
     }
+
 }

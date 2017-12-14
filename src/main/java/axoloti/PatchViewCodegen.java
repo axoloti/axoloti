@@ -11,8 +11,8 @@ import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectInstanceController;
-import axoloti.object.codegenview.IAxoObjectInstanceCodegenView;
 import axoloti.object.codegenview.AxoObjectInstanceCodegenViewFactory;
+import axoloti.object.codegenview.IAxoObjectInstanceCodegenView;
 import axoloti.outlets.OutletBool32;
 import axoloti.outlets.OutletCharPtr32;
 import axoloti.outlets.OutletFrac32;
@@ -224,7 +224,7 @@ public class PatchViewCodegen extends PatchAbstractView {
         String c = "   static int32_t * GetInitParams(void){\n"
                 + "      static const int32_t p[" + s + "]= {\n";
         for (int i = 0; i < s; i++) {
-            c += "      " + ParameterInstances.get(i).GetValueRaw();
+            c += "      " + 0; //FIXME ParameterInstances.get(i).GetValueRaw();
             if (i != s - 1) {
                 c += ",\n";
             } else {
@@ -668,8 +668,8 @@ public class PatchViewCodegen extends PatchAbstractView {
 
         c += "void xpatch_init2(int32_t fwid)\n"
                 + "{\n"
-                + "  if (fwid != 0x" + MainFrame.mainframe.LinkFirmwareID + ") {\n"
-                //                + "    return;"
+                + "  if (fwid != 0x" + TargetModel.getTargetController().getModel().getFirmwareLinkID() + ") {\n"
+                + "    return;"
                 + "  }\n"
                 + "  extern uint32_t _pbss_start;\n"
                 + "  extern uint32_t _pbss_end;\n"
@@ -1440,5 +1440,9 @@ public class PatchViewCodegen extends PatchAbstractView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }
-    
+
+    @Override
+    public void dispose() {
+    }
+
 }

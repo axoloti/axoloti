@@ -20,6 +20,7 @@ public abstract class ArrayView<T extends IView> {
             for (T view : existingViews) {
                 if (!controller.subcontrollers.contains(view.getController())) {
                     subviews2.remove(view);
+                    view.dispose();
                     removeView(view);
                 }
             }

@@ -17,7 +17,8 @@
  */
 package axoloti.attributedefinition;
 
-import axoloti.atom.AtomDefinitionController;
+import axoloti.property.IntegerProperty;
+import axoloti.property.Property;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -47,9 +48,9 @@ public class AxoAttributeSpinner extends AxoAttribute {
         this.DefaultValue = DefaultValue;
     }
 
-    public static final String ATOM_MINVALUE = "MinValue";
-    public static final String ATOM_MAXVALUE = "MaxValue";
-    public static final String ATOM_DEFAULTVALUE = "DefaultValue";
+    public static final Property ATOM_MINVALUE = new IntegerProperty("MinValue", AxoAttributeSpinner.class, "Minimum");
+    public static final Property ATOM_MAXVALUE = new IntegerProperty("MaxValue", AxoAttributeSpinner.class, "Maximum");
+    public static final Property ATOM_DEFAULTVALUE = new IntegerProperty("DefaultValue", AxoAttributeSpinner.class, "Default");
 
     public static final String TypeName = "spinner";
 
@@ -59,7 +60,7 @@ public class AxoAttributeSpinner extends AxoAttribute {
     }
 
     @Override
-    public List<String> getEditableFields() {
+    public List<Property> getEditableFields() {
         List l = super.getEditableFields();
         l.add(ATOM_MINVALUE);
         l.add(ATOM_MAXVALUE);

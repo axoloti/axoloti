@@ -28,7 +28,7 @@
  */
 package axoloti.piccolo;
 
-import axoloti.MainFrame;
+import axoloti.utils.Preferences;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import org.piccolo2d.PCamera;
@@ -134,7 +134,7 @@ public final class PatchMouseWheelZoomEventHandler extends PBasicInputEventHandl
      */
     @Override
     public void mouseWheelRotated(final PInputEvent event) {
-        if (!MainFrame.prefs.getMouseWheelPan()
+        if (!Preferences.getPreferences().getMouseWheelPan()
                 || event.isControlDown()
                 || event.isMetaDown()) {
             PCamera camera = event.getCamera();

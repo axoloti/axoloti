@@ -17,19 +17,18 @@
  */
 package axoloti.dialogs;
 
+import axoloti.CConnection;
 import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
 import static axoloti.FileUtils.axpFileFilter;
 import axoloti.MainFrame;
-import static axoloti.MainFrame.prefs;
 import axoloti.PatchFrame;
-import axoloti.PatchModel;
 import axoloti.PatchViewSwing;
 import axoloti.SDCardInfo;
 import axoloti.SDCardMountStatusListener;
 import axoloti.SDFileInfo;
-import axoloti.CConnection;
+import axoloti.utils.Preferences;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -307,7 +306,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     void SaveAs() {
-        final JFileChooser fc = new JFileChooser(MainFrame.prefs.getCurrentFileDirectory());
+        final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         FileFilter axb = new FileFilter() {
             @Override
@@ -401,7 +400,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
             FilenamePath = fileToBeSaved.getPath();
             setTitle(FilenamePath);
-            MainFrame.prefs.setCurrentFileDirectory(fileToBeSaved.getPath());
+            Preferences.getPreferences().setCurrentFileDirectory(fileToBeSaved.getPath());
             Save(fileToBeSaved);
         }
     }
@@ -425,7 +424,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     @Override
-    public boolean AskClose() {
+    public boolean askClose() {
         if (isDirty()) {
             Object[] options = {"Save",
                 "Don't save",
@@ -675,7 +674,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonUploadBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBankActionPerformed
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (CConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
         }
@@ -690,7 +689,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }//GEN-LAST:event_jMenuItemSaveAsActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        AskClose();
+        askClose();
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpActionPerformed
@@ -731,7 +730,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-        JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+        JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp"));
         fc.addChoosableFileFilter(axpFileFilter);
@@ -787,7 +786,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
         Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Uploading patch bank file");
-        QCmdProcessor processor = MainFrame.mainframe.getQcmdprocessor();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (CConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
         }
@@ -823,7 +822,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public JFrame GetFrame() {
+    public JFrame getFrame() {
         return this;
     }
 
@@ -864,7 +863,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     @Override
-    public ArrayList<DocumentWindow> GetChildDocuments() {
+    public ArrayList<DocumentWindow> getChildDocuments() {
         return null;
     }
 

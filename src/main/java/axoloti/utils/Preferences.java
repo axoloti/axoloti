@@ -242,7 +242,7 @@ public class Preferences {
 
     private static Preferences singleton;
 
-    public static Preferences LoadPreferences() {
+    public static Preferences getPreferences() {
         if (singleton == null) {
             File p = new File(Preferences.GetPrefsFileLoc());
             if (p.exists()) {

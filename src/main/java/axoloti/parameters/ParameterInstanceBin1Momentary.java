@@ -17,7 +17,6 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -43,11 +42,6 @@ public class ParameterInstanceBin1Momentary extends ParameterInstanceBin {
         //
         // Do we need to extend the parameter model to objects writing a new parameter value themselves?
         return "";
-    }
-
-    @Override
-    public void setValue(Value value) {
-        super.setValue(value);
     }
 
 }

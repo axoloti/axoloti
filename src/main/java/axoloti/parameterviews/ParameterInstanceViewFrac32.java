@@ -1,8 +1,7 @@
 package axoloti.parameterviews;
 
 import axoloti.Modulation;
-import axoloti.Preset;
-import axoloti.datatypes.Value;
+import axoloti.PresetDouble;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.parameters.ParameterInstance;
@@ -27,13 +26,22 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     }
 
     @Override
+    void UpdateUnit() {
+        super.UpdateUnit();
+        if (getModel().getConversion() != null) {
+            valuelbl.setText(getModel().getConversion().ToReal(new ValueFrac32(
+                    getModel().getValue())));
+        }
+    }
+
+    @Override
     public void PostConstructor() {
         super.PostConstructor();
         // FIXME: does not belong in view
         if (getModel().getModulators() != null) {
             List<Modulation> modulators = getModel().getModulators();
             for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue().getDouble());
+                System.out.println("mod amount " + m.getValue());
                 m.PostConstructor(getModel());
             }
         }
@@ -56,14 +64,14 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     @Override
     public boolean handleAdjustment() {
         // FIXME: cleanup preset logic
-        Preset p = getModel().GetPreset(presetEditActive);
+        PresetDouble p = getModel().getPreset(presetEditActive);
         if (p != null) {
-            p.value = new ValueFrac32(getControlComponent().getValue());
+            p.setValue(getControlComponent().getValue());
         }
-        if (getModel().getValue().getDouble() != getControlComponent().getValue()) {
+        if (getModel().getValue() != getControlComponent().getValue()) {
             if (getController() != null) {
-                ValueFrac32 vf32 = new ValueFrac32(getControlComponent().getValue());
-                getController().setModelUndoableProperty(ParameterInstance.ELEMENT_PARAM_VALUE, vf32);
+                Double d = getControlComponent().getValue();
+                getController().setModelUndoableProperty(ParameterInstance.VALUE, d);
             }
         } else {
             return false;
@@ -78,10 +86,12 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (evt.getPropertyName().equals(ParameterInstance.ELEMENT_PARAM_VALUE)) {
-            Value v = (Value) evt.getNewValue();
-            ctrl.setValue(v.getDouble());
+        if (ParameterInstance.VALUE.is(evt)) {
+            Double v = (Double) evt.getNewValue();
+            ctrl.setValue(v);
+            UpdateUnit();
+        } else if (ParameterInstance.CONVERSION.is(evt)) {
             UpdateUnit();
         }
-    }    
+    }
 }

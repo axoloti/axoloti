@@ -59,7 +59,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getController().changeValue(TFObjName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE, TFObjName.getText());
             }
 
             @Override
@@ -85,7 +85,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().changeValue(TFObjName.getText());
+                getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE,TFObjName.getText());
             }
         });
     }

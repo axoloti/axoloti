@@ -26,6 +26,6 @@ public class PParameterInstanceView4LevelX16 extends PParameterInstanceViewInt32
 
     @Override
     public void updateV() {
-        ctrl.setValue(parameterInstance.getValue().getInt());
+        ctrl.setValue(getModel().getValue());
     }
 }

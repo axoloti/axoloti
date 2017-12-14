@@ -17,7 +17,9 @@
  */
 package axoloti.parameters;
 
-import axoloti.datatypes.Value;
+import static axoloti.parameters.ParameterInstance.MIDI_CC;
+import axoloti.property.Property;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -30,17 +32,19 @@ public class ParameterInstanceBin1 extends ParameterInstanceBin<ParameterBin1> {
         super();
     }
 
+    @Override
+    public List<Property> getEditableFields() {
+        List<Property> l = super.getEditableFields();
+        l.add(MIDI_CC);
+        return l;
+    }
+
     public ParameterInstanceBin1(@Attribute(name = "value") int v) {
         super(v);
     }
 
     public String GenerateCodeMidiHandler(String vprefix) {
         return GenerateMidiCCCodeSub(vprefix, "(data2>0)");
-    }
-
-    @Override
-    public void setValue(Value value) {
-        super.setValue(value);
     }
 
 }

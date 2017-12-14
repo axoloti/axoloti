@@ -18,6 +18,7 @@
 package axoloti.parameters;
 
 import axoloti.datatypes.ValueInt32;
+import axoloti.property.Property;
 import java.security.MessageDigest;
 import java.util.List;
 import org.simpleframework.xml.Element;
@@ -32,10 +33,12 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     public ValueInt32 MinValue;
     @Element
     public ValueInt32 MaxValue;
+    
+
 
     public ParameterInt32Box() {
         this.MinValue = new ValueInt32(0);
-        this.MaxValue = new ValueInt32(0);
+        this.MaxValue = new ValueInt32(64);
     }
 
     public ParameterInt32Box(String name, int MinValue, int MaxValue) {
@@ -47,8 +50,6 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     @Override
     public ParameterInstanceInt32Box InstanceFactory() {
         ParameterInstanceInt32Box b = new ParameterInstanceInt32Box();
-        b.setMin(MinValue.getInt());
-        b.setMax(MaxValue.getInt());
         return b;
     }
 
@@ -66,10 +67,10 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     }
 
     @Override
-    public List<String> getEditableFields() {
+    public List<Property> getEditableFields() {
         List l = super.getEditableFields();
-        l.add("MinValue");
-        l.add("MaxValue");
+        l.add(VALUE_MIN);
+        l.add(VALUE_MAX);
         return l;
     }
 
@@ -84,7 +85,20 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     }
 
     @Override
+    public void setMinValue(Integer minValue) {
+        this.MinValue = new ValueInt32(minValue);
+        firePropertyChange(VALUE_MIN, null, minValue);
+    }
+
+    @Override
     public Integer getMaxValue() {
         return MaxValue.getInt();
     }
+
+    @Override
+    public void setMaxValue(Integer max) {
+        this.MaxValue = new ValueInt32(max);
+        firePropertyChange(VALUE_MAX, null, max);
+    }
+
 }

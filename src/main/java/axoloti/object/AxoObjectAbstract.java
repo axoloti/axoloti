@@ -18,10 +18,19 @@
 package axoloti.object;
 
 import axoloti.Modulator;
+import axoloti.attributedefinition.AxoAttribute;
+import axoloti.displays.Display;
+import axoloti.inlets.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.outlets.Outlet;
+import axoloti.parameters.Parameter;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -162,10 +171,37 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     
 /* MVC clean methods below... */
-    
-    
-    
-    private String StringDenull(String s){
+    public static final Property OBJ_INLETS = new ObjectProperty("Inlets", ArrayList.class, AxoObjectAbstract.class);
+    public static final Property OBJ_OUTLETS = new ObjectProperty("Outlets", ArrayList.class, AxoObjectAbstract.class);
+    public static final Property OBJ_ATTRIBUTES = new ObjectProperty("Attributes", ArrayList.class, AxoObjectAbstract.class);
+    public static final Property OBJ_PARAMETERS = new ObjectProperty("Parameters", ArrayList.class, AxoObjectAbstract.class);
+    public static final Property OBJ_DISPLAYS = new ObjectProperty("Displays", ArrayList.class, AxoObjectAbstract.class);
+
+    public abstract List<Inlet> getInlets();
+
+    public abstract List<Outlet> getOutlets();
+
+    public abstract List<AxoAttribute> getAttributes();
+
+    public abstract List<Parameter> getParameters();
+
+    public abstract List<Display> getDisplays();
+
+    public void setInlets(ArrayList<Inlet> inlets) {
+    }
+
+    public void setOutlets(ArrayList<Outlet> outlets) {
+    }
+    public void setAttributes(ArrayList<AxoAttribute> attributes) {
+    }
+
+    public void setParameters(ArrayList<Parameter> parameters) {
+    }
+
+    public void setDisplays(ArrayList<Display> displays) {
+    }
+
+    private String StringDenull(String s) {
         if (s == null) return "";
         return s;
     }
