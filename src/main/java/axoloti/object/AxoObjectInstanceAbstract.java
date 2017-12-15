@@ -17,7 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
 import axoloti.PatchModel;
 import axoloti.SDFileReference;
 import axoloti.attribute.AttributeInstance;
@@ -128,14 +127,14 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             return type;
         }
         if (typeUUID != null) {
-            type = MainFrame.axoObjects.GetAxoObjectFromUUID(typeUUID);
+            type = AxoObjects.getAxoObjects().GetAxoObjectFromUUID(typeUUID);
             if (type != null) {
                 System.out.println("restored from UUID:" + type.getId());
                 typeName = type.getId();
             }
         }
         if (type == null) {
-            List<IAxoObject> types = MainFrame.axoObjects.GetAxoObjectFromName(typeName, directory);
+            List<IAxoObject> types = AxoObjects.getAxoObjects().GetAxoObjectFromName(typeName, directory);
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
             } else { // pick first

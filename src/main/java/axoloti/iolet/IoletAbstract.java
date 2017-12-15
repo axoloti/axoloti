@@ -1,18 +1,16 @@
 package axoloti.iolet;
 
 import axoloti.INetView;
-import axoloti.MainFrame;
 import axoloti.Net;
 import axoloti.NetController;
 import axoloti.NetDrag;
 import axoloti.NetDragging;
-import axoloti.PatchModel;
 import axoloti.PatchViewSwing;
-import axoloti.inlets.IInletInstanceView;
+import axoloti.TransparentCursor;
 import axoloti.inlets.InletInstance;
 import axoloti.inlets.InletInstanceView;
+import axoloti.mvc.IView;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
-import axoloti.outlets.IOutletInstanceView;
 import axoloti.outlets.OutletInstance;
 import axoloti.outlets.OutletInstanceView;
 import java.awt.Component;
@@ -27,7 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import org.simpleframework.xml.Attribute;
-import axoloti.mvc.IView;
 
 public abstract class IoletAbstract extends JPanel implements MouseListener, MouseMotionListener, IIoletAbstract, IView {
 
@@ -221,7 +218,7 @@ public abstract class IoletAbstract extends JPanel implements MouseListener, Mou
 
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
-                || getRootPane().getCursor() != MainFrame.transparentCursor)
+                || getRootPane().getCursor() != TransparentCursor.get())
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
             INetView netView = axoObj.getPatchView().GetNetView(this);

@@ -118,7 +118,7 @@ public class PatchViewPiccolo extends PatchView {
                 Point patchPosition = asPoint(e.getInputManager().getCurrentCanvasPosition());
                 getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
                 getController().AddObjectInstance(
-                        MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), patchPosition);
+                        AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), patchPosition);
                 e.setHandled(true);
             } else if ((e.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(e)) {
                 e.setHandled(true);

@@ -668,7 +668,7 @@ public class PatchViewCodegen extends PatchAbstractView {
 
         c += "void xpatch_init2(int32_t fwid)\n"
                 + "{\n"
-                + "  if (fwid != 0x" + TargetModel.getTargetController().getModel().getFirmwareLinkID() + ") {\n"
+                + "  if (fwid != 0x" + TargetController.getTargetController().getModel().getFirmwareLinkID() + ") {\n"
                 + "    return;"
                 + "  }\n"
                 + "  extern uint32_t _pbss_start;\n"

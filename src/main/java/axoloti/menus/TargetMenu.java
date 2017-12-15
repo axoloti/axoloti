@@ -2,10 +2,9 @@ package axoloti.menus;
 
 import axoloti.Axoloti;
 import axoloti.IConnection;
-import axoloti.MainFrame;
 import axoloti.TargetController;
 import axoloti.TargetModel;
-import axoloti.dialogs.AJFrame;
+import axoloti.TargetViews;
 import axoloti.dialogs.AxolotiRemoteControl;
 import axoloti.dialogs.FileManagerFrame;
 import axoloti.dialogs.KeyboardFrame;
@@ -47,14 +46,19 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     private JMenuItem jMenuItemFlashDFU;
     private JMenuItem jMenuItemFlashDefault;
     private JMenuItem jMenuItemFlashSDR;
-    private JMenuItem jMenuItemMemViewer;
-    private JMenuItem jMenuItem1;
     private JMenuItem jMenuItemMount;
     private JMenuItem jMenuItemPanic;
     private JMenuItem jMenuItemPing;
     private JMenuItem jMenuItemRefreshFWID;
     private JSeparator jDevSeparator;
     private JMenu jMenuFirmware;
+    private JSeparator jSeparator1;
+    private JMenuItem jMenuItemKeyboard;
+    private JMenuItem jMenuItemMidiMonitor;
+    private JMenuItem jMenuItemMidiRouting;
+    private JMenuItem jMenuItemFileManager;
+    private JMenuItem jMenuItemRemote;
+    private JMenuItem jMenuItemMemoryViewer;
 
     public TargetMenu(TargetController controller) {
         super("Board");
@@ -101,22 +105,6 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
             }
         });
         add(jMenuItemPanic);
-
-        jMenuItemMemViewer = new JMenuItem("New memory viewer");
-        jMenuItemMemViewer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemMemViewerActionPerformed(evt);
-            }
-        });
-        add(jMenuItemMemViewer);
-
-        jMenuItem1 = new JMenuItem("MIDI input monitor");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
-        add(jMenuItem1);
 
         jMenuItemMount = new JMenuItem("Enter card reader mode (disconnects editor)");
         jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
@@ -190,6 +178,52 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
         add(jMenuFirmware);
+
+        jSeparator1 = new JSeparator();
+        add(jSeparator1);
+        jMenuItemKeyboard = new JMenuItem("Keyboard");
+        jMenuItemKeyboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TargetViews.getTargetViews().showKeyboard();
+            }
+        });
+        add(jMenuItemKeyboard);
+        jMenuItemMidiMonitor = new JMenuItem("MIDI Input Monitor");
+        jMenuItemMidiMonitor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TargetViews.getTargetViews().showMidiMonitor();
+            }
+        });
+        add(jMenuItemMidiMonitor);
+        jMenuItemMidiRouting = new JMenuItem("MIDI Routing");
+        jMenuItemMidiRouting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TargetViews.getTargetViews().showMidiRouting();
+            }
+        });
+        add(jMenuItemMidiRouting);
+        jMenuItemFileManager = new JMenuItem("File manager");
+        jMenuItemFileManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TargetViews.getTargetViews().showFilemanager();
+            }
+        });
+        add(jMenuItemFileManager);
+        jMenuItemRemote = new JMenuItem("Remote");
+        jMenuItemRemote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TargetViews.getTargetViews().showRemote();
+            }
+        });
+        add(jMenuItemRemote);
+        jMenuItemMemoryViewer = new JMenuItem("Memory Viewer");
+        jMenuItemMemoryViewer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TargetViews.getTargetViews().showMemoryViewer();
+            }
+        });
+        add(jMenuItemMemoryViewer);
+
     }
 
     private void jMenuItemFDisconnectActionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,18 +246,6 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdPing());
     }
 
-    private void jMenuItemMemViewerActionPerformed(java.awt.event.ActionEvent evt) {
-        AJFrame F = new axoloti.dialogs.Memory(getController());
-        getController().addView(F);
-        F.setVisible(true);
-    }
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
-        AJFrame F = new axoloti.dialogs.MidiMonitor(getController());
-        getController().addView(F);
-        F.setVisible(true);
-    }
-
     private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {
         getController().getModel().updateLinkFirmwareID();
     }
@@ -235,7 +257,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
             QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdDisconnect());
             QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdFlashDFU());
         } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and then connect the micro-USB port to your computer while holding button S1. The LEDs will stay off when in DFU mode.");
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and then connect the micro-USB port to your computer while holding button S1. The LEDs will stay off when in DFU mode.");
         }
     }
 
@@ -274,7 +296,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStop());
         QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdUploadPatch(fname));
         QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStartMounter());
-        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
+        Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
     }
 
     @Override

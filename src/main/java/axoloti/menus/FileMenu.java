@@ -19,15 +19,13 @@ package axoloti.menus;
 
 import axoloti.FileUtils;
 import axoloti.MainFrame;
-import static axoloti.MainFrame.axoObjects;
-import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
 import axoloti.PatchView;
 import axoloti.PatchViewSwing;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
-import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
@@ -46,7 +44,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import qcmds.QCmdProcessor;
 
 /**
  *
@@ -232,7 +229,7 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuReloadObjectsActionPerformed(java.awt.event.ActionEvent evt) {
-        axoObjects.LoadAxoObjects();
+        AxoObjects.loadAxoObjects();
     }
 
     private void jMenuOpenURLActionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,9 +246,9 @@ public class FileMenu extends JMenu {
             String name = url.substring(url.lastIndexOf("/") + 1, url.length());
             PatchViewSwing.OpenPatch(name, input);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
+            Logger.getLogger(FileMenu.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Unable to open URL {0}\n{1}", new Object[]{url, ex});
+            Logger.getLogger(FileMenu.class.getName()).log(Level.SEVERE, "Unable to open URL {0}\n{1}", new Object[]{url, ex});
         }
     }
 
@@ -267,7 +264,7 @@ public class FileMenu extends JMenu {
         for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
             lib.sync();
         }
-        axoObjects.LoadAxoObjects();
+        AxoObjects.loadAxoObjects();
     }
 
     private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {

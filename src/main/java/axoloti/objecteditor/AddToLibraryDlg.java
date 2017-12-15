@@ -18,8 +18,6 @@
 
 package axoloti.objecteditor;
 
-import axoloti.MainFrame;
-import static axoloti.MainFrame.axoObjects;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
@@ -286,8 +284,8 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
                 dir.mkdirs();
             }
         }
-        MainFrame.axoObjects.WriteAxoObject(obj.getPath(), obj);
-        axoObjects.LoadAxoObjects();
+        AxoObjects.getAxoObjects().WriteAxoObject(obj.getPath(), obj);
+        AxoObjects.loadAxoObjects();
 
         setVisible(false);
         dispose();

@@ -17,8 +17,8 @@
  */
 package components;
 
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import java.awt.AWTException;
 import java.awt.Cursor;
 import java.awt.Graphics;
@@ -79,7 +79,7 @@ public abstract class RControlEncoder extends JComponent {
             public void mouseDragged(MouseEvent e) {
                 if ((MousePressedBtn == MouseEvent.BUTTON1)) {
                     int v;
-                    getRootPane().setCursor(MainFrame.transparentCursor);
+                    getRootPane().setCursor(TransparentCursor.get());
                     v = (MousePressedCoordY - e.getYOnScreen());
                     if (Math.abs(v) > 2) {
                         if (robot == null) {

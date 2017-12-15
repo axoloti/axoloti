@@ -1,5 +1,6 @@
 package axoloti;
 
+import static axoloti.TargetModel.getTargetModel;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
@@ -12,6 +13,15 @@ public class TargetController extends AbstractController<TargetModel, IView, Abs
 
     public TargetController(TargetModel model, AbstractDocumentRoot documentRoot, AbstractController parent) {
         super(model, documentRoot, parent);
+    }
+
+    private static TargetController targetController;
+
+    public static TargetController getTargetController() {
+        if (targetController == null) {
+            targetController = new TargetController(getTargetModel(), null, null);
+        }
+        return targetController;
     }
 
 }

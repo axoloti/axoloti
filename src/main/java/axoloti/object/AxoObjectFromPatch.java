@@ -17,7 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
 import axoloti.PatchController;
 import axoloti.PatchFrame;
 import axoloti.PatchModel;
@@ -58,7 +57,7 @@ public class AxoObjectFromPatch extends AxoObject {
         shortId = f.getName().substring(0, f.getName().lastIndexOf("."));
         setPath(f.getAbsolutePath());
         UpdateObject();
-        MainFrame.axoObjects.ObjectList.add(this);
+        AxoObjects.getAxoObjects().ObjectList.add(this);
         // strip file extension
     }
 

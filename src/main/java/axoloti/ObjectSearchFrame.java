@@ -21,6 +21,7 @@ import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectInstanceFactory;
 import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectTreeNode;
+import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectController;
@@ -78,8 +79,8 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
         this.patchController = patchController;
         DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
-        this.objectTree = MainFrame.axoObjects.ObjectTree;
-        this.root = PopulateJTree(MainFrame.axoObjects.ObjectTree, root1);
+        this.objectTree = AxoObjects.getAxoObjects().ObjectTree;
+        this.root = PopulateJTree(AxoObjects.getAxoObjects().ObjectTree, root1);
         tm = new DefaultTreeModel(this.root);
         jTree1.setModel(tm);
         jTree1.setShowsRootHandles(true);
@@ -296,15 +297,15 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     }
 
     public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString, boolean setVisible) {
-        if (this.objectTree != MainFrame.axoObjects.ObjectTree) {
+        if (this.objectTree != AxoObjects.getAxoObjects().ObjectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
-            this.objectTree = MainFrame.axoObjects.ObjectTree;
-            this.root = PopulateJTree(MainFrame.axoObjects.ObjectTree, root1);
+            this.objectTree = AxoObjects.getAxoObjects().ObjectTree;
+            this.root = PopulateJTree(AxoObjects.getAxoObjects().ObjectTree, root1);
             tm = new DefaultTreeModel(this.root);
             jTree1.setModel(tm);
         }
 
-        MainFrame.mainframe.SetGrabFocusOnSevereErrors(false);
+        MainFrame.mainframe.setGrabFocusOnSevereErrors(false);
         accepted = false;
         snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
@@ -427,7 +428,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     public void Search(String s) {
         ArrayList<IAxoObject> listData = new ArrayList<IAxoObject>();
         if ((s == null) || s.isEmpty()) {
-            for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
                 listData.add(o);
             }
             jList1.setListData(listData.toArray());
@@ -435,26 +436,26 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 //            jList1.revalidate();
         } else {
             // exact match first
-            for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
                 if (o.getId().equals(s)) {
                     listData.add(o);
                 }
             }
-            for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
                 if (o.getId().startsWith(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }
                 }
             }
-            for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
                 if (o.getId().contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }
                 }
             }
-            for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
                 if (o.getDescription() != null && o.getDescription().contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
@@ -469,7 +470,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 ExpandJTreeToEl(listData.get(0));
                 SetPreview(type);
             } else {
-                List<IAxoObject> objs = MainFrame.axoObjects.GetAxoObjectFromName(s, patchController.GetCurrentWorkingDirectory());
+                List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(s, patchController.GetCurrentWorkingDirectory());
                 if ((objs != null) && (objs.size() > 0)) {
                     jList1.setListData(objs.toArray());
                     SetPreview(objs.get(0));
@@ -482,18 +483,18 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
     void Cancel() {
         accepted = false;
-        MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
+        MainFrame.mainframe.setGrabFocusOnSevereErrors(true);
         setVisible(false);
     }
 
     void Accept() {
         if (!accepted) {
             accepted = true;
-            MainFrame.mainframe.SetGrabFocusOnSevereErrors(true);
+            MainFrame.mainframe.setGrabFocusOnSevereErrors(true);
             setVisible(false);
             IAxoObject x = type;
             if (x == null) {
-                List<IAxoObject> objs = MainFrame.axoObjects.GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.GetCurrentWorkingDirectory());
+                List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.GetCurrentWorkingDirectory());
                 if ((objs != null) && (!objs.isEmpty())) {
                     x = objs.get(0);
                     jTextFieldObjName.setText("");

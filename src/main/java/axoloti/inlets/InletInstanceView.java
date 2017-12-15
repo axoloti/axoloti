@@ -1,8 +1,8 @@
 package axoloti.inlets;
 
 import axoloti.INetView;
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.JackInputComponent;
@@ -68,7 +68,7 @@ public class InletInstanceView extends IoletAbstract implements IInletInstanceVi
     @Override
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
-                || getRootPane().getCursor() != MainFrame.transparentCursor)
+                || getRootPane().getCursor() != TransparentCursor.get())
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
             INetView netView = axoObj.getPatchView().GetNetView((IInletInstanceView) this);

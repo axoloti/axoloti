@@ -17,8 +17,8 @@
  */
 package components.control;
 
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
@@ -99,7 +99,7 @@ public class VSliderComponent extends ACtrlComponent {
             grabFocus();
             px = e.getXOnScreen();
             py = e.getYOnScreen();
-            getRootPane().setCursor(MainFrame.transparentCursor);
+            getRootPane().setCursor(TransparentCursor.get());
             e.consume();
             fireEventAdjustmentBegin();
         }
@@ -310,7 +310,7 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     public void robotMoveToCenter() {
-        getRootPane().setCursor(MainFrame.transparentCursor);
+        getRootPane().setCursor(TransparentCursor.get());
         robot.mouseMove(px, py);
     }
 }

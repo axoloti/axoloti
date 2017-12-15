@@ -1,7 +1,7 @@
 package components.piccolo.control;
 
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
@@ -116,7 +116,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                 }
 
                 if (MousePressedBtn == MouseEvent.BUTTON1) {
-                    e.pushCursor(MainFrame.transparentCursor);
+                    e.pushCursor(TransparentCursor.get());
                     fireEventAdjustmentBegin();
                 } else {
                     e.popCursor();

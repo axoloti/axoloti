@@ -21,10 +21,6 @@ import static axoloti.Axoloti.FIRMWARE_DIR;
 import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
-import axoloti.dialogs.AxolotiRemoteControl;
-import axoloti.dialogs.FileManagerFrame;
-import axoloti.dialogs.KeyboardFrame;
-import axoloti.dialogs.MidiRouting;
 import axoloti.dialogs.PatchBank;
 import axoloti.dialogs.PreferencesFrame;
 import axoloti.dialogs.TJFrame;
@@ -34,10 +30,8 @@ import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import axoloti.utils.Preferences;
-import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
@@ -45,7 +39,6 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -80,17 +73,11 @@ import qcmds.QCmdProcessor;
  */
 public final class MainFrame extends TJFrame implements ActionListener {
 
-    static public AxoObjects axoObjects;
     public static MainFrame mainframe;
 
     ThemeEditor themeEditor;
-    KeyboardFrame keyboard;
-    FileManagerFrame filemanager;
-    AxolotiRemoteControl remote;
-    MidiRouting midirouting;
 
     private Thread qcmdprocessorThread;
-    static public Cursor transparentCursor;
     private boolean bGrabFocusOnSevereErrors = true;
 
     private boolean doAutoScroll = true;
@@ -105,8 +92,6 @@ public final class MainFrame extends TJFrame implements ActionListener {
         initComponents();
         jLabelVoltages.setSize(jLabelVoltages.getPreferredSize());
         fileMenu.initComponents();
-
-        transparentCursor = getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
 
         mainframe = this;
 
@@ -224,32 +209,9 @@ public final class MainFrame extends TJFrame implements ActionListener {
         Logger.getLogger("").setLevel(Level.INFO);
         doLayout();
 
-        TargetController targetController = getController();
-
-        keyboard = new KeyboardFrame(targetController);
-        targetController.addView(keyboard);
-        //piano.setAlwaysOnTop(true);
-        keyboard.setTitle("Keyboard");
-        keyboard.setVisible(false);
-
-        filemanager = new FileManagerFrame(targetController);
-        targetController.addView(filemanager);
-        filemanager.setTitle("File Manager");
-        filemanager.setVisible(false);
-
         themeEditor = new ThemeEditor();
         themeEditor.setTitle("Theme Editor");
         themeEditor.setVisible(false);
-
-        remote = new AxolotiRemoteControl(targetController);
-        targetController.addView(remote);
-        remote.setTitle("Remote");
-        remote.setVisible(false);
-
-        midirouting = new MidiRouting(targetController);
-        targetController.addView(midirouting);
-        midirouting.setTitle("MIDI Routing");
-        midirouting.setVisible(false);
 
         if (!TestDir(HOME_DIR, true)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Home directory is invalid:{0}, does it exist?, can it be written to?", System.getProperty(Axoloti.HOME_DIR));
@@ -335,8 +297,8 @@ public final class MainFrame extends TJFrame implements ActionListener {
                     for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
                         lib.reportStatus();
                     }
-                    axoObjects = new AxoObjects();
-                    axoObjects.LoadAxoObjects();
+
+                    AxoObjects.loadAxoObjects();
 
                     if (!Axoloti.isFailSafeMode()) {
                         boolean success = CConnection.GetConnection().connect(null);
@@ -359,7 +321,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
                             public void run() {
                                 try {
                                     // wait for objects be loaded
-                                    if (axoObjects.LoaderThread.isAlive()) {
+                                    if (AxoObjects.getAxoObjects().LoaderThread.isAlive()) {
                                         EventQueue.invokeLater(this);
                                     } else {
                                         PatchViewSwing.OpenPatch(f);
@@ -870,14 +832,12 @@ public final class MainFrame extends TJFrame implements ActionListener {
         }
     }
 
-    public boolean WarnedAboutFWCRCMismatch = false;
-
     void setFirmwareID(String firmwareId) {
         String linkFwId = getController().getModel().getFirmwareLinkID();
         if (!firmwareId.equals(linkFwId)) {
-            if (!WarnedAboutFWCRCMismatch) {
+            if (!TargetModel.getTargetModel().getWarnedAboutFWCRCMismatch()) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, linkFwId});
-                WarnedAboutFWCRCMismatch = true;
+                TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(true);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -973,27 +933,12 @@ public final class MainFrame extends TJFrame implements ActionListener {
         }
     }
 
-    public FileManagerFrame getFilemanager() {
-        return filemanager;
-    }
-
     public ThemeEditor getThemeEditor() {
         return themeEditor;
     }
 
-    public AxolotiRemoteControl getRemote() {
-        return remote;
-    }
 
-    public MidiRouting getMidiRouting() {
-        return midirouting;
-    }
-    
-    public KeyboardFrame getKeyboard() {
-        return keyboard;
-    }
-
-    public void SetGrabFocusOnSevereErrors(boolean b) {
+    public void setGrabFocusOnSevereErrors(boolean b) {
         bGrabFocusOnSevereErrors = b;
     }
 
@@ -1018,7 +963,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
             String linkFwId = (String)evt.getNewValue();
             jLabelFirmwareID.setText("Firmware ID = " + linkFwId);
             Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Link to firmware CRC {0}", linkFwId);
-            WarnedAboutFWCRCMismatch = false;
+            TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(false);
         } else if (TargetModel.HAS_SDCARD.is(evt)) {
             Boolean b = (Boolean) evt.getNewValue();
             if (b) {

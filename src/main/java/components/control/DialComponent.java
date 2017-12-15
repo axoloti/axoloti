@@ -17,8 +17,8 @@
  */
 package components.control;
 
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
@@ -146,7 +146,7 @@ public class DialComponent extends ACtrlComponent {
                 }
 
                 if (MousePressedBtn == MouseEvent.BUTTON1) {
-                    getRootPane().setCursor(MainFrame.transparentCursor);
+                    getRootPane().setCursor(TransparentCursor.get());
                     fireEventAdjustmentBegin();
                 } else {
                     getRootPane().setCursor(Cursor.getDefaultCursor());

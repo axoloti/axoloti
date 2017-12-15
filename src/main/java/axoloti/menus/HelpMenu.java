@@ -18,7 +18,6 @@
 package axoloti.menus;
 
 import axoloti.CheckForUpdates;
-import axoloti.MainFrame;
 import axoloti.dialogs.AboutFrame;
 import java.awt.Desktop;
 import java.io.File;
@@ -124,7 +123,7 @@ public class HelpMenu extends JMenu {
             File f = new File("doc/user guide.html");
             Desktop.getDesktop().browse(f.toURI());
         } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HelpMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -132,9 +131,9 @@ public class HelpMenu extends JMenu {
         try {
             Desktop.getDesktop().browse(new URI("http://community.axoloti.com"));
         } catch (IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HelpMenu.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(HelpMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

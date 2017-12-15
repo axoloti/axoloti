@@ -17,8 +17,8 @@
  */
 package components.control;
 
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.Constants;
@@ -161,7 +161,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                 MousePressedCoordX = e.getXOnScreen();
                 MousePressedCoordY = e.getYOnScreen();
                 MousePressedBtn = e.getButton();
-                getRootPane().setCursor(MainFrame.transparentCursor);
+                getRootPane().setCursor(TransparentCursor.get());
                 fireEventAdjustmentBegin();
             }
             e.consume();
@@ -441,7 +441,7 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     public void robotMoveToCenter() {
-        getRootPane().setCursor(MainFrame.transparentCursor);
+        getRootPane().setCursor(TransparentCursor.get());
         robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
     }
 }

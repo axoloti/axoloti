@@ -1,8 +1,8 @@
 package axoloti.outlets;
 
 import axoloti.INetView;
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import axoloti.iolet.IoletAbstract;
 import axoloti.objectviews.AxoObjectInstanceViewAbstract;
 import components.LabelComponent;
@@ -61,7 +61,7 @@ public class OutletInstanceView extends IoletAbstract implements IOutletInstance
     @Override
     public void setHighlighted(boolean highlighted) {
         if ((getRootPane() == null
-                || getRootPane().getCursor() != MainFrame.transparentCursor)
+                || getRootPane().getCursor() != TransparentCursor.get())
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
             INetView netView = axoObj.getPatchView().GetNetView((IOutletInstanceView) this);

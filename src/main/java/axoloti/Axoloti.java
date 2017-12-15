@@ -326,7 +326,7 @@ public class Axoloti {
 
         if (cmdLineOnly) {
             try {
-                MainFrame frame = new MainFrame(args, TargetModel.getTargetController());
+                MainFrame frame = new MainFrame(args, TargetController.getTargetController());
                 AxoObjects objs = new AxoObjects();
                 objs.LoadAxoObjects();
                 if (SplashScreen.getSplashScreen() != null) {
@@ -362,7 +362,7 @@ public class Axoloti {
                 @Override
                 public void run() {
                     try {
-                        MainFrame frame = new MainFrame(args, TargetModel.getTargetController());
+                        MainFrame frame = new MainFrame(args, TargetController.getTargetController());
                         frame.setVisible(true);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -22,7 +22,6 @@ import axoloti.ConnectionStatusListener;
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
 import static axoloti.FileUtils.axpFileFilter;
-import axoloti.MainFrame;
 import axoloti.PatchFrame;
 import axoloti.PatchViewSwing;
 import axoloti.SDCardInfo;
@@ -785,17 +784,17 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
-        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Uploading patch bank file");
+        Logger.getLogger(PatchBank.class.getName()).log(Level.INFO, "Uploading patch bank file");
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (CConnection.GetConnection().isConnected()) {
             processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
         }
 
         for (File f : files) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
+            Logger.getLogger(PatchBank.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
             UploadOneFile(f);
         }
-        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Patch bank uploaded");
+        Logger.getLogger(PatchBank.class.getName()).log(Level.INFO, "Patch bank uploaded");
     }//GEN-LAST:event_jUploadAllActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

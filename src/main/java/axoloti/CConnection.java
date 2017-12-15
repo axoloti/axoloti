@@ -29,7 +29,7 @@ public class CConnection {
 
     public static IConnection GetConnection() {
         if (conn == null) {
-            conn = new USBBulkConnection_v2(TargetModel.getTargetController());
+            conn = new USBBulkConnection_v2(TargetController.getTargetController());
         }
         return conn;
     }    

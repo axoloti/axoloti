@@ -19,10 +19,10 @@ package axoloti.objecteditor;
 
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
-import axoloti.MainFrame;
 import axoloti.mvc.IView;
 import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObject;
+import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
 import axoloti.property.Property;
@@ -482,7 +482,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             return false;
         }
         int count = 0;
-        for (IAxoObject o : MainFrame.axoObjects.ObjectList) {
+        for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
             if (getModel().getPath().equalsIgnoreCase(o.getPath())) {
                 count++;
             }
@@ -876,9 +876,9 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
         if (!isCompositeObject()) {
-            MainFrame.axoObjects.WriteAxoObject(getModel().getPath(), getModel());
+            AxoObjects.getAxoObjects().WriteAxoObject(getModel().getPath(), getModel());
             updateReferenceXML();
-            MainFrame.axoObjects.LoadAxoObjects();
+            AxoObjects.getAxoObjects().LoadAxoObjects();
         } else {
             JOptionPane.showMessageDialog(null, "The original object file " + getModel().getPath() + " contains multiple objects, the object editor does not support this.\n"
                     + "Your changes are NOT saved!");

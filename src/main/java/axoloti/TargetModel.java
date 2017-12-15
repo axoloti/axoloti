@@ -29,14 +29,12 @@ import qcmds.QCmdUploadPatch;
 public class TargetModel extends AbstractModel {
 
     private static TargetModel targetModel;
-    private static TargetController targetController;
 
-    public static TargetController getTargetController() {
+    public static TargetModel getTargetModel() {
         if (targetModel == null) {
             targetModel = new TargetModel();
-            targetController = new TargetController(targetModel, null, null);
         }
-        return targetController;
+        return targetModel;
     }
 
     public TargetModel() {
@@ -53,6 +51,7 @@ public class TargetModel extends AbstractModel {
     boolean sDCardMounted;
     TargetRTInfo RTInfo;
     int patchIndex;
+    public boolean WarnedAboutFWCRCMismatch = false;
 
     public void readFromTarget() {
         ChunkData chunk_input = connection.GetFWChunks().GetOne(FourCCs.FW_MIDI_INPUT_ROUTING);
@@ -106,6 +105,7 @@ public class TargetModel extends AbstractModel {
     public final static Property HAS_SDCARD = new BooleanProperty("SDCardMounted", TargetModel.class);
     public final static Property RTINFO = new ObjectProperty("RTInfo", TargetRTInfo.class, TargetModel.class);
     public final static Property PATCHINDEX = new IntegerProperty("PatchIndex", TargetModel.class);
+    public final static Property WARNEDABOUTFWCRCMISMATCH = new BooleanProperty("WarnedAboutFWCRCMismatch", TargetModel.class);
 
     @Override
     public List<Property> getProperties() {
@@ -205,4 +205,12 @@ public class TargetModel extends AbstractModel {
         firePropertyChange(PATCHINDEX, null, this.patchIndex);
     }
 
+    public Boolean getWarnedAboutFWCRCMismatch() {
+        return WarnedAboutFWCRCMismatch;
+    }
+
+    public void setWarnedAboutFWCRCMismatch(Boolean WarnedAboutFWCRCMismatch) {
+        this.WarnedAboutFWCRCMismatch = WarnedAboutFWCRCMismatch;
+        firePropertyChange(WARNEDABOUTFWCRCMISMATCH, null, WarnedAboutFWCRCMismatch);
+    }
 }

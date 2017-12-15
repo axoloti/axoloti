@@ -1,6 +1,6 @@
 package axoloti.menus;
 
-import axoloti.TargetModel;
+import axoloti.TargetController;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
@@ -15,7 +15,7 @@ public class StandardMenubar extends JMenuBar {
         fileMenu1.initComponents();
         add(fileMenu1);
 
-        JMenu boardMenu = new axoloti.menus.TargetMenu(TargetModel.getTargetController());
+        JMenu boardMenu = new axoloti.menus.TargetMenu(TargetController.getTargetController());
         add(boardMenu);
 
         JMenu windowMenu1 = new axoloti.menus.WindowMenu();

@@ -46,6 +46,17 @@ import org.simpleframework.xml.core.Persister;
  */
 public class AxoObjects {
 
+    private static AxoObjects axoObjects;
+
+    public static void loadAxoObjects() {
+        axoObjects = new AxoObjects();
+        axoObjects.LoadAxoObjects();
+    }
+
+    public static AxoObjects getAxoObjects() {
+        return axoObjects;
+    }
+
     public AxoObjectTreeNode ObjectTree;
     public ArrayList<IAxoObject> ObjectList;
     HashMap<String, IAxoObject> ObjectUUIDMap;

@@ -174,7 +174,7 @@ public class PatchViewSwing extends PatchView {
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
-                    getController().AddObjectInstance(MainFrame.axoObjects.GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
+                    getController().AddObjectInstance(AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();

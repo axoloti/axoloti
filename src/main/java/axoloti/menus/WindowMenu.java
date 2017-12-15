@@ -19,14 +19,12 @@ package axoloti.menus;
 
 import axoloti.DocumentWindow;
 import axoloti.DocumentWindowList;
-import axoloti.MainFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
-import javax.swing.JSeparator;
 
 /**
  *
@@ -111,28 +109,6 @@ public class WindowMenu extends JMenu {
 
     static void PopulateWindowMenu(JMenu jMenuWindow) {
         jMenuWindow.removeAll();
-        {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe, "Axoloti");
-            jMenuWindow.add(a);
-        }
-        {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getKeyboard(), "Keyboard");
-            jMenuWindow.add(a);
-        }
-        {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getFilemanager(), "File Manager");
-            jMenuWindow.add(a);
-        }
-        {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getRemote(), "Remote");
-            jMenuWindow.add(a);
-        }
-        {
-            WindowMenuItem a = new WindowMenuItem(MainFrame.mainframe.getMidiRouting(), "MIDI Routing");
-            jMenuWindow.add(a);
-        }
-
-        jMenuWindow.add(new JSeparator());
         PopulateDocuments(jMenuWindow, "", DocumentWindowList.GetList());
     }
 }

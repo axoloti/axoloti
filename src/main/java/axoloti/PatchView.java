@@ -366,7 +366,7 @@ public abstract class PatchView extends PatchAbstractView {
             pf.setVisible(true);
 
         } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -391,14 +391,14 @@ public abstract class PatchView extends PatchAbstractView {
         } catch (java.lang.reflect.InvocationTargetException ite) {
             if (ite.getTargetException() instanceof PatchModel.PatchVersionException) {
                 PatchModel.PatchVersionException pve = (PatchModel.PatchVersionException) ite.getTargetException();
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
+                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
                         new Object[]{f.getAbsoluteFile(), pve.getMessage()});
             } else {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ite);
+                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ite);
             }
             return null;
         } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

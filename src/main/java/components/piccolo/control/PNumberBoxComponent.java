@@ -1,7 +1,7 @@
 package components.piccolo.control;
 
-import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.TransparentCursor;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.objectviews.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
@@ -134,7 +134,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
                 MousePressedCoordX = PUtils.getXOnScreen(e);
                 MousePressedCoordY = PUtils.getYOnScreen(e);
                 MousePressedBtn = e.getButton();
-                e.pushCursor(MainFrame.transparentCursor);
+                e.pushCursor(TransparentCursor.get());
                 fireEventAdjustmentBegin();
             }
             e.setHandled(true);

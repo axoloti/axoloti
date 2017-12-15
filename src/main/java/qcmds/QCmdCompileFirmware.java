@@ -17,7 +17,6 @@
  */
 package qcmds;
 
-import axoloti.MainFrame;
 import axoloti.TargetModel;
 import axoloti.utils.OSDetect;
 import java.io.File;
@@ -37,8 +36,8 @@ public class QCmdCompileFirmware extends QCmdShellTask {
 
     @Override
     public String GetDoneMessage() {
-        TargetModel.getTargetController().getModel().updateLinkFirmwareID();
-        MainFrame.mainframe.WarnedAboutFWCRCMismatch = false;
+        TargetModel.getTargetModel().updateLinkFirmwareID();
+        TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(false);
         return "Done compiling firmware";
     }
     

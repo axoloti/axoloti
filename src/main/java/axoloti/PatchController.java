@@ -18,6 +18,7 @@ import axoloti.object.AxoObjectInstancePatcher;
 import axoloti.object.AxoObjectInstancePatcherObject;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
+import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.IAxoObjectInstance;
 import axoloti.object.ObjectController;
@@ -986,7 +987,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             return false;
         }
         String id = axoObjectInstance.getType().getId();
-        List<IAxoObject> candidates = MainFrame.axoObjects.GetAxoObjectFromName(id, axoObjectInstance.getPatchModel().GetCurrentWorkingDirectory());
+        List<IAxoObject> candidates = AxoObjects.getAxoObjects().GetAxoObjectFromName(id, axoObjectInstance.getPatchModel().GetCurrentWorkingDirectory());
         if (candidates == null) {
             return false;
         }

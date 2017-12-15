@@ -997,7 +997,6 @@ public class USBBulkConnection_v2 extends IConnection {
                         patch.getController().setDspLoad(DSPLoad);
                     }
                 }
-                // MainFrame.mainframe.showPatchIndex(patchIndex);
 
                 TargetRTInfo rtinfo = new TargetRTInfo();
                 rtinfo.inLevel1 = inLevel1;

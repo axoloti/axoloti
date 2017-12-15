@@ -155,7 +155,7 @@ public abstract class IConnection implements IView<TargetController> {
             csl.ShowDisconnect();
         }
         getController().getModel().setConnection(null);
-        MainFrame.mainframe.WarnedAboutFWCRCMismatch = false;
+        getController().getModel().setWarnedAboutFWCRCMismatch(false);
     }
 
     public void ShowConnect() {
