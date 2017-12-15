@@ -1,22 +1,22 @@
 package axoloti.swingui.patch.object.attribute;
 
-import axoloti.patch.object.attribute.AttributeInstanceController;
-import axoloti.patch.object.attribute.AttributeInstanceTablename;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.JLabel;
+
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceTablename;
+import axoloti.utils.Constants;
+
 class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
     JTextField TFtableName;
-    JLabel vlabel;
 
     AttributeInstanceViewTablename(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

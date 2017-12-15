@@ -19,8 +19,8 @@ package axoloti.piccolo.components;
 
 import axoloti.preferences.Theme;
 import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32UMap;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFrac32UMap;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -46,7 +46,6 @@ public class PAssignModulatorComponent extends PatchPNode {
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        setVisible(false);
         this.parameterInstanceView = parameterInstanceView;
         addInputEventListener(new PBasicInputEventHandler() {
             @Override

@@ -19,7 +19,6 @@ import javax.swing.event.DocumentListener;
 class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
 
     JTextField TFFileName;
-    JLabel vlabel;
     ButtonComponent ButtonChooseFile;
 
     AttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {

@@ -17,18 +17,26 @@
  */
 package axoloti.piccolo.components;
 
-import axoloti.preferences.Theme;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.parameterviews.PParameterInstanceViewFrac32UMap;
-import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+
 import javax.swing.JPopupMenu;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPaintContext;
+
+import axoloti.abstractui.PatchView;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.preferences.Theme;
+import axoloti.property.MidiCCProperty;
+import axoloti.swingui.property.menu.AssignMidiCCMenuItems;
+import axoloti.utils.Constants;
 
 /**
  *
@@ -38,16 +46,16 @@ public class PAssignMidiCCComponent extends PatchPNode {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    PParameterInstanceViewFrac32UMap parameterInstanceView;
+    ParameterInstanceController parameterInstanceController;
 
-    public PAssignMidiCCComponent(PParameterInstanceViewFrac32UMap param) {
-        super(param.getPatchView());
+    public PAssignMidiCCComponent(ParameterInstanceController parameterInstanceController, PatchView patchView) {
+        super(patchView);
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.parameterInstanceView = param;
-        setVisible(parameterInstanceView.getModel().getMidiCC() >= 0);
+        this.parameterInstanceController = parameterInstanceController;
+
         addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void mouseClicked(PInputEvent e) {
@@ -61,9 +69,10 @@ public class PAssignMidiCCComponent extends PatchPNode {
 
     void doPopup(PInputEvent e) {
         JPopupMenu sub1 = new JPopupMenu();
-        PAssignMidiCCMenuItems assignMidiCCMenuItems = new PAssignMidiCCMenuItems(parameterInstanceView, sub1);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstanceController, (MidiCCProperty) ParameterInstance.MIDI_CC);
+        sub1.add(assignMidiCCMenuItems);
         Point popupLocation = PUtils.getPopupLocation(e);
-        sub1.show(parameterInstanceView.getCanvas(), popupLocation.x, popupLocation.y);
+        sub1.show(((PatchViewPiccolo) patchView).getViewportView().getComponent(), popupLocation.x, popupLocation.y);
     }
 
     @Override
@@ -72,7 +81,7 @@ public class PAssignMidiCCComponent extends PatchPNode {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, (int) getWidth(), (int) getHeight());
-        if (parameterInstanceView.getModel().getMidiCC() >= 0) {
+        if (parameterInstanceController.getModel().getMidiCC() >= 0) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, (int) getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);
@@ -92,9 +101,6 @@ public class PAssignMidiCCComponent extends PatchPNode {
     }
 
     public void setCC(int i) {
-        setVisible(parameterInstanceView.getModel().getMidiCC() >= 0);
-        if (getVisible()) {
-            repaint();
-        }
+        repaint();
     }
 }

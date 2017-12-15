@@ -17,17 +17,16 @@
  */
 package axoloti.swingui.components;
 
-import axoloti.preferences.Theme;
-import axoloti.swingui.patch.object.inlet.InletInstanceView;
 import java.awt.BasicStroke;
-import static java.awt.Component.CENTER_ALIGNMENT;
-import static java.awt.Component.RIGHT_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+
 import javax.swing.JComponent;
+
+import axoloti.preferences.Theme;
 
 /**
  *
@@ -38,16 +37,16 @@ public class JackInputComponent extends JComponent {
     private static final int sz = 10;
     private static final int margin = 2;
     private static final Dimension dim = new Dimension(sz, sz);
-    final InletInstanceView inletInstanceView;
+    
+    private boolean connected = false;
 
-    public JackInputComponent(InletInstanceView inletInstanceView) {
+    public JackInputComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
-        this.inletInstanceView = inletInstanceView;
     }
     private final Stroke stroke = new BasicStroke(1.5f);
 
@@ -58,7 +57,7 @@ public class JackInputComponent extends JComponent {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setStroke(stroke);
-        if (inletInstanceView.getModel().isConnected()) {
+        if (connected) {
             g2.setPaint(Theme.getCurrentTheme().Component_Primary);
             g2.drawOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
             g2.setPaint(getForeground());
@@ -72,7 +71,7 @@ public class JackInputComponent extends JComponent {
         }
     }
 
-    public InletInstanceView getInletInstanceView() {
-        return inletInstanceView;
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

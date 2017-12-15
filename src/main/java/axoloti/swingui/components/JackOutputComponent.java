@@ -18,7 +18,6 @@
 package axoloti.swingui.components;
 
 import axoloti.preferences.Theme;
-import axoloti.swingui.patch.object.outlet.OutletInstanceView;
 import java.awt.BasicStroke;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import java.awt.Dimension;
@@ -38,16 +37,16 @@ public class JackOutputComponent extends JComponent {
     private static final int margin = 2;
     private static final int inset = 1;
     private static final Dimension dim = new Dimension(sz, sz);
-    final OutletInstanceView outletInstanceView;
 
-    public JackOutputComponent(OutletInstanceView outletInstanceView) {
+    private boolean connected = false;
+
+    public JackOutputComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
-        this.outletInstanceView = outletInstanceView;
     }
     private final static Stroke stroke = new BasicStroke(1.5f);
 
@@ -61,7 +60,7 @@ public class JackOutputComponent extends JComponent {
         g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(margin, margin + 1, sz - margin - margin, sz - margin - margin);
 
-        if (outletInstanceView.getModel().isConnected()) {
+        if (connected) {
             g2.fillOval(margin + inset, margin + inset + 1, sz - (margin + inset) * 2 + 1, sz - (margin + inset) * 2 + 1);
             g2.setPaint(getForeground());
             g2.fillOval(margin + inset - 1, margin + inset, sz - (margin + inset) * 2 + 1, sz - (margin + inset) * 2 + 1);
@@ -72,5 +71,9 @@ public class JackOutputComponent extends JComponent {
         }
 
         g2.drawRect(margin - 1, margin, sz - margin - margin, sz - margin - margin);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

@@ -55,7 +55,7 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
         int mask = 3 << (position * 2);
         int v = (int) value;
         v = (v & ~mask) + (val << (position * 2));
-        setValue((double) v);
+        fireValue((double) v);
     }
 
     private int GetFieldValue(int position) {
@@ -248,6 +248,10 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
             this.value = value;
             repaint();
         }
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

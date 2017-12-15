@@ -17,7 +17,7 @@
  */
 package axoloti.piccolo.components;
 
-import axoloti.piccolo.parameterviews.PParameterInstanceView;
+import axoloti.piccolo.patch.object.parameter.PParameterInstanceView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JComponent;

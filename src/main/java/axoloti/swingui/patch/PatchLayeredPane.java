@@ -1,6 +1,6 @@
 package axoloti.swingui.patch;
 
-import axoloti.patch.PatchViewportView;
+import axoloti.abstractui.PatchViewportView;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;

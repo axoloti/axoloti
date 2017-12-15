@@ -21,7 +21,7 @@ import axoloti.abstractui.INetView;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchViewportView;
+import axoloti.abstractui.PatchViewportView;
 import axoloti.preferences.Theme;
 import axoloti.object.AxoObjects;
 import axoloti.patch.object.IAxoObjectInstance;
@@ -407,7 +407,7 @@ public class PatchViewSwing extends PatchView {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        Layers.setPreferredSize(new Dimension(5000, 5000));
+        Layers.setPreferredSize(new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE));
         ShowPreset(0);
     }
 
@@ -471,8 +471,8 @@ public class PatchViewSwing extends PatchView {
             if ((Boolean)evt.getNewValue() == false) {
                 Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
-                Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);                
-            }            
+                Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
+            }
         }
     }
 
@@ -499,8 +499,8 @@ public class PatchViewSwing extends PatchView {
     public void remove(INetView view) {
         netLayerPanel.remove((NetView) view);
         netLayerPanel.repaint(((NetView) view).getBounds());
-    }   
-    
+    }
+
     @Override
     public void add(IAxoObjectInstanceView v) {
         if (objectLayerPanel != null) {

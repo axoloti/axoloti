@@ -24,6 +24,8 @@ import java.util.logging.Logger;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPaintContext;
 
+import static java.awt.Component.RIGHT_ALIGNMENT;
+
 public class PDialComponent extends PCtrlComponentAbstract {
 
     private double value;
@@ -48,7 +50,8 @@ public class PDialComponent extends PCtrlComponentAbstract {
         setMinimumSize(d);
         setMaximumSize(d);
         setPreferredSize(d);
-        setSize(d);
+
+        getProxyComponent().setAlignmentX(RIGHT_ALIGNMENT);
 
         try {
             robot = new Robot(MouseInfo.getPointerInfo().getDevice());
@@ -88,7 +91,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                     }
                     v = value + t * ((int) Math.round((MousePressedCoordY - PUtils.getYOnScreen(e))));
                 }
-                setValue(v);
+                fireValue(v);
                 e.setHandled(true);
             }
         }
@@ -152,34 +155,34 @@ public class PDialComponent extends PCtrlComponentAbstract {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_RIGHT:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() + steps);
+                    fireValue(getValue() + steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_LEFT:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() - steps);
+                    fireValue(getValue() - steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_PAGE_UP:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() + 5 * steps);
+                    fireValue(getValue() + 5 * steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_PAGE_DOWN:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() - 5 * steps);
+                    fireValue(getValue() - 5 * steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_HOME:
                     fireEventAdjustmentBegin();
-                    setValue(getMin());
+                    fireValue(getMin());
                     fireEventAdjustmentFinished();
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_END:
                     fireEventAdjustmentBegin();
-                    setValue(getMax());
+                    fireValue(getMax());
                     fireEventAdjustmentFinished();
                     ke.setHandled(true);
                     break;
@@ -190,7 +193,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                     if (convs != null) {
                         for (NativeToReal c : convs) {
                             try {
-                                setValue(c.FromReal(keybBuffer));
+                                fireValue(c.FromReal(keybBuffer));
                                 converted = true;
                                 break;
                             } catch (ParseException ex2) {
@@ -200,7 +203,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                     if (!converted) {
                         // otherwise, try parsing
                         try {
-                            setValue(Float.parseFloat(keybBuffer));
+                            fireValue(Float.parseFloat(keybBuffer));
                         } catch (java.lang.NumberFormatException ex) {
                         }
                     }
@@ -303,7 +306,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
     }
 
     private static final Stroke strokeThin = new BasicStroke(1);
-    private static final Stroke strokeThick = new BasicStroke(1.5f);
+    private static final Stroke strokeThick = new BasicStroke(2);
 
     @Override
     protected void paint(PPaintContext paintContext) {
@@ -338,12 +341,12 @@ public class PDialComponent extends PCtrlComponentAbstract {
             g2.drawLine(radius, radius, radius + x, radius + y);
             if (keybBuffer.isEmpty()) {
                 String s = String.format("%5.2f", value);
-                g2.setFont(Constants.FONT_DIAL);
-                g2.drawString(s, 0, getSize().height - 1);
+                g2.setFont(Constants.FONT);
+                g2.drawString(s, 0, getSize().height);
             } else {
                 g2.setColor(Theme.getCurrentTheme().Error_Text);
-                g2.setFont(Constants.FONT_DIAL);
-                g2.drawString(keybBuffer, 0, getSize().height - 1);
+                g2.setFont(Constants.FONT);
+                g2.drawString(keybBuffer, 0, getSize().height);
             }
         }
         if (isFocusOwner()) {
@@ -371,6 +374,10 @@ public class PDialComponent extends PCtrlComponentAbstract {
             setToolTipText(s);
         }
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

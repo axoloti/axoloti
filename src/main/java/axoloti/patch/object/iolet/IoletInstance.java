@@ -18,6 +18,7 @@
 package axoloti.patch.object.iolet;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persist;
@@ -26,9 +27,11 @@ import axoloti.datatypes.DataType;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.iolet.Iolet;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.atom.AtomInstance;
-import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.property.BooleanProperty;
+import axoloti.property.Property;
 
 /**
  *
@@ -45,6 +48,10 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
     final private AtomDefinitionController controller;
 
     protected IAxoObjectInstance axoObj;
+
+    boolean connected = false;
+
+    public final static Property CONNECTED = new BooleanProperty("Connected", IoletInstance.class);
 
     @Persist
     public void Persist() {
@@ -102,15 +109,6 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         }
     }
 
-    public boolean isConnected() {
-        if (axoObj == null) {
-            return false;
-        }
-
-        // FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
-        return false;
-    }
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
@@ -127,4 +125,23 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
 
     public abstract String getName();
     public abstract boolean isSource();
+
+    public boolean getConnected() {
+        return connected;
+    }
+
+    public void setConnected(Boolean connected) {
+        boolean oldValue = this.connected;
+        this.connected = connected;
+        firePropertyChange(
+            CONNECTED,
+            oldValue, connected);
+    }
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = super.getProperties();
+        l.add(CONNECTED);
+        return l;
+    }
 }

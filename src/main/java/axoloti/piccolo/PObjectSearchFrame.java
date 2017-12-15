@@ -1,22 +1,32 @@
 package axoloti.piccolo;
 
-import axoloti.swingui.ObjectSearchFrame;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.object.AxoObjectAbstract;
-import axoloti.patch.object.AxoObjectInstanceAbstract;
-import axoloti.object.IAxoObject;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.object.IAxoObject;
+import axoloti.object.ObjectController;
+import axoloti.patch.PatchController;
+import axoloti.patch.object.AxoObjectInstanceAbstract;
+import axoloti.patch.object.AxoObjectInstanceFactory;
+import axoloti.patch.object.AxoObjectInstancePatcher;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.ObjectInstancePatcherController;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.piccolo.patch.PatchPCanvas;
+import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
+import axoloti.swingui.ObjectSearchFrame;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
+
 public class PObjectSearchFrame extends ObjectSearchFrame {
 
-    double scale = 1.0;
+    private double scale = 1.0;
+    private PatchViewPiccolo patchView;
 
-    public PObjectSearchFrame(PatchController patchController) {
+    public PObjectSearchFrame(PatchController patchController, PatchViewPiccolo patchView) {
         super(patchController);
+        this.patchView = patchView;
+        this.scale = patchView.getViewportView().getViewScale();
     }
 
     @Override
@@ -39,26 +49,43 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             getListView().setSelectedValue(o, true);
             if (getListView().getSelectedValue() != o) {
             }
-            AxoObjectInstanceAbstract objectInstance = null;//o.CreateInstance(null, "dummy", new Point(0, 0));
-            PAxoObjectInstanceViewAbstract objectInstanceView = null;
-            // TODO: PICCOLO view factory
-            //... = (PAxoObjectInstanceViewAbstract) objectInstance.createView((PatchViewPiccolo) patchController.getPatchView());
+            ObjectController oc = o.createController(null, null);
+            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
+            ObjectInstanceController c;
+
+            if (objectInstance instanceof AxoObjectInstancePatcher) {
+                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance, null, null);
+            } else {
+                c = new ObjectInstanceController(objectInstance, null, null);
+            }
+
+            PAxoObjectInstanceViewAbstract objectInstanceView = (
+                (PAxoObjectInstanceViewAbstract)
+                AxoObjectInstanceViewFactory.createView(c, patchView));
 
             getMainView().removeAll();
             PatchPCanvas container = new PatchPCanvas();
             container.setVisible(true);
             getMainView().setLayout(null);
-            scale = 1.0; // patchController.getPatchView().getViewportView().getViewScale();
+
             container.setEnabled(false);
             container.getCamera().scale(scale);
             container.getLayer().addChild(objectInstanceView);
-            container.setBounds(0, 0, (int) (objectInstanceView.getBounds().width * scale),
-                    (int) (objectInstanceView.getBounds().height * scale));
-            Dimension preferredSize = new Dimension(container.getBounds().width,
-                    container.getBounds().height);
+
+            Dimension preferredSize = new Dimension(
+                (int) ((objectInstanceView.getBounds().width + 10) * scale),
+                (int) ((objectInstanceView.getBounds().height + 10) * scale));
+            container.setBounds(
+                0, 0,
+                (int) ((preferredSize.width + 10) * scale),
+                (int) ((preferredSize.height + 10) * scale));
             container.setPreferredSize(preferredSize);
-            getMainView().setPreferredSize(preferredSize);
             getMainView().add(container);
+
+            Dimension oldPreferredSize = getMainView().getPreferredSize();
+            getMainView().setPreferredSize(preferredSize);
+
+            objectInstanceView.resizeToGrid();
             objectInstanceView.repaint();
             getMainView().revalidate();
             getMainView().repaint();
@@ -89,9 +116,9 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
     public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
         super.Launch(patchLoc, o, searchString, false);
 
-// FIXME
-//        if (patchController.getPatchView().getViewportView().getViewScale() != scale) {
-//            SetPreview(previewObj, true);
-//        }
+        if (scale != patchView.getViewportView().getViewScale()) {
+            this.scale = patchView.getViewportView().getViewScale();
+            SetPreview(previewObj, true);
+        }
     }
 }

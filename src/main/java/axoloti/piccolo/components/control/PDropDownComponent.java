@@ -4,7 +4,7 @@ import axoloti.preferences.Theme;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPCanvas;
+import axoloti.piccolo.patch.PatchPCanvas;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -24,24 +24,26 @@ import org.piccolo2d.util.PPaintContext;
 public class PDropDownComponent extends PCtrlComponentAbstract {
 
     public interface DDCListener {
-
         public void SelectionChanged();
     }
 
     int SelectedIndex;
-    List<String> Items;
+    List<String> items;
 
     final private AttributeInstanceComboBox parent;
 
-    public PDropDownComponent(List<String> Items, AttributeInstanceComboBox parent, IAxoObjectInstanceView axoObjectInstanceView) {
+    public PDropDownComponent(List<String> items, AttributeInstanceComboBox parent, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
-        this.Items = Items;
         this.parent = parent;
         SelectedIndex = 0;
+        setItems(items);
+    }
 
+    public void setItems(List<String> items) {
+        this.items = items;
         FontRenderContext frc = new FontRenderContext(null, true, true);
         int maxWidth = 0;
-        for (String s : Items) {
+        for (String s : items) {
             TextLayout tl = new TextLayout(s, Constants.FONT, frc);
             Rectangle2D r = tl.getBounds();
             if (maxWidth < r.getWidth()) {
@@ -75,9 +77,9 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
         int[] yp = new int[]{vmargin, vmargin, vmargin + htick * 2};
         g2.fillPolygon(xp, yp, 3);
         PUtils.setRenderQualityToHigh(g2);
-        if (Items.size() > 0) {
+        if (items.size() > 0) {
             g2.setFont(Constants.FONT);
-            g2.drawString(Items.get(SelectedIndex), 4, 12);
+            g2.drawString(items.get(SelectedIndex), 4, 12);
         }
         PUtils.setRenderQualityToLow(g2);
     }
@@ -87,7 +89,7 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
     }
 
     public void setSelectedItem(String selection) {
-        int index = Items.indexOf(selection);
+        int index = items.indexOf(selection);
         if ((SelectedIndex != index) && (index >= 0)) {
             SelectedIndex = index;
             for (DDCListener il : ddcListeners) {
@@ -98,15 +100,15 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
     }
 
     public String getSelectedItem() {
-        return Items.get(SelectedIndex);
+        return items.get(SelectedIndex);
     }
 
     public int getItemCount() {
-        return Items.size();
+        return items.size();
     }
 
     public String getItemAt(int i) {
-        return Items.get(i);
+        return items.get(i);
     }
 
     ArrayList<DDCListener> ddcListeners = new ArrayList<>();
@@ -114,7 +116,7 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
     void doPopup(PInputEvent e) {
         if (isEnabled()) {
             JPopupMenu p = new JPopupMenu();
-            for (String s : Items) {
+            for (String s : items) {
                 JMenuItem mi = p.add(s);
                 mi.addActionListener(new ActionListener() {
 

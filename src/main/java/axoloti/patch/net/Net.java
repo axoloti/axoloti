@@ -58,6 +58,13 @@ public class Net extends AbstractModel {
         } else {
             this.dests = dest.toArray(new InletInstance[]{});
         }
+
+        for(OutletInstance o : source) {
+            o.setConnected(true);
+        }
+        for(InletInstance i : dest) {
+            i.setConnected(true);
+        }
     }
 
     @ElementList(name = "source", inline = true, required = false)
@@ -193,6 +200,9 @@ public class Net extends AbstractModel {
         OutletInstance[] old_value = this.sources;
         this.sources = sources;
         validate();
+        for(OutletInstance o : sources) {
+            o.setConnected(true);
+        }
         firePropertyChange(
                 NET_SOURCES,
                 old_value, sources);
@@ -206,6 +216,9 @@ public class Net extends AbstractModel {
         InletInstance[] old_value = this.dests;
         this.dests = dests;
         validate();
+        for(InletInstance i : dests) {
+            i.setConnected(true);
+        }
         firePropertyChange(
                 NET_DESTINATIONS,
                 old_value, dests);

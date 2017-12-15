@@ -19,7 +19,7 @@ package axoloti.patch.object;
 
 import axoloti.object.ObjectController;
 import axoloti.patch.PatchModel;
-import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.abstractui.PatchView;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
@@ -62,7 +62,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {
-                PatchViewSwing.OpenPatch(f);
+                PatchView.OpenPatch(f);
             } else {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());
             }

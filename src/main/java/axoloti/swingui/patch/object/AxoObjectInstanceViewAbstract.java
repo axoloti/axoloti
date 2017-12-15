@@ -1,5 +1,27 @@
 package axoloti.swingui.patch.object;
 
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.border.Border;
+
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
@@ -20,26 +42,6 @@ import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patch.object.inlet.InletInstanceView;
 import axoloti.swingui.patch.object.outlet.OutletInstanceView;
 import axoloti.utils.Constants;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.border.Border;
 
 public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceController> implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
 
@@ -366,31 +368,6 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
         setSize(d);
         revalidate();
-    }
-
-    @Override
-    public void addParameterInstanceView(IParameterInstanceView view) {
-    }
-
-    @Override
-    public void addAttributeInstanceView(IAttributeInstanceView view) {
-
-    }
-
-    @Override
-    public void addDisplayInstanceView(IDisplayInstanceView view) {
-
-    }
-
-    @Override
-    public void addOutletInstanceView(IIoletInstanceView view) {
-        add((OutletInstanceView) view);
-
-    }
-
-    @Override
-    public void addInletInstanceView(IIoletInstanceView view) {
-        add((InletInstanceView) view);
     }
 
     @Override

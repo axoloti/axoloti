@@ -12,7 +12,6 @@ import javax.swing.SwingUtilities;
 class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
     ButtonComponent bEdit;
-    JLabel vlabel;
 
     AttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

@@ -7,6 +7,7 @@ import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.swingui.TransparentCursor;
 import axoloti.swingui.components.LabelComponent;
+import axoloti.swingui.components.JackOutputComponent;
 import axoloti.swingui.components.SignalMetaDataIcon;
 import axoloti.swingui.patch.object.iolet.IoletAbstract;
 import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
@@ -16,8 +17,6 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
-
-
 
 public class OutletInstanceView extends IoletAbstract<IoletInstanceController> implements IIoletInstanceView {
 
@@ -43,7 +42,7 @@ public class OutletInstanceView extends IoletAbstract<IoletInstanceController> i
         add(label);
         add(Box.createHorizontalStrut(2));
         add(new SignalMetaDataIcon(getModel().getModel().GetSignalMetaData()));
-        jack = new axoloti.swingui.components.JackOutputComponent(this);
+        jack = new JackOutputComponent();
         jack.setForeground(getModel().getModel().getDatatype().GetColor());
         add(jack);
 
@@ -77,9 +76,17 @@ public class OutletInstanceView extends IoletAbstract<IoletInstanceController> i
         } else if (OutletInstance.DESCRIPTION.is(evt)) {
             setToolTipText((String) evt.getNewValue());
         }
+        else if (OutletInstance.CONNECTED.is(evt)) {
+            getJack().setConnected((Boolean) evt.getNewValue());
+            getJack().repaint();
+        }
     }
 
     @Override
     public void dispose() {
+    }
+
+    private JackOutputComponent getJack() {
+        return (JackOutputComponent) jack;
     }
 }

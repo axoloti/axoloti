@@ -17,21 +17,6 @@
  */
 package axoloti.swingui;
 
-import axoloti.patch.PatchController;
-import axoloti.patch.object.AxoObjectInstanceAbstract;
-import axoloti.patch.object.AxoObjectInstanceFactory;
-import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.object.AxoObjectTreeNode;
-import axoloti.object.AxoObjects;
-import axoloti.object.IAxoObject;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.object.ObjectController;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.ObjectInstancePatcherController;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.utils.Constants;
 import java.awt.Cursor;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
@@ -45,6 +30,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
@@ -56,6 +42,23 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.object.AxoObjectTreeNode;
+import axoloti.object.AxoObjects;
+import axoloti.object.IAxoObject;
+import axoloti.object.ObjectController;
+import axoloti.patch.PatchController;
+import axoloti.patch.object.AxoObjectInstanceAbstract;
+import axoloti.patch.object.AxoObjectInstanceFactory;
+import axoloti.patch.object.AxoObjectInstancePatcher;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.ObjectInstancePatcherController;
+import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
+import axoloti.utils.Constants;
 
 /**
  *
@@ -365,12 +368,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 c = new ObjectInstanceController(objectInstance, null, null);
             }
 
-            AxoObjectInstanceViewAbstract objectInstanceView = AxoObjectInstanceViewFactory.createView(c, null);
+            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.createView(c, (PatchViewSwing) null);
             jPanel1.removeAll();
-            jPanel1.add(objectInstanceView);
+            jPanel1.add((AxoObjectInstanceViewAbstract) objectInstanceView);
             objectInstanceView.resizeToGrid();
             jPanel1.repaint();  //reqd, as removed object may be smaller than new object
-           
+
             IAxoObject t = objectInstanceView.getModel().getType();
             if (t != null) {
                 String description = t.getDescription() == null || t.getDescription().isEmpty() ? o.getDescription() : t.getDescription();

@@ -35,7 +35,7 @@ public class PVSliderComponent extends PCtrlComponentAbstract {
     private int py;
 
     private void updateValue(PInputEvent e) {
-        setValue(min + (1 - globalToLocal(e.getPosition()).getY() / getHeight()) * ((max - min) / tick) * tick);
+        fireValue(min + (1 - globalToLocal(e.getPosition()).getY() / getHeight()) * ((max - min) / tick) * tick);
     }
 
     @Override
@@ -72,41 +72,41 @@ public class PVSliderComponent extends PCtrlComponentAbstract {
             case KeyEvent.VK_UP:
             case KeyEvent.VK_RIGHT:
                 fireEventAdjustmentBegin();
-                setValue(getValue() + steps);
+                fireValue(getValue() + steps);
                 ke.setHandled(true);
                 break;
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_LEFT:
                 fireEventAdjustmentBegin();
-                setValue(getValue() - steps);
+                fireValue(getValue() - steps);
                 ke.setHandled(true);
                 break;
             case KeyEvent.VK_PAGE_UP:
                 fireEventAdjustmentBegin();
-                setValue(getValue() + 5 * steps);
+                fireValue(getValue() + 5 * steps);
                 ke.setHandled(true);
                 break;
             case KeyEvent.VK_PAGE_DOWN:
                 fireEventAdjustmentBegin();
-                setValue(getValue() - 5 * steps);
+                fireValue(getValue() - 5 * steps);
                 ke.setHandled(true);
                 break;
             case KeyEvent.VK_HOME:
                 fireEventAdjustmentBegin();
-                setValue(max);
+                fireValue(max);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case KeyEvent.VK_END:
                 fireEventAdjustmentBegin();
-                setValue(min);
+                fireValue(min);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case KeyEvent.VK_ENTER:
                 fireEventAdjustmentBegin();
                 try {
-                    setValue(Float.parseFloat(keybBuffer));
+                    fireValue(Float.parseFloat(keybBuffer));
                 } catch (java.lang.NumberFormatException ex) {
                 }
                 fireEventAdjustmentFinished();
@@ -221,6 +221,10 @@ public class PVSliderComponent extends PCtrlComponentAbstract {
         this.value = value;
         getCanvas().setToolTipText("" + value);
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

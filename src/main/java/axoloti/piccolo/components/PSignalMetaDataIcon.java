@@ -2,7 +2,7 @@ package axoloti.piccolo.components;
 
 import axoloti.datatypes.SignalMetaData;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.patch.PatchPNode;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

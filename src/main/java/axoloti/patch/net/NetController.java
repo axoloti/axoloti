@@ -72,6 +72,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         if (inlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
+        inlet.setConnected(true);
         ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
         n.add(inlet);
         setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
@@ -81,6 +82,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         if (outlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
+        outlet.setConnected(true);
         ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
         n.add(outlet);
         setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
