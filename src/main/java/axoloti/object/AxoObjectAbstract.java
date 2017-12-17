@@ -18,14 +18,14 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.attributedefinition.AxoAttribute;
-import axoloti.displays.Display;
-import axoloti.inlets.Inlet;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
-import axoloti.outlets.Outlet;
-import axoloti.parameters.Parameter;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.parameter.Parameter;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import java.util.ArrayList;

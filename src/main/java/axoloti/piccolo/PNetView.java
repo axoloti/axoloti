@@ -1,12 +1,12 @@
 package axoloti.piccolo;
 
-import axoloti.INetView;
-import axoloti.Net;
-import axoloti.PatchViewPiccolo;
-import axoloti.Theme;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.mvc.AbstractController;
-import axoloti.outlets.IOutletInstanceView;
+import axoloti.preferences.Theme;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.INetView;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.PatchViewPiccolo;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -230,11 +230,6 @@ public class PNetView extends PatchPNode implements INetView {
     }
 
     @Override
-    public Net getNet() {
-        return net;
-    }
-
-    @Override
     public ArrayList<IOutletInstanceView> getSourceViews() {
         return source;
     }
@@ -249,13 +244,14 @@ public class PNetView extends PatchPNode implements INetView {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public AbstractController getController() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public NetController getController() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

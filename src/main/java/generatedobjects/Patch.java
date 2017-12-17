@@ -17,28 +17,28 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeObjRef;
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.attributedefinition.AxoAttributeTablename;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletCharPtr32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
-import axoloti.inlets.InletInt32Pos;
+import axoloti.object.attribute.AxoAttributeObjRef;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.attribute.AxoAttributeTablename;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletCharPtr32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.inlet.InletInt32Pos;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectComment;
 import axoloti.object.AxoObjectHyperlink;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletCharPtr32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.outlets.OutletInt32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletCharPtr32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.outlet.OutletInt32Pos;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

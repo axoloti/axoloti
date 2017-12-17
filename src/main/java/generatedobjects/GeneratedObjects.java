@@ -17,12 +17,35 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.*;
-import axoloti.inlets.*;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterInt32Box;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.attribute.AxoAttributeTablename;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletInt32Bipolar;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.outlet.OutletFrac32BufferBipolar;
+import axoloti.object.outlet.OutletFrac32BufferPos;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32BufferBipolar;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32BufferPos;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.inlet.InletInt32Bipolar;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32RisingFalling;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.inlet.InletBool32Rising;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.*;
-import axoloti.parameters.*;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.util.ArrayList;
 

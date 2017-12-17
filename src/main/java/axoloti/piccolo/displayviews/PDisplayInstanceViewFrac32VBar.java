@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceFrac32VBar;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.displays.PVBarComponent;
+import axoloti.patch.object.display.DisplayInstanceFrac32VBar;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.displays.PVBarComponent;
 
 public class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
 

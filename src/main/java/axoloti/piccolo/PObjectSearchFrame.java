@@ -1,12 +1,12 @@
 package axoloti.piccolo;
 
-import axoloti.ObjectSearchFrame;
-import axoloti.PatchController;
-import axoloti.PatchViewPiccolo;
+import axoloti.swingui.ObjectSearchFrame;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchViewPiccolo;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.object.AxoObjectInstanceAbstract;
+import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.object.IAxoObject;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import java.awt.Dimension;
 import java.awt.Point;

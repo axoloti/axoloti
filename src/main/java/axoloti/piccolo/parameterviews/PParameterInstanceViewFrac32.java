@@ -1,10 +1,10 @@
 package axoloti.piccolo.parameterviews;
 
 import axoloti.Modulation;
-import axoloti.PresetDouble;
+import axoloti.preset.PresetDouble;
 import axoloti.datatypes.ValueFrac32;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceFrac32;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;

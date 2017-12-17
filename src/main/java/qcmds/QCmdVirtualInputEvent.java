@@ -17,8 +17,8 @@
  */
 package qcmds;
 
-import axoloti.IConnection;
-import axoloti.VirtualInputEvent;
+import axoloti.connection.IConnection;
+import axoloti.target.remote.VirtualInputEvent;
 
 /**
  *

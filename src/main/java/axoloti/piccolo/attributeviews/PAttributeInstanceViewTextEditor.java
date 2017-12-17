@@ -1,9 +1,9 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.TextEditor;
-import axoloti.attribute.AttributeInstanceTextEditor;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.control.PButtonComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
+import axoloti.piccolo.components.control.PButtonComponent;
+import axoloti.swingui.TextEditor;
 
 public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
@@ -35,8 +35,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
                 }
             });*/
         }
-        editor.setState(java.awt.Frame.NORMAL);
-        editor.setVisible(true);
+        editor.toFront();
     }
 
     @Override

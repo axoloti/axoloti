@@ -1,7 +1,7 @@
 
 package axoloti.property;
 
-import axoloti.outlets.OutletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
 
 /**
  *

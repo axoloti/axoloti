@@ -15,8 +15,12 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/* Oops, this class is hard-referenced in .axo files... */
 package axoloti.parameters;
 
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 import axoloti.realunits.LinearTimeExp;
 import axoloti.realunits.NativeToReal;
 

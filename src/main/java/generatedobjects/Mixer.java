@@ -18,18 +18,18 @@
 package generatedobjects;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.inlets.Inlet;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferPos;
-import axoloti.inlets.InletFrac32Pos;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferPos;
+import axoloti.object.inlet.InletFrac32Pos;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapGain;
-import axoloti.parameters.ParameterFrac32UMapGainSquare;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapGain;
+import axoloti.object.parameter.ParameterFrac32UMapGainSquare;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.util.ArrayList;
 

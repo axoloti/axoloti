@@ -17,10 +17,10 @@
  */
 package qcmds;
 
-import axoloti.PatchController;
-import axoloti.PatchModel;
-import axoloti.PatchViewCodegen;
-import axoloti.parameters.ParameterInstance;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewCodegen;
+import axoloti.patch.object.parameter.ParameterInstance;
 
 /**
  *

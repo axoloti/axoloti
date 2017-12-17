@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceFrac32SDial;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.displays.PDispComponent;
+import axoloti.patch.object.display.DisplayInstanceFrac32SDial;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.displays.PDispComponent;
 
 public class PDisplayInstanceViewFrac32SDial extends PDisplayInstanceViewFrac32 {
 

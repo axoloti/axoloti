@@ -1,7 +1,7 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstance1;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.patch.object.display.DisplayInstance1;
+import axoloti.abstractui.IAxoObjectInstanceView;
 
 public abstract class PDisplayInstanceView1 extends PDisplayInstanceView {
 

@@ -1,7 +1,7 @@
 package axoloti.piccolo;
 
-import axoloti.PatchView;
-import axoloti.Theme;
+import axoloti.abstractui.PatchView;
+import axoloti.preferences.Theme;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;

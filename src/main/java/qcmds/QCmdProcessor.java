@@ -17,12 +17,12 @@
  */
 package qcmds;
 
-import axoloti.CConnection;
-import axoloti.IConnection;
-import axoloti.MainFrame;
-import axoloti.PatchViewCodegen;
-import axoloti.TargetViews;
-import axoloti.utils.Preferences;
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
+import axoloti.swingui.MainFrame;
+import axoloti.patch.PatchViewCodegen;
+import axoloti.swingui.target.TargetViews;
+import axoloti.preferences.Preferences;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;

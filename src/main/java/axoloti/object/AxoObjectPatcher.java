@@ -17,8 +17,9 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
-import axoloti.PatchModel;
+import axoloti.patch.object.AxoObjectInstancePatcher;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
 import java.awt.Point;
 
 /**

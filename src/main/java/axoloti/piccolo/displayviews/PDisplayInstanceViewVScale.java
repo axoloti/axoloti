@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceVScale;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.displays.PVValueLabelsComponent;
+import axoloti.patch.object.display.DisplayInstanceVScale;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.displays.PVValueLabelsComponent;
 
 public class PDisplayInstanceViewVScale extends PDisplayInstanceView {
 

@@ -17,12 +17,12 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.inlets.InletFrac32Buffer;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMapRatio;
-import axoloti.parameters.ParameterFrac32UMap;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMapRatio;
+import axoloti.object.parameter.ParameterFrac32UMap;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

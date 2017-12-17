@@ -17,24 +17,24 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletInt32;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.Parameter4LevelX16;
-import axoloti.parameters.ParameterBin16;
-import axoloti.parameters.ParameterBin32;
-import axoloti.parameters.ParameterFrac32SMapVSlider;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapVSlider;
-import axoloti.parameters.ParameterInt32BoxSmall;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.Parameter4LevelX16;
+import axoloti.object.parameter.ParameterBin16;
+import axoloti.object.parameter.ParameterBin32;
+import axoloti.object.parameter.ParameterFrac32SMapVSlider;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapVSlider;
+import axoloti.object.parameter.ParameterInt32BoxSmall;
 
 /**
  *

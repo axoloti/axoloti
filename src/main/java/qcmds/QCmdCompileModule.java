@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.PatchController;
+import axoloti.patch.PatchController;
 import axoloti.utils.OSDetect;
 import java.io.File;
 import java.util.ArrayList;

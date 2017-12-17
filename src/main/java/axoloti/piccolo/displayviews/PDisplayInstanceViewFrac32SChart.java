@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceFrac32SChart;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.displays.PScopeComponent;
+import axoloti.patch.object.display.DisplayInstanceFrac32SChart;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.displays.PScopeComponent;
 
 public class PDisplayInstanceViewFrac32SChart extends PDisplayInstanceViewFrac32 {
 

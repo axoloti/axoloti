@@ -18,8 +18,8 @@
 package axoloti;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.object.IAxoObjectInstance;
-import axoloti.parameters.ParameterInstanceFrac32;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 

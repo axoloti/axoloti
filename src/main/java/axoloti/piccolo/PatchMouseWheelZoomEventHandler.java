@@ -28,7 +28,7 @@
  */
 package axoloti.piccolo;
 
-import axoloti.utils.Preferences;
+import axoloti.preferences.Preferences;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import org.piccolo2d.PCamera;

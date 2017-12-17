@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.IConnection;
+import axoloti.connection.IConnection;
 
 /**
  *

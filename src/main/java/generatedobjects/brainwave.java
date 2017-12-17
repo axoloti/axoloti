@@ -17,9 +17,9 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeTextEditor;
+import axoloti.object.attribute.AxoAttributeTextEditor;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32;
 
 /**
  *

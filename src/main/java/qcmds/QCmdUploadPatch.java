@@ -18,7 +18,7 @@
 package qcmds;
 
 import axoloti.Axoloti;
-import axoloti.IConnection;
+import axoloti.connection.IConnection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

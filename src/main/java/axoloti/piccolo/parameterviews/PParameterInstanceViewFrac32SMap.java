@@ -1,7 +1,7 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceFrac32SMap;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 
 public class PParameterInstanceViewFrac32SMap extends PParameterInstanceViewFrac32UMap {
 

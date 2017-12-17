@@ -1,16 +1,16 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.PatchViewPiccolo;
-import axoloti.Theme;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.inlets.InletInstance;
-import axoloti.object.AxoObjectInstanceZombie;
-import axoloti.outlets.IOutletInstanceView;
-import axoloti.outlets.OutletInstance;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.AxoObjectInstanceZombie;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.PatchPNode;
 import axoloti.piccolo.inlets.PInletInstanceView;
 import axoloti.piccolo.outlets.POutletInstanceView;
-import components.piccolo.PLabelComponent;
+import axoloti.piccolo.components.PLabelComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;

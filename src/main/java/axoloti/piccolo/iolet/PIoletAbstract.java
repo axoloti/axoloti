@@ -1,18 +1,15 @@
 package axoloti.piccolo.iolet;
 
-import axoloti.Net;
-import axoloti.PatchModel;
-import axoloti.PatchViewPiccolo;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.iolet.IIoletAbstract;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.outlets.IOutletInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.net.Net;
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewPiccolo;
 import axoloti.piccolo.PNetDragging;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.inlets.PInletInstanceView;
 import axoloti.piccolo.outlets.POutletInstanceView;
-import components.piccolo.PLabelComponent;
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -26,7 +23,7 @@ import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
 
-public abstract class PIoletAbstract extends PatchPNode implements IIoletAbstract {
+public abstract class PIoletAbstract extends PatchPNode {
 
     public IAxoObjectInstanceView axoObjectInstanceView;
     public PLabelComponent lbl;

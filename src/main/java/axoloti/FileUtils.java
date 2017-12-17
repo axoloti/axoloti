@@ -17,8 +17,11 @@
  */
 package axoloti;
 
-import axoloti.dialogs.PatchBank;
-import axoloti.utils.Preferences;
+import axoloti.abstractui.DocumentWindow;
+import axoloti.abstractui.DocumentWindowList;
+import axoloti.swingui.dialogs.PatchBank;
+import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.preferences.Preferences;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -153,10 +156,7 @@ public class FileUtils {
             File f = fc.getSelectedFile();
             for (DocumentWindow dw : DocumentWindowList.GetList()) {
                 if (f.equals(dw.getFile())) {
-                    JFrame frame1 = dw.getFrame();
-                    frame1.setVisible(true);
-                    frame1.setState(java.awt.Frame.NORMAL);
-                    frame1.toFront();
+                    dw.toFront();
                     return;
                 }
             }

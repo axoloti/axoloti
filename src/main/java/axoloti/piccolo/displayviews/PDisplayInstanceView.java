@@ -1,15 +1,15 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstance;
-import axoloti.displayviews.IDisplayInstanceView;
+import axoloti.patch.object.display.DisplayInstance;
 import axoloti.mvc.AbstractController;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.mvc.IView;
 import axoloti.piccolo.PatchPNode;
-import components.piccolo.PLabelComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.PLabelComponent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
-public abstract class PDisplayInstanceView extends PatchPNode implements IDisplayInstanceView {
+public abstract class PDisplayInstanceView extends PatchPNode implements IView {
 
     DisplayInstance displayInstance;
     IAxoObjectInstanceView axoObjectInstanceView;

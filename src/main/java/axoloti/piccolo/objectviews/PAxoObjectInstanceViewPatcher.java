@@ -1,8 +1,8 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.PatchViewPiccolo;
-import axoloti.object.AxoObjectInstancePatcher;
-import components.piccolo.control.PButtonComponent;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.AxoObjectInstancePatcher;
+import axoloti.piccolo.components.control.PButtonComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
 

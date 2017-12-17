@@ -17,21 +17,21 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferBipolar;
-import axoloti.inlets.InletFrac32Pos;
-import axoloti.inlets.InletInt32;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferBipolar;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32BufferBipolar;
-import axoloti.outlets.OutletFrac32BufferPos;
-import axoloti.parameters.ParameterFrac32SMapPitch;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapFreq;
-import axoloti.parameters.ParameterFrac32UMapGain;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32BufferBipolar;
+import axoloti.object.outlet.OutletFrac32BufferPos;
+import axoloti.object.parameter.ParameterFrac32SMapPitch;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapFreq;
+import axoloti.object.parameter.ParameterFrac32UMapGain;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.util.HashSet;
 

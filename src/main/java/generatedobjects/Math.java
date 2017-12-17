@@ -17,14 +17,14 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletFrac32BufferPos;
-import axoloti.outlets.OutletFrac32Pos;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32BufferPos;
+import axoloti.object.outlet.OutletFrac32Pos;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

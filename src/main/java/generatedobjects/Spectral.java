@@ -17,15 +17,15 @@
  */
 package generatedobjects;
 
-import axoloti.displays.DisplayFrac32VBar;
-import axoloti.displays.DisplayFrac32VBarDB;
-import axoloti.displays.DisplayFrac4UByteVBar;
-import axoloti.displays.DisplayVScale;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletFrac32Buffer;
+import axoloti.object.display.DisplayFrac32VBar;
+import axoloti.object.display.DisplayFrac32VBarDB;
+import axoloti.object.display.DisplayFrac4UByteVBar;
+import axoloti.object.display.DisplayVScale;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32UMap;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32UMap;
 
 /**
  *

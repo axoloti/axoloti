@@ -1,11 +1,11 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.PatchViewPiccolo;
-import axoloti.object.AxoObjectInstanceHyperlink;
-import components.piccolo.PLabelComponent;
-import components.piccolo.control.PCtrlEvent;
-import components.piccolo.control.PCtrlListener;
-import components.piccolo.control.PPulseButtonComponent;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.AxoObjectInstanceHyperlink;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.components.control.PCtrlEvent;
+import axoloti.piccolo.components.control.PCtrlListener;
+import axoloti.piccolo.components.control.PPulseButtonComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import javax.swing.BoxLayout;
 import org.piccolo2d.event.PBasicInputEventHandler;

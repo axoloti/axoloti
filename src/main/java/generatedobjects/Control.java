@@ -17,21 +17,21 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32Pos;
+import axoloti.object.inlet.InletFrac32Pos;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterBin1;
-import axoloti.parameters.ParameterBin16;
-import axoloti.parameters.ParameterBin1Momentary;
-import axoloti.parameters.ParameterFrac32SMap;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterInt32Box;
-import axoloti.parameters.ParameterInt32HRadio;
-import axoloti.parameters.ParameterInt32VRadio;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterBin1;
+import axoloti.object.parameter.ParameterBin16;
+import axoloti.object.parameter.ParameterBin1Momentary;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterInt32Box;
+import axoloti.object.parameter.ParameterInt32HRadio;
+import axoloti.object.parameter.ParameterInt32VRadio;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

@@ -1,9 +1,9 @@
 package axoloti.piccolo.parameterviews;
 
 import axoloti.datatypes.Value;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin32;
-import components.piccolo.control.PCheckboxComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceBin32;
+import axoloti.piccolo.components.control.PCheckboxComponent;
 
 public class PParameterInstanceViewBin32 extends PParameterInstanceViewInt32 {
 

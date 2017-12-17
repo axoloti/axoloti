@@ -1,8 +1,8 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceObjRef;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PTextFieldComponent;
+import axoloti.patch.object.attribute.AttributeInstanceObjRef;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.PTextFieldComponent;
 import java.awt.Dimension;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

@@ -17,10 +17,10 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeTablename;
-import axoloti.inlets.InletInt32;
+import axoloti.object.attribute.AxoAttributeTablename;
+import axoloti.object.inlet.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletCharPtr32;
+import axoloti.object.outlet.OutletCharPtr32;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

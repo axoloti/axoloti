@@ -17,8 +17,8 @@
  */
 package qcmds;
 
-import axoloti.IConnection;
-import axoloti.IConnection.MemReadHandler;
+import axoloti.connection.IConnection;
+import axoloti.connection.IConnection.MemReadHandler;
 import java.nio.ByteBuffer;
 
 /**

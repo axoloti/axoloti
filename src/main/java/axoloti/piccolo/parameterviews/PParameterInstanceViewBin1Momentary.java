@@ -1,9 +1,9 @@
 package axoloti.piccolo.parameterviews;
 
 import axoloti.datatypes.Value;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin1Momentary;
-import components.piccolo.control.PPulseButtonComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceBin1Momentary;
+import axoloti.piccolo.components.control.PPulseButtonComponent;
 
 public class PParameterInstanceViewBin1Momentary extends PParameterInstanceViewBin {
 

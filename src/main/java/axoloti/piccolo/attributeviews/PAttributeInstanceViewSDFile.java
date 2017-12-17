@@ -1,9 +1,9 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceSDFile;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PTextFieldComponent;
-import components.piccolo.control.PButtonComponent;
+import axoloti.patch.object.attribute.AttributeInstanceSDFile;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.PTextFieldComponent;
+import axoloti.piccolo.components.control.PButtonComponent;
 import java.awt.Dimension;
 import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;

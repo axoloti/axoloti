@@ -1,6 +1,6 @@
 package axoloti.piccolo;
 
-import axoloti.PatchViewPiccolo;
+import axoloti.patch.PatchViewPiccolo;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import axoloti.utils.Constants;
 import java.awt.event.InputEvent;

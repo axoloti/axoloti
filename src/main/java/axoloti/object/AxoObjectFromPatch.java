@@ -17,12 +17,12 @@
  */
 package axoloti.object;
 
-import axoloti.PatchController;
-import axoloti.PatchFrame;
-import axoloti.PatchModel;
-import axoloti.PatchView;
-import axoloti.PatchViewCodegen;
+import axoloti.abstractui.PatchView;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewCodegen;
+import axoloti.swingui.patch.PatchFrame;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
@@ -91,8 +91,7 @@ public class AxoObjectFromPatch extends AxoObject {
         if (pf == null) {
             pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         }
-        pf.setState(java.awt.Frame.NORMAL);
-        pf.setVisible(true);
+        pf.toFront();
     }
 
     public PatchModel getPatchModel() {

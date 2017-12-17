@@ -17,13 +17,13 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletFrac32Bipolar;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletFrac32Bipolar;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.ParameterFrac32SMapKLineTimeExp;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.ParameterFrac32SMapKLineTimeExp;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**

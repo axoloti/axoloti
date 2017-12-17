@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.PatchViewCodegen;
+import axoloti.patch.PatchViewCodegen;
 
 /**
  *

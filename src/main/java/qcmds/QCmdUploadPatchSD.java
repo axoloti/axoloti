@@ -17,8 +17,8 @@
  */
 package qcmds;
 
-import axoloti.IConnection;
-import axoloti.PatchFileBinary;
+import axoloti.connection.IConnection;
+import axoloti.patch.PatchFileBinary;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,10 +1,10 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceInt32HRadio;
-import axoloti.parameters.ParameterInt32HRadio;
-import components.piccolo.PAssignMidiCCMenuItems;
-import components.piccolo.control.PHRadioComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceInt32HRadio;
+import axoloti.object.parameter.ParameterInt32HRadio;
+import axoloti.piccolo.components.PAssignMidiCCMenuItems;
+import axoloti.piccolo.components.control.PHRadioComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 

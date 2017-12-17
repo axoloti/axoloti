@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.PatchController;
+import axoloti.patch.PatchController;
 
 /**
  *

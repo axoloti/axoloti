@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceFrac8S128VBar;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PVGraphComponent;
+import axoloti.patch.object.display.DisplayInstanceFrac8S128VBar;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.PVGraphComponent;
 
 public class PDisplayInstanceViewFrac8S128VBar extends PDisplayInstanceView {
 

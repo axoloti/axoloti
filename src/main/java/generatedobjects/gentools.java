@@ -17,23 +17,23 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttribute;
-import axoloti.inlets.Inlet;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
-import axoloti.outlets.Outlet;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.Parameter;
-import axoloti.parameters.ParameterFrac32UMap;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.Parameter;
+import axoloti.object.parameter.ParameterFrac32UMap;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.utils.Preferences;
+import axoloti.preferences.Preferences;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -85,7 +85,7 @@ public class gentools {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
         }
-        for (axoloti.displays.Display p : o.displays) {
+        for (axoloti.object.display.Display p : o.displays) {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
         }
@@ -100,17 +100,17 @@ public class gentools {
         s = s.replaceAll("default", "");
         for (Parameter p : o.params) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
         for (Inlet p : o.inlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
         for (Outlet p : o.outlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
             }
         }
 
@@ -263,7 +263,7 @@ public class gentools {
                     oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }
             }
-            for (axoloti.displays.Display p : oo.displays) {
+            for (axoloti.object.display.Display p : oo.displays) {
                 if (oo.sInitCode != null) {
                     oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.GetCName());
                 }

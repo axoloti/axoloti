@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceInt32Bar32;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.displays.PLedstripComponent;
+import axoloti.patch.object.display.DisplayInstanceInt32Bar32;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.displays.PLedstripComponent;
 import java.awt.Dimension;
 
 public class PDisplayInstanceViewInt32Bar32 extends PDisplayInstanceViewInt32 {

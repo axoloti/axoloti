@@ -1,11 +1,11 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceInt32;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PLabelComponent;
-import components.piccolo.control.PCtrlEvent;
-import components.piccolo.control.PCtrlListener;
-import components.piccolo.control.PVSliderComponent;
+import axoloti.patch.object.attribute.AttributeInstanceInt32;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.components.control.PCtrlEvent;
+import axoloti.piccolo.components.control.PCtrlListener;
+import axoloti.piccolo.components.control.PVSliderComponent;
 import java.awt.Dimension;
 
 public class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {

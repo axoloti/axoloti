@@ -1,9 +1,9 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin1;
-import components.piccolo.PAssignMidiCCMenuItems;
-import components.piccolo.control.PCheckboxComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceBin1;
+import axoloti.piccolo.components.PAssignMidiCCMenuItems;
+import axoloti.piccolo.components.control.PCheckboxComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 

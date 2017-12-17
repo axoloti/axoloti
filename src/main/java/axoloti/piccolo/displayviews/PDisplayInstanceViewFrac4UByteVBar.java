@@ -1,9 +1,9 @@
 package axoloti.piccolo.displayviews;
 
 import axoloti.datatypes.Value;
-import axoloti.displays.DisplayInstanceFrac4UByteVBar;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.displays.PVLineComponent;
+import axoloti.patch.object.display.DisplayInstanceFrac4UByteVBar;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.displays.PVLineComponent;
 
 public class PDisplayInstanceViewFrac4UByteVBar extends PDisplayInstanceViewFrac32 {
 

@@ -17,20 +17,20 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.ParameterFrac32SMap;
-import axoloti.parameters.ParameterFrac32SMapKPitch;
-import axoloti.parameters.ParameterFrac32SMapLFOPitch;
-import axoloti.parameters.ParameterFrac32SMapPitch;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapFilterQ;
-import axoloti.parameters.ParameterInt32Box;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.object.parameter.ParameterFrac32SMapKPitch;
+import axoloti.object.parameter.ParameterFrac32SMapLFOPitch;
+import axoloti.object.parameter.ParameterFrac32SMapPitch;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapFilterQ;
+import axoloti.object.parameter.ParameterInt32Box;
 import static generatedobjects.gentools.WriteAxoObject;
 import java.util.HashSet;
 

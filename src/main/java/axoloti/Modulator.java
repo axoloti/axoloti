@@ -17,7 +17,7 @@
  */
 package axoloti;
 
-import axoloti.object.IAxoObjectInstance;
+import axoloti.patch.object.IAxoObjectInstance;
 import java.util.ArrayList;
 
 /**

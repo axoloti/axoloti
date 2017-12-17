@@ -17,14 +17,14 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeTablename;
-import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
+import axoloti.object.attribute.AxoAttributeTablename;
+import axoloti.object.attribute.AxoAttributeTextEditor;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMap;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMap;
 
 /**
  *

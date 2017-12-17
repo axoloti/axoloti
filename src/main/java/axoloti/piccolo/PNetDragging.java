@@ -1,10 +1,10 @@
 package axoloti.piccolo;
 
-import axoloti.Net;
-import axoloti.PatchViewPiccolo;
-import axoloti.Theme;
-import axoloti.inlets.IInletInstanceView;
-import axoloti.outlets.IOutletInstanceView;
+import axoloti.patch.net.Net;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
 import static axoloti.piccolo.PUtils.asPoint;
 import java.awt.Color;
 import java.awt.Graphics2D;

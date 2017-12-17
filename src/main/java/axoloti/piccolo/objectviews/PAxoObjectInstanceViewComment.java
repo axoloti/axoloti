@@ -1,8 +1,8 @@
 package axoloti.piccolo.objectviews;
 
-import axoloti.PatchViewPiccolo;
-import axoloti.object.AxoObjectInstanceComment;
-import components.piccolo.PLabelComponent;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.object.AxoObjectInstanceComment;
+import axoloti.piccolo.components.PLabelComponent;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import javax.swing.BoxLayout;
 import org.piccolo2d.event.PBasicInputEventHandler;

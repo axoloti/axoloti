@@ -1,6 +1,6 @@
 package axoloti.piccolo;
 
-import axoloti.Theme;
+import axoloti.preferences.Theme;
 import java.awt.Graphics2D;
 import org.piccolo2d.util.PPaintContext;
 

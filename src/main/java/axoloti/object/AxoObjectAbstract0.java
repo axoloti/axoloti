@@ -1,11 +1,11 @@
 package axoloti.object;
 
-import axoloti.SDFileReference;
-import axoloti.attributedefinition.AxoAttribute;
-import axoloti.displays.Display;
-import axoloti.inlets.Inlet;
-import axoloti.outlets.Outlet;
-import axoloti.parameters.Parameter;
+import axoloti.target.fs.SDFileReference;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.parameter.Parameter;
 import axoloti.property.Property;
 import java.awt.Rectangle;
 import java.io.File;

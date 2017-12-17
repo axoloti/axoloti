@@ -1,8 +1,8 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceInt32Box;
-import components.piccolo.control.PNumberBoxComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
+import axoloti.piccolo.components.control.PNumberBoxComponent;
 
 public class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 {
 

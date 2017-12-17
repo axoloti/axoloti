@@ -1,9 +1,9 @@
 package axoloti.piccolo;
 
-import axoloti.PatchViewPiccolo;
-import axoloti.PatchViewportView;
-import axoloti.Theme;
-import axoloti.utils.Preferences;
+import axoloti.patch.PatchViewPiccolo;
+import axoloti.patch.PatchViewportView;
+import axoloti.preferences.Theme;
+import axoloti.preferences.Preferences;
 import java.awt.event.InputEvent;
 import javax.swing.JComponent;
 import org.piccolo2d.PNode;

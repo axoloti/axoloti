@@ -1,10 +1,10 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceSpinner;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.control.PCtrlEvent;
-import components.piccolo.control.PCtrlListener;
-import components.piccolo.control.PNumberBoxComponent;
+import axoloti.patch.object.attribute.AttributeInstanceSpinner;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.control.PCtrlEvent;
+import axoloti.piccolo.components.control.PCtrlListener;
+import axoloti.piccolo.components.control.PNumberBoxComponent;
 
 public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 

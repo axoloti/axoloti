@@ -1,8 +1,8 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstance4LevelX16;
-import components.piccolo.control.PCheckbox4StatesComponent;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstance4LevelX16;
+import axoloti.piccolo.components.control.PCheckbox4StatesComponent;
 
 public class PParameterInstanceView4LevelX16 extends PParameterInstanceViewInt32 {
 

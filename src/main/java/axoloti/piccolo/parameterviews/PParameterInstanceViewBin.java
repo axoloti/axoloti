@@ -1,11 +1,11 @@
 package axoloti.piccolo.parameterviews;
 
-import axoloti.PresetInt;
-import axoloti.Theme;
+import axoloti.preset.PresetInt;
+import axoloti.preferences.Theme;
 import axoloti.datatypes.Value;
 import axoloti.datatypes.ValueInt32;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import axoloti.parameters.ParameterInstanceBin;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstanceBin;
 import java.awt.Graphics2D;
 import org.piccolo2d.util.PPaintContext;
 

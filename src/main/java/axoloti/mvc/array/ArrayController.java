@@ -1,6 +1,6 @@
 package axoloti.mvc.array;
 
-import axoloti.NetController;
+import axoloti.patch.net.NetController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IModel;

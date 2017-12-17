@@ -17,10 +17,12 @@
  */
 package axoloti;
 
+import axoloti.swingui.MainFrame;
+import axoloti.target.TargetController;
 import axoloti.object.AxoObjects;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
-import axoloti.utils.Preferences;
+import axoloti.preferences.Preferences;
 import java.awt.EventQueue;
 import java.awt.SplashScreen;
 import java.io.File;

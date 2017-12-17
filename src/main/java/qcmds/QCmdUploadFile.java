@@ -17,8 +17,8 @@
  */
 package qcmds;
 
-import axoloti.IConnection;
-import axoloti.SDCardInfo;
+import axoloti.connection.IConnection;
+import axoloti.target.fs.SDCardInfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

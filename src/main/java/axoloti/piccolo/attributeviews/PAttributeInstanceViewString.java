@@ -1,7 +1,7 @@
 package axoloti.piccolo.attributeviews;
 
-import axoloti.attribute.AttributeInstanceString;
-import axoloti.objectviews.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceString;
+import axoloti.abstractui.IAxoObjectInstanceView;
 
 public abstract class PAttributeInstanceViewString extends PAttributeInstanceView {
 

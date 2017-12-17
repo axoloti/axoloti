@@ -1,8 +1,8 @@
 package axoloti.piccolo.displayviews;
 
-import axoloti.displays.DisplayInstanceNoteLabel;
-import axoloti.objectviews.IAxoObjectInstanceView;
-import components.piccolo.PLabelComponent;
+import axoloti.patch.object.display.DisplayInstanceNoteLabel;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
 
 public class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {

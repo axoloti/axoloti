@@ -18,7 +18,7 @@
 package axoloti.object;
 
 import axoloti.utils.AxolotiLibrary;
-import axoloti.utils.Preferences;
+import axoloti.preferences.Preferences;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,10 +1,10 @@
 package axoloti.piccolo.outlets;
 
-import axoloti.outlets.IOutletInstanceView;
-import axoloti.outlets.OutletInstanceZombie;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.object.outlet.OutletInstanceZombie;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
-import components.piccolo.PJackOutputComponent;
-import components.piccolo.PLabelComponent;
+import axoloti.piccolo.components.PJackOutputComponent;
+import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;

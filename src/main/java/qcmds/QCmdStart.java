@@ -17,9 +17,9 @@
  */
 package qcmds;
 
-import axoloti.IConnection;
-import axoloti.PatchController;
-import axoloti.PatchViewCodegen;
+import axoloti.connection.IConnection;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchViewCodegen;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
