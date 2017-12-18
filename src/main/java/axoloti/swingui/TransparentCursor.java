@@ -2,8 +2,8 @@ package axoloti.swingui;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import javax.swing.JFrame;
 
 /**
  *
@@ -15,9 +15,7 @@ public class TransparentCursor {
 
     public static Cursor get() {
         if (transparentCursor == null) {
-            JFrame frame = new JFrame();
-            transparentCursor = frame.getToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
-            frame.dispose();
+            transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB), new Point(), null);
         }
         return transparentCursor;
     }
