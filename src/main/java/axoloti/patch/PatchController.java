@@ -841,7 +841,6 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 disconnect(il);
                 Net n = new Net(new OutletInstance[]{ol}, new InletInstance[]{il});
                 netControllers.add(n);
-                getModel().nets.add(n);
                 Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: new net added");
                 return n;
             }
