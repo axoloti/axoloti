@@ -40,4 +40,13 @@ public class DocumentWindowList {
     static public ArrayList<DocumentWindow> GetList() {
         return list;
     }
+
+    static public boolean AskCloseAll() {
+        for(DocumentWindow dw : (ArrayList<DocumentWindow>) list.clone()) {
+            if (dw.askClose()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

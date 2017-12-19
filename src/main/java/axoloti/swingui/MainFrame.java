@@ -822,15 +822,13 @@ public final class MainFrame extends TJFrame implements ActionListener {
     }
 
     public void Quit() {
-        while (!DocumentWindowList.GetList().isEmpty()) {
-            if (DocumentWindowList.GetList().get(0).askClose()) {
-                return;
-            }
+        if(DocumentWindowList.AskCloseAll()) {
+            return;
         }
+        
         Preferences.getPreferences().SavePrefs();
-        if (DocumentWindowList.GetList().isEmpty()) {
-            System.exit(0);
-        }
+        dispose();
+        System.exit(0);
     }
 
     private void setCpuID(String cpuId) {
