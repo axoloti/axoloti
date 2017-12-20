@@ -19,9 +19,9 @@ package axoloti;
 
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
-import axoloti.swingui.dialogs.PatchBank;
-import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.preferences.Preferences;
+import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patchbank.PatchBank;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -166,7 +166,7 @@ public class FileUtils {
                 PatchViewSwing.OpenPatch(f);
                 Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             } else if (axbFileFilter.accept(f)) {
-                PatchBank.OpenBank(f);
+                PatchBank.OpenPatchBankEditor(f);
                 Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             }
         }

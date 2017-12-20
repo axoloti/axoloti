@@ -18,6 +18,7 @@
 package qcmds;
 
 import axoloti.connection.IConnection;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardInfo;
 import java.io.File;
 import java.io.FileInputStream;
@@ -133,8 +134,9 @@ public class QCmdUploadFile implements QCmdSerialTask {
 
             inputStream.close();
             connection.TransmitCloseFile();
-
-            SDCardInfo.getInstance().AddFile(filename, (int) size, ts);
+            SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+            sdcardinfo.AddFile(filename, (int) size, ts);
+            TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
             success = true;
             return this;
         } catch (IOException ex) {

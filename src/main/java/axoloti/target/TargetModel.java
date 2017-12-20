@@ -1,23 +1,24 @@
 package axoloti.target;
 
-import axoloti.connection.IConnection;
-import axoloti.swingui.MainFrame;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractModel;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
+import axoloti.swingui.MainFrame;
+import axoloti.target.fs.SDCardInfo;
+import axoloti.target.midirouting.MidiInputRoutingTable;
+import axoloti.target.midirouting.MidiOutputRoutingTable;
 import axoloti.utils.FirmwareID;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import axoloti.target.midirouting.MidiInputRoutingTable;
-import axoloti.target.midirouting.MidiOutputRoutingTable;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStartFlasher;
 import qcmds.QCmdStop;
@@ -52,6 +53,8 @@ public class TargetModel extends AbstractModel {
     MidiOutputRoutingTable[] outputRoutingTables;
     boolean sDCardMounted;
     TargetRTInfo RTInfo;
+    SDCardInfo sdcardInfo = new SDCardInfo();
+
     int patchIndex;
     public boolean WarnedAboutFWCRCMismatch = false;
 
@@ -108,6 +111,7 @@ public class TargetModel extends AbstractModel {
     public final static Property RTINFO = new ObjectProperty("RTInfo", TargetRTInfo.class, TargetModel.class);
     public final static Property PATCHINDEX = new IntegerProperty("PatchIndex", TargetModel.class);
     public final static Property WARNEDABOUTFWCRCMISMATCH = new BooleanProperty("WarnedAboutFWCRCMismatch", TargetModel.class);
+    public final static Property SDCARDINFO = new ObjectProperty("SDCardInfo", SDCardInfo.class, TargetModel.class);
 
     @Override
     public List<Property> getProperties() {
@@ -215,4 +219,14 @@ public class TargetModel extends AbstractModel {
         this.WarnedAboutFWCRCMismatch = WarnedAboutFWCRCMismatch;
         firePropertyChange(WARNEDABOUTFWCRCMISMATCH, null, WarnedAboutFWCRCMismatch);
     }
+
+    public SDCardInfo getSDCardInfo() {
+        return sdcardInfo;
+    }
+
+    public void setSDCardInfo(SDCardInfo sDCardInfo) {
+        this.sdcardInfo = sDCardInfo;
+        firePropertyChange(SDCARDINFO, null, sDCardInfo);
+    }
+
 }

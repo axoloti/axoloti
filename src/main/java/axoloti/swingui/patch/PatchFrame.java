@@ -95,7 +95,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
         initComponents();
-        fileMenu1.initComponents();
         patchView = new PatchViewSwing(patchController);
         patchView.PostConstructor();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
@@ -529,6 +528,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         getContentPane().add(jToolbarPanel);
 
+        fileMenu1.initComponents();
         fileMenu1.setText("File");
         fileMenu1.add(jSeparator1);
 
@@ -1009,7 +1009,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jMenuSaveClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveClipActionPerformed
         Serializer serializer = new Persister();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(2048);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
         try {
             serializer.write(getPatchModel(), baos);
         } catch (Exception ex) {

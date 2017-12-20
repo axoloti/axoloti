@@ -1,15 +1,11 @@
 package axoloti.patch;
 
 import axoloti.Axoloti;
-import axoloti.connection.CConnection;
-import axoloti.connection.IConnection;
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
 import axoloti.datatypes.DataType;
-import axoloti.object.inlet.Inlet;
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
@@ -17,27 +13,31 @@ import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectFromPatch;
+import axoloti.object.AxoObjectPatcher;
+import axoloti.object.AxoObjectPatcherObject;
+import axoloti.object.AxoObjects;
+import axoloti.object.IAxoObject;
+import axoloti.object.ObjectController;
+import axoloti.object.inlet.Inlet;
+import static axoloti.patch.PatchModel.USE_EXECUTION_ORDER;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.AxoObjectInstanceFactory;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.AxoObjectInstancePatcherObject;
-import axoloti.object.AxoObjectPatcher;
-import axoloti.object.AxoObjectPatcherObject;
-import axoloti.object.AxoObjects;
-import axoloti.object.IAxoObject;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.object.ObjectController;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.ObjectInstancePatcherController;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
-import static axoloti.patch.PatchModel.USE_EXECUTION_ORDER;
+import axoloti.preferences.Preferences;
 import axoloti.swingui.patch.PatchFrame;
-import axoloti.target.fs.SDCardInfo;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.Constants;
-import axoloti.preferences.Preferences;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayInputStream;
@@ -154,13 +154,13 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             if (targetfn.charAt(0) != '/') {
                 targetfn = sdpath + "/" + fref.targetPath;
             }
-            if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+            if (!TargetModel.getTargetModel().getSDCardInfo().exists(targetfn, f.lastModified(), f.length())) {
                 try {
                     GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
                     GetQCmdProcessor().WaitQueueFinished();
                     GetQCmdProcessor().AppendToQueue(new qcmds.QCmdPing());
                     GetQCmdProcessor().WaitQueueFinished();
-                    if (!SDCardInfo.getInstance().exists(targetfn, f.lastModified(), f.length())) {
+                    if (!TargetModel.getTargetModel().getSDCardInfo().exists(targetfn, f.lastModified(), f.length())) {
                         if (f.length() > 8 * 1024 * 1024) {
                             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
                             continue;
@@ -295,6 +295,17 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 }
             }
             qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
+
+            Serializer serializer = new Persister();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
+            try {
+                serializer.write(getModel(), baos);
+            } catch (Exception ex) {
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
+            qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(bais, sdfnPatch));
 
             String dir;
             int i = sdfilename.lastIndexOf("/");

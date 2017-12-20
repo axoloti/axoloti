@@ -13,7 +13,7 @@ public class AbstractDocumentRoot {
 
     private UndoManager undoManager = new UndoManager();
 
-    UndoManager getUndoManager() {
+    public UndoManager getUndoManager() {
         return undoManager;
     }
 

@@ -18,41 +18,35 @@
 package qcmds;
 
 import axoloti.connection.IConnection;
-import axoloti.target.TargetModel;
-import axoloti.target.fs.SDCardInfo;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class QCmdDeleteFile implements QCmdSerialTask {
+public class QCmdGetFileContents implements QCmdSerialTask {
 
     final String filename;
+    IConnection.MemReadHandler doneHandler;
 
-    public QCmdDeleteFile(String filename) {
+    public QCmdGetFileContents(String filename, IConnection.MemReadHandler doneHandler) {
         this.filename = filename;
+        this.doneHandler = doneHandler;
     }
 
     @Override
     public String GetStartMessage() {
-        return "Start deleting file on sdcard : " + filename;
+        return "Start get file contents : " + filename;
     }
 
     @Override
     public String GetDoneMessage() {
-        SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-        sdcardinfo.Delete(filename);
-        TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
-        return "Done deleting file";
+        return "Done getting file contents";
     }
 
     @Override
     public QCmd Do(IConnection connection) {
         connection.ClearSync();
-        Logger.getLogger(QCmdDeleteFile.class.getName()).log(Level.INFO, "deleting: {0}", filename);
-        connection.TransmitDeleteFile(filename);
+        connection.TransmitGetFileContents(filename, doneHandler);
         return this;
     }
 

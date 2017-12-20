@@ -18,11 +18,16 @@
 package axoloti.swingui.target;
 
 import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
 import axoloti.preferences.Preferences;
+import axoloti.swingui.TextEditor;
+import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardInfo;
 import axoloti.target.fs.SDFileInfo;
+import axoloti.textdoc.TextController;
+import axoloti.textdoc.TextModel;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
@@ -31,6 +36,8 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -44,6 +51,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import qcmds.QCmdCreateDirectory;
 import qcmds.QCmdDeleteFile;
+import qcmds.QCmdGetFileContents;
 import qcmds.QCmdGetFileList;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
@@ -83,7 +91,7 @@ public class FileManagerFrame extends TJFrame {
 
             @Override
             public int getRowCount() {
-                return SDCardInfo.getInstance().getFiles().size();
+                return getSDCardInfo().getFiles().size();
             }
 
             @Override
@@ -96,7 +104,7 @@ public class FileManagerFrame extends TJFrame {
 
                 switch (columnIndex) {
                     case 0: {
-                        SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+                        SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
                         if (f.isDirectory()) {
                             returnValue = f.getFilename();
                         } else {
@@ -105,7 +113,7 @@ public class FileManagerFrame extends TJFrame {
                     }
                     break;
                     case 1: {
-                        SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+                        SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
                         if (f.isDirectory()) {
                             returnValue = "";
                         } else {
@@ -114,7 +122,7 @@ public class FileManagerFrame extends TJFrame {
                     }
                     break;
                     case 2: {
-                        SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+                        SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
                         if (f.isDirectory()) {
                             returnValue = "";
                         } else {
@@ -130,7 +138,7 @@ public class FileManagerFrame extends TJFrame {
                     }
                     break;
                     case 3: {
-                        Calendar c = SDCardInfo.getInstance().getFiles().get(rowIndex).getTimestamp();
+                        Calendar c = getSDCardInfo().getFiles().get(rowIndex).getTimestamp();
                         if (c.get(Calendar.YEAR) > 1979) {
                             returnValue = c.getTime().toString();
                         } else {
@@ -182,22 +190,25 @@ public class FileManagerFrame extends TJFrame {
             }
         });
     }
-    
-    void UpdateButtons(){
+
+    void UpdateButtons() {
         int row = jFileTable.getSelectedRow();
         if (row < 0) {
             jButtonDelete.setEnabled(false);
+            jButtonOpen.setEnabled(false);
             ButtonUploadDefaultName();
         } else {
             jButtonDelete.setEnabled(true);
-            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(row);
+            SDFileInfo f = getSDCardInfo().getFiles().get(row);
             if (f != null && f.isDirectory()) {
                 jButtonUpload.setText("Upload to " + f.getFilename() + " ...");
                 jButtonCreateDir.setText("Create directory in " + f.getFilename() + " ...");
+                jButtonOpen.setEnabled(false);
             } else {
                 ButtonUploadDefaultName();
+                jButtonOpen.setEnabled(true);
             }
-        }        
+        }
     }
 
     void ButtonUploadDefaultName() {
@@ -221,6 +232,7 @@ public class FileManagerFrame extends TJFrame {
         jButtonUpload = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jButtonCreateDir = new javax.swing.JButton();
+        jButtonOpen = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -294,6 +306,13 @@ public class FileManagerFrame extends TJFrame {
             }
         });
 
+        jButtonOpen.setText("Open");
+        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOpenActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -306,6 +325,8 @@ public class FileManagerFrame extends TJFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jButtonOpen)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonDelete)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonUpload)
@@ -325,7 +346,8 @@ public class FileManagerFrame extends TJFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonDelete)
                     .addComponent(jButtonUpload)
-                    .addComponent(jButtonCreateDir))
+                    .addComponent(jButtonCreateDir)
+                    .addComponent(jButtonOpen))
                 .addGap(5, 5, 5))
         );
 
@@ -349,7 +371,7 @@ public class FileManagerFrame extends TJFrame {
         String dir = "/";
         int rowIndex = jFileTable.getSelectedRow();
         if (rowIndex >= 0) {
-            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+            SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
             if (f != null && f.isDirectory()) {
                 dir = f.getFilename();
             }
@@ -382,7 +404,7 @@ public class FileManagerFrame extends TJFrame {
         int rowIndex = jFileTable.getSelectedRow();
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (rowIndex >= 0) {
-            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+            SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
             if (!f.isDirectory()) {
                 processor.AppendToQueue(new QCmdDeleteFile(f.getFilename()));
             } else {
@@ -400,7 +422,7 @@ public class FileManagerFrame extends TJFrame {
         String dir = "/";
         int rowIndex = jFileTable.getSelectedRow();
         if (rowIndex >= 0) {
-            SDFileInfo f = SDCardInfo.getInstance().getFiles().get(rowIndex);
+            SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
             if (f != null && f.isDirectory()) {
                 dir = f.getFilename();
             }
@@ -413,6 +435,76 @@ public class FileManagerFrame extends TJFrame {
         UpdateButtons();
     }//GEN-LAST:event_jButtonCreateDirActionPerformed
 
+    class ByteBufferBackedInputStream extends InputStream {
+
+        ByteBuffer buf;
+
+        public ByteBufferBackedInputStream(ByteBuffer buf) {
+            this.buf = buf;
+        }
+
+        public int read() throws IOException {
+            if (!buf.hasRemaining()) {
+                return -1;
+            }
+            return buf.get() & 0xFF;
+        }
+
+        public int read(byte[] bytes, int off, int len)
+                throws IOException {
+            if (!buf.hasRemaining()) {
+                return -1;
+            }
+
+            len = Math.min(len, buf.remaining());
+            buf.get(bytes, off, len);
+            return len;
+        }
+    }
+
+    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
+        int rowIndex = jFileTable.getSelectedRow();
+        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
+        if (rowIndex >= 0) {
+            SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
+            processor.AppendToQueue(new QCmdGetFileContents(f.getFilename(), new IConnection.MemReadHandler() {
+                @Override
+                public void Done(ByteBuffer mem) {
+                    if (mem == null) {
+                        return;
+                    }
+                    if (f.getExtension().equals("axb")) {
+                        String s = "";
+                        while (mem.remaining() > 0) {
+                            s += (char) mem.get();
+                        }
+                        TextModel textModel = new TextModel(s);
+                        TextController textController = new TextController(textModel, null, null);
+                        TextEditor textEditor = new TextEditor(TextModel.TEXT, textController, null);
+                        textController.addView(textEditor);
+                        textEditor.setTitle(f.getFilename());
+                        textEditor.setVisible(true);
+                        textEditor.toFront();
+                    } else if (f.getFilename().endsWith("/patch.axp")) {
+                        // convert "/xyz/patch.axp" into "xyz.axp"
+                        String patchname = f.getFilename().substring(0, f.getFilename().length() - 10) + ".axp";
+                        if (patchname.charAt(0) == '/') {
+                            patchname = patchname.substring(1);
+                        }
+                        InputStream input = new ByteBufferBackedInputStream(mem);
+                        PatchViewSwing.OpenPatch(patchname, input);
+                    } else {
+                        System.out.println("file contents:");
+                        while (mem.remaining() > 0) {
+                            System.out.print((char) mem.get());
+                        }
+                        System.out.println();
+                    }
+                }
+            }));
+        }
+    }//GEN-LAST:event_jButtonOpenActionPerformed
+
     public void refresh() {
         if (!SwingUtilities.isEventDispatchThread()) {
             SwingUtilities.invokeLater(new Runnable() {
@@ -421,14 +513,6 @@ public class FileManagerFrame extends TJFrame {
                     refresh();
                 }
             });
-        } else {
-            jFileTable.clearSelection();
-            int clusters = SDCardInfo.getInstance().getClusters();
-            int clustersize = SDCardInfo.getInstance().getClustersize();
-            int sectorsize = SDCardInfo.getInstance().getSectorsize();
-            jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
-            jFileTable.revalidate();
-            jFileTable.repaint();
         }
     }
 
@@ -436,6 +520,7 @@ public class FileManagerFrame extends TJFrame {
     private javax.swing.JButton jButton1Refresh;
     private javax.swing.JButton jButtonCreateDir;
     private javax.swing.JButton jButtonDelete;
+    private javax.swing.JButton jButtonOpen;
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JTable jFileTable;
     private javax.swing.JLabel jLabelSDInfo;
@@ -458,7 +543,17 @@ public class FileManagerFrame extends TJFrame {
         } else if (TargetModel.HAS_SDCARD.is(evt)) {
             Boolean b = (Boolean) evt.getNewValue();
             ShowConnect(b);
+        } else if (TargetModel.SDCARDINFO.is(evt)) {
+            int clusters = getSDCardInfo().getClusters();
+            int clustersize = getSDCardInfo().getClustersize();
+            int sectorsize = getSDCardInfo().getSectorsize();
+            jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
+            ((AbstractTableModel) jFileTable.getModel()).fireTableDataChanged();
         }
+    }
+
+    private SDCardInfo getSDCardInfo() {
+        return getModel().getSDCardInfo();
     }
 
 }

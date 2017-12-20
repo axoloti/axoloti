@@ -16,8 +16,11 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
 
     final DocumentWindow parent;
 
-    public AJFrame(DocumentWindow parent) throws HeadlessException {
+    final T controller;
+
+    public AJFrame(T controller, DocumentWindow parent) throws HeadlessException {
         super();
+        this.controller = controller;
         this.parent = parent;
         super.setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
@@ -34,6 +37,11 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
         });
 
         registerDocumentWindow();
+    }
+
+    @Override
+    public T getController() {
+        return controller;
     }
 
     private void registerDocumentWindow() {

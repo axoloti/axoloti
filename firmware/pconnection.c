@@ -98,9 +98,10 @@ static uint32_t value;
 #define evt_bulk_memrd32 (1<<2)
 #define evt_bulk_memrdx  (1<<3)
 #define evt_bulk_tx_fileinfo (1<<5)
-#define evt_bulk_tx_logmessage (1<<6)
-#define evt_bulk_tx_dirlist (1<<7)
-#define evt_bulk_tx_paramchange (1<<8)
+#define evt_bulk_tx_filecontents (1<<6)
+#define evt_bulk_tx_logmessage (1<<7)
+#define evt_bulk_tx_dirlist (1<<8)
+#define evt_bulk_tx_paramchange (1<<9)
 
 #define tx_hdr_acknowledge 0x416F7841   // "AxoA"
 #define tx_hdr_fwid        0x566f7841   // "AxoV"
@@ -109,6 +110,7 @@ static uint32_t value;
 #define tx_hdr_memrdx      0x726f7841   // "Axor"
 #define tx_hdr_paramchange 0x516F7841   // "AxoQ"
 #define tx_hdr_fileinfo    0x666F7841   // "Axof"
+#define tx_hdr_filecontents 0x466F7841   // "AxoF"
 
 tx_pckt_ack_v2_t tx_pckt_ack_v2 = {
 		.header = tx_hdr_acknowledge,
@@ -202,6 +204,27 @@ static msg_t bulk_tx_fileinfo(void) {
     strcpy(&msg[12], &FileName[6]);
     int l = strlen(&msg[12]) + 13;
     return BulkUsbTransmitPacket((const unsigned char* )msg, l);
+}
+
+static msg_t bulk_tx_filecontents(void) {
+    FRESULT err;
+    err = f_open(&pFile, &FileName[6], FA_READ);
+    if (err != FR_OK) {
+      report_fatfs_error(err,&FileName[0]);
+    }
+    fbuff[0] = tx_hdr_filecontents;
+    fbuff[1] = f_size(&pFile);
+    msg_t m = BulkUsbTransmitPacket((const unsigned char* )fbuff, 8);
+    if (m!=MSG_OK) return m;
+    int bytes_read;
+    while (1) {
+		FRESULT err = f_read(&pFile, (char *)fbuff, 64,
+					  (void *)&bytes_read);
+		m = BulkUsbTransmit((char *)fbuff, bytes_read);
+		if (bytes_read < 64) break;
+    }
+    f_close(&pFile);
+    return m;
 }
 
 static FRESULT scan_files(char *path) {
@@ -476,6 +499,9 @@ static THD_FUNCTION(BulkWriter, arg) {
 		case evt_bulk_tx_fileinfo:
 			msg = bulk_tx_fileinfo();
 			break;
+		case evt_bulk_tx_filecontents:
+			msg = bulk_tx_filecontents();
+			break;
 		case evt_bulk_tx_logmessage:
 			msg = bulk_tx_logmessage();
 			break;
@@ -559,7 +585,7 @@ typedef struct {
 #define rcv_hdr_memwr          0x576f7841 // "AxoW"
 #define rcv_hdr_paramchange    0x506f7841 // "AxoP"
 #define rcv_hdr_midi           0x4D6f7841 // "AxoM"
-#define rcv_hdr_fs_create      0x436f7841 // "AxoC"
+#define rcv_hdr_fs_create      0x436f7841 // "AxoC" // also other file manipulations
 #define rcv_hdr_fs_dirlist     0x646f7841 // "Axod"
 #define rcv_hdr_copy_to_flash  0x466f7841 // "AxoF"
 #define rcv_hdr_activate_dfu   0x446f7841 // "AxoD"
@@ -641,6 +667,8 @@ static void ManipulateFile(void) {
       if (err == FR_OK) { // condition?
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_fileinfo);
       }
+    } else if (FileName[1]=='c') {
+  	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_filecontents);
     }
   }
 }

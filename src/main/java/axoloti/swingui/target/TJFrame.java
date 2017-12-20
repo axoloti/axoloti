@@ -1,9 +1,10 @@
 package axoloti.swingui.target;
 
-import axoloti.swingui.mvc.AJFrame;
 import axoloti.abstractui.DocumentWindow;
-import axoloti.target.TargetController;
 import axoloti.swingui.menus.StandardMenubar;
+import axoloti.swingui.mvc.AJFrame;
+import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
  */
 public abstract class TJFrame extends AJFrame<TargetController> {
 
-    private TargetController controller;
+    public final StandardMenubar menuBar;
 
     public TJFrame(TargetController controller) throws HeadlessException {
-        super(null);
-        this.controller = controller;
-        setJMenuBar(new StandardMenubar());
+        super(controller, null);
+        menuBar = new StandardMenubar(controller.getDocumentRoot());
+        setJMenuBar(menuBar);
     }
 
     @Override
@@ -37,9 +38,8 @@ public abstract class TJFrame extends AJFrame<TargetController> {
         return null;
     }
 
-    @Override
-    public TargetController getController() {
-        return controller;
+    public TargetModel getModel() {
+        return getController().getModel();
     }
 
 }

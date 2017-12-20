@@ -18,32 +18,32 @@
 package axoloti.swingui;
 
 import axoloti.Axoloti;
-import axoloti.connection.CConnection;
-import axoloti.abstractui.DocumentWindowList;
-import axoloti.connection.IConnection;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
-import axoloti.abstractui.PatchView;
-import axoloti.preferences.Theme;
-import axoloti.Version;
-import axoloti.target.TargetModel;
-import axoloti.target.TargetRTInfo;
-import axoloti.target.TargetController;
-import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.swingui.patch.PatchFrame;
 import static axoloti.Axoloti.FIRMWARE_DIR;
 import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
-import axoloti.swingui.dialogs.PatchBank;
-import axoloti.swingui.preferences.PreferencesFrame;
-import axoloti.swingui.target.TJFrame;
-import axoloti.swingui.preferences.ThemeEditor;
+import axoloti.Version;
+import axoloti.abstractui.DocumentWindowList;
+import axoloti.abstractui.PatchView;
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.AxoObjects;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.preferences.Preferences;
+import axoloti.preferences.Theme;
+import axoloti.swingui.patch.PatchFrame;
+import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patchbank.PatchBank;
+import axoloti.swingui.preferences.PreferencesFrame;
+import axoloti.swingui.preferences.ThemeEditor;
+import axoloti.swingui.target.TJFrame;
+import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
+import axoloti.target.TargetRTInfo;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
-import axoloti.preferences.Preferences;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -763,11 +763,6 @@ public final class MainFrame extends TJFrame implements ActionListener {
         pf.setVisible(true);
     }
 
-    public void NewBank() {
-        PatchBank b = new PatchBank();
-        b.setVisible(true);
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.swingui.menus.FileMenu fileMenu;
     private javax.swing.Box.Filler filler1;
@@ -938,7 +933,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         if (cmd.startsWith("open:")) {
             String fn = cmd.substring(5);
             if (fn.endsWith(".axb")) {
-                PatchBank.OpenBank(new File(fn));
+                PatchBank.OpenPatchBankEditor(new File(fn));
             } else if (fn.endsWith(".axp") || fn.endsWith(".axs") || fn.endsWith(".axh")) {
                 PatchViewSwing.OpenPatch(new File(fn));
             }

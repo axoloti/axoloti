@@ -1,13 +1,12 @@
 package axoloti.connection;
 
 import axoloti.ConnectionStatusListener;
-import axoloti.patch.PatchViewCodegen;
-import axoloti.target.fs.SDCardMountStatusListener;
-import axoloti.target.fs.SDCardInfo;
 import axoloti.chunks.ChunkParser;
-import static axoloti.swingui.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.mvc.View;
+import axoloti.patch.PatchViewCodegen;
+import static axoloti.swingui.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.target.TargetController;
+import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.targetprofile.axoloti_core;
 import axoloti.usb.LibUSBContext;
 import java.nio.ByteBuffer;
@@ -51,6 +50,7 @@ public abstract class IConnection extends View<TargetController> {
     abstract public void TransmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3);
     abstract public void TransmitCreateFile(String filename, int size);
     abstract public void TransmitGetFileInfo(String filename);
+    abstract public void TransmitGetFileContents(String filename, MemReadHandler handler);
     abstract public void TransmitCreateFile(String filename, int size, Calendar date);
     abstract public void TransmitCreateDirectory(String filename, Calendar date);
     abstract public void TransmitDeleteFile(String filename);
@@ -201,7 +201,7 @@ public abstract class IConnection extends View<TargetController> {
         for (SDCardMountStatusListener sdcml : sdcmls) {
             sdcml.ShowSDCardUnmounted();
         }
-        SDCardInfo.getInstance().SetInfo(0, 0, 0);
+        getController().getModel().getSDCardInfo().SetInfo(0, 0, 0);
         getController().getModel().setSDCardMounted(false);
     }
 

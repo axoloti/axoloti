@@ -28,7 +28,7 @@ import axoloti.swingui.patch.net.NetView;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
 import axoloti.swingui.patch.object.iolet.IoletAbstract;
-import axoloti.target.fs.SDCardInfo;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDFileReference;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -249,7 +249,7 @@ public abstract class PatchView extends PatchAbstractView {
 
             String f = "/" + getController().getSDCardPath();
             //System.out.println("pathf" + f);
-            if (SDCardInfo.getInstance().find(f) == null) {
+            if (TargetModel.getTargetModel().getSDCardInfo().find(f) == null) {
                 qCmdProcessor.AppendToQueue(new QCmdCreateDirectory(f));
             }
             qCmdProcessor.AppendToQueue(new QCmdChangeWorkingDirectory(f));

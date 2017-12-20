@@ -38,7 +38,6 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
 
     StringProperty stringProperty;
     RSyntaxTextArea textArea;
-    final AbstractController controller;
 
     /**
      * Creates new form TextEditor
@@ -46,10 +45,9 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
      * @param stringProperty initial string
      */
     public TextEditor(StringProperty stringProperty, AbstractController controller, DocumentWindow parent) {
-        super(parent);
+        super(controller, parent);
         initComponents();
-        setJMenuBar(new StandardMenubar());
-        this.controller = controller;
+        setJMenuBar(new StandardMenubar(null));
         this.stringProperty = stringProperty;
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
@@ -122,7 +120,7 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 //        System.out.println("txt changed (lost focus)");
-        controller.setModelUndoableProperty(stringProperty, textArea.getText());
+        getController().setModelUndoableProperty(stringProperty, textArea.getText());
     }//GEN-LAST:event_formWindowLostFocus
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -148,13 +146,8 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (stringProperty.is(evt)) {
-            SetText(stringProperty.get(controller.getModel()));
+            SetText(stringProperty.get(getController().getModel()));
         }
-    }
-
-    @Override
-    public AbstractController getController() {
-        return controller;
     }
 
     @Override

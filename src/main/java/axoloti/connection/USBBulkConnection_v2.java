@@ -24,16 +24,17 @@ package axoloti.connection;
 import axoloti.HWSignature;
 import axoloti.chunks.ChunkParser;
 import axoloti.chunks.FourCC;
-import axoloti.swingui.dialogs.USBPortSelectionDlg;
-import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.preferences.Preferences;
+import axoloti.swingui.dialogs.USBPortSelectionDlg;
 import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
 import axoloti.target.fs.SDCardInfo;
 import axoloti.targetprofile.axoloti_core;
-import axoloti.preferences.Preferences;
 import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
@@ -475,6 +476,35 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
+    public void TransmitGetFileContents(String filename, MemReadHandler handler) {
+        byte[] data = new byte[15 + filename.length()];
+        data[0] = 'A';
+        data[1] = 'x';
+        data[2] = 'o';
+        data[3] = 'C';
+        data[4] = 0;
+        data[5] = 0;
+        data[6] = 0;
+        data[7] = 0;
+        data[8] = 0;
+        data[9] = 'c';
+        data[10] = 0;
+        data[11] = 0;
+        data[12] = 0;
+        data[13] = 0;
+        int i = 14;
+        for (int j = 0; j < filename.length(); j++) {
+            data[i++] = (byte) filename.charAt(j);
+        }
+        data[i] = 0;
+        WaitReadSync();
+        readsync.ready = false;
+        memReadHandler = handler;
+        writeBytes(data);
+        WaitReadSync();
+    }
+
+    @Override
     public String getFWID() {
         return firmwareID;
     }
@@ -870,10 +900,10 @@ public class USBBulkConnection_v2 extends IConnection {
 
         @Override
         public void run() {
-            ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
-            recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
-            IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
+                ByteBuffer recvbuffer = ByteBuffer.allocateDirect(256 * 1024);
+                recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
+                IntBuffer transfered = IntBuffer.allocate(1);
                 recvbuffer.rewind();
                 int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
                 switch (result) {
@@ -1198,6 +1228,7 @@ public class USBBulkConnection_v2 extends IConnection {
     final int rx_hdr_displaypckt = 0x446F7841;  // "AxoD"
     final int rx_hdr_paramchange = 0x516F7841;  // "AxoQ" 
     final int rx_hdr_fileinfo = 0x666F7841;     // "Axof" 
+    final int tx_hdr_filecontents = 0x466F7841; // "AxoF"
 
     final boolean log_rx_diagnostics = false;
 
@@ -1314,6 +1345,11 @@ public class USBBulkConnection_v2 extends IConnection {
                             }
                             state = ReceiverState.memread;
                             break;
+                        case tx_hdr_filecontents:
+                            System.out.println("tx_hdr_filecontents");
+                            memReadLength = rbuf.getInt();
+                            state = ReceiverState.memread;
+                            break;
                         case rx_hdr_displaypckt:
                             if (log_rx_diagnostics) {
                                 //System.out.println("rx displaypckt deprecated");
@@ -1337,7 +1373,9 @@ public class USBBulkConnection_v2 extends IConnection {
                             if (fname.charAt(fname.length() - 1) == (char) 0) {
                                 fname = fname.substring(0, fname.length() - 1);
                             }
-                            SDCardInfo.getInstance().AddFile(fname, sz, timestamp);                            
+                            SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+                            sdcardinfo.AddFile(fname, sz, timestamp);
+                            TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                         }
                             break;
                         default:
@@ -1380,8 +1418,8 @@ public class USBBulkConnection_v2 extends IConnection {
                     }
                     System.out.println(">");
                 }
-                if (true && log_rx_diagnostics) {
-                    System.out.println("rx memrd recv'd sz=" + size);
+                if (true || log_rx_diagnostics) {
+                    System.out.println("rx memrd recv'd sz=" + size + " " + memReadHandler);
                 }
                 byte memr[] = new byte[memReadLength];
                 rbuf.get(memr,0,memReadLength);
@@ -1391,7 +1429,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 MemReadHandler mrh = memReadHandler;
                 if (mrh != null) {
                     try {
-                        if (true && log_rx_diagnostics) {
+                        if (true || log_rx_diagnostics) {
                                 System.out.println("handler: " + mrh.toString());
                         }
                         SwingUtilities.invokeAndWait(new Runnable() {

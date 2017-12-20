@@ -36,23 +36,15 @@ import javax.swing.SpinnerNumberModel;
  */
 public class PatchSettingsFrame extends AJFrame<PatchController> {
 
-    final PatchController patchController;
-
-    @Override
-    public PatchController getController() {
-        return patchController;
-    }
-
     /**
      * Creates new form PatchSettingsFrame
      *
      */
     public PatchSettingsFrame(DocumentWindow parentDocumentWindow, PatchController patchController) {
-        super(parentDocumentWindow);
+        super(patchController, parentDocumentWindow);
         initComponents();
-        this.patchController = patchController;
         setTitle("settings");
-        setJMenuBar(new StandardMenubar());
+        setJMenuBar(new StandardMenubar(patchController.getDocumentRoot()));
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMinimum(1);
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMaximum(16);
         ((SpinnerNumberModel) jSpinnerNumPresets.getModel()).setMinimum(0);
@@ -454,7 +446,7 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     }
 
     PatchModel getModel() {
-        return patchController.getModel();
+        return getController().getModel();
     }
 
     @Override

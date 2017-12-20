@@ -21,14 +21,14 @@ import axoloti.FileUtils;
 import axoloti.abstractui.PatchView;
 import axoloti.object.AxoObjects;
 import axoloti.patch.PatchModel;
+import axoloti.preferences.Preferences;
 import axoloti.swingui.MainFrame;
-import axoloti.swingui.dialogs.PatchBank;
-import axoloti.swingui.preferences.PreferencesFrame;
 import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patchbank.PatchBank;
+import axoloti.swingui.preferences.PreferencesFrame;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
-import axoloti.preferences.Preferences;
 import generatedobjects.GeneratedObjects;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -42,6 +42,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JPopupMenu.Separator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -59,9 +60,9 @@ public class FileMenu extends JMenu {
         super();
     }
 
+    private int pos;
+    
     public void initComponents() {
-
-        int pos = 0;
         jMenuNewBank = new JMenuItem();
         jMenuNewPatch = new JMenuItem();
         jMenuOpen = new JMenuItem();
@@ -88,7 +89,7 @@ public class FileMenu extends JMenu {
                 jMenuNewPatchActionPerformed(evt);
             }
         });
-        insert(jMenuNewPatch, pos++);
+        super.add(jMenuNewPatch);
 
         jMenuNewBank.setText("New patch bank");
         jMenuNewBank.addActionListener(new java.awt.event.ActionListener() {
@@ -97,7 +98,7 @@ public class FileMenu extends JMenu {
                 jMenuNewBankActionPerformed(evt);
             }
         });
-        insert(jMenuNewBank, pos++);
+        super.add(jMenuNewBank);
 
         jMenuOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
                 KeyUtils.CONTROL_OR_CMD_MASK));
@@ -108,7 +109,7 @@ public class FileMenu extends JMenu {
                 jMenuOpenActionPerformed(evt);
             }
         });
-        insert(jMenuOpen, pos++);
+        super.add(jMenuOpen);
 
         jMenuOpenURL.setText("Open from URL...");
         jMenuOpenURL.addActionListener(new java.awt.event.ActionListener() {
@@ -117,16 +118,21 @@ public class FileMenu extends JMenu {
                 jMenuOpenURLActionPerformed(evt);
             }
         });
-        insert(jMenuOpenURL, pos++);
+        super.add(jMenuOpenURL);
 
         recentFileMenu1.setText("Open Recent");
-        insert(recentFileMenu1, pos++);
+        super.add(recentFileMenu1);
+        
+        
+        super.add(new Separator());
+        pos = getItemCount();
+        super.add(new Separator());
 
         libraryMenu1.setText("Library");
-        insert(libraryMenu1, pos++);
+        super.add(libraryMenu1);
 
         favouriteMenu1.setText("Favorites");
-        insert(favouriteMenu1, pos++);
+        super.add(favouriteMenu1);
 
         jMenuSync.setText("Sync Libraries");
         jMenuSync.addActionListener(new java.awt.event.ActionListener() {
@@ -135,9 +141,9 @@ public class FileMenu extends JMenu {
                 jMenuSyncActionPerformed(evt);
             }
         });
-        insert(jMenuSync, pos++);
+        super.add(jMenuSync);
 
-        add(jSeparator2);
+        super.add(jSeparator2);
 
         jMenuReloadObjects.setText("Reload Objects");
         jMenuReloadObjects.addActionListener(new java.awt.event.ActionListener() {
@@ -146,7 +152,7 @@ public class FileMenu extends JMenu {
                 jMenuReloadObjectsActionPerformed(evt);
             }
         });
-        add(jMenuReloadObjects);
+        super.add(jMenuReloadObjects);
 
         jMenuRegenerateObjects.setText("Regenerate Objects");
         jMenuRegenerateObjects.addActionListener(new java.awt.event.ActionListener() {
@@ -155,7 +161,7 @@ public class FileMenu extends JMenu {
                 jMenuRegenerateObjectsActionPerformed(evt);
             }
         });
-        add(jMenuRegenerateObjects);
+        super.add(jMenuRegenerateObjects);
 
         jMenuAutoTest.setText("Test Compilation");
         jMenuAutoTest.addActionListener(new java.awt.event.ActionListener() {
@@ -164,8 +170,8 @@ public class FileMenu extends JMenu {
                 jMenuAutoTestActionPerformed(evt);
             }
         });
-        add(jMenuAutoTest);
-        add(jSeparator3);
+        super.add(jMenuAutoTest);
+        super.add(jSeparator3);
 
         jMenuItemPreferences.setText("Preferences...");
         jMenuItemPreferences.addActionListener(new java.awt.event.ActionListener() {
@@ -174,8 +180,8 @@ public class FileMenu extends JMenu {
                 jMenuItemPreferencesActionPerformed(evt);
             }
         });
-        add(jMenuItemPreferences);
-        add(jSeparator1);
+        super.add(jMenuItemPreferences);
+        super.add(jSeparator1);
 
         jMenuQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q,
                 KeyUtils.CONTROL_OR_CMD_MASK));
@@ -186,7 +192,7 @@ public class FileMenu extends JMenu {
                 jMenuQuitActionPerformed(evt);
             }
         });
-        add(jMenuQuit);
+        super.add(jMenuQuit);
 
         jMenuRegenerateObjects.setVisible(false);
         if (!Preferences.getPreferences().getExpertMode()) {
@@ -267,7 +273,7 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {
-        NewBank();
+        PatchBank.OpenPatchBankEditor(null);
     }
 
     public void NewPatch() {
@@ -276,13 +282,13 @@ public class FileMenu extends JMenu {
         pf.setVisible(true);
     }
 
-    public void NewBank() {
-        PatchBank b = new PatchBank();
-        b.setVisible(true);
-    }
-
     private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {
         MainFrame.mainframe.Quit();
+    }
+    
+    @Override
+    public JMenuItem add(JMenuItem menuItem) {
+        return insert(menuItem, pos++);
     }
 
 }

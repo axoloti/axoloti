@@ -24,15 +24,15 @@ package axoloti.connection;
 import axoloti.HWSignature;
 import axoloti.abstractui.PatchView;
 import axoloti.chunks.ChunkParser;
-import axoloti.swingui.dialogs.USBPortSelectionDlg;
-import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
-import axoloti.target.TargetController;
-import axoloti.target.fs.SDCardInfo;
-import axoloti.targetprofile.axoloti_core;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Preferences;
+import axoloti.swingui.dialogs.USBPortSelectionDlg;
+import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
+import axoloti.targetprofile.axoloti_core;
 import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
@@ -459,6 +459,11 @@ public class USBBulkConnection extends IConnection {
 
     @Override
     public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void TransmitGetFileContents(String filename, MemReadHandler handler) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -1229,7 +1234,7 @@ public class USBBulkConnection extends IConnection {
 //                            + sdinfoRcvBuffer.asIntBuffer().get(0) + " "
 //                            + sdinfoRcvBuffer.asIntBuffer().get(1) + " "
 //                            + sdinfoRcvBuffer.asIntBuffer().get(2));
-                    SDCardInfo.getInstance().SetInfo(sdinfoRcvBuffer.asIntBuffer().get(0), sdinfoRcvBuffer.asIntBuffer().get(1), sdinfoRcvBuffer.asIntBuffer().get(2));
+                    TargetModel.getTargetModel().getSDCardInfo().SetInfo(sdinfoRcvBuffer.asIntBuffer().get(0), sdinfoRcvBuffer.asIntBuffer().get(1), sdinfoRcvBuffer.asIntBuffer().get(2));
                     GoIdleState();
                 }
                 break;
@@ -1251,7 +1256,7 @@ public class USBBulkConnection extends IConnection {
                     if (fname.charAt(fname.length() - 1) == (char) 0) {
                         fname = fname.substring(0, fname.length() - 1);
                     }
-                    SDCardInfo.getInstance().AddFile(fname, size, timestamp);
+                    TargetModel.getTargetModel().getSDCardInfo().AddFile(fname, size, timestamp);
 //                    Logger.getLogger(USBBulkConnection.class.getName()).info("fileinfo: " + cb.toString());
                     GoIdleState();
                     if (fname.equals("/")) {

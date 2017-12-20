@@ -15,69 +15,67 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.swingui.dialogs;
+package axoloti.swingui.patchbank;
 
 import axoloti.ConnectionStatusListener;
 import static axoloti.FileUtils.axpFileFilter;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.connection.CConnection;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.patchbank.PatchBankController;
+import axoloti.patchbank.PatchBankModel;
 import axoloti.preferences.Preferences;
-import axoloti.swingui.patch.PatchFrame;
+import axoloti.swingui.menus.StandardMenubar;
+import axoloti.swingui.mvc.AJFrame;
 import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.target.fs.SDCardInfo;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.target.fs.SDFileInfo;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
+import java.beans.PropertyChangeEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.nio.ByteBuffer;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdUploadFile;
 
 /**
  *
  * @author jtaelman
  */
-public class PatchBank extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener {
-
-    String FilenamePath = null;
-
-    final String fileExtension = ".axb";
-
-    boolean dirty = false;
-
-    ArrayList<File> files;
+public class PatchBank extends AJFrame<PatchBankController> implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener {
 
     /**
      * Creates new form PatchBank
      */
-    public PatchBank() {
+    public PatchBank(PatchBankController controller) {
+        super(controller, null);
         initComponents();
-        fileMenu1.initComponents();
-        files = new ArrayList<File>();
-        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
-        DocumentWindowList.RegisterWindow(this);
+        StandardMenubar menuBar = new StandardMenubar(controller.getDocumentRoot());
+        JMenuItem jMenuItemSave = new JMenuItem("Save");
+        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveActionPerformed(evt);
+            }
+        });
+        menuBar.fileMenu.add(jMenuItemSave);
+
+        JMenuItem jMenuItemSaveAs = new JMenuItem("Save as...");
+        jMenuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveAsActionPerformed(evt);
+            }
+        });
+        menuBar.fileMenu.add(jMenuItemSaveAs);
+        setJMenuBar(menuBar);
+
         CConnection.GetConnection().addConnectionStatusListener(this);
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Index", "File", "on sdcard"};
@@ -107,7 +105,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
             @Override
             public int getRowCount() {
-                return files.size();
+                return getModel().getFiles().size();
             }
 
             @Override
@@ -121,9 +119,10 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                         if (svalue != null && !svalue.isEmpty()) {
                             File f = new File(svalue);
                             if (f.exists() && f.isFile() && f.canRead()) {
+                                ArrayList<File> files = new ArrayList<>(getModel().getFiles());
                                 files.set(rowIndex, f);
-                                setDirty();
-                                refresh();
+                                getController().addMetaUndo("Change");
+                                getController().setModelUndoableProperty(PatchBankModel.FILES, files);
                             }
                         }
                         break;
@@ -141,16 +140,16 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                         returnValue = Integer.toString(rowIndex);
                         break;
                     case 1: {
-                        File f = files.get(rowIndex);
+                        File f = getModel().getFiles().get(rowIndex);
                         if (f != null) {
-                            returnValue = toRelative(f);
+                            returnValue = getController().getModel().toRelative(f);
                         } else {
                             returnValue = "";
                         }
                         break;
                     }
                     case 2: {
-                        File f = files.get(rowIndex);
+                        File f = getModel().getFiles().get(rowIndex);
                         if (f != null) {
                             boolean en = f.exists();
                             String fn = f.getName();
@@ -158,7 +157,7 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                             if (i > 0) {
                                 fn = fn.substring(0, i);
                             }
-                            SDFileInfo sdfi = SDCardInfo.getInstance().find("/" + fn + "/patch.bin");
+                            SDFileInfo sdfi = TargetModel.getTargetModel().getSDCardInfo().find("/" + fn + "/patch.bin");
                             if (sdfi != null) {
                                 if (en) {
                                     returnValue = "resolved locally, and exists on sdcard";
@@ -204,8 +203,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             jButtonRemove.setEnabled(false);
         } else {
             jButtonUp.setEnabled(row > 0);
-            jButtonDown.setEnabled(row < files.size() - 1);
-            File f = files.get(row);
+            jButtonDown.setEnabled(row < getModel().getFiles().size() - 1);
+            File f = getModel().getFiles().get(row);
             boolean en = (f != null) && (f.exists());
             jButtonOpen.setEnabled(en);
             jButtonUpload.setEnabled(en);
@@ -213,94 +212,8 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         }
     }
 
-    public void refresh() {
-        jTable1.revalidate();
-        jTable1.repaint();
-    }
-
-    String toRelative(File f) {
-        if (FilenamePath != null && !FilenamePath.isEmpty()) {
-            Path path = Paths.get(f.getPath());
-            Path pathBase = Paths.get(new File(FilenamePath).getParent());
-            if (path.isAbsolute()) {
-                Path pathRelative = pathBase.relativize(path);
-                return pathRelative.toString();
-            } else {
-                return path.toString();
-            }
-        } else {
-            return f.getAbsolutePath();
-        }
-    }
-
-    File fromRelative(String s) {
-        Path basePath = FileSystems.getDefault().getPath(FilenamePath);
-        Path resolvedPath = basePath.getParent().resolve(s);
-        return resolvedPath.toFile();
-    }
-
-    public byte[] GetContents() {
-        ByteBuffer data = ByteBuffer.allocateDirect(128 * 256);
-        for (File file : files) {
-            String fn = (String) file.getName();
-            for (char c : fn.toCharArray()) {
-                data.put((byte) c);
-            }
-            data.put((byte) '\n');
-        }
-        data.limit(data.position());
-        data.rewind();
-        byte[] b = new byte[data.limit()];
-        data.get(b);
-        return b;
-    }
-
-    void Open(File f) throws IOException {
-        FilenamePath = f.getPath();
-        InputStream fs = new FileInputStream(f);
-        BufferedReader fbs = new BufferedReader(new InputStreamReader(fs));
-        String s;
-        files = new ArrayList<File>();
-        while ((s = fbs.readLine())
-                != null) {
-            File ff = fromRelative(s);
-            if (ff != null) {
-                files.add(ff);
-            }
-        }
-        fs.close();
-        refresh();
-        setTitle(FilenamePath);
-    }
-
-    void Save(File f) {
-        FilenamePath = f.getPath();
-        try {
-            PrintWriter pw = new PrintWriter(f);
-            for (File file : files) {
-                String fn = toRelative(file);
-                pw.println(fn);
-            }
-            pw.close();
-            clearDirty();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchBank.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    void Save() {
-        if (FilenamePath == null) {
-            SaveAs();
-        } else {
-            File f = new File(FilenamePath);
-            if (!f.canWrite()) {
-                SaveAs();
-            } else {
-                Save(f);
-            }
-        }
-        refresh();
+    PatchBankModel getModel() {
+        return getController().getModel();
     }
 
     void SaveAs() {
@@ -323,40 +236,24 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
             }
         };
         fc.addChoosableFileFilter(axb);
-        String fn = FilenamePath;
-        if (fn == null) {
-            fn = "untitled";
+        File f = getModel().getFile();
+        if ((f == null) || (!f.exists())) {
+            f = new File(Preferences.getPreferences().getCurrentFileDirectory());
         }
-        File f = new File(fn);
         fc.setSelectedFile(f);
-
-        String ext = "";
-        int dot = fn.lastIndexOf('.');
-        if (dot > 0 && fn.length() > dot + 3) {
-            ext = fn.substring(dot);
-        }
-        if (ext.equalsIgnoreCase(fileExtension)) {
-            fc.setFileFilter(axb);
-        }
-
+        fc.setFileFilter(axb);
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            String filterext = fileExtension;
+            String filterext = PatchBankModel.fileExtension;
             if (fc.getFileFilter() == axb) {
-                filterext = fileExtension;
+                filterext = PatchBankModel.fileExtension;
             }
 
             File fileToBeSaved = fc.getSelectedFile();
-            ext = "";
+            String ext = PatchBankModel.fileExtension;
             String fname = fileToBeSaved.getAbsolutePath();
-            dot = fname.lastIndexOf('.');
-            if (dot > 0 && fname.length() > dot + 3) {
-                ext = fname.substring(dot);
-            }
-
-            if (!ext.equalsIgnoreCase(fileExtension)) {
+            if (!ext.equalsIgnoreCase(PatchBankModel.fileExtension)) {
                 fileToBeSaved = new File(fc.getSelectedFile() + filterext);
-
             } else if (!ext.equals(filterext)) {
                 Object[] options = {"Yes",
                     "No"};
@@ -395,24 +292,10 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
                         return;
                 }
             }
-
-            FilenamePath = fileToBeSaved.getPath();
-            setTitle(FilenamePath);
+            getModel().setFile(fileToBeSaved);
+            getModel().Save();
             Preferences.getPreferences().setCurrentFileDirectory(fileToBeSaved.getPath());
-            Save(fileToBeSaved);
         }
-    }
-
-    boolean isDirty() {
-        return dirty;
-    }
-
-    void setDirty() {
-        dirty = true;
-    }
-
-    void clearDirty() {
-        dirty = false;
     }
 
     public void Close() {
@@ -423,12 +306,13 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
     @Override
     public boolean askClose() {
-        if (isDirty()) {
+//      if (getController().getUndoManager().canUndo()) {
+        if (true) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
             int n = JOptionPane.showOptionDialog(this,
-                    "Do you want to save changes to " + FilenamePath + " ?",
+                    "Do you want to save changes to " + getController().getModel().getFile().getName() + " ?",
                     "Axoloti asks:",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
@@ -476,13 +360,6 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         jButtonAdd = new javax.swing.JButton();
         jButtonOpen = new javax.swing.JButton();
         jButtonUpload = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        fileMenu1 = new axoloti.swingui.menus.FileMenu();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItemSave = new javax.swing.JMenuItem();
-        jMenuItemSaveAs = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        windowMenu1 = new axoloti.swingui.menus.WindowMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Untitled patch bank");
@@ -641,50 +518,28 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
 
         getContentPane().add(jPanel2);
 
-        fileMenu1.setText("File");
-        fileMenu1.add(jSeparator1);
-
-        jMenuItemSave.setText("Save");
-        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSaveActionPerformed(evt);
-            }
-        });
-        fileMenu1.add(jMenuItemSave);
-
-        jMenuItemSaveAs.setText("Save as...");
-        jMenuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSaveAsActionPerformed(evt);
-            }
-        });
-        fileMenu1.add(jMenuItemSaveAs);
-
-        jMenuBar1.add(fileMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-        jMenuBar1.add(windowMenu1);
-
-        setJMenuBar(jMenuBar1);
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonUploadBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBankActionPerformed
-        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        if (CConnection.GetConnection().isConnected()) {
-            processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
-        }
+        getController().getModel().upload();
     }//GEN-LAST:event_jButtonUploadBankActionPerformed
 
-    private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        Save();
-    }//GEN-LAST:event_jMenuItemSaveActionPerformed
+    private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {
+        if (getFile() == null) {
+            SaveAs();
+        } else {
+            if (!getFile().canWrite()) {
+                SaveAs();
+            } else {
+                getModel().Save();
+            }
+        }
+    }
 
-    private void jMenuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveAsActionPerformed
+    private void jMenuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
         SaveAs();
-    }//GEN-LAST:event_jMenuItemSaveAsActionPerformed
+    }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         askClose();
@@ -695,11 +550,12 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (row < 1) {
             return;
         }
+        ArrayList<File> files = new ArrayList<>(getModel().getFiles());
         File o = files.remove(row);
         files.add(row - 1, o);
+        getController().addMetaUndo("Move up");
+        getController().setModelUndoableProperty(PatchBankModel.FILES, files);
         jTable1.setRowSelectionInterval(row - 1, row - 1);
-        setDirty();
-        refresh();
     }//GEN-LAST:event_jButtonUpActionPerformed
 
     private void jButtonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownActionPerformed
@@ -707,14 +563,15 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (row < 0) {
             return;
         }
+        ArrayList<File> files = new ArrayList<>(getModel().getFiles());
         if (row > (files.size() - 1)) {
             return;
         }
         File o = files.remove(row);
         files.add(row + 1, o);
+        getController().addMetaUndo("Move down");
+        getController().setModelUndoableProperty(PatchBankModel.FILES, files);
         jTable1.setRowSelectionInterval(row + 1, row + 1);
-        setDirty();
-        refresh();
     }//GEN-LAST:event_jButtonDownActionPerformed
 
     private void jButtonRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoveActionPerformed
@@ -722,82 +579,45 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         if (row < 0) {
             return;
         }
+        ArrayList<File> files = new ArrayList<>(getModel().getFiles());
         files.remove(row);
-        setDirty();
-        refresh();
+        getController().addMetaUndo("Remove");
+        getController().setModelUndoableProperty(PatchBankModel.FILES, files);
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
-        fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp"));
         fc.addChoosableFileFilter(axpFileFilter);
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+            ArrayList<File> files = new ArrayList<>(getModel().getFiles());
             files.add(fc.getSelectedFile());
-            setDirty();
-            refresh();
+            getController().addMetaUndo("Add");
+            getController().setModelUndoableProperty(PatchBankModel.FILES, files);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
         int row = jTable1.getSelectedRow();
         if (row >= 0) {
-            File f = files.get(jTable1.getSelectedRow());
+            File f = getModel().getFiles().get(jTable1.getSelectedRow());
             if (f.isFile() && f.canRead()) {
                 PatchViewSwing.OpenPatch(f);
             }
         }
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
-    void UploadOneFile(File f) {
-        if (!f.isFile() || !f.canRead()) {
-            return;
-        }
-        PatchFrame pf = PatchViewSwing.OpenPatchInvisible(f);
-        if (pf != null) {
-            boolean isVisible = pf.isVisible();
-            pf.getPatchController().UploadToSDCard();
-            if (!isVisible) {
-                pf.Close();
-            }
-
-            //FIXME: workaround waitQueueFinished bug
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                ;
-            }
-
-            try {
-                QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
-            } catch (Exception ex) {
-                Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-        File f = files.get(jTable1.getSelectedRow());
-        UploadOneFile(f);
+        File f = getModel().getFiles().get(jTable1.getSelectedRow());
+        getController().getModel().UploadOneFile(f);
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
-        Logger.getLogger(PatchBank.class.getName()).log(Level.INFO, "Uploading patch bank file");
-        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        if (CConnection.GetConnection().isConnected()) {
-            processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
-        }
-
-        for (File f : files) {
-            Logger.getLogger(PatchBank.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
-            UploadOneFile(f);
-        }
-        Logger.getLogger(PatchBank.class.getName()).log(Level.INFO, "Patch bank uploaded");
+        getController().getModel().uploadAll();
     }//GEN-LAST:event_jUploadAllActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private axoloti.swingui.menus.FileMenu fileMenu1;
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonDown;
     private javax.swing.JButton jButtonOpen;
@@ -806,17 +626,11 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JButton jButtonUploadBank;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItemSave;
-    private javax.swing.JMenuItem jMenuItemSaveAs;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton jUploadAll;
-    private axoloti.swingui.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 
     public void ShowConnect1(boolean status) {
@@ -835,24 +649,9 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
         ShowConnect1(false);
     }
 
-    static public void OpenBank(File f) {
-        PatchBank pb = new PatchBank();
-        try {
-            pb.Open(f);
-            pb.setVisible(true);
-        } catch (IOException ex) {
-            pb.Close();
-            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, "Patchbank file not found or not accessable:{0}", f.getName());
-        }
-    }
-
     @Override
     public File getFile() {
-        if (FilenamePath == null) {
-            return null;
-        } else {
-            return new File(FilenamePath);
-        }
+        return getController().getModel().getFile();
     }
 
     @Override
@@ -871,9 +670,33 @@ public class PatchBank extends javax.swing.JFrame implements DocumentWindow, Con
     }
 
     @Override
-    public void toFront() {
-        setState(java.awt.Frame.NORMAL);
-        super.toFront();
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (PatchBankModel.FILES.is(evt)) {
+            ((AbstractTableModel) jTable1.getModel()).fireTableDataChanged();
+        } else if (PatchBankModel.FILE.is(evt)) {
+            File f = getFile();
+            if (f != null) {
+                setTitle(f.getName());
+            }
+        }
     }
 
+    public static void OpenPatchBankEditor(File f) {
+        try {
+            PatchBankModel b;
+            if (f == null) {
+                b = new PatchBankModel();
+            } else {
+                b = new PatchBankModel(f);
+            }
+            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+            PatchBankController c = new PatchBankController(b, documentRoot, null);
+            PatchBank bv = new PatchBank(c);
+            c.addView(bv);
+            bv.setVisible(true);
+            bv.toFront();
+        } catch (IOException ex) {
+            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

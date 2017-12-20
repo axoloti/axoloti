@@ -18,10 +18,9 @@
 package qcmds;
 
 import axoloti.connection.IConnection;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardInfo;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -60,7 +59,9 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
         if (!fn.endsWith("/")) {
             fn = fn + "/";
         }
-        SDCardInfo.getInstance().AddFile(fn, 0, date);
+        SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+        sdcardinfo.AddFile(fn, 0, date);
+        TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
         return this;
     }
 
