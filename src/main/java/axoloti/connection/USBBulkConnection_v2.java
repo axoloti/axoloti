@@ -1227,6 +1227,7 @@ public class USBBulkConnection_v2 extends IConnection {
     final int tx_hdr_memrdx = 0x726f7841;       // "Axor"
     final int rx_hdr_displaypckt = 0x446F7841;  // "AxoD"
     final int rx_hdr_paramchange = 0x516F7841;  // "AxoQ" 
+    final int rx_hdr_sdcardinfo = 0x646F7841;   // "Axod"
     final int rx_hdr_fileinfo = 0x666F7841;     // "Axof" 
     final int tx_hdr_filecontents = 0x466F7841; // "AxoF"
 
@@ -1363,8 +1364,17 @@ public class USBBulkConnection_v2 extends IConnection {
                             int index = rbuf.getInt();
                             RPacketParamChange(index, value, patchID);
                         }
-                            break;
-                        case rx_hdr_fileinfo : {
+                        break;
+                        case rx_hdr_sdcardinfo: {
+                            SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+                            int fname = rbuf.getInt();
+                            int sz = rbuf.getInt();
+                            int timestamp = rbuf.getInt();
+                            sdcardinfo.SetInfo(fname, sz, timestamp);
+                            TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+                        }
+                        break;
+                        case rx_hdr_fileinfo: {
                             int sz = rbuf.getInt();
                             int timestamp = rbuf.getInt();
                             CharBuffer cb = Charset.forName("ISO-8859-1").decode(rbuf);
@@ -1377,7 +1387,7 @@ public class USBBulkConnection_v2 extends IConnection {
                             sdcardinfo.AddFile(fname, sz, timestamp);
                             TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                         }
-                            break;
+                        break;
                         default:
                             System.out.println(String.format("lost header %8x", header));
                     }
@@ -1418,7 +1428,7 @@ public class USBBulkConnection_v2 extends IConnection {
                     }
                     System.out.println(">");
                 }
-                if (true || log_rx_diagnostics) {
+                if (false || log_rx_diagnostics) {
                     System.out.println("rx memrd recv'd sz=" + size + " " + memReadHandler);
                 }
                 byte memr[] = new byte[memReadLength];
@@ -1429,7 +1439,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 MemReadHandler mrh = memReadHandler;
                 if (mrh != null) {
                     try {
-                        if (true || log_rx_diagnostics) {
+                        if (false || log_rx_diagnostics) {
                                 System.out.println("handler: " + mrh.toString());
                         }
                         SwingUtilities.invokeAndWait(new Runnable() {

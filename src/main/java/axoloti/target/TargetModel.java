@@ -11,6 +11,7 @@ import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.swingui.MainFrame;
 import axoloti.target.fs.SDCardInfo;
+import axoloti.target.midimonitor.MidiMonitorData;
 import axoloti.target.midirouting.MidiInputRoutingTable;
 import axoloti.target.midirouting.MidiOutputRoutingTable;
 import axoloti.utils.FirmwareID;
@@ -54,6 +55,7 @@ public class TargetModel extends AbstractModel {
     boolean sDCardMounted;
     TargetRTInfo RTInfo;
     SDCardInfo sdcardInfo = new SDCardInfo();
+    MidiMonitorData midiMonitor;
 
     int patchIndex;
     public boolean WarnedAboutFWCRCMismatch = false;
@@ -112,6 +114,7 @@ public class TargetModel extends AbstractModel {
     public final static Property PATCHINDEX = new IntegerProperty("PatchIndex", TargetModel.class);
     public final static Property WARNEDABOUTFWCRCMISMATCH = new BooleanProperty("WarnedAboutFWCRCMismatch", TargetModel.class);
     public final static Property SDCARDINFO = new ObjectProperty("SDCardInfo", SDCardInfo.class, TargetModel.class);
+    public final static Property MIDIMONITOR = new ObjectProperty("MidiMonitor", MidiMonitorData.class, TargetModel.class);
 
     @Override
     public List<Property> getProperties() {
@@ -150,6 +153,9 @@ public class TargetModel extends AbstractModel {
     }
 
     public void setConnection(IConnection connection) {
+        if ((connection != null) && (this.connection == null)) {
+            setSDCardInfo(new SDCardInfo());
+        }
         this.connection = connection;
         firePropertyChange(CONNECTION,
                 null, connection);
@@ -227,6 +233,15 @@ public class TargetModel extends AbstractModel {
     public void setSDCardInfo(SDCardInfo sDCardInfo) {
         this.sdcardInfo = sDCardInfo;
         firePropertyChange(SDCARDINFO, null, sDCardInfo);
+    }
+
+    public MidiMonitorData getMidiMonitor() {
+        return midiMonitor;
+    }
+
+    public void setMidiMonitor(MidiMonitorData midiMonitor) {
+        this.midiMonitor = midiMonitor;
+        firePropertyChange(MIDIMONITOR, null, midiMonitor);
     }
 
 }

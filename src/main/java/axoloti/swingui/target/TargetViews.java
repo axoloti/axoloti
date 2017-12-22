@@ -40,6 +40,7 @@ public class TargetViews implements IView<TargetController> {
     }
 
     private static void popWindow(JFrame frame) {
+        frame.setVisible(true);
         frame.toFront();
     }
 

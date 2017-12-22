@@ -22,6 +22,7 @@ import axoloti.connection.IConnection;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.TextEditor;
 import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patchbank.PatchBank;
 import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardInfo;
@@ -45,7 +46,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -473,7 +473,7 @@ public class FileManagerFrame extends TJFrame {
                     if (mem == null) {
                         return;
                     }
-                    if (f.getExtension().equals("axb")) {
+                    if (f.getExtension().equals("txt")) {
                         String s = "";
                         while (mem.remaining() > 0) {
                             s += (char) mem.get();
@@ -485,6 +485,13 @@ public class FileManagerFrame extends TJFrame {
                         textEditor.setTitle(f.getFilename());
                         textEditor.setVisible(true);
                         textEditor.toFront();
+                    } else if (f.getExtension().equals("axb")) {
+                        String patchname = f.getFilename();
+                        if (patchname.charAt(0) == '/') {
+                            patchname = patchname.substring(1);
+                        }
+                        InputStream inputStream = new ByteBufferBackedInputStream(mem);
+                        PatchBank.OpenPatchBankEditor(inputStream, f.getFilename());
                     } else if (f.getFilename().endsWith("/patch.axp")) {
                         // convert "/xyz/patch.axp" into "xyz.axp"
                         String patchname = f.getFilename().substring(0, f.getFilename().length() - 10) + ".axp";
@@ -504,17 +511,6 @@ public class FileManagerFrame extends TJFrame {
             }));
         }
     }//GEN-LAST:event_jButtonOpenActionPerformed
-
-    public void refresh() {
-        if (!SwingUtilities.isEventDispatchThread()) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    refresh();
-                }
-            });
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1Refresh;

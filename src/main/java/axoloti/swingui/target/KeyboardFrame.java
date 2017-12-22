@@ -17,11 +17,11 @@
  */
 package axoloti.swingui.target;
 
-import axoloti.target.TargetController;
-import axoloti.target.TargetModel;
 import axoloti.swingui.components.PianoComponent;
 import axoloti.swingui.components.control.ACtrlComponent;
 import axoloti.swingui.components.control.DialComponent;
+import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -208,6 +208,7 @@ public class KeyboardFrame extends TJFrame {
             boolean b = evt.getNewValue() != null;
             piano.setEnabled(b);
             pbenddial.setEnabled(b);
+            jButtonAllNotesOff.setEnabled(b);
         }
     }
 

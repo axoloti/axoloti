@@ -28,11 +28,6 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
     final TargetController controller;
 
-    KeyboardFrame keyboard;
-    FileManagerFrame filemanager;
-    AxolotiRemoteControl remote;
-    MidiRouting midirouting;
-
     private JMenuItem jMenuItemSelectCom;
     private JMenuItem jMenuItemEnterDFU;
     private JMenuItem jMenuItemFCompile;

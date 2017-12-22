@@ -9,7 +9,6 @@ import axoloti.swingui.patch.PatchViewSwing;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,10 +74,9 @@ public class PatchBankModel extends AbstractModel {
         files = new ArrayList<File>();
     }
 
-    public PatchBankModel(File f) throws IOException {
-        file = f;
-        InputStream fs = new FileInputStream(f);
-        BufferedReader fbs = new BufferedReader(new InputStreamReader(fs));
+    public PatchBankModel(InputStream inputStream, String filename) throws IOException {
+        file = new File(filename);
+        BufferedReader fbs = new BufferedReader(new InputStreamReader(inputStream));
         String s;
         files = new ArrayList<File>();
         while ((s = fbs.readLine())
@@ -88,7 +86,6 @@ public class PatchBankModel extends AbstractModel {
                 files.add(ff);
             }
         }
-        fs.close();
     }
 
     public byte[] GetContents() {

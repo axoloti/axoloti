@@ -34,7 +34,9 @@ import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.target.fs.SDFileInfo;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -681,13 +683,13 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         }
     }
 
-    public static void OpenPatchBankEditor(File f) {
+    public static void OpenPatchBankEditor(InputStream inputStream, String filename) {
         try {
             PatchBankModel b;
-            if (f == null) {
+            if (inputStream == null) {
                 b = new PatchBankModel();
             } else {
-                b = new PatchBankModel(f);
+                b = new PatchBankModel(inputStream, filename);
             }
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             PatchBankController c = new PatchBankController(b, documentRoot, null);
@@ -695,6 +697,20 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             c.addView(bv);
             bv.setVisible(true);
             bv.toFront();
+        } catch (IOException ex) {
+            Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void OpenPatchBankEditor(File f) {
+        try {
+            PatchBankModel b;
+            if (f == null) {
+                OpenPatchBankEditor(null, "Untitled.axb");
+            } else {
+                FileInputStream fstream = new FileInputStream(f);
+                OpenPatchBankEditor(fstream, f.getName());
+            }
         } catch (IOException ex) {
             Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);
         }
