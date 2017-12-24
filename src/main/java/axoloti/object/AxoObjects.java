@@ -73,47 +73,44 @@ public class AxoObjects {
         if (n.startsWith("../") && (cwd != null)) {
             bfname = cwd + "/../" + n.substring(3);
         }
+        ArrayList<IAxoObject> set = new ArrayList<IAxoObject>();
+        File f;
         if ((bfname != null) && (cwd != null)) {
-            { // try object file
-                ArrayList<IAxoObject> set = new ArrayList<IAxoObject>();
-                String fnameA = bfname + ".axo";
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "attempt to create object from object file : {0}", fnameA);
-                File f = new File(fnameA);
-                if (f.isFile()) {
-                    boolean loadOK = false;
-                    AxoObjectFile of = null;
+            String fnameA = bfname + ".axo";
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "attempt to create object from object file : {0}", fnameA);
+            f = new File(fnameA);
+            if (f.isFile()) {
+                boolean loadOK = false;
+                AxoObjectFile of = null;
+                try {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "hit : {0}", fnameA);
+                    of = serializer.read(AxoObjectFile.class, f);
+                    loadOK = true;
+                } catch (Exception ex) {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                     try {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "hit : {0}", fnameA);
-                        of = serializer.read(AxoObjectFile.class, f);
+                        of = serializer.read(AxoObjectFile.class, f, false);
                         loadOK = true;
-                    } catch (Exception ex) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-                        try {
-                            of = serializer.read(AxoObjectFile.class, f, false);
-                            loadOK = true;
-                        } catch (Exception ex1) {
-                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex1);
-                        }
+                    } catch (Exception ex1) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex1);
                     }
-                    if (loadOK) {
-                        AxoObjectAbstract o = of.objs.get(0);
-                        if (o != null) {
-                            o.setPath(fnameA);
-                            // to be completed : loading overloaded objects too
-                            o.createdFromRelativePath = true;
-                            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameA);
-                            set.add(o);
-                            return set;
-                        }
+                }
+                if (loadOK) {
+                    AxoObjectAbstract o = of.objs.get(0);
+                    if (o != null) {
+                        o.setPath(fnameA);
+                        // to be completed : loading overloaded objects too
+                        o.createdFromRelativePath = true;
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameA);
+                        set.add(o);
+                        return set;
                     }
                 }
             }
-            /* TODO: review
-            { // try subpatch file
-                ArrayList<AxoObjectAbstract> set = new ArrayList<AxoObjectAbstract>();
+            else {
                 String fnameP = bfname + ".axs";
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "attempt to create object from subpatch file in patch directory: {0}", fnameP);
-                File f = new File(fnameP);
+                f = new File(fnameP);
                 if (f.isFile()) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "hit : {0}", fnameP);
                     AxoObjectAbstract o = new AxoObjectFromPatch(f);
@@ -126,9 +123,7 @@ public class AxoObjects {
                     return set;
                 }
             }
-            */
         }
-        ArrayList<IAxoObject> set = new ArrayList<IAxoObject>();
         // need to clone ObjectList to avoid a ConcurrentModificationException?
         for (IAxoObject o : (ArrayList<IAxoObject>)ObjectList.clone()) {
             if (o.getId().equals(n)) {
@@ -246,7 +241,7 @@ public class AxoObjects {
                     } catch (java.lang.reflect.InvocationTargetException ite) {
                         if(ite.getTargetException() instanceof AxoObjectFile.ObjectVersionException) {
                             AxoObjectFile.ObjectVersionException ove = (AxoObjectFile.ObjectVersionException) ite.getTargetException();
-                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Object produced with newer version of Axoloti {0} {1}", 
+                            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Object produced with newer version of Axoloti {0} {1}",
                                                                             new Object[]{fileEntry.getAbsoluteFile(), ove.getMessage()});
                         } else {
                             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ite);
@@ -374,7 +369,7 @@ public class AxoObjects {
         LoaderThread = new Thread(objloader);
         LoaderThread.start();
     }
-    
+
     public static String ConvertToLegalFilename(String s) {
         s = s.replaceAll("<", "LT");
         s = s.replaceAll(">", "GT");
@@ -384,10 +379,10 @@ public class AxoObjects {
         s = s.replaceAll("-", "MINUS");
         s = s.replaceAll("/", "SLASH");
         s = s.replaceAll(":", "COLON");
-        //if (!cn.equals(o.id)) o.sCName = cn;        
+        //if (!cn.equals(o.id)) o.sCName = cn;
         return s;
     }
-    
+
     void PostProcessObject(AxoObjectAbstract o) {
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
@@ -544,6 +539,6 @@ public class AxoObjects {
         }
         o.id = id;
     }
-    
-    
+
+
 }
