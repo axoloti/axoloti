@@ -1,6 +1,6 @@
 package axoloti.piccolo.outlets;
 
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.outlet.OutletInstanceZombie;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import axoloti.piccolo.components.PJackOutputComponent;
@@ -9,7 +9,7 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 
-public class POutletInstanceZombieView extends POutletInstanceView implements IOutletInstanceView {
+public class POutletInstanceZombieView extends POutletInstanceView implements IIoletInstanceView {
 
     OutletInstanceZombie outletInstanceZombie;
 

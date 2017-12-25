@@ -2,9 +2,8 @@ package axoloti.swingui.patch.net;
 
 import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.INetView;
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
@@ -22,13 +21,16 @@ import java.awt.Stroke;
 import java.awt.geom.QuadCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 public class NetView extends JComponent implements INetView {
 
-    protected ArrayList<IOutletInstanceView> source = new ArrayList<>();
-    protected ArrayList<IInletInstanceView> dest = new ArrayList<>();
+    protected List<IIoletInstanceView> source = new ArrayList<>();
+    protected List<IIoletInstanceView> dest = new ArrayList<>();
     protected boolean selected = false;
 
     NetController controller;
@@ -54,7 +56,7 @@ public class NetView extends JComponent implements INetView {
             if (ov == null) {
                 throw new Error("no corresponding outlet instance view found");
             }
-            for (IOutletInstanceView o2 : ov.getOutletInstanceViews()) {
+            for (IIoletInstanceView o2 : ov.getOutletInstanceViews()) {
                 if (o2.getController().getModel() == i) {
                     source.add(o2);
                     break;
@@ -67,7 +69,7 @@ public class NetView extends JComponent implements INetView {
             if (ov == null) {
                 throw new Error("no corresponding inlet instance view found");
             }
-            for (IInletInstanceView o2 : ov.getInletInstanceViews()) {
+            for (IIoletInstanceView o2 : ov.getInletInstanceViews()) {
                 if (o2.getController().getModel() == i) {
                     dest.add(o2);
                     break;
@@ -82,10 +84,10 @@ public class NetView extends JComponent implements INetView {
             return;
         }
         this.selected = selected;
-        for (IOutletInstanceView i : source) {
+        for (IIoletInstanceView i : source) {
             i.setHighlighted(selected);
         }
-        for (IInletInstanceView i : dest) {
+        for (IIoletInstanceView i : dest) {
             i.setHighlighted(selected);
         }
         repaint();
@@ -119,7 +121,7 @@ public class NetView extends JComponent implements INetView {
         int max_y = Integer.MIN_VALUE;
         int max_x = Integer.MIN_VALUE;
 
-        for (IInletInstanceView i : dest) {
+        for (IIoletInstanceView i : dest) {
             if (i == null) {
                 System.out.println("null");
             }
@@ -129,7 +131,7 @@ public class NetView extends JComponent implements INetView {
             max_x = Math.max(max_x, p1.x);
             max_y = Math.max(max_y, p1.y);
         }
-        for (IOutletInstanceView i : source) {
+        for (IIoletInstanceView i : source) {
             if (i == null) {
                 System.out.println("null");
             }
@@ -203,7 +205,7 @@ public class NetView extends JComponent implements INetView {
         }
 
         Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
-        for (IInletInstanceView i : dest) {
+        for (IIoletInstanceView i : dest) {
             Point p1 = i.getJackLocInCanvas();
 
             Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
@@ -212,7 +214,7 @@ public class NetView extends JComponent implements INetView {
             g2.setColor(c);
             DrawWire(g2, from.x, from.y, to.x, to.y);
         }
-        for (IOutletInstanceView i : source) {
+        for (IIoletInstanceView i : source) {
             Point p1 = i.getJackLocInCanvas();
 
             Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
@@ -220,19 +222,13 @@ public class NetView extends JComponent implements INetView {
             DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
             g2.setColor(c);
             DrawWire(g2, from.x, from.y, to.x, to.y);
-
         }
     }
 
-
     @Override
-    public ArrayList<IOutletInstanceView> getSourceViews() {
-        return source;
-    }
-
-    @Override
-    public ArrayList<IInletInstanceView> getDestinationViews() {
-        return dest;
+    public List<IIoletInstanceView> getIoletViews() {
+        return Stream.concat(source.stream(), dest.stream())
+            .collect(Collectors.toList());
     }
 
     @Override

@@ -65,6 +65,8 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 
+import axoloti.patch.object.iolet.IoletInstance;
+
 public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
 
     public PatchController(PatchModel model, AbstractDocumentRoot documentRoot, ObjectInstancePatcherController parentController) {
@@ -369,7 +371,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             if (obj instanceof AxoObjectPatcher) {
                 AxoObjectPatcher objp = (AxoObjectPatcher)obj;
                 objp.createController(null, this)
-                
+
             }
             else*/
             objinst = AxoObjectInstanceFactory.createView(obj.createController(getDocumentRoot(), this), this, n + i, loc);
@@ -514,7 +516,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
              } else {
              //o.patch = this;
              p.objectinstances.remove(o);
-             AxoObjectZombie z = new AxoObjectZombie();                    
+             AxoObjectZombie z = new AxoObjectZombie();
              AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null, null), getModel(), o.getInstanceName(), new Point(o.getX(), o.getY()));
              zombie.patchModel = getModel();
              zombie.typeName = o.typeName;
@@ -586,7 +588,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 ArrayList<OutletInstance> source2 = new ArrayList<>();
                 for (OutletInstance o : n.getSources()) {
                     String objname = o.getObjname();
-                    String outletname = o.getOutletname();
+                    String outletname = o.getName();
                     if ((objname != null) && (outletname != null)) {
                         String on2 = dict.get(objname);
                         if (on2 != null) {
@@ -611,7 +613,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
                 for (InletInstance o : n.getDestinations()) {
                     String objname = o.getObjname();
-                    String inletname = o.getInletname();
+                    String inletname = o.getName();
                     if ((objname != null) && (inletname != null)) {
                         String on2 = dict.get(objname);
                         if (on2 != null) {
@@ -670,13 +672,13 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 IAxoObjectInstance o = i.getObjectInstance();
                 assert (o.getInletInstances().contains(i));
                 assert (getModel().getObjectInstances().contains(o));
-                assert (getNetFromInlet(i).getModel() == n);
+                assert (getNetFromIolet(i).getModel() == n);
             }
             for (OutletInstance i : n.getSources()) {
                 IAxoObjectInstance o = i.getObjectInstance();
                 assert (o.getOutletInstances().contains(i));
                 assert (getModel().getObjectInstances().contains(o));
-                assert (getNetFromOutlet(i).getModel() == n);
+                assert (getNetFromIolet(i).getModel() == n);
             }
         }
         for (IAxoObjectInstance o : getModel().getObjectInstances()) {
@@ -744,7 +746,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             objectInstanceControllers.add(newObj);
 
             for (InletInstance i : obj.getInletInstances()) {
-                NetController n = getNetFromInlet(i);
+                NetController n = getNetFromIolet(i);
                 if (n != null) {
                     for (InletInstance i2 : newObj.getInletInstances()) {
                         if (i2.getName().equals(i.getName())) {
@@ -755,7 +757,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 }
             }
             for (OutletInstance i : obj.getOutletInstances()) {
-                NetController n = getNetFromOutlet(i);
+                NetController n = getNetFromIolet(i);
                 if (n != null) {
                     for (OutletInstance i2 : newObj.getOutletInstances()) {
                         if (i2.getName().equals(i.getName())) {
@@ -801,22 +803,20 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         checkCoherency();
     }
 
-    public NetController getNetFromInlet(InletInstance il) {
+    public NetController getNetFromIolet(IoletInstance il) {
         for (NetController c : netControllers) {
-            for (InletInstance d : c.getModel().getDestinations()) {
-                if (d == il) {
-                    return c;
+            if(il.isSource()) {
+                for (OutletInstance d : c.getModel().getSources()) {
+                    if (d == il) {
+                        return c;
+                    }
                 }
             }
-        }
-        return null;
-    }
-
-    public NetController getNetFromOutlet(OutletInstance il) {
-        for (NetController c : netControllers) {
-            for (OutletInstance d : c.getModel().getSources()) {
-                if (d == il) {
-                    return c;
+            else {
+                for (InletInstance d : c.getModel().getDestinations()) {
+                    if (d == il) {
+                        return c;
+                    }
                 }
             }
         }
@@ -833,8 +833,8 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             return null;
         }
         NetController n1, n2;
-        n1 = getNetFromInlet(il);
-        n2 = getNetFromOutlet(ol);
+        n1 = getNetFromIolet(il);
+        n2 = getNetFromIolet(ol);
         if ((n1 == null) && (n2 == null)) {
             Net n = new Net(new OutletInstance[]{ol}, new InletInstance[]{il});
             netControllers.add(n);
@@ -884,8 +884,8 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             return null;
         }
         NetController n1, n2;
-        n1 = getNetFromInlet(il);
-        n2 = getNetFromInlet(ol);
+        n1 = getNetFromIolet(il);
+        n2 = getNetFromIolet(ol);
         if ((n1 == null) && (n2 == null)) {
             Net n = new Net(new OutletInstance[]{}, new InletInstance[]{il, ol});
             netControllers.add(n);
@@ -908,20 +908,8 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return null;
     }
 
-    public Net disconnect(InletInstance io) {
-        NetController n = getNetFromInlet(io);
-        if (n != null) {
-            if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
-                delete(n);
-            } else {
-                n.disconnect(io);
-            }
-        }
-        return null;
-    }
-
-    public Net disconnect(OutletInstance io) {
-        NetController n = getNetFromOutlet(io);
+    public Net disconnect(IoletInstance io) {
+        NetController n = getNetFromIolet(io);
         if (n != null) {
             if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
                 delete(n);
@@ -1020,7 +1008,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         int[] ranking;
         ranking = new int[candidates.size()];
         for (InletInstance j : axoObjectInstance.getInletInstances()) {
-            NetController n = getNetFromInlet(j);
+            NetController n = getNetFromIolet(j);
             if (n == null) {
                 continue;
             }

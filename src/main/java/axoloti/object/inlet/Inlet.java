@@ -17,55 +17,22 @@
  */
 package axoloti.object.inlet;
 
-import axoloti.object.atom.AtomDefinition;
-import axoloti.datatypes.DataType;
-import axoloti.datatypes.SignalMetaData;
-import axoloti.property.Property;
-import axoloti.utils.CharEscape;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
+import axoloti.object.iolet.Iolet;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class Inlet extends AtomDefinition implements Cloneable {
-
+public abstract class Inlet extends Iolet {
     public Inlet() {
+        super();
     }
 
     public Inlet(String name, String description) {
         super(name, description);
     }
 
-    @Override
-    public String toString() {
-        return getTypeName();
-    }
-
     public String GetCName() {
-        return "inlet_" + CharEscape.CharEscape(getName());
-    }
-
-    public abstract DataType getDatatype();
-
-    public SignalMetaData GetSignalMetaData() {
-        return SignalMetaData.none;
-    }
-
-    public void updateSHA(MessageDigest md) {
-        md.update(getName().getBytes());
-        md.update((byte) getDatatype().hashCode());
-    }
-
-    @Override
-    public Inlet clone() throws CloneNotSupportedException {
-        return (Inlet) super.clone();
-    }
-
-    @Override
-    public List<Property> getEditableFields() {
-        return new ArrayList<>();
+        return "inlet_" + super.GetCName();
     }
 }

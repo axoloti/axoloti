@@ -17,62 +17,23 @@
  */
 package axoloti.object.outlet;
 
-import axoloti.object.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
-import axoloti.datatypes.SignalMetaData;
-import axoloti.property.Property;
-import axoloti.utils.CharEscape;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
-import org.simpleframework.xml.Attribute;
+import axoloti.object.iolet.Iolet;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class Outlet extends AtomDefinition implements Cloneable {
-
-    @Deprecated
-    @Attribute(required = false)
-    Boolean SumBuffer;
-
-    public DataType getDatatype() {
-        return null;
-    }
-
+public abstract class Outlet extends Iolet {
     public Outlet() {
+        super();
     }
 
     public Outlet(String name, String description) {
         super(name, description);
     }
 
-    @Override
-    public String toString() {
-        return getTypeName();
-    }
-
     public String GetCName() {
-        return "outlet_" + CharEscape.CharEscape(getName());
-    }
-
-    public SignalMetaData GetSignalMetaData() {
-        return SignalMetaData.none;
-    }
-
-    public void updateSHA(MessageDigest md) {
-        md.update(getName().getBytes());
-        md.update((byte) getDatatype().hashCode());
-    }
-
-    @Override
-    public Outlet clone() throws CloneNotSupportedException {
-        return (Outlet) super.clone();
-    }
-
-    @Override
-    public List<Property> getEditableFields() {
-        return new ArrayList<>();
+        return "outlet_" + super.GetCName();
     }
 }

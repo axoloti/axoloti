@@ -1,10 +1,10 @@
 package axoloti.piccolo.inlets;
 
 import axoloti.abstractui.INetView;
-import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.inlet.InletInstanceController;
-import axoloti.swingui.patch.object.inlet.InletInstancePopupMenu;
+import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import axoloti.piccolo.components.PJackInputComponent;
@@ -18,17 +18,16 @@ import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PInletInstanceView extends PIoletAbstract implements IInletInstanceView {
-
-    InletInstancePopupMenu popup;
+public class PInletInstanceView extends PIoletAbstract implements IIoletInstanceView {
     InletInstance inletInstance;
-    InletInstanceController controller;
+    IoletInstanceController controller;
+    IoletInstancePopupMenu popup;
 
     public PInletInstanceView(InletInstance inletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         this.inletInstance = inletInstance;
 
-        popup = new InletInstancePopupMenu(getController());
+        popup = new IoletInstancePopupMenu(getController());
     }
 
     private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
@@ -76,7 +75,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     public void setHighlighted(boolean highlighted) {
         if (axoObjectInstanceView != null
                 && axoObjectInstanceView.getPatchView() != null) {
-            INetView netView = axoObjectInstanceView.getPatchView().GetNetView((IInletInstanceView) this);
+            INetView netView = axoObjectInstanceView.getPatchView().GetNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);
@@ -95,7 +94,7 @@ public class PInletInstanceView extends PIoletAbstract implements IInletInstance
     }
 
     @Override
-    public InletInstanceController getController() {
+    public IoletInstanceController getController() {
         return controller;
     }
 

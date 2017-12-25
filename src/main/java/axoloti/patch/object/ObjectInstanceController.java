@@ -6,13 +6,12 @@ import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.inlet.InletInstanceController;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.outlet.OutletInstanceController;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import java.awt.Point;
@@ -27,8 +26,8 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
 
     public final ArrayController<AttributeInstanceController, AttributeInstance, ObjectInstanceController> attributeInstanceControllers;
     public final ArrayController<ParameterInstanceController, ParameterInstance, ObjectInstanceController> parameterInstanceControllers;
-    public final ArrayController<InletInstanceController, InletInstance, ObjectInstanceController> inletInstanceControllers;
-    public final ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController> outletInstanceControllers;
+    public final ArrayController<IoletInstanceController, InletInstance, ObjectInstanceController> inletInstanceControllers;
+    public final ArrayController<IoletInstanceController, OutletInstance, ObjectInstanceController> outletInstanceControllers;
     public final ArrayController<DisplayInstanceController, DisplayInstance, ObjectInstanceController> displayInstanceControllers;
 
     public ObjectInstanceController(IAxoObjectInstance model, AbstractDocumentRoot documentRoot, PatchController parent) {
@@ -56,29 +55,29 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
             public void disposeController(ParameterInstanceController controller) {
             }
         };
-        inletInstanceControllers = new ArrayController<InletInstanceController, InletInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_INLET_INSTANCES) {
+        inletInstanceControllers = new ArrayController<IoletInstanceController, InletInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_INLET_INSTANCES) {
 
             @Override
-            public InletInstanceController createController(InletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
-                return new InletInstanceController(model, documentRoot, parent);
+            public IoletInstanceController createController(InletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
+                return new IoletInstanceController(model, documentRoot, parent);
             }
 
             @Override
-            public void disposeController(InletInstanceController controller) {
+            public void disposeController(IoletInstanceController controller) {
                 if (getParent() != null) {
                     getParent().disconnect(controller.getModel());
                 }
             }
         };
-        outletInstanceControllers = new ArrayController<OutletInstanceController, OutletInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_OUTLET_INSTANCES) {
+        outletInstanceControllers = new ArrayController<IoletInstanceController, OutletInstance, ObjectInstanceController>(this, AxoObjectInstance.OBJ_OUTLET_INSTANCES) {
 
             @Override
-            public OutletInstanceController createController(OutletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
-                return new OutletInstanceController(model, documentRoot, parent);
+            public IoletInstanceController createController(OutletInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
+                return new IoletInstanceController(model, documentRoot, parent);
             }
 
             @Override
-            public void disposeController(OutletInstanceController controller) {
+            public void disposeController(IoletInstanceController controller) {
                 if (getParent() != null) {
                     getParent().disconnect(controller.getModel());
                 }

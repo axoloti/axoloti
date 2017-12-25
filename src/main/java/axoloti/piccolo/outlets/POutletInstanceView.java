@@ -2,10 +2,10 @@ package axoloti.piccolo.outlets;
 
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.outlet.OutletInstanceController;
-import axoloti.swingui.patch.object.outlet.OutletInstancePopupMenu;
+import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import axoloti.piccolo.iolet.PIoletAbstract;
 import axoloti.piccolo.components.PJackOutputComponent;
 import axoloti.piccolo.components.PLabelComponent;
@@ -18,10 +18,10 @@ import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class POutletInstanceView extends PIoletAbstract implements IOutletInstanceView {
+public class POutletInstanceView extends PIoletAbstract implements IIoletInstanceView {
 
     OutletInstance outletInstance;
-    OutletInstanceController controller;
+    IoletInstanceController controller;
 
     public POutletInstanceView(OutletInstance outletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
@@ -76,7 +76,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     public void setHighlighted(boolean highlighted) {
         if (axoObjectInstanceView != null
                 && axoObjectInstanceView.getPatchView() != null) {
-            INetView netView = axoObjectInstanceView.getPatchView().GetNetView((IOutletInstanceView) this);
+            INetView netView = axoObjectInstanceView.getPatchView().GetNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);
@@ -86,7 +86,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
 
     @Override
     public JPopupMenu getPopup() {
-        return new OutletInstancePopupMenu(getController());
+        return new IoletInstancePopupMenu(getController());
     }
 
     @Override
@@ -95,7 +95,7 @@ public class POutletInstanceView extends PIoletAbstract implements IOutletInstan
     }
 
     @Override
-    public OutletInstanceController getController() {
+    public IoletInstanceController getController() {
         return controller;
     }
 

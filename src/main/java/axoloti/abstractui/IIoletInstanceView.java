@@ -1,15 +1,16 @@
 package axoloti.abstractui;
 
-import axoloti.mvc.IView;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.outlet.OutletInstanceController;
 import java.awt.Point;
 
-public interface IOutletInstanceView extends IView<OutletInstanceController> {
+import axoloti.mvc.IView;
+import axoloti.patch.object.iolet.IoletInstance;
+import axoloti.patch.object.iolet.IoletInstanceController;
+
+public interface IIoletInstanceView extends IView<IoletInstanceController> {
 
     public void PostConstructor();
 
-    public OutletInstance getModel();
+    public IoletInstance getModel();
 
     public void setHighlighted(boolean highlighted);
 
@@ -22,5 +23,4 @@ public interface IOutletInstanceView extends IView<OutletInstanceController> {
     public void setAlignmentX(float alignmentX);
 
     public void setAlignmentY(float alignmentY);
-
 }

@@ -80,14 +80,14 @@ public abstract class PatchView extends PatchAbstractView {
 
     public List<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
     public List<INetView> netViews = new ArrayList<>();
-    
+
     public PatchView(PatchController patchController) {
         super(patchController);
     }
 
     public void PostConstructor() {
 
-        
+
     }
 
     public List<IAxoObjectInstanceView> getObjectInstanceViews() {
@@ -177,12 +177,7 @@ public abstract class PatchView extends PatchAbstractView {
         p.nets = new ArrayList<Net>();
         for (INetView n : netViews) {
             int sel = 0;
-            for (IInletInstanceView i : n.getDestinationViews()) {
-                if (i.getObjectInstanceView().getModel().getSelected()) {
-                    sel++;
-                }
-            }
-            for (IOutletInstanceView i : n.getSourceViews()) {
+            for (IIoletInstanceView i : n.getIoletViews()) {
                 if (i.getObjectInstanceView().getModel().getSelected()) {
                     sel++;
                 }
@@ -273,7 +268,7 @@ public abstract class PatchView extends PatchAbstractView {
         for(String module : getController().getModel().getModules()) {
            qCmdProcessor.AppendToQueue(
                    new QCmdCompileModule(getController(),
-                           module, 
+                           module,
                            getController().getModel().getModuleDir(module)));
         }
         qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getController()));
@@ -347,7 +342,7 @@ public abstract class PatchView extends PatchAbstractView {
         }
         return b;
     }
-    
+
     public static PatchFrame OpenPatchModel(PatchModel pm, String fileNamePath) {
         if (fileNamePath == null) {
             fileNamePath = "untitled";
@@ -482,42 +477,13 @@ public abstract class PatchView extends PatchAbstractView {
         return null;
     }
 
-    public INetView GetNetView(IInletInstanceView i) {
+    public INetView GetNetView(IIoletInstanceView io) {
         if (netViews == null) {
             return null;
         }
-        for (INetView netView : netViews) {
-            for (IInletInstanceView d : netView.getDestinationViews()) {
-                if (d == i) {
-                    return netView;
-                }
-            }
-        }
-        return null;
-    }
 
-    public INetView GetNetView(IOutletInstanceView o) {
-        if (netViews == null) {
-            return null;
-        }
         for (INetView netView : netViews) {
-            for (IOutletInstanceView d : netView.getSourceViews()) {
-                if (d == o) {
-                    return netView;
-                }
-            }
-        }
-        return null;
-    }
-
-    public INetView GetNetView(IoletAbstract io) {
-        for (INetView netView : netViews) {
-            for (IInletInstanceView d : netView.getDestinationViews()) {
-                if (d == io) {
-                    return netView;
-                }
-            }
-            for (IOutletInstanceView d : netView.getSourceViews()) {
+            for (IIoletInstanceView d : netView.getIoletViews()) {
                 if (d == io) {
                     return netView;
                 }
@@ -545,7 +511,7 @@ public abstract class PatchView extends PatchAbstractView {
         }
         */
     }
-    
+
     ArrayView<IAxoObjectInstanceView> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView>() {
         @Override
         public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {

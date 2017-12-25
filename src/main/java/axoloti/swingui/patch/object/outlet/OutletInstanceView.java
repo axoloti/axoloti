@@ -2,13 +2,14 @@ package axoloti.swingui.patch.object.outlet;
 
 import axoloti.preferences.Theme;
 import axoloti.abstractui.INetView;
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.outlet.OutletInstanceController;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.swingui.TransparentCursor;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.SignalMetaDataIcon;
 import axoloti.swingui.patch.object.iolet.IoletAbstract;
+import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
@@ -16,11 +17,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
 
-public class OutletInstanceView extends IoletAbstract<OutletInstanceController> implements IOutletInstanceView {
+
+
+public class OutletInstanceView extends IoletAbstract<IoletInstanceController> implements IIoletInstanceView {
 
     LabelComponent label;
 
-    public OutletInstanceView(OutletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
+    public OutletInstanceView(IoletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         super(controller);
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -50,12 +53,7 @@ public class OutletInstanceView extends IoletAbstract<OutletInstanceController> 
 
     @Override
     public JPopupMenu getPopup() {
-        return new OutletInstancePopupMenu(getController());
-    }
-
-    @Override
-    public OutletInstance getModel() {
-        return getController().getModel();
+        return new IoletInstancePopupMenu(getController());
     }
 
     @Override
@@ -64,7 +62,7 @@ public class OutletInstanceView extends IoletAbstract<OutletInstanceController> 
                 || getRootPane().getCursor() != TransparentCursor.get())
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
-            INetView netView = axoObj.getPatchView().GetNetView((IOutletInstanceView) this);
+            INetView netView = axoObj.getPatchView().GetNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);

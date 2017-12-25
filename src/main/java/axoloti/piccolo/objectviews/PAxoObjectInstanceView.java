@@ -5,13 +5,12 @@ import axoloti.preferences.Theme;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.object.display.Display;
 import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.object.inlet.Inlet;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.abstractui.IOutletInstanceView;
 import axoloti.object.outlet.Outlet;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.abstractui.IParameterInstanceView;
@@ -202,10 +201,10 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 //                    n.connectOutlet(outletInstance);
 //                }
             }
-//            getModel().getOutletInstances().add(outletInstance);            
+//            getModel().getOutletInstances().add(outletInstance);
             POutletInstanceView view = null;
             // TODO: PICCOLO view factory
-            // ... = (POutletInstanceView) outletInstance.createView(this);            
+            // ... = (POutletInstanceView) outletInstance.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
             //outletInstanceViews.add(view);
         }
@@ -252,7 +251,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 */
         for (Display p : getType().displays) {
 //            DisplayInstance pin = p.CreateInstance(getModel());
-            PDisplayInstanceView view = null; 
+            PDisplayInstanceView view = null;
             // TODO: implement PICCOLO view factory
             // ... = (PDisplayInstanceView) pin.createView(this);
             view.setAlignmentX(RIGHT_ALIGNMENT);
@@ -431,12 +430,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public List<IInletInstanceView> getInletInstanceViews() {
+    public List<IIoletInstanceView> getInletInstanceViews() {
         return null;//inletInstanceViews;
     }
 
     @Override
-    public List<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IIoletInstanceView> getOutletInstanceViews() {
         return null;//outletInstanceViews;
     }
 
@@ -461,12 +460,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public void addOutletInstanceView(IOutletInstanceView view) {
+    public void addOutletInstanceView(IIoletInstanceView view) {
         p_outletViews.addChild((POutletInstanceView) view);
     }
 
     @Override
-    public void addInletInstanceView(IInletInstanceView view) {
+    public void addInletInstanceView(IIoletInstanceView view) {
         p_inletViews.addChild((PInletInstanceView) view);
     }
 }

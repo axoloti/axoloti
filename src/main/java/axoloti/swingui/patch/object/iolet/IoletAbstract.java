@@ -5,6 +5,7 @@ import axoloti.mvc.AbstractController;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.net.NetDrag;
+import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.swingui.TransparentCursor;
@@ -162,15 +163,21 @@ public abstract class IoletAbstract<T extends AbstractController> extends ViewPa
                 if (this instanceof InletInstanceView) {
                     if (dragtarget instanceof InletInstanceView) {
                         getPatchView().getController().addMetaUndo("connect");
-                        n = getPatchView().getController().AddConnection(((InletInstance) getController().getModel()), ((InletInstanceView) dragtarget).getController().getModel());
+                        n = getPatchView().getController().AddConnection(
+                            (InletInstance) getController().getModel(),
+                            (InletInstance) ((InletInstanceView) dragtarget).getController().getModel());
                     } else if (dragtarget instanceof OutletInstanceView) {
                         getPatchView().getController().addMetaUndo("connect");
-                        n = getPatchView().getController().AddConnection(((InletInstance) getController().getModel()), ((OutletInstanceView) dragtarget).getController().getModel());
+                        n = getPatchView().getController().AddConnection(
+                            (InletInstance) getController().getModel(),
+                            (OutletInstance) ((OutletInstanceView) dragtarget).getController().getModel());
                     }
                 } else if (this instanceof OutletInstanceView) {
                     if (dragtarget instanceof InletInstanceView) {
                         getPatchView().getController().addMetaUndo("connect");
-                        n = getPatchView().getController().AddConnection(((InletInstanceView) dragtarget).getController().getModel(), ((OutletInstanceView) IoletAbstract.this).getController().getModel());
+                        n = getPatchView().getController().AddConnection(
+                            (InletInstance) ((InletInstanceView) dragtarget).getController().getModel(),
+                            (OutletInstance) ((OutletInstanceView) IoletAbstract.this).getController().getModel());
                     }
                 }
                 getPatchView().getController().PromoteOverloading(false);
@@ -220,16 +227,9 @@ public abstract class IoletAbstract<T extends AbstractController> extends ViewPa
     public void mouseMoved(MouseEvent e) {
     }
 
-    public void setHighlighted(boolean highlighted) {
-        if ((getRootPane() == null
-                || getRootPane().getCursor() != TransparentCursor.get())
-                && axoObj != null
-                && axoObj.getPatchView() != null) {
-            INetView netView = axoObj.getPatchView().GetNetView(this);
-            if (netView != null
-                    && netView.getSelected() != highlighted) {
-                netView.setSelected(highlighted);
-            }
-        }
+    public abstract void setHighlighted(boolean highlighted);
+
+    public IoletInstance getModel() {
+        return (IoletInstance) getController().getModel();
     }
 }

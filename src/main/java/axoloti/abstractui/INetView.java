@@ -2,7 +2,7 @@ package axoloti.abstractui;
 
 import axoloti.mvc.IView;
 import axoloti.patch.net.NetController;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface INetView extends IView<NetController> {
 
@@ -14,9 +14,7 @@ public interface INetView extends IView<NetController> {
 
     public boolean getSelected();
 
-    public ArrayList<IOutletInstanceView> getSourceViews();
-
-    public ArrayList<IInletInstanceView> getDestinationViews();
+    public List<IIoletInstanceView> getIoletViews();
 
     public void setVisible(boolean isVisible);
 

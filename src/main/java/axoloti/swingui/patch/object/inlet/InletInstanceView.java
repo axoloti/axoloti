@@ -1,9 +1,9 @@
 package axoloti.swingui.patch.object.inlet;
 
-import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.inlet.InletInstanceController;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
 import axoloti.swingui.components.JackInputComponent;
@@ -11,25 +11,21 @@ import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.SignalMetaDataIcon;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.iolet.IoletAbstract;
+import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
 
-public class InletInstanceView extends IoletAbstract<InletInstanceController> implements IInletInstanceView {
+public class InletInstanceView extends IoletAbstract<IoletInstanceController> implements IIoletInstanceView {
 
     LabelComponent label;
 
-    public InletInstanceView(InletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
+    public InletInstanceView(IoletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         super(controller);
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-    }
-
-    @Override
-    public InletInstance getModel() {
-        return getController().getModel();
     }
 
     @Override
@@ -57,7 +53,7 @@ public class InletInstanceView extends IoletAbstract<InletInstanceController> im
 
     @Override
     public JPopupMenu getPopup() {
-        return new InletInstancePopupMenu(getController());
+        return new IoletInstancePopupMenu(getController());
     }
 
     public String getInletname() {
@@ -71,7 +67,7 @@ public class InletInstanceView extends IoletAbstract<InletInstanceController> im
                 || getRootPane().getCursor() != TransparentCursor.get())
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
-            INetView netView = axoObj.getPatchView().GetNetView((IInletInstanceView) this);
+            INetView netView = axoObj.getPatchView().GetNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);

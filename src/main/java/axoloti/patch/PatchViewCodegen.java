@@ -500,7 +500,7 @@ public class PatchViewCodegen extends View<PatchController> {
             if (needsComma) {
                 c += ", ";
             }
-            NetController nc = getController().getNetFromInlet(i);
+            NetController nc = getController().getNetFromIolet(i);
             if ((nc != null) && (nc.getModel().isValidNet())) {
                 Net n = nc.getModel();
                 OutletInstance firstSource = java.util.Collections.min(Arrays.asList(n.getSources()));
@@ -521,7 +521,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 c += i.getDataType().GenerateSetDefaultValueCode();
             } else if (!nc.getModel().isValidNet()) {
                 c += i.getDataType().GenerateSetDefaultValueCode();
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getObjectInstance().getInstanceName() + ":" + i.getInletname());
+                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getObjectInstance().getInstanceName() + ":" + i.getName());
             }
             needsComma = true;
         }
@@ -529,7 +529,7 @@ public class PatchViewCodegen extends View<PatchController> {
             if (needsComma) {
                 c += ", ";
             }
-            NetController nc = getController().getNetFromOutlet(i);
+            NetController nc = getController().getNetFromIolet(i);
             if ((nc != null) && nc.getModel().isValidNet()) {
                 if (nc.IsFirstOutlet(i)) {
                     c += nc.CName();
