@@ -109,55 +109,74 @@ public class USBBulkConnection_v2 extends IConnection {
         return queueSerialTask.add(cmd);
     }
 
+    private void disconnect1() {
+        disp_addr = 0;
+                    ClearSync();
+                    ClearReadSync();
+                    memReadHandler = null;
+                    GoIdleState();
+                    if (connected) {
+                        disconnectRequested = true;
+                        connected = false;
+                        isSDCardPresent = null;
+                        ShowDisconnect();
+                        queueSerialTask.clear();
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        queueSerialTask.add(new QCmdSerialTaskNull());
+                        queueSerialTask.add(new QCmdSerialTaskNull());
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
+                        ClearSync();
+                        ClearReadSync();
+                        QCmdProcessor.getQCmdProcessor().Panic();
+
+                        if (receiverThread.isAlive()) {
+                            receiverThread.interrupt();
+                            try {
+                                receiverThread.join();
+                            } catch (InterruptedException ex) {
+                                //Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                        int result = LibUsb.releaseInterface(handle, interfaceNumber);
+                        if (result != LibUsb.SUCCESS) {
+                            throw new LibUsbException("Unable to release interface", result);
+                        }
+
+                        LibUsb.close(handle);
+                        handle = null;
+                        CpuId0 = 0;
+                        CpuId1 = 0;
+                        CpuId2 = 0;
+                    }
+    }
+
     @Override
     public void disconnect() {
-        disp_addr = 0;
-        ClearSync();
-        ClearReadSync();
-        memReadHandler = null;
-        GoIdleState();
-        if (connected) {
-            disconnectRequested = true;
-            connected = false;
-            isSDCardPresent = null;
-            ShowDisconnect();
-            queueSerialTask.clear();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+        {
+            if (!SwingUtilities.isEventDispatchThread()) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        disconnect1();
+                    }
+                });
+            } else {
+                disconnect1();
             }
-            queueSerialTask.add(new QCmdSerialTaskNull());
-            queueSerialTask.add(new QCmdSerialTaskNull());
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
-            ClearSync();
-            ClearReadSync();
-            QCmdProcessor.getQCmdProcessor().Panic();
-
-            if (receiverThread.isAlive()) {
-                receiverThread.interrupt();
-                try {
-                    receiverThread.join();
-                } catch (InterruptedException ex) {
-                    //Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            int result = LibUsb.releaseInterface(handle, interfaceNumber);
-            if (result != LibUsb.SUCCESS) {
-                throw new LibUsbException("Unable to release interface", result);
-            }
-
-            LibUsb.close(handle);
-            handle = null;
-            CpuId0 = 0;
-            CpuId1 = 0;
-            CpuId2 = 0;
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (InvocationTargetException ex) {
+//            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -180,6 +199,7 @@ public class USBBulkConnection_v2 extends IConnection {
         targetProfile = new axoloti_core();
         handle = OpenDeviceHandle(_cpuid);
         if (handle == null) {
+            ShowDisconnect();
             return false;
         }
 

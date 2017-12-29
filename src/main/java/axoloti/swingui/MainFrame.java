@@ -549,6 +549,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
             }
         } else {
             QCmdProcessor.getQCmdProcessor().Panic();
+            jCheckBoxConnect.setEnabled(false);
             boolean success = CConnection.GetConnection().connect(null);
         }
     }//GEN-LAST:event_jCheckBoxConnectActionPerformed
@@ -804,7 +805,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
 
     private void ShowConnectDisconnect(boolean connect) {
         jCheckBoxConnect.setSelected(connect);
-
+        jCheckBoxConnect.setEnabled(true);
         if (!connect) {
             setCpuID(null);
             jLabelVoltages.setText(" ");
