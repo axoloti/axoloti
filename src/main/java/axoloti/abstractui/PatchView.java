@@ -342,6 +342,7 @@ public abstract class PatchView extends PatchAbstractView {
     public boolean save(File f) {
         PreSerialize();
         boolean b = getController().getModel().save(f);
+        getController().getDocumentRoot().markSaved();
         if (ObjEditor != null) {
             // ObjEditor.UpdateObject();
         }

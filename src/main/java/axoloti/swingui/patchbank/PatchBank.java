@@ -296,6 +296,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             }
             getModel().setFile(fileToBeSaved);
             getModel().Save();
+            getController().getDocumentRoot().markSaved();
             Preferences.getPreferences().setCurrentFileDirectory(fileToBeSaved.getPath());
         }
     }
@@ -308,13 +309,17 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
 
     @Override
     public boolean askClose() {
-//      if (getController().getUndoManager().canUndo()) {
-        if (true) {
+        if (getController().getDocumentRoot().getDirty()) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
+            String filename = "untitled";
+            File f = getController().getModel().getFile();
+            if (f != null) {
+                filename = f.getName();
+            }
             int n = JOptionPane.showOptionDialog(this,
-                    "Do you want to save changes to " + getController().getModel().getFile().getName() + " ?",
+                    "Do you want to save changes to " + filename + " ?",
                     "Axoloti asks:",
                     JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
@@ -535,6 +540,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                 SaveAs();
             } else {
                 getModel().Save();
+                getController().getDocumentRoot().markSaved();
             }
         }
     }
@@ -709,7 +715,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                 OpenPatchBankEditor(null, "Untitled.axb");
             } else {
                 FileInputStream fstream = new FileInputStream(f);
-                OpenPatchBankEditor(fstream, f.getName());
+                OpenPatchBankEditor(fstream, f.getAbsolutePath());
             }
         } catch (IOException ex) {
             Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);

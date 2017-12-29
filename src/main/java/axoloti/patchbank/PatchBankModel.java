@@ -66,7 +66,8 @@ public class PatchBankModel extends AbstractModel {
 
     File fromRelative(String s) {
         Path basePath = file.toPath();
-        Path resolvedPath = basePath.getParent().resolve(s);
+        Path baseParent = basePath.getParent();
+        Path resolvedPath = baseParent.resolve(s);
         return resolvedPath.toFile();
     }
 

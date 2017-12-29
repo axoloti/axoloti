@@ -4,6 +4,9 @@ import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
@@ -68,6 +71,9 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         //System.out.println("propertyChange: " + evt.getPropertyName() + " : " + ((evt.getNewValue()!=null)?evt.getNewValue().toString() : "null"));
+        if (!SwingUtilities.isEventDispatchThread()) {
+            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
+        }
         for (View view : registeredViews) {
             view.modelPropertyChange(evt);
         }

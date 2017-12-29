@@ -366,7 +366,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public boolean askClose() {
-        if (!getController().getUndoManager().canUndo()) {
+        if (!getController().getDocumentRoot().getDirty()) {
             Close();
             return false;
         }
