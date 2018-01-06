@@ -118,7 +118,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     @Override
     public void mouseClicked(MouseEvent me) {
         if (getPatchView() != null) {
-            grabFocus();
+            getPatchView().requestFocus();
             if (me.getClickCount() == 1) {
                 if (me.isShiftDown()) {
                     getModel().setSelected(!getModel().getSelected());
@@ -186,7 +186,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     ArrayList<AxoObjectInstanceViewAbstract> draggingObjects = null;
 
     protected void handleMousePressed(MouseEvent me) {
-        grabFocus();
+        getPatchView().requestFocus();
         if (getPatchView() != null) {
             if (me.isPopupTrigger()) {
                 JPopupMenu p = CreatePopupMenu();
