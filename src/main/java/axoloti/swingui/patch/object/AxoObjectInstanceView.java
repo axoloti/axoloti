@@ -421,7 +421,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     }
 
     public void OpenEditor() {
-        getType().OpenEditor(getModel().editorBounds, getModel().editorActiveTabIndex);
+        getType().OpenEditor();
     }
 
     @Override

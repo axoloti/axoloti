@@ -400,7 +400,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     public void OpenEditor() {
-        getType().OpenEditor(model.editorBounds, model.editorActiveTabIndex);
+        getType().OpenEditor();
     }
 
     public ArrayList<AttributeInstanceView> attributeInstanceViews = new ArrayList<AttributeInstanceView>();

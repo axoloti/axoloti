@@ -30,6 +30,7 @@ import axoloti.property.Property;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
+import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
@@ -461,11 +462,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         getModel().CloseEditor();
     }
 
-    public int getActiveTabIndex() {
+    private int getActiveTabIndex() {
         return this.jTabbedPane1.getSelectedIndex();
     }
 
-    public void setActiveTabIndex(int n) {
+    private void setActiveTabIndex(int n) {
         this.jTabbedPane1.setSelectedIndex(n);
     }
 
@@ -561,6 +562,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(540, 400));
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
             }
@@ -568,6 +570,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
                 formWindowLostFocus(evt);
             }
         });
+        addWindowListener(new java.awt.event.WindowAdapter() {
+                public void windowClosing(java.awt.event.WindowEvent evt) {
+                    askClose();
+                }
+            });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
         getContentPane().add(jLabel4);
 
@@ -960,4 +967,22 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         super.toFront();
     }
 
+    public class UIState {
+        Rectangle bounds;
+        Integer activeTabIndex;
+    }
+
+    public UIState getUIState() {
+        UIState state = new UIState();
+        state.bounds = getBounds();
+        state.activeTabIndex = getActiveTabIndex();
+        return state;
+    }
+
+    public void restoreTo(UIState state) {
+        if(state != null) {
+            setBounds(state.bounds);
+            setActiveTabIndex(state.activeTabIndex);
+        }
+    }
 }

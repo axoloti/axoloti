@@ -104,7 +104,7 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     }
 
     @Override
-    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {        
+    public void OpenEditor() {
     }
 
     @Override
