@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -60,7 +61,12 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE, TFObjName.getText());
+                SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE, TFObjName.getText());
+                        }
+                    });
             }
 
             @Override

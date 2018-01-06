@@ -46,7 +46,12 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         add(TFFileName);
         TFFileName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {
-                //getController().changeValue(TFFileName.getText());
+                SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, TFFileName.getText());
+                        }
+                    });
             }
 
             @Override
