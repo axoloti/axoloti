@@ -343,11 +343,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public void ShowConnect() {
-        if (getPatchController().isLocked()) {
-            getPatchController().setLocked(false);
-        }
-        jCheckBoxLive.setSelected(false);
-        jCheckBoxMenuItemLive.setSelected(false);
+        jCheckBoxLive.setSelected(getPatchController().isLocked());
+        jCheckBoxMenuItemLive.setSelected(getPatchController().isLocked());
         ShowConnect1(true);
     }
 
