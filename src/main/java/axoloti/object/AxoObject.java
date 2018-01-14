@@ -288,40 +288,23 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     AxoObjectEditor editor;
-
-    Rectangle editorBounds;
-    Integer editorActiveTabIndex;
-
-    public void setEditorBounds(Rectangle editorBounds) {
-        if (editorBounds != null) {
-            editor.setBounds(editorBounds);
-        } else if (this.editorBounds != null) {
-            editor.setBounds(this.editorBounds);
-        }
-
-    }
-
-    public void setEditorActiveTabIndex(Integer editorActiveTabIndex) {
-        if (editorActiveTabIndex != null) {
-            editor.setActiveTabIndex(editorActiveTabIndex);
-        } else if (this.editorActiveTabIndex != null) {
-            editor.setActiveTabIndex(this.editorActiveTabIndex);
-        }
-    }
-
+    AxoObjectEditor.UIState stateOnPreviousClose;
+    
     @Override
-    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
+    public void OpenEditor() {
         if (editor == null) {
             ObjectController ctrl = createController(null, null);
             editor = new AxoObjectEditor(ctrl);
+            editor.restoreTo(stateOnPreviousClose);
         }
-
-        setEditorBounds(editorBounds);
-        setEditorActiveTabIndex(editorActiveTabIndex);
+        editor.setVisible(true);
         editor.toFront();
     }
 
     public void CloseEditor() {
+        if(editor != null) {
+            stateOnPreviousClose = editor.getUIState();
+        }
         editor = null;
     }
 

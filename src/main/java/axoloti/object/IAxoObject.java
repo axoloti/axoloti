@@ -79,7 +79,7 @@ public interface IAxoObject extends IModel {
 
     public File GetHelpPatchFile();
 
-    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex);
+    public void OpenEditor();
 
     public ArrayList<SDFileReference> getFileDepends();
 }

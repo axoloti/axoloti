@@ -87,7 +87,7 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     @Override
-    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
+    public void OpenEditor() {
         if (pf == null) {
             pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         }

@@ -321,9 +321,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     }
 
-    public Rectangle editorBounds;
-    public Integer editorActiveTabIndex;
-
     @Override
     public void dispose() {
     }
