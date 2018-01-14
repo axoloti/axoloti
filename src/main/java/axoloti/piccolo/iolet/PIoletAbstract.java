@@ -191,8 +191,7 @@ public abstract class PIoletAbstract extends PatchPNode {
         }
     };
 
-    public void setHighlighted(boolean highlighted) {
-    }
+    public abstract void setHighlighted(boolean highlighted);
 
     public PBasicInputEventHandler getInputEventHandler() {
         return inputEventListener;

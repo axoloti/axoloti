@@ -17,128 +17,50 @@
  */
 package axoloti.patch.object.inlet;
 
-import axoloti.object.inlet.Inlet;
-import axoloti.object.atom.AtomDefinition;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
+
 import axoloti.object.atom.AtomDefinitionController;
-import axoloti.patch.object.atom.AtomInstance;
-import axoloti.datatypes.DataType;
+import axoloti.object.inlet.Inlet;
 import axoloti.patch.object.IAxoObjectInstance;
-import java.beans.PropertyChangeEvent;
-import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.Persist;
+import axoloti.patch.object.iolet.IoletInstance;
 
 /**
  *
  * @author Johannes Taelman
  */
 @Root(name = "dest")
-public class InletInstance<T extends Inlet> extends AtomInstance<T> {
+public class InletInstance<T extends Inlet> extends IoletInstance<T> {
 
     @Attribute(name = "inlet", required = false)
     protected String inletname;
-    @Deprecated
-    @Attribute(required = false)
-    protected String name;
-    @Attribute(name = "obj", required = false)
-    protected String objname;
-
-    private final AtomDefinitionController controller;
-
-    protected IAxoObjectInstance axoObj;
-
-    public String getInletname() {
-        return inletname;
-    }
-
-    public IAxoObjectInstance getObjectInstance() {
-        return axoObj;
-    }
-
-    @Persist
-    public void Persist() {
-        objname = axoObj.getInstanceName();
-    }
-
-    @Override
-    public T getModel() {
-        return (T) getController().getModel();
-    }
 
     public InletInstance() {
-        axoObj = null;
-        controller = null;
+        super();
     }
 
     public InletInstance(String objname, String inletname) {
-        axoObj = null;
-        controller = null;
-        this.objname = objname;
+        super(objname);
         this.inletname = inletname;
     }
 
     public InletInstance(AtomDefinitionController inletController, final IAxoObjectInstance axoObj) {
-        this.controller = inletController;
-        this.axoObj = axoObj;
-        RefreshName();
-    }
-
-    public DataType getDataType() {
-        return getModel().getDatatype();
-    }
-
-    public String GetCName() {
-        return getModel().GetCName();
-    }
-
-    public String GetLabel() {
-        return getModel().getName();
-    }
-
-    public void RefreshName() {
-        if (axoObj != null) {
-            name = axoObj.getInstanceName() + " " + getModel().getName();
-            objname = axoObj.getInstanceName();
-            name = null;
-        }
-    }
-
-    public String getObjname() {
-        if (axoObj != null) {
-            return axoObj.getInstanceName();
-        } else {
-            return this.objname;
-        }
-    }
-
-    public boolean isConnected() {
-        if (axoObj == null) {
-            return false;
-        }
-        return false;
-        //FIXME: return (axoObj.getPatchModel().GetNet(this) != null);
+        super(inletController, axoObj);
     }
 
     @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
-        super.modelPropertyChange(evt);
-        if (AtomDefinition.NAME.is(evt)) {
-            setName((String) evt.getNewValue());
-        }
-    }
-
-    @Override
-    public AtomDefinitionController getController() {
-        return controller;
-    }
-
     public String getName() {
         return inletname;
     }
 
+    @Override
     public void setName(String inletname) {
         String preVal = this.inletname;
         this.inletname = inletname;
         firePropertyChange(NAME, preVal, inletname);
     }
 
+    public boolean isSource() {
+        return false;
+    }
 }

@@ -2,10 +2,9 @@ package axoloti.piccolo.objectviews;
 
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.preferences.Theme;
-import axoloti.abstractui.IInletInstanceView;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.AxoObjectInstanceZombie;
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.PatchPNode;
 import axoloti.piccolo.inlets.PInletInstanceView;
@@ -168,29 +167,29 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public List<IInletInstanceView> getInletInstanceViews() {
+    public List<IIoletInstanceView> getInletInstanceViews() {
         return null; //inletInstanceViews;
     }
 
     @Override
-    public List<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IIoletInstanceView> getOutletInstanceViews() {
         return null; //outletInstanceViews;
     }
 
-    private Map<InletInstance, IInletInstanceView> inletInstanceViews = new HashMap<>();
-    private Map<OutletInstance, IOutletInstanceView> outletInstanceViews = new HashMap<>();
+    private Map<InletInstance, IIoletInstanceView> inletInstanceViews = new HashMap<>();
+    private Map<OutletInstance, IIoletInstanceView> outletInstanceViews = new HashMap<>();
 
     @Override
-    public void addInletInstanceView(IInletInstanceView view) {
-        inletInstanceViews.put(view.getModel(), view);
+    public void addInletInstanceView(IIoletInstanceView view) {
+        inletInstanceViews.put((InletInstance) view.getModel(), view);
         p_inletViews.addChild((PInletInstanceView) view);
         view.setAlignmentX(LEFT_ALIGNMENT);
 
     }
 
     @Override
-    public void addOutletInstanceView(IOutletInstanceView view) {
-        outletInstanceViews.put(view.getModel(), view);
+    public void addOutletInstanceView(IIoletInstanceView view) {
+        outletInstanceViews.put((OutletInstance) view.getModel(), view);
         p_outletViews.addChild((POutletInstanceView) view);
         view.setAlignmentX(RIGHT_ALIGNMENT);
     }
@@ -222,12 +221,12 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
+    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return inletInstanceViews.get(inletInstance);
     }
 
     @Override
-    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+    public IIoletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return outletInstanceViews.get(outletInstance);
     }
 }

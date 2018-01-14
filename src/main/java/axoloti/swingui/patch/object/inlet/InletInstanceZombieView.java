@@ -1,6 +1,6 @@
 package axoloti.swingui.patch.object.inlet;
 
-import axoloti.patch.object.inlet.InletInstanceController;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.components.LabelComponent;
 import javax.swing.Box;
@@ -9,7 +9,7 @@ import javax.swing.BoxLayout;
 public class InletInstanceZombieView extends InletInstanceView {
 
 
-    public InletInstanceZombieView(InletInstanceController controller, AxoObjectInstanceViewAbstract o) {
+    public InletInstanceZombieView(IoletInstanceController controller, AxoObjectInstanceViewAbstract o) {
         super( controller, o);
     }
 
@@ -20,7 +20,7 @@ public class InletInstanceZombieView extends InletInstanceView {
         jack.setForeground(getModel().getDataType().GetColor());
         add(jack);
         add(Box.createHorizontalStrut(2));
-        add(new LabelComponent(getModel().getInletname()));
+        add(new LabelComponent(getModel().getName()));
         add(Box.createHorizontalGlue());
     }
 

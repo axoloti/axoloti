@@ -3,8 +3,7 @@ package axoloti.piccolo;
 import axoloti.patch.net.Net;
 import axoloti.patch.PatchViewPiccolo;
 import axoloti.preferences.Theme;
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import static axoloti.piccolo.PUtils.asPoint;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,7 +15,7 @@ import org.piccolo2d.util.PPaintContext;
 public class PNetDragging extends PNetView {
 
     public PNetDragging(PatchViewPiccolo patchView) {
-        super(null,null);
+        super(null, null);
         //this(patchView.getController().getNetDraggingModel(), patchView);
     }
 
@@ -61,48 +60,17 @@ public class PNetDragging extends PNetView {
         if (p0 != null) {
             if (boundsChangedSincePaint) {
                 Point2D from = asPoint(globalToLocal(p0));
-                for (IInletInstanceView i : getDestinationViews()) {
+                for (IIoletInstanceView i : getIoletViews()) {
                     Point2D to = asPoint(globalToLocal(i.getJackLocInCanvas()));
-
-                    QuadCurve2D.Float curve = inletCurves.get(i);
-                    if (curve == null) {
-                        curve = new QuadCurve2D.Float();
-                        inletCurves.put(i, curve);
-                    }
-                    int x1 = (int) from.getX();
-                    int x2 = (int) to.getX();
-                    int y1 = (int) from.getY();
-                    int y2 = (int) to.getY();
-
-                    curve.setCurve(x1, y1, (x1 + x2) / 2, CtrlPointY(x1, y1, x2, y2), x2, y2);
-
-                }
-                for (IOutletInstanceView i : getSourceViews()) {
-                    Point to = asPoint(globalToLocal(i.getJackLocInCanvas()));
-
-                    QuadCurve2D.Float curve = outletCurves.get(i);
-                    if (curve == null) {
-                        curve = new QuadCurve2D.Float();
-                        outletCurves.put(i, curve);
-                    }
-                    int x1 = (int) from.getX();
-                    int x2 = (int) to.getX();
-                    int y1 = (int) from.getY();
-                    int y2 = (int) to.getY();
-
-                    curve.setCurve(x1, y1, (x1 + x2) / 2, CtrlPointY(x1, y1, x2, y2), x2, y2);
+                    setCurveShape(getIoletCurve(i), from, to);
                 }
                 boundsChangedSincePaint = false;
             }
 
             PUtils.setRenderQualityToHigh(g2);
-            for (IInletInstanceView i : getDestinationViews()) {
+            for (IIoletInstanceView i : getIoletViews()) {
                 g2.setColor(c);
-                g2.draw(inletCurves.get(i));
-            }
-            for (IOutletInstanceView i : getSourceViews()) {
-                g2.setColor(c);
-                g2.draw(outletCurves.get(i));
+                g2.draw(ioletCurves.get(i));
             }
             PUtils.setRenderQualityToLow(g2);
         }
@@ -122,14 +90,7 @@ public class PNetDragging extends PNetView {
             max_y = p0.y;
         }
 
-        for (IInletInstanceView i : getDestinationViews()) {
-            Point p1 = i.getJackLocInCanvas();
-            min_x = Math.min(min_x, p1.x);
-            min_y = Math.min(min_y, p1.y);
-            max_x = Math.max(max_x, p1.x);
-            max_y = Math.max(max_y, p1.y);
-        }
-        for (IOutletInstanceView i : getSourceViews()) {
+        for (IIoletInstanceView i : getIoletViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);

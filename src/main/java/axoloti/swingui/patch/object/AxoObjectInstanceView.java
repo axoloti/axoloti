@@ -6,16 +6,16 @@ import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.patch.object.inlet.InletInstanceController;
+import axoloti.abstractui.IIoletInstanceView;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.object.IAxoObject;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.abstractui.IOutletInstanceView;
-import axoloti.patch.object.outlet.OutletInstanceController;
+import axoloti.abstractui.IIoletInstanceView;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.swingui.patch.object.attribute.AttributeInstanceView;
@@ -92,8 +92,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
     }
 
-    List<IInletInstanceView> inletInstanceViews;
-    List<IOutletInstanceView> outletInstanceViews;
+    List<IIoletInstanceView> inletInstanceViews;
+    List<IIoletInstanceView> outletInstanceViews;
     List<IAttributeInstanceView> attributeInstanceViews;
     List<IParameterInstanceView> parameterInstanceViews;
     List<IDisplayInstanceView> displayInstanceViews;
@@ -110,7 +110,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
                 d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
                 return d;
             }
-            
+
         });*/
 
         final PopupIcon popupIcon = new PopupIcon();
@@ -222,44 +222,44 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         setVisible(true);
         revalidate();
     }
-    
-    ArrayView<IInletInstanceView> inletInstanceViewSync = new ArrayView<IInletInstanceView>() {
+
+    ArrayView<IIoletInstanceView> inletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
         @Override
         public InletInstanceView viewFactory(AbstractController ctrl) {
-            return InletInstanceViewFactory.createView((InletInstanceController) ctrl, AxoObjectInstanceView.this);
+            return InletInstanceViewFactory.createView((IoletInstanceController) ctrl, AxoObjectInstanceView.this);
         }
 
         @Override
-        public void updateUI(List<IInletInstanceView> views) {
+        public void updateUI(List<IIoletInstanceView> views) {
             p_inletViews.removeAll();
-            for (IInletInstanceView c : views) {
+            for (IIoletInstanceView c : views) {
                 p_inletViews.add((Component) c);
             }
             resizeToGrid();
         }
 
         @Override
-        public void removeView(IInletInstanceView view) {
+        public void removeView(IIoletInstanceView view) {
         }
     };
 
-    ArrayView<IOutletInstanceView> outletInstanceViewSync = new ArrayView<IOutletInstanceView>() {
+    ArrayView<IIoletInstanceView> outletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
         @Override
-        public OutletInstanceView viewFactory(AbstractController ctrl) {
-            return OutletInstanceViewFactory.createView((OutletInstanceController) ctrl, AxoObjectInstanceView.this);
+        public IIoletInstanceView viewFactory(AbstractController ctrl) {
+            return OutletInstanceViewFactory.createView((IoletInstanceController) ctrl, AxoObjectInstanceView.this);
         }
 
         @Override
-        public void updateUI(List<IOutletInstanceView> views) {
+        public void updateUI(List<IIoletInstanceView> views) {
             p_outletViews.removeAll();
-            for (IOutletInstanceView c : views) {
+            for (IIoletInstanceView c : views) {
                 p_outletViews.add((Component) c);
             }
             resizeToGrid();
         }
 
         @Override
-        public void removeView(IOutletInstanceView view) {
+        public void removeView(IIoletInstanceView view) {
         }
     };
 
@@ -322,7 +322,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             public void removeView(IDisplayInstanceView view) {
             }
         };
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
@@ -338,8 +338,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().displayInstanceControllers);
         }
     }
-    
-    
+
+
     @Override
     JPopupMenu CreatePopupMenu() {
         JPopupMenu popup = super.CreatePopupMenu();
@@ -441,12 +441,12 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     }
 
     @Override
-    public List<IInletInstanceView> getInletInstanceViews() {
+    public List<IIoletInstanceView> getInletInstanceViews() {
         return inletInstanceViews;
     }
 
     @Override
-    public List<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IIoletInstanceView> getOutletInstanceViews() {
         return outletInstanceViews;
     }
 

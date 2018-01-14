@@ -3,9 +3,8 @@ package axoloti.swingui.patch.object;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
-import axoloti.abstractui.IOutletInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
@@ -241,7 +240,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                 }
                 draggingObjects = null;
                 getPatchView().AdjustSize();
-                getController().getParent().fixNegativeObjectCoordinates();                
+                getController().getParent().fixNegativeObjectCoordinates();
             }
             me.consume();
         }
@@ -260,12 +259,12 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     }
 
     @Override
-    public List<IInletInstanceView> getInletInstanceViews() {
+    public List<IIoletInstanceView> getInletInstanceViews() {
         return null;
     }
 
     @Override
-    public List<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IIoletInstanceView> getOutletInstanceViews() {
         return null;
     }
 
@@ -285,7 +284,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     @Override
     public void addInstanceNameEditor() {
-        getController().addMetaUndo("edit object instance name");        
+        getController().addMetaUndo("edit object instance name");
         InstanceNameTF = new TextFieldComponent(getModel().getInstanceName());
         InstanceNameTF.selectAll();
         InstanceNameTF.addActionListener(new ActionListener() {
@@ -353,12 +352,12 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     /*
     @Override public void validate() {
         super.validate();
-        Dimension d = getPreferredSize();        
+        Dimension d = getPreferredSize();
 //        setBounds();
         repaint();
     }
     */
-    
+
     @Override
     public void resizeToGrid() {
         revalidate();
@@ -384,13 +383,13 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     }
 
     @Override
-    public void addOutletInstanceView(IOutletInstanceView view) {
+    public void addOutletInstanceView(IIoletInstanceView view) {
         add((OutletInstanceView) view);
 
     }
 
     @Override
-    public void addInletInstanceView(IInletInstanceView view) {
+    public void addInletInstanceView(IIoletInstanceView view) {
         add((InletInstanceView) view);
     }
 
@@ -405,12 +404,12 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     }
 
     @Override
-    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
+    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return null;
     }
 
     @Override
-    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+    public IIoletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
     }
 
@@ -421,7 +420,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
                 if (getInletInstanceViews() != null) {
-                    for (IInletInstanceView i : getInletInstanceViews()) {
+                    for (IIoletInstanceView i : getInletInstanceViews()) {
                         INetView n = getPatchView().GetNetView(i);
                         if (n != null) {
                             n.updateBounds();
@@ -429,7 +428,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                     }
                 }
                 if (getOutletInstanceViews() != null) {
-                    for (IOutletInstanceView i : getOutletInstanceViews()) {
+                    for (IIoletInstanceView i : getOutletInstanceViews()) {
                         INetView n = getPatchView().GetNetView(i);
                         if (n != null) {
                             n.updateBounds();

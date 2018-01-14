@@ -27,13 +27,13 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public PatchModel getPatchModel();
 
-    public IInletInstanceView getInletInstanceView(InletInstance inletInstance);
+    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance);
 
-    public IOutletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
+    public IIoletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
 
-    public List<IInletInstanceView> getInletInstanceViews();
+    public List<IIoletInstanceView> getInletInstanceViews();
 
-    public List<IOutletInstanceView> getOutletInstanceViews();
+    public List<IIoletInstanceView> getOutletInstanceViews();
 
     public List<IParameterInstanceView> getParameterInstanceViews();
 
@@ -61,9 +61,9 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public void addDisplayInstanceView(IDisplayInstanceView view);
 
-    public void addOutletInstanceView(IOutletInstanceView view);
+    public void addOutletInstanceView(IIoletInstanceView view);
 
-    public void addInletInstanceView(IInletInstanceView view);
+    public void addInletInstanceView(IIoletInstanceView view);
 
     public JComponent getCanvas();
 

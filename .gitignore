@@ -96,6 +96,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+workbench.xmi
 
 # External tool builders
 .externalToolBuilders/

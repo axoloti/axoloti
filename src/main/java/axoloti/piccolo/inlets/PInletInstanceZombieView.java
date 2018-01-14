@@ -1,7 +1,7 @@
 package axoloti.piccolo.inlets;
 
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.patch.object.inlet.InletInstanceController;
+import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.inlet.InletInstanceZombie;
 import axoloti.piccolo.objectviews.PAxoObjectInstanceViewAbstract;
 import axoloti.piccolo.components.PJackInputComponent;
@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 
-public class PInletInstanceZombieView extends PInletInstanceView implements IInletInstanceView {
+public class PInletInstanceZombieView extends PInletInstanceView implements IIoletInstanceView {
 
     InletInstanceZombie inletInstanceZombie;
 
@@ -29,13 +29,13 @@ public class PInletInstanceZombieView extends PInletInstanceView implements IInl
 
         addChild(jack);
         addToSwingProxy(Box.createHorizontalStrut(2));
-        addChild(new PLabelComponent(inletInstanceZombie.getInletname()));
+        addChild(new PLabelComponent(inletInstanceZombie.getName()));
         addToSwingProxy(Box.createHorizontalGlue());
         this.addInputEventListener(getInputEventHandler());
     }
 
     @Override
-    public InletInstanceController getController() {
+    public IoletInstanceController getController() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

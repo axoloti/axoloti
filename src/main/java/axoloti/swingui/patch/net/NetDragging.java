@@ -18,8 +18,7 @@
 package axoloti.swingui.patch.net;
 
 import axoloti.preferences.Theme;
-import axoloti.abstractui.IInletInstanceView;
-import axoloti.abstractui.IOutletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.net.NetController;
 import axoloti.swingui.patch.PatchViewSwing;
 import java.awt.Color;
@@ -80,24 +79,13 @@ public class NetDragging extends NetView {
         }
         if (p0 != null) {
             Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
-            for (IInletInstanceView i : getDestinationViews()) {
+            for (IIoletInstanceView i : getIoletViews()) {
                 Point p1 = i.getJackLocInCanvas();
-
                 Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
                 DrawWire(g2, from.x, from.y, to.x, to.y);
-            }
-            for (IOutletInstanceView i : getSourceViews()) {
-                Point p1 = i.getJackLocInCanvas();
-
-                Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
-                g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
-                DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
-                g2.setColor(c);
-                DrawWire(g2, from.x, from.y, to.x, to.y);
-
             }
         }
     }
@@ -116,14 +104,7 @@ public class NetDragging extends NetView {
             max_y = p0.y;
         }
 
-        for (IInletInstanceView i : getDestinationViews()) {
-            Point p1 = i.getJackLocInCanvas();
-            min_x = Math.min(min_x, p1.x);
-            min_y = Math.min(min_y, p1.y);
-            max_x = Math.max(max_x, p1.x);
-            max_y = Math.max(max_y, p1.y);
-        }
-        for (IOutletInstanceView i : getSourceViews()) {
+        for (IIoletInstanceView i : getIoletViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);

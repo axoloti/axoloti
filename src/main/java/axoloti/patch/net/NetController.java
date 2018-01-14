@@ -6,6 +6,7 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import java.util.ArrayList;
@@ -28,17 +29,17 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
             ArrayList<OutletInstance> source2 = new ArrayList<>();
             for (OutletInstance i : model.getSources()) {
                 String objname = i.getObjname();
-                String outletname = i.getOutletname();
+                String outletname = i.getName();
 
                 IAxoObjectInstance o = patchModel.GetObjectInstance(objname);
                 if (o == null) {
-                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
+                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
                     return;
                 }
                 OutletInstance r = o.GetOutletInstance(outletname);
                 if (r == null) {
-                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : {0}::{1}", new Object[]{i.getObjname(), i.getOutletname()});
+                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : {0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
                     return;
                 }
@@ -47,16 +48,16 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
             ArrayList<InletInstance> dest2 = new ArrayList<>();
             for (InletInstance i : model.getDestinations()) {
                 String objname = i.getObjname();
-                String inletname = i.getInletname();
+                String inletname = i.getName();
                 IAxoObjectInstance o = patchModel.GetObjectInstance(objname);
                 if (o == null) {
-                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
+                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
                     return;
                 }
                 InletInstance r = o.GetInletInstance(inletname);
                 if (r == null) {
-                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :{0}::{1}", new Object[]{i.getObjname(), i.getInletname()});
+                    Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :{0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
                     return;
                 }
@@ -85,22 +86,20 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
-    public void disconnect(InletInstance inlet) {
-        if (inlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
+    public void disconnect(IoletInstance iolet) {
+        if (iolet.getObjectInstance().getPatchModel() != getParent().getModel()) {
             return;
         }
-        ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
-        n.remove(inlet);
-        setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
-    }
-
-    public void disconnect(OutletInstance outlet) {
-        if (outlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
-            return;
+        if(iolet.isSource()) {
+            List<IoletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
+            n.remove(iolet);
+            setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
         }
-        ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
-        n.remove(outlet);
-        setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
+        else {
+            List<IoletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
+            n.remove(iolet);
+            setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
+        }
     }
 
     public boolean NeedsLatch() {

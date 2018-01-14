@@ -3,9 +3,8 @@ package axoloti.patch;
 import axoloti.preferences.Theme;
 import axoloti.abstractui.PatchView;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
-import axoloti.abstractui.IOutletInstanceView;
 import axoloti.object.AxoObjects;
 import axoloti.piccolo.PObjectSearchFrame;
 import axoloti.piccolo.PPatchBorder;
@@ -370,11 +369,8 @@ public class PatchViewPiccolo extends PatchView {
     public void removeAllNetViews() {
         for (INetView netView : netViews) {
             getCanvas().getLayer().removeChild((PatchPNode) netView);
-            for (IInletInstanceView iiv : netView.getDestinationViews()) {
+            for (IIoletInstanceView iiv : netView.getIoletViews()) {
                 iiv.repaint();
-            }
-            for (IOutletInstanceView oiv : netView.getSourceViews()) {
-                oiv.repaint();
             }
         }
     }
@@ -483,7 +479,7 @@ public class PatchViewPiccolo extends PatchView {
                 canvas.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
                 canvas.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
-            }            
+            }
         }
     }
 

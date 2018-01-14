@@ -7,11 +7,10 @@ import axoloti.patch.PatchViewPiccolo;
 import axoloti.preferences.Theme;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.abstractui.IOutletInstanceView;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.piccolo.PUtils;
@@ -168,12 +167,12 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public List<IInletInstanceView> getInletInstanceViews() {
+    public List<IIoletInstanceView> getInletInstanceViews() {
         return null;
     }
 
     @Override
-    public List<IOutletInstanceView> getOutletInstanceViews() {
+    public List<IIoletInstanceView> getOutletInstanceViews() {
         return null;
     }
 
@@ -189,14 +188,14 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         setOffset(x, y);
         if (getPatchView() != null) {
             repaint();
-            for (IInletInstanceView i : getInletInstanceViews()) {
+            for (IIoletInstanceView i : getInletInstanceViews()) {
                 INetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
                     n.repaint();
                 }
             }
-            for (IOutletInstanceView i : getOutletInstanceViews()) {
+            for (IIoletInstanceView i : getOutletInstanceViews()) {
                 INetView n = getPatchView().GetNetView(i);
                 if (n != null) {
                     n.updateBounds();
@@ -293,12 +292,12 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public void addOutletInstanceView(IOutletInstanceView view) {
+    public void addOutletInstanceView(IIoletInstanceView view) {
 
     }
 
     @Override
-    public void addInletInstanceView(IInletInstanceView view) {
+    public void addInletInstanceView(IIoletInstanceView view) {
 
     }
 
@@ -317,12 +316,12 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
+    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return null;
     }
 
     @Override
-    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+    public IIoletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
     }
 
