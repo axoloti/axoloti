@@ -1,12 +1,11 @@
 package axoloti.swingui.target;
 
+import axoloti.target.PollHandler;
 import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.midimonitor.MidiMessage;
 import axoloti.target.midimonitor.MidiMonitorData;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
@@ -15,7 +14,9 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author jtaelman
  */
-public class MidiMonitor extends TJFrame implements ActionListener {
+public class MidiMonitor extends TJFrame {
+
+    final PollHandler poller;
 
     /**
      * Creates new form Memory
@@ -116,6 +117,13 @@ public class MidiMonitor extends TJFrame implements ActionListener {
         jMidiMonitorTable.getColumnModel().getColumn(3).setPreferredWidth(320);
         jMidiMonitorTable.setFont(new Font("monospaced", Font.PLAIN, 12));
         doLayout();
+
+        poller = new PollHandler() {
+            @Override
+            public void operation() {
+                refresh();
+            }
+        };
     }
 
     /**
@@ -129,6 +137,7 @@ public class MidiMonitor extends TJFrame implements ActionListener {
 
         jUpdatePanel = new javax.swing.JPanel();
         jButtonUpdate = new javax.swing.JButton();
+        jCheckBoxPoll = new javax.swing.JCheckBox();
         jScrollPane = new javax.swing.JScrollPane();
         jMidiMonitorTable = new javax.swing.JTable();
 
@@ -148,6 +157,13 @@ public class MidiMonitor extends TJFrame implements ActionListener {
             }
         });
 
+        jCheckBoxPoll.setText("Poll Continuously");
+        jCheckBoxPoll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxPollActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jUpdatePanelLayout = new javax.swing.GroupLayout(jUpdatePanel);
         jUpdatePanel.setLayout(jUpdatePanelLayout);
         jUpdatePanelLayout.setHorizontalGroup(
@@ -155,13 +171,17 @@ public class MidiMonitor extends TJFrame implements ActionListener {
             .addGroup(jUpdatePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jCheckBoxPoll)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jUpdatePanelLayout.setVerticalGroup(
             jUpdatePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jUpdatePanelLayout.createSequentialGroup()
                 .addGap(0, 12, Short.MAX_VALUE)
-                .addComponent(jButtonUpdate))
+                .addGroup(jUpdatePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonUpdate)
+                    .addComponent(jCheckBoxPoll)))
         );
 
         jMidiMonitorTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -209,12 +229,12 @@ public class MidiMonitor extends TJFrame implements ActionListener {
     }//GEN-LAST:event_formWindowClosed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
-        MidiMonitorData.refresh(getController().getModel().getConnection());
+        refresh();
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-    }
+    private void jCheckBoxPollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxPollActionPerformed
+        setPolling(jCheckBoxPoll.isSelected());
+    }//GEN-LAST:event_jCheckBoxPollActionPerformed
 
     void showConnect1(boolean connected) {
         jMidiMonitorTable.setEnabled(connected);
@@ -225,8 +245,27 @@ public class MidiMonitor extends TJFrame implements ActionListener {
         return getController().getModel().getMidiMonitor();
     }
 
+    void setPolling(boolean b) {
+        if (b) {
+            TargetModel.getTargetModel().addPoller(poller);
+        } else {
+            TargetModel.getTargetModel().removePoller(poller);
+        }
+    }
+
+    void refresh() {
+        MidiMonitorData.refresh(getController().getModel().getConnection());
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        setPolling(false);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonUpdate;
+    private javax.swing.JCheckBox jCheckBoxPoll;
     private javax.swing.JTable jMidiMonitorTable;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JPanel jUpdatePanel;

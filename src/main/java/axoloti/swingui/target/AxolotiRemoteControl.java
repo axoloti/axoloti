@@ -17,19 +17,22 @@
  */
 package axoloti.swingui.target;
 
-import axoloti.connection.CConnection;
-import axoloti.connection.IConnection;
-import axoloti.target.TargetController;
-import axoloti.target.TargetModel;
-import axoloti.target.remote.VirtualInputEvent;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
 import axoloti.swingui.components.RControlButtonWithLed;
 import axoloti.swingui.components.RControlColorLed;
 import axoloti.swingui.components.RControlEncoder;
+import axoloti.target.PollHandler;
+import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
+import axoloti.target.remote.VirtualInputEvent;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -60,6 +63,8 @@ public class AxolotiRemoteControl extends TJFrame {
     JPanel jPanel4;
     JPanel jPanel5;
     ArrayList<JButton> buttons = new ArrayList<>();
+
+    final PollHandler poller;
 
     /**
      * Creates new form AxolotiRemoteControl
@@ -268,6 +273,39 @@ public class AxolotiRemoteControl extends TJFrame {
         }
 
         add(jPanelY);
+
+        poller = new PollHandler() {
+            @Override
+            public void operation() {
+                refreshFB();
+            }
+        };
+
+        addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                setPolling(true);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                setPolling(false);
+            }
+        });
+    }
+
+    void setPolling(boolean b) {
+        if (b) {
+            TargetModel.getTargetModel().addPoller(poller);
+        } else {
+            TargetModel.getTargetModel().removePoller(poller);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        setPolling(false);
     }
 
     VirtualInputEvent KeyToVirtualEvent(KeyEvent e, boolean pressed) {

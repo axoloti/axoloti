@@ -2,6 +2,8 @@ package axoloti.swingui.target;
 
 import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
+import axoloti.target.midirouting.MidiInputRoutingTable;
+import axoloti.target.midirouting.MidiOutputRoutingTable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.AbstractAction;
@@ -13,8 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
-import axoloti.target.midirouting.MidiInputRoutingTable;
-import axoloti.target.midirouting.MidiOutputRoutingTable;
 
 /**
  *
@@ -36,7 +36,7 @@ public class MidiRouting extends TJFrame {
     JTable table_midi_out_routing;
 
     void initComponents() {
-        setMinimumSize(new java.awt.Dimension(200, 160));
+        setMinimumSize(new java.awt.Dimension(600, 250));
         table_midi_in_routing = new JTable(new AbstractTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {

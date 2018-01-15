@@ -1,6 +1,7 @@
 package axoloti.swingui.target;
 
 import axoloti.connection.IConnection;
+import axoloti.target.PollHandler;
 import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import java.awt.Font;
@@ -17,6 +18,8 @@ import qcmds.QCmdMemRead;
  */
 public class Memory extends TJFrame implements ActionListener {
 
+    final PollHandler poller;
+
     /**
      * Creates new form Memory
      */
@@ -27,6 +30,14 @@ public class Memory extends TJFrame implements ActionListener {
         jTextFieldAddr.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setEditable(false);
+
+        poller = new PollHandler() {
+            @Override
+            public void operation() {
+                readmem();
+            }
+        };
+
     }
 
     /**
@@ -44,6 +55,7 @@ public class Memory extends TJFrame implements ActionListener {
         jButtonUpdate = new javax.swing.JButton();
         jButtonInc = new javax.swing.JButton();
         jButtonDec = new javax.swing.JButton();
+        jCheckBoxUpdate = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaMemoryContent = new javax.swing.JTextArea();
 
@@ -81,22 +93,33 @@ public class Memory extends TJFrame implements ActionListener {
             }
         });
 
+        jCheckBoxUpdate.setText("Update continuously");
+        jCheckBoxUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBoxUpdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextFieldAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonInc)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldAddr, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonInc))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBoxUpdate)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonDec)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -106,9 +129,11 @@ public class Memory extends TJFrame implements ActionListener {
                     .addComponent(jLabel1)
                     .addComponent(jTextFieldAddr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonInc)
-                    .addComponent(jButtonDec)
-                    .addComponent(jButtonUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonDec))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCheckBoxUpdate)))
         );
 
         jTextAreaMemoryContent.setColumns(20);
@@ -119,23 +144,21 @@ public class Memory extends TJFrame implements ActionListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void readmem(int addr) {
-        this.addr = addr;
-        jTextFieldAddr.setText(String.format("0x%08x", addr));
+    void readmem() {
         jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
         int length = 256;
         IConnection conn = getController().getModel().getConnection();
@@ -171,26 +194,48 @@ public class Memory extends TJFrame implements ActionListener {
 
     int addr = 0;
 
+    void setAddr(int addr) {
+        if (this.addr == addr) {
+            return;
+        }
+        jTextFieldAddr.setText(String.format("0x%08x", addr));
+        this.addr = addr;
+    }
+
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         String hex = jTextFieldAddr.getText();
         if (hex.startsWith("0x")) {
             hex = hex.substring(2);
         }
-        addr = (new BigInteger(hex, 16)).intValue();
-        readmem(addr);
+        setAddr((new BigInteger(hex, 16)).intValue());
+        readmem();
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     private void jButtonIncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncActionPerformed
-        readmem(addr + 0x100);
+        setAddr(addr + 0x100);
+        readmem();
     }//GEN-LAST:event_jButtonIncActionPerformed
 
     private void jButtonDecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDecActionPerformed
-        readmem(addr - 0x100);
+        setAddr(addr - 0x100);
+        readmem();
     }//GEN-LAST:event_jButtonDecActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         dispose();
     }//GEN-LAST:event_formWindowClosed
+
+    private void jCheckBoxUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxUpdateActionPerformed
+        setPolling(jCheckBoxUpdate.isSelected());
+    }//GEN-LAST:event_jCheckBoxUpdateActionPerformed
+
+    void setPolling(boolean b) {
+        if (b) {
+            TargetModel.getTargetModel().addPoller(poller);
+        } else {
+            TargetModel.getTargetModel().removePoller(poller);
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -206,6 +251,7 @@ public class Memory extends TJFrame implements ActionListener {
     private javax.swing.JButton jButtonDec;
     private javax.swing.JButton jButtonInc;
     private javax.swing.JButton jButtonUpdate;
+    private javax.swing.JCheckBox jCheckBoxUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -219,6 +265,12 @@ public class Memory extends TJFrame implements ActionListener {
         if (TargetModel.CONNECTION.is(evt)) {
             showConnect1(evt.getNewValue() != null);
         }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        setPolling(false);
     }
 
 }

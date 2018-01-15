@@ -1,6 +1,7 @@
 package axoloti.target.midirouting;
 
 import axoloti.connection.CConnection;
+import axoloti.connection.CompletionHandler;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractModel;
 import axoloti.property.ObjectProperty;
@@ -27,7 +28,8 @@ public class MidiInputRoutingTable extends AbstractModel {
         return addr + 8;
     }
 
-    public void retrieve(IConnection conn, int addr) {
+
+    public void retrieve(IConnection conn, int addr, CompletionHandler completionHandler) {
         this.addr = addr;
         conn.AppendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
             @Override
@@ -46,17 +48,22 @@ public class MidiInputRoutingTable extends AbstractModel {
                         setPortName(c);
                         int nports = mem1.getInt();
                         System.out.println("portname1:" + c + ":" + nports);
-                        conn.AppendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
-                            @Override
-                            public void Done(ByteBuffer mem) {
-                                int vports1[] = new int[nports];
-                                for (int i = 0; i < nports; i++) {
-                                    vports1[i] = mem.getInt();
-                                    System.out.println(String.format("MidiInputRouting %s:%d map %08X ", getPortName(), i, vports1[i]));
+                        if (nports == 0) {
+                            completionHandler.done();
+                        } else {
+                            conn.AppendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
+                                @Override
+                                public void Done(ByteBuffer mem) {
+                                    int vports1[] = new int[nports];
+                                    for (int i = 0; i < nports; i++) {
+                                        vports1[i] = mem.getInt();
+                                        System.out.println(String.format("MidiInputRouting %s:%d map %08X ", getPortName(), i, vports1[i]));
+                                    }
+                                    setMapping(vports1);
+                                    completionHandler.done();
                                 }
-                                setMapping(vports1);
-                            }
-                        }));
+                            }));
+                        }
                     }
                 }));
             }

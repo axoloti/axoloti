@@ -2,6 +2,7 @@ package axoloti.target;
 
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.connection.CompletionHandler;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractModel;
 import axoloti.property.BooleanProperty;
@@ -60,40 +61,68 @@ public class TargetModel extends AbstractModel {
     int patchIndex;
     public boolean WarnedAboutFWCRCMismatch = false;
 
-    public void readFromTarget() {
+    void readInputMapFromTarget() {
         ChunkData chunk_input = connection.GetFWChunks().GetOne(FourCCs.FW_MIDI_INPUT_ROUTING);
         chunk_input.data.rewind();
         int n_input_interfaces = chunk_input.data.remaining() / 4;
         MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[n_input_interfaces];
+        int ir_addrs[] = new int[n_input_interfaces];
         for (int i = 0; i < n_input_interfaces; i++) {
             cirs[i] = new MidiInputRoutingTable();
-            int addr = chunk_input.data.getInt();
-            cirs[i].retrieve(connection, addr);
+            ir_addrs[i] = chunk_input.data.getInt();
         }
+        CompletionHandler ch = new CompletionHandler() {
+            int i = 0;
 
-        try {
-            QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
-            setInputRoutingTable(cirs);
-        } catch (Exception ex) {
-            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            @Override
+            public void done() {
+                System.out.println("ch " + i);
+                if (i < n_input_interfaces) {
+                    i++;
+                    cirs[i - 1].retrieve(connection, ir_addrs[i - 1], this);
+                } else {
+                    System.out.println("ch done " + i);
+                    setInputRoutingTable(cirs);
+                }
+            }
 
+        };
+        ch.done();
+    }
+
+    void readOutputMapFromTarget() {
         ChunkData chunk_output = connection.GetFWChunks().GetOne(FourCCs.FW_MIDI_OUTPUT_ROUTING);
         chunk_output.data.rewind();
         int n_output_interfaces = chunk_output.data.remaining() / 4;
         MidiOutputRoutingTable[] cors = new MidiOutputRoutingTable[n_output_interfaces];
+        int or_addrs[] = new int[n_output_interfaces];
         for (int i = 0; i < n_output_interfaces; i++) {
             cors[i] = new MidiOutputRoutingTable();
-            int addr = chunk_output.data.getInt();
-            cors[i].retrieve(connection, addr);
+            or_addrs[i] = chunk_output.data.getInt();
         }
+        CompletionHandler ch = new CompletionHandler() {
+            int i = 0;
 
-        try {
-            QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
-            setOutputRoutingTable(cors);
-        } catch (Exception ex) {
-            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            @Override
+            public void done() {
+                System.out.println("ch " + i);
+                if (i < n_output_interfaces) {
+                    i++;
+                    cors[i - 1].retrieve(connection, or_addrs[i - 1], this);
+                } else {
+                    System.out.println("ch done " + i);
+                    setOutputRoutingTable(cors);
+                }
+            }
+
+        };
+        ch.done();
+
+    }
+
+    public void readFromTarget() {
+        readInputMapFromTarget();
+        readOutputMapFromTarget();
     }
 
     public void applyToTarget() {
@@ -242,6 +271,20 @@ public class TargetModel extends AbstractModel {
     public void setMidiMonitor(MidiMonitorData midiMonitor) {
         this.midiMonitor = midiMonitor;
         firePropertyChange(MIDIMONITOR, null, midiMonitor);
+    }
+
+    ArrayList<PollHandler> pollers = new ArrayList<>();
+
+    public List<PollHandler> getPollers() {
+        return pollers;
+    }
+
+    public void addPoller(PollHandler poller) {
+        pollers.add(poller);
+    }
+
+    public void removePoller(PollHandler poller) {
+        pollers.remove(poller);
     }
 
 }

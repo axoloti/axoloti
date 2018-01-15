@@ -19,10 +19,11 @@ package qcmds;
 
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
-import axoloti.swingui.MainFrame;
 import axoloti.patch.PatchViewCodegen;
-import axoloti.swingui.target.TargetViews;
 import axoloti.preferences.Preferences;
+import axoloti.swingui.MainFrame;
+import axoloti.target.PollHandler;
+import axoloti.target.TargetModel;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
@@ -56,9 +57,9 @@ public class QCmdProcessor implements Runnable {
                 }
                 if (queue.isEmpty() && serialconnection.isConnected()) {
                     queue.add(new QCmdPing());
-                    // todo: convert to poll list in TargetModel
-                    if ((TargetViews.getTargetViews().getRemote() != null) && (TargetViews.getTargetViews().getRemote().isFocused())) {
-                        TargetViews.getTargetViews().getRemote().refreshFB();
+
+                    for (PollHandler poller : TargetModel.getTargetModel().getPollers()) {
+                        poller.operation();
                     }
                 }
             }
