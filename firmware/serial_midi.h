@@ -28,8 +28,8 @@ extern midi_output_buffer_t midi_output_din;
 // report the number of bytes pending for transmission
 int  serial_MidiGetOutputBufferPending(void);
 
-extern midi_input_remap_t midi_inputmap_din;
-extern midi_output_routing_t midi_outputmap_din;
+extern midi_routing_t midi_inputmap_din;
+extern midi_routing_t midi_outputmap_din;
 
 // obsolete
 void serial_MidiSend1(uint8_t b0);

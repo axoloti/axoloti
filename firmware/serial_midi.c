@@ -54,16 +54,20 @@ const signed char SysMsgLengthLookup[16] = {-1, // 0xf0=sysex start. may vary
     3 // 0xff= not reset, but a META-EVENT, which is always 3 bytes
     };
 
-midi_input_remap_t midi_inputmap_din = {
+midi_routing_t midi_inputmap_din = {
 		.name = "DIN",
 		.nports = 1,
-		.bmvports = {0b00000001}
+		.bmvports = {
+				0b0000000000000001
+		}
 };
 
-midi_output_routing_t midi_outputmap_din = {
+midi_routing_t midi_outputmap_din = {
 			.name = "DIN",
 			.nports = 1,
-			.bmvports = {1}
+			.bmvports = {
+					0b0000000000000001
+			}
 };
 
 static unsigned char MidiByte0;

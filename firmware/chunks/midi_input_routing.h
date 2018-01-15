@@ -27,7 +27,7 @@
 
 typedef struct {
 	chunk_header_t header;
-	midi_input_remap_t * (routing_table[4]);
+	midi_routing_t * (routing_table[4]);
 } chunk_midi_input_routing_t;
 
 #endif

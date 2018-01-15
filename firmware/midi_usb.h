@@ -34,9 +34,9 @@
 // use midi_input_buffer after real->virtual port remapping
 extern midi_output_buffer_t midi_output_usbd;
 
-extern midi_input_remap_t midi_inputmap_usbd;
+extern midi_routing_t midi_inputmap_usbd;
 
-extern midi_output_routing_t midi_outputmap_usbd;
+extern midi_routing_t midi_outputmap_usbd;
 
 void midi_usb_init(void);
 

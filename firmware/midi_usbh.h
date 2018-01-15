@@ -8,11 +8,11 @@
 extern midi_output_buffer_t midi_output_usbh1;
 extern midi_output_buffer_t midi_output_usbh2;
 
-extern midi_input_remap_t midi_inputmap_usbh1;
-extern midi_input_remap_t midi_inputmap_usbh2;
+extern midi_routing_t midi_inputmap_usbh1;
+extern midi_routing_t midi_inputmap_usbh2;
 
-extern midi_output_routing_t midi_outputmap_usbh1;
-extern midi_output_routing_t midi_outputmap_usbh2;
+extern midi_routing_t midi_outputmap_usbh1;
+extern midi_routing_t midi_outputmap_usbh2;
 
 int  usbh_MidiGetOutputBufferPending(void);
 int  usbh_MidiGetOutputBufferAvailable(void);

@@ -5,8 +5,8 @@
 
 typedef struct {
 	USBHMIDIConfig config;
-	midi_input_remap_t *in_mapping;
-	midi_output_routing_t *out_mapping;
+	midi_routing_t *in_mapping;
+	midi_routing_t *out_mapping;
 	midi_output_buffer_t out_buffer;
 } USBHMIDIConfig_ext;
 

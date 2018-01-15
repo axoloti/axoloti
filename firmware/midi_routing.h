@@ -20,24 +20,24 @@
 #define MIDI_ROUTING_H
 
 #define MIDI_VPORTS 16
-
+#include <stdint.h>
 
 typedef struct {
 	char *name;
 	int nports;
 	int32_t bmvports[/*nports*/]; // nports long, bitmap: for every vport, 1: output, 0: ignore
-} midi_output_routing_t;
+} midi_routing_t;
 
 /* -------
- * MIDI input port mapping
+ * MIDI port routing table
  *
  * all patch midi input and output to use 16 virtual input and output ports
  *
- * map each real input port to up to 4 "virtual" input port
- * map each "virtual" output port to up to 4 "virtual" output ports
+ * map each real input port to one or multiple "virtual" input ports
+ * map each "virtual" output port to one or multiple "virtual" output ports
  *
- * one fixed virtual input port # specifically for clock
  * one fixed virtual input port # specifically for regular keybd playing
+ * one fixed virtual input port # specifically for clock
  * a virtual port can serve for specific midi controllers,
  *   for example a launchpad, and be handled specifically without
  *   injecting note-events in a synth patch
@@ -46,11 +46,5 @@ typedef struct {
  *
  * how to trap midi/break feedback loops?
  */
-
-typedef struct {
-	char *name;
-	int nports;
-	int32_t bmvports[/*nports*/]; // bitmap: for every vport, 1: output, 0: ignore
-} midi_input_remap_t;
 
 #endif

@@ -34,16 +34,16 @@
 
 midi_output_buffer_t midi_output_usbd;
 
-midi_input_remap_t midi_inputmap_usbd = {
-		"USB device",
-		1,
-		{0b00000010}
+midi_routing_t midi_inputmap_usbd = {
+		.name = "USB device",
+		.nports = 1,
+		.bmvports = {0b0000000000000001}
 };
 
-midi_output_routing_t midi_outputmap_usbd = {
+midi_routing_t midi_outputmap_usbd = {
 			.name = "USB device",
 			.nports = 1,
-			.bmvports = {0b00000010}
+			.bmvports = {0b0000000000000010}
 };
 
 static thread_t * thd_usbd_midi_out;
