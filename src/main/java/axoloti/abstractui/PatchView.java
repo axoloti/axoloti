@@ -47,12 +47,8 @@ import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.piccolo.patch.net.PNetView;
 import axoloti.swingui.ObjectSearchFrame;
 import axoloti.swingui.patch.PatchFrame;
-import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.swingui.patch.net.NetView;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDFileReference;
@@ -535,16 +531,12 @@ public abstract class PatchView extends PatchAbstractView {
 
     };
 
+    abstract public INetView createNetView(NetController controller, PatchView patchView);
+
     ArrayView<INetView> netViewSync = new ArrayView<INetView>() {
         @Override
         public INetView viewFactory(AbstractController ctrl) {
-            INetView view;
-            if(PatchView.this instanceof PatchViewSwing) {
-                view = new NetView((NetController) ctrl, (PatchViewSwing) PatchView.this);
-            }
-            else {
-                view = new PNetView((NetController) ctrl, (PatchViewPiccolo) PatchView.this);
-            }
+            INetView view = createNetView((NetController) ctrl, PatchView.this);
             view.PostConstructor();
             ctrl.addView(view);
             add(view);

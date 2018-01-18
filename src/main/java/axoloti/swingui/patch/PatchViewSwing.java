@@ -51,19 +51,18 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
-import axoloti.abstractui.PatchView.Direction;
 import axoloti.abstractui.PatchViewportView;
 import axoloti.object.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
+import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.preferences.Theme;
-import axoloti.swingui.patch.PatchViewSwing.JPanelAbsoluteLayout;
 import axoloti.swingui.patch.net.NetView;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
@@ -545,5 +544,10 @@ public class PatchViewSwing extends PatchView {
     @Override
     public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory() {
         return AxoObjectInstanceViewFactory.getInstance();
+    }
+
+    @Override
+    public INetView createNetView(NetController controller, PatchView patchView) {
+        return new NetView(controller, (PatchViewSwing) patchView);
     }
 }

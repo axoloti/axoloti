@@ -34,8 +34,8 @@ import org.piccolo2d.util.PBounds;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
@@ -44,12 +44,14 @@ import axoloti.abstractui.PatchViewportView;
 import axoloti.object.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
+import axoloti.patch.net.NetController;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.piccolo.PObjectSearchFrame;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.components.PFocusable;
 import axoloti.piccolo.components.control.PCtrlComponentAbstract;
 import axoloti.piccolo.components.control.PDropDownComponent;
+import axoloti.piccolo.patch.net.PNetView;
 import axoloti.piccolo.patch.object.PAxoObjectInstanceViewFactory;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
@@ -535,4 +537,8 @@ public class PatchViewPiccolo extends PatchView {
         return PAxoObjectInstanceViewFactory.getInstance();
     }
 
+    @Override
+    public INetView createNetView(NetController controller, PatchView patchView) {
+        return new PNetView(controller, (PatchViewPiccolo) patchView);
+    }
 }
