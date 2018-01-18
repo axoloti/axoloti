@@ -12,11 +12,11 @@ import axoloti.patch.object.AxoObjectInstanceFactory;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.ObjectInstancePatcherController;
-import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.piccolo.patch.PatchPCanvas;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
+import axoloti.piccolo.patch.object.PAxoObjectInstanceViewFactory;
 import axoloti.swingui.ObjectSearchFrame;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
 
 public class PObjectSearchFrame extends ObjectSearchFrame {
 
@@ -61,7 +61,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
 
             PAxoObjectInstanceViewAbstract objectInstanceView = (
                 (PAxoObjectInstanceViewAbstract)
-                AxoObjectInstanceViewFactory.createView(c, patchView));
+                PAxoObjectInstanceViewFactory.getInstance().createView(c, patchView));
 
             getMainView().removeAll();
             PatchPCanvas container = new PatchPCanvas();

@@ -368,7 +368,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 c = new ObjectInstanceController(objectInstance, null, null);
             }
 
-            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.createView(c, (PatchViewSwing) null);
+            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.getInstance().createView(c, null);
             jPanel1.removeAll();
             jPanel1.add((AxoObjectInstanceViewAbstract) objectInstanceView);
             objectInstanceView.resizeToGrid();

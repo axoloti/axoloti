@@ -1,7 +1,5 @@
 package axoloti.piccolo.patch;
 
-import static axoloti.piccolo.PUtils.asPoint;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
@@ -36,22 +34,23 @@ import org.piccolo2d.util.PBounds;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
+import axoloti.abstractui.PatchView.Direction;
 import axoloti.abstractui.PatchViewportView;
 import axoloti.object.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.piccolo.PObjectSearchFrame;
-import axoloti.piccolo.patch.PPatchBorder;
-import axoloti.piccolo.patch.PatchPCanvas;
-import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.PUtils;
 import axoloti.piccolo.components.PFocusable;
 import axoloti.piccolo.components.control.PCtrlComponentAbstract;
 import axoloti.piccolo.components.control.PDropDownComponent;
+import axoloti.piccolo.patch.object.PAxoObjectInstanceViewFactory;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
@@ -126,7 +125,7 @@ public class PatchViewPiccolo extends PatchView {
                 ShowClassSelector(e, null, null);
             } else if (((e.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(e))
                     || ((e.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(e))) {
-                Point patchPosition = asPoint(e.getInputManager().getCurrentCanvasPosition());
+                Point patchPosition = PUtils.asPoint(e.getInputManager().getCurrentCanvasPosition());
                 getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
                 getController().AddObjectInstance(
                         AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), patchPosition);
@@ -452,10 +451,10 @@ public class PatchViewPiccolo extends PatchView {
         try {
             Point2D p = e.getPosition();
             Point2D q = e.getCanvasPosition();
-            ShowClassSelector(asPoint(e.getPosition()), asPoint(e.getCanvasPosition()), o, searchString);
+            ShowClassSelector(PUtils.asPoint(e.getPosition()), PUtils.asPoint(e.getCanvasPosition()), o, searchString);
         } catch (RuntimeException ex) {
             // if this is from a keyboard event
-            Point canvasPosition = asPoint(e.getInputManager().getCurrentCanvasPosition());
+            Point canvasPosition = PUtils.asPoint(e.getInputManager().getCurrentCanvasPosition());
             Point patchPosition = (Point) canvasPosition.clone();
             getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
             ShowClassSelector(patchPosition, canvasPosition, o, searchString);
@@ -467,7 +466,7 @@ public class PatchViewPiccolo extends PatchView {
             return;
         }
         if (canvasPosition == null) {
-            canvasPosition = asPoint(getCanvas().getRoot().getDefaultInputManager().getCurrentCanvasPosition());
+            canvasPosition = PUtils.asPoint(getCanvas().getRoot().getDefaultInputManager().getCurrentCanvasPosition());
         }
 
         if (osf == null) {
@@ -529,6 +528,11 @@ public class PatchViewPiccolo extends PatchView {
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory() {
+        return PAxoObjectInstanceViewFactory.getInstance();
     }
 
 }

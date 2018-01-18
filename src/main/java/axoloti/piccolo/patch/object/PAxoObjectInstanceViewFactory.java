@@ -1,4 +1,4 @@
-package axoloti.swingui.patch.object;
+package axoloti.piccolo.patch.object;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceViewFactory;
@@ -11,48 +11,41 @@ import axoloti.patch.object.AxoObjectInstancePatcherObject;
 import axoloti.patch.object.AxoObjectInstanceZombie;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 
-/**
- *
- * @author jtaelman
- */
-public class AxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFactory {
+public class PAxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFactory {
 
-    protected AxoObjectInstanceViewFactory() {
-    }
+    private static PAxoObjectInstanceViewFactory instance;
 
-    private static AxoObjectInstanceViewFactory instance;
-
-    public static AxoObjectInstanceViewFactory getInstance() {
+    public static PAxoObjectInstanceViewFactory getInstance() {
         if(instance == null) {
-            instance = new AxoObjectInstanceViewFactory();
+            instance = new PAxoObjectInstanceViewFactory();
         }
         return instance;
     }
 
     @Override
-    public IAxoObjectInstanceView createView(ObjectInstanceController controller, PatchView patchView) {
+    public IAxoObjectInstanceView createView(ObjectInstanceController controller, PatchView pv) {
         IAxoObjectInstance model = controller.getModel();
-        AxoObjectInstanceViewAbstract view = null;
-        PatchViewSwing patchViewSwing = (PatchViewSwing) patchView;
+        PAxoObjectInstanceViewAbstract view = null;
+        PatchViewPiccolo pvp = (PatchViewPiccolo) pv;
         if (model instanceof AxoObjectInstanceComment) {
-            view = new AxoObjectInstanceViewComment(controller, patchViewSwing);
+            view = new PAxoObjectInstanceViewComment(controller, pvp);
         } else if (model instanceof AxoObjectInstanceHyperlink) {
-            view = new AxoObjectInstanceViewHyperlink(controller, patchViewSwing);
+            view = new PAxoObjectInstanceViewHyperlink(controller, pvp);
         } else if (model instanceof AxoObjectInstanceZombie) {
-            view = new AxoObjectInstanceViewZombie(controller, patchViewSwing);
+            view = new PAxoObjectInstanceViewZombie(controller, pvp);
         } else if (model instanceof AxoObjectInstancePatcherObject) {
-            view = new AxoObjectInstanceViewPatcherObject(controller, patchViewSwing);
+            view = new PAxoObjectInstanceViewPatcherObject(controller, pvp);
         } else if (model instanceof AxoObjectInstancePatcher) {
-            view = new AxoObjectInstanceViewPatcher(controller, patchViewSwing);
+            view = new PAxoObjectInstanceViewPatcher(controller, pvp);
         } else if (model instanceof AxoObjectInstance) {
-            view = new AxoObjectInstanceView(controller, patchViewSwing);
+            view = new PAxoObjectInstanceView(controller, pvp);
         } else {
             throw new Error("unknown object type");
         }
-        view.PostConstructor();
         controller.addView(view);
+        view.PostConstructor();
         return view;
     }
 }

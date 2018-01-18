@@ -42,23 +42,19 @@ import axoloti.object.AxoObjectFromPatch;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
-import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.piccolo.patch.net.PNetView;
 import axoloti.swingui.ObjectSearchFrame;
 import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patch.net.NetView;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
-import axoloti.swingui.patch.object.iolet.IoletAbstract;
 import axoloti.target.TargetModel;
-import axoloti.piccolo.patch.object.PAxoObjectInstanceView;
-import axoloti.target.fs.SDCardInfo;
 import axoloti.target.fs.SDFileReference;
 
 import qcmds.QCmdChangeWorkingDirectory;
@@ -517,10 +513,12 @@ public abstract class PatchView extends PatchAbstractView {
         */
     }
 
+    abstract public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory();
+
     ArrayView<IAxoObjectInstanceView> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView>() {
         @Override
         public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
-            IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, PatchView.this);
+            IAxoObjectInstanceView view = getAxoObjectInstanceViewFactory().createView((ObjectInstanceController) ctrl, PatchView.this);
             add(view);
             return view;
         }

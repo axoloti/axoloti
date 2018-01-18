@@ -17,20 +17,6 @@
  */
 package axoloti.swingui.patch;
 
-import axoloti.abstractui.INetView;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
-import axoloti.abstractui.PatchView;
-import axoloti.abstractui.PatchViewportView;
-import axoloti.preferences.Theme;
-import axoloti.object.AxoObjects;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.swingui.patch.net.NetView;
-import axoloti.utils.Constants;
-import axoloti.utils.KeyUtils;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -52,6 +38,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -59,11 +46,29 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
-import static javax.swing.TransferHandler.COPY_OR_MOVE;
-import static javax.swing.TransferHandler.MOVE;
+
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+
+import axoloti.abstractui.IAxoObjectInstanceViewFactory;
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.INetView;
+import axoloti.abstractui.PatchView;
+import axoloti.abstractui.PatchView.Direction;
+import axoloti.abstractui.PatchViewportView;
+import axoloti.object.AxoObjects;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.preferences.Theme;
+import axoloti.swingui.patch.PatchViewSwing.JPanelAbsoluteLayout;
+import axoloti.swingui.patch.net.NetView;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
+import axoloti.utils.Constants;
+import axoloti.utils.KeyUtils;
 
 /**
  *
@@ -537,4 +542,8 @@ public class PatchViewSwing extends PatchView {
         super.dispose();
     }
 
+    @Override
+    public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory() {
+        return AxoObjectInstanceViewFactory.getInstance();
+    }
 }
