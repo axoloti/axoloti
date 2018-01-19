@@ -10,8 +10,7 @@ import qcmds.QCmdProcessor;
 
 class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
-    private ButtonComponent BtnUpdate;
-    public PatchFrame pf;
+    private PatchFrame pf;
 
     public AxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
@@ -55,22 +54,6 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         });
         add(BtnEdit);
         resizeToGrid();
-    }
-
-    @Override
-    public void Unlock() {
-        super.Unlock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void Lock() {
-        super.Lock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(false);
-        }
     }
 
     @Override

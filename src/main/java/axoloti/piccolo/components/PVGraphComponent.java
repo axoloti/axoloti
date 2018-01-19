@@ -3,7 +3,7 @@ package axoloti.piccolo.components;
 import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.patch.PatchPNode;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

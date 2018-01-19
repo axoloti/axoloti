@@ -22,7 +22,9 @@ import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
-import axoloti.swingui.components.control.ACtrlComponent;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_END;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import axoloti.swingui.components.control.HSliderComponent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -72,10 +74,10 @@ public class AssignModulatorMenuItems {
 
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
+                    if (evt.getPropertyName().equals(PROP_VALUE_ADJ_BEGIN)) {
                         valueBeforeAdjustment = ((HSliderComponent) evt.getSource()).getValue();
-                    } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_END)) {
-                    } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
+                    } else if (evt.getPropertyName().equals(PROP_VALUE_ADJ_END)) {
+                    } else if (evt.getPropertyName().equals(PROP_VALUE)) {
                     int i = hsls.indexOf(evt.getSource());
                         //                            System.out.println("ctrl " + i + parameterInstance.axoObj.patch.Modulators.get(i).objinst.InstanceName);
                         ValueFrac32 v = new ValueFrac32(((HSliderComponent) evt.getSource()).getValue());

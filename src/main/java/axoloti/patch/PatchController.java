@@ -910,6 +910,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
 
     public Net disconnect(IoletInstance io) {
         NetController n = getNetFromIolet(io);
+        io.setConnected(false);
         if (n != null) {
             if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
                 delete(n);
@@ -921,6 +922,12 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public void delete(NetController n) {
+        for (InletInstance io : n.getModel().getDestinations()) {
+            io.setConnected(false);
+        }
+        for (OutletInstance oi : n.getModel().getSources()) {
+            oi.setConnected(false);
+        }
         netControllers.remove(n.getModel());
     }
 

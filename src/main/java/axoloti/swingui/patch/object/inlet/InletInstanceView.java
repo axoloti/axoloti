@@ -33,7 +33,7 @@ public class InletInstanceView extends IoletAbstract<IoletInstanceController> im
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         setMaximumSize(new Dimension(32767, 14));
-        jack = new JackInputComponent(this);
+        jack = new JackInputComponent();
         jack.setForeground(getModel().getModel().getDatatype().GetColor());
         jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
@@ -83,9 +83,17 @@ public class InletInstanceView extends IoletAbstract<IoletInstanceController> im
         } else if (InletInstance.DESCRIPTION.is(evt)) {
             setToolTipText((String) evt.getNewValue());
         }
+        else if (InletInstance.CONNECTED.is(evt)) {
+            getJack().setConnected((Boolean) evt.getNewValue());
+            getJack().repaint();
+        }
     }
 
     @Override
     public void dispose() {
+    }
+    
+    private JackInputComponent getJack() {
+        return (JackInputComponent) jack;
     }
 }

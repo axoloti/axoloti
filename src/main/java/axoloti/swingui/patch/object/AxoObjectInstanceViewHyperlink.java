@@ -4,7 +4,7 @@ import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.swingui.components.LabelComponent;
-import axoloti.swingui.components.control.ACtrlComponent;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import axoloti.swingui.components.control.PulseButtonComponent;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.MouseEvent;
@@ -35,7 +35,7 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
         button.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
+                if (evt.getPropertyName().equals(PROP_VALUE)) {
                     if (evt.getNewValue().equals(1.0)) {
                         getModel().Launch();
                     }

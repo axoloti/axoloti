@@ -20,7 +20,7 @@ package axoloti.preferences;
 import axoloti.Axoloti;
 import axoloti.patch.PatchController;
 import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchViewPiccolo;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.patch.PatchViewType;
 import static axoloti.patch.PatchViewType.PICCOLO;

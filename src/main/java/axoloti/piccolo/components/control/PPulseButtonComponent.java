@@ -33,7 +33,7 @@ public class PPulseButtonComponent extends PCtrlComponentAbstract {
     protected void mousePressed(PInputEvent e) {
         grabFocus();
         if (e.getButton() == 1) {
-            setValue(1.0);
+            fireValue(1.0);
         }
     }
 
@@ -41,7 +41,7 @@ public class PPulseButtonComponent extends PCtrlComponentAbstract {
     protected void mouseReleased(PInputEvent e) {
         if (e.getButton() == 1) {
             if (!e.isShiftDown()) {
-                setValue(0.0);
+                fireValue(0.0);
             }
         }
     }
@@ -49,7 +49,7 @@ public class PPulseButtonComponent extends PCtrlComponentAbstract {
     @Override
     public void keyPressed(PInputEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            setValue(1.0);
+            fireValue(1.0);
             ke.setHandled(true);
         }
     }
@@ -57,7 +57,7 @@ public class PPulseButtonComponent extends PCtrlComponentAbstract {
     @Override
     void keyReleased(PInputEvent ke) {
         if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            setValue(1.0);
+            fireValue(1.0);
             ke.setHandled(true);
         }
     }
@@ -93,8 +93,12 @@ public class PPulseButtonComponent extends PCtrlComponentAbstract {
         if (this.value != value) {
             this.value = value;
         }
-        fireEvent();
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
+        fireEvent();
     }
 
     @Override

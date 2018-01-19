@@ -5,9 +5,9 @@ import axoloti.preset.Preset;
 import axoloti.preferences.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
-import axoloti.piccolo.PatchPCanvas;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.parameterviews.PParameterInstanceView;
+import axoloti.piccolo.patch.PatchPCanvas;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.object.parameter.PParameterInstanceView;
 import axoloti.piccolo.components.control.PCheckboxComponent;
 import axoloti.piccolo.components.control.PCtrlComponentAbstract;
 import axoloti.piccolo.components.control.PCtrlEvent;
@@ -24,7 +24,6 @@ public class PAssignPresetPanel extends PatchPCanvas {
     public PAssignPresetPanel(PParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
         int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getNPresets();
-        setVisible(true);
 
         removeInputEventListener(zoomEventHandler);
         removeInputEventListener(selectionEventHandler);
@@ -89,7 +88,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
             if (selected) {
                 //parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getModel().getValue());
                 ctrls.get(i).setEnabled(true);
-                ctrls.get(i).setValue((Double) parameterInstanceView.getModel().getPreset(i + 1).getValue()); // 
+                ctrls.get(i).setValue((Double) parameterInstanceView.getModel().getPreset(i + 1).getValue()); //
             } else {
                 ctrls.get(i).setEnabled(false);
                 parameterInstanceView.getController().RemovePreset(i + 1);

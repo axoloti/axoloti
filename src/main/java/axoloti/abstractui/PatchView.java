@@ -1,35 +1,5 @@
 package axoloti.abstractui;
 
-import axoloti.chunks.ChunkData;
-import axoloti.chunks.ChunkParser;
-import axoloti.chunks.Cpatch_display;
-import axoloti.chunks.FourCC;
-import axoloti.chunks.FourCCs;
-import axoloti.connection.CConnection;
-import axoloti.connection.IConnection;
-import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.array.ArrayView;
-import axoloti.object.AxoObjectFromPatch;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewCodegen;
-import axoloti.patch.PatchViewportView;
-import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.swingui.ObjectSearchFrame;
-import axoloti.swingui.patch.PatchFrame;
-import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.swingui.patch.net.NetView;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
-import axoloti.swingui.patch.object.iolet.IoletAbstract;
-import axoloti.target.TargetModel;
-import axoloti.target.fs.SDFileReference;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
@@ -51,10 +21,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
+
+import axoloti.chunks.ChunkData;
+import axoloti.chunks.ChunkParser;
+import axoloti.chunks.Cpatch_display;
+import axoloti.chunks.FourCC;
+import axoloti.chunks.FourCCs;
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
+import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.array.ArrayView;
+import axoloti.object.AxoObjectFromPatch;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.PatchViewCodegen;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.swingui.ObjectSearchFrame;
+import axoloti.swingui.patch.PatchFrame;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
+import axoloti.target.TargetModel;
+import axoloti.target.fs.SDFileReference;
+
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
@@ -357,7 +355,6 @@ public abstract class PatchView extends PatchAbstractView {
         PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         long ChronoFrameCreated = Calendar.getInstance().getTimeInMillis();
         System.out.println("ChronoFrameCreated " + (ChronoFrameCreated - ChronoControllerCreated));
-        patchController.addView(pf);
         long ChronoAddView = Calendar.getInstance().getTimeInMillis();
         System.out.println("ChronoAddViewCreated " + (ChronoAddView - ChronoFrameCreated));
         pf.setVisible(true);
@@ -423,7 +420,6 @@ public abstract class PatchView extends PatchAbstractView {
                 n.setVisible(isCableTypeEnabled(d));
             }
         }
-        //repaint();
     }
 
     @Override
@@ -513,11 +509,12 @@ public abstract class PatchView extends PatchAbstractView {
         */
     }
 
+    abstract public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory();
+
     ArrayView<IAxoObjectInstanceView> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView>() {
         @Override
         public IAxoObjectInstanceView viewFactory(AbstractController ctrl) {
-            IAxoObjectInstanceView view = AxoObjectInstanceViewFactory.createView((ObjectInstanceController) ctrl, (PatchViewSwing) PatchView.this);
-            view.PostConstructor();
+            IAxoObjectInstanceView view = getAxoObjectInstanceViewFactory().createView((ObjectInstanceController) ctrl, PatchView.this);
             add(view);
             return view;
         }
@@ -534,10 +531,12 @@ public abstract class PatchView extends PatchAbstractView {
 
     };
 
+    abstract public INetView createNetView(NetController controller, PatchView patchView);
+
     ArrayView<INetView> netViewSync = new ArrayView<INetView>() {
         @Override
         public INetView viewFactory(AbstractController ctrl) {
-            INetView view = new NetView((NetController) ctrl, (PatchViewSwing) PatchView.this);
+            INetView view = createNetView((NetController) ctrl, PatchView.this);
             view.PostConstructor();
             ctrl.addView(view);
             add(view);
@@ -604,9 +603,9 @@ public abstract class PatchView extends PatchAbstractView {
                     }
                     dtde.dropComplete(true);
                 } catch (UnsupportedFlavorException ex) {
-                    Logger.getLogger(PatchViewSwing.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
-                    Logger.getLogger(PatchViewSwing.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 return;
             }

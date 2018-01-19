@@ -52,7 +52,7 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
         } else {
             v = v & ~mask;
         }
-        setValue((double) v);
+        fireValue((double) v);
         notifyActionListeners();
     }
 
@@ -226,8 +226,12 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
     public void setValue(double value) {
         if (this.value != value) {
             this.value = value;
-            getParent().repaint();
+            repaint();
         }
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

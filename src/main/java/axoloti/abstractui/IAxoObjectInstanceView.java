@@ -55,19 +55,8 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public Dimension getSize();
 
-    public void addParameterInstanceView(IParameterInstanceView view);
-
-    public void addAttributeInstanceView(IAttributeInstanceView view);
-
-    public void addDisplayInstanceView(IDisplayInstanceView view);
-
-    public void addOutletInstanceView(IIoletInstanceView view);
-
-    public void addInletInstanceView(IIoletInstanceView view);
-
     public JComponent getCanvas();
 
     public boolean isZombie();
-
 
 }

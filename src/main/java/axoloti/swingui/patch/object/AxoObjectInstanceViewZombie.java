@@ -131,18 +131,6 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
     }
 
     @Override
-    public void addInletInstanceView(IIoletInstanceView view) {
-        inletInstanceViews.put((InletInstance) view.getModel(), view);
-        add((InletInstanceView) view);
-    }
-
-    @Override
-    public void addOutletInstanceView(IIoletInstanceView view) {
-        outletInstanceViews.put((OutletInstance) view.getModel(), view);
-        add((OutletInstanceView) view);
-    }
-
-    @Override
     public boolean isZombie() {
         return true;
     }

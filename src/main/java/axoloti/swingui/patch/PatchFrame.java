@@ -17,26 +17,8 @@
  */
 package axoloti.swingui.patch;
 
-import axoloti.ConnectionStatusListener;
-import axoloti.FileUtils;
-import axoloti.abstractui.DocumentWindow;
-import axoloti.abstractui.DocumentWindowList;
-import axoloti.abstractui.PatchView;
-import axoloti.connection.CConnection;
-import axoloti.mvc.IView;
-import axoloti.mvc.UndoUI;
-import axoloti.object.AxoObjects;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
 import static axoloti.patch.PatchViewType.PICCOLO;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.preferences.Preferences;
-import axoloti.swingui.TextEditor;
-import axoloti.swingui.components.PresetPanel;
-import axoloti.swingui.components.VisibleCablePanel;
-import axoloti.target.fs.SDCardMountStatusListener;
-import axoloti.utils.KeyUtils;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -59,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -66,8 +49,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
+
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+
+import axoloti.ConnectionStatusListener;
+import axoloti.FileUtils;
+import axoloti.abstractui.DocumentWindow;
+import axoloti.abstractui.DocumentWindowList;
+import axoloti.abstractui.PatchView;
+import axoloti.connection.CConnection;
+import axoloti.mvc.IView;
+import axoloti.mvc.UndoUI;
+import axoloti.object.AxoObjects;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.preferences.Preferences;
+import axoloti.swingui.TextEditor;
+import axoloti.swingui.components.PresetPanel;
+import axoloti.swingui.components.VisibleCablePanel;
+import axoloti.target.fs.SDCardMountStatusListener;
+import axoloti.utils.KeyUtils;
+
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
@@ -94,8 +100,17 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private JScrollPane jScrollPane1;
 
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor) {
+        this(patchController, qcmdprocessor, false);
+    }
+
+    public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor, boolean usePiccolo) {
         initComponents();
-        patchView = new PatchViewSwing(patchController);
+        if(usePiccolo) {
+            patchView = new PatchViewPiccolo(patchController);
+        }
+        else {
+            patchView = new PatchViewSwing(patchController);
+        }
         patchView.PostConstructor();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         this.qcmdprocessor = qcmdprocessor;
@@ -106,8 +121,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             patchController.getDocumentRoot().addUndoListener(undoUi);
         }
 
-        JMenuItem menuItemNewView = new JMenuItem("new view");
-        menuItemNewView.addActionListener(new ActionListener() {
+        JMenuItem menuItemNewSwingView = new JMenuItem("New Swing View");
+        menuItemNewSwingView.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
@@ -115,7 +130,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 pf.setVisible(true);
             }
         });
-        fileMenu1.add(menuItemNewView);
+        fileMenu1.add(menuItemNewSwingView);
+
+        JMenuItem menuItemNewPiccoloView = new JMenuItem("New Piccolo View");
+        menuItemNewPiccoloView.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor(), true);
+                    patchController.addView(pf);
+                    pf.setVisible(true);
+                }
+            });
+        fileMenu1.add(menuItemNewPiccoloView);
 
         presetPanel = new PresetPanel(patchController);
         visibleCablePanel = new VisibleCablePanel(getPatchView());
@@ -133,7 +159,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         getContentPane().add(jScrollPane1);
 
         jMenuEdit.add(undoUi.createMenuItemUndo());
-        jMenuEdit.add(undoUi.createMenuItemRedo());      
+        jMenuEdit.add(undoUi.createMenuItemRedo());
 
         JMenuItem menuItem = new JMenuItem(new DefaultEditorKit.CutAction());
         menuItem.setText("Cut");
@@ -237,7 +263,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         getPatchView().getViewportView().getComponent().requestFocusInWindow();
 
-        if (Preferences.getPreferences().getPatchViewType() == PICCOLO) {
+        if (usePiccolo) {
             initializeZoomMenuItems();
         }
 
@@ -252,9 +278,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 askClose();
             }
         });
-        
+
         patchController.addView(this);
-        patchController.addView(patchView);        
+        patchController.addView(patchView);
     }
 
     private void initializeZoomMenuItems() {
@@ -304,7 +330,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public PatchController getController() {
         return patchController;
     }
-    
+
     QCmdProcessor qcmdprocessor;
 
     private void setLive(boolean b) {

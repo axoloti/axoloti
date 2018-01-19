@@ -414,12 +414,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         return popup;
     }
 
-    public void refreshIndex() {
-        if (getPatchView() != null && IndexLabel != null) {
-            IndexLabel.setText(" " + getPatchView().getObjectInstanceViews().indexOf(this));
-        }
-    }
-
     public void OpenEditor() {
         getType().OpenEditor();
     }

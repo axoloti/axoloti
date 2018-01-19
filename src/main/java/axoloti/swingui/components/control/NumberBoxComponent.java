@@ -129,7 +129,6 @@ public class NumberBoxComponent extends ACtrlComponent {
                     v = min;
                 }
                 fireValue(v);
-                fireEvent();
             }
         }
     }
@@ -193,7 +192,7 @@ public class NumberBoxComponent extends ACtrlComponent {
             if (ke.isShiftDown()) {
                 steps = steps * 0.1; // mini steps!
                 if (KeyUtils.isControlOrCommandDown(ke)) {
-                    steps = steps * 0.1; // micro steps!                
+                    steps = steps * 0.1; // micro steps!
                 }
             } else if (KeyUtils.isControlOrCommandDown(ke)) {
                 steps = steps * 10.0; //accelerate!

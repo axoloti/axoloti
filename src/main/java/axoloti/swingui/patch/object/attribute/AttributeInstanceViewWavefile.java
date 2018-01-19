@@ -17,7 +17,6 @@ import javax.swing.event.DocumentListener;
 class AttributeInstanceViewWavefile extends AttributeInstanceView {
 
     JTextField TFwaveFilename;
-    JLabel vlabel;
 
     AttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
@@ -78,14 +77,10 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                //getModel().setValueBeforeAdjustment(TFwaveFilename.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                //if (!TFwaveFilename.getText().equals(getModel().getValueBeforeAdjustment())) {
-                //    getModel().getObjectInstance().getPatchModel().setDirty();
-                //}
             }
         });
     }

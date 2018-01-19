@@ -1,16 +1,19 @@
 package axoloti.piccolo.components;
 
-import axoloti.preferences.Theme;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.inlets.PInletInstanceView;
-import java.awt.BasicStroke;
 import static java.awt.Component.CENTER_ALIGNMENT;
 import static java.awt.Component.RIGHT_ALIGNMENT;
+
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+
 import org.piccolo2d.util.PPaintContext;
+
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.object.inlet.PInletInstanceView;
+import axoloti.preferences.Theme;
 
 public class PJackInputComponent extends PatchPNode {
 
@@ -22,7 +25,8 @@ public class PJackInputComponent extends PatchPNode {
     private static final int MARGIN = 2;
     private static final int MARGIN_SHADOW = MARGIN + 1;
     private static final int DIM = SZ - MARGIN - MARGIN;
-    final PInletInstanceView inletInstanceView;
+
+    private boolean connected = false;
 
     public PJackInputComponent(PInletInstanceView inletInstanceView) {
         super(inletInstanceView.getPatchView());
@@ -32,7 +36,6 @@ public class PJackInputComponent extends PatchPNode {
         setSize(dim);
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
-        this.inletInstanceView = inletInstanceView;
     }
     private final Stroke stroke = new BasicStroke(1.5f);
 
@@ -43,18 +46,22 @@ public class PJackInputComponent extends PatchPNode {
 
         g2.setStroke(stroke);
         g2.setPaint(Theme.getCurrentTheme().Object_TitleBar_Background);
-        if (inletInstanceView.getModel().isConnected()) {
+        if (connected) {
             g2.fillOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
         }
         g2.drawOval(margin + 1, margin + 1, sz - margin - margin, sz - margin - margin);
 
         g2.setPaint(getForeground());
-        if (inletInstanceView.getModel().isConnected()) {
+        if (connected) {
             g2.fillOval(margin, margin, sz - margin - margin, sz - margin - margin);
         }
         g2.drawOval(margin, margin, sz - margin - margin, sz - margin - margin);
 
         g2.setStroke(strokeThin);
         PUtils.setRenderQualityToLow(g2);
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
 }

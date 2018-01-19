@@ -1,16 +1,24 @@
 package axoloti.piccolo.components.control;
 
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.PatchPNode;
-import axoloti.piccolo.components.PFocusable;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JComponent;
+
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
+
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.components.PFocusable;
+
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_END;
+
 
 public abstract class PCtrlComponentAbstract extends PatchPNode implements PFocusable {
 
@@ -187,22 +195,24 @@ public abstract class PCtrlComponentAbstract extends PatchPNode implements PFocu
         for (PCtrlListener listener : listenerList) {
             listener.PCtrlAdjusted(new PCtrlEvent(this, getValue()));
         }
+        firePropertyChange(0, PROP_VALUE, null, (Double) getValue());
     }
 
     void fireEventAdjustmentBegin() {
         for (PCtrlListener listener : listenerList) {
             listener.PCtrlAdjustmentBegin(new PCtrlEvent(this, getValue()));
         }
+        firePropertyChange(0, PROP_VALUE_ADJ_BEGIN, null, null);
     }
 
     void fireEventAdjustmentFinished() {
         for (PCtrlListener listener : listenerList) {
             listener.PCtrlAdjustmentFinished(new PCtrlEvent(this, getValue()));
         }
+        firePropertyChange(0, PROP_VALUE_ADJ_END, null, null);
     }
 
     public void robotMoveToCenter(PInputEvent e) {
-
     }
 
     private JComponent presetCanvas;

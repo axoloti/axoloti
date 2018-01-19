@@ -35,42 +35,30 @@ package axoloti.piccolo;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
+import java.awt.Point;
 import java.util.Collection;
 import java.util.Iterator;
+
 import javax.swing.JComponent;
 import javax.swing.border.Border;
+
 import org.piccolo2d.PNode;
 
 public class SwingLayoutNode extends PNode {
-
     private final ProxyComponent proxyComponent;
 
     public SwingLayoutNode() {
-        this.proxyComponent = new ProxyComponent(this);
+        proxyComponent = new ProxyComponent(this);
     }
 
     public void addChild(final int index, final SwingLayoutNode child) {
-        /*
-         * NOTE: This must be the only super.addChild call that we make in our
-         * entire implementation, because all PNode.addChild methods are
-         * implemented in terms of this one. Calling other variants of
-         * super.addChild will incorrectly invoke our overrides, resulting in
-         * StackOverflowException.
-         */
         super.addChild(index, child);
-        addProxyComponent(child);
+        addProxyComponent(index, child);
     }
 
     public void addChild(final SwingLayoutNode child) {
-        // NOTE: since PNode.addChild(PNode) is implemented in terms of
-        // PNode.addChild(int index), we must do the same.
         int index = getChildrenCount();
-        // workaround a flaw in PNode.addChild(PNode), they should have handled
-        // this in PNode.addChild(int index).
-        if (child.getParent() == this) {
-            index--;
-        }
-        addChild(index, child);
+        addChild(getChildrenCount(), child);
     }
 
     public void addChildren(final Collection nodes) {
@@ -82,59 +70,43 @@ public class SwingLayoutNode extends PNode {
     }
 
     public PNode removeChild(final int index) {
-        /*
-         * NOTE: This must be the only super.removeChild call that we make in
-         * our entire implementation, because all PNode.removeChild methods are
-         * implemented in terms of this one. Calling other variants of
-         * super.removeChild will incorrectly invoke our overrides, resulting in
-         * StackOverflowException.
-         */
         final SwingLayoutNode node = (SwingLayoutNode) super.removeChild(index);
         removeProxyComponent(node);
         return node;
     }
 
     public void removeAllChildren() {
-        final Iterator i = getChildrenIterator();
-        while (i.hasNext()) {
-            removeChild((SwingLayoutNode) i.next());
-        }
+        super.removeAllChildren();
+        proxyComponent.removeAll();
     }
 
-    private void addProxyComponent(final SwingLayoutNode node) {
-        proxyComponent.add(node.getProxyComponent());
+    private void addProxyComponent(final int index, final SwingLayoutNode node) {
+        proxyComponent.add(node.getProxyComponent(), index + directlyAddedToProxy);
     }
 
     private void removeProxyComponent(final SwingLayoutNode node) {
-        if (node != null) {
-            proxyComponent.remove(node.getProxyComponent());
-        }
+        proxyComponent.remove(node.getProxyComponent());
     }
 
     public ProxyComponent getProxyComponent() {
         return proxyComponent;
     }
 
-    public static class ProxyComponent extends JComponent {
-
+    public class ProxyComponent extends JComponent {
         private final SwingLayoutNode node;
 
         public ProxyComponent(final SwingLayoutNode node) {
             this.node = node;
         }
 
+        @Override
         public void setBounds(final int x, final int y, final int w, final int h) {
-            if (x != getX() || y != getY() || w != getWidth() || h != getHeight()) {
+            if(x != getX() || y != getY() || w != getWidth() || h != getHeight()) {
                 super.setBounds(x, y, w, h);
-
-                node.setOffset(x, y);
-                double width = w;
-                // handle swing's annoying parent relative negative widths
-                if (width < 0) {
-                    width = ((SwingLayoutNode) node.getParent()).getProxyComponent().getWidth() + w;
-                }
-                node.setBounds(0, 0, width, h);
-                node.getProxyComponent().doLayout();
+                doLayout();
+                node.setBounds(0, 0, getWidth(), getHeight());
+                Point location = node.getLocation();
+                node.setOffset(location.getX(), location.getY());
             }
         }
     }
@@ -191,12 +163,17 @@ public class SwingLayoutNode extends PNode {
         proxyComponent.setBorder(border);
     }
 
+    private int directlyAddedToProxy = 0;
+
     public void addToSwingProxy(Component c) {
         proxyComponent.add(c);
+        directlyAddedToProxy++;
     }
 
-    public void validate() {
-
+    @Override
+    public void setVisible(boolean isVisible) {
+        super.setVisible(isVisible);
+        proxyComponent.setVisible(isVisible);
     }
 
     public void setLayout(LayoutManager manager) {
@@ -205,5 +182,18 @@ public class SwingLayoutNode extends PNode {
 
     public int roundUp(double val) {
         return (int) Math.ceil(val);
+    }
+
+    public Point getLocation() {
+        return proxyComponent.getLocation();
+    }
+
+    public void invalidate() {
+        for(int i = 0; i < getChildrenCount(); i++) {
+            if(getChild(i) instanceof SwingLayoutNode) {
+                ((SwingLayoutNode) getChild(i)).invalidate();
+            }
+        }
+        getProxyComponent().invalidate();
     }
 }

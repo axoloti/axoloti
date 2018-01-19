@@ -1,7 +1,7 @@
 package axoloti.piccolo.components.displays;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.patch.PatchPNode;
 
 public abstract class PDispComponentAbstract extends PatchPNode {
 

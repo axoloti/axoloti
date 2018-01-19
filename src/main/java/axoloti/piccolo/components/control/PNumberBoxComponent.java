@@ -102,7 +102,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
                 if (v < min) {
                     v = min;
                 }
-                setValue(v);
+                fireValue(v);
             }
         }
     }
@@ -121,12 +121,12 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
                 if (localPosition.y > getHeight() / 2) {
                     hiliteDown = true;
                     fireEventAdjustmentBegin();
-                    setValue(value - tick);
+                    fireValue(value - tick);
                     fireEventAdjustmentFinished();
                 } else {
                     hiliteUp = true;
                     fireEventAdjustmentBegin();
-                    setValue(value + tick);
+                    fireValue(value + tick);
                     fireEventAdjustmentFinished();
                 }
             } else {
@@ -175,41 +175,41 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
                 case KeyEvent.VK_UP:
                 case KeyEvent.VK_RIGHT:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() + steps);
+                    fireValue(getValue() + steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_DOWN:
                 case KeyEvent.VK_LEFT:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() - steps);
+                    fireValue(getValue() - steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_PAGE_UP:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() + 5 * steps);
+                    fireValue(getValue() + 5 * steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_PAGE_DOWN:
                     fireEventAdjustmentBegin();
-                    setValue(getValue() - 5 * steps);
+                    fireValue(getValue() - 5 * steps);
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_HOME:
                     fireEventAdjustmentBegin();
-                    setValue(getMin());
+                    fireValue(getMin());
                     fireEventAdjustmentFinished();
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_END:
                     fireEventAdjustmentBegin();
-                    setValue(getMax());
+                    fireValue(getMax());
                     fireEventAdjustmentFinished();
                     ke.setHandled(true);
                     break;
                 case KeyEvent.VK_ENTER:
                     fireEventAdjustmentBegin();
                     try {
-                        setValue(Float.parseFloat(keybBuffer));
+                        fireValue(Float.parseFloat(keybBuffer));
                     } catch (java.lang.NumberFormatException ex) {
                     }
                     fireEventAdjustmentFinished();
@@ -347,6 +347,10 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
         }
 
         repaint();
+    }
+
+    public void fireValue(double value) {
+        setValue(value);
         fireEvent();
     }
 

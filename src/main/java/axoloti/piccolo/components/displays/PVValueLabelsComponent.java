@@ -2,7 +2,7 @@ package axoloti.piccolo.components.displays;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
-import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.patch.PatchPNode;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

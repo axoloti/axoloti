@@ -1,8 +1,8 @@
 package axoloti.piccolo.components;
 
 import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchViewPiccolo;
-import axoloti.piccolo.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.piccolo.patch.PatchPNode;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;

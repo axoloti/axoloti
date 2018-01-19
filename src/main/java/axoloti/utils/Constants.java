@@ -27,7 +27,6 @@ import java.awt.Font;
 public class Constants {
 
     public static final Font FONT = Font.decode("Lucida Sans Regular 9");
-    public static final Font FONT_DIAL = Font.decode("Lucida Sans Regular 8");
 
     public static final int X_GRID = 14;
     public static final int Y_GRID = 14;
@@ -40,8 +39,8 @@ public class Constants {
     public static final String DRAGGED_OBJECT_LAYER_PANEL = "DRAGGED_OBJECT_LAYER_PANEL";
 
     public static final String TEMP_OBJECT_SUFFIX = "____tmp";
-    
+
     public static final double PICCOLO_VIEW_SCALE_UPPER_BOUND = 40.0d;
     public static final double PICCOLO_VIEW_SCALE_LOWER_BOUND = 0.1d;
-    
+
 }
