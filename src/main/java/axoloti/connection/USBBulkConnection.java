@@ -534,6 +534,16 @@ public class USBBulkConnection extends IConnection {
     }
 
     @Override
+    public void TransmitStart(String patchName) {
+        throw new Error("not implemented");
+    }
+
+    @Override
+    public void TransmitStart(int patchIndex) {
+        throw new Error("not implemented");
+    }
+
+    @Override
     public void TransmitStop() {
         writeBytes(stopPckt);
     }

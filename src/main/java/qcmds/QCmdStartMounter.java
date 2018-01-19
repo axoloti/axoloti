@@ -24,7 +24,7 @@ package qcmds;
 public class QCmdStartMounter extends QCmdStart {
 
     public QCmdStartMounter() {
-        super(null);
+        super();
     }
 
     @Override

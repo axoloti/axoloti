@@ -614,6 +614,36 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
+    public void TransmitStart(String patchName) {
+        byte b[] = new byte[4 + patchName.length() + 1];
+        b[0] = startPckt[0];
+        b[1] = startPckt[1];
+        b[2] = startPckt[2];
+        b[3] = startPckt[3];
+        int i;
+        for (i = 0; i < patchName.length(); i++) {
+            b[i + 4] = (byte) patchName.charAt(i);
+        }
+        b[i + 4] = (byte) 0;
+        writeBytes(b);
+    }
+
+    @Override
+    public void TransmitStart(int patchIndex) {
+        byte b[] = new byte[8];
+        b[0] = startPckt[0];
+        b[1] = startPckt[1];
+        b[2] = startPckt[2];
+        b[3] = startPckt[3];
+        int i;
+        for (i = 0; i < 4; i++) {
+            b[i + 4] = (byte) (patchIndex);
+            patchIndex >>= 8;
+        }
+        writeBytes(b);
+    }
+
+    @Override
     public void TransmitStop() {
         writeBytes(stopPckt);
     }
@@ -940,6 +970,7 @@ public class USBBulkConnection_v2 extends IConnection {
                     default:
                         String err = LibUsb.errorName(result);
                         Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "receive error: " + err);
+                        disconnectRequested = true;
                         GoIdleState();
                         disconnect();
                         break;

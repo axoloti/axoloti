@@ -43,6 +43,8 @@ public abstract class IConnection extends View<TargetController> {
     abstract public void SelectPort();
     abstract public void TransmitStop();
     abstract public void TransmitStart();
+    abstract public void TransmitStart(String patchName);
+    abstract public void TransmitStart(int patchIndex);
     abstract public void TransmitPing();
     abstract public void TransmitRecallPreset(int presetNo);
     abstract public void UploadFragment(byte[] buffer, int offset);

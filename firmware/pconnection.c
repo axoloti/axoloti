@@ -220,7 +220,8 @@ static msg_t bulk_tx_filecontents(void) {
     while (1) {
 		FRESULT err = f_read(&pFile, (char *)fbuff, 64,
 					  (void *)&bytes_read);
-		m = BulkUsbTransmit((char *)fbuff, bytes_read);
+		(void)err;
+		m = BulkUsbTransmit((uint8_t *)fbuff, bytes_read);
 		if (bytes_read < 64) break;
     }
     f_close(&pFile);
@@ -539,6 +540,16 @@ typedef struct rcv_pckt_offset_value rcv_pckt_memwrx_t;
 
 typedef struct {
    uint32_t header;
+   uint32_t patch_index;
+} rcv_pckt_start1_t;
+
+typedef struct {
+   uint32_t header;
+   char patch_name[];
+} rcv_pckt_start2_t;
+
+typedef struct {
+   uint32_t header;
    uint32_t patch_id;
    int32_t value;
    uint16_t index;
@@ -745,9 +756,21 @@ static THD_FUNCTION(BulkReader, arg) {
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
       } else if (header == rcv_hdr_start) {
     	  // Axos : start patch
-          loadPatchIndex = LIVE;
-          StartPatch();
-    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+    	  if (msg == 4) {
+    		  // just start what's in memory
+			  loadPatchIndex = LIVE;
+			  StartPatch();
+			  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+    	  } else if (bulk_rxbuf[5] == 0) {
+    		  // load patch from index
+    		  rcv_pckt_start1_t *rcv_pckt_start1 = (rcv_pckt_start1_t *)(bulk_rxbuf);
+    		  int32_t index = rcv_pckt_start1->patch_index;
+    		  LoadPatchIndexed(index);
+    	  } else {
+    		  // load patch by name
+    		  rcv_pckt_start2_t *rcv_pckt_start2 = (rcv_pckt_start2_t *)(bulk_rxbuf);
+    		  LoadPatch(rcv_pckt_start2->patch_name);
+    	  }
       } else if (header == rcv_hdr_memwr) {
     	  // AxoW : write memory
     	  rcv_pckt_memwrx_t *p = (rcv_pckt_memwrx_t *)bulk_rxbuf;

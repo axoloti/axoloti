@@ -54,6 +54,7 @@ import qcmds.QCmdDeleteFile;
 import qcmds.QCmdGetFileContents;
 import qcmds.QCmdGetFileList;
 import qcmds.QCmdProcessor;
+import qcmds.QCmdStart;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadFile;
 
@@ -492,6 +493,9 @@ public class FileManagerFrame extends TJFrame {
                         }
                         InputStream inputStream = new ByteBufferBackedInputStream(mem);
                         PatchBank.OpenPatchBankEditor(inputStream, f.getFilename());
+                    } else if (f.getFilename().endsWith("/patch.bin")) {
+                        String patchname = f.getFilename();
+                        processor.AppendToQueue(new QCmdStart(patchname));
                     } else if (f.getFilename().endsWith("/patch.axp")) {
                         // convert "/xyz/patch.axp" into "xyz.axp"
                         String patchname = f.getFilename().substring(0, f.getFilename().length() - 10) + ".axp";
@@ -500,10 +504,22 @@ public class FileManagerFrame extends TJFrame {
                         }
                         InputStream input = new ByteBufferBackedInputStream(mem);
                         PatchViewSwing.OpenPatch(patchname, input);
+                    } else if (f.getExtension().equals("axr")) {
+                        System.out.println("midi routing file contents:");
+                        while (mem.remaining() > 0) {
+                            int i = mem.getInt();
+                            for (int j = 0; j < 32; j++) {
+                                System.out.print((i & 1) == 1 ? "1" : "0");
+                                i = i>>1;
+                            }
+                            System.out.println();
+                        }
+                        System.out.println();
                     } else {
                         System.out.println("file contents:");
                         while (mem.remaining() > 0) {
                             System.out.print((char) mem.get());
+//                            System.out.print(String.format("%02X\n", mem.get()));
                         }
                         System.out.println();
                     }

@@ -24,7 +24,7 @@ package qcmds;
 public class QCmdStartFlasher extends QCmdStart {
 
     public QCmdStartFlasher() {
-        super(null);
+        super();
     }
 
     @Override
