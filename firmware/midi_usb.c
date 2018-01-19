@@ -43,7 +43,7 @@ midi_routing_t midi_inputmap_usbd = {
 midi_routing_t midi_outputmap_usbd = {
 			.name = "USB device",
 			.nports = 1,
-			.bmvports = {0b0000000000000010}
+			.bmvports = {0b0000000000000001}
 };
 
 static thread_t * thd_usbd_midi_out;
@@ -114,6 +114,8 @@ static void notify(void *obj) {
 }
 
 void midi_usb_init(void) {
+	load_midi_routing(&midi_inputmap_usbd, in);
+	load_midi_routing(&midi_outputmap_usbd, out);
 	midi_output_buffer_objinit(&midi_output_usbd, notify);
 	thd_usbd_midi_out = chThdCreateStatic(waUsbd_midi_out, sizeof(waUsbd_midi_out), NORMALPRIO, usbd_midi_out, NULL);
 	thd_usbd_midi_in =  chThdCreateStatic(waUsbd_midi_in, sizeof(waUsbd_midi_in), NORMALPRIO, usbd_midi_in, NULL);

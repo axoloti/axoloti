@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
+import qcmds.QCmdCreateDirectory;
+import qcmds.QCmdProcessor;
 
 /**
  *
@@ -26,6 +28,7 @@ public class MidiRouting extends TJFrame {
     MidiOutputRoutingTable[] outputRoutingTables;
 
     JButton buttonRefresh;
+    JButton buttonWriteSettings;
 
     public MidiRouting(TargetController controller) {
         super(controller);
@@ -254,7 +257,7 @@ public class MidiRouting extends TJFrame {
         JScrollPane scrollpane_out = new JScrollPane(table_midi_out_routing);
         JPanel vPane = new JPanel();
         vPane.setLayout(new BoxLayout(vPane, BoxLayout.PAGE_AXIS));
-        vPane.add(new JLabel("todo: allow creating/storing devicename based rules..."));
+        vPane.add(new JLabel("todo: deploy virtual midi ports..."));
         vPane.add(scrollpane_in);
         vPane.add(scrollpane_out);
         JPanel bPane = new JPanel();
@@ -267,6 +270,14 @@ public class MidiRouting extends TJFrame {
             }
         });
         bPane.add(buttonRefresh);
+        buttonWriteSettings = new JButton("Write settings");
+        buttonWriteSettings.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                writeSettings();
+            }
+        });
+        bPane.add(buttonWriteSettings);
         vPane.add(bPane);
         this.add(vPane);
     }
@@ -275,10 +286,30 @@ public class MidiRouting extends TJFrame {
         table_midi_in_routing.setEnabled(connected);
         table_midi_out_routing.setEnabled(connected);
         buttonRefresh.setEnabled(connected);
+        buttonWriteSettings.setEnabled(connected);
     }
 
     void apply() {
         getController().getModel().applyToTarget();
+    }
+
+    void writeSettings() {
+        QCmdProcessor p = QCmdProcessor.getQCmdProcessor();
+        p.AppendToQueue(new QCmdCreateDirectory("/settings"));
+        p.AppendToQueue(new QCmdCreateDirectory("/settings/midi-in"));
+        p.AppendToQueue(new QCmdCreateDirectory("/settings/midi-out"));
+        for (MidiOutputRoutingTable mort : outputRoutingTables) {
+            if (mort == null) {
+                continue;
+            }
+            mort.upload();
+        }
+        for (MidiInputRoutingTable mirt : inputRoutingTables) {
+            if (mirt == null) {
+                continue;
+            }
+            mirt.upload();
+        }
     }
 
     final String[] ColumnIds = {

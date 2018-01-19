@@ -139,13 +139,13 @@
 #define HAL_USBH_USE_HUB                              TRUE
 
 #define HAL_USBHHUB_MAX_INSTANCES                     1
-#define HAL_USBHHUB_MAX_PORTS                         7
+#define HAL_USBHHUB_MAX_PORTS                         4
 
 #define HAL_USBH_USE_ADDITIONAL_CLASS_DRIVERS		  TRUE
 
 
 /* debug */
-#define USBH_DEBUG_ENABLE                             1
+#define USBH_DEBUG_ENABLE                             0
 #define USBH_DEBUG_USBHD                              USBHD2
 #define USBH_DEBUG_SD                                 SD2
 #define USBH_DEBUG_BUFFER                             500 /* was 25000 */

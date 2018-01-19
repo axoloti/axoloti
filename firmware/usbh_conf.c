@@ -8,6 +8,7 @@
 #endif
 #include "usbh_patch.h"
 #include "usbh_conf.h"
+#include "midi_routing.h"
 
 /* notes:
  * * debugging is active on SD2
@@ -147,7 +148,7 @@ static void notify_midi_usbh2(void *obj) {
   chEvtSignal(thd_midi_usbh_out,1<<1);
 }
 
-static THD_WORKING_AREA(waUSBHPnP, 256	);
+static THD_WORKING_AREA(waUSBHPnP, 960	);
 static void ThreadUSBHPnP(void *p) {
 	(void) p;
 
@@ -174,19 +175,21 @@ static void ThreadUSBHPnP(void *p) {
     for (;;) {
         for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
             if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
-                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
+//                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
                 usbhmidiStart(&USBHMIDID[i]);
                 USBHMIDIC[i].in_mapping->name = USBHMIDID[i].name;
 				USBHMIDIC[i].in_mapping->nports = USBHMIDID[i].nInputPorts;
                 USBHMIDIC[i].out_mapping->name = USBHMIDID[i].name;
 				USBHMIDIC[i].out_mapping->nports = USBHMIDID[i].nOutputPorts;
+				load_midi_routing(USBHMIDIC[i].in_mapping, in);
+				load_midi_routing(USBHMIDIC[i].out_mapping, out);
             }
         }
 
 #if HAL_USBH_USE_HID
 		for (i = 0; i < HAL_USBHHID_MAX_INSTANCES; i++) {
 			if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_ACTIVE) {
-				usbDbgPrintf("HID: Connected, HID%d", i);
+//				usbDbgPrintf("HID: Connected, HID%d", i);
 				usbhhidStart(&USBHHIDD[i], &hidcfg[i]);
 				if (usbhhidGetType(&USBHHIDD[i]) != USBHHID_DEVTYPE_GENERIC) {
 					usbhhidSetIdle(&USBHHIDD[i], 0, 0);

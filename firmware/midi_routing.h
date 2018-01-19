@@ -47,4 +47,12 @@ typedef struct {
  * how to trap midi/break feedback loops?
  */
 
+enum direction {
+ in,
+ out
+};
+
+extern void load_midi_routing(midi_routing_t *routing, enum direction dir);
+extern void store_midi_routing(midi_routing_t *routing, enum direction dir);
+
 #endif

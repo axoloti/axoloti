@@ -211,6 +211,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/axoloti_oscs.c \
        ${FIRMWARE}/axoloti_board.c \
        ${FIRMWARE}/midi.c \
+       ${FIRMWARE}/midi_routing.c \
        ${FIRMWARE}/midi_usb.c \
        ${FIRMWARE}/ui.c \
        ${FIRMWARE}/glcdfont.c \

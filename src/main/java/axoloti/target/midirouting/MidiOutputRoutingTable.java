@@ -7,11 +7,17 @@ import axoloti.mvc.AbstractModel;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import qcmds.QCmdMemRead;
+import qcmds.QCmdProcessor;
+import qcmds.QCmdUploadFile;
 import qcmds.QCmdWriteMem;
 
 /**
@@ -118,5 +124,27 @@ public class MidiOutputRoutingTable extends AbstractModel {
         firePropertyChange(
                 MORT_MAPPING,
                 null, vports);
+    }
+
+    public void upload() {
+        if (vports == null) {
+            return;
+        }
+        String fn = "/settings/midi-out/" + getPortName() + ".axr";
+        ByteBuffer bb = ByteBuffer.allocateDirect(vports.length * 4);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+        bb.asIntBuffer().put(vports);
+        byte b[] = new byte[vports.length * 4];
+        bb.rewind();
+        bb.get(b);
+        InputStream is = new ByteArrayInputStream(b);
+        QCmdProcessor p = QCmdProcessor.getQCmdProcessor();
+        p.AppendToQueue(new QCmdUploadFile(is, fn));
+        try {
+            p.WaitQueueFinished();
+        } catch (Exception ex) {
+            Logger.getLogger(MidiOutputRoutingTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }
