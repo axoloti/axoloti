@@ -283,6 +283,14 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="targetMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Board"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetMenu(axoloti.target.TargetController.getTargetController())"/>
+          </AuxValues>
+        </Menu>
         <Menu class="axoloti.swingui.menus.WindowMenu" name="windowMenu1">
         </Menu>
         <Menu class="axoloti.swingui.menus.HelpMenu" name="helpMenu1">

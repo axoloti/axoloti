@@ -17,8 +17,26 @@
  */
 package axoloti.swingui.patch;
 
-import static axoloti.patch.PatchViewType.PICCOLO;
-
+import axoloti.ConnectionStatusListener;
+import axoloti.FileUtils;
+import axoloti.abstractui.DocumentWindow;
+import axoloti.abstractui.DocumentWindowList;
+import axoloti.abstractui.PatchView;
+import axoloti.connection.CConnection;
+import axoloti.mvc.IView;
+import axoloti.mvc.UndoUI;
+import axoloti.object.AxoObjects;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.preferences.Preferences;
+import axoloti.swingui.TextEditor;
+import axoloti.swingui.components.PresetPanel;
+import axoloti.swingui.components.VisibleCablePanel;
+import axoloti.target.fs.SDCardMountStatusListener;
+import axoloti.utils.KeyUtils;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -41,7 +59,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -49,31 +66,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
-
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-
-import axoloti.ConnectionStatusListener;
-import axoloti.FileUtils;
-import axoloti.abstractui.DocumentWindow;
-import axoloti.abstractui.DocumentWindowList;
-import axoloti.abstractui.PatchView;
-import axoloti.connection.CConnection;
-import axoloti.mvc.IView;
-import axoloti.mvc.UndoUI;
-import axoloti.object.AxoObjects;
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.preferences.Preferences;
-import axoloti.swingui.TextEditor;
-import axoloti.swingui.components.PresetPanel;
-import axoloti.swingui.components.VisibleCablePanel;
-import axoloti.target.fs.SDCardMountStatusListener;
-import axoloti.utils.KeyUtils;
-
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
@@ -486,6 +480,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuItemClearPreset = new javax.swing.JMenuItem();
         jMenuItemPresetCurrentToInit = new javax.swing.JMenuItem();
         jMenuItemDifferenceToPreset = new javax.swing.JMenuItem();
+        targetMenu = new axoloti.swingui.target.TargetMenu(axoloti.target.TargetController.getTargetController());
         windowMenu1 = new axoloti.swingui.menus.WindowMenu();
         helpMenu1 = new axoloti.swingui.menus.HelpMenu();
 
@@ -789,6 +784,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jMenuPreset.add(jMenuItemDifferenceToPreset);
 
         jMenuBar1.add(jMenuPreset);
+
+        targetMenu.setText("Board");
+        jMenuBar1.add(targetMenu);
         jMenuBar1.add(windowMenu1);
 
         helpMenu1.setText("Help");
@@ -1164,6 +1162,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JPopupMenu.Separator jSeparator5;
     private javax.swing.JPanel jToolbarPanel;
+    private javax.swing.JMenu targetMenu;
     private axoloti.swingui.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 
