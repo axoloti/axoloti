@@ -70,6 +70,7 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
         patchController.addView(p);
         jScrollPane1.setViewportView(p);
          */
+        setVisible(true);
     }
 
     /**
@@ -492,12 +493,6 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
             jCheckBoxHasChannelAttrib.setSelected((Boolean)evt.getNewValue());
         } else {
         }
-    }
-
-    @Override
-    public void toFront() {
-        setState(java.awt.Frame.NORMAL);
-        super.toFront();
     }
 
 }

@@ -219,7 +219,7 @@ public class FileMenu extends JMenu {
     private javax.swing.JMenuItem jMenuAutoTest;
 
     private void jMenuItemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {
-        PreferencesFrame.GetPreferencesFrame().toFront();
+        PreferencesFrame pf = new PreferencesFrame();
     }
 
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {

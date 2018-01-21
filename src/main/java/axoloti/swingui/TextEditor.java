@@ -58,6 +58,7 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
         textArea.setVisible(true);
         setContentPane(cp);
         textArea.setText(stringProperty.get(controller.getModel()));
+        setVisible(true);
     }
 
     public void SetText(String s) {
@@ -156,9 +157,4 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
         getController().removeView(this);
     }
 
-    @Override
-    public void toFront() {
-        setState(java.awt.Frame.NORMAL);
-        super.toFront();
-    }
 }

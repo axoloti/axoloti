@@ -69,6 +69,9 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
 
     @Override
     public void toFront() {
+        if (!isVisible()) {
+            setVisible(true);
+        }
         setState(java.awt.Frame.NORMAL);
         super.toFront();
     }

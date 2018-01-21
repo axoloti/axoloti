@@ -36,7 +36,6 @@ import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
-import axoloti.swingui.preferences.PreferencesFrame;
 import axoloti.swingui.preferences.ThemeEditor;
 import axoloti.swingui.target.TJFrame;
 import axoloti.target.TargetController;
@@ -554,7 +553,6 @@ public final class MainFrame extends TJFrame implements ActionListener {
         }
     }//GEN-LAST:event_jCheckBoxConnectActionPerformed
 
-    PreferencesFrame pp;
 // usually we run all tests, as many may fail for same reason and you want
 // a list of all affected files, but if you want to stop on first failure, flip this flag
     public static boolean stopOnFirstFail = false;

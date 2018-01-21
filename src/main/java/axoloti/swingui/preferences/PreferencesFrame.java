@@ -17,12 +17,12 @@
  */
 package axoloti.swingui.preferences;
 
+import axoloti.preferences.Preferences;
 import axoloti.swingui.MainFrame;
+import axoloti.swingui.dialogs.AxolotiLibraryEditor;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.preferences.Preferences;
-import axoloti.swingui.dialogs.AxolotiLibraryEditor;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -39,22 +39,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Johannes Taelman
  */
-public class PreferencesFrame extends javax.swing.JFrame {
-
-    static PreferencesFrame singleton = null;
-
-    public static PreferencesFrame GetPreferencesFrame() {
-        if (singleton == null) {
-            singleton = new PreferencesFrame();
-        }
-        return singleton;
-    }
+public class PreferencesFrame extends javax.swing.JDialog {
 
     /**
      * Creates new form PreferencesFrame
      *
      */
-    private PreferencesFrame() {
+    public PreferencesFrame() {
         initComponents();
         Preferences prefs = Preferences.getPreferences();
         jTextFieldPollInterval.setText(Integer.toString(prefs.getPollInterval()));
@@ -120,6 +111,8 @@ public class PreferencesFrame extends javax.swing.JFrame {
 //                prefs.SavePrefs();
 //            }
 //        });
+        setModal(true);
+        setVisible(true);
     }
 
     void Apply() {
@@ -559,7 +552,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
 
     private void jAddLibBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddLibBtnActionPerformed
 
-        AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true);
+        AxolotiLibraryEditor d = new AxolotiLibraryEditor(null, true);
         AxolotiLibrary lib = d.getLibrary();
 
         AxolotiLibrary newlib;
@@ -630,7 +623,7 @@ public class PreferencesFrame extends javax.swing.JFrame {
             AxolotiLibrary lib = Preferences.getPreferences().getLibrary(id);
             if (lib != null) {
                 String type = lib.getType();
-                AxolotiLibraryEditor d = new AxolotiLibraryEditor(this, true, lib);
+                AxolotiLibraryEditor d = new AxolotiLibraryEditor(null, true, lib);
                 AxolotiLibrary updlib = lib;
                 if (!lib.getType().equals(type)) {
                     if (AxoGitLibrary.TYPE.equals(lib.getType())) {
