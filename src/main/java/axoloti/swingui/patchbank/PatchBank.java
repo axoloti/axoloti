@@ -700,6 +700,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             PatchBankController c = new PatchBankController(b, documentRoot, null);
             PatchBank bv = new PatchBank(c);
+            documentRoot.getUndoManager().discardAllEdits();
             c.addView(bv);
             bv.setVisible(true);
             bv.toFront();
