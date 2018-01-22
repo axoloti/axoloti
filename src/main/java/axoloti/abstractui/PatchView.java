@@ -350,6 +350,7 @@ public abstract class PatchView extends PatchAbstractView {
         long ChronoStart = Calendar.getInstance().getTimeInMillis();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         PatchController patchController = new PatchController(pm, documentRoot, null);
+        documentRoot.getUndoManager().discardAllEdits();
         long ChronoControllerCreated = Calendar.getInstance().getTimeInMillis();
         System.out.println("ChronoControllerCreated " + (ChronoControllerCreated - ChronoStart));
         PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
