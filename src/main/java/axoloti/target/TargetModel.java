@@ -204,16 +204,16 @@ public class TargetModel extends AbstractModel {
         setFirmwareLinkID(FirmwareID.getFirmwareID());
     }
 
-    public void flashUsingSDRam(String fname_flasher, String pname) {
+    public void flashUsingSDRam(String fname_flasher, String fname_fw) {
         updateLinkFirmwareID();
-        File p = new File(pname);
+        File p = new File(fname_fw);
         if (p.canRead()) {
             QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStop());
             QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdUploadFWSDRam(p));
             QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdUploadPatch(fname_flasher));
             QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStartFlasher());
         } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", pname);
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", fname_fw);
         }
     }
 

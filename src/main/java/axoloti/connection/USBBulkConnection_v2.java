@@ -18,8 +18,8 @@
 package axoloti.connection;
 
 /**
- * Replaces the old packet-over-serial protocol with vendor-specific usb bulk
- * transport
+ * Replaces the old packets-over-bytestream protocol on vendor-specific usb bulk
+ * transport with usb packets on vendor-specific usb bulk transport.
  */
 import axoloti.HWSignature;
 import axoloti.chunks.ChunkParser;
@@ -35,6 +35,7 @@ import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
 import axoloti.target.fs.SDCardInfo;
 import axoloti.targetprofile.axoloti_core;
+import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
@@ -48,6 +49,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.CRC32;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.usb4java.*;
 import qcmds.QCmd;
@@ -77,6 +79,7 @@ public class USBBulkConnection_v2 extends IConnection {
     private DeviceHandle handle;
     private final int interfaceNumber = 2;
     private String firmwareID;
+    private boolean old_protocol = false;
 
     protected USBBulkConnection_v2(TargetController controller) {
         super(controller);
@@ -190,6 +193,7 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public boolean connect(String _cpuid) {
         disconnect();
+        old_protocol = false;
         disconnectRequested = false;
         synchronized (sync) {
             sync.ready = true;
@@ -214,9 +218,6 @@ public class USBBulkConnection_v2 extends IConnection {
 
             GoIdleState();
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
-            transmitterThread = new Thread(new Transmitter());
-            transmitterThread.setName("Transmitter");
-            transmitterThread.start();
             receiverThread = new Thread(new Receiver());
             receiverThread.setName("Receiver");
             receiverThread.start();
@@ -230,19 +231,34 @@ public class USBBulkConnection_v2 extends IConnection {
             connected = true;
             ClearSync();
             TransmitPing();
+            TransmitPing();
             WaitSync();
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
+            if (old_protocol) {
+//                throw new Error("old protocol");
+                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, "upgrading...");
+                disconnect1();
+                int r = JOptionPane.showConfirmDialog((Component) null, "Firmware version 1.0.12 detected, upgrade to experimental firmware?",
+                        "alert", JOptionPane.OK_CANCEL_OPTION);
+                if (r == JOptionPane.OK_OPTION) {
+                    handle = OpenDeviceHandle(_cpuid);
+                    FirmwareUpgrade_1_0_12 fwUpgrade = new FirmwareUpgrade_1_0_12(handle);
+                }
+                return false;
+            }
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "connected");
-
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
             }
+            transmitterThread = new Thread(new Transmitter());
+            transmitterThread.setName("Transmitter");
+            transmitterThread.start();
 
             qcmdp.AppendToQueue(new QCmdTransmitGetFWVersion());
             try {
@@ -1356,7 +1372,7 @@ public class USBBulkConnection_v2 extends IConnection {
                             patchentrypoint1 += (rbuf.get() & 0xFF);
                             patchentrypoint = patchentrypoint1;
                             String sFwcrc = String.format("%08X", fwcrc);
-                            Logger.getLogger(USBBulkConnection.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
                                     fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
                             firmwareID = sFwcrc;
                             GoIdleState();
@@ -1381,7 +1397,7 @@ public class USBBulkConnection_v2 extends IConnection {
                             }
                             textRcvBuffer.limit(textRcvBuffer.position());
                             textRcvBuffer.rewind();
-                            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                         }
                         break;
                         case tx_hdr_memrdx:
@@ -1439,8 +1455,23 @@ public class USBBulkConnection_v2 extends IConnection {
                             TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                         }
                         break;
+                        case 0x00416f78: {
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Old version of firmware (1.x) detected");
+                            while (rbuf.hasRemaining()) {
+                                byte b = rbuf.get();
+                                System.out.println(String.format("   data %02x (%c)", b, (char) b));
+                            }
+                            old_protocol = true;
+                            disconnectRequested = true;
+                        }
+                        break;
                         default:
-                            System.out.println(String.format("lost header %8x", header));
+                            System.out.println(String.format("lost header %08x (%c%c%c%c)", header,
+                                    (char) (byte) (header), (char) (byte) (header >> 8), (char) (byte) (header >> 16), (char) (byte) (header >> 24)));
+                            while (rbuf.hasRemaining()) {
+                                byte b = rbuf.get();
+                                System.out.println(String.format("   data %02x (%c)", b, (char) b));
+                            }
                     }
                 }
             }
@@ -1451,7 +1482,7 @@ public class USBBulkConnection_v2 extends IConnection {
                     if (b==0) {
                         textRcvBuffer.limit(textRcvBuffer.position());
                         textRcvBuffer.rewind();
-                        Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                         GoIdleState();
                     } else {
                         if (textRcvBuffer.position() < textRcvBuffer.limit()) {
@@ -1460,7 +1491,7 @@ public class USBBulkConnection_v2 extends IConnection {
                             System.out.println("textRcvBuffer overflow :" + (char)b);
                             textRcvBuffer.limit(textRcvBuffer.position());
                             textRcvBuffer.rewind();
-                            Logger.getLogger(USBBulkConnection.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
                             textRcvBuffer.limit(textRcvBuffer.capacity());
                             textRcvBuffer.rewind();
                             textRcvBuffer.append((char)b);                        

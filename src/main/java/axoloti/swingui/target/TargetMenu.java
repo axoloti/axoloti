@@ -1,6 +1,7 @@
 package axoloti.swingui.target;
 
 import axoloti.Axoloti;
+import axoloti.connection.FirmwareUpgrade_1_0_12;
 import axoloti.connection.IConnection;
 import axoloti.mvc.IView;
 import axoloti.preferences.Preferences;
@@ -35,6 +36,8 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     private JMenuItem jMenuItemFDisconnect;
     private JMenuItem jMenuItemFlashDFU;
     private JMenuItem jMenuItemFlashDefault;
+    private JMenuItem jMenuItemFlashDowngrade;
+    private JMenuItem jMenuItemFlashUpgrade_v1_v2;
     private JMenuItem jMenuItemFlashSDR;
     private JMenuItem jMenuItemMount;
     private JMenuItem jMenuItemPanic;
@@ -114,6 +117,23 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
             }
         });
         jMenuFirmware.add(jMenuItemFlashDefault);
+
+        jMenuItemFlashDowngrade = new JMenuItem("Flash downgrade to 1.0.12");
+        jMenuItemFlashDowngrade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFlashDowngradeActionPerformed(evt);
+            }
+        });
+        jMenuFirmware.add(jMenuItemFlashDowngrade);
+
+        jMenuItemFlashUpgrade_v1_v2 = new JMenuItem("Flash upgrade 1.x to 2.0");
+        jMenuItemFlashUpgrade_v1_v2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemFlashUpgrade_v1_v2_ActionPerformed(evt);
+            }
+        });
+        // auto-detected, we do not need to access this manually
+        //jMenuFirmware.add(jMenuItemFlashUpgrade_v1_v2);
 
         jMenuItemFlashDFU = new JMenuItem("Flash (Rescue)");
         jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
@@ -279,6 +299,16 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
         getController().getModel().flashUsingSDRam(fname, pname);
+    }
+
+    private void jMenuItemFlashDowngradeActionPerformed(java.awt.event.ActionEvent evt) {
+        String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/old_firmware/firmware-1.0.12/axoloti.bin";
+        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
+        getController().getModel().flashUsingSDRam(fname, pname);
+    }
+
+    private void jMenuItemFlashUpgrade_v1_v2_ActionPerformed(java.awt.event.ActionEvent evt) {
+        FirmwareUpgrade_1_0_12 firmwareUpgrade = new FirmwareUpgrade_1_0_12(IConnection.OpenDeviceHandle(null));
     }
 
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {
