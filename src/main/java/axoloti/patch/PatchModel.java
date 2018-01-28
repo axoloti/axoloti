@@ -20,25 +20,26 @@ package axoloti.patch;
 import axoloti.Axoloti;
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.patch.net.Net;
-import axoloti.preset.Preset;
 import axoloti.Version;
+import axoloti.mvc.AbstractModel;
+import axoloti.object.AxoObjectPatcher;
+import axoloti.object.AxoObjects;
+import axoloti.object.IAxoObject;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.mvc.AbstractModel;
+import axoloti.patch.net.Net;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceComment;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.AxoObjectInstancePatcherObject;
 import axoloti.patch.object.AxoObjectInstanceZombie;
-import axoloti.object.AxoObjectPatcher;
-import axoloti.object.AxoObjects;
-import axoloti.object.IAxoObject;
 import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.preferences.Preferences;
+import axoloti.preset.Preset;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
 import axoloti.property.ObjectProperty;
@@ -47,7 +48,6 @@ import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.preferences.Preferences;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -689,6 +689,11 @@ public class PatchModel extends AbstractModel {
         return windowPos;
     }
 
+    public void setWindowPos(Rectangle windowPos) {
+        this.windowPos = windowPos;
+        firePropertyChange(PATCH_WINDOWPOS, null, windowPos);
+    }
+
     public String getNotes() {
         return notes;
     }
@@ -767,6 +772,7 @@ public class PatchModel extends AbstractModel {
     public final static Property PATCH_MIDICHANNEL = new IntegerProperty("MidiChannel", PatchModel.class);
     public final static Property PATCH_MIDISELECTOR = new BooleanProperty("MidiSelector", PatchModel.class);
     public final static StringProperty PATCH_NOTES = new StringProperty("Notes", PatchModel.class);
+    public final static Property PATCH_WINDOWPOS = new ObjectProperty("WindowPos", Rectangle.class, PatchModel.class);
 
     @Override
     public List<Property> getProperties() {
@@ -786,6 +792,7 @@ public class PatchModel extends AbstractModel {
         l.add(PATCH_NMODULATIONTARGETSPERSOURCE);
         l.add(PATCH_MIDICHANNEL);
         l.add(PATCH_MIDISELECTOR);
+        l.add(PATCH_WINDOWPOS);
         return l;
     }
     

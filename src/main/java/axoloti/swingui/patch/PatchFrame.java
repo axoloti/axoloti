@@ -48,6 +48,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -273,6 +275,24 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         });
 
+        addComponentListener(new ComponentAdapter() {
+
+            void update() {
+                // this is not an undoable property
+                getPatchModel().setWindowPos(getBounds());
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+                update();
+            }
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                update();
+            }
+        });
+
         patchController.addView(this);
         patchController.addView(patchView);
     }
@@ -321,6 +341,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         return patchController.getModel();
     }
 
+    @Override
     public PatchController getController() {
         return patchController;
     }
@@ -1221,6 +1242,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             ShowDSPLoad((Integer)evt.getNewValue());
         } else if (PatchModel.PATCH_FILENAME.is(evt)) {
             this.setTitle((String)evt.getNewValue());
+        } else if (PatchModel.PATCH_WINDOWPOS.is(evt)) {
+            // do NOT respond to this event
+            // multiple views would track position/size
         }
     }
 
