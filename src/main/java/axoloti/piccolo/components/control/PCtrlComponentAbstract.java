@@ -1,23 +1,19 @@
 package axoloti.piccolo.components.control;
 
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JComponent;
-
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-import org.piccolo2d.event.PInputEventListener;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.components.PFocusable;
-
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_END;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComponent;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
+import org.piccolo2d.event.PInputEventListener;
 
 
 public abstract class PCtrlComponentAbstract extends PatchPNode implements PFocusable {

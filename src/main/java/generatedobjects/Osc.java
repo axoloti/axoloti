@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Bipolar;
@@ -24,7 +25,6 @@ import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.inlet.InletFrac32BufferBipolar;
 import axoloti.object.inlet.InletFrac32Pos;
 import axoloti.object.inlet.InletInt32;
-import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletFrac32Bipolar;
 import axoloti.object.outlet.OutletFrac32BufferBipolar;
 import axoloti.object.outlet.OutletFrac32BufferPos;

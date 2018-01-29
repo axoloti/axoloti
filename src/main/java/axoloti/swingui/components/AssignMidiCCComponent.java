@@ -17,9 +17,9 @@
  */
 package axoloti.swingui.components;
 
-import axoloti.preferences.Theme;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.preferences.Theme;
 import axoloti.property.MidiCCProperty;
 import axoloti.swingui.property.menu.AssignMidiCCMenuItems;
 import axoloti.utils.Constants;

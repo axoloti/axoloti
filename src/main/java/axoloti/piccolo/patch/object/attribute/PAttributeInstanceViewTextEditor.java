@@ -1,13 +1,12 @@
 package axoloti.piccolo.patch.object.attribute;
 
+import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
 import axoloti.piccolo.components.control.PButtonComponent;
 import axoloti.swingui.TextEditor;
 import javax.swing.SwingUtilities;
-
-import axoloti.abstractui.DocumentWindow;
-import axoloti.patch.object.attribute.AttributeInstanceController;
 
 public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 

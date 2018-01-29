@@ -17,17 +17,15 @@
  */
 package axoloti.object.iolet;
 
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.simpleframework.xml.Attribute;
-
 import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.property.Property;
 import axoloti.utils.CharEscape;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.List;
+import org.simpleframework.xml.Attribute;
 
 public abstract class Iolet extends AtomDefinition implements Cloneable {
 

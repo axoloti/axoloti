@@ -38,10 +38,8 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.Iterator;
-
 import javax.swing.JComponent;
 import javax.swing.border.Border;
-
 import org.piccolo2d.PNode;
 
 public class SwingLayoutNode extends PNode {

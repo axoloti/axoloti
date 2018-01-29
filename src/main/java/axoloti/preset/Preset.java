@@ -17,12 +17,7 @@
  */
 package axoloti.preset;
 
-import axoloti.datatypes.Value;
-import axoloti.datatypes.ValueFrac32;
-import axoloti.datatypes.ValueInt32;
 import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementUnion;
 
 /**
  *

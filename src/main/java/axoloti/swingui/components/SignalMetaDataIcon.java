@@ -17,9 +17,9 @@
  */
 package axoloti.swingui.components;
 
-import axoloti.preferences.Theme;
 import axoloti.datatypes.SignalMetaData;
 import static axoloti.datatypes.SignalMetaData.bipolar;
+import axoloti.preferences.Theme;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;

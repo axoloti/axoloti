@@ -1,14 +1,14 @@
 package axoloti.swingui.patch.net;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.INetView;
 import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.object.inlet.InletInstance;
+import axoloti.abstractui.INetView;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
 import java.awt.BasicStroke;
 import java.awt.Color;

@@ -1,15 +1,15 @@
 package axoloti.piccolo.patch.object.inlet;
 
-import axoloti.abstractui.INetView;
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.INetView;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.iolet.IoletInstanceController;
-import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.iolet.PIoletAbstract;
 import axoloti.piccolo.components.PJackInputComponent;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.PSignalMetaDataIcon;
+import axoloti.piccolo.iolet.PIoletAbstract;
+import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import javax.swing.Box;

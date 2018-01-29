@@ -17,8 +17,8 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.display.DisplayInt32Bar16;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.display.DisplayInt32Bar16;
 
 /**
  *

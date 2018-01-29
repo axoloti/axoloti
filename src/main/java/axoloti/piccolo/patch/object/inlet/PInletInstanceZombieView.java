@@ -1,11 +1,10 @@
 package axoloti.piccolo.patch.object.inlet;
 
-import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.object.inlet.InletInstanceZombie;
-import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.piccolo.components.PJackInputComponent;
 import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;

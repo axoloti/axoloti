@@ -17,12 +17,12 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeObjRef;
 import axoloti.object.attribute.AxoAttributeSpinner;
 import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Buffer;
-import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.parameter.ParameterFrac32SMapPitch;

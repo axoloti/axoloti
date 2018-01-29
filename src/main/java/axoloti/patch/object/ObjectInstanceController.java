@@ -1,5 +1,9 @@
 package axoloti.patch.object;
 
+import axoloti.mvc.AbstractController;
+import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.IView;
+import axoloti.mvc.array.ArrayController;
 import axoloti.patch.PatchController;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceController;
@@ -7,10 +11,6 @@ import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.iolet.IoletInstanceController;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.IView;
-import axoloti.mvc.array.ArrayController;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;

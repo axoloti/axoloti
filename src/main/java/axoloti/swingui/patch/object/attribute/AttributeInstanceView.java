@@ -1,12 +1,12 @@
 package axoloti.swingui.patch.object.attribute;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceController;
-import axoloti.swingui.mvc.ViewPanel;
+import axoloti.preferences.Theme;
 import axoloti.swingui.components.LabelComponent;
+import axoloti.swingui.mvc.ViewPanel;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 

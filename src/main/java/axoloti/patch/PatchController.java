@@ -31,6 +31,7 @@ import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.ObjectInstancePatcherController;
 import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Preferences;
@@ -64,8 +65,6 @@ import qcmds.QCmdCompilePatch;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
-
-import axoloti.patch.object.iolet.IoletInstance;
 
 public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
 

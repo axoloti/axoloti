@@ -1,10 +1,9 @@
 package axoloti.abstractui;
 
-import java.awt.Point;
-
 import axoloti.mvc.IView;
 import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.iolet.IoletInstanceController;
+import java.awt.Point;
 
 public interface IIoletInstanceView extends IView<IoletInstanceController> {
 

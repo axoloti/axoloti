@@ -3,8 +3,8 @@ package axoloti.swingui.patch.object.display;
 import axoloti.abstractui.IDisplayInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceController;
-import axoloti.swingui.mvc.ViewPanel;
 import axoloti.swingui.components.LabelComponent;
+import axoloti.swingui.mvc.ViewPanel;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 

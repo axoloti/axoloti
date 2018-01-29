@@ -1,14 +1,8 @@
 
 package axoloti.patch.object;
 
-import axoloti.patch.PatchController;
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.IView;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.parameter.ParameterInstance;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
+import axoloti.patch.PatchController;
 
 /**
  *

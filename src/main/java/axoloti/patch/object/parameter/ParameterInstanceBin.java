@@ -1,8 +1,8 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterBin;
-import axoloti.preset.PresetInt;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.preset.PresetInt;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;

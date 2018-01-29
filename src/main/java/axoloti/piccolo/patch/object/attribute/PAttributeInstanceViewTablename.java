@@ -1,19 +1,16 @@
 package axoloti.piccolo.patch.object.attribute;
 
-import java.awt.Dimension;
-
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceTablename;
 import axoloti.piccolo.components.PTextFieldComponent;
+import java.awt.Dimension;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
 
 public class PAttributeInstanceViewTablename extends PAttributeInstanceViewString {
 

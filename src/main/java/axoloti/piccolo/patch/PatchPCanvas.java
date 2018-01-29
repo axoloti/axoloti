@@ -1,23 +1,19 @@
 package axoloti.piccolo.patch;
 
+import axoloti.abstractui.PatchViewportView;
+import axoloti.piccolo.PUtils;
+import axoloti.preferences.Preferences;
+import axoloti.preferences.Theme;
+import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.InputEvent;
-
 import javax.swing.JComponent;
-
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.extras.swing.PScrollPane;
 import org.piccolo2d.util.PAffineTransform;
 import org.piccolo2d.util.PPaintContext;
-
-import axoloti.abstractui.PatchViewportView;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.piccolo.PUtils;
-import axoloti.preferences.Preferences;
-import axoloti.preferences.Theme;
-import axoloti.utils.Constants;
 
 public class PatchPCanvas extends PSwingCanvas implements PatchViewportView {
 

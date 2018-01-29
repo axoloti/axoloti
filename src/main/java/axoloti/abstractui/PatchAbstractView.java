@@ -1,7 +1,7 @@
 package axoloti.abstractui;
 
-import axoloti.patch.PatchController;
 import axoloti.mvc.View;
+import axoloti.patch.PatchController;
 import axoloti.swingui.patch.PatchFrame;
 
 /**

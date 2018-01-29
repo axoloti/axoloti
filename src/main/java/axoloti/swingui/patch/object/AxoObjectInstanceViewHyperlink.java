@@ -1,11 +1,11 @@
 package axoloti.swingui.patch.object;
 
-import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.swingui.components.LabelComponent;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import axoloti.swingui.components.control.PulseButtonComponent;
+import axoloti.swingui.patch.PatchViewSwing;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

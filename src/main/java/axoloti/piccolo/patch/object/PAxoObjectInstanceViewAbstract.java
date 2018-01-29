@@ -1,5 +1,25 @@
 package axoloti.piccolo.patch.object;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.INetView;
+import axoloti.abstractui.IParameterInstanceView;
+import axoloti.abstractui.PatchView;
+import axoloti.patch.PatchModel;
+import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.components.PPopupIcon;
+import axoloti.piccolo.components.PTextFieldComponent;
+import axoloti.piccolo.patch.PatchPCanvas;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
+import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -11,38 +31,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.border.Border;
-
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-
-import axoloti.abstractui.IAttributeInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IDisplayInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.abstractui.INetView;
-import axoloti.abstractui.IParameterInstanceView;
-import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchModel;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.patch.object.AxoObjectInstance;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.patch.PatchPCanvas;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.components.PLabelComponent;
-import axoloti.piccolo.components.PPopupIcon;
-import axoloti.piccolo.components.PTextFieldComponent;
-import axoloti.preferences.Theme;
-import axoloti.utils.Constants;
 
 public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoObjectInstanceView {
 

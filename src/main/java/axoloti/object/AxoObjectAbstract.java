@@ -18,12 +18,12 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.object.attribute.AxoAttribute;
-import axoloti.object.display.Display;
-import axoloti.object.inlet.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.property.ObjectProperty;

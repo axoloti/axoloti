@@ -1,15 +1,13 @@
 package axoloti.piccolo.patch.object;
 
-import static java.awt.Component.LEFT_ALIGNMENT;
-import static java.awt.Component.TOP_ALIGNMENT;
-
-import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.ObjectInstancePatcherController;
 import axoloti.piccolo.components.control.PButtonComponent;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.swingui.patch.PatchFrame;
-
+import static java.awt.Component.LEFT_ALIGNMENT;
+import static java.awt.Component.TOP_ALIGNMENT;
 import qcmds.QCmdProcessor;
 
 public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {

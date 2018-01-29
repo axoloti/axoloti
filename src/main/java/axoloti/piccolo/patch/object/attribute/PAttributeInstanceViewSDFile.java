@@ -1,22 +1,19 @@
 package axoloti.piccolo.patch.object.attribute;
 
-import java.awt.Dimension;
-import java.awt.Window;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
 import axoloti.piccolo.components.PTextFieldComponent;
 import axoloti.piccolo.components.control.PButtonComponent;
+import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.KeyEvent;
+import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
 
 
 

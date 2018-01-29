@@ -17,11 +17,11 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.object.attribute.AttributeTypes;
-import axoloti.object.attribute.AxoAttribute;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
+import axoloti.object.attribute.AttributeTypes;
+import axoloti.object.attribute.AxoAttribute;
 
 /**
  *

@@ -1,16 +1,15 @@
 package axoloti.swingui.patch.object.attribute;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.utils.Constants;
 import axoloti.swingui.components.ButtonComponent;
+import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;

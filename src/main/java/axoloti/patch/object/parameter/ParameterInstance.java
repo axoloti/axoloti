@@ -18,14 +18,14 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.Modulation;
+import axoloti.object.AxoObjectPatcher;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
-import axoloti.patch.object.atom.AtomInstance;
-import axoloti.object.AxoObjectPatcher;
 import axoloti.object.parameter.Parameter;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstancePatcher;
+import axoloti.patch.object.atom.AtomInstance;
 import axoloti.preset.Preset;
 import axoloti.property.BooleanProperty;
 import axoloti.property.MidiCCProperty;

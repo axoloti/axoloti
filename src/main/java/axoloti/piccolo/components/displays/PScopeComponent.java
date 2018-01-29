@@ -1,8 +1,8 @@
 package axoloti.piccolo.components.displays;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
+import axoloti.preferences.Theme;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

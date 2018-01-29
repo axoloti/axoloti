@@ -23,7 +23,6 @@ import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
 import axoloti.swingui.patch.PatchFrame;
-import java.awt.Rectangle;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

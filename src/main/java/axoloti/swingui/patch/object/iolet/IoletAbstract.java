@@ -1,14 +1,12 @@
 package axoloti.swingui.patch.object.iolet;
 
-import axoloti.abstractui.INetView;
 import axoloti.mvc.AbstractController;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.net.NetDrag;
-import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.swingui.TransparentCursor;
 import axoloti.swingui.mvc.ViewPanel;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patch.net.NetDragging;

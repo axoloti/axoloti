@@ -1,15 +1,13 @@
 package axoloti.piccolo.patch.object.outlet;
 
-import java.awt.Dimension;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.piccolo.components.PJackOutputComponent;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
+import java.awt.Dimension;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 
 public class POutletInstanceZombieView extends POutletInstanceView implements IIoletInstanceView {
 

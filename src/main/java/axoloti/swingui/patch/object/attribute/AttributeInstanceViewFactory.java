@@ -1,5 +1,6 @@
 package axoloti.swingui.patch.object.attribute;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceController;
@@ -10,7 +11,6 @@ import axoloti.patch.object.attribute.AttributeInstanceSpinner;
 import axoloti.patch.object.attribute.AttributeInstanceTablename;
 import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
 import axoloti.swingui.patch.object.AxoObjectInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceView;
 
 /**
  *

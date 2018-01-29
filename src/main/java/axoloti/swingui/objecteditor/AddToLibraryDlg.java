@@ -20,8 +20,8 @@ package axoloti.swingui.objecteditor;
 
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjects;
-import axoloti.utils.AxolotiLibrary;
 import axoloti.preferences.Preferences;
+import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -1,5 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceBool32;
 import axoloti.patch.object.display.DisplayInstanceController;
@@ -21,7 +22,6 @@ import axoloti.patch.object.display.DisplayInstanceInt32HexLabel;
 import axoloti.patch.object.display.DisplayInstanceInt32Label;
 import axoloti.patch.object.display.DisplayInstanceNoteLabel;
 import axoloti.patch.object.display.DisplayInstanceVScale;
-import axoloti.abstractui.IAxoObjectInstanceView;
 
 /**
  *

@@ -17,8 +17,8 @@
  */
 package axoloti.object.display;
 
-import axoloti.object.atom.AtomDefinition;
 import axoloti.datatypes.DataType;
+import axoloti.object.atom.AtomDefinition;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.property.BooleanProperty;
 import axoloti.property.Property;

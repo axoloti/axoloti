@@ -1,9 +1,9 @@
 package axoloti.mvc.array;
 
-import axoloti.patch.net.NetController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IModel;
+import axoloti.patch.net.NetController;
 import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;

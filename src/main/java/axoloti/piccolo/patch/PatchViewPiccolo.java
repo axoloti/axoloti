@@ -1,39 +1,5 @@
 package axoloti.piccolo.patch;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
-import java.awt.geom.Point2D;
-import java.beans.PropertyChangeEvent;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.Action;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.JComponent;
-import javax.swing.KeyStroke;
-import javax.swing.TransferHandler;
-
-import org.piccolo2d.PCamera;
-import org.piccolo2d.PNode;
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-import org.piccolo2d.util.PBounds;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.IIoletInstanceView;
@@ -58,6 +24,37 @@ import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Point2D;
+import java.beans.PropertyChangeEvent;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import javax.swing.TransferHandler;
+import org.piccolo2d.PCamera;
+import org.piccolo2d.PNode;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
+import org.piccolo2d.util.PBounds;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 
 public class PatchViewPiccolo extends PatchView {
 

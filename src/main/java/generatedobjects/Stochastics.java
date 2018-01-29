@@ -17,8 +17,8 @@
  */
 package generatedobjects;
 
-import axoloti.object.inlet.InletBool32Rising;
 import axoloti.object.AxoObject;
+import axoloti.object.inlet.InletBool32Rising;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Bipolar;
 import axoloti.object.outlet.OutletFrac32Buffer;

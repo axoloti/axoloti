@@ -1,10 +1,10 @@
 package axoloti.piccolo.components.control;
 
-import axoloti.preferences.Theme;
-import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.patch.PatchPCanvas;
+import axoloti.preferences.Theme;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

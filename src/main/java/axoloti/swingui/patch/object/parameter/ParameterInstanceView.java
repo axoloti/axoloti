@@ -1,17 +1,17 @@
 package axoloti.swingui.patch.object.parameter;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.preferences.Theme;
 import axoloti.preset.Preset;
 import axoloti.property.Property;
-import axoloti.swingui.mvc.ViewPanel;
 import axoloti.swingui.components.AssignMidiCCComponent;
 import axoloti.swingui.components.AssignPresetMenuItems;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.control.ACtrlComponent;
+import axoloti.swingui.mvc.ViewPanel;
 import axoloti.swingui.property.menu.ViewFactory;
 import java.awt.Component;
 import java.awt.Dimension;

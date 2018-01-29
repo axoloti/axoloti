@@ -1,17 +1,13 @@
 package axoloti.piccolo.components;
 
-import java.awt.Dimension;
-
-import javax.swing.JLabel;
-import javax.swing.border.Border;
-
-import org.piccolo2d.extras.pswing.PSwing;
-
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.preferences.Theme;
 import axoloti.utils.Constants;
-
 import static java.awt.Component.LEFT_ALIGNMENT;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.border.Border;
+import org.piccolo2d.extras.pswing.PSwing;
 
 public class PLabelComponent extends PatchPNode {
 

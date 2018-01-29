@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeSpinner;
 import axoloti.object.attribute.AxoAttributeTextEditor;
@@ -25,7 +26,6 @@ import axoloti.object.inlet.InletBool32Rising;
 import axoloti.object.inlet.InletFrac32Bipolar;
 import axoloti.object.inlet.InletFrac32Pos;
 import axoloti.object.inlet.InletInt32Pos;
-import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletBool32Pulse;
 import axoloti.object.outlet.OutletFrac32;

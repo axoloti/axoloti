@@ -1,15 +1,13 @@
 package axoloti.swingui.patch.object.attribute;
 
-import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceWavefile;
-import axoloti.abstractui.IAxoObjectInstanceView;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

@@ -1,21 +1,18 @@
 package axoloti.piccolo.patch.object.parameter;
 
 import axoloti.Modulation;
-import axoloti.preset.PresetDouble;
-import axoloti.datatypes.ValueFrac32;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.datatypes.ValueFrac32;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
-
+import axoloti.preset.PresetDouble;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 
 public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 

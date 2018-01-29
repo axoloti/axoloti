@@ -17,8 +17,8 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.display.DisplayNoteLabel;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.display.DisplayNoteLabel;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.PitchToNote;
 

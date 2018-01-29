@@ -1,9 +1,9 @@
 package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.object.parameter.ParameterInt32;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
-import axoloti.object.parameter.ParameterInt32;
 import axoloti.swingui.components.control.NumberBoxComponent;
 import java.beans.PropertyChangeEvent;
 

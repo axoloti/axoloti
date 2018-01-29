@@ -19,8 +19,8 @@ package axoloti.swingui.components;
 
 import axoloti.patch.PatchModel;
 import axoloti.preset.Preset;
-import axoloti.swingui.patch.object.parameter.ParameterInstanceView;
 import axoloti.swingui.components.control.ACtrlComponent;
+import axoloti.swingui.patch.object.parameter.ParameterInstanceView;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;

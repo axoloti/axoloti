@@ -1,26 +1,26 @@
 package axoloti.patch.object.display;
 
-import axoloti.object.display.DisplayNoteLabel;
-import axoloti.object.display.DisplayFrac4UByteVBar;
-import axoloti.object.display.DisplayFrac4ByteVBar;
-import axoloti.object.display.DisplayFrac32SDial;
-import axoloti.object.display.DisplayInt32HexLabel;
-import axoloti.object.display.DisplayFrac32SChart;
-import axoloti.object.display.DisplayFrac32VBarDB;
-import axoloti.object.display.DisplayFrac32UChart;
-import axoloti.object.display.DisplayFrac8S128VBar;
-import axoloti.object.display.DisplayFrac32UDial;
-import axoloti.object.display.DisplayVScale;
-import axoloti.object.display.DisplayFrac8U128VBar;
-import axoloti.object.display.DisplayInt32Label;
-import axoloti.object.display.DisplayInt32Bar32;
-import axoloti.object.display.DisplayFrac32VU;
-import axoloti.object.display.DisplayFrac32VBar;
-import axoloti.object.display.DisplayBool32;
-import axoloti.object.display.DisplayInt32Bar16;
-import axoloti.object.display.DisplayFrac4UByteVBarDB;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.display.DisplayBool32;
+import axoloti.object.display.DisplayFrac32SChart;
+import axoloti.object.display.DisplayFrac32SDial;
+import axoloti.object.display.DisplayFrac32UChart;
+import axoloti.object.display.DisplayFrac32UDial;
+import axoloti.object.display.DisplayFrac32VBar;
+import axoloti.object.display.DisplayFrac32VBarDB;
+import axoloti.object.display.DisplayFrac32VU;
+import axoloti.object.display.DisplayFrac4ByteVBar;
+import axoloti.object.display.DisplayFrac4UByteVBar;
+import axoloti.object.display.DisplayFrac4UByteVBarDB;
+import axoloti.object.display.DisplayFrac8S128VBar;
+import axoloti.object.display.DisplayFrac8U128VBar;
+import axoloti.object.display.DisplayInt32Bar16;
+import axoloti.object.display.DisplayInt32Bar32;
+import axoloti.object.display.DisplayInt32HexLabel;
+import axoloti.object.display.DisplayInt32Label;
+import axoloti.object.display.DisplayNoteLabel;
+import axoloti.object.display.DisplayVScale;
 
 /**
  *

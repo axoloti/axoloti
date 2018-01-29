@@ -1,21 +1,18 @@
 package axoloti.piccolo.patch;
 
+import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
+import axoloti.utils.Constants;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.extras.event.PNotification;
 import org.piccolo2d.extras.event.PNotificationCenter;
 import org.piccolo2d.extras.event.PSelectionEventHandler;
-
-import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.utils.Constants;
 
 public class PatchSelectionEventHandler extends PSelectionEventHandler {
 

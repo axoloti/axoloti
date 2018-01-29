@@ -1,11 +1,10 @@
 package axoloti.piccolo.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.components.displays.PScopeComponent;
-import java.beans.PropertyChangeEvent;
-
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.piccolo.components.displays.PScopeComponent;
+import java.beans.PropertyChangeEvent;
 
 public class PDisplayInstanceViewFrac32SChart extends PDisplayInstanceViewFrac32 {
 

@@ -18,8 +18,6 @@
 package qcmds;
 
 import axoloti.connection.IConnection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

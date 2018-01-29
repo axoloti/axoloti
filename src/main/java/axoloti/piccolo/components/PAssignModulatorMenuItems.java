@@ -19,10 +19,8 @@ package axoloti.piccolo.components;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.datatypes.ValueFrac32;
 import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFrac32UMap;
 import axoloti.swingui.components.control.HSliderComponent;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;

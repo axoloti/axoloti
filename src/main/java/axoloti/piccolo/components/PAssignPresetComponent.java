@@ -17,25 +17,22 @@
  */
 package axoloti.piccolo.components;
 
+import axoloti.abstractui.PatchView;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
+import axoloti.swingui.components.control.HSliderComponent;
+import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
-
 import javax.swing.JPopupMenu;
-
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPaintContext;
-
-import axoloti.abstractui.PatchView;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.patch.object.parameter.ParameterInstanceController;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.preferences.Theme;
-import axoloti.swingui.components.control.HSliderComponent;
-import axoloti.utils.Constants;
 
 /**
  *

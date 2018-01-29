@@ -17,8 +17,9 @@
  */
 package axoloti.swingui.dialogs;
 
-import axoloti.target.TargetController;
 import axoloti.mvc.IView;
+import axoloti.preferences.Preferences;
+import axoloti.target.TargetController;
 import static axoloti.usb.Usb.DeviceToPath;
 import static axoloti.usb.Usb.PID_AXOLOTI;
 import static axoloti.usb.Usb.PID_AXOLOTI_SDCARD;
@@ -27,7 +28,6 @@ import static axoloti.usb.Usb.VID_AXOLOTI;
 import static axoloti.usb.Usb.VID_STM;
 import axoloti.utils.OSDetect;
 import static axoloti.utils.OSDetect.getOS;
-import axoloti.preferences.Preferences;
 import java.beans.PropertyChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;

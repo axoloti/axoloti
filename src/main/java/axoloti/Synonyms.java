@@ -1,7 +1,7 @@
 package axoloti;
 
-import axoloti.utils.AxolotiLibrary;
 import axoloti.preferences.Preferences;
+import axoloti.utils.AxolotiLibrary;
 import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;

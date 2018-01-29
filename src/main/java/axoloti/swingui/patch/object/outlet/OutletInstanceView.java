@@ -1,17 +1,17 @@
 package axoloti.swingui.patch.object.outlet;
 
-import axoloti.preferences.Theme;
-import axoloti.abstractui.INetView;
 import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.abstractui.INetView;
 import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
-import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.JackOutputComponent;
+import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.SignalMetaDataIcon;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.iolet.IoletAbstract;
 import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import javax.swing.Box;

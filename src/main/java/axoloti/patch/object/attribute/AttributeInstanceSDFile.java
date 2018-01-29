@@ -17,10 +17,10 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.target.fs.SDFileReference;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeSDFile;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.target.fs.SDFileReference;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;

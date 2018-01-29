@@ -17,8 +17,6 @@
  */
 package qcmds;
 
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
 import axoloti.patch.object.parameter.ParameterInstance;
 

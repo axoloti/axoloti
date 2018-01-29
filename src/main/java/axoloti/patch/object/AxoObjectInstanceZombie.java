@@ -17,12 +17,12 @@
  */
 package axoloti.patch.object;
 
+import axoloti.object.ObjectController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.inlet.InletInstanceZombie;
-import axoloti.object.ObjectController;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.outlet.OutletInstanceZombie;
 import axoloti.patch.object.parameter.ParameterInstance;

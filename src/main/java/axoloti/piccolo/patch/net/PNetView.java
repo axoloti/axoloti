@@ -1,5 +1,17 @@
 package axoloti.piccolo.patch.net;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.INetView;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -14,21 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.piccolo2d.util.PPaintContext;
-
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.abstractui.INetView;
-import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.preferences.Theme;
 
 public class PNetView extends PatchPNode implements INetView {
 

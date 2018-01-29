@@ -1,8 +1,8 @@
 package axoloti.abstractui;
 
+import axoloti.mvc.IView;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceController;
-import axoloti.mvc.IView;
 
 public interface IAttributeInstanceView extends IView<AttributeInstanceController> {
 

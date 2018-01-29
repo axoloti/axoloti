@@ -17,10 +17,10 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.swingui.TextEditor;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeTextEditor;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.swingui.TextEditor;
 import org.simpleframework.xml.Element;
 
 /**

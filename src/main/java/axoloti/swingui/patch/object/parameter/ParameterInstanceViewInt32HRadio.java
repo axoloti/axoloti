@@ -1,9 +1,9 @@
 package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.object.parameter.ParameterInt32;
 import axoloti.object.parameter.ParameterInt32HRadio;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.swingui.components.control.HRadioComponent;
 import java.beans.PropertyChangeEvent;
 

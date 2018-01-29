@@ -17,9 +17,9 @@
  */
 package generatedobjects;
 
-import axoloti.object.attribute.AxoAttributeSpinner;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
+import axoloti.object.attribute.AxoAttributeSpinner;
 import axoloti.object.outlet.OutletInt32;
 import static generatedobjects.gentools.WriteAxoObject;
 

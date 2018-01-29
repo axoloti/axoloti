@@ -17,7 +17,8 @@
  */
 package generatedobjects;
 
-import axoloti.object.display.DisplayBool32;
+import axoloti.object.AxoObject;
+import axoloti.object.AxoObjectAbstract;
 import axoloti.object.display.DisplayFrac32SChart;
 import axoloti.object.display.DisplayFrac32SDial;
 import axoloti.object.display.DisplayFrac32UChart;
@@ -41,8 +42,6 @@ import axoloti.object.inlet.InletFrac32BufferBipolar;
 import axoloti.object.inlet.InletFrac32Pos;
 import axoloti.object.inlet.InletInt32;
 import axoloti.object.inlet.InletInt32Pos;
-import axoloti.object.AxoObject;
-import axoloti.object.AxoObjectAbstract;
 import axoloti.object.outlet.OutletInt32Pos;
 import axoloti.object.parameter.ParameterFrac32UMap;
 import static generatedobjects.gentools.WriteAxoObject;

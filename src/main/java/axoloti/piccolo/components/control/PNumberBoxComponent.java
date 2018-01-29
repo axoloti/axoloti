@@ -1,14 +1,14 @@
 package axoloti.piccolo.components.control;
 
-import axoloti.preferences.Theme;
-import axoloti.swingui.TransparentCursor;
-import axoloti.datatypes.ValueFrac32;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.datatypes.ValueFrac32;
 import axoloti.piccolo.PUtils;
+import axoloti.preferences.Theme;
 import axoloti.realunits.NativeToReal;
+import axoloti.swingui.TransparentCursor;
+import axoloti.swingui.components.control.NumberBoxComponent;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import axoloti.swingui.components.control.NumberBoxComponent;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Dimension;

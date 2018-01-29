@@ -1,8 +1,8 @@
 package axoloti.piccolo.patch.object.display;
 
-import axoloti.patch.object.display.DisplayInstanceInt32;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstanceInt32;
 
 public abstract class PDisplayInstanceViewInt32 extends PDisplayInstanceView1 {
 

@@ -17,7 +17,6 @@
  */
 package axoloti.object.display;
 
-import axoloti.object.display.Display;
 import axoloti.datatypes.Frac32;
 import java.security.MessageDigest;
 

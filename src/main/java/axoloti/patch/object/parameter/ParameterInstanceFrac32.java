@@ -17,11 +17,11 @@
  */
 package axoloti.patch.object.parameter;
 
-import axoloti.object.parameter.ParameterFrac32;
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.preset.PresetDouble;
+import axoloti.object.parameter.ParameterFrac32;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.preset.PresetDouble;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;

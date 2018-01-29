@@ -17,12 +17,12 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.object.atom.AtomDefinition;
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.ObjectController;
+import axoloti.object.atom.AtomDefinition;
+import axoloti.object.atom.AtomDefinitionController;
 import axoloti.property.Property;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

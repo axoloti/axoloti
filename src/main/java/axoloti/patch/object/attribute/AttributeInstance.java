@@ -17,13 +17,13 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.target.fs.SDFileReference;
 import axoloti.object.atom.AtomDefinitionController;
-import axoloti.patch.object.atom.AtomInstance;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.patch.object.AxoObjectInstance;
-import static axoloti.utils.CharEscape.CharEscape;
+import axoloti.patch.object.atom.AtomInstance;
 import axoloti.swingui.components.LabelComponent;
+import axoloti.target.fs.SDFileReference;
+import static axoloti.utils.CharEscape.CharEscape;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;

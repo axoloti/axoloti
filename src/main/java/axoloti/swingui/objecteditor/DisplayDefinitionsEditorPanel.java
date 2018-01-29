@@ -17,11 +17,11 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.object.display.Display;
-import axoloti.object.display.DisplayTypes;
 import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
+import axoloti.object.display.Display;
+import axoloti.object.display.DisplayTypes;
 
 /**
  *

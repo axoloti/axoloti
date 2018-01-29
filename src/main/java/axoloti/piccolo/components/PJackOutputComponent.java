@@ -1,18 +1,15 @@
 package axoloti.piccolo.components;
 
-import static java.awt.Component.CENTER_ALIGNMENT;
-import static java.awt.Component.RIGHT_ALIGNMENT;
-
-import java.awt.BasicStroke;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-
-import org.piccolo2d.util.PPaintContext;
-
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.object.outlet.POutletInstanceView;
 import axoloti.preferences.Theme;
+import java.awt.BasicStroke;
+import static java.awt.Component.CENTER_ALIGNMENT;
+import static java.awt.Component.RIGHT_ALIGNMENT;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import org.piccolo2d.util.PPaintContext;
 
 public class PJackOutputComponent extends PatchPNode {
 

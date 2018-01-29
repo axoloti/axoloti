@@ -1,13 +1,13 @@
 package axoloti.object;
 
-import axoloti.object.atom.AtomDefinitionController;
-import axoloti.object.attribute.AxoAttribute;
-import axoloti.object.display.Display;
-import axoloti.object.inlet.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayController;
+import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import java.beans.PropertyChangeEvent;

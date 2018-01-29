@@ -17,9 +17,9 @@
  */
 package axoloti.swingui.menus;
 
+import axoloti.preferences.Preferences;
 import static axoloti.swingui.menus.PopulatePatchMenu.PopulatePatchMenu;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.preferences.Preferences;
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;

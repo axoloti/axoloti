@@ -17,8 +17,8 @@
  */
 package generatedobjects;
 
-import axoloti.object.inlet.InletFrac32;
 import axoloti.object.AxoObject;
+import axoloti.object.inlet.InletFrac32;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.parameter.ParameterFrac32UMap;
 import static generatedobjects.gentools.WriteAxoObject;

@@ -17,14 +17,14 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
+import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectFile;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.inlet.InletInt32;
-import axoloti.object.AxoObject;
-import axoloti.object.AxoObjectAbstract;
-import axoloti.object.AxoObjectFile;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletFrac32;
@@ -32,8 +32,8 @@ import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
 import axoloti.object.parameter.Parameter;
 import axoloti.object.parameter.ParameterFrac32UMap;
-import axoloti.utils.AxolotiLibrary;
 import axoloti.preferences.Preferences;
+import axoloti.utils.AxolotiLibrary;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

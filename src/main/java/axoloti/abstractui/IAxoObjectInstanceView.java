@@ -1,11 +1,11 @@
 package axoloti.abstractui;
 
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.IView;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.PatchModel;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.List;

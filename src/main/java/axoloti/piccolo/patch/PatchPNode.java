@@ -1,17 +1,15 @@
 package axoloti.piccolo.patch;
 
+import axoloti.abstractui.PatchView;
+import axoloti.piccolo.SwingLayoutNode;
+import axoloti.preferences.Theme;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
-
 import org.piccolo2d.util.PBounds;
 import org.piccolo2d.util.PPaintContext;
-
-import axoloti.abstractui.PatchView;
-import axoloti.piccolo.SwingLayoutNode;
-import axoloti.preferences.Theme;
 
 public class PatchPNode extends SwingLayoutNode {
 

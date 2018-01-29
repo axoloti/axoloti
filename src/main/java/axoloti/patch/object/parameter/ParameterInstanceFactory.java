@@ -1,7 +1,7 @@
 package axoloti.patch.object.parameter;
 
-import axoloti.object.parameter.Parameter;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.parameter.Parameter;
 import axoloti.patch.object.AxoObjectInstance;
 
 /**

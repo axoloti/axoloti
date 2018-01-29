@@ -1,22 +1,5 @@
 package axoloti.piccolo.patch.object;
 
-import static java.awt.Component.LEFT_ALIGNMENT;
-import static java.awt.Component.TOP_ALIGNMENT;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.util.List;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
@@ -26,16 +9,16 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.IAxoObject;
-import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceController;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.patch.object.attribute.PAttributeInstanceViewFactory;
 import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.piccolo.patch.object.attribute.PAttributeInstanceViewFactory;
 import axoloti.piccolo.patch.object.display.PDisplayInstanceViewFactory;
 import axoloti.piccolo.patch.object.inlet.PInletInstanceViewFactory;
 import axoloti.piccolo.patch.object.outlet.POutletInstanceViewFactory;
@@ -43,6 +26,17 @@ import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFactory;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
+import static java.awt.Component.LEFT_ALIGNMENT;
+import static java.awt.Component.TOP_ALIGNMENT;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.util.List;
+import javax.swing.BoxLayout;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
 
 public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
 

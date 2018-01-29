@@ -17,6 +17,7 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeObjRef;
 import axoloti.object.attribute.AxoAttributeSDFile;
@@ -29,7 +30,6 @@ import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.inlet.InletFrac32BufferPos;
 import axoloti.object.inlet.InletFrac32Pos;
 import axoloti.object.inlet.InletInt32Pos;
-import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.parameter.ParameterFrac32SMapPitch;

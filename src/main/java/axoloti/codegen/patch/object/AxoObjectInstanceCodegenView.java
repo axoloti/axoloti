@@ -1,11 +1,11 @@
 package axoloti.codegen.patch.object;
 
-import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.datatypes.Frac32buffer;
-import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.utils.CodeGeneration;

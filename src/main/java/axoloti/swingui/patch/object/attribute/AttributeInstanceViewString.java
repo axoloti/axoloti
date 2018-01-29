@@ -1,8 +1,8 @@
 package axoloti.swingui.patch.object.attribute;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceString;
-import axoloti.abstractui.IAxoObjectInstanceView;
 import java.beans.PropertyChangeEvent;
 
 abstract class AttributeInstanceViewString extends AttributeInstanceView {

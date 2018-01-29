@@ -8,8 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEvent;
 

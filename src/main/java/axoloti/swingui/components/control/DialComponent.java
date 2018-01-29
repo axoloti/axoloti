@@ -17,13 +17,13 @@
  */
 package axoloti.swingui.components.control;
 
-import axoloti.preferences.Theme;
-import axoloti.swingui.TransparentCursor;
 import axoloti.datatypes.ValueFrac32;
+import axoloti.preferences.Preferences;
+import axoloti.preferences.Theme;
 import axoloti.realunits.NativeToReal;
+import axoloti.swingui.TransparentCursor;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import axoloti.preferences.Preferences;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;

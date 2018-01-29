@@ -1,14 +1,14 @@
 package axoloti.patch.net;
 
 import axoloti.abstractui.INetView;
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.iolet.IoletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

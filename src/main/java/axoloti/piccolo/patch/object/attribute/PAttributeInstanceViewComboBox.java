@@ -1,13 +1,12 @@
 package axoloti.piccolo.patch.object.attribute;
 
-import java.beans.PropertyChangeEvent;
-import java.util.List;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.piccolo.components.control.PDropDownComponent;
+import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString {
 

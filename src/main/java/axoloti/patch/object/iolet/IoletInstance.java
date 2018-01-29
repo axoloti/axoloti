@@ -17,21 +17,18 @@
  */
 package axoloti.patch.object.iolet;
 
-import java.beans.PropertyChangeEvent;
-import java.util.List;
-
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.core.Persist;
-
 import axoloti.datatypes.DataType;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.iolet.Iolet;
-import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.atom.AtomInstance;
 import axoloti.property.BooleanProperty;
 import axoloti.property.Property;
+import java.beans.PropertyChangeEvent;
+import java.util.List;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *

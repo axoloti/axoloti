@@ -8,8 +8,6 @@ import axoloti.preferences.Theme;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.PopupIcon;
 import axoloti.swingui.patch.PatchViewSwing;
-import axoloti.swingui.patch.object.inlet.InletInstanceView;
-import axoloti.swingui.patch.object.outlet.OutletInstanceView;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

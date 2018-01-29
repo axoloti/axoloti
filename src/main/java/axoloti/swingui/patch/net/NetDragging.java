@@ -17,9 +17,9 @@
  */
 package axoloti.swingui.patch.net;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.patch.net.NetController;
+import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
 import java.awt.Color;
 import java.awt.Graphics;

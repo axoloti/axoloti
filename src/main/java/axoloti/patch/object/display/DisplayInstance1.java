@@ -17,10 +17,8 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.display.Display;
 import axoloti.object.atom.AtomDefinitionController;
-import axoloti.datatypes.Value;
-import java.nio.ByteBuffer;
+import axoloti.object.display.Display;
 
 /**
  *

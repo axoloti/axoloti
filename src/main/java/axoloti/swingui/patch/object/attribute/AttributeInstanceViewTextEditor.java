@@ -6,7 +6,6 @@ import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
 import axoloti.swingui.TextEditor;
 import axoloti.swingui.components.ButtonComponent;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {

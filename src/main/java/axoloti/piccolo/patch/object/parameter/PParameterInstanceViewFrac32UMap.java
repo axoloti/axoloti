@@ -1,31 +1,24 @@
 package axoloti.piccolo.patch.object.parameter;
 
-import axoloti.preset.Preset;
-import axoloti.preset.PresetDouble;
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
-import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.components.PAssignMidiCCComponent;
 import axoloti.piccolo.components.PAssignMidiCCMenuItems;
 import axoloti.piccolo.components.PAssignModulatorComponent;
 import axoloti.piccolo.components.PAssignModulatorMenuItems;
 import axoloti.piccolo.components.PAssignPresetComponent;
 import axoloti.piccolo.components.control.PDialComponent;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.preferences.Theme;
+import axoloti.preset.PresetDouble;
 import java.awt.Graphics2D;
+import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import org.piccolo2d.util.PPaintContext;
-import java.awt.Graphics2D;
-import java.beans.PropertyChangeEvent;
-
-import javax.swing.BoxLayout;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
-
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 
 public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac32U {
 

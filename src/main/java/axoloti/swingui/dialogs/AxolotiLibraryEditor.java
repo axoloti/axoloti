@@ -1,10 +1,10 @@
 package axoloti.swingui.dialogs;
 
 import axoloti.Axoloti;
+import axoloti.preferences.Preferences;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
-import axoloti.preferences.Preferences;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;

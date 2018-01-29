@@ -1,8 +1,8 @@
 package axoloti.swingui.patch.object.attribute;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceInt32;
-import axoloti.abstractui.IAxoObjectInstanceView;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JSlider;

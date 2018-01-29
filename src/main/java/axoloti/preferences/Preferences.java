@@ -18,13 +18,13 @@
 package axoloti.preferences;
 
 import axoloti.Axoloti;
-import axoloti.patch.PatchController;
+import axoloti.Version;
 import axoloti.abstractui.PatchView;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.patch.PatchController;
 import axoloti.patch.PatchViewType;
 import static axoloti.patch.PatchViewType.PICCOLO;
-import axoloti.Version;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;

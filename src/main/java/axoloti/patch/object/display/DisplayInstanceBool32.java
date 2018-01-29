@@ -18,8 +18,6 @@
 package axoloti.patch.object.display;
 
 import axoloti.object.atom.AtomDefinitionController;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 
 /**
  *

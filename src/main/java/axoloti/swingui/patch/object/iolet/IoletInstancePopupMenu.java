@@ -17,8 +17,8 @@
  */
 package axoloti.swingui.patch.object.iolet;
 
-import axoloti.patch.net.NetController;
 import axoloti.patch.PatchController;
+import axoloti.patch.net.NetController;
 import axoloti.patch.object.iolet.IoletInstanceController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

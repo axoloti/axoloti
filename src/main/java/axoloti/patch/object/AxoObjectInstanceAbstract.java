@@ -17,11 +17,6 @@
  */
 package axoloti.patch.object;
 
-import axoloti.patch.PatchModel;
-import axoloti.target.fs.SDFileReference;
-import axoloti.patch.object.attribute.AttributeInstance;
-import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
@@ -29,10 +24,15 @@ import axoloti.object.AxoObjectUnloaded;
 import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
+import axoloti.target.fs.SDFileReference;
 import axoloti.utils.CharEscape;
 import java.awt.Point;
 import java.util.ArrayList;

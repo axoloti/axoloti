@@ -1,5 +1,20 @@
 package axoloti.piccolo.iolet;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.mvc.AbstractController;
+import axoloti.patch.PatchModel;
+import axoloti.patch.net.Net;
+import axoloti.patch.net.NetController;
+import axoloti.patch.net.NetDrag;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.piccolo.patch.net.PNetDragging;
+import axoloti.piccolo.patch.object.inlet.PInletInstanceView;
+import axoloti.piccolo.patch.object.outlet.POutletInstanceView;
 import java.awt.BasicStroke;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -7,29 +22,11 @@ import java.awt.Stroke;
 import java.awt.event.InputEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-
 import javax.swing.JPopupMenu;
-
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
-
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.mvc.AbstractController;
-import axoloti.patch.PatchModel;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
-import axoloti.patch.net.NetDrag;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.piccolo.patch.net.PNetDragging;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.components.PLabelComponent;
-import axoloti.piccolo.patch.object.inlet.PInletInstanceView;
-import axoloti.piccolo.patch.object.outlet.POutletInstanceView;
 
 public abstract class PIoletAbstract extends PatchPNode {
     public IAxoObjectInstanceView axoObjectInstanceView;

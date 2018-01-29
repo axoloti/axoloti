@@ -17,8 +17,8 @@
  */
 package axoloti.swingui.menus;
 
-import axoloti.utils.AxolotiLibrary;
 import axoloti.preferences.Preferences;
+import axoloti.utils.AxolotiLibrary;
 import javax.swing.JMenu;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;

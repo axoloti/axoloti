@@ -1,11 +1,10 @@
 package axoloti.preferences;
 
 import axoloti.FileUtils;
-import axoloti.swingui.MainFrame;
 import static axoloti.FileUtils.axtFileFilter;
 import axoloti.object.AxoObjects;
+import axoloti.swingui.MainFrame;
 import axoloti.utils.ColorConverter;
-import axoloti.preferences.Preferences;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;

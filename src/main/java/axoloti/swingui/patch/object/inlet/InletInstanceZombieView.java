@@ -1,8 +1,8 @@
 package axoloti.swingui.patch.object.inlet;
 
 import axoloti.patch.object.iolet.IoletInstanceController;
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.components.LabelComponent;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 

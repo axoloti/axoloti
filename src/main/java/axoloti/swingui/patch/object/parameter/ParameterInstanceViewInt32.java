@@ -1,11 +1,11 @@
 package axoloti.swingui.patch.object.parameter;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.object.parameter.ParameterInt32;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceInt32;
-import axoloti.object.parameter.ParameterInt32;
+import axoloti.preferences.Theme;
 import axoloti.preset.PresetInt;
 import java.beans.PropertyChangeEvent;
 

@@ -17,26 +17,23 @@
  */
 package axoloti.piccolo.components;
 
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
-
-import javax.swing.JPopupMenu;
-
-import org.piccolo2d.event.PBasicInputEventHandler;
-import org.piccolo2d.event.PInputEvent;
-import org.piccolo2d.util.PPaintContext;
-
 import axoloti.abstractui.PatchView;
-import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.preferences.Theme;
 import axoloti.property.MidiCCProperty;
 import axoloti.swingui.property.menu.AssignMidiCCMenuItems;
 import axoloti.utils.Constants;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import javax.swing.JPopupMenu;
+import org.piccolo2d.event.PBasicInputEventHandler;
+import org.piccolo2d.event.PInputEvent;
+import org.piccolo2d.util.PPaintContext;
 
 /**
  *

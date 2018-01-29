@@ -17,8 +17,8 @@
  */
 package axoloti.swingui.menus;
 
-import axoloti.swingui.MainFrame;
 import axoloti.preferences.Preferences;
+import axoloti.swingui.MainFrame;
 import java.util.ArrayList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;

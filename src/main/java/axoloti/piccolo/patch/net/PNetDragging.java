@@ -1,19 +1,16 @@
 package axoloti.piccolo.patch.net;
 
+import axoloti.abstractui.IIoletInstanceView;
+import axoloti.patch.net.NetController;
+import axoloti.piccolo.PUtils;
 import static axoloti.piccolo.PUtils.asPoint;
-
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-
 import org.piccolo2d.util.PPaintContext;
-
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.net.NetController;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.preferences.Theme;
 
 public class PNetDragging extends PNetView {
 

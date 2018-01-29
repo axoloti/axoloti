@@ -17,13 +17,12 @@
  */
 package axoloti.patch.object.inlet;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.inlet.Inlet;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.iolet.IoletInstance;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
 
 /**
  *

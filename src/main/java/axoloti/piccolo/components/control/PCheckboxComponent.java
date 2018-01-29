@@ -1,10 +1,10 @@
 package axoloti.piccolo.components.control;
 
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.piccolo.PUtils;
-import axoloti.utils.KeyUtils;
 import axoloti.piccolo.components.PActionListener;
+import axoloti.preferences.Theme;
+import axoloti.utils.KeyUtils;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

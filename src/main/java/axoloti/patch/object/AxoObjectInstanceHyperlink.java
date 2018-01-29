@@ -17,9 +17,9 @@
  */
 package axoloti.patch.object;
 
+import axoloti.abstractui.PatchView;
 import axoloti.object.ObjectController;
 import axoloti.patch.PatchModel;
-import axoloti.abstractui.PatchView;
 import java.awt.Desktop;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;

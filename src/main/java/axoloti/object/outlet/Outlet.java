@@ -17,7 +17,6 @@
  */
 package axoloti.object.outlet;
 
-import axoloti.datatypes.DataType;
 import axoloti.object.iolet.Iolet;
 
 /**

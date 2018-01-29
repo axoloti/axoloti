@@ -1,12 +1,11 @@
 package axoloti.codegen.patch.object;
 
+import axoloti.object.AxoObjectPatcher;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
 import axoloti.patch.SubPatchMode;
 import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.object.AxoObjectPatcher;
-import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstancePatcherController;
 
 /**

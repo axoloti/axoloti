@@ -1,16 +1,15 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.target.fs.SDFileReference;
-import axoloti.object.attribute.AxoAttribute;
-import axoloti.object.display.Display;
-import axoloti.object.inlet.Inlet;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IModel;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
-import java.awt.Rectangle;
+import axoloti.target.fs.SDFileReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;

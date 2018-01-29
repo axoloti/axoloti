@@ -1,9 +1,9 @@
 package axoloti.target;
 
-import static axoloti.target.TargetModel.getTargetModel;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
+import static axoloti.target.TargetModel.getTargetModel;
 
 /**
  *

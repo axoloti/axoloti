@@ -1,30 +1,25 @@
 package axoloti.piccolo.patch.object;
 
+import axoloti.abstractui.IIoletInstanceView;
+import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.PatchViewPiccolo;
+import axoloti.preferences.Theme;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.components.PLabelComponent;
-import axoloti.preferences.Theme;
 
 public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract {
 

@@ -1,17 +1,17 @@
 package axoloti.piccolo.components;
 
-import axoloti.patch.PatchModel;
-import axoloti.preset.Preset;
-import axoloti.preferences.Theme;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
-import axoloti.piccolo.patch.PatchPCanvas;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.patch.object.parameter.PParameterInstanceView;
+import axoloti.patch.PatchModel;
 import axoloti.piccolo.components.control.PCheckboxComponent;
 import axoloti.piccolo.components.control.PCtrlComponentAbstract;
 import axoloti.piccolo.components.control.PCtrlEvent;
 import axoloti.piccolo.components.control.PCtrlListener;
+import axoloti.piccolo.patch.PatchPCanvas;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.piccolo.patch.object.parameter.PParameterInstanceView;
+import axoloti.preferences.Theme;
+import axoloti.preset.Preset;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;

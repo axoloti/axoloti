@@ -1,12 +1,11 @@
 package axoloti.piccolo.patch.object.parameter;
 
-import java.beans.PropertyChangeEvent;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.parameter.ParameterInt32;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
 import axoloti.piccolo.components.control.PNumberBoxComponent;
+import java.beans.PropertyChangeEvent;
 
 public class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 {
 

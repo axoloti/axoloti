@@ -1,9 +1,9 @@
 package axoloti.swingui.patch.object.outlet;
 
-import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.abstractui.IIoletInstanceView;
+import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 
 /**
  *

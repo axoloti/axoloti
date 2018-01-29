@@ -1,10 +1,9 @@
 package axoloti.piccolo.patch.object.attribute;
 
-import axoloti.patch.object.attribute.AttributeInstanceString;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import java.beans.PropertyChangeEvent;
-
 import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceString;
+import java.beans.PropertyChangeEvent;
 
 public abstract class PAttributeInstanceViewString extends PAttributeInstanceView {
 

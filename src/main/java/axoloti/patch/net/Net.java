@@ -17,12 +17,12 @@
  */
 package axoloti.patch.net;
 
-import axoloti.preferences.Theme;
 import axoloti.datatypes.DataType;
-import axoloti.patch.object.inlet.InletInstance;
 import axoloti.mvc.AbstractModel;
 import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.preferences.Theme;
 import axoloti.property.DestinationArrayProperty;
 import axoloti.property.Property;
 import axoloti.property.SourceArrayProperty;

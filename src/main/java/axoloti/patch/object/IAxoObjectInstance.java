@@ -1,14 +1,14 @@
 package axoloti.patch.object;
 
+import axoloti.mvc.IModel;
+import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
-import axoloti.target.fs.SDFileReference;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.mvc.IModel;
-import axoloti.object.IAxoObject;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.target.fs.SDFileReference;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;

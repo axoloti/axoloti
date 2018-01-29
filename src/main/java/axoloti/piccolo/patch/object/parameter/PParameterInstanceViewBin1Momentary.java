@@ -1,7 +1,6 @@
 package axoloti.piccolo.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.datatypes.Value;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.components.control.PPulseButtonComponent;
 

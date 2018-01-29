@@ -18,7 +18,6 @@
 package axoloti.swingui.components;
 
 import axoloti.preferences.Theme;
-import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;

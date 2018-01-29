@@ -1,16 +1,17 @@
 package axoloti.piccolo.components.control;
 
-import axoloti.preferences.Theme;
-import axoloti.swingui.TransparentCursor;
-import axoloti.datatypes.ValueFrac32;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.datatypes.ValueFrac32;
 import axoloti.piccolo.PUtils;
+import axoloti.preferences.Preferences;
+import axoloti.preferences.Theme;
 import axoloti.realunits.NativeToReal;
+import axoloti.swingui.TransparentCursor;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import axoloti.preferences.Preferences;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
+import static java.awt.Component.RIGHT_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -23,8 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPaintContext;
-
-import static java.awt.Component.RIGHT_ALIGNMENT;
 
 public class PDialComponent extends PCtrlComponentAbstract {
 

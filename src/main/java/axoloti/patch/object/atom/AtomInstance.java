@@ -17,10 +17,10 @@
  */
 package axoloti.patch.object.atom;
 
-import axoloti.object.atom.AtomDefinition;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
+import axoloti.object.atom.AtomDefinition;
 import axoloti.property.PropagatedProperty;
 import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;

@@ -17,9 +17,9 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeTablename;
 import axoloti.object.inlet.InletInt32;
-import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletCharPtr32;
 import static generatedobjects.gentools.WriteAxoObject;
 

@@ -17,10 +17,10 @@
  */
 package axoloti.piccolo.components;
 
-import axoloti.preferences.Theme;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFrac32UMap;
+import axoloti.preferences.Theme;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

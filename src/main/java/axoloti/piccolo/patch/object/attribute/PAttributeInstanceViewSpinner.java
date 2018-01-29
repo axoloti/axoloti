@@ -1,14 +1,13 @@
 package axoloti.piccolo.patch.object.attribute;
 
-import axoloti.patch.object.attribute.AttributeInstanceSpinner;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstanceSpinner;
 import axoloti.piccolo.components.control.PNumberBoxComponent;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
+import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import axoloti.patch.object.attribute.AttributeInstanceController;
-import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;
-import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 
 public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 

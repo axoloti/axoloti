@@ -1,12 +1,11 @@
 package axoloti.piccolo.patch.object.attribute;
 
-import axoloti.abstractui.PatchView;
-import axoloti.patch.object.attribute.AttributeInstance;
-import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.piccolo.patch.PatchPNode;
+import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.patch.PatchPNode;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 

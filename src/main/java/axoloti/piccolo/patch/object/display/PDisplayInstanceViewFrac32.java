@@ -1,6 +1,5 @@
 package axoloti.piccolo.patch.object.display;
 
-import axoloti.patch.object.display.DisplayInstanceFrac32;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstanceController;
 

@@ -17,11 +17,10 @@
  */
 package axoloti.swingui.components;
 
-import axoloti.preferences.Theme;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
-import axoloti.utils.Constants;
+import axoloti.preferences.Theme;
 import axoloti.swingui.components.control.HSliderComponent;
+import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

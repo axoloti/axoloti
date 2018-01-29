@@ -1,12 +1,11 @@
 package axoloti.piccolo.patch.object.display;
 
-import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PLedstripComponent;
+import java.awt.Dimension;
+import java.beans.PropertyChangeEvent;
 
 public class PDisplayInstanceViewBool32 extends PDisplayInstanceViewInt32 {
 

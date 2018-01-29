@@ -1,8 +1,21 @@
 package axoloti.piccolo.patch.object.parameter;
 
+import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IParameterInstanceView;
+import axoloti.abstractui.PatchView;
+import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.piccolo.PUtils;
+import axoloti.piccolo.components.PAssignMidiCCComponent;
+import axoloti.piccolo.components.PAssignPresetMenuItems;
+import axoloti.piccolo.components.PLabelComponent;
+import axoloti.piccolo.components.control.PCtrlComponentAbstract;
+import axoloti.piccolo.patch.PatchPNode;
+import axoloti.preset.Preset;
+import axoloti.property.Property;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;
-
+import axoloti.swingui.property.menu.ViewFactory;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -13,29 +26,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
-
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
-
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IParameterInstanceView;
-import axoloti.abstractui.PatchView;
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
-import axoloti.piccolo.PUtils;
-import axoloti.piccolo.patch.PatchPNode;
-import axoloti.piccolo.components.PAssignMidiCCComponent;
-import axoloti.piccolo.components.PAssignPresetMenuItems;
-import axoloti.piccolo.components.PLabelComponent;
-import axoloti.piccolo.components.control.PCtrlComponentAbstract;
-import axoloti.preset.Preset;
-import axoloti.property.Property;
-import axoloti.swingui.property.menu.ViewFactory;
 
 public abstract class PParameterInstanceView extends PatchPNode implements ActionListener, IParameterInstanceView {
 

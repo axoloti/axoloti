@@ -17,6 +17,12 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
+import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectComment;
+import axoloti.object.AxoObjectHyperlink;
+import axoloti.object.AxoObjectPatcher;
+import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.attribute.AxoAttributeObjRef;
 import axoloti.object.attribute.AxoAttributeSpinner;
 import axoloti.object.attribute.AxoAttributeTablename;
@@ -27,12 +33,6 @@ import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.inlet.InletInt32;
 import axoloti.object.inlet.InletInt32Pos;
-import axoloti.object.AxoObject;
-import axoloti.object.AxoObjectAbstract;
-import axoloti.object.AxoObjectComment;
-import axoloti.object.AxoObjectHyperlink;
-import axoloti.object.AxoObjectPatcher;
-import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletCharPtr32;
 import axoloti.object.outlet.OutletFrac32;

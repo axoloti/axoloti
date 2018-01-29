@@ -17,8 +17,8 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.display.Display;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.display.Display;
 import axoloti.patch.object.atom.AtomInstance;
 import axoloti.property.ObjectProperty;
 import axoloti.property.PropagatedProperty;

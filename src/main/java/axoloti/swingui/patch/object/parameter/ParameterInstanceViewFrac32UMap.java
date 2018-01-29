@@ -1,11 +1,11 @@
 package axoloti.swingui.patch.object.parameter;
 
-import axoloti.preset.Preset;
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
+import axoloti.preferences.Theme;
+import axoloti.preset.Preset;
 import axoloti.swingui.components.AssignMidiCCComponent;
 import axoloti.swingui.components.AssignModulatorComponent;
 import axoloti.swingui.components.AssignModulatorMenuItems;

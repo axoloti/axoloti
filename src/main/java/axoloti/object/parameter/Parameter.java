@@ -17,11 +17,11 @@
  */
 package axoloti.object.parameter;
 
+import axoloti.datatypes.DataType;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
-import axoloti.datatypes.DataType;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.property.BooleanProperty;
 import axoloti.property.Property;
 import axoloti.utils.CharEscape;

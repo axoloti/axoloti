@@ -1,10 +1,10 @@
 package axoloti.swingui.patch.object.parameter;
 
-import axoloti.preset.Preset;
-import axoloti.preferences.Theme;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
+import axoloti.preferences.Theme;
+import axoloti.preset.Preset;
 import axoloti.swingui.components.control.VSliderComponent;
 
 class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32S {

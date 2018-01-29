@@ -1,8 +1,5 @@
 package axoloti.piccolo;
 
-import java.awt.Dimension;
-import java.awt.Point;
-
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
@@ -17,6 +14,8 @@ import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
 import axoloti.piccolo.patch.object.PAxoObjectInstanceViewFactory;
 import axoloti.swingui.ObjectSearchFrame;
+import java.awt.Dimension;
+import java.awt.Point;
 
 public class PObjectSearchFrame extends ObjectSearchFrame {
 

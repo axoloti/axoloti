@@ -17,21 +17,21 @@
  */
 package generatedobjects;
 
+import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.inlet.InletBool32Rising;
 import axoloti.object.inlet.InletBool32RisingFalling;
 import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Bipolar;
 import axoloti.object.inlet.InletFrac32Buffer;
-import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletFrac32Pos;
 import axoloti.object.outlet.OutletInt32Pos;
 import axoloti.object.parameter.ParameterFrac32SMap;
-import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import axoloti.object.parameter.ParameterFrac32SMapKLineTimeExp;
 import axoloti.object.parameter.ParameterFrac32SMapKLineTimeExp2;
 import axoloti.object.parameter.ParameterFrac32UMap;
 import axoloti.object.parameter.ParameterFrac32UMapKDecayTime;
+import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import static generatedobjects.gentools.WriteAxoObject;
 
 /**
