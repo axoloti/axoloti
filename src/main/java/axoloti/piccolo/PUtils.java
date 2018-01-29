@@ -75,17 +75,17 @@ public class PUtils {
             System.out.println(key + ": " + typeCount.get(key));
         }
     }
-    
+
     public static boolean viewScaleWithinLimits(double currentViewScale, double attemptedScaleFactor) {
         double newViewScale = currentViewScale * attemptedScaleFactor;
-        return newViewScale > Constants.PICCOLO_VIEW_SCALE_LOWER_BOUND && 
+        return newViewScale > Constants.PICCOLO_VIEW_SCALE_LOWER_BOUND &&
                newViewScale < Constants.PICCOLO_VIEW_SCALE_UPPER_BOUND;
     }
-    
+
     public static int getXOnScreen(PInputEvent e) {
         return ((MouseEvent) e.getSourceSwingEvent()).getXOnScreen();
     }
-    
+
     public static int getYOnScreen(PInputEvent e) {
         return ((MouseEvent) e.getSourceSwingEvent()).getYOnScreen();
     }

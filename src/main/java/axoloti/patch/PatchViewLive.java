@@ -10,21 +10,21 @@ import java.beans.PropertyChangeEvent;
 public class PatchViewLive implements IView<PatchController> {
 
     final PatchController controller;
-    
+
     public PatchViewLive(PatchController controller) {
         this.controller = controller;
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        
+
     }
 
     @Override
     public PatchController getController() {
         return controller;
     }
-    
+
     @Override
     public void dispose() {
     }

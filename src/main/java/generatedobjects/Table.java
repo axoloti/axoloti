@@ -52,7 +52,7 @@ public class Table extends gentools {
         WriteAxoObject(catName, CreateSdRamTable8());
         WriteAxoObject(catName, CreateSdRamTable16());
         WriteAxoObject(catName, CreateSdRamTable32());
-        
+
         WriteAxoObject(catName, CreateSdRamTable16Load());
 
         WriteAxoObject(catName, CreateRamTable32Slider16());

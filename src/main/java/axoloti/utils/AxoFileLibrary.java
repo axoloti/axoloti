@@ -8,7 +8,7 @@ public class AxoFileLibrary
         extends AxolotiLibrary {
 
     public static String TYPE="local";
-    
+
     public AxoFileLibrary() {
         super();
     }
@@ -21,18 +21,18 @@ public class AxoFileLibrary
     public void sync() {
         // NOP
     }
-    
+
     public void reportStatus() {
-        File f = new File(getLocalLocation()); 
+        File f = new File(getLocalLocation());
         if(!f.exists()) {
            Logger.getLogger(AxoFileLibrary.class.getName()).log(Level.WARNING, "Status : {0} : local directory missing", getId());
         }
         Logger.getLogger(AxoFileLibrary.class.getName()).log(Level.INFO, "Status : {0} : OK", getId());
     }
-    
+
     @Override
     public void init(boolean delete) {
-        // NOP 
+        // NOP
         // would be dangerous to delete local files
         // we should assume they are not backed up
 

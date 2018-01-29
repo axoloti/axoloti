@@ -270,7 +270,7 @@ public class Axoloti {
                 + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
                 + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
                 + "AxolotiHome = " + System.getProperty(HOME_DIR) + "\n"
-                + "Chibios = " + System.getProperty(CHIBIOS_DIR) + "\n"                
+                + "Chibios = " + System.getProperty(CHIBIOS_DIR) + "\n"
         );
     }
 

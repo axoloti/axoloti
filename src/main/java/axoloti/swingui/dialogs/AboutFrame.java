@@ -47,7 +47,7 @@ public class AboutFrame extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(AboutFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         jVersionTxt.setText(Version.AXOLOTI_VERSION);
         jDateTxt.setText(Version.AXOLOTI_BUILD_TIME);
         jTextPane1.setOpaque(false);

@@ -58,9 +58,9 @@ public class HelpMenu extends JMenu {
             public void menuCanceled(MenuEvent e) {
                 removeAll();
             }
-        });        
+        });
     }
-    
+
     private void Populate() {
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();

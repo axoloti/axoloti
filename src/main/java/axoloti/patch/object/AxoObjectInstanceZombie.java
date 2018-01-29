@@ -117,7 +117,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 
     @Override
     public void Remove() {
-    }    
+    }
 
     @Override
     public List<Property> getProperties() {

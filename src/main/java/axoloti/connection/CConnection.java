@@ -34,5 +34,5 @@ public class CConnection {
             conn = new USBBulkConnection_v2(TargetController.getTargetController());
         }
         return conn;
-    }    
+    }
 }

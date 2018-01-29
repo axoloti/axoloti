@@ -12,7 +12,7 @@ class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     ButtonComponent BtnEdit;
     AxoObjectEditor editor;
     AxoObjectEditor.UIState stateOnPreviousClose;
-    
+
     public AxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
     }

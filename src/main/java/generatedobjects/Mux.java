@@ -94,8 +94,8 @@ public class Mux extends gentools {
         o.outlets.add(new OutletCharPtr32("o", "output"));
         o.sKRateCode = "   %o%= (%s%)?(char *)%i2%:(char *)%i1%;\n";
         return o;
-    }    
-    
+    }
+
     static AxoObject Create_inmuxn(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {

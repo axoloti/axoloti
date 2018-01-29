@@ -67,7 +67,7 @@ public class gentools {
         s = s.replaceAll("\\+", "PLUS");
         s = s.replaceAll("-", "MINUS");
         s = s.replaceAll("/", "SLASH");
-        //if (!cn.equals(o.id)) o.sCName = cn;        
+        //if (!cn.equals(o.id)) o.sCName = cn;
         return s;
     }
 
@@ -197,7 +197,7 @@ public class gentools {
              if (oo.sKRateCode!=null)
              CheckString(oo,oo.sKRateCode);
              if (oo.sSRateCode!=null)
-             CheckString(oo,oo.sSRateCode);            
+             CheckString(oo,oo.sSRateCode);
              */
         }
         if (o.getAuthor() == null) {
@@ -359,7 +359,7 @@ public class gentools {
                 objPath = objPath.replace('\\', '/');
                 //System.out.printf("1 path %s objPath %s\n", path, objPath);
                 path = objPath.substring(0, objPath.lastIndexOf('/'));
-                //fn = objPath.substring(0,fn.length()-4);                
+                //fn = objPath.substring(0,fn.length()-4);
                 System.out.printf("2 path %s objPath %s fn %s\n", path, objPath, fn);
                 o.id = o.id.substring(o.id.lastIndexOf('/') + 1);
             }

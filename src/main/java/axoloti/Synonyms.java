@@ -49,7 +49,7 @@ public class Synonyms {
                 Logger.getLogger(Synonyms.class.getName()).log(Level.WARNING,"not loading synonyms cannot find factory library");
             }
 
-            
+
         } catch (Exception ex) {
             Logger.getLogger(Synonyms.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -364,14 +364,14 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         if (jLibrary.getSelectedIndex() >= 0) {
             AxolotiLibrary lib = Preferences.getPreferences().getLibrary((String) jLibrary.getSelectedObjects()[0]);
             StringBuilder file = new StringBuilder();
- 
+
             file.append(lib.getLocalLocation());
             file.append("objects").append(File.separator);
             String cp = lib.getContributorPrefix();
             if (cp != null && cp.length() > 0) {
                 file.append(cp).append(File.separator);
             }
- 
+
             String objname = jObjectName.getText().trim();
             String objid = objname;
             String objpath = "";
@@ -383,7 +383,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             objid = AxoObjects.ConvertToLegalFilename(objid);
             objpath = objpath.replace('/', File.separatorChar);
 
-            
+
             file.append(objpath).append(File.separator);
             file.append(objid);
             return file.toString() + ".axo";

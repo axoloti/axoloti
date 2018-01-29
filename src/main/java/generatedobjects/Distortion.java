@@ -85,7 +85,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -148,7 +148,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -213,7 +213,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -462,7 +462,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -575,9 +575,9 @@ public class Distortion extends gentools {
  int32_t x = ((-i0<<6)/(i1-i0));
  if (%p1%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
- if (!%inv1%) 
+ if (!%inv1%)
  amp[nextvoice] = i1>>16;
- else 
+ else
  amp[nextvoice] = -i1>>16;
 
  } else if (%enable2%&&(i1<0)&&!(i0<0)){   // dispatch
@@ -587,9 +587,9 @@ public class Distortion extends gentools {
  if (%p2%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
 
- if (!%inv2%) 
+ if (!%inv2%)
  amp[nextvoice] = i1>>16;
- else 
+ else
  amp[nextvoice] = -i1>>16;
 
  }
@@ -626,9 +626,9 @@ public class Distortion extends gentools {
  int32_t x = ((-i0<<6)/(i1-i0));
  if (%p1%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
- if (!%inv1%) 
+ if (!%inv1%)
  amp[nextvoice] = (i0-i1)>>16;
- else 
+ else
  amp[nextvoice] = -(i0-i1)>>16;
  } else if (%enable2%&&(i1<0)&&(i0>0)){   // dispatch
 
@@ -637,9 +637,9 @@ public class Distortion extends gentools {
  if (%p2%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
  //	i1 = 0;
- if (!%inv2%) 
+ if (!%inv2%)
  amp[nextvoice] = (i0-i1)>>16;
- else 
+ else
  amp[nextvoice] = -(i0-i1)>>16;
 
  }

@@ -131,14 +131,14 @@ public class GeneratedObjects extends gentools {
 //        objs.add(Create_FlashTableGranularPlay());
         //WriteAxoObject("util",modsource());
 
-        /*        
+        /*
          for(AxoObject o:objs){
          String cn = o.id;
          }
          //        Objects.add(CreateSScope2());
 
          for(AxoObject o:objs){
- 
+
          }
          */
     }

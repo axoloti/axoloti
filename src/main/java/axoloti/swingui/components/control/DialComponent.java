@@ -173,7 +173,7 @@ public class DialComponent extends ACtrlComponent {
             if (ke.isShiftDown()) {
                 steps = steps * 0.1; // mini steps!
                 if (KeyUtils.isControlOrCommandDown(ke)) {
-                    steps = steps * 0.1; // micro steps!                
+                    steps = steps * 0.1; // micro steps!
                 }
             } else if (KeyUtils.isControlOrCommandDown(ke)) {
                 steps = steps * 10.0; //accelerate!
@@ -406,7 +406,7 @@ public class DialComponent extends ACtrlComponent {
         setValue(value);
         fireEvent();
     }
-    
+
     @Override
     public double getValue() {
         return value;

@@ -50,7 +50,7 @@ public class QCmdCompilePatch extends QCmdShellTask {
             return "Compiling patch failed ( " + patchController.getFileNamePath() + " ) ";
         }
     }
-    
+
     @Override
     public String[] GetEnv() {
         ArrayList<String> list = new ArrayList<>();
@@ -62,8 +62,8 @@ public class QCmdCompilePatch extends QCmdShellTask {
             String moduleDirs = "";
             for(String m : moduleSet) {
                 modules += m + " ";
-                moduleDirs += 
-                    this.patchController.getModel().getModuleDir(m) 
+                moduleDirs +=
+                    this.patchController.getModel().getModuleDir(m)
                     + " ";
             }
             list.add("MODULES=" + modules);
@@ -74,12 +74,12 @@ public class QCmdCompilePatch extends QCmdShellTask {
         list.toArray(vars);
         return vars;
     }
-    
+
     @Override
     public File GetWorkingDir() {
         return new File(FirmwareDir());
     }
-    
+
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {

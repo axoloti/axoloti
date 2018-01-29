@@ -27,7 +27,7 @@ public class QCmdStop implements QCmdSerialTask {
 
     public QCmdStop() {
     }
-    
+
     @Override
     public String GetStartMessage() {
         return "";//Start stopping patch";

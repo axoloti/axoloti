@@ -117,7 +117,7 @@ public class HSliderComponent extends ACtrlComponent {
         setValue(value);
         fireEvent();
     }
-    
+
     @Override
     public double getValue() {
         return value;

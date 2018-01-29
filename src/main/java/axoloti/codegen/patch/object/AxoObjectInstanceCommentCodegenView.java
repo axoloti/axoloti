@@ -11,9 +11,9 @@ import java.beans.PropertyChangeEvent;
  * @author jtaelman
  */
 public class AxoObjectInstanceCommentCodegenView implements IAxoObjectInstanceCodegenView {
-    
+
     final ObjectInstanceController controller;
-    
+
     public AxoObjectInstanceCommentCodegenView(AxoObjectInstanceComment model, ObjectInstanceController controller) {
         this.controller = controller;
     }

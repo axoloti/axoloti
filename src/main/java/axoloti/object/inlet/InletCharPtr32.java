@@ -44,5 +44,5 @@ public class InletCharPtr32 extends Inlet {
     public String getTypeName() {
         return TypeName;
     }
-    
+
 }

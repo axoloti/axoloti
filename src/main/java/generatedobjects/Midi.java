@@ -1102,7 +1102,7 @@ public class Midi extends gentools {
                 + "if (!(%trig%>0) && ntrig) {ntrig=0;}\n";
         return o;
     }
-    
+
     static AxoObject Create_mpe() {
         AxoObject o = new AxoObject("mpe", "Controller input for MIDI Polyphonic Expression");
         o.setAuthor("Mark Harris");

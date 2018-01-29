@@ -41,21 +41,21 @@ import javax.swing.JPopupMenu;
  * @author Johannes Taelman
  */
 public class DropDownComponent extends JComponent implements MouseListener {
-    
+
     public interface DDCListener {
-        
+
         public void SelectionChanged();
     }
-    
+
     int SelectedIndex;
     List<String> items;
-    
+
     public DropDownComponent(List<String> items) {
         SelectedIndex = 0;
         setItems(items);
         addMouseListener((MouseListener) this);
     }
-    
+
     public void setItems(List<String> items) {
         this.items = items;
         FontRenderContext frc = new FontRenderContext(null, true, true);
@@ -73,7 +73,7 @@ public class DropDownComponent extends JComponent implements MouseListener {
         setMinimumSize(d);
         setMaximumSize(new Dimension(5000, 15));
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -100,11 +100,11 @@ public class DropDownComponent extends JComponent implements MouseListener {
             g2.drawString(items.get(SelectedIndex), 4, 12);
         }
     }
-    
+
     public int getSelectedIndex() {
         return SelectedIndex;
     }
-    
+
     public void setSelectedItem(String selection) {
         int index = items.indexOf(selection);
         if ((SelectedIndex != index) && (index >= 0)) {
@@ -116,28 +116,28 @@ public class DropDownComponent extends JComponent implements MouseListener {
             repaint();
         }
     }
-    
+
     public String getSelectedItem() {
         return items.get(SelectedIndex);
     }
-    
+
     public int getItemCount() {
         return items.size();
     }
-    
+
     public String getItemAt(int i) {
         return items.get(i);
     }
-    
+
     ArrayList<DDCListener> ddcListeners = new ArrayList<DDCListener>();
-    
+
     void doPopup() {
         if (isEnabled()) {
             JPopupMenu p = new JPopupMenu();
             for (String s : items) {
                 JMenuItem mi = p.add(s);
                 mi.addActionListener(new ActionListener() {
-                    
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         setSelectedItem(e.getActionCommand());
@@ -148,30 +148,30 @@ public class DropDownComponent extends JComponent implements MouseListener {
             p.show(this, 0, getHeight() - 1);
         }
     }
-    
+
     public void addItemListener(DDCListener itemListener) {
         ddcListeners.add(itemListener);
     }
-    
+
     @Override
     public void mouseClicked(MouseEvent e) {
     }
-    
+
     @Override
     public void mousePressed(MouseEvent e) {
         doPopup();
     }
-    
+
     @Override
     public void mouseReleased(MouseEvent e) {
     }
-    
+
     @Override
     public void mouseEntered(MouseEvent e) {
     }
-    
+
     @Override
     public void mouseExited(MouseEvent e) {
     }
-    
+
 }

@@ -19,7 +19,7 @@ public abstract class ParameterInt32<T extends ParameterInstanceInt32> extends P
 
     public final static Property VALUE_MIN = new IntegerProperty("MinValue", ParameterInt32.class, "Minimum");
     public final static Property VALUE_MAX = new IntegerProperty("MaxValue", ParameterInt32.class, "Maximum");
-    
+
     public abstract Integer getMinValue();
     public abstract void setMinValue(Integer v);
     public abstract Integer getMaxValue();

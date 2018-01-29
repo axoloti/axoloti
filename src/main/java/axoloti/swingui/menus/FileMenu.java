@@ -61,7 +61,7 @@ public class FileMenu extends JMenu {
     }
 
     private int pos;
-    
+
     public void initComponents() {
         jMenuNewBank = new JMenuItem();
         jMenuNewPatch = new JMenuItem();
@@ -122,8 +122,8 @@ public class FileMenu extends JMenu {
 
         recentFileMenu1.setText("Open Recent");
         super.add(recentFileMenu1);
-        
-        
+
+
         super.add(new Separator());
         pos = getItemCount();
         super.add(new Separator());
@@ -285,7 +285,7 @@ public class FileMenu extends JMenu {
     private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {
         MainFrame.mainframe.Quit();
     }
-    
+
     @Override
     public JMenuItem add(JMenuItem menuItem) {
         return insert(menuItem, pos++);

@@ -288,7 +288,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     AxoObjectEditor editor;
     AxoObjectEditor.UIState stateOnPreviousClose;
-    
+
     @Override
     public void OpenEditor() {
         if (editor == null) {
@@ -472,8 +472,8 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public AxoObject clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();        
-        /* 
+        throw new CloneNotSupportedException();
+        /*
         // This implementation does not make a shallow clone!
         AxoObject c = (AxoObject) super.clone();
         c.inlets = new ArrayList<Inlet>();
@@ -501,8 +501,8 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     public void copy(AxoObject o) throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();        
-        /* 
+        throw new CloneNotSupportedException();
+        /*
         // This implementation does not make a shallow clone!
         inlets = new ArrayList<Inlet>();
         for (Inlet i : o.inlets) {
@@ -570,7 +570,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     /* MVC code */
-    
+
     public static final Property OBJ_ID = new StringProperty("Id", AxoObject.class);
     public static final Property OBJ_DESCRIPTION = new StringPropertyNull("Description", AxoObject.class);
     public static final Property OBJ_LICENSE = new StringPropertyNull("License", AxoObject.class);
@@ -626,7 +626,7 @@ public class AxoObject extends AxoObjectAbstract {
         this.helpPatch = helpPatch;
         firePropertyChange(OBJ_HELPPATCH, prev_val, helpPatch);
     }
-    
+
     @Override
     public List<Inlet> getInlets() {
         if (inlets == null) return new ArrayList<>();

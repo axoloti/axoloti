@@ -28,32 +28,32 @@ public class VirtualInputEvent {
     public static final byte BTN_14 = 21;
     public static final byte BTN_15 = 22;
     public static final byte BTN_16 = 23;
-    
+
     public static final byte MODIFIER_SHIFT = 1;
-    
+
     public static final byte QUADRANT_MAIN = 0;
     public static final byte QUADRANT_TOPLEFT = 1;
     public static final byte QUADRANT_TOPRIGHT = 2;
     public static final byte QUADRANT_BOTTOMLEFT = 3;
     public static final byte QUADRANT_BOTTOMRIGHT = 4;
     public static final byte QUADRANT_BOTTOM = 5;
-    
+
     final byte quadrant;
     final byte modifiers;
     final byte button;
     final byte value;
-    
+
     public VirtualInputEvent(byte button, byte modifiers, byte value, byte quadrant) {
         this.button = button;
         this.modifiers = modifiers;
         this.value = value;
         this.quadrant = quadrant;
     }
-    
+
     public byte getQuadrant() {
         return quadrant;
     }
-    
+
     public byte getModifiers() {
         return modifiers;
     }

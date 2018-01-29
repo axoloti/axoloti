@@ -66,7 +66,7 @@ public class Reverb extends gentools {
          + "d[dpos++]=din>>14;\n"
          + "%out% = ___SMMLS(g2,din<<2,dout);\n"
          + "if (dpos == %delay%) dpos = 0;\n";
-    
+
          */
         return o;
     }

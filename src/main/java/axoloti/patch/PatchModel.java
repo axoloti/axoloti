@@ -620,7 +620,7 @@ public class PatchModel extends AbstractModel {
          */
         return pdata;
     }
-    
+
 /*
     public void transferObjectConnections(AxoObjectInstanceZombie oldObject, AxoObjectInstance newObject) {
         transferObjectConnections(oldObject.getInletInstances().getArray(),
@@ -634,7 +634,7 @@ public class PatchModel extends AbstractModel {
                 newObject);
     }
 */
-    
+
     public void transferObjectConnections(ArrayList<InletInstance> inletInstances,
             ArrayList<OutletInstance> outletInstances,
             AxoObjectInstance newObject) { /*
@@ -734,19 +734,19 @@ public class PatchModel extends AbstractModel {
         }
         Modulators.add(m);
     }
-    
-    AxoAttributeComboBox attrMidiChannel = new AxoAttributeComboBox("midichannel", 
+
+    AxoAttributeComboBox attrMidiChannel = new AxoAttributeComboBox("midichannel",
             new String[]{"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
             new String[]{"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"});
     // use a cut down list of those currently supported
-    AxoAttributeComboBox attrMidiDevice = new AxoAttributeComboBox("mididevice", 
+    AxoAttributeComboBox attrMidiDevice = new AxoAttributeComboBox("mididevice",
             new String[]{"omni", "din", "usb device", "usb host", "internal"},
             new String[]{"0", "1", "2", "3", "15"});
-    AxoAttributeComboBox attrMidiPort = new AxoAttributeComboBox("midiport", 
-            new String[]{"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, 
-            new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});    
-    AxoAttributeComboBox attrPoly = new AxoAttributeComboBox("poly", 
-            new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"}, 
+    AxoAttributeComboBox attrMidiPort = new AxoAttributeComboBox("midiport",
+            new String[]{"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
+            new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
+    AxoAttributeComboBox attrPoly = new AxoAttributeComboBox("poly",
+            new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
 
     private String StringDenull(String s){
@@ -795,7 +795,7 @@ public class PatchModel extends AbstractModel {
         l.add(PATCH_WINDOWPOS);
         return l;
     }
-    
+
     public String getFileNamePath() {
         if (FileNamePath == null) {
             return "";

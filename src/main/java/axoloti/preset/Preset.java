@@ -34,7 +34,7 @@ public abstract class Preset<DT> {
     })
     public Value value;
 */
-    
+
     public DT v;
 
     public Preset() {
@@ -44,11 +44,11 @@ public abstract class Preset<DT> {
         this.index = index;
         this.v = value;
     }
-  
+
     public void setValue(DT value){
         this.v = value;
     }
-    
+
     public DT getValue() {
         return v;
     }

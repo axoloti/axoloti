@@ -169,7 +169,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         this.uuid = uuid;
     }
 
-    
+
 /* MVC clean methods below... */
     public static final Property OBJ_INLETS = new ObjectProperty("Inlets", ArrayList.class, AxoObjectAbstract.class);
     public static final Property OBJ_OUTLETS = new ObjectProperty("Outlets", ArrayList.class, AxoObjectAbstract.class);
@@ -205,7 +205,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         if (s == null) return "";
         return s;
     }
-    
+
     @Override
     public String getId() {
         return id;

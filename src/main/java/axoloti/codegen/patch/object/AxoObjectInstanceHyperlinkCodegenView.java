@@ -11,9 +11,9 @@ import java.beans.PropertyChangeEvent;
  * @author jtaelman
  */
 public class AxoObjectInstanceHyperlinkCodegenView implements IAxoObjectInstanceCodegenView {
-    
+
     final ObjectInstanceController controller;
-    
+
     public AxoObjectInstanceHyperlinkCodegenView(AxoObjectInstanceHyperlink model, ObjectInstanceController controller) {
         this.controller = controller;
     }

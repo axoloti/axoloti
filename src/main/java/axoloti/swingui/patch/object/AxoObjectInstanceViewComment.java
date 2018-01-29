@@ -91,8 +91,8 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }
-    }   
-    
+    }
+
     @Override
     public void addInstanceNameEditor() {
         InstanceNameTF = new TextFieldComponent(getModel().getCommentText());

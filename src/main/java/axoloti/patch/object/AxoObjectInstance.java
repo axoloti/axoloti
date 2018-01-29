@@ -89,7 +89,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     List<InletInstance> inletInstances;
     List<OutletInstance> outletInstances;
-    
+
     @Path("params")
     @ElementListUnion({
         @ElementList(entry = "frac32.u.map", type = ParameterInstanceFrac32UMap.class, inline = true, required = false),
@@ -232,7 +232,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         return null;
     }
 /* these functions seem unused and are obsolete:
-    
+
     @Override
     public boolean hasStruct() {
         if (getParameterInstances() != null && !(getParameterInstances().isEmpty())) {
@@ -348,7 +348,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             }
             typeWasAmbiguous = sourceObject.isTypeWasAmbiguous();
         }
-    }    
+    }
 
     @Override
     public void Remove() {
@@ -369,7 +369,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
         AxoObjectInstancePatcher aoip = getContainer();
         if (aoip != null) {
-            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();        
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
             if (parentInlet != null) {
                 ArrayList<Inlet> inlets = new ArrayList<>(aop.getInlets());
                 inlets.remove(parentInlet);
@@ -381,8 +381,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 aop.setOutlets(outlets);
             }
         }
-    }    
-    
+    }
+
         /* MVC clean code below here */
 
     public static final Property OBJ_LOCATION = new ObjectProperty("Location", Point.class, AxoObjectInstance.class);
@@ -404,7 +404,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         l.add(OBJ_DISPLAY_INSTANCES);
         return l;
     }
-    
+
     @Override
     public List<InletInstance> getInletInstances() {
         if (inletInstances == null) {

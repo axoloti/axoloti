@@ -45,5 +45,5 @@ public class InletInt32 extends Inlet {
     public String getTypeName() {
         return TypeName;
     }
-    
+
 }

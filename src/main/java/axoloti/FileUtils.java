@@ -118,7 +118,7 @@ public class FileUtils {
             return "Axoloti Object";
         }
     };
-    
+
     public final static FileFilter axtFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {

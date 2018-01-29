@@ -41,13 +41,13 @@ public class QCmdFlashDFU extends QCmdShellTask {
             return "Flashing firmware failed!";
         }
     }
-    
+
     @Override
     public File GetWorkingDir() {
         return new File(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
     }
-    
-    
+
+
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {

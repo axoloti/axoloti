@@ -23,7 +23,7 @@ public abstract class ArrayController<T extends AbstractController, M extends IM
 
     final P parent;
     final Property property;
-    
+
     public ArrayController(P parent, Property property) {
         this.parent = parent;
         this.property = property;

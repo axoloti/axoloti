@@ -35,7 +35,7 @@ public class JackInputComponent extends JComponent {
     private static final int sz = 10;
     private static final int margin = 2;
     private static final Dimension dim = new Dimension(sz, sz);
-    
+
     private boolean connected = false;
 
     public JackInputComponent() {

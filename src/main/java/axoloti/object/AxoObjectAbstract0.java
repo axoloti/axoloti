@@ -29,7 +29,7 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     public List<Property> getProperties() {
         List<Property> l = new ArrayList<>();
 //        l.add()
-        return l;       
+        return l;
     }
 
     @Override
@@ -86,16 +86,16 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     public String getMidiCode() {
         return "";
     }
-    
+
     @Override
     public Boolean getRotatedParams() {
         return false;
     }
-    
+
     @Override
     public final String getHelpPatch() {
         return "";
-    }    
+    }
 
     @Override
     public File GetHelpPatchFile() {

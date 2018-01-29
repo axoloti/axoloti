@@ -18,11 +18,11 @@ import java.beans.PropertyChangeEvent;
 public class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
 
     final ObjectInstanceController controller;
-    
+
     public AxoObjectInstanceCodegenView(AxoObjectInstance model, ObjectInstanceController controller) {
         this.controller = controller;
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }
@@ -31,7 +31,7 @@ public class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenVi
     public ObjectInstanceController getController() {
         return controller;
     }
-    
+
     @Override
     public AxoObjectInstance getModel() {
         return (AxoObjectInstance)controller.getModel();
@@ -269,7 +269,7 @@ typedef struct ui_object {
         }
         return c;
     }
-    
+
     @Override
     public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
         String s = "";
@@ -322,8 +322,8 @@ typedef struct ui_object {
             }
         }
         return "";
-    }    
-    
+    }
+
     @Override
     public void dispose() {
     }

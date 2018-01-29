@@ -82,7 +82,7 @@ public class QCmdProcessor implements Runnable {
             }
         }
     }
-    
+
     protected QCmdProcessor() {
         queue = new ArrayBlockingQueue<QCmd>(10);
         queueResponse = new ArrayBlockingQueue<QCmd>(10);
@@ -94,13 +94,13 @@ public class QCmdProcessor implements Runnable {
     }
 
     private static QCmdProcessor singleton = null;
-    
+
     public static QCmdProcessor getQCmdProcessor() {
         if (singleton == null)
             singleton = new QCmdProcessor();
         return singleton;
     }
-    
+
     public PatchViewCodegen getPatchController() {
         return patchController;
     }
@@ -256,12 +256,12 @@ public class QCmdProcessor implements Runnable {
 
     public void ClearQueue() {
         queue.clear();
-    }    
+    }
 
     public boolean isQueueEmpty() {
         return queue.isEmpty();
     }
-    
+
     public boolean hasQueueSpaceLeft() {
         return (queue.remainingCapacity()>3);
     }

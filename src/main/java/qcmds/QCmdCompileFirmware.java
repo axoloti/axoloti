@@ -40,12 +40,12 @@ public class QCmdCompileFirmware extends QCmdShellTask {
         TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(false);
         return "Done compiling firmware";
     }
-    
+
     @Override
     public File GetWorkingDir() {
         return new File(FirmwareDir());
     }
-    
+
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {

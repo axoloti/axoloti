@@ -76,7 +76,7 @@ public class Stochastics extends gentools {
         o.outlets.add(new OutletInt32("v", "random value"));
         o.sLocalData = "int32_t val;\n"
                 + "int ntrig;\n";
-        o.sInitCode = "" 
+        o.sInitCode = ""
                 + "val = 0;\n"
                 + "ntrig = 0;\n";
         o.sKRateCode = "   if ((inlet_trig>0) && !ntrig) {\n"

@@ -25,7 +25,7 @@ public class QCmdDisconnect implements QCmdGUITask {
 
     public QCmdDisconnect() {
     }
-    
+
     @Override
     public String GetStartMessage() {
         return "Start disconnect";

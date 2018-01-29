@@ -21,7 +21,7 @@ public class PresetInt extends Preset<Integer> {
     public PresetInt(@Element(name = "i") ValueInt32 x) {
         v = x.getInt();
     }
-    
+
     public PresetInt(int index, Integer value) {
         super(index, value);
     }

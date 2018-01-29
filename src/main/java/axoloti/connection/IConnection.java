@@ -36,7 +36,7 @@ public abstract class IConnection extends View<TargetController> {
     {
         public void Done(ByteBuffer mem);
     }
-    
+
     abstract public boolean isConnected();
     abstract public void disconnect();
     abstract public boolean connect(String cpuid);
@@ -61,7 +61,7 @@ public abstract class IConnection extends View<TargetController> {
     abstract public void TransmitCloseFile();
     abstract public void TransmitMemoryRead(int addr, int length, MemReadHandler handler);
     abstract public void TransmitMemoryRead(int addr, int length);
-    abstract public void TransmitMemoryRead1Word(int addr);    
+    abstract public void TransmitMemoryRead1Word(int addr);
     abstract public void SendUpdatedPreset(byte[] b);
     abstract public void SendMidi(int cable, int m0, int m1, int m2);
     abstract public boolean AppendToQueue(QCmdSerialTask cmd);
@@ -153,7 +153,7 @@ public abstract class IConnection extends View<TargetController> {
         if (isConnected()) {
             csl.ShowConnect();
         } else {
-            csl.ShowDisconnect();            
+            csl.ShowDisconnect();
         }
         csls.add(csl);
     }

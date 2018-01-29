@@ -24,7 +24,7 @@ import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
  * @author jtaelman
  */
 public class ParameterTypes {
-    
+
     final static Parameter types[] = {
       new ParameterFrac32SMap(),
       new Parameter4LevelX16(),
@@ -57,7 +57,7 @@ public class ParameterTypes {
       new ParameterInt32HRadio(),
       new ParameterInt32VRadio()
     };
-    
+
     public static Parameter[] getTypes(){
         return types;
     }

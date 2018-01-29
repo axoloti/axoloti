@@ -54,25 +54,25 @@ public class QCmdCompileModule extends QCmdShellTask {
             return "Compiling module failed ( "+ module + " ) ";
         }
     }
-    
+
     @Override
     public String[] GetEnv() {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(super.GetEnv()));
-        
+
         list.add("MODULE=" + module);
         list.add("MODULE_DIR=" + moduleDir);
-        
+
         String vars[] = new String[list.size()];
         list.toArray(vars);
         return vars;
     }
-    
+
     @Override
     public File GetWorkingDir() {
         return new File(FirmwareDir());
     }
-    
+
     @Override
     String GetExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {

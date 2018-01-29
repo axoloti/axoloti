@@ -43,7 +43,7 @@ public class AttributeInstanceViewFactory {
          // these have different constructors... FIXME
          } else if (model instanceof AttributeInstanceWavefile) {
          return new AttributeInstanceWavefile((AttributeInstanceWavefile)model, obj);
-         }  
+         }
          */
         view.PostConstructor();
         controller.addView(view);

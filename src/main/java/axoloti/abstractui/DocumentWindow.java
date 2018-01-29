@@ -30,7 +30,7 @@ public interface DocumentWindow {
 
     public String getTitle();
 
-    /*    
+    /*
     // return true when cancelling an unsaved close
      */
     public boolean askClose();

@@ -54,7 +54,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     private Boolean onParent = false;
     @Attribute(required = false)
     private Integer MidiCC = null;
-    
+
     protected int index;
     public T parameter;
     protected boolean needsTransmit = false;
@@ -128,7 +128,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     public void setNeedsTransmit(boolean needsTransmit) {
         this.needsTransmit = needsTransmit;
     }
-    
+
     public ByteBuffer getValueBB() {
         return ByteBuffer.wrap(new byte[4]);
     }
@@ -226,7 +226,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     public int getIndex() {
         return index;
     }
-    
+
     // review!
     public String GetUserParameterName() {
         if (axoObjectInstance.getParameterInstances().size() == 1) {
@@ -240,7 +240,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     public abstract int valToInt32(DT o);
     public abstract DT int32ToVal(int v);
-    
+
     public String GetCMultiplier() {
         return "0";
     }
@@ -327,7 +327,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     /* MVC getters and setters */
 
-    /* View personality */    
+    /* View personality */
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
@@ -373,9 +373,9 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     public T getParamOnParent() {
         return paramOnParent;
     }
-    
+
     public abstract Preset presetFactory(int index, DT value);
-    
+
     public void updateParamOnParent() {
         if (paramOnParent != null) {
             paramOnParent.setName(ControlOnParentName());
@@ -400,12 +400,12 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
             // TODO: sort
         }
         if (prev_value != null) {
-            ps.remove((Parameter) prev_value);                
+            ps.remove((Parameter) prev_value);
         }
         aop.setParameters(ps);
     }
-    
-    public void setOnParent(Boolean onParent) {        
+
+    public void setOnParent(Boolean onParent) {
         if (onParent == null) {
             onParent = false;
         }
@@ -414,7 +414,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         }
         if (!onParent) {
             onParent = null;
-        }        
+        }
         Boolean oldValue = this.onParent;
         this.onParent = onParent;
         if (onParent != null && onParent) {
@@ -447,7 +447,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         firePropertyChange(AtomDefinition.NAME, prevValue, name);
     }
 
-    
+
     @Override
     public void dispose() {
         super.dispose();
@@ -455,5 +455,5 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
             setParamOnParent(null);
         }
     }
-    
+
 }

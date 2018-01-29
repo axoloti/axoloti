@@ -22,12 +22,12 @@ package axoloti.utils;
  * @author jtaelman
  */
 public class CodeGeneration {
-    
+
     // param_name_length equals MAX_PARAMETER_NAME_LENGTH in firmware/parameters.h
     static final public int param_name_length = 8;
 
     // to generate a static initializer for a char array in c++
-    // CPPCharArrayStaticInitializer("static",5) 
+    // CPPCharArrayStaticInitializer("static",5)
     // returns {'s','t','a','t','i'}
     // not null terminated!
     static public String CPPCharArrayStaticInitializer(String n, int length) {

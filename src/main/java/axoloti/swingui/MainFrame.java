@@ -358,7 +358,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
                 + "* zombie objects broken\n"
                 + "* modules are broken\n"
                 + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n");
-        
+
         controller.addView(this);
     }
 
@@ -819,7 +819,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         if(DocumentWindowList.AskCloseAll()) {
             return;
         }
-        
+
         Preferences.getPreferences().SavePrefs();
         dispose();
         System.exit(0);
@@ -961,7 +961,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
             ShowConnectDisconnect(isConneced);
             if (connection != null) {
                 setCpuID(connection.getTargetProfile().getCPUSerialString());
-                setFirmwareID(connection.getFWID());          
+                setFirmwareID(connection.getFWID());
             } else {
                 setCpuID(null);
             }

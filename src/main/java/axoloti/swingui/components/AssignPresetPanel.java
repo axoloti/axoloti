@@ -63,7 +63,7 @@ public class AssignPresetPanel extends JPanel {
                 if (o instanceof Integer) {
                     ctrl.setValue((Integer)p.getValue());
                 } else {
-                    ctrl.setValue((Double)p.getValue());                        
+                    ctrl.setValue((Double)p.getValue());
                 }
             } else {
                 ctrl.setEnabled(false);
@@ -104,7 +104,7 @@ public class AssignPresetPanel extends JPanel {
     };
 
     double valueBeforeAdjustment;
-    
+
     PropertyChangeListener ctrlListener = new PropertyChangeListener() {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {

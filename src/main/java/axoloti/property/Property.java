@@ -17,7 +17,7 @@ public abstract class Property<T> {
         if (friendlyName == null) {
             this.friendlyName = name;
         } else {
-            this.friendlyName = friendlyName;            
+            this.friendlyName = friendlyName;
         }
     }
 
@@ -40,7 +40,7 @@ public abstract class Property<T> {
     public abstract Class getType();
 
     public abstract boolean allowNull();
-    
+
     public boolean is(PropertyChangeEvent evt) {
         return (getName().equals(evt.getPropertyName()));
     }

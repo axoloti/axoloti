@@ -261,7 +261,7 @@ public class CheckboxComponent extends ACtrlComponent {
         setValue(value);
         fireEvent();
     }
-    
+
     @Override
     public double getValue() {
         return value;

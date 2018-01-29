@@ -41,7 +41,7 @@ public class IoletInstancePopupMenu extends JPopupMenu {
         PatchController pc = ioletInstanceController.getParent().getParent();
         NetController nc = pc.getNetFromIolet(ioletInstanceController.getModel());
         boolean isSource = ioletInstanceController.getModel().isSource();
-        
+
 
         JMenuItem itemDisconnect = new JMenuItem("Disconnect " + getDirectionLabel(isSource));
         if (nc == null) {

@@ -41,14 +41,14 @@ import java.util.logging.Logger;
  * @author jtaelman
  */
 public class PatchViewCodegen extends View<PatchController> {
-   
+
     List<IAxoObjectInstanceCodegenView> objectInstanceViews;
     List<INetView> netViews;
 
-    final ArrayList<ParameterInstance> ParameterInstances;    
+    final ArrayList<ParameterInstance> ParameterInstances;
     final ArrayList<DisplayInstance> DisplayInstances;
     final int displayDataLength;
-    
+
     public PatchViewCodegen(PatchController controller) {
         super(controller);
         objectInstanceViews = new ArrayList<>();
@@ -57,7 +57,7 @@ public class PatchViewCodegen extends View<PatchController> {
             objectInstanceViews.add(o);
         }
 
-        int i = 0;        
+        int i = 0;
         ParameterInstances = new ArrayList<ParameterInstance>();
         for (IAxoObjectInstance o : controller.getModel().objectinstances) {
             for (ParameterInstance p : o.getParameterInstances()) {
@@ -79,7 +79,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 DisplayInstances.add(p);
             }
         }
-        displayDataLength = offset;        
+        displayDataLength = offset;
     }
 
     private PatchModel getModel() {
@@ -142,7 +142,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c += "    static const uint32_t NMODULATIONSOURCES = " + getModel().getNModulationSources() + ";\n";
         c += "    static const uint32_t NMODULATIONTARGETS = " + getModel().getNModulationTargetsPerSource() + ";\n";
         return c;
-    }    
+    }
 
     String GenerateObjectCode(String classname, boolean enableOnParent, String OnParentAccess) {
         String c = "";
@@ -198,14 +198,14 @@ public class PatchViewCodegen extends View<PatchController> {
         }
         return c;
     }
-    
+
     public String GenerateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
         String c = "";
         c += GeneratePexchAndDisplayCode();
         c += GenerateObjectCode(classname, enableOnParent, "parent->");
         return c;
-    }    
-    
+    }
+
     String GenerateStructCodePlusPlus(String classname, boolean enableOnParent, String parentclassname) {
         String c = "";
         c += "class " + classname + "{\n";
@@ -213,7 +213,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c += GenerateStructCodePlusPlusSub(parentclassname, enableOnParent);
         return c;
     }
-    
+
     String GenerateUICode() {
         int count[] = new int[]{0};
         String c = "";
@@ -243,7 +243,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "   }";
         return c;
     }
-    
+
 
     public String GeneratePresetCode3(String ClassName) {
         String c = "   static const int32_t * GetPresets(void){\n";
@@ -295,7 +295,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "}\n";
         return c;
     }
-    
+
     public String GenerateModulationCode3() {
         String s = "   static PExModulationTarget_t * GetModulationTable(void){\n";
         s += "    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n";
@@ -413,7 +413,7 @@ public class PatchViewCodegen extends View<PatchController> {
         return c;
     }
 
-    
+
     public String GenerateDisposeCodePlusPlusSub(String className) {
         // reverse order
         String c = "";
@@ -443,7 +443,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c += "}\n\n";
         return c;
     }
-    
+
     public String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
         String c = "";
         c += "//--------- <nets> -----------//\n";
@@ -562,7 +562,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c += ");\n";
         return c;
     }
-    
+
     String GenerateDSPCodePlusPlus(String ClassName, boolean enableOnParent) {
         String c;
         c = "/* krate */\n";
@@ -573,7 +573,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c += GenerateDSPCodePlusPlusSub(ClassName, enableOnParent);
         c += "}\n\n";
         return c;
-    }    
+    }
 
     public String GenerateMidiInCodePlusPlus() {
         String c = "";
@@ -695,7 +695,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
                 + "  root.Init();\n"
                 + "}\n\n";
-        
+
         c += "#define fourcc_patch_root FOURCC('A','X','P','T')\n"
                 + "typedef struct {\n"
                 + "	chunk_header_t header;\n"
@@ -755,11 +755,11 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "					fptr_applyPreset: ApplyPreset,\n"
                 + "		},\n"
                 + "};\n";
-        
+
         return c;
     }
-    
-    
+
+
     String GenerateCode4() {
         String c = "";
 
@@ -890,7 +890,7 @@ public class PatchViewCodegen extends View<PatchController> {
         GenerateNormalCode(ao);
         return ao;
     }
-    
+
     public void GenerateNormalCode(AxoObject ao){
         ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true)
                 + "static const int polyIndex = 0;\n";
@@ -929,9 +929,9 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                 + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
                 + GenerateMidiInCodePlusPlus();
-    
+
     }
-    
+
     public void GeneratePolyCode(AxoObject ao) {
         ao.sLocalData = GenerateParamInitCode3("");
         ao.sLocalData += GeneratePexchAndDisplayCode();
@@ -1186,7 +1186,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "}\n";
     }
 
-    
+
     public void GeneratePolyExpressionCode(AxoObject o) {
         GeneratePolyCode(o);
         o.sLocalData
@@ -1326,9 +1326,9 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
-                + "}\n"; // other midi        
+                + "}\n"; // other midi
     }
-    
+
 //    void ExportAxoObjPoly2(File f1) {
 //        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
 //    }
@@ -1409,8 +1409,8 @@ public class PatchViewCodegen extends View<PatchController> {
         AxoObject o = GenerateAxoObjPoly(template);
         GeneratePolyExpressionCode(o);
         return o;
-    }    
-    
+    }
+
     public AxoObject GenerateAxoObj(AxoObject template) {
         AxoObject ao;
         switch (getModel().getSubPatchMode()) {
@@ -1444,7 +1444,7 @@ public class PatchViewCodegen extends View<PatchController> {
     public ArrayList<DisplayInstance> getDisplayInstances() {
         return DisplayInstances;
     }
-    
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }

@@ -34,7 +34,7 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     public ValueInt32 MinValue;
     @Element
     public ValueInt32 MaxValue;
-    
+
 
 
     public ParameterInt32Box() {

@@ -32,7 +32,7 @@ import javax.swing.JRadioButton;
  * @author Johannes Taelman
  */
 public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
-    
+
     final MidiCCProperty property;
     final AbstractController ctrl;
 
@@ -41,7 +41,7 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         this.property = property;
         this.ctrl = ctrl;
         setText("Midi CC");
-        
+
         /*
         JMenuItem m = new JMenuItem("Assign...");
         m.addActionListener(new ActionListener() {
@@ -87,7 +87,7 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
                 }
             }
         }
-        add(p);        
+        add(p);
     }
 
     @Override
@@ -99,6 +99,6 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         } else if (s.equals("none")) {
             Integer v = -1;
             ctrl.setModelUndoableProperty(property, v);
-        }        
+        }
     }
 }

@@ -278,12 +278,12 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
         }
     }
 
-    
+
     public void fireValue(double value) {
         setValue(value);
         fireEvent();
     }
-    
+
     @Override
     public double getValue() {
         return value;

@@ -44,12 +44,12 @@ public class KeyboardFrame extends TJFrame {
     int getCable() {
         return ((SpinnerNumberModel) jSpinnerCable.getModel()).getNumber().intValue() - 1;
     }
-    
+
     int getChannel() {
-        return ((SpinnerNumberModel) jSpinnerChannel.getModel()).getNumber().intValue() - 1;        
+        return ((SpinnerNumberModel) jSpinnerChannel.getModel()).getNumber().intValue() - 1;
     }
-        
-    
+
+
     public KeyboardFrame(TargetController controller) {
         super(controller);
         initComponents();

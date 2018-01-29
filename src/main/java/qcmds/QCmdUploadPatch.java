@@ -74,9 +74,9 @@ public class QCmdUploadPatch implements QCmdSerialTask {
                 connection.UploadFragment(buffer, baseaddr + offset);
                 offset += nRead;
             } while (tlength > 0);
-            inputStream.close();        
+            inputStream.close();
     }
-    
+
     @Override
     public QCmd Do(IConnection connection) {
         connection.ClearSync();

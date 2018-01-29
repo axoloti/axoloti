@@ -62,14 +62,14 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     int x;
     @Attribute
     int y;
-    
+
     Boolean selected = false;
 
     private final PatchModel patchModel;
 
     IAxoObject type;
     boolean typeWasAmbiguous = false;
-    
+
     ObjectController controller;
 
     public AxoObjectInstanceAbstract() {
@@ -201,7 +201,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     }
 
     private Point p = new Point();
-    
+
     public boolean providesModulationSource() {
         return false;
     }

@@ -20,11 +20,11 @@ public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodege
         PatchController pc = controller.getSubPatchController();
         PatchModel pm = pc.getModel();
         PatchViewCodegen pvcg = new PatchViewCodegen(pc);
-        
+
         // from GenerateAxoObjNormal
-        if (pm.getSubPatchMode() == SubPatchMode.no || 
+        if (pm.getSubPatchMode() == SubPatchMode.no ||
                 pm.getSubPatchMode() == SubPatchMode.normal) {
-/*            
+/*
             ao.sLocalData = pvcg.GenerateStructCodePlusPlusSub("attr_parent", true)
                     + "static const int polyIndex = 0;\n";
             ao.sLocalData += pvcg.GenerateParamInitCode3("");
@@ -63,7 +63,7 @@ public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodege
             ao.sMidiCode = ""
                     + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                     + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
-                    + pvcg.GenerateMidiInCodePlusPlus();    
+                    + pvcg.GenerateMidiInCodePlusPlus();
 */
             pvcg.GenerateNormalCode(ao);
         } else if (pm.getSubPatchMode() == SubPatchMode.polyphonic) {
@@ -74,5 +74,5 @@ public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodege
             pvcg.GeneratePolyExpressionCode(ao);
         }
     }
-    
+
 }

@@ -52,8 +52,8 @@ public abstract class ArrayView<T extends IView> {
     public abstract void updateUI(List<T> views);
 
 
-    /* Override this method to create a suitable view of the model referenced 
-     * by the controller. The implementation should also call the addView method 
+    /* Override this method to create a suitable view of the model referenced
+     * by the controller. The implementation should also call the addView method
      * of the controller. */
     public abstract T viewFactory(AbstractController ctrl);
 

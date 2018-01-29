@@ -379,7 +379,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         assert (false);
                         break;
                     case 1:
-                        //Field f = getController().get(rowIndex).fields.get(rowIndex);                        
+                        //Field f = getController().get(rowIndex).fields.get(rowIndex);
                         Class c = property.getType();
                         String svalue = (String) value;
                         Object newValue = property.StringToObj(svalue);

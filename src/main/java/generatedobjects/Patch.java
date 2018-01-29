@@ -200,7 +200,7 @@ public class Patch extends gentools {
         o.sSRateCode = "   _outlet[buffer_index] = %outlet%;\n";
         return o;
     }
-    
+
           static AxoObject Create_outlet_string() {
         AxoObject o = new AxoObject("outlet string", "String outlet. The outlet object becomes an outlet connector when this patch is used as an object (subpatch)");
         o.inlets.add(new InletCharPtr32("outlet", "outlet"));
@@ -288,8 +288,8 @@ public class Patch extends gentools {
         o.sKRateCode = "   if ((%trig%>0) && !ntrig) {LoadPatchIndexed(inlet_i); ntrig=1;}\n"
                 + "   else if (!(%trig%>0)) ntrig=0;\n";
         return o;
-    }    
-    
+    }
+
     static AxoObject CreateLoadPatchFn() {
         AxoObject o = new AxoObject("load fn", "load a patch from sdcard");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
@@ -323,8 +323,8 @@ public class Patch extends gentools {
     static AxoObject CreatePatcherObject() {
         AxoObject o = new AxoObjectPatcherObject("object", "Object stored in the patch document (IN DEVELOPMENT!)");
         return o;
-    }   
-    
+    }
+
     static AxoObject CreateCyclecounter() {
         AxoObject o = new AxoObject("cyclecounter", "Outputs the cpu clock cycle counter, a 32bit integer incrementing on every clock cycle. Useful for benchmarking objects.");
         o.outlets.add(new OutletInt32("t", "cpu time in ticks"));

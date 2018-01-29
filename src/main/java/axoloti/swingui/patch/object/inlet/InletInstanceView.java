@@ -92,7 +92,7 @@ public class InletInstanceView extends IoletAbstract<IoletInstanceController> im
     @Override
     public void dispose() {
     }
-    
+
     private JackInputComponent getJack() {
         return (JackInputComponent) jack;
     }

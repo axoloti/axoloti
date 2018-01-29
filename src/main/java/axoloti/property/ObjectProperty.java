@@ -6,9 +6,9 @@ package axoloti.property;
  * @author jtaelman
  */
 public class ObjectProperty extends PropertyReadWrite<Object> {
-    
+
     final Class clazz;
-    
+
     public ObjectProperty(String name, Class propertyClass, Class containerClass) {
         super(name, propertyClass, containerClass, name);
         this.clazz = propertyClass;

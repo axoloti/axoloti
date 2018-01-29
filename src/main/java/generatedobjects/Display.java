@@ -220,10 +220,10 @@ public class Display extends gentools {
      }*/
     /*
      static AxoObject CreatePitchDisplay(){
-        
+
      }
      static AxoObject CreateFractDisplay(){
-        
+
      }
      */
     /*
@@ -660,7 +660,7 @@ public class Display extends gentools {
         o.sKRateCode = "%v%=%in%;\n";
         return o;
     }
-    
+
     static AxoObject CreateDisplayVU() {
         AxoObject o = new AxoObject("vu", "cheap vu meter display");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
