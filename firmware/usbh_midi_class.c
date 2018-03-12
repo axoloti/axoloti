@@ -40,9 +40,8 @@
 #error "USBHMIDI needs USBH"
 #endif
 
-#warning "Needs ChibiOS_16.1.8/community from https://github.com/ChibiOS/ChibiOS-Contrib,"
-#warning "different than the one included in Chibios_16.1.8, "
-#warning "otherwise compilation will fail on this file!"
+#warning "Needs ChibiOS community library from https://github.com/Axoloti/ChibiOS-Contrib patch-2"
+#warning "otherwise compilation will fail!"
 
 #include <string.h>
 #include "usbh_midi_class.h"
