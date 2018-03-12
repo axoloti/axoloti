@@ -44,7 +44,7 @@ static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 	} else {
 		int q = evt.fields.quadrant - quadrant_topleft;
 		int i = q + menu_stack[menu_stack_position].currentpos;
-		if (i < patchMeta.nparams) {
+		if (i < (int)patchMeta.nparams) {
 			int v = value_from_input_event(evt);
 			if (v) {
 				Parameter_t *p = &patchMeta.params[i];

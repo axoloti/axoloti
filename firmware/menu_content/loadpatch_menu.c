@@ -14,7 +14,6 @@
 typedef struct {
   DIR dir;
   FILINFO fno;
-   char FileName[64];
 } data;
 
 static data d;
@@ -27,8 +26,6 @@ static void init(void) {
 	sel = 0;
 	nfiles = 0;
 	FRESULT res;
-	d.fno.lfname = &d.FileName[0];
-	d.fno.lfsize = sizeof(d.FileName);
 	res = f_opendir(&d.dir, "/");
 	int i = 0;
 	if (res == FR_OK) {
@@ -39,7 +36,7 @@ static void init(void) {
 			if (d.fno.fname[0] == '.')
 				continue;
 			char *fn;
-			fn = *d.fno.lfname ? d.fno.lfname : d.fno.fname;
+			fn = d.fno.fname;
 			if (fn[0] == '.')
 				continue;
 			i++;
@@ -57,8 +54,6 @@ static void refresh(int launch) {
 		return;
 	}
 	FRESULT res;
-	d.fno.lfname = &d.FileName[0];
-	d.fno.lfsize = sizeof(d.FileName);
 	res = f_opendir(&d.dir, "/");
 	int i = 0;
 	if (res == FR_OK) {
@@ -69,18 +64,18 @@ static void refresh(int launch) {
 			if (d.fno.fname[0] == '.')
 				continue;
 			char *fn;
-			fn = *d.fno.lfname ? d.fno.lfname : d.fno.fname;
+			fn = d.fno.fname;
 			if (fn[0] == '.')
 				continue;
 			if (i-sel == 0) {
 				LCD_drawStringInvN(0, 1 + i - sel, fn, 20);
 				if (launch) {
 					char *f0 = fn;
-					for(i=0;i<sizeof(d.FileName);i++) {
+					for(i=0;i<(int)sizeof(d.fno.fname);i++) {
 						if (!*f0) break;
 						f0++;
 					}
-					if ((!*f0)&&(i<sizeof(d.FileName)-11)) {
+					if ((!*f0)&&(i<(int)sizeof(d.fno.fname)-11)) {
 						*f0++ = '/';
 						*f0++ = 'p';
 						*f0++ = 'a';

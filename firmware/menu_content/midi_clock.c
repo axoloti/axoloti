@@ -1,4 +1,5 @@
 #include "ch.h"
+#include "hal.h"
 #include "chprintf.h"
 #include "string.h"
 #include "../ui.h"

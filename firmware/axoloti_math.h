@@ -22,7 +22,7 @@
 #include "hal.h"
 
 #include <stdint.h>
-#include "math.h"
+//#include "math.h"
 
 //#pragma GCC diagnostic push
 //#pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -176,6 +176,10 @@ __attribute__ ( ( always_inline ) ) __STATIC_INLINE int32_t rand_s32(void) {
   static uint32_t randSeed = 22222;
   return randSeed = (randSeed * 196314165) + RNG->DR;
 }
+
+#ifdef RAND_MAX
+#undef RAND_MAX
+#endif
 
 #define RAND_MAX INT32_MAX
 __attribute__ ( ( always_inline ) ) __STATIC_INLINE int rand(void) {

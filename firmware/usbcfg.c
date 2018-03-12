@@ -20,9 +20,6 @@
 #include "hal.h"
 #include "usbcfg.h"
 
-#include "chibios_migration.h"
-
-
 /*
  * USB Driver structure.
  */
@@ -345,7 +342,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
-    chSysLockFromIsr();
+    chSysLockFromISR();
 
     /* Enables the endpoints specified into the configuration.
        Note, this callback is invoked from an ISR so I-Class functions
@@ -353,7 +350,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     usbInitEndpointI(usbp, USBD1_DATA_REQUEST_EP, &ep1config);
     usbInitEndpointI(usbp, USBD2_DATA_REQUEST_EP, &ep2config);
 
-    chSysUnlockFromIsr();
+    chSysUnlockFromISR();
     return;
   case USB_EVENT_SUSPEND:
     return;
@@ -420,7 +417,7 @@ static const uint8_t msdescriptor1[] = {
 /* double NUL-terminated Unicode String (LE) Property name "{88BAE032-5A81-49f0-BC3D-A4FF138216D6}" */
 };
 
-static bool_t specialRequestsHook(USBDriver *usbp) {
+static bool specialRequestsHook(USBDriver *usbp) {
   if (
       (usbp->setup[0] == 0xC0) &&
       (usbp->setup[1] == 0x14) &&

@@ -19,7 +19,6 @@
 #define __SDCARD_H
 
 #include "ch.h"
-#include "chibios_migration.h"
 
 void sdcard_init(void);
 int sdcard_loadPatch1(char *fname);
@@ -27,7 +26,7 @@ void sdcard_attemptMountIfUnmounted(void);
 void sdcard_unmount(void);
 
 //extern FATFS SDC_FS;
-extern bool_t fs_ready;
+extern bool fs_ready;
 
 extern uint32_t fbuff[256];
 

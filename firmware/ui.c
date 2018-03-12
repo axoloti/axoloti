@@ -544,12 +544,12 @@ void pollProcessUIEvent(void) {
 	}
 }
 
-static WORKING_AREA(waThreadUI2, 1024);
+static THD_WORKING_AREA(waThreadUI2, 1024);
 static THD_FUNCTION(ThreadUI2, arg) {
 	(void) (arg);
 	chRegSetThreadName("ui2");
 	while (1) {
-		eventmask_t evt = chEvtWaitOneTimeout(0xFFFFFFFF, MS2ST(16)); // ~ 60Hz refresh rate
+		eventmask_t evt = chEvtWaitOneTimeout(0xFFFFFFFF, TIME_MS2I(16)); // ~ 60Hz refresh rate
 		const ui_node_t * head_node = menu_stack[menu_stack_position].parent;
 		if (evt == lcd_dirty_flag_clearscreen) {
 			LCD_clear();

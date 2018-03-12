@@ -86,7 +86,7 @@ mkdir -p "${PLATFORM_ROOT}/lib"
 mkdir -p "${PLATFORM_ROOT}/src"
 
 
-CH_VERSION=16.1.8
+CH_VERSION=18.2.0
 if [ ! -d "${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
@@ -101,7 +101,7 @@ then
     fi
     unzip -q -o ${ARCHIVE}
     cd ${ARDIR}/ext
-    7z x ./fatfs-0.10b-patched.7z
+    7z x ./fatfs-0.13-patched.7z
     cd ../../
     mv ${ARDIR} ../..
 

@@ -127,12 +127,12 @@ static void ADAU_I2C_Init(void)
         GPIOH,
         7,
         PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN
-            | PAL_STM32_PUDR_PULLUP);
+            | PAL_MODE_INPUT_PULLUP);
     palSetPadMode(
         GPIOH,
         8,
         PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN
-            | PAL_STM32_PUDR_PULLUP);
+            | PAL_MODE_INPUT_PULLUP);
 
     rccEnableI2C3(FALSE);
     nvicEnableVector(I2C3_EV_IRQn, STM32_I2C_I2C3_IRQ_PRIORITY);
@@ -212,7 +212,7 @@ static const unsigned char pll48k_pullup[6] = {0x1F,0x40,0x04,0x81,0x31,0x01};
 static const unsigned char pll48k_exact[6] = {0x1F,0x40,0x04,0x80,0x31,0x01};
 static const unsigned char pll48k_pulldown[6] = {0x1F,0x40,0x04,0x7F,0x31,0x01};
 
-void codec_ADAU1961_hw_init(uint16_t samplerate, bool_t isMaster) {
+void codec_ADAU1961_hw_init(uint16_t samplerate, bool isMaster) {
 
   ADAU_I2C_Init();
   chThdSleepMilliseconds(5);
@@ -410,10 +410,10 @@ static void dma_sai_a_interrupt_spilink_master(void* dat, uint32_t flags) {
 	palSetPadMode(GPIOA, 0, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPad(GPIOA, 0);
 #endif
-	chSysLockFromIsr();
+	chSysLockFromISR();
 	codec_interrupt_timestamp = stGetCounter();
 	spilink_master_process();
-	chSysUnlockFromIsr();
+	chSysUnlockFromISR();
 	if ((sai_a_dma)->stream->CR & STM32_DMA_CR_CT) {
 		computebufI(rbuf2, buf);
 	} else {
@@ -482,7 +482,7 @@ void check_clock_is_present(void) {
 	sysmon_blink_pattern(BLINK_BOOT);
 }
 
-void codec_ADAU1961_i2s_init(uint16_t sampleRate, bool_t isMaster) {
+void codec_ADAU1961_i2s_init(uint16_t sampleRate, bool isMaster) {
   volatile SAI_Block_TypeDef *sai_a = SAI1_Block_A;
   volatile SAI_Block_TypeDef *sai_b = SAI1_Block_B;
 //configure MCO
@@ -549,7 +549,7 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate, bool_t isMaster) {
       | STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
       STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD;
 
-  bool_t b;
+  bool b;
   if  (isMaster){
 	  b = dmaStreamAllocate(sai_a_dma, STM32_SAI_A_IRQ_PRIORITY,
 	                               (stm32_dmaisr_t)dma_sai_a_interrupt_spilink_master,

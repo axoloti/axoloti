@@ -31,6 +31,11 @@
 #ifndef _CHCONF_H_
 #define _CHCONF_H_
 
+
+#define _CHIBIOS_RT_CONF_
+#define _CHIBIOS_RT_CONF_VER_5_0_
+
+
 /*===========================================================================*/
 /**
  * @name System timers settings
@@ -50,6 +55,18 @@
  *          setting also defines the system tick time unit.
  */
 #define CH_CFG_ST_FREQUENCY                 1000
+
+/**
+ * @brief   Time intervals data size.
+ * @note    Allowed values are 16, 32 or 64 bits.
+ */
+#define CH_CFG_INTERVALS_SIZE               32
+
+/**
+ * @brief   Time types data size.
+ * @note    Allowed values are 16 or 32 bits.
+ */
+#define CH_CFG_TIME_TYPES_SIZE 32
 
 /**
  * @brief   Time delta constant for the tick-less mode.
@@ -305,6 +322,15 @@
 #define CH_CFG_USE_MEMPOOLS                 FALSE
 
 /**
+ * @brief  Objects FIFOs APIs.
+ * @details If enabled then the objects FIFOs APIs are included
+ *          in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#define CH_CFG_USE_OBJ_FIFOS                FALSE
+
+/**
  * @brief   Dynamic Threads APIs.
  * @details If enabled then the dynamic threads creation APIs are included
  *          in the kernel.
@@ -317,8 +343,55 @@
 
 /** @} */
 
+/*===========================================================================*/
+/**
+ * @name Objects factory options
+ * @{
+ */
+/*===========================================================================*/
 
+/**
+ * @brief   Objects Factory APIs.
+ * @details If enabled then the objects factory APIs are included in the
+ *          kernel.
+ *
+ * @note    The default is @p FALSE.
+ */
+#define CH_CFG_USE_FACTORY                  FALSE
 
+/**
+ * @brief   Maximum length for object names.
+ * @details If the specified length is zero then the name is stored by
+ *          pointer but this could have unintended side effects.
+ */
+#define CH_CFG_FACTORY_MAX_NAMES_LENGTH     8
+
+/**
+ * @brief   Enables the registry of generic objects.
+ */
+#define CH_CFG_FACTORY_OBJECTS_REGISTRY     TRUE
+
+/**
+ * @brief   Enables factory for generic buffers.
+ */
+#define CH_CFG_FACTORY_GENERIC_BUFFERS      TRUE
+
+/**
+ * @brief   Enables factory for semaphores.
+ */
+#define CH_CFG_FACTORY_SEMAPHORES           TRUE
+
+/**
+ * @brief   Enables factory for mailboxes.
+ */
+#define CH_CFG_FACTORY_MAILBOXES            TRUE
+
+/**
+ * @brief   Enables factory for objects FIFOs.
+ */
+#define CH_CFG_FACTORY_OBJ_FIFOS            TRUE
+
+/** @} */
 
 /**
  * @brief   Atomic semaphore API.
@@ -378,14 +451,21 @@
  */
 #define CH_DBG_ENABLE_ASSERTS               TRUE
 
+
 /**
  * @brief   Debug option, trace buffer.
- * @details If enabled then the context switch circular trace buffer is
- *          activated.
+ * @details If enabled then the trace buffer is activated.
  *
- * @note    The default is @p FALSE.
+ * @note    The default is @p CH_DBG_TRACE_MASK_DISABLED.
  */
-#define CH_DBG_ENABLE_TRACE                 FALSE
+#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_DISABLED
+
+/**
+ * @brief   Trace buffer entries.
+ * @note    The trace buffer is only allocated if @p CH_DBG_TRACE_MASK is
+ *          different from @p CH_DBG_TRACE_MASK_DISABLED.
+ */
+#define CH_DBG_TRACE_BUFFER_SIZE 128
 
 /**
  * @brief   Debug option, stack checks.
@@ -430,6 +510,22 @@
 /*===========================================================================*/
 
 /**
+ * @brief   System structure extension.
+ * @details User fields added to the end of the @p ch_system_t structure.
+ */
+#define CH_CFG_SYSTEM_EXTRA_FIELDS                                          \
+/* Add threads custom fields here.*/
+
+/**
+ * @brief   System initialization hook.
+ * @details User initialization code added to the @p chSysInit() function
+ *          just before interrupts are enabled globally.
+ */
+#define CH_CFG_SYSTEM_INIT_HOOK(tp) {                                       \
+  /* Add threads initialization code here.*/                                \
+}
+
+/**
  * @brief   Threads descriptor structure extension.
  * @details User fields added to the end of the @p thread_t structure.
  */
@@ -465,6 +561,20 @@
  */
 #define CH_CFG_CONTEXT_SWITCH_HOOK(ntp, otp) {                              \
   /* Context switch code here.*/                                            \
+}
+
+/**
+ * @brief   ISR enter hook.
+ */
+#define CH_CFG_IRQ_PROLOGUE_HOOK() {                                        \
+  /* IRQ prologue code here.*/                                              \
+}
+
+/**
+ * @brief   ISR exit hook.
+ */
+#define CH_CFG_IRQ_EPILOGUE_HOOK() {                                        \
+  /* IRQ epilogue code here.*/                                              \
 }
 
 /**
@@ -513,6 +623,15 @@ void report_halt(const char *reason);
 
 #define CH_CFG_SYSTEM_HALT_HOOK(reason) {                                   \
 		report_halt(reason);                                                 \
+}
+
+/**
+ * @brief   Trace hook.
+ * @details This hook is invoked each time a new record is written in the
+ *          trace buffer.
+ */
+#define CH_CFG_TRACE_HOOK(tep) {                                            \
+  /* Trace code here.*/                                                     \
 }
 
 /** @} */

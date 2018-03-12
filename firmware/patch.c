@@ -66,8 +66,8 @@ static int32_t *outbuf;
 static int nThreadsBeforePatch;
 #define STACKSPACE_MARGIN 32
 
-static WORKING_AREA(waThreadDSP, 7200) CCM;
-static Thread *pThreadDSP = 0;
+static THD_WORKING_AREA(waThreadDSP, 7200) CCM;
+static thread_t *pThreadDSP = 0;
 static const char *index_fn = "/index.axb";
 
 #define THREAD_DSP_EVT_MASK_COMPUTE ((eventmask_t)1)
@@ -77,7 +77,7 @@ static const char *index_fn = "/index.axb";
 
 static int GetNumberOfThreads(void){
   int i=1;
-  Thread *thd1 = chRegFirstThread();
+  thread_t *thd1 = chRegFirstThread();
   while(thd1){
     i++;
     thd1 = chRegNextThread (thd1);
@@ -87,13 +87,20 @@ static int GetNumberOfThreads(void){
 
 void CheckStackOverflow(void) {
 #if CH_DBG_FILL_THREADS
-  Thread *thd = chRegFirstThread();
+  thread_t *thd = chRegFirstThread();
   // skip 1st thread, main thread
   thd = chRegNextThread (thd);
   int critical = 0;
   int nfree = 0;
   while(thd){
-    char *stk = (char *)(thd+1);
+    if (THD_WORKING_AREA_END(thd) == THD_WORKING_AREA_BASE(thd)) {
+	thd = chRegNextThread(thd);
+        continue;
+    }
+
+//    char *stk = (char *)(thd+1);
+//    char *stk = (char *)THD_WORKING_AREA_END(thd) - 4;
+    char *stk = (char *)THD_WORKING_AREA_BASE(thd) + 64;
     nfree = 0;
     while(*stk == CH_DBG_STACK_FILL_VALUE) {
       nfree++;
@@ -118,6 +125,7 @@ void CheckStackOverflow(void) {
         LogTextMessage("Thread ?? : stack critical %d",nfree);
       else
         LogTextMessage("Thread ?? : stack overflow");
+    LogTextMessage("b = %08X e = %08X", THD_WORKING_AREA_BASE(thd), THD_WORKING_AREA_END(thd));
   }
 #endif
 }
@@ -443,7 +451,7 @@ void computebufI(int32_t *inp, int32_t *outp) {
     inbuf[i] = inp[i];
   }
   outbuf = outp;
-  chSysLockFromIsr();
+  chSysLockFromISR();
   // generate midi clock in codec interrupt
   // advantage: zero quarter note jitter
   // no clock loss when audio computation suffers a buffer underrun
@@ -464,7 +472,7 @@ void computebufI(int32_t *inp, int32_t *outp) {
 	  }
   }
   chEvtSignalI(pThreadDSP, THREAD_DSP_EVT_MASK_COMPUTE);
-  chSysUnlockFromIsr();
+  chSysUnlockFromISR();
 }
 
 // MidiByte0 is only to be used by patches, avoids queuing

@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-math-errno
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-math-errno -D__FPU_PRESENT
 endif
 
 # C specific options here (added to USE_OPT).
@@ -60,7 +60,7 @@ endif
 # Stack size to be allocated to the Cortex-M process stack. This stack is
 # the stack used by the main() thread.
 ifeq ($(USE_PROCESS_STACKSIZE),)
-  USE_PROCESS_STACKSIZE = 0x400
+  USE_PROCESS_STACKSIZE = 0x450
 endif
 
 # Stack size to the allocated to the Cortex-M main/exceptions stack. This
@@ -98,7 +98,7 @@ axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
-CHIBIOS = ${axoloti_release}/ChibiOS_16.1.8
+CHIBIOS = ${axoloti_release}/ChibiOS_18.2.0
 CHIBIOS_CONTRIB = $(CHIBIOS)/community
 
 
@@ -111,15 +111,18 @@ FIRMWARE=.
 MUTABLE_INSTRUMENTS = ${FIRMWARE}/mutable_instruments
 
 
+# Startup files.
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+
 include board.mk
-include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 # HAL-OSAL files (optional).
 include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
 include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
-include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 	
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
 
@@ -299,12 +302,13 @@ TCSRC =
 TCPPSRC =
 
 # List ASM source files here
-ASMSRC = $(STARTUPASM) $(PORTASM) $(OSALASM) \
-         ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal2.s
+ASMSRC = ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal2.s
+ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 
-INCDIR = ${CMSIS}/Include \
+INCDIR = $(CHIBIOS)/os/license \
+	 ${CMSIS}/Include \
          ${CMSIS}/DSP_Lib/Include \
-		 $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
+         $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
          $(FATFSINC) \
          $(CHIBIOS)/os/various \
@@ -388,7 +392,8 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DARM_MATH_CM4 -D__FPU_PRESENT
+UDEFS = -DARM_MATH_CM4 
+# -D__FPU_PRESENT
 
 # Define ASM defines here
 UADEFS =
@@ -406,5 +411,6 @@ ULIBS = -lm
 # End of user defines
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC
+
+RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk

@@ -166,7 +166,7 @@ extern "C" {
   void bduStart(BulkUSBDriver *bdup, const BulkUSBConfig *config);
   void bduStop(BulkUSBDriver *bdup);
   void bduConfigureHookI(BulkUSBDriver *bdup);
-  bool_t bduRequestsHook(USBDriver *usbp);
+  bool bduRequestsHook(USBDriver *usbp);
   void bduDataTransmitted(USBDriver *usbp, usbep_t ep);
   void bduDataReceived(USBDriver *usbp, usbep_t ep);
 #ifdef __cplusplus

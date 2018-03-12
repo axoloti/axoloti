@@ -22,8 +22,8 @@
 #include "spilink.h"
 #include "spidb.h"
 
-bool_t spilink_toggle;
-Thread *pThreadSpilink = 0;
+bool spilink_toggle;
+thread_t *pThreadSpilink = 0;
 
 spilink_data_t spilink_tx[2] DMA_MEM_FW;
 spilink_data_t spilink_rx[2] DMA_MEM_FW;
@@ -38,19 +38,19 @@ uint32_t frameno = 0;
 #define SPILINK_NSS_PORT GPIOA
 #define SPILINK_NSS_PAD GPIOA_PIN15
 
-bool_t spilink_master_active = 0;
+bool spilink_master_active = 0;
 int spilink_update_index;
 int lcd_update_index;
 
 /*
  * SPI configuration (10.5MHz, CPHA=0, CPOL=0, 16 bit).
  */
-static const SPIDBConfig spidbcfg_slave = { { NULL, SPILINK_NSS_PORT, SPILINK_NSS_PAD, SPI_CR1_DFF },
+static const SPIDBConfig spidbcfg_slave = { { 0, (spicallback_t)NULL, SPILINK_NSS_PORT, SPILINK_NSS_PAD, SPI_CR1_DFF, 0 },
 		(void *)&spilink_rx, (void *)&spilink_tx, sizeof(spilink_data_t) / 2 };
-static const SPIDBConfig spidbcfg_master = { { NULL, SPILINK_NSS_PORT, SPILINK_NSS_PAD, SPI_CR1_BR_0 | SPI_CR1_DFF },
+static const SPIDBConfig spidbcfg_master = { { 0, (spicallback_t)NULL, SPILINK_NSS_PORT, SPILINK_NSS_PAD, SPI_CR1_BR_0 | SPI_CR1_DFF, 0 },
 		(void *)&spilink_rx, (void *)&spilink_tx, sizeof(spilink_data_t) / 2 };
 
-static WORKING_AREA(waThreadSpilink, 256);
+static THD_WORKING_AREA(waThreadSpilink, 256);
 //__attribute__ ((section (".ccmramend")));
 
 static THD_FUNCTION(ThreadSpilinkSlave, arg) {
@@ -59,7 +59,7 @@ static THD_FUNCTION(ThreadSpilinkSlave, arg) {
 		// slave
 		while (1) {
 			/* Waiting for messages.*/
-			msg_t m = chEvtWaitAnyTimeout(7, MS2ST(50));
+			msg_t m = chEvtWaitAnyTimeout(7, TIME_MS2I(50));
 			if (!m) { // timeout
 				int i;
 				for (i = 0; i < 2; i++) {
@@ -112,7 +112,7 @@ void spilink_clear_audio_tx(void) {
 	}
 }
 
-void spilink_init(bool_t isMaster) {
+void spilink_init(bool isMaster) {
 	int i;
 	for (i = 0; i < 2; i++) {
 		spilink_tx[i].header = SPILINK_HEADER;
@@ -148,7 +148,7 @@ void spilink_init(bool_t isMaster) {
 	} else { // slave
 		spilink_rx_samples = &spilink_rx[0].audio_io;
 		spilink_tx_samples = &spilink_tx[0].audio_io;
-		Thread *_pThreadSpilink = chThdCreateStatic(waThreadSpilink,
+		thread_t *_pThreadSpilink = chThdCreateStatic(waThreadSpilink,
 				sizeof(waThreadSpilink), HIGHPRIO - 1,
 				ThreadSpilinkSlave, NULL);
 		spidbSlaveStart(&SPILINK, &spidbcfg_slave, _pThreadSpilink);

@@ -4,6 +4,7 @@
 #include "sdcard.h"
 #include "exceptions.h"
 #include <string.h>
+#include "hal.h"
 #include "chprintf.h"
 
 FIL fil1;

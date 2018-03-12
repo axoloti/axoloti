@@ -28,7 +28,14 @@
 MEMORY
 {
 /* make SRAM1 pretending to be flash memory */
-    flash : org = 0x00000000, LENGTH = 0x0000B000
+    flash0  : org = 0x00000000, LENGTH = 0x0000B000
+    flash1  : org = 0x00000000, len = 0
+    flash2  : org = 0x00000000, len = 0
+    flash3  : org = 0x00000000, len = 0
+    flash4  : org = 0x00000000, len = 0
+    flash5  : org = 0x00000000, len = 0
+    flash6  : org = 0x00000000, len = 0
+    flash7  : org = 0x00000000, len = 0
     ram0  : org = 0x20000000, len = 192k    /* SRAM1 + SRAM2 + SRAM3 */
     ram1  : org = 0x20000000, len = 0 
     ram2  : org = 0x2001E000, len = 8k      /* 2nd half of SRAM2 */
@@ -38,6 +45,32 @@ MEMORY
     ram6  : org = 0x00000000, len = 0
     ram7  : org = 0x00000000, len = 0
 }
+
+/* For each data/text section two region are defined, a virtual region
+   and a load region (_LMA suffix).*/
+
+/* Flash region to be used for exception vectors.*/
+REGION_ALIAS("VECTORS_FLASH", flash0);
+REGION_ALIAS("VECTORS_FLASH_LMA", flash0);
+
+/* Flash region to be used for constructors and destructors.*/
+REGION_ALIAS("XTORS_FLASH", flash0);
+REGION_ALIAS("XTORS_FLASH_LMA", flash0);
+
+/* Flash region to be used for code text.*/
+REGION_ALIAS("TEXT_FLASH", flash0);
+REGION_ALIAS("TEXT_FLASH_LMA", flash0);
+
+/* Flash region to be used for read only data.*/
+REGION_ALIAS("RODATA_FLASH", flash0);
+REGION_ALIAS("RODATA_FLASH_LMA", flash0);
+
+/* Flash region to be used for various.*/
+REGION_ALIAS("VARIOUS_FLASH", flash0);
+REGION_ALIAS("VARIOUS_FLASH_LMA", flash0);
+
+/* Flash region to be used for RAM(n) initialization data.*/
+REGION_ALIAS("RAM_INIT_FLASH_LMA", flash0);
 
 /* RAM region to be used for Main stack. This stack accommodates the processing
    of all exceptions and interrupts*/
@@ -49,6 +82,7 @@ REGION_ALIAS("PROCESS_STACK_RAM", ram4);
 
 /* RAM region to be used for data segment.*/
 REGION_ALIAS("DATA_RAM", ram3);
+REGION_ALIAS("DATA_RAM_LMA", flash0);
 
 /* RAM region to be used for BSS segment.*/
 REGION_ALIAS("BSS_RAM", ram3);
@@ -61,15 +95,15 @@ SECTIONS
 {
     .entry_section : 
     {
-		LONG(0x32787861) /* signature "axx2"  */
-		LONG(patch_root_chunk)
+        LONG(0x32787861) /* signature "axx2"  */
+        LONG(patch_root_chunk)
         *(.entry_section)
         *(.entry_section.*)
         LONG(0)
         LONG(0x12345678)
         . = 0x0200;
-    } > flash
+    } > flash0
 }
 
+/* Generic rules inclusion.*/
 INCLUDE rules.ld
-

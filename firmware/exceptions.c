@@ -285,12 +285,19 @@ void exception_checkandreport(void) {
         LogTextMessage("mmfar=0x%x",exceptiondump->mmfar);
       }
     }
+#else
+    (void)report_registers;
 #endif
   }
 }
 
 void report_fatfs_error(int errno, const char *fn) {
-  if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
+	if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		// software breakpoint
+		asm("BKPT 255");
+	}
+
+	if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
     return;
 
   char *p;

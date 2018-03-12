@@ -33,17 +33,17 @@
 // ------ Main menu stuff ------
 
 ui_node_t MainMenu[MainMenu_length] = {
-  { &nodeFunctionTable_loadpatch, "Load patch" },
+  { &nodeFunctionTable_loadpatch, "Load patch", .nodeList = {}},
   { &nodeFunctionTable_object_list, "Objects", .objList = {0,0}}, // at MAIN_MENU_INDEX_PATCH
   { &nodeFunctionTable_param_list, "Params", .paramList = {0,0}}, // at MAIN_MENU_INDEX_PARAMS
   { &nodeFunctionTable_node_list, "SDCard", .nodeList = {SdcMenu, SdcMenu_length}},
   { &nodeFunctionTable_node_list, "ADCs", .nodeList = {ADCMenu, ADCMenu_length}},
   { &nodeFunctionTable_integer_value, "dsp%", .intValue = {&dspLoadPct, 0, 100}},
-  { &nodeFunctionTable_midiclock, "MIDI clock" },
-  { &nodeFunctionTable_midicc, "MIDI controller" },
-  { &nodeFunctionTable_midimon, "MIDI monitor" },
-  { &nodeFunctionTable_processes, "Processes" },
-  { &nodeFunctionTable_test, "Test" },
+  { &nodeFunctionTable_midiclock, "MIDI clock", .nodeList = {}},
+  { &nodeFunctionTable_midicc, "MIDI controller", .nodeList = {}},
+  { &nodeFunctionTable_midimon, "MIDI monitor", .nodeList = {}},
+  { &nodeFunctionTable_processes, "Processes", .nodeList = {}},
+  { &nodeFunctionTable_test, "Test", .nodeList = {}},
   { &nodeFunctionTable_node_list, "Food", .nodeList = {FoodMenu, FoodMenu_length}}
 };
 

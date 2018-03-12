@@ -27,9 +27,15 @@ const ui_node_t SdcFormatOK1 =
 static const ui_node_t SdcFormatOK =
   { &nodeFunctionTable_node_list, "Format", .nodeList = {&SdcFormatOK1, 1}};
 
+// todo: test if formatting works
 void EnterMenuFormat(void) {
 	FRESULT err;
-	err = f_mkfs(0, 0, 0);
+	BYTE work[FF_MAX_SS];
+	err = f_mkfs(
+		0, // path 
+		FM_ANY, // opt
+		0, // au
+		work, sizeof work);
 	if (err != FR_OK)
 		ui_enter_node(&SdcFormatFailed);
 	else

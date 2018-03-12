@@ -24,8 +24,6 @@
 #include "serial_midi.h"
 #include "patch.h"
 
-#include "chibios_migration.h"
-
 const unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80=note off, 3 bytes
                                                3, // 0x90=note on, 3 bytes
                                                3, // 0xa0=poly pressure, 3 bytes
@@ -216,14 +214,15 @@ void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
 }
 
 int serial_MidiGetOutputBufferPending(void) {
-  return chOQGetFullI(&SDMIDI.oqueue);
+// todo: check references!
+  return 0;//chOQGetFullI(&SDMIDI.oqueue);
 }
 
 // Midi UART...
 static const SerialConfig sdMidiCfg = {31250, // baud
     0, 0, 0};
 
-static WORKING_AREA(waThreadMidiIn, 256);
+static THD_WORKING_AREA(waThreadMidiIn, 256);
 static THD_FUNCTION(ThreadMidiIn, arg) {
   (void)arg;
   chRegSetThreadName("midi_din_in");
@@ -236,7 +235,7 @@ static THD_FUNCTION(ThreadMidiIn, arg) {
 
 midi_output_buffer_t midi_output_din;
 
-static WORKING_AREA(waThreadMidiOut, 256);
+static THD_WORKING_AREA(waThreadMidiOut, 256);
 static THD_FUNCTION(ThreadMidiOut, arg) {
 	(void) arg;
 	chRegSetThreadName("midi_din_out");

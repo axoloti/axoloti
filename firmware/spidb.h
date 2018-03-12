@@ -19,8 +19,6 @@
 #ifndef SPIDB_H_
 #define SPIDB_H_
 
-#include "chibios_migration.h"
-
 /*
  *
  * Double buffered periodic spi exchange
@@ -42,12 +40,12 @@ enum spidb_signal {
 extern unsigned int spidb_interrupt_timestamp;
 
 void spidbMasterStart(SPIDriver *spip, const SPIDBConfig *config);
-void spidbSlaveStart(SPIDriver *spip, const SPIDBConfig *config, Thread * thread);
+void spidbSlaveStart(SPIDriver *spip, const SPIDBConfig *config, thread_t * thread);
 void spidbSlaveResync(SPIDriver *spip);
 
 // inline functions
 
-__STATIC_INLINE void spidbMasterExchangeI(SPIDriver *spip, bool_t toggle) {
+__STATIC_INLINE void spidbMasterExchangeI(SPIDriver *spip, bool toggle) {
 	SPIDBConfig *config = (SPIDBConfig *)spip->config;
 	palClearPad(config->spiconfig.ssport, config->spiconfig.sspad);
 	int offset = toggle?0:2*config->size; // assumes 16 bit xfer

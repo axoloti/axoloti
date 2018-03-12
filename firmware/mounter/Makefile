@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -std=c11
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
 endif 
 
 # C specific options here (added to USE_OPT).
@@ -70,17 +70,20 @@ PROJECT = mounter
 BUILDDIR = mounter_build
 
 # Imported source files and paths
-CHIBIOS = ${axoloti_release}/ChibiOS_16.1.8
+CHIBIOS = ${axoloti_release}/ChibiOS_18.2.0
 CHIBIOS_CONTRIB = $(CHIBIOS)/community
 
+# Startup files.
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+
 include board.mk
-include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
 include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/osal/rt/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/rt/rt.mk
-include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+# include $(CHIBIOS)/os/rt/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 	
 # Define linker script file here
 LDSCRIPT = ../STM32F427trojan.ld
@@ -97,13 +100,13 @@ CSRC = $(STARTUPSRC) \
        $(STREAMSSRC) \
        $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
        $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
-       ../glcdfont.c \
-       ../axoloti_control.c \
        ../axoloti_board.c \
        ../watchdog.c \
        $(CHIBIOS_CONTRIB)/os/various/lib_scsi.c \
        usbcfg.c \
        main.c  
+#       ../glcdfont.c \
+#       ../axoloti_control.c \
 
        
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -131,9 +134,11 @@ TCSRC =
 TCPPSRC =
 
 # List ASM source files here
-ASMSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
+ASMSRC =
+ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 
 INCDIR =  \
+         $(CHIBIOS)/os/license \
          $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(TESTINC) \
          $(FATFSINC) \
@@ -233,7 +238,7 @@ VPATH = .
 # End of user defines
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC
+RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC
 include $(RULESPATH)/rules.mk
 
 SPLITFILES := $(BUILDDIR)/$(PROJECT).sram1.bin \
@@ -242,11 +247,11 @@ SPLITFILES := $(BUILDDIR)/$(PROJECT).sram1.bin \
 
 %.sram1.bin: %.elf
 	@echo Creating $@
-	@$(CP) -O binary -R .sdram.* -R .rodata -R .rodata.* -R .data -R .data.* $< $@
+	@$(CP) -O binary -R .sdram.* -R .data -R .data.* $< $@
 
 %.sram3.bin: %.elf
 	@echo Creating $@
-	@$(CP) -O binary --only-section=.rodata --only-section=.rodata.* --only-section=.data --only-section=.data.* $< $@
+	@$(CP) -O binary --only-section=.data --only-section=.data.* $< $@
 
 %.sdram.bin: %.elf
 	@echo Creating $@

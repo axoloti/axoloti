@@ -23,7 +23,6 @@
 #include "hal.h"
 #include "sdram.h"
 #include "chprintf.h"
-#include "shell.h"
 #include "string.h"
 #include <stdio.h>
 #include "codec.h"
@@ -92,7 +91,7 @@ int main(void) {
   axoloti_board_init();
 
 // connect PB10 to ground to enable slave mode
-  bool_t is_master = palReadPad(GPIOB, GPIOB_PIN10);
+  bool is_master = palReadPad(GPIOB, GPIOB_PIN10);
   start_dsp_thread();
   codec_init(is_master);
   adc_init();

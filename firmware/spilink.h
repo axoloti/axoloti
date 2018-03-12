@@ -29,9 +29,6 @@
 #include "axoloti_control.h"
 #include "ui.h"
 
-#include "chibios_migration.h"
-
-
 #define SPILINK_BUFSIZE 16
 #define SPILINK_CHANNELS 4
 #define SPILINK_CTLDATASIZE 16
@@ -55,18 +52,18 @@ typedef struct {
 	int32_t footer;
 } spilink_data_t;
 
-void spilink_init(bool_t isMaster);
+void spilink_init(bool isMaster);
 void spilink_clear_audio_tx(void);
 
-extern Thread *pThreadSpilink;
+extern thread_t *pThreadSpilink;
 
 extern spilink_channels_t *spilink_rx_samples;
 extern spilink_channels_t *spilink_tx_samples;
 extern spilink_data_t spilink_rx[2];
 extern spilink_data_t spilink_tx[2];
 extern uint32_t frameno;
-extern bool_t spilink_master_active;
-extern bool_t spilink_toggle;
+extern bool spilink_master_active;
+extern bool spilink_toggle;
 
 #define SPILINK_HEADER (('A' << 8) | ('x') | ('o' << 24) | ('<' << 16))
 #define SPILINK_FOOTER (('A' << 8) | ('x') | ('o' << 24) | ('>' << 16))

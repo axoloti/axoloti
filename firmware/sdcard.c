@@ -18,7 +18,6 @@
 #include "ch.h"
 #include "hal.h"
 #include "chprintf.h"
-#include "shell.h"
 #include "ff.h"
 #include "patch.h"
 #include "sdcard.h"
@@ -34,7 +33,7 @@
 FATFS SDC_FS;
 
 /* FS mounted and ready.*/
-bool_t fs_ready = FALSE;
+bool fs_ready = FALSE;
 
 /*
  * Card insertion event.

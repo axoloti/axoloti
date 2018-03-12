@@ -70,7 +70,8 @@ void drawDispValue1(const gfxq *gfx, Display_meta_t *disp) {
 	} else if (gfx == &gfx_Q[3]) {
 		x = 32;
 		line = 5;
-	}
+	} else
+		return;
 
 	switch (disp->display_type) {
 	case display_meta_type_int32:
@@ -123,7 +124,7 @@ static void paint_update_quadrant(int quadrant_index, int obj_index) {
 }
 
 static void fpaint_screen_update(const struct ui_node * node, uint32_t flag) {
-	unsigned int i = menu_stack[menu_stack_position].currentpos;
+	int i = menu_stack[menu_stack_position].currentpos;
 	switch (flag) {
 	case 0: { // idle
 		static int q1 = 0;

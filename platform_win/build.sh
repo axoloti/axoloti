@@ -7,7 +7,7 @@ PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 mkdir -p "${PLATFORM_ROOT}/src"
 cd "${PLATFORM_ROOT}"
 
-CH_VERSION=16.1.8
+CH_VERSION=18.2.0
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
@@ -23,7 +23,7 @@ then
     unzip -q -o ${ARCHIVE}
 #    mv ${ARDIR} chibios
     cd ${ARDIR}/ext
-    7z x ./fatfs-0.10b-patched.7z
+    7z x ./fatfs-0.13_patched.7z
     cd ../../
     mv ${ARDIR} ../..
 

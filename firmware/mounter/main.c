@@ -135,11 +135,11 @@ int main(void)
   msdStop(&USBMSD1);
 }
 
-extern void Reset_Handler(void);
+extern void _crt0_entry(void);
 
 void patch_init(int32_t fwID) {
 	(void)fwID;
-	Reset_Handler();
+	_crt0_entry();
 }
 
 typedef void (*fptr_patch_init_t)(int32_t fwID);

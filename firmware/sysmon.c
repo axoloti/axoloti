@@ -38,7 +38,7 @@ bool sdcsw_prev = FALSE;
 
 volatile uint8_t pattern_index;
 
-static WORKING_AREA(waThreadSysmon, 256);
+static THD_WORKING_AREA(waThreadSysmon, 256);
 static THD_FUNCTION(ThreadSysmon, arg) {
   (void)arg;
   chRegSetThreadName("sysmon");

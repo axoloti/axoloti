@@ -33,7 +33,7 @@ then
     mkdir "${PLATFORM_ROOT}/src"
 fi
 
-CH_VERSION=16.1.8
+CH_VERSION=18.2.0
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
 then
     cd "${PLATFORM_ROOT}/src"
@@ -49,7 +49,7 @@ then
     unzip -q -o ${ARCHIVE}
 #    mv ${ARDIR} chibios
     cd ${ARDIR}/ext
-    7z x ./fatfs-0.10b-patched.7z
+    7z x ./fatfs-0.13_patched.7z
     cd ../../
     mv ${ARDIR} ../..
 
@@ -64,15 +64,16 @@ else
 fi
 
 
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc" ];
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" ];
 then
     cd "${PLATFORM_ROOT}"
-    ARDIR=gcc-arm-none-eabi-6-2017-q1-update
-    ARCHIVE=${ARDIR}-mac.tar.bz2
-    if [ ! -f ${ARCHIVE} ]; 
+    ARDIR=gcc-arm-none-eabi-7-2017q4
+    ARCHIVE_BASE="gcc-arm-none-eabi-7-2017-q4-major"
+    ARCHIVE=${ARCHIVE_BASE}-mac.tar.bz2
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/6_1-2017q1/${ARCHIVE} > ${ARCHIVE}
+        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2017q4/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi

@@ -230,16 +230,14 @@ static msg_t bulk_tx_filecontents(void) {
 
 static FRESULT scan_files(char *path) {
   FRESULT res;
-  FILINFO fno;
   DIR dir;
-  int i;
-  char *fn;
+  UINT i;
+  static FILINFO fno;
+
   char *msg = &((char*)fbuff)[64];
-  fno.lfname = &FileName[0];
-  fno.lfsize = sizeof(FileName);
+
   res = f_opendir(&dir, path);
   if (res == FR_OK) {
-    i = strlen(path);
     for (;;) {
       res = f_readdir(&dir, &fno);
       if (res != FR_OK || fno.fname[0] == 0)
@@ -247,17 +245,19 @@ static FRESULT scan_files(char *path) {
       if (fno.fname[0] == '.')
         continue;
 #if _USE_LFN
-      fn = *fno.lfname ? fno.lfname : fno.fname;
+      const char *fn = *fno.lfname ? fno.lfname : fno.fname;
 #else
-      fn = fno.fname;
+      const char *fn = fno.fname;
 #endif
       if (fn[0] == '.')
         continue;
       if (fno.fattrib & AM_HID)
         continue;
       if (fno.fattrib & AM_DIR) {
+        i = strlen(path);
         path[i] = '/';
-        strcpy(&path[i+1], fn);
+        strcpy(&path[i+1], fno.fname);
+
         msg[0] = 'A';
         msg[1] = 'x';
         msg[2] = 'o';
@@ -269,9 +269,10 @@ static FRESULT scan_files(char *path) {
         msg[12+l] = '/';
         msg[13+l] = 0;
         BulkUsbTransmitPacket((const unsigned char* )msg, l+14);
+
         res = scan_files(path);
-        path[i] = 0;
         if (res != FR_OK) break;
+        path[i] = 0;
       } else {
         msg[0] = 'A';
         msg[1] = 'x';
@@ -280,6 +281,7 @@ static FRESULT scan_files(char *path) {
         *(int32_t *)(&msg[4]) = fno.fsize;
         *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
         strcpy(&msg[12], &path[1]);
+        i = strlen(&path[1]);
         msg[12+i-1] = '/';
         strcpy(&msg[12+i], fn);
         int l = strlen(&msg[12]);
@@ -406,7 +408,8 @@ static void obnotify(io_buffers_queue_t *bqp) {
 
 static void logObjectInit(LogStream *msp) {
   msp->vmt    = &vmt;
-  obqObjectInit(&msp->obqueue, msp->ob,
+// TODO: make suspended true initially
+  obqObjectInit(&msp->obqueue, false, msp->ob,
                 LOG_BUFFERS_SIZE, LOG_BUFFERS_NUMBER,
                 obnotify, msp);
 }
@@ -672,8 +675,6 @@ static void ManipulateFile(void) {
       // get file info
       FRESULT err;
       FILINFO fno;
-      fno.lfname = &((char*)fbuff)[0];
-      fno.lfsize = 256;
       err =  f_stat(&FileName[6],&fno);
       if (err == FR_OK) { // condition?
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_fileinfo);
@@ -842,6 +843,7 @@ static THD_FUNCTION(BulkReader, arg) {
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_dirlist);
       } else if (header == rcv_hdr_copy_to_flash) {
           StopPatch();
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
     	  CopyPatchToFlash();
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
       } else if (header == rcv_hdr_activate_dfu) {
@@ -950,7 +952,7 @@ void LogTextMessage(const char* format, ...) {
 		va_start(ap, format);
 		chvprintf((BaseSequentialStream *)&logstream, format, ap);
 		va_end(ap);
-		chSequentialStreamPut((BaseSequentialStream *)&logstream,0);
+		streamPut((BaseSequentialStream *)&logstream,0);
 		obqFlush(&logstream.obqueue);
 		// would like to remove this semaphore, but that seems to cause data loss?
 		chBSemWait(&logsem);

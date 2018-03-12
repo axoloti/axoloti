@@ -61,7 +61,7 @@ static void dma_spidb_slave_interrupt(void* dat, uint32_t flags) {
 	spidb_interrupt_timestamp = stGetCounter();
 
 	if (flags & STM32_DMA_ISR_TCIF) {
-		chSysLockFromIsr();
+		chSysLockFromISR();
 #ifdef DEBUG_INT_ON_GPIO
 	palSetPadMode(GPIOA, 1, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPad(GPIOA, 1);
@@ -75,9 +75,9 @@ static void dma_spidb_slave_interrupt(void* dat, uint32_t flags) {
 		dmaStreamSetTransactionSize(spip->dmatx, ((SPIDBConfig *)(spip->config))->size*2);
 		dmaStreamEnable(spip->dmatx);
 #endif
-		chSysUnlockFromIsr();
+		chSysUnlockFromISR();
 	} else if (flags & STM32_DMA_ISR_HTIF) {
-		chSysLockFromIsr();
+		chSysLockFromISR();
 #ifdef DEBUG_INT_ON_GPIO
 	palSetPadMode(GPIOA, 1, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPad(GPIOA, 1);
@@ -86,7 +86,7 @@ static void dma_spidb_slave_interrupt(void* dat, uint32_t flags) {
 #ifdef DEBUG_INT_ON_GPIO
 	palClearPad(GPIOA, 1);
 #endif
-		chSysUnlockFromIsr();
+		chSysUnlockFromISR();
 	} else if (flags & STM32_DMA_ISR_TEIF) {
 //	    chSysHalt("spidb:TEIF");
 	}
@@ -100,7 +100,7 @@ static void dma_spidb_slave_interrupt(void* dat, uint32_t flags) {
  * @param[in] config    pointer to the @p SPIDBConfig configuration
  *
  */
-void spidbSlaveStart(SPIDriver *spip, const SPIDBConfig *config, Thread * thread) {
+void spidbSlaveStart(SPIDriver *spip, const SPIDBConfig *config, thread_t * thread) {
 
 	spiStart(spip, &config->spiconfig);
 
@@ -113,7 +113,7 @@ void spidbSlaveStart(SPIDriver *spip, const SPIDBConfig *config, Thread * thread
     dmaStreamRelease(spip->dmarx);
     dmaStreamRelease(spip->dmatx);
 
-    bool_t b;
+    bool b;
 	int irq_priority = -1;
 #if STM32_SPI_USE_SPI1
 	if (spip == &SPID1) {
@@ -185,7 +185,7 @@ void spidbMasterStart(SPIDriver *spip, const SPIDBConfig *config) {
     dmaStreamRelease(spip->dmarx);
     dmaStreamRelease(spip->dmatx);
 
-    bool_t b;
+    bool b;
 	int irq_priority = -1;
 #if STM32_SPI_USE_SPI1
 	if (spip == &SPID1) {

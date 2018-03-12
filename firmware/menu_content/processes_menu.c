@@ -46,9 +46,9 @@ static void fpaint_screen_update(const struct ui_node * node, uint32_t flags) {
 		}
 		int nfree = 0;
 #if CH_DBG_FILL_THREADS
-		char *stk = (char *)(thd->p_stklimit);
-		while(*stk == 0x55) {
-			nfree++;
+		int32_t *stk = (int32_t *)chThdGetWorkingAreaX(thd);
+		while(*stk == 0x55555555) {
+			nfree+=4;
 			stk++;
 		}
 #endif

@@ -1,4 +1,4 @@
-// Chibios 2.6.x to 16.x migration wrappers
+// Chibios 2.6.x to 18.x migration wrappers
 
 #ifndef CHIBIOS_MIGRATION_H
 #define CHIBIOS_MIGRATION_H
@@ -29,4 +29,6 @@
 #define chRegGetThreadName chRegGetThreadNameX
 #define THD_STATE_NAMES CH_STATE_NAMES
 #define hal_lld_get_counter_value port_rt_get_counter_value
+
+#define MS2ST TIME_MS2I
 #endif
