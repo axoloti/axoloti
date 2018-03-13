@@ -20,7 +20,11 @@ package qcmds;
 import axoloti.connection.IConnection;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardInfo;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -55,13 +59,25 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
     public QCmd Do(IConnection connection) {
         connection.ClearSync();
         connection.TransmitCreateDirectory(filename, date);
-        String fn = filename;
-        if (!fn.endsWith("/")) {
-            fn = fn + "/";
+        String fn1 = filename;
+        if (!fn1.endsWith("/")) {
+            fn1 = fn1 + "/";
         }
-        SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-        sdcardinfo.AddFile(fn, 0, date);
-        TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+        final String fn = fn1;
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+                    sdcardinfo.AddFile(fn, 0, date);
+                    TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+                }
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return this;
     }
 
