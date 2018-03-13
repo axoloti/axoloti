@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -42,12 +41,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
-                        }
-                    });
+                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
             }
 
             @Override
@@ -96,7 +90,12 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
     @Override
     public void setString(String tableName) {
         if (TFtableName != null) {
-            TFtableName.setText(tableName);
+            if (tableName == null) {
+                tableName = "";
+            }
+            if (!tableName.equals(TFtableName.getText())) {
+                TFtableName.setText(tableName);
+            }
         }
     }
 }
