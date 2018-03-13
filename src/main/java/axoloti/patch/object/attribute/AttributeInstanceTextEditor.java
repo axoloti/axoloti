@@ -44,7 +44,11 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
 
     @Override
     public String CValue() {
-        return sText;
+        if (sText == null) {
+            return "";
+        } else {
+            return sText;
+        }
     }
 
     @Override

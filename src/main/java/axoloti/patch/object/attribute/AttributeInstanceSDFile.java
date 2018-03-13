@@ -53,6 +53,9 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         if ((f != null) && f.exists()) {
             return f.getName().replaceAll("\\\\", "\\/");
         } else {
+            if (fileName == null) {
+                return "";
+            }
             return fileName.replaceAll("\\\\", "\\/");
         }
     }
