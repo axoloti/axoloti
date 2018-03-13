@@ -24,9 +24,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -134,9 +136,20 @@ public class QCmdUploadFile implements QCmdSerialTask {
 
             inputStream.close();
             connection.TransmitCloseFile();
-            SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-            sdcardinfo.AddFile(filename, (int) size, ts);
-            TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+                        sdcardinfo.AddFile(filename, (int) size, ts);
+                        TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+                    }
+                });
+            } catch (InterruptedException ex) {
+                Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
             success = true;
             return this;
         } catch (IOException ex) {
