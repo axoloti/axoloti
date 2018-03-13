@@ -1,48 +1,59 @@
 #include "loadpatch_menu.h"
 #include "axoloti_control.h"
+#include "ch.h"
+#include "hal.h"
 #include "ff.h"
+#include "chprintf.h"
+#include "sdcard.h"
+#include "exceptions.h"
+#include "pconnection.h"
+#include "patch.h"
 
 /*
- * currently lists all directories
- * including those that do not contain a patch.bin
- * those will fail to load
- *
- * todo: indicate load success/fail...
+ * todo: indicate patch load success/fail...
  * todo: nicer scrolling
  */
-
-typedef struct {
-  DIR dir;
-  FILINFO fno;
-} data;
-
-static data d;
 
 static int sel = 0;
 static int nfiles = 0;
 
-
 static void init(void) {
 	sel = 0;
 	nfiles = 0;
+	sdcard_attemptMountIfUnmounted();
+	if (!fs_ready) {
+		LogTextMessage("sdcard not ready");
+		return;
+	}
 	FRESULT res;
-	res = f_opendir(&d.dir, "/");
+	DIR dir;
+	FILINFO fno;
+	res = f_opendir(&dir, "/");
 	int i = 0;
-	if (res == FR_OK) {
-		for (;;) {
-			res = f_readdir(&d.dir, &d.fno);
-			if (res != FR_OK || d.fno.fname[0] == 0)
-				break;
-			if (d.fno.fname[0] == '.')
-				continue;
-			char *fn;
-			fn = d.fno.fname;
-			if (fn[0] == '.')
-				continue;
-			i++;
-		}
+	if (res != FR_OK) {
+		report_fatfs_error(res,"");
+		nfiles = 0;
+		return;
+	}
+	for (;;) {
+		res = f_readdir(&dir, &fno);
+		if (res != FR_OK || fno.fname[0] == 0)
+			break;
+//		LogTextMessage("loadpatch_menu traversing %s", fno.fname);
+		if (fno.fname[0] == '.')
+			continue;
+		char fn_patch[64];
+		chsnprintf(fn_patch,64,"/%s/patch.bin",fno.fname);
+		res = f_stat(fn_patch, (FILINFO*)0);
+		if (res != FR_OK)
+			continue;
+		i++;
 	}
 	nfiles = i;
+	f_closedir(&dir);
+	// diagnostic log
+//	f_getcwd(fno.fname, sizeof(fno.fname));
+//	LogTextMessage("loadpatch_menu init %d cwd %s", nfiles, fno.fname);
 }
 
 static void refresh(int launch) {
@@ -54,54 +65,46 @@ static void refresh(int launch) {
 		return;
 	}
 	FRESULT res;
-	res = f_opendir(&d.dir, "/");
-	int i = 0;
-	if (res == FR_OK) {
-		for (;;) {
-			res = f_readdir(&d.dir, &d.fno);
-			if (res != FR_OK || d.fno.fname[0] == 0)
-				break;
-			if (d.fno.fname[0] == '.')
-				continue;
-			char *fn;
-			fn = d.fno.fname;
-			if (fn[0] == '.')
-				continue;
-			if (i-sel == 0) {
-				LCD_drawStringInvN(0, 1 + i - sel, fn, 20);
-				if (launch) {
-					char *f0 = fn;
-					for(i=0;i<(int)sizeof(d.fno.fname);i++) {
-						if (!*f0) break;
-						f0++;
-					}
-					if ((!*f0)&&(i<(int)sizeof(d.fno.fname)-11)) {
-						*f0++ = '/';
-						*f0++ = 'p';
-						*f0++ = 'a';
-						*f0++ = 't';
-						*f0++ = 'c';
-						*f0++ = 'h';
-						*f0++ = '.';
-						*f0++ = 'b';
-						*f0++ = 'i';
-						*f0++ = 'n';
-						*f0++ = 0;
-						LoadPatch(fn);
-					} else {
-						LCD_drawStringInvN(0, 1 + i - sel, "filename too long!", 20);
-					}
-				}
-			} else if (i - sel > 0)
-				LCD_drawStringN(0, 1 + i - sel, fn, 20);
-			if (i - sel == 6)
-				break;
-			i++;
+	DIR dir;
+	FILINFO fno;
+	res = f_opendir(&dir, "/");
+	if (res != FR_OK) {
+		int i;
+		for (i=0;i<7;i++) {
+			LCD_drawStringN(0, 1 + i - sel, "////", 20);
 		}
+		return;
+	}
+	int i = 0;
+	for (;;) {
+		res = f_readdir(&dir, &fno);
+		if (res != FR_OK || fno.fname[0] == 0)
+			break;
+		if (fno.fname[0] == '.')
+			continue;
+		// check if this directory contains a patch.bin file
+		char fn_patch[64];
+		chsnprintf(fn_patch,64,"/%s/patch.bin",fno.fname);
+		res = f_stat(fn_patch, (FILINFO*)0);
+		if (res != FR_OK)
+			continue;
+		if (i-sel == 0) {
+			LCD_drawStringInvN(0, 1 + i - sel, fno.fname, 20);
+			if (launch) {
+				f_closedir(&dir);
+				LoadPatch(fn_patch);
+				return;
+			}
+		} else if (i - sel > 0)
+			LCD_drawStringN(0, 1 + i - sel, fno.fname, 20);
+		if (i - sel == 6)
+			break;
+		i++;
 	}
 	for (; i - sel < 7; i++) {
 		LCD_drawStringN(0, 1 + i - sel, "////", 20);
 	}
+	f_closedir(&dir);
 }
 
 static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {

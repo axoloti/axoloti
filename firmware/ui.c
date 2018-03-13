@@ -544,7 +544,7 @@ void pollProcessUIEvent(void) {
 	}
 }
 
-static THD_WORKING_AREA(waThreadUI2, 1024);
+static THD_WORKING_AREA(waThreadUI2, 1380);
 static THD_FUNCTION(ThreadUI2, arg) {
 	(void) (arg);
 	chRegSetThreadName("ui2");
