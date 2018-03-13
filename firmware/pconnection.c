@@ -282,8 +282,8 @@ static FRESULT scan_files(char *path) {
         *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
         strcpy(&msg[12], &path[1]);
         i = strlen(&path[1]);
-        msg[12+i-1] = '/';
-        strcpy(&msg[12+i], fn);
+        msg[12+i] = '/';
+        strcpy(&msg[12+i+1], fn);
         int l = strlen(&msg[12]);
         BulkUsbTransmitPacket((const unsigned char* )msg, l+13);
       }
