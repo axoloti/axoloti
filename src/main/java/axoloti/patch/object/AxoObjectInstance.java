@@ -76,6 +76,7 @@ import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persist;
@@ -119,7 +120,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
     List<AttributeInstance> attributeInstances = new ArrayList<>();
     List<DisplayInstance> displayInstances = new ArrayList<>();
-
 
     public AxoObjectInstance() {
         super();
@@ -410,9 +410,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (inletInstances == null) {
             return new ArrayList<>();
         }
-        return inletInstances;
+        return Collections.unmodifiableList(inletInstances);
     }
 
+    @Override
     public void setInletInstances(List<InletInstance> inletInstances) {
         List<InletInstance> oldval = this.inletInstances;
         this.inletInstances = inletInstances;
@@ -424,9 +425,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (outletInstances == null) {
             return new ArrayList<>();
         }
-        return outletInstances;
+        return Collections.unmodifiableList(outletInstances);
     }
 
+    @Override
     public void setOutletInstances(List<OutletInstance> outletInstances) {
         List<OutletInstance> oldval = this.outletInstances;
         this.outletInstances = outletInstances;
@@ -438,9 +440,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (parameterInstances == null) {
             return new ArrayList<>();
         }
-        return parameterInstances;
+        return Collections.unmodifiableList(parameterInstances);
     }
 
+    @Override
     public void setParameterInstances(List parameterInstances) {
         List<ParameterInstance> oldval = this.parameterInstances;
         this.parameterInstances = parameterInstances;
@@ -452,9 +455,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (attributeInstances == null) {
             return new ArrayList<>();
         }
-        return attributeInstances;
+        return Collections.unmodifiableList(attributeInstances);
     }
 
+    @Override
     public void setAttributeInstances(List<AttributeInstance> attributeInstances) {
         List<AttributeInstance> oldval = this.attributeInstances;
         this.attributeInstances = attributeInstances;
@@ -466,9 +470,10 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (displayInstances == null) {
             return new ArrayList<>();
         }
-        return displayInstances;
+        return Collections.unmodifiableList(displayInstances);
     }
 
+    @Override
     public void setDisplayInstances(List<DisplayInstance> displayInstances) {
         List<DisplayInstance> oldval = this.displayInstances;
         this.displayInstances = displayInstances;

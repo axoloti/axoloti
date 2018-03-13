@@ -113,6 +113,7 @@ import axoloti.swingui.objecteditor.AxoObjectEditor;
 import axoloti.target.fs.SDFileReference;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -329,7 +330,6 @@ public class AxoObject extends AxoObjectAbstract {
         ctrl.addView(o);
         return o;
     }*/
-
     @Override
     public boolean providesModulationSource() {
         if ((ModulationSources != null) && (!ModulationSources.isEmpty())) {
@@ -629,8 +629,10 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Inlet> getInlets() {
-        if (inlets == null) return new ArrayList<>();
-        return inlets;
+        if (inlets == null) {
+            return Collections.unmodifiableList(new ArrayList<>());
+        }
+        return Collections.unmodifiableList(inlets);
     }
 
     @Override
@@ -642,8 +644,10 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Outlet> getOutlets() {
-        if (outlets == null) return new ArrayList<>();
-        return outlets;
+        if (outlets == null) {
+            return Collections.unmodifiableList(new ArrayList<>());
+        }
+        return Collections.unmodifiableList(outlets);
     }
 
     @Override
@@ -655,8 +659,10 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Parameter> getParameters() {
-        if (params == null) return new ArrayList<>();
-        return params;
+        if (params == null) {
+            return Collections.unmodifiableList(new ArrayList<>());
+        }
+        return Collections.unmodifiableList(params);
     }
 
     @Override
@@ -668,8 +674,10 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<AxoAttribute> getAttributes() {
-        if (attributes == null) return new ArrayList<>();
-        return attributes;
+        if (attributes == null) {
+            return Collections.unmodifiableList(new ArrayList<>());
+        }
+        return Collections.unmodifiableList(attributes);
     }
 
     @Override
@@ -681,8 +689,10 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Display> getDisplays() {
-        if (displays == null) return new ArrayList<>();
-        return displays;
+        if (displays == null) {
+            return Collections.unmodifiableList(new ArrayList<>());
+        }
+        return Collections.unmodifiableList(displays);
     }
 
     @Override

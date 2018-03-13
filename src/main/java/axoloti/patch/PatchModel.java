@@ -301,7 +301,7 @@ public class PatchModel extends AbstractModel {
     void SortByPosition() {
         ArrayList<IAxoObjectInstance> clone = new ArrayList<>();
         clone.addAll(objectinstances);
-        Collections.sort(this.objectinstances);
+        Collections.sort(clone);
         setObjectinstances(clone);
         refreshIndexes();
     }
@@ -423,7 +423,6 @@ public class PatchModel extends AbstractModel {
                 includes.addAll(i);
             }
         }
-
         return includes;
     }
 
@@ -793,7 +792,7 @@ public class PatchModel extends AbstractModel {
         l.add(PATCH_MIDICHANNEL);
         l.add(PATCH_MIDISELECTOR);
         l.add(PATCH_WINDOWPOS);
-        return l;
+        return Collections.unmodifiableList(l);
     }
 
     public String getFileNamePath() {
@@ -835,7 +834,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public List<IAxoObjectInstance> getObjectinstances() {
-        return objectinstances;
+        return Collections.unmodifiableList(objectinstances);
     }
 
     public void setObjectinstances(ArrayList<IAxoObjectInstance> objectinstances) {
@@ -847,7 +846,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public List<Net> getNets() {
-        return nets;
+        return Collections.unmodifiableList(nets);
     }
 
     public void setNets(ArrayList<Net> nets) {
