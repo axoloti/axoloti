@@ -15,6 +15,7 @@ public class FourCCs {
     static public final FourCC PATCH_DISPLAY = new FourCC('D', 'I', 'S', 'P');
     static public final FourCC PATCH_FUNCTION = new FourCC('P', 'F', 'U', 'N');
 
+    static public final FourCC FW_PATCH_NAME = new FourCC('P', 'C', 'H', 'N');
     static public final FourCC FW_GPIO_ADC = new FourCC('G', 'A', 'D', 'C');
     static public final FourCC FW_LCD_FRAMEBUFFER = new FourCC('L', 'C', 'D', 'F');
     static public final FourCC FW_MIDI_INPUT_ROUTING = new FourCC('M', 'I', 'R', '2');
