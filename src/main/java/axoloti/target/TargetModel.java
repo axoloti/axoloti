@@ -17,10 +17,12 @@ import axoloti.target.midirouting.MidiInputRoutingTable;
 import axoloti.target.midirouting.MidiOutputRoutingTable;
 import axoloti.utils.FirmwareID;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import qcmds.QCmdMemRead;
 import qcmds.QCmdProcessor;
 import qcmds.QCmdStartFlasher;
 import qcmds.QCmdStop;
@@ -57,7 +59,7 @@ public class TargetModel extends AbstractModel {
     TargetRTInfo RTInfo;
     SDCardInfo sdcardInfo = new SDCardInfo();
     MidiMonitorData midiMonitor;
-
+    String patchName;
     int patchIndex;
     public boolean WarnedAboutFWCRCMismatch = false;
 
@@ -144,6 +146,7 @@ public class TargetModel extends AbstractModel {
     public final static Property WARNEDABOUTFWCRCMISMATCH = new BooleanProperty("WarnedAboutFWCRCMismatch", TargetModel.class);
     public final static Property SDCARDINFO = new ObjectProperty("SDCardInfo", SDCardInfo.class, TargetModel.class);
     public final static Property MIDIMONITOR = new ObjectProperty("MidiMonitor", MidiMonitorData.class, TargetModel.class);
+    public final static Property PATCHNAME = new StringProperty("PatchName", TargetModel.class);
 
     @Override
     public List<Property> getProperties() {
@@ -154,6 +157,7 @@ public class TargetModel extends AbstractModel {
         l.add(MRTS_OUTPUT);
         l.add(RTINFO);
         l.add(PATCHINDEX);
+        l.add(PATCHNAME);
         return l;
     }
 
@@ -242,7 +246,11 @@ public class TargetModel extends AbstractModel {
     }
 
     public void setPatchIndex(Integer patchIndex) {
+        if (this.patchIndex == patchIndex) {
+            return;
+        }
         this.patchIndex = patchIndex;
+        readPatchName();
         firePropertyChange(PATCHINDEX, null, this.patchIndex);
     }
 
@@ -271,6 +279,47 @@ public class TargetModel extends AbstractModel {
     public void setMidiMonitor(MidiMonitorData midiMonitor) {
         this.midiMonitor = midiMonitor;
         firePropertyChange(MIDIMONITOR, null, midiMonitor);
+    }
+
+    public void readPatchName() {
+        if (connection.GetFWChunks() == null) {
+            setPatchName("disconnected");
+            return;
+        }
+        ChunkData chunk_output = connection.GetFWChunks().GetOne(FourCCs.FW_PATCH_NAME);
+        if (chunk_output == null) {
+            setPatchName("???");
+            return;
+        }
+        chunk_output.data.rewind();
+        int addr = chunk_output.data.getInt();
+        connection.AppendToQueue(new QCmdMemRead(addr, 32, new IConnection.MemReadHandler() {
+            @Override
+            public void Done(ByteBuffer mem) {
+                if (mem == null) {
+                    setPatchName("failed");
+                    return;
+                }
+                String s = "";
+                while (mem.hasRemaining()) {
+                    char c = (char) mem.get();
+                    if (c == 0) {
+                        break;
+                    }
+                    s += c;
+                }
+                setPatchName(s);
+            }
+        }));
+    }
+
+    public String getPatchName() {
+        return patchName;
+    }
+
+    public void setPatchName(String patchName) {
+        this.patchName = patchName;
+        firePropertyChange(PATCHNAME, null, patchName);
     }
 
     ArrayList<PollHandler> pollers = new ArrayList<>();

@@ -30,6 +30,7 @@
 #include "codec.h"
 #include "axoloti_memory.h"
 #include "menu_content/main_menu.h"
+#include "patch_name.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
@@ -131,6 +132,7 @@ void CheckStackOverflow(void) {
 }
 
 static void StopPatch1(void) {
+  *patch_name = 0;
   if (patchMeta.fptr_patch_dispose != 0) {
     CheckStackOverflow();
     (patchMeta.fptr_patch_dispose)();
@@ -182,6 +184,8 @@ static int StartPatch1(void) {
   if (patchMeta.fptr_dsp_process == 0) {
     report_patchLoadFail((const char *)&loadFName[0]);
     patchStatus = STARTFAILED;
+    patchMeta.patchID = 0;
+    *patch_name = 0;
     return -1;
   }
   int32_t sdrem = sdram_get_free();
@@ -189,6 +193,7 @@ static int StartPatch1(void) {
     StopPatch1();
     patchStatus = STARTFAILED;
     patchMeta.patchID = 0;
+    *patch_name = 0;
     report_patchLoadSDRamOverflow((const char *)&loadFName[0],-sdrem);
     return -1;
   }

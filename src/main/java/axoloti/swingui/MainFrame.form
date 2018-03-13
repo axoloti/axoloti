@@ -155,7 +155,12 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelPatch">
               <Properties>
-                <Property name="text" type="java.lang.String" value="patch"/>
+                <Property name="text" type="java.lang.String" value="patchIndex"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabelPatchName">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="patchName"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabelSDCardPresent">

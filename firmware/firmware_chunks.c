@@ -19,6 +19,7 @@
 #include "firmware_chunks.h"
 
 #include "fourcc.h"
+#include "chunks/patch_name.h"
 #include "chunks/midi_buffer.h"
 #include "chunks/midi_input_routing.h"
 #include "chunks/midi_output_routing.h"
@@ -32,9 +33,11 @@
 #include "midi_usb.h"
 #include "axoloti_control.h"
 #include "axoloti_board.h"
+#include "patch_name.h"
 
 // ------ firmware chunks ---------------------------------------------
 typedef struct {
+	chunk_patch_name_t patch_name;
 	chunk_midi_input_routing_t midi_input_routing;
 	chunk_midi_output_routing_t midi_output_routing;
 	chunk_gpio_adc_t gpio_adc;
@@ -52,6 +55,10 @@ typedef struct {
 const chunk_fw_root_t chunk_fw_root = {
 	.header = CHUNK_HEADER(fw_root),
 	.fw_chunks = {
+		.patch_name = {
+			.header = CHUNK_HEADER(patch_name),
+			.patch_name = patch_name
+		},
 		.midi_input_routing = {
 			.header = CHUNK_HEADER(midi_input_routing),
 			.routing_table = {&midi_inputmap_din, &midi_inputmap_usbd, &midi_inputmap_usbh1, &midi_inputmap_usbh2}
@@ -63,7 +70,7 @@ const chunk_fw_root_t chunk_fw_root = {
 		.gpio_adc = {
 			.header = CHUNK_HEADER(gpio_adc),
 			.datatype = 0,
-			.channels = 15,
+			.channels = 16,
 			.data = &adcvalues[0]
 		},
 		.lcd_framebuffer = {

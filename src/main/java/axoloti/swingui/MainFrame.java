@@ -398,6 +398,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         jLabelFirmwareID = new javax.swing.JLabel();
         jLabelVoltages = new javax.swing.JLabel();
         jLabelPatch = new javax.swing.JLabel();
+        jLabelPatchName = new javax.swing.JLabel();
         jLabelSDCardPresent = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0), new java.awt.Dimension(32767, 0));
         jPanel5 = new javax.swing.JPanel();
@@ -467,8 +468,11 @@ public final class MainFrame extends TJFrame implements ActionListener {
         jLabelVoltages.setText("5V : 5.00V VDD : 3.30V ");
         jPanel1.add(jLabelVoltages);
 
-        jLabelPatch.setText("patch");
+        jLabelPatch.setText("patchIndex");
         jPanel1.add(jLabelPatch);
+
+        jLabelPatchName.setText("patchName");
+        jPanel1.add(jLabelPatchName);
 
         jLabelSDCardPresent.setText("no SDCard");
         jPanel1.add(jLabelSDCardPresent);
@@ -774,6 +778,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
     private javax.swing.JLabel jLabelFirmwareID;
     private javax.swing.JLabel jLabelIcon;
     private javax.swing.JLabel jLabelPatch;
+    private javax.swing.JLabel jLabelPatchName;
     private javax.swing.JLabel jLabelProgress;
     private javax.swing.JLabel jLabelSDCardPresent;
     private javax.swing.JLabel jLabelVoltages;
@@ -980,6 +985,9 @@ public final class MainFrame extends TJFrame implements ActionListener {
         } else if (TargetModel.PATCHINDEX.is(evt)) {
             int i = (Integer)evt.getNewValue();
             showPatchIndex(i);
+        } else if (TargetModel.PATCHNAME.is(evt)) {
+            String s = (String) evt.getNewValue();
+            jLabelPatchName.setText(s);
         }
     }
 
