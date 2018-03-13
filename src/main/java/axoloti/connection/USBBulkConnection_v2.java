@@ -1433,26 +1433,48 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case rx_hdr_sdcardinfo: {
-                            SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-                            int fname = rbuf.getInt();
-                            int sz = rbuf.getInt();
-                            int timestamp = rbuf.getInt();
-                            sdcardinfo.SetInfo(fname, sz, timestamp);
-                            TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+                            try {
+                                SwingUtilities.invokeAndWait(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+                                        int fname = rbuf.getInt();
+                                        int sz = rbuf.getInt();
+                                        int timestamp = rbuf.getInt();
+                                        sdcardinfo.SetInfo(fname, sz, timestamp);
+                                        TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+                                    }
+                                });
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (InvocationTargetException ex) {
+                                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                         break;
                         case rx_hdr_fileinfo: {
-                            int sz = rbuf.getInt();
-                            int timestamp = rbuf.getInt();
-                            CharBuffer cb = Charset.forName("ISO-8859-1").decode(rbuf);
-                            String fname = cb.toString();
-                            // strip trailing null
-                            if (fname.charAt(fname.length() - 1) == (char) 0) {
-                                fname = fname.substring(0, fname.length() - 1);
+                            try {
+                                SwingUtilities.invokeAndWait(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int sz = rbuf.getInt();
+                                        int timestamp = rbuf.getInt();
+                                        CharBuffer cb = Charset.forName("ISO-8859-1").decode(rbuf);
+                                        String fname = cb.toString();
+                                        // strip trailing null
+                                        if (fname.charAt(fname.length() - 1) == (char) 0) {
+                                            fname = fname.substring(0, fname.length() - 1);
+                                        }
+                                        SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
+                                        sdcardinfo.AddFile(fname, sz, timestamp);
+                                        TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
+                                    }
+                                });
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (InvocationTargetException ex) {
+                                Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-                            sdcardinfo.AddFile(fname, sz, timestamp);
-                            TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                         }
                         break;
                         case 0x00416f78: {
