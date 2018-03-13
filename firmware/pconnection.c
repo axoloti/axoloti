@@ -141,27 +141,17 @@ static msg_t bulk_tx_ack(void) {
 typedef struct {
 	uint32_t header;
 	uint8_t version[4];
-	uint8_t fwid[4];
-	uint8_t patch_mainloc[4];
+	uint32_t fw_crc;
+	uint32_t fw_chunkaddr;
 } tx_pckt_fwversion_t;
 
 static msg_t bulk_tx_fw_version(void) {
-	tx_pckt_fwversion_t pckt;
-    pckt.header = tx_hdr_fwid;
-	pckt.version[0] = FWVERSION1; // major
-	pckt.version[1] = FWVERSION2; // minor
-	pckt.version[2] = FWVERSION3;
-	pckt.version[3] = FWVERSION4;
-	uint32_t fwid = GetFirmwareID();
-	pckt.fwid[0] = (uint8_t) (fwid >> 24);
-	pckt.fwid[1] = (uint8_t) (fwid >> 16);
-	pckt.fwid[2] = (uint8_t) (fwid >> 8);
-	pckt.fwid[3] = (uint8_t) (fwid);
-	uint32_t chunk_addr = (uint32_t)chunk_fw_root_data;
-	pckt.patch_mainloc[0] = (uint8_t) (chunk_addr >> 24);
-	pckt.patch_mainloc[1] = (uint8_t) (chunk_addr >> 16);
-	pckt.patch_mainloc[2] = (uint8_t) (chunk_addr >> 8);
-	pckt.patch_mainloc[3] = (uint8_t) (chunk_addr);
+	tx_pckt_fwversion_t pckt = {
+			.header = tx_hdr_fwid,
+			.version = {FWVERSION1, FWVERSION2, FWVERSION3, FWVERSION4},
+			.fw_crc =  GetFirmwareID(),
+			.fw_chunkaddr = (uint32_t)chunk_fw_root_data
+	};
 	return BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
 }
 

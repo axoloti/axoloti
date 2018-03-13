@@ -354,13 +354,13 @@ public class USBBulkConnection_v2 extends IConnection {
             }
 
             ClearReadSync();
-            TransmitMemoryRead(patchentrypoint, 8);
+            TransmitMemoryRead(fw_chunkaddr, 8);
             WaitReadSync();
             int fw_chunks_hdr = readsync.memReadBuffer.getInt();
             int fw_chunks_size = readsync.memReadBuffer.getInt();
             System.out.println("fw chunks hdr " + FourCC.Format(fw_chunks_hdr) + ", size " + fw_chunks_size);
             ClearReadSync();
-            TransmitMemoryRead(patchentrypoint, fw_chunks_size + 8);
+            TransmitMemoryRead(fw_chunkaddr, fw_chunks_size + 8);
             WaitReadSync();
             fw_chunks = new ChunkParser(readsync.memReadBuffer);
             ShowConnect();
@@ -1193,7 +1193,7 @@ public class USBBulkConnection_v2 extends IConnection {
     private int memReadValue;
     private MemReadHandler memReadHandler;
     private byte[] fwversion = new byte[4];
-    private int patchentrypoint;
+    private int fw_chunkaddr;
 
     @Override
     public ByteBuffer getMemReadBuffer() {
@@ -1205,26 +1205,6 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public int getMemRead1Word() {
         return memReadValue;
-    }
-
-    void storeDataByte(int c) {
-        switch (dataIndex & 0x3) {
-            case 0:
-                packetData[dataIndex >> 2] = c;
-                break;
-            case 1:
-                packetData[dataIndex >> 2] += (c << 8);
-                break;
-            case 2:
-                packetData[dataIndex >> 2] += (c << 16);
-                break;
-            case 3:
-                packetData[dataIndex >> 2] += (c << 24);
-                break;
-        }
-//            System.out.println("s " + dataIndex + "  v=" + Integer.toHexString(packetData[dataIndex>>2]) + " c=");
-        dataIndex++;
-
     }
 
     void DisplayPackHeader(int i1, int i2) {
@@ -1361,19 +1341,12 @@ public class USBBulkConnection_v2 extends IConnection {
                             fwversion[1] = rbuf.get();
                             fwversion[2] = rbuf.get();
                             fwversion[3] = rbuf.get();
-                            int fwcrc1 = (rbuf.get() & 0xFF) << 24;
-                            fwcrc1 += (rbuf.get() & 0xFF) << 16;
-                            fwcrc1 += (rbuf.get() & 0xFF) << 8;
-                            fwcrc1 += (rbuf.get() & 0xFF);
+                            int fwcrc1 = rbuf.getInt();
                             fwcrc = fwcrc1;
-                            int patchentrypoint1 = (rbuf.get() & 0xFF) << 24;
-                            patchentrypoint1 += (rbuf.get() & 0xFF) << 16;
-                            patchentrypoint1 += (rbuf.get() & 0xFF) << 8;
-                            patchentrypoint1 += (rbuf.get() & 0xFF);
-                            patchentrypoint = patchentrypoint1;
+                            fw_chunkaddr = rbuf.getInt();
                             String sFwcrc = String.format("%08X", fwcrc);
-                            Logger.getLogger(USBBulkConnection_v2.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
-                                    fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s",
+                                    fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc));
                             firmwareID = sFwcrc;
                             GoIdleState();
                         }

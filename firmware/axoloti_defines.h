@@ -28,10 +28,10 @@ typedef int32_t int32buffer[BUFSIZE];
 
 #define BOARD_AXOLOTI_V05 1
 
-// firmware version 1.0.0.1
+// firmware version 1.1.0.0
 #define FWVERSION1 1
-#define FWVERSION2 0
+#define FWVERSION2 1
 #define FWVERSION3 0
-#define FWVERSION4 1
+#define FWVERSION4 0
 
 #endif
