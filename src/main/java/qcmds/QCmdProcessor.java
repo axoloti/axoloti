@@ -84,8 +84,8 @@ public class QCmdProcessor implements Runnable {
     }
 
     protected QCmdProcessor() {
-        queue = new ArrayBlockingQueue<QCmd>(10);
-        queueResponse = new ArrayBlockingQueue<QCmd>(10);
+        queue = new ArrayBlockingQueue<QCmd>(16);
+        queueResponse = new ArrayBlockingQueue<QCmd>(16);
         serialconnection = CConnection.GetConnection();
         pinger = new PeriodicPinger();
         pingerThread = new Thread(pinger);
@@ -134,22 +134,9 @@ public class QCmdProcessor implements Runnable {
             }
         });
     }
-    private int progressValue = 0;
-
-    private void setProgress(final int i) {
-        if (i != progressValue) {
-            progressValue = i;
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    MainFrame.mainframe.SetProgressValue(i);
-                }
-            });
-        }
-    }
 
     private void publish(final String m) {
-//        println(m);
+        println("publish: " + m);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -167,7 +154,14 @@ public class QCmdProcessor implements Runnable {
             try {
                 Thread.sleep(10);
                 t += 10;
-                if (t > 5000) {
+                if (t > 8000) {
+                    System.out.println("flushing..., current = " + currentcmd);
+                    while (!queue.isEmpty()) {
+                        System.out.println("queue timeout : " + queue.take());
+                    }
+                    while (!queueResponse.isEmpty()) {
+                        System.out.println("queue timeout : " + queueResponse.take());
+                    }
                     throw new Exception("Queue timeout " + currentcmd);
                 }
             } catch (InterruptedException ex) {
@@ -185,7 +179,6 @@ public class QCmdProcessor implements Runnable {
         dialTransmitterThread.setName("DialTransmitter");
         dialTransmitterThread.start();
         while (true) {
-            setProgress(0);
             try {
                 queueResponse.clear();
                 currentcmd = queue.take();
@@ -227,7 +220,8 @@ public class QCmdProcessor implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(QCmdProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
-            setProgress(0);
+            // FIXME: progress reporting
+            // setProgress(0);
         }
     }
 
