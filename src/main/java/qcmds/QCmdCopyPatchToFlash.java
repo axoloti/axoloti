@@ -18,6 +18,8 @@
 package qcmds;
 
 import axoloti.connection.IConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,6 +37,7 @@ public class QCmdCopyPatchToFlash implements QCmdSerialTask {
         if (connection.WaitSync(5000)) {
             return this;
         } else {
+            Logger.getLogger(QCmdCopyPatchToFlash.class.getName()).log(Level.SEVERE, "flashing failed? (timeout)");
             return new QCmdDisconnect();
         }
     }

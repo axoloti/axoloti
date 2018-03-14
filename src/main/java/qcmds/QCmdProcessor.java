@@ -136,7 +136,7 @@ public class QCmdProcessor implements Runnable {
     }
 
     private void publish(final String m) {
-        println("publish: " + m);
+//        println("publish: " + m);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

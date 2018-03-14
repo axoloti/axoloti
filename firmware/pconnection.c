@@ -687,6 +687,7 @@ static void CopyPatchToFlash(void) {
     flash_addr += 4;
     c += 4;
   }
+  flash_lock();
   // verify
   src_addr = SDRAM_BANK_ADDR;
   flash_addr = PATCHFLASHLOC;
@@ -833,9 +834,9 @@ static THD_FUNCTION(BulkReader, arg) {
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_dirlist);
       } else if (header == rcv_hdr_copy_to_flash) {
           StopPatch();
-    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
     	  CopyPatchToFlash();
     	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_ack);
+          LoadPatchStartFlash();
       } else if (header == rcv_hdr_activate_dfu) {
     	  StopPatch();
     	  exception_initiate_dfu();

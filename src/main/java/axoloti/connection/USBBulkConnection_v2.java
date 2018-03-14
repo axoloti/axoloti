@@ -684,6 +684,11 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void TransmitCopyToFlash() {
         writeBytes(copyToFlashPckt);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
