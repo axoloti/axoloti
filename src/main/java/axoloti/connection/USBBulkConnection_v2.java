@@ -43,6 +43,7 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -386,6 +387,18 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void writeBytes(byte[] data) {
+        boolean dump_tx_headers = false;
+        if (dump_tx_headers) {
+            if (data.length >= 4) {
+                System.out.println(String.format("%s        ->  %c%c%c%c  %5d",
+                        new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS").format(Calendar.getInstance().getTime()),
+                        (char) data[0],
+                        (char) data[1],
+                        (char) data[2],
+                        (char) data[3],
+                        data.length - 4));
+            }
+        }
         ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
         buffer.put(data);
         IntBuffer transfered = IntBuffer.allocate(1);
@@ -982,6 +995,20 @@ public class USBBulkConnection_v2 extends IConnection {
                         int sz = transfered.get(0);
                         recvbuffer.limit(sz);
                         recvbuffer.rewind();
+                        boolean dump_rx_headers = false;
+                        if (dump_rx_headers) {
+                            if (sz >= 4) {
+                                System.out.println(String.format("%s <- %c%c%c%c           %4d",
+                                        new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS").format(Calendar.getInstance().getTime()),
+                                        (char) recvbuffer.get(),
+                                        (char) recvbuffer.get(),
+                                        (char) recvbuffer.get(),
+                                        (char) recvbuffer.get(),
+                                        sz - 4
+                                ));
+                                recvbuffer.rewind();
+                            }
+                        }
                         processPacket(recvbuffer, recvbuffer.remaining());
                         break;
                     case LibUsb.ERROR_TIMEOUT:
