@@ -4,7 +4,10 @@ call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
 call :setrelease "%axoloti_release%"
 
-set PATH=%platformdir%gcc-arm-none-eabi-7-2017-q4-major\bin;%platformdir%bin
+set PATH=%platformdir%gcc-arm-none-eabi-7-2017q4\bin;%platformdir%bin
+
+echo %PATH%
+arm-none-eabi-gcc --version
 
 echo "setup build dir"
 cd %axoloti_firmware%

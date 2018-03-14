@@ -17,8 +17,8 @@ if not defined axoloti_home (
    set axoloti_home=%platformdir%..
 )
 
-set PATH=%platformdir%gcc-arm-none-eabi-6-2017-q1-update\bin;%platformdir%bin;%windir%\system32
-echo %PATH%
+set PATH=%platformdir%gcc-arm-none-eabi-7-2017q4\bin;%platformdir%bin;%windir%\system32
+echo PATH=%PATH%
 
 goto :eof
 

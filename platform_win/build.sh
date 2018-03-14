@@ -8,7 +8,7 @@ mkdir -p "${PLATFORM_ROOT}/src"
 cd "${PLATFORM_ROOT}"
 
 CH_VERSION=18.2.0
-if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
+if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ];
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=ChibiOS_${CH_VERSION}
@@ -31,7 +31,7 @@ then
     cd ${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}
     rm -rf community
     git clone https://github.com/axoloti/ChibiOS-Contrib.git community
-    cd community 
+    cd community
     git checkout patch-2
 
     cd "${PLATFORM_ROOT}"
@@ -39,29 +39,34 @@ else
     echo "chibios directory already present, skipping..."
 fi
 
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc.exe" ];
+
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2017q4/bin/arm-none-eabi-gcc" ];
 then
-    ARDIR=gcc-arm-none-eabi-6-2017-q1-update
-    ARCHIVE=${ARDIR}-win32.zip
-    if [ ! -f ${ARCHIVE} ]; 
+    cd "${PLATFORM_ROOT}"
+    ARDIR=gcc-arm-none-eabi-7-2017q4
+    ARCHIVE_BASE="gcc-arm-none-eabi-7-2017-q4-major"
+    ARCHIVE=${ARCHIVE_BASE}-win32.zip
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/6_1-2017q1/${ARCHIVE} > ${ARCHIVE}
+		curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2017q4/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
-    fi    
+    fi
     unzip -q -o ${ARCHIVE} -d ${ARDIR}
     rm ${ARCHIVE}
 else
-    echo "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc already present, skipping..."
+    echo "gcc-arm-none-eabi-7-2017q4 present, skipping..."
 fi
 
 if [ ! -f "bin/make.exe" ];
 then
     echo "downloading make"
     curl -L http://gnuwin32.sourceforge.net/downlinks/make-bin-zip.php > make-3.81-bin.zip
-    unzip -q -o make-3.81-bin.zip 
+    unzip -q -o make-3.81-bin.zip
     rm make-3.81-bin.zip
+else
+    echo "make already present, skipping...."
 fi
 
 
@@ -75,43 +80,52 @@ fi
 
 if [ ! -f "bin/rm.exe" ];
 then
-    echo "downloading rm"
+    echo "downloading gnuwin32 coreutils"
     curl -L http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php > coreutils-5.3.0-bin.zip
     unzip -q -o coreutils-5.3.0-bin.zip
     rm coreutils-5.3.0-bin.zip
-fi
-
-if [ ! -f "bin/dfu-util.exe" ];
-then
-    ./build-dfu-util.sh
+else
+    echo "gnuwin32 coreutils already present, skipping...."
 fi
 
 if [ ! -d "apache-ant-1.9.4" ];
 then
     ARCHIVE=apache-ant-1.9.4-bin.zip
-    if [ ! -f ${ARCHIVE} ]; 
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://archive.apache.org/dist/ant/binaries/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
-    fi    
+    fi
 
     unzip -q ${ARCHIVE}
     rm ${ARCHIVE}
 fi
 
-if [ ! -f "zadig_2.1.2.exe" ];
+if [ ! -f "zadig_2.3.exe" ];
 then
-    ARCHIVE=zadig_2.1.2.exe
-    if [ ! -f ${ARCHIVE} ]; 
+    ARCHIVE=zadig_2.3.exe
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://zadig.akeo.ie/downloads/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
-    fi        
+    fi
 fi
 
+if [ ! -f "bin/dfu-util-static.exe" ];
+then
+    ARCHIVE=dfu-util-0.9-win64.zip
+    if [ ! -f ${ARCHIVE} ];
+    then
+        echo "downloading ${ARCHIVE}"
+        curl -L http://dfu-util.sourceforge.net/releases/${ARCHIVE} > ${ARCHIVE}
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
+	unzip -q -j -d bin dfu-util-0.9-win64.zip
+fi
 
 echo "DONE!"

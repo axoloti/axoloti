@@ -280,28 +280,26 @@
 		 </fx:fileset>
 		 <fx:fileset dir=".">
 			 <include name="doc/*"/>
-			 <include name="firmware/*" />
-			 <include name="firmware/STM*/**/*" />
-			 <include name="firmware/mutable_instruments/**/*" />
-			 <include name="firmware/build/*.bin" />
-			 <include name="firmware/build/*.elf" />
-			 <include name="firmware/flasher/*" />
-			 <include name="firmware/flasher/flasher_build/*.bin" />
-			 <include name="firmware/flasher/flasher_build/*.elf" />
-			 <include name="firmware/mounter/*" />
-			 <include name="firmware/mounter/mass_storage/*" />
-			 <include name="firmware/mounter/mounter_build/*.bin" />
-			 <include name="firmware/mounter/mounter_build/*.elf" />
-			 <include name="chibios/*"/>
-			 <include name="chibios/boards/ST_STM32F4_DISCOVERY/*"/>
-			 <include name="chibios/ext/**/*"/>
-			 <include name="chibios/os/**/*"/>
-			 <include name="chibios/docs/**/*"/>
-			 <include name="CMSIS/**/*"/>
-			 <include name="patch/**/*"/>
+			 <include name="firmware/**"/>
+			 <!-- .git is excluded by default -->
+			 <exclude name="firmware/**/.dep/**"/>
+			 <exclude name="firmware/**/obj/**"/>
+			 <exclude name="firmware/**/lst/**"/>
+			 <include name="old_firmware/**"/>
+			 <include name="ChibiOS_18.2.0/*"/>
+			 <include name="ChibiOS_18.2.0/community/os/**"/>
+			 <include name="ChibiOS_18.2.0/ext/**"/>
+			 <include name="ChibiOS_18.2.0/os/**"/>
+			 <include name="ChibiOS_18.2.0/docs/**"/>
+			 <include name="CMSIS/**"/>
+			 <include name="patch/**"/>
 			 <include name="*.txt"/>
 			 <include name="public_key.der"/>
 		 </fx:fileset>
+		 <fx:fileset os="Windows" dir="platform_win">
+			<include name="bin/*"/>
+			<include name="gcc-arm-none-eabi-6-2017-q1-update/**"/>
+		</fx:fileset>
 	</fx:resources>
 
 	<fx:jar destfile="dist/axoloti-app.jar">
@@ -373,8 +371,9 @@
 		<arg line="build/bundles/axoloti-${short.version}.deb build/bundles/axoloti-linux-${short.version}.deb"/>
 	</exec>
 
-    	<fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version}">
-            <fx:info title="Axoloti"
+    <fx:deploy os="Windows" nativeBundles="msi" width="100" height="100" outdir="build/" outfile="AxolotiApp" version="${build.version} ">
+	<!-- optionally add verbose="true" to the list above -->
+		<fx:info title="Axoloti"
 		     vendor="axoloti"
 		     description="Axoloti application"
 		     license="GPL"
@@ -384,8 +383,8 @@
 		  		<fx:association icon="src/main/java/resources/axoloti_icon.ico" mimetype="application/xml" extension="axp axs axh axo"/>
 	      	</fx:info>
 			<fx:application name="Axoloti" mainClass="axoloti.Axoloti" version="${short.version}"/>
-	    <fx:resources refid="appRes"/>
-            <fx:platform>
+			<fx:resources refid="appRes"/>
+			<fx:platform>
                 <fx:jvmarg value="-Xbootclasspath/a:marlin-0.8.2.jar"/>
                 <fx:jvmarg value="-Xbootclasspath/p:marlin-0.8.2-sun-java2d.jar"/>
                 <fx:jvmarg value="-Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine" />
