@@ -87,7 +87,7 @@ public class PatchModel extends AbstractModel {
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
     List<IAxoObjectInstance> objectinstances = new ArrayList<>();
     @ElementList(name = "nets")
-    public ArrayList<Net> nets = new ArrayList<>();
+    public List<Net> nets = new ArrayList<>();
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
@@ -758,8 +758,8 @@ public class PatchModel extends AbstractModel {
     public final static Property PATCH_LOCKED = new BooleanProperty("Locked", PatchModel.class);
     public final static Property PATCH_FILENAME = new StringPropertyNull("FileNamePath", PatchModel.class);
     public final static Property PATCH_DSPLOAD = new IntegerProperty("DspLoad", PatchModel.class);
-    public final static Property PATCH_OBJECTINSTANCES = new ObjectProperty("Objectinstances", ArrayList.class, PatchModel.class);
-    public final static Property PATCH_NETS = new ObjectProperty("Nets", ArrayList.class, PatchModel.class);
+    public final static Property PATCH_OBJECTINSTANCES = new ObjectProperty("Objectinstances", List.class, PatchModel.class);
+    public final static Property PATCH_NETS = new ObjectProperty("Nets", List.class, PatchModel.class);
     public final static Property PATCH_AUTHOR = new StringPropertyNull("Author", PatchModel.class);
     public final static Property PATCH_LICENSE = new StringPropertyNull("License", PatchModel.class);
     public final static Property PATCH_ATTRIBUTIONS = new StringPropertyNull("Attributions", PatchModel.class);
@@ -837,7 +837,7 @@ public class PatchModel extends AbstractModel {
         return Collections.unmodifiableList(objectinstances);
     }
 
-    public void setObjectinstances(ArrayList<IAxoObjectInstance> objectinstances) {
+    public void setObjectinstances(List<IAxoObjectInstance> objectinstances) {
         List<IAxoObjectInstance> old_value = this.objectinstances;
         this.objectinstances = objectinstances;
         firePropertyChange(
@@ -849,7 +849,7 @@ public class PatchModel extends AbstractModel {
         return Collections.unmodifiableList(nets);
     }
 
-    public void setNets(ArrayList<Net> nets) {
+    public void setNets(List<Net> nets) {
         List<Net> old_value = this.nets;
         this.nets = nets;
         firePropertyChange(

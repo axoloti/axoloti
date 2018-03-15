@@ -636,7 +636,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void setInlets(ArrayList<Inlet> inlets) {
+    public void setInlets(List<Inlet> inlets) {
         List<Inlet> old_val = this.inlets;
         this.inlets = inlets;
         firePropertyChange(OBJ_INLETS, old_val, inlets);
@@ -651,7 +651,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void setOutlets(ArrayList<Outlet> outlets) {
+    public void setOutlets(List<Outlet> outlets) {
         List<Outlet> old_val = this.outlets;
         this.outlets = outlets;
         firePropertyChange(OBJ_OUTLETS, old_val, outlets);
@@ -666,7 +666,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void setParameters(ArrayList<Parameter> parameters) {
+    public void setParameters(List<Parameter> parameters) {
         List<Parameter> old_val = this.params;
         this.params = parameters;
         firePropertyChange(OBJ_PARAMETERS, old_val, parameters);
@@ -681,7 +681,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void setAttributes(ArrayList<AxoAttribute> attributes) {
+    public void setAttributes(List<AxoAttribute> attributes) {
         List<AxoAttribute> old_val = this.attributes;
         this.attributes = attributes;
         firePropertyChange(OBJ_ATTRIBUTES, old_val, attributes);
@@ -696,7 +696,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void setDisplays(ArrayList<Display> displays) {
+    public void setDisplays(List<Display> displays) {
         List<Display> old_val = this.displays;
         this.displays = displays;
         firePropertyChange(OBJ_DISPLAYS, old_val, displays);

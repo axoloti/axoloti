@@ -1,20 +1,21 @@
 package axoloti.property;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author jtaelman
  */
-public class StringListProperty extends PropertyReadWrite<ArrayList<String>> {
+public class StringListProperty extends PropertyReadWrite<List<String>> {
 
     public StringListProperty(String name, Class containerClass, String friendlyName) {
-        super(name, ArrayList.class, containerClass, friendlyName);
+        super(name, List.class, containerClass, friendlyName);
     }
 
     @Override
     public Class getType() {
-        return ArrayList.class;
+        return List.class;
     }
 
     @Override
@@ -22,7 +23,7 @@ public class StringListProperty extends PropertyReadWrite<ArrayList<String>> {
         return false;
     }
 
-    static String StringArrayToString(ArrayList<String> va) {
+    static String StringArrayToString(List<String> va) {
         // items quoted, separated by comma
         // quote characters escaped with backslash
         String s = "";
@@ -41,7 +42,7 @@ public class StringListProperty extends PropertyReadWrite<ArrayList<String>> {
 
     @Override
     public String getAsString(Object o) {
-        ArrayList<String> s = get(o);
+        List<String> s = get(o);
         if (s == null) {
             return "";
         } else {
@@ -49,7 +50,7 @@ public class StringListProperty extends PropertyReadWrite<ArrayList<String>> {
         }
     }
 
-    static ArrayList<String> StringToStringArrayList(String s) {
+    static List<String> StringToStringArrayList(String s) {
         // items separated by comma
         // items can be within quotes
         // backlash to escape quote character
@@ -110,7 +111,7 @@ public class StringListProperty extends PropertyReadWrite<ArrayList<String>> {
     }
 
     @Override
-    public ArrayList<String> StringToObj(String v) {
+    public List<String> StringToObj(String v) {
         return StringToStringArrayList(v);
     }
 }

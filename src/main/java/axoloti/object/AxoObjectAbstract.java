@@ -28,7 +28,6 @@ import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -171,11 +170,11 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
 
 /* MVC clean methods below... */
-    public static final Property OBJ_INLETS = new ObjectProperty("Inlets", ArrayList.class, AxoObjectAbstract.class);
-    public static final Property OBJ_OUTLETS = new ObjectProperty("Outlets", ArrayList.class, AxoObjectAbstract.class);
-    public static final Property OBJ_ATTRIBUTES = new ObjectProperty("Attributes", ArrayList.class, AxoObjectAbstract.class);
-    public static final Property OBJ_PARAMETERS = new ObjectProperty("Parameters", ArrayList.class, AxoObjectAbstract.class);
-    public static final Property OBJ_DISPLAYS = new ObjectProperty("Displays", ArrayList.class, AxoObjectAbstract.class);
+    public static final Property OBJ_INLETS = new ObjectProperty("Inlets", List.class, AxoObjectAbstract.class);
+    public static final Property OBJ_OUTLETS = new ObjectProperty("Outlets", List.class, AxoObjectAbstract.class);
+    public static final Property OBJ_ATTRIBUTES = new ObjectProperty("Attributes", List.class, AxoObjectAbstract.class);
+    public static final Property OBJ_PARAMETERS = new ObjectProperty("Parameters", List.class, AxoObjectAbstract.class);
+    public static final Property OBJ_DISPLAYS = new ObjectProperty("Displays", List.class, AxoObjectAbstract.class);
 
     public abstract List<Inlet> getInlets();
 
@@ -187,18 +186,18 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     public abstract List<Display> getDisplays();
 
-    public void setInlets(ArrayList<Inlet> inlets) {
+    public void setInlets(List<Inlet> inlets) {
     }
 
-    public void setOutlets(ArrayList<Outlet> outlets) {
+    public void setOutlets(List<Outlet> outlets) {
     }
-    public void setAttributes(ArrayList<AxoAttribute> attributes) {
-    }
-
-    public void setParameters(ArrayList<Parameter> parameters) {
+    public void setAttributes(List<AxoAttribute> attributes) {
     }
 
-    public void setDisplays(ArrayList<Display> displays) {
+    public void setParameters(List<Parameter> parameters) {
+    }
+
+    public void setDisplays(List<Display> displays) {
     }
 
     private String StringDenull(String s) {

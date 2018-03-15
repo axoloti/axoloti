@@ -51,7 +51,7 @@ public class AxoAttributeComboBox extends AxoAttribute {
         return MenuEntries;
     }
 
-    public void setMenuEntries(ArrayList<String> MenuEntries) {
+    public void setMenuEntries(List<String> MenuEntries) {
         List<String> oldVal = this.MenuEntries;
         this.MenuEntries = MenuEntries;
         firePropertyChange(ATOM_MENUENTRIES, oldVal, MenuEntries);
@@ -61,7 +61,7 @@ public class AxoAttributeComboBox extends AxoAttribute {
         return CEntries;
     }
 
-    public void setCEntries(ArrayList<String> CEntries) {
+    public void setCEntries(List<String> CEntries) {
         List<String> oldVal = this.CEntries;
         this.CEntries = CEntries;
         firePropertyChange(ATOM_CENTRIES, oldVal, CEntries);
