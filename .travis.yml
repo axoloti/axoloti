@@ -21,6 +21,7 @@ before_install:
 
 script:
   - ant
+  - ant check_fw
   - ant -Dbuild.bundle=true bundle
   - ant -Dbuild.runtime=true runtime
 

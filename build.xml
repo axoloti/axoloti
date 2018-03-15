@@ -242,7 +242,19 @@
 	</exec>
   </target>
 
-  <target name="bundle" if="build.bundle" depends="calc.build.version, calc.short.version, userguide">
+  <target name="check_fw">
+      <fail message="firmware build does not exist?">
+          <condition>
+              <not>
+                  <resourcecount count="3">
+                      <fileset id="fs" dir="firmware" includes="build/axoloti.bin,mounter/mounter_build/mounter.bin,flasher/flasher_build/flasher.bin"/>
+                  </resourcecount>
+              </not>
+          </condition>
+      </fail>
+  </target>
+
+  <target name="bundle" if="build.bundle" depends="calc.build.version, calc.short.version, userguide, check_fw">
 	<echo>bundling ${build.version} ${short.version}</echo>
 	<echo>${java.home}</echo>
 	<exec dir="." executable="rm" >
