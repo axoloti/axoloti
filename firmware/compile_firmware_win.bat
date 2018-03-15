@@ -4,7 +4,7 @@ call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
 call :setrelease "%axoloti_release%"
 
-set PATH=%platformdir%gcc-arm-none-eabi-7-2017q4\bin;%platformdir%bin
+set PATH=%axoloti_runtime%\platform_win\gcc-arm-none-eabi-7-2017q4\bin;%axoloti_runtime%\platform_win\bin
 
 echo %PATH%
 arm-none-eabi-gcc --version

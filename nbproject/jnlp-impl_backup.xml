@@ -306,7 +306,7 @@ made subject to such option by the copyright holder.
 
     <target name="-copy-tmp-manifest" if="manifest.file">
         <property name="tmp.manifest.file" value="${build.dir}/manifest.mf"/>
-        <copy file="${manifest.file}" tofile="${build.dir}/manifest.mf"/>
+        <copy file="${manifest.file}" tofile="${build.dir}/manifest.mf" encoding="${manifest.encoding}"/>
     </target>
 
     <target name="-set-mixed-code-properties" depends="-check-signing-possible" if="jnlp.signed.true+signjars.task.available">
