@@ -24,7 +24,7 @@ export axoloti_home=${axoloti_home:="$rootdir"}
 
 which java >/dev/null || echo "java not found in path"
 
-marlin_jvmargs='-Xbootclasspath/a:lib/marlin-0.8.2.jar -Xbootclasspath/a:lib/marlin-0.8.2-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine'
+marlin_jvmargs='-Xbootclasspath/a:lib/marlin-0.9.1-Unsafe.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine'
 
 if [ -f $rootdir/dist/Axoloti.jar ]
 then

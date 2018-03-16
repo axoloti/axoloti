@@ -45,7 +45,7 @@ if not defined JAVAHOME (
 
 echo JavaHome: %JAVAHOME%
 set PATH=%JAVAHOME%\bin
-set MARLIN_JVMARGS="-Xbootclasspath/a:lib/marlin-0.8.2.jar -Xbootclasspath/a:lib/marlin-0.8.2-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine"
+set MARLIN_JVMARGS="-Xbootclasspath/a:lib/marlin-0.9.1-Unsafe.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine"
 java %MARLIN_JVMARGS% -jar dist/axoloti.jar %*
 
 :end
