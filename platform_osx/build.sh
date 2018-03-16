@@ -4,7 +4,7 @@
 # Items already present are skipped to save your bandwidth.
 
 #checking for required executables
-command -v 7z >/dev/null 2>&1 || { echo >&2 "I require 7zip (7z) but it's not installed. 
+command -v 7z >/dev/null 2>&1 || { echo >&2 "I require 7zip (7z) but it's not installed.
 Please install 7zip prior to running this script again. Aborting.
 To install via brew run:
 brew update
@@ -18,23 +18,23 @@ PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 
 cd "$PLATFORM_ROOT"
 
-if [ ! -d "${PLATFORM_ROOT}/bin" ]; 
+if [ ! -d "${PLATFORM_ROOT}/bin" ];
 then
     mkdir "${PLATFORM_ROOT}/bin"
 fi
 
-if [ ! -d "${PLATFORM_ROOT}/lib" ]; 
+if [ ! -d "${PLATFORM_ROOT}/lib" ];
 then
     mkdir "${PLATFORM_ROOT}/lib"
 fi
 
-if [ ! -d "${PLATFORM_ROOT}/src" ]; 
+if [ ! -d "${PLATFORM_ROOT}/src" ];
 then
     mkdir "${PLATFORM_ROOT}/src"
 fi
 
 CH_VERSION=18.2.0
-if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ]; 
+if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ];
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=ChibiOS_${CH_VERSION}
@@ -57,7 +57,7 @@ then
     cd ${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}
     rm -rf community
     git clone https://github.com/axoloti/ChibiOS-Contrib.git community
-    cd community 
+    cd community
     git checkout patch-2
 else
     echo "chibios directory already present, skipping..."
@@ -80,16 +80,16 @@ then
     tar xfj ${ARCHIVE}
     rm ${ARCHIVE}
 else
-    echo "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc already present, skipping..."
+    echo "gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc already present, skipping..."
 fi
 
 
-if [ ! -f "$PLATFORM_ROOT/bin/libusb-1.0.0.dylib" ]; 
+if [ ! -f "$PLATFORM_ROOT/bin/libusb-1.0.0.dylib" ];
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=libusb-1.0.19
     ARCHIVE=${ARDIR}.tar.bz2
-    if [ ! -f ${ARCHIVE} ]; 
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://sourceforge.net/projects/libusb/files/libusb-1.0/$ARDIR/$ARCHIVE/download > $ARCHIVE
@@ -97,17 +97,17 @@ then
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfj ${ARCHIVE}
-    
+
     cd "${PLATFORM_ROOT}/src/libusb-1.0.19"
 
     patch -N -p1 < ../libusb.stdfu.patch
 
     ./configure --prefix="${PLATFORM_ROOT}/i386" CFLAGS="-arch i386 -mmacosx-version-min=10.6" LDFLAGS="-arch i386"
-    make 
+    make
     make install
     make clean
     ./configure --prefix="${PLATFORM_ROOT}/x86_64" CFLAGS="-arch x86_64 -mmacosx-version-min=10.6" LDFLAGS="-arch x86_64"
-    make 
+    make
     make install
     make clean
 
@@ -120,12 +120,12 @@ else
     echo "libusb already present, skipping..."
 fi
 
-if [ ! -f "${PLATFORM_ROOT}/bin/dfu-util" ]; 
+if [ ! -f "${PLATFORM_ROOT}/bin/dfu-util" ];
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=dfu-util-0.8
     ARCHIVE=${ARDIR}.tar.gz
-    if [ ! -f $ARCHIVE ]; 
+    if [ ! -f $ARCHIVE ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://dfu-util.sourceforge.net/releases/$ARCHIVE > $ARCHIVE
@@ -136,14 +136,14 @@ then
 
     cd "${PLATFORM_ROOT}/src/${ARDIR}"
     ./configure --prefix="${PLATFORM_ROOT}/i386" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/i386/include/libusb-1.0/ CFLAGS="-arch i386 -mmacosx-version-min=10.6" LDFLAGS="-arch i386"
-    make 
+    make
     make install
     make clean
 
     cd "$PLATFORM_ROOT/src/$ARDIR"
     make clean
     ./configure --prefix="${PLATFORM_ROOT}/x86_64" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.0.dylib" USB_CFLAGS=-I${PLATFORM_ROOT}/x86_64/include/libusb-1.0/ CFLAGS="-arch x86_64 -mmacosx-version-min=10.6" LDFLAGS="-arch x86_64"
-    make 
+    make
     make install
     make clean
 
@@ -153,13 +153,13 @@ else
     echo "dfu-util already present, skipping..."
 fi
 
-if [ ! -f "$PLATFORM_ROOT/bin/make" ]; 
+if [ ! -f "$PLATFORM_ROOT/bin/make" ];
 then
     cd "${PLATFORM_ROOT}/src"
     ARDIR=make-3.82
     ARCHIVE=${ARDIR}.tar.gz
 
-    if [ ! -f ${ARCHIVE} ]; 
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://ftp.gnu.org/gnu/make/$ARCHIVE > $ARCHIVE

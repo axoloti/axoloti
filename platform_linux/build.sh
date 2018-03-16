@@ -117,24 +117,23 @@ else
     echo "chibios directory already present, skipping..."
 fi
 
-
-
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc" ];
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" ];
 then
     cd "${PLATFORM_ROOT}"
-    ARDIR=gcc-arm-none-eabi-6-2017-q1-update
-    ARCHIVE=${ARDIR}-linux.tar.bz2
+    ARDIR=gcc-arm-none-eabi-7-2017q4
+    ARCHIVE_BASE="gcc-arm-none-eabi-7-2017-q4-major"
+    ARCHIVE=${ARCHIVE_BASE}-linux.tar.bz2
     if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/6_1-2017q1/${ARCHIVE} > ${ARCHIVE}
+        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2017q4/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfj ${ARCHIVE}
     rm ${ARCHIVE}
 else
-    echo "gcc-arm-none-eabi-6-2017-q1-update/bin/arm-none-eabi-gcc already present, skipping..."
+    echo "gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc already present, skipping..."
 fi
 
 if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ];
