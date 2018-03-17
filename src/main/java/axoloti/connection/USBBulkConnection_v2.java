@@ -612,7 +612,7 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public boolean WaitReadSync() {
-        int i=5;
+        int i = 5;
         while (!readsync.ready) {
             try {
                 synchronized (readsync) {
@@ -982,10 +982,14 @@ public class USBBulkConnection_v2 extends IConnection {
 
     class Receiver implements Runnable {
 
+        final int MAX_RX_SIZE = 4096;
+        // larger than 4096 will give "WARN Event TRB for slot 1 ep 4 with no TDs queued" in linux kernel log
+
         @Override
         public void run() {
+            ByteBuffer packet = null;
             while (!disconnectRequested) {
-                ByteBuffer recvbuffer = ByteBuffer.allocateDirect(256 * 1024);
+                ByteBuffer recvbuffer = ByteBuffer.allocateDirect(MAX_RX_SIZE);
                 recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
                 IntBuffer transfered = IntBuffer.allocate(1);
                 recvbuffer.rewind();
@@ -995,21 +999,68 @@ public class USBBulkConnection_v2 extends IConnection {
                         int sz = transfered.get(0);
                         recvbuffer.limit(sz);
                         recvbuffer.rewind();
-                        boolean dump_rx_headers = false;
-                        if (dump_rx_headers) {
-                            if (sz >= 4) {
-                                System.out.println(String.format("%s <- %c%c%c%c           %4d",
-                                        new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS").format(Calendar.getInstance().getTime()),
-                                        (char) recvbuffer.get(),
-                                        (char) recvbuffer.get(),
-                                        (char) recvbuffer.get(),
-                                        (char) recvbuffer.get(),
-                                        sz - 4
-                                ));
-                                recvbuffer.rewind();
+                        if (sz < MAX_RX_SIZE) {
+                            // terminates a packet
+                            if (packet == null) {
+                                packet = recvbuffer;
+                            } else {
+                                int pl = packet.position();
+                                if (packet.capacity() > pl + sz) {
+                                    packet.put(recvbuffer);
+                                    packet.limit(pl + sz);
+                                    packet.rewind();
+                                } else {
+                                    ByteBuffer new_packet = ByteBuffer.allocate(packet.position() + sz);
+                                    new_packet.order(ByteOrder.LITTLE_ENDIAN);
+                                    packet.limit(packet.position());
+                                    packet.rewind();
+                                    new_packet.put(packet);
+                                    new_packet.put(recvbuffer);
+                                    new_packet.limit(packet.position() + recvbuffer.position());
+                                    new_packet.rewind();
+                                    packet = new_packet;
+                                }
+                            }
+                            // diagnostics
+                            boolean dump_rx_headers = false;
+                            if (dump_rx_headers) {
+                                if (sz >= 4) {
+                                    System.out.println(String.format("%s <- %c%c%c%c           %4d",
+                                            new SimpleDateFormat("yyyyMMdd-HH:mm:ss.SSS").format(Calendar.getInstance().getTime()),
+                                            (char) packet.get(),
+                                            (char) packet.get(),
+                                            (char) packet.get(),
+                                            (char) packet.get(),
+                                            packet.limit() - 4
+                                    ));
+                                    packet.rewind();
+                                }
+                            }
+                            processPacket(packet, packet.remaining());
+                            packet = null;
+                        } else {
+                            // packet to be continued in the future...
+                            if (packet == null) {
+                                packet = ByteBuffer.allocate(MAX_RX_SIZE * 8);
+                            }
+                            int pl = packet.position();
+                            System.out.println("pos=" + pl + " cap=" + packet.capacity() + " sz=" + sz);
+                            if (packet.capacity() > pl + sz) {
+                                // fits
+                                packet.put(recvbuffer);
+                                packet.position(pl + sz);
+                            } else {
+                                // extend
+                                ByteBuffer new_packet = ByteBuffer.allocate(packet.capacity() * 2 + sz);
+                                new_packet.order(ByteOrder.LITTLE_ENDIAN);
+                                packet.limit(packet.position());
+                                packet.rewind();
+                                new_packet.put(packet);
+                                new_packet.put(recvbuffer);
+                                new_packet.position(packet.position() + recvbuffer.position());
+                                packet = new_packet;
                             }
                         }
-                        processPacket(recvbuffer, recvbuffer.remaining());
                         break;
                     case LibUsb.ERROR_TIMEOUT:
                         if (state != ReceiverState.header) {
@@ -1324,7 +1375,7 @@ public class USBBulkConnection_v2 extends IConnection {
                     int header = rbuf.getInt();
                     switch (header) {
                         case tx_hdr_acknowledge: {
-                            if (false && log_rx_diagnostics) {
+                            if (log_rx_diagnostics) {
                                 System.out.println("rx hdr ack");
                             }
                             int ackversion = rbuf.getInt();
@@ -1353,7 +1404,7 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_memrd32: {
-                            if (true && log_rx_diagnostics) {
+                            if (log_rx_diagnostics) {
                                 System.out.println("rx hdr memrd32");
                             }
                             memReadAddr = rbuf.getInt();
@@ -1366,7 +1417,7 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_fwid: {
-                            if (true && log_rx_diagnostics) {
+                            if (log_rx_diagnostics) {
                                 System.out.println("rx hdr fwid");
                             }
                             fwversion[0] = rbuf.get();
@@ -1384,7 +1435,7 @@ public class USBBulkConnection_v2 extends IConnection {
                         }
                         break;
                         case tx_hdr_log: {
-                            if (true && log_rx_diagnostics) {
+                            if (log_rx_diagnostics) {
                                 System.out.println("rx hdr log");
                             }
                             textRcvBuffer.rewind();
@@ -1408,11 +1459,15 @@ public class USBBulkConnection_v2 extends IConnection {
                         case tx_hdr_memrdx:
                             memReadAddr = rbuf.getInt();
                             memReadLength = rbuf.getInt();
-                            if (true && log_rx_diagnostics) {
+                            if (log_rx_diagnostics) {
                                 System.out.print("rx memrd addr=" + String.format("0x%08X", memReadAddr) + " le=" + memReadLength + " [");
                                 for (int i = 12; i < size; i++) {
                                     // this would be unexpected extra data...
                                     System.out.print("|" + (char) rbuf.get(i));
+                                    if (i > 100) {
+                                        System.out.println("|...truncated");
+                                        break;
+                                    }
                                 }
                                 System.out.println("]");
                             }
@@ -1532,12 +1587,18 @@ public class USBBulkConnection_v2 extends IConnection {
                     System.out.print("memread barf:" + memReadLength + ":" + size + "<");
 //                    rbuf.position(memReadLength);
                     rbuf.rewind();
+                    int i = 0;
                     while(rbuf.hasRemaining()) {
-                        System.out.print("|"+(char)rbuf.get());
+                        System.out.print("|" + (char) rbuf.get());
+                        i++;
+                        if (i > 100) {
+                            System.out.println("|...truncated");
+                            break;
+                        }
                     }
                     System.out.println(">");
                 }
-                if (false || log_rx_diagnostics) {
+                if (log_rx_diagnostics) {
                     System.out.println("rx memrd recv'd sz=" + size + " " + memReadHandler);
                 }
                 byte memr[] = new byte[memReadLength];
@@ -1548,7 +1609,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 MemReadHandler mrh = memReadHandler;
                 if (mrh != null) {
                     try {
-                        if (false || log_rx_diagnostics) {
+                        if (log_rx_diagnostics) {
                                 System.out.println("handler: " + mrh.toString());
                         }
                         SwingUtilities.invokeAndWait(new Runnable() {
