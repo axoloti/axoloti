@@ -207,12 +207,20 @@ static msg_t bulk_tx_filecontents(void) {
     msg_t m = BulkUsbTransmitPacket((const unsigned char* )fbuff, 8);
     if (m!=MSG_OK) return m;
     int bytes_read;
+    unsigned int bs = 64*8;
+    if (sizeof(fbuff)<bs) bs = sizeof(fbuff);
     while (1) {
-		FRESULT err = f_read(&pFile, (char *)fbuff, 64,
-					  (void *)&bytes_read);
-		(void)err;
-		m = BulkUsbTransmit((uint8_t *)fbuff, bytes_read);
-		if (bytes_read < 64) break;
+        FRESULT err = f_read(&pFile, (char *)fbuff, bs,
+                                  (void *)&bytes_read);
+        (void)err;
+        m = BulkUsbTransmit((uint8_t *)fbuff, bytes_read);
+        if (bytes_read < bs) {
+            if ((bytes_read & 0x3F) == 0) {
+                // multiple of 64 bytes, append zero-length packet
+                m = BulkUsbTransmit((uint8_t *)fbuff, 0);
+            }
+            break;
+        }
     }
     f_close(&pFile);
     return m;

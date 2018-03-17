@@ -36,9 +36,12 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.WritableByteChannel;
 import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -472,6 +475,7 @@ public class FileManagerFrame extends TJFrame {
                 @Override
                 public void Done(ByteBuffer mem) {
                     if (mem == null) {
+                        Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Open: failed");
                         return;
                     }
                     if (f.getExtension().equals("txt")) {
@@ -516,10 +520,29 @@ public class FileManagerFrame extends TJFrame {
                         }
                         System.out.println();
                     } else {
+                        // TODO: write to temp folder rather than cwd?
+                        // TODO: file selection dialog?
+                        mem.rewind();
+                        System.out.println("file contents written to download.txt");
+                        File f1 = new File("download.txt");
+                        try {
+                            FileOutputStream fos = new FileOutputStream(f1);
+                            WritableByteChannel channel = Channels.newChannel(fos);
+                            channel.write(mem);
+                            fos.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        mem.rewind();
                         System.out.println("file contents:");
+                        int i=0;
                         while (mem.remaining() > 0) {
                             System.out.print((char) mem.get());
 //                            System.out.print(String.format("%02X\n", mem.get()));
+                            if (i > 100) {
+                                System.out.println("...truncated");
+                                break;
+                            }
                         }
                         System.out.println();
                     }
