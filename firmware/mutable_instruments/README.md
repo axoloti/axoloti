@@ -24,8 +24,6 @@ before initial commit:
 * sample_data in elements/resources.h made non-const to allow dynamic loading
 * sample_data initialised with new call loadElementsData in axoloti_mi.h/cpp
 
-* clouds, change reverb to 16bit (brighter, less noisy) , allow sample rate to be set, default to 48k (fx/reverb.sh, granular_processor.h/cpp)
-
 Original README
 ===============
 
