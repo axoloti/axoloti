@@ -852,7 +852,7 @@ public class USBBulkConnection extends Connection {
 
         @Override
         public void run() {
-            ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
+            ByteBuffer recvbuffer = ByteBuffer.allocateDirect(4096);
             IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
                 int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
