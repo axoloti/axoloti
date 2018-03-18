@@ -63,11 +63,6 @@ then
     rm coreutils-5.3.0-bin.zip
 fi
 
-if [ ! -f "bin/dfu-util.exe" ];
-then
-    ./build-dfu-util.sh
-fi
-
 if [ ! -d "apache-ant-1.9.4" ];
 then
     ARCHIVE=apache-ant-1.9.4-bin.zip
@@ -83,9 +78,9 @@ then
     rm ${ARCHIVE}
 fi
 
-if [ ! -f "zadig_2.1.2.exe" ];
+if [ ! -f "zadig_2.3.exe" ];
 then
-    ARCHIVE=zadig_2.1.2.exe
+    ARCHIVE=zadig_2.3.exe
     if [ ! -f ${ARCHIVE} ]; 
     then
         echo "downloading ${ARCHIVE}"
@@ -95,5 +90,17 @@ then
     fi        
 fi
 
+if [ ! -f "bin/dfu-util-static.exe" ];
+then
+    ARCHIVE=dfu-util-0.9-win64.zip
+    if [ ! -f ${ARCHIVE} ];
+    then
+        echo "downloading ${ARCHIVE}"
+        curl -L http://dfu-util.sourceforge.net/releases/${ARCHIVE} > ${ARCHIVE}
+    else
+        echo "${ARCHIVE} already downloaded"
+    fi
+	unzip -q -j -d bin dfu-util-0.9-win64.zip
+fi
 
 echo "DONE!"

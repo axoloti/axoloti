@@ -18,5 +18,6 @@ gcc-arm-none-eabi-*-win32.zip
 openocd-0.8.0.zip
 arm-none-eabi
 zadig*.exe
+dfu-util-*.zip
 
 .bash_history

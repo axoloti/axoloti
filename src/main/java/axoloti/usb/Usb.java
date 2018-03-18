@@ -149,9 +149,9 @@ public class Usb {
                         Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "DFU device found, but can''t get access : {0}", LibUsb.strError(result));
                         switch (axoloti.utils.OSDetect.getOS()) {
                             case WIN:
-                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Please install the \"STM32 Bootloader WinUSB\" driver.");
-                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Launch Zadig (http://zadig.akeo.ie/) , open the configuration from platform_win\\zadig_conf_dfu.cfg and press \"install driver\"");
-                                break;
+                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Please install the WinUSB driver for the \"STM32 Bootloader\":");
+                                Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Launch Zadig (http://zadig.akeo.ie/) , " +
+									"select \"Options->List all devices\", select \"STM32 BOOTLOADER\", and \"replace\" the STTub30 driver with the WinUSB driver");                                break;
                             case LINUX:
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Probably need to add a udev rule.");
                                 break;
