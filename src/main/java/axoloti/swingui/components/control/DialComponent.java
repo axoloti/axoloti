@@ -24,13 +24,11 @@ import axoloti.realunits.NativeToReal;
 import axoloti.swingui.TransparentCursor;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Stroke;
@@ -39,8 +37,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -84,11 +80,6 @@ public class DialComponent extends ACtrlComponent {
         });
 
         SetupTransferHandler();
-        try {
-            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-        } catch (AWTException ex) {
-            Logger.getLogger(DialComponent.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     final int layoutTick = 3;
 
@@ -97,7 +88,6 @@ public class DialComponent extends ACtrlComponent {
         if (isEnabled()) {
             double v;
             if ((MousePressedBtn == MouseEvent.BUTTON1)) {
-                this.robotMoveToCenter();
                 if (Preferences.getPreferences().getMouseDialAngular()) {
                     int y = e.getY();
                     int x = e.getX();
@@ -108,7 +98,7 @@ public class DialComponent extends ACtrlComponent {
                         v = Math.round(v / tick) * tick;
                     }
                 } else {
-
+                    this.robotMoveToCenter();
                     double t = tick;
                     if (KeyUtils.isControlOrCommandDown(e)) {
                         t = t * 0.1;
@@ -117,6 +107,9 @@ public class DialComponent extends ACtrlComponent {
                         t = t * 0.1;
                     }
                     v = value + t * ((int) Math.round((MousePressedCoordY - e.getYOnScreen())));
+                    if (robot == null) {
+                        MousePressedCoordY = e.getYOnScreen();
+                    }
                 }
                 fireValue(v);
                 e.consume();
@@ -131,6 +124,7 @@ public class DialComponent extends ACtrlComponent {
     protected void mousePressed(MouseEvent e) {
         if (!e.isPopupTrigger()) {
             if (isEnabled()) {
+                robot = createRobot();
                 grabFocus();
                 MousePressedCoordX = e.getXOnScreen();
                 MousePressedCoordY = e.getYOnScreen();
@@ -146,7 +140,9 @@ public class DialComponent extends ACtrlComponent {
                 }
 
                 if (MousePressedBtn == MouseEvent.BUTTON1) {
-                    getRootPane().setCursor(TransparentCursor.get());
+                    if (!Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                        getRootPane().setCursor(TransparentCursor.get());
+                    }
                     fireEventAdjustmentBegin();
                 } else {
                     getRootPane().setCursor(Cursor.getDefaultCursor());
@@ -164,6 +160,7 @@ public class DialComponent extends ACtrlComponent {
             fireEventAdjustmentFinished();
             e.consume();
         }
+        robot = null;
     }
 
     @Override
@@ -438,6 +435,8 @@ public class DialComponent extends ACtrlComponent {
 
     public void robotMoveToCenter() {
         //getRootPane().setCursor(MainFrame.transparentCursor);
-        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+        if (robot != null) {
+            robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+        }
     }
 }

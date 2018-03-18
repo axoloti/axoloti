@@ -18,18 +18,17 @@
 package axoloti.swingui.components.control;
 
 import axoloti.datatypes.ValueFrac32;
+import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.realunits.NativeToReal;
 import axoloti.swingui.TransparentCursor;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
-import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Robot;
@@ -38,8 +37,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -114,14 +111,10 @@ public class NumberBoxComponent extends ACtrlComponent {
                     t = t * 0.1;
                 }
                 v = value + t * (MousePressedCoordY - e.getYOnScreen());
-                if (robot == null) {
-                    try {
-                        robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-                    } catch (AWTException ex) {
-                        Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
                 this.robotMoveToCenter();
+                if (robot == null) {
+                    MousePressedCoordY = e.getYOnScreen();
+                }
                 if (v > max) {
                     v = max;
                 }
@@ -139,6 +132,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     @Override
     protected void mousePressed(MouseEvent e) {
         if (!e.isPopupTrigger()) {
+            robot = createRobot();
             grabFocus();
             if (isEnabled() && (e.getX() >= getWidth() - rmargin - htick * 2)) {
                 dragging = false;
@@ -160,7 +154,9 @@ public class NumberBoxComponent extends ACtrlComponent {
                 MousePressedCoordX = e.getXOnScreen();
                 MousePressedCoordY = e.getYOnScreen();
                 MousePressedBtn = e.getButton();
-                getRootPane().setCursor(TransparentCursor.get());
+                if (!Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                    getRootPane().setCursor(TransparentCursor.get());
+                }
                 fireEventAdjustmentBegin();
             }
             e.consume();
@@ -440,7 +436,9 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     @Override
     public void robotMoveToCenter() {
-        getRootPane().setCursor(TransparentCursor.get());
-        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+        if (robot != null) {
+            getRootPane().setCursor(TransparentCursor.get());
+            robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+        }
     }
 }

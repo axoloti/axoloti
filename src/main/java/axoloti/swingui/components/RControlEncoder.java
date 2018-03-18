@@ -17,6 +17,7 @@
  */
 package axoloti.swingui.components;
 
+import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
 import java.awt.AWTException;
@@ -46,6 +47,15 @@ public abstract class RControlEncoder extends JComponent {
     Robot robot;
 
     public RControlEncoder() {
+        try {
+            if (Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                robot = null;
+            } else {
+                robot = new Robot(MouseInfo.getPointerInfo().getDevice());
+            }
+        } catch (AWTException ex) {
+            Logger.getLogger(RControlEncoder.class.getName()).log(Level.SEVERE, null, ex);
+        }
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -79,17 +89,14 @@ public abstract class RControlEncoder extends JComponent {
             public void mouseDragged(MouseEvent e) {
                 if ((MousePressedBtn == MouseEvent.BUTTON1)) {
                     int v;
-                    getRootPane().setCursor(TransparentCursor.get());
                     v = (MousePressedCoordY - e.getYOnScreen());
                     if (Math.abs(v) > 2) {
-                        if (robot == null) {
-                            try {
-                                robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-                            } catch (AWTException ex) {
-                                Logger.getLogger(RControlEncoder.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                        if (robot != null) {
+                            getRootPane().setCursor(TransparentCursor.get());
+                            robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+                        } else {
+                            MousePressedCoordY = e.getYOnScreen();
                         }
-                        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
                         DoRotation1(v / 2);
                     }
                 }

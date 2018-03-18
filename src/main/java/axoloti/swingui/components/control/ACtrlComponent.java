@@ -17,8 +17,12 @@
  */
 package axoloti.swingui.components.control;
 
+import axoloti.preferences.Preferences;
 import axoloti.utils.KeyUtils;
+import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Robot;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -187,6 +191,19 @@ public abstract class ACtrlComponent extends JComponent {
         map.put(TransferHandler.getPasteAction().getValue(Action.NAME),
                 TransferHandler.getPasteAction());
 
+    }
+
+    Robot createRobot() {
+        try {
+            if (Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                return null;
+            } else {
+                return new Robot(MouseInfo.getPointerInfo().getDevice());
+            }
+        } catch (AWTException ex) {
+            Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public void robotMoveToCenter() {

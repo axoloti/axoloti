@@ -17,6 +17,7 @@
  */
 package axoloti.swingui.components.control;
 
+import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
 import java.awt.AWTException;
@@ -75,11 +76,6 @@ public class VSliderComponent extends ACtrlComponent {
             }
         });
         SetupTransferHandler();
-        try {
-            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-        } catch (AWTException ex) {
-            Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     private int px;
     private int py;
@@ -89,6 +85,9 @@ public class VSliderComponent extends ACtrlComponent {
         if (isEnabled()) {
             double v = value + tick * ((int) Math.round((py - e.getYOnScreen())));
             robotMoveToCenter();
+            if (robot == null) {
+                py = e.getYOnScreen();
+            }
             fireValue(v);
         }
     }
@@ -99,7 +98,10 @@ public class VSliderComponent extends ACtrlComponent {
             grabFocus();
             px = e.getXOnScreen();
             py = e.getYOnScreen();
-            getRootPane().setCursor(TransparentCursor.get());
+            robot = createRobot();
+            if (!Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                getRootPane().setCursor(TransparentCursor.get());
+            }
             e.consume();
             fireEventAdjustmentBegin();
         }
@@ -111,6 +113,7 @@ public class VSliderComponent extends ACtrlComponent {
             fireEventAdjustmentFinished();
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
+        robot = null;
     }
 
     @Override
@@ -310,7 +313,9 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     public void robotMoveToCenter() {
-        getRootPane().setCursor(TransparentCursor.get());
-        robot.mouseMove(px, py);
+        if (robot != null) {
+            getRootPane().setCursor(TransparentCursor.get());
+            robot.mouseMove(px, py);
+        }
     }
 }
