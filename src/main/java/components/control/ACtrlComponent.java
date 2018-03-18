@@ -19,7 +19,11 @@ package components.control;
 
 import axoloti.object.AxoObjectInstance;
 import axoloti.utils.KeyUtils;
+import axoloti.utils.Preferences;
+import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Robot;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
@@ -214,6 +218,19 @@ public abstract class ACtrlComponent extends JComponent {
 
     public void setParentAxoObjectInstance(AxoObjectInstance axoObj) {
         this.axoObj = axoObj;
+    }
+
+    Robot createRobot() {
+        try {
+            if (Preferences.LoadPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                return null;
+            } else {
+                return new Robot(MouseInfo.getPointerInfo().getDevice());
+            }
+        } catch (AWTException ex) {
+            Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public void robotMoveToCenter() {

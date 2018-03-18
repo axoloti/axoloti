@@ -55,6 +55,8 @@ public class Preferences {
     @Element(required = false)
     Boolean MouseDialAngular;
     @Element(required = false)
+    Boolean MouseDoNotRecenterWhenAdjustingControls;
+    @Element(required = false)
     Boolean ExpertMode;
     @ElementList(required = false)
     ArrayList<String> recentFiles = new ArrayList<String>();
@@ -105,6 +107,9 @@ public class Preferences {
         }
         if (MouseDialAngular == null) {
             MouseDialAngular = false;
+        }
+        if (MouseDoNotRecenterWhenAdjustingControls == null) {
+            MouseDoNotRecenterWhenAdjustingControls = false;
         }
         if (ExpertMode == null) {
             ExpertMode = false;
@@ -319,6 +324,18 @@ public class Preferences {
             return;
         }
         this.MouseDialAngular = MouseDialAngular;
+        SetDirty();
+    }
+
+    public boolean getMouseDoNotRecenterWhenAdjustingControls() {
+        return MouseDoNotRecenterWhenAdjustingControls;
+    }
+
+    public void setMouseDoNotRecenterWhenAdjustingControls(boolean MouseDoNotRecenterWhenAdjustingControls) {
+        if (MouseDoNotRecenterWhenAdjustingControls == this.MouseDoNotRecenterWhenAdjustingControls) {
+            return;
+        }
+        this.MouseDoNotRecenterWhenAdjustingControls = MouseDoNotRecenterWhenAdjustingControls;
         SetDirty();
     }
 

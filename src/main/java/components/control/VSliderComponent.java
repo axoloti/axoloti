@@ -19,6 +19,7 @@ package components.control;
 
 import axoloti.MainFrame;
 import axoloti.Theme;
+import axoloti.utils.Preferences;
 import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
@@ -74,11 +75,6 @@ public class VSliderComponent extends ACtrlComponent {
             }
         });
         SetupTransferHandler();
-        try {
-            robot = new Robot(MouseInfo.getPointerInfo().getDevice());
-        } catch (AWTException ex) {
-            Logger.getLogger(NumberBoxComponent.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     private int px;
     private int py;
@@ -88,6 +84,9 @@ public class VSliderComponent extends ACtrlComponent {
         if (isEnabled()) {
             double v = value + tick * ((int) Math.round((py - e.getYOnScreen())));
             robotMoveToCenter();
+            if (robot == null) {
+                py = e.getYOnScreen();
+            }
             setValue(v);
         }
     }
@@ -98,7 +97,10 @@ public class VSliderComponent extends ACtrlComponent {
             grabFocus();
             px = e.getXOnScreen();
             py = e.getYOnScreen();
-            getRootPane().setCursor(MainFrame.transparentCursor);
+            robot = createRobot();
+            if (!Preferences.LoadPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
+                getRootPane().setCursor(MainFrame.transparentCursor);
+            }
             e.consume();
             fireEventAdjustmentBegin();
         }
@@ -110,6 +112,7 @@ public class VSliderComponent extends ACtrlComponent {
             fireEventAdjustmentFinished();
         }
         getRootPane().setCursor(Cursor.getDefaultCursor());
+        robot = null;
     }
 
     @Override
@@ -305,7 +308,9 @@ public class VSliderComponent extends ACtrlComponent {
 
     @Override
     public void robotMoveToCenter() {
-        getRootPane().setCursor(MainFrame.transparentCursor);
-        robot.mouseMove(px, py);
+        if (robot != null) {
+            getRootPane().setCursor(MainFrame.transparentCursor);
+            robot.mouseMove(px, py);
+        }
     }
 }
