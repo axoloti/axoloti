@@ -32,22 +32,29 @@ import axoloti.patch.object.ObjectInstancePatcherController;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
 import axoloti.utils.Constants;
+import axoloti.utils.OSDetect;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import javax.swing.Icon;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JTextPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -61,7 +68,7 @@ import javax.swing.tree.TreePath;
  *
  * @author Johannes Taelman
  */
-public class ObjectSearchFrame extends javax.swing.JFrame {
+public class ObjectSearchFrame extends ResizableUndecoratedFrame {
 
     DefaultMutableTreeNode root;
     DefaultTreeModel tm;
@@ -76,15 +83,41 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
      * @param p parent
      */
     public ObjectSearchFrame(PatchController patchController) {
+        super();
         initComponents();
-        getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
+
+        if (OSDetect.getOS() == OSDetect.OS.MAC) {
+            // buttons w    ith a text label use huge margins on macos
+            // or when forced, will substitute the label with '...',
+            // while buttons with just an icon can have a tight margin (want!)
+            // We're using a single unicode character as a label
+            // but do not want it to be treated as a label...
+            jButtonCancel.setIcon(new StringIcon(jButtonCancel.getText()));
+            jButtonCancel.setText(null);
+            jButtonAccept.setIcon(new StringIcon(jButtonAccept.getText()));
+            jButtonAccept.setText(null);
+            // Alternative approach: use real icons
+            // Unfortunately macos does not provide icons. with appropriate
+            // semantics..
+            //
+            // Toolkit toolkit = Toolkit.getDefaultToolkit();
+            // Image image = toolkit.getImage("NSImage://NSStopProgressTemplate");
+            // image = toolkit.getImage("NSImage://NSMenuOnStateTemplate");
+            //
+            // prettify buttons - macos exclusive
+            jButtonCancel.putClientProperty("JButton.buttonType", "segmented");
+            jButtonAccept.putClientProperty("JButton.buttonType", "segmented");
+            jButtonCancel.putClientProperty("JButton.segmentPosition", "first");
+            jButtonAccept.putClientProperty("JButton.segmentPosition", "last");
+        }
+        jButtonAccept.setEnabled(false);
+
         this.patchController = patchController;
         DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
         this.objectTree = AxoObjects.getAxoObjects().ObjectTree;
         this.root = PopulateJTree(AxoObjects.getAxoObjects().ObjectTree, root1);
         tm = new DefaultTreeModel(this.root);
         jTree1.setModel(tm);
-        jTree1.setShowsRootHandles(true);
         jTree1.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -260,7 +293,7 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     protected IAxoObject previewObj;
     int patchLocX;
     int patchLocY;
-
+    
     private Point snapToGrid(Point p) {
         p.x = Constants.X_GRID * (p.x / Constants.X_GRID);
         p.y = Constants.Y_GRID * (p.y / Constants.Y_GRID);
@@ -346,7 +379,12 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             type = null;
             jPanel1.removeAll();
             jPanel1.repaint();
+            jButtonAccept.setEnabled(false);
             return;
+        }
+        else {
+            accepted = true;
+            jButtonAccept.setEnabled(true);            
         }
         if (o != previewObj) {
             previewObj = o;
@@ -489,29 +527,27 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     }
 
     public void Accept() {
-        if (!accepted) {
-            accepted = true;
-            MainFrame.mainframe.setGrabFocusOnSevereErrors(true);
-            setVisible(false);
-            IAxoObject x = type;
-            if (x == null) {
-                List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.GetCurrentWorkingDirectory());
-                if ((objs != null) && (!objs.isEmpty())) {
-                    x = objs.get(0);
-                    jTextFieldObjName.setText("");
-                }
+        MainFrame.mainframe.setGrabFocusOnSevereErrors(true);
+        setVisible(false);
+        IAxoObject x = type;
+        if (x == null) {
+            List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.GetCurrentWorkingDirectory());
+            if ((objs != null) && (!objs.isEmpty())) {
+                x = objs.get(0);
+                jTextFieldObjName.setText("");
             }
-            if (x != null) {
-                if (target_object == null) {
+        }
+        if (x != null) {
+            if (target_object == null) {
                     patchController.addMetaUndo("add object");
                     patchController.AddObjectInstance(x, new Point(patchLocX, patchLocY));
-                } else {
+            } else {
                     patchController.addMetaUndo("change object type");
                     AxoObjectInstanceAbstract oi = patchController.ChangeObjectInstanceType(target_object, x);
-                }
             }
-            setVisible(false);
         }
+        setVisible(false);
+        accepted = false;
     }
 
     protected JPanel getMainView() {
@@ -535,9 +571,13 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel3 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         jTextFieldObjName = new javax.swing.JTextField();
+        jButtonCancel = new javax.swing.JButton();
+        jButtonAccept = new javax.swing.JButton();
         jSplitPane3 = new javax.swing.JSplitPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
@@ -546,7 +586,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jSplitPane2 = new javax.swing.JSplitPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
 
         setForeground(java.awt.SystemColor.control);
@@ -561,6 +600,9 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             }
         });
 
+        jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
         jSplitPane1.setDividerLocation(186);
         jSplitPane1.setMinimumSize(new java.awt.Dimension(83, 50));
         jSplitPane1.setPreferredSize(new java.awt.Dimension(600, 365));
@@ -569,26 +611,60 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
         jPanel2.setAlignmentY(0.0F);
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.PAGE_AXIS));
 
+        jPanel4.setAlignmentY(0.0F);
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+
         jTextFieldObjName.setAlignmentX(0.0F);
-        jTextFieldObjName.setMaximumSize(new java.awt.Dimension(10000, 20));
-        jTextFieldObjName.setMinimumSize(new java.awt.Dimension(100, 20));
-        jTextFieldObjName.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextFieldObjName.setMaximumSize(new java.awt.Dimension(2147483647, 26));
+        jTextFieldObjName.setMinimumSize(new java.awt.Dimension(40, 26));
+        jTextFieldObjName.setPreferredSize(new java.awt.Dimension(800, 20));
         jTextFieldObjName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldObjNameActionPerformed(evt);
             }
         });
-        jPanel2.add(jTextFieldObjName);
+        jPanel4.add(jTextFieldObjName);
+
+        jButtonCancel.setText("✗");
+        jButtonCancel.setToolTipText("Cancel");
+        jButtonCancel.setActionCommand("");
+        jButtonCancel.setDefaultCapable(false);
+        jButtonCancel.setFocusable(false);
+        jButtonCancel.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        jButtonCancel.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButtonCancel);
+
+        jButtonAccept.setText("✓");
+        jButtonAccept.setToolTipText("Accept");
+        jButtonAccept.setActionCommand("");
+        jButtonAccept.setDefaultCapable(false);
+        jButtonAccept.setFocusable(false);
+        jButtonAccept.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        jButtonAccept.setMinimumSize(new java.awt.Dimension(24, 24));
+        jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAcceptActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButtonAccept);
+
+        jPanel2.add(jPanel4);
 
         jSplitPane3.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane3.setResizeWeight(0.5);
+        jSplitPane3.setAlignmentX(0.5F);
+        jSplitPane3.setAlignmentY(1.0F);
         jSplitPane3.setMinimumSize(new java.awt.Dimension(126, 95));
 
         jScrollPane3.setMinimumSize(new java.awt.Dimension(24, 64));
 
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setAlignmentX(0.0F);
-        jList1.setMaximumSize(null);
         jList1.setMinimumSize(new java.awt.Dimension(100, 50));
         jList1.setVisibleRowCount(6);
         jScrollPane3.setViewportView(jList1);
@@ -621,7 +697,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jTextPane1.setEditable(false);
         jTextPane1.setFocusCycleRoot(false);
-        jTextPane1.setFocusTraversalKeysEnabled(false);
         jTextPane1.setFocusable(false);
         jTextPane1.setRequestFocusEnabled(false);
         jScrollPane4.setViewportView(jTextPane1);
@@ -630,7 +705,6 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         jPanel1.setEnabled(false);
-        jPanel1.setFocusTraversalKeysEnabled(false);
         jPanel1.setFocusable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -644,13 +718,13 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jScrollPane2.setViewportView(jPanel1);
-
-        jSplitPane2.setRightComponent(jScrollPane2);
+        jSplitPane2.setRightComponent(jPanel1);
 
         jSplitPane1.setRightComponent(jSplitPane2);
 
-        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        jPanel3.add(jSplitPane1, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -661,19 +735,35 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
                 || !(evt.getOppositeWindow() instanceof axoloti.swingui.patch.PatchFrame)) {
             Cancel();
         } else {
-            Accept();
+            if (accepted) {
+                Accept();
+            } else {
+                Cancel();
+            }
         }
     }//GEN-LAST:event_formWindowLostFocus
 
     private void jTextFieldObjNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldObjNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldObjNameActionPerformed
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+        Cancel();
+    }//GEN-LAST:event_jButtonCancelActionPerformed
+
+    private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
+        Accept();
+    }//GEN-LAST:event_jButtonAcceptActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAccept;
+    private javax.swing.JButton jButtonCancel;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
@@ -684,4 +774,42 @@ public class ObjectSearchFrame extends javax.swing.JFrame {
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 
+
+    class StringIcon implements Icon {
+
+        final String str;
+        final int w, h;
+
+        public StringIcon(String str) {
+            this(str, 20, 20);
+        }
+
+        public StringIcon(String str, int w, int h) {
+            this.str = str;
+            this.w = w;
+            this.h = h;
+        }
+
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            Graphics2D g2 = (Graphics2D) g;
+            FontMetrics metrics = g2.getFontMetrics(g2.getFont());
+            Rectangle2D bounds = metrics.getStringBounds(str, g2);
+            int xc = (w / 2) + x;
+            int yc = (h / 2) + y;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawString(str, xc - (int) bounds.getCenterX(), yc - (int) bounds.getCenterY());
+//          g.fillOval(xm, ym, 1, 1);
+        }
+
+        @Override
+        public int getIconWidth() {
+            return w;
+        }
+
+        @Override
+        public int getIconHeight() {
+            return h;
+        }
+    }
 }
