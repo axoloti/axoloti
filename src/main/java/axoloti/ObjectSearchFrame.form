@@ -40,9 +40,6 @@
             <EmptyBorder bottom="3" left="3" right="3" top="3"/>
           </Border>
         </Property>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="null"/>
-        </Property>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
@@ -95,14 +92,11 @@
                     <Component class="javax.swing.JTextField" name="jTextFieldObjName">
                       <Properties>
                         <Property name="alignmentX" type="float" value="0.0"/>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[10000, 20]"/>
-                        </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[100, 20]"/>
+                          <Dimension value="[40, 26]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[100, 20]"/>
+                          <Dimension value="[800, 20]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -117,13 +111,10 @@
                         <Property name="defaultCapable" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                          <Insets value="[0, 4, 0, 4]"/>
-                        </Property>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[30, 240]"/>
+                          <Insets value="[1, 1, 1, 1]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[20, 24]"/>
+                          <Dimension value="[24, 24]"/>
                         </Property>
                       </Properties>
                       <Events>
@@ -138,13 +129,10 @@
                         <Property name="defaultCapable" type="boolean" value="false"/>
                         <Property name="focusable" type="boolean" value="false"/>
                         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                          <Insets value="[0, 4, 0, 4]"/>
-                        </Property>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[30, 240]"/>
+                          <Insets value="[1, 1, 1, 1]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[20, 24]"/>
+                          <Dimension value="[24, 24]"/>
                         </Property>
                       </Properties>
                       <Events>

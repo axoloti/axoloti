@@ -21,18 +21,26 @@ import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectInstanceAbstract;
 import axoloti.object.AxoObjectTreeNode;
 import axoloti.utils.Constants;
+import axoloti.utils.OSDetect;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import javax.swing.Icon;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -62,6 +70,33 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     public ObjectSearchFrame(PatchGUI p) {
         super();
         initComponents();
+
+        if (OSDetect.getOS() == OSDetect.OS.MAC) {
+            // buttons w    ith a text label use huge margins on macos
+            // or when forced, will substitute the label with '...',
+            // while buttons with just an icon can have a tight margin (want!)
+            // We're using a single unicode character as a label
+            // but do not want it to be treated as a label...
+            jButtonCancel.setIcon(new StringIcon(jButtonCancel.getText()));
+            jButtonCancel.setText(null);
+            jButtonAccept.setIcon(new StringIcon(jButtonAccept.getText()));
+            jButtonAccept.setText(null);
+            // Alternative approach: use real icons
+            // Unfortunately macos does not provide icons. with appropriate
+            // semantics..
+            //
+            // Toolkit toolkit = Toolkit.getDefaultToolkit();
+            // Image image = toolkit.getImage("NSImage://NSStopProgressTemplate");
+            // image = toolkit.getImage("NSImage://NSMenuOnStateTemplate");
+            //
+            // prettify buttons - macos exclusive
+            jButtonCancel.putClientProperty("JButton.buttonType", "segmented");
+            jButtonAccept.putClientProperty("JButton.buttonType", "segmented");
+            jButtonCancel.putClientProperty("JButton.segmentPosition", "first");
+            jButtonAccept.putClientProperty("JButton.segmentPosition", "last");
+        }
+        jButtonAccept.setEnabled(false);
+
         this.p = p;
         DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
         this.objectTree = MainFrame.axoObjects.ObjectTree;
@@ -527,7 +562,6 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        jPanel3.setMaximumSize(null);
         jPanel3.setLayout(new java.awt.BorderLayout());
 
         jSplitPane1.setDividerLocation(186);
@@ -542,9 +576,8 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         jTextFieldObjName.setAlignmentX(0.0F);
-        jTextFieldObjName.setMaximumSize(new java.awt.Dimension(10000, 20));
-        jTextFieldObjName.setMinimumSize(new java.awt.Dimension(100, 20));
-        jTextFieldObjName.setPreferredSize(new java.awt.Dimension(100, 20));
+        jTextFieldObjName.setMinimumSize(new java.awt.Dimension(40, 26));
+        jTextFieldObjName.setPreferredSize(new java.awt.Dimension(800, 20));
         jTextFieldObjName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldObjNameActionPerformed(evt);
@@ -557,9 +590,8 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         jButtonCancel.setActionCommand("");
         jButtonCancel.setDefaultCapable(false);
         jButtonCancel.setFocusable(false);
-        jButtonCancel.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        jButtonCancel.setMaximumSize(new java.awt.Dimension(30, 240));
-        jButtonCancel.setMinimumSize(new java.awt.Dimension(20, 24));
+        jButtonCancel.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        jButtonCancel.setMinimumSize(new java.awt.Dimension(24, 24));
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCancelActionPerformed(evt);
@@ -572,9 +604,8 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         jButtonAccept.setActionCommand("");
         jButtonAccept.setDefaultCapable(false);
         jButtonAccept.setFocusable(false);
-        jButtonAccept.setMargin(new java.awt.Insets(0, 4, 0, 4));
-        jButtonAccept.setMaximumSize(new java.awt.Dimension(30, 240));
-        jButtonAccept.setMinimumSize(new java.awt.Dimension(20, 24));
+        jButtonAccept.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        jButtonAccept.setMinimumSize(new java.awt.Dimension(24, 24));
         jButtonAccept.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonAcceptActionPerformed(evt);
@@ -704,4 +735,42 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 
+
+    class StringIcon implements Icon {
+
+        final String str;
+        final int w, h;
+
+        public StringIcon(String str) {
+            this(str, 20, 20);
+        }
+
+        public StringIcon(String str, int w, int h) {
+            this.str = str;
+            this.w = w;
+            this.h = h;
+        }
+
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            Graphics2D g2 = (Graphics2D) g;
+            FontMetrics metrics = g2.getFontMetrics(g2.getFont());
+            Rectangle2D bounds = metrics.getStringBounds(str, g2);
+            int xc = (w / 2) + x;
+            int yc = (h / 2) + y;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.drawString(str, xc - (int) bounds.getCenterX(), yc - (int) bounds.getCenterY());
+//          g.fillOval(xm, ym, 1, 1);
+        }
+
+        @Override
+        public int getIconWidth() {
+            return w;
+        }
+
+        @Override
+        public int getIconHeight() {
+            return h;
+        }
+    }
 }
