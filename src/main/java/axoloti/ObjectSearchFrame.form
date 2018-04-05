@@ -92,6 +92,9 @@
                     <Component class="javax.swing.JTextField" name="jTextFieldObjName">
                       <Properties>
                         <Property name="alignmentX" type="float" value="0.0"/>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[2147483647, 26]"/>
+                        </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[40, 26]"/>
                         </Property>
@@ -175,9 +178,6 @@
                             </Property>
                             <Property name="selectionMode" type="int" value="0"/>
                             <Property name="alignmentX" type="float" value="0.0"/>
-                            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="null"/>
-                            </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[100, 50]"/>
                             </Property>

@@ -576,6 +576,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
         jTextFieldObjName.setAlignmentX(0.0F);
+        jTextFieldObjName.setMaximumSize(new java.awt.Dimension(2147483647, 26));
         jTextFieldObjName.setMinimumSize(new java.awt.Dimension(40, 26));
         jTextFieldObjName.setPreferredSize(new java.awt.Dimension(800, 20));
         jTextFieldObjName.addActionListener(new java.awt.event.ActionListener() {
@@ -625,7 +626,6 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
 
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setAlignmentX(0.0F);
-        jList1.setMaximumSize(null);
         jList1.setMinimumSize(new java.awt.Dimension(100, 50));
         jList1.setVisibleRowCount(6);
         jScrollPane3.setViewportView(jList1);
