@@ -44,7 +44,7 @@ public class CheckForUpdates {
             return;
         }
         try {
-            URL url = new URL("http://www.axoloti.com/updates/" + Version.AXOLOTI_SHORT_VERSION);
+            URL url = new URL("http://www.axoloti.com/updates/" + Version.AXOLOTI_SHORT_VERSION + "-2");
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(url.openStream()));
             in.close();
