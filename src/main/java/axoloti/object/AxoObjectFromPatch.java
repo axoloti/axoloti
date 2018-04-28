@@ -48,8 +48,8 @@ public class AxoObjectFromPatch extends AxoObject {
         try {
             patchModel = serializer.read(PatchModel.class, f);
             patchModel.setFileNamePath(f.getPath());
-            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            patchController = new PatchController(patchModel, documentRoot, null);
+            patchModel.setDocumentRoot(new AbstractDocumentRoot());
+            patchController = patchModel.getControllerFromModel();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -61,8 +61,7 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     final public void UpdateObject() {
-        // cheating here by creating a new controller...
-        PatchController controller = new PatchController(patchModel, null, null);
+        PatchController controller = patchModel.getControllerFromModel();
         PatchViewCodegen codegen = new PatchViewCodegen(controller);
         AxoObject o = codegen.GenerateAxoObj(new AxoObject());
         attributes = o.getAttributes();
@@ -90,6 +89,7 @@ public class AxoObjectFromPatch extends AxoObject {
         if (pf == null) {
             pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         }
+        pf.setVisible(true);
         pf.toFront();
     }
 

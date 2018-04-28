@@ -1,7 +1,6 @@
 
 package axoloti.patch.object;
 
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.patch.PatchController;
 
 /**
@@ -17,11 +16,10 @@ public class ObjectInstancePatcherController extends ObjectInstanceController {
         return (AxoObjectInstancePatcher)super.getModel();
     }
 
-    public ObjectInstancePatcherController(AxoObjectInstancePatcher model, AbstractDocumentRoot documentRoot, PatchController parent) {
-
-        super(model, documentRoot, parent);
-        model.getSubPatchModel().setContainer(model);
-        subPatchController = new PatchController(model.getSubPatchModel(), documentRoot, this);
+    public ObjectInstancePatcherController(AxoObjectInstancePatcher model) {
+        super(model);
+        model.getSubPatchModel().setParent(model);
+        subPatchController = model.getSubPatchModel().getControllerFromModel();
     }
 
     public PatchController getSubPatchController() {

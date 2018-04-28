@@ -1,12 +1,12 @@
 package axoloti.mvc;
 
+import axoloti.patch.net.NetDrag;
+import axoloti.property.ListProperty;
 import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
+import java.util.List;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
@@ -15,17 +15,13 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
 
     private final ArrayList<View> registeredViews = new ArrayList<View>();
     private final Model model;
-    private final ParentController parent;
-    private final AbstractDocumentRoot documentRoot;
 
-    public AbstractController(Model model, AbstractDocumentRoot documentRoot, ParentController parent) {
+    protected AbstractController(Model model) {
+        if ((model.getDocumentRoot() == null) && (model.getParent() != null)) {
+            model.setDocumentRoot(model.getParent().getDocumentRoot());
+        }
         model.addPropertyChangeListener(this);
         this.model = model;
-        this.parent = parent;
-        this.documentRoot = documentRoot;
-        if (documentRoot == null) {
-            //System.out.println("documentroot is null");
-        }
     }
 
     // to be called in controller.createView()
@@ -33,6 +29,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         if (view != null) {
             if (registeredViews.contains(view)) {
                 System.out.println("view already added : " + view.toString());
+//                throw new Error("view already added");
             } else {
                 for (Property property : getModel().getProperties()) {
                     Object propertyValue = property.get(getModel());
@@ -49,7 +46,9 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     final public void removeView(View view) {
         if (!registeredViews.contains(view)) {
 // TODO: trace double removal of AJFrame's
-//            throw new Error("view was not attached to controller :" + view.toString());
+            String s = "view was not attached to controller :" + view.toString();
+            System.out.println(s);
+//            throw new Error(s);
         }
         registeredViews.remove(view);
     }
@@ -58,12 +57,14 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         return model;
     }
 
-    public ParentController getParent() {
-        return parent;
-    }
-
     public AbstractDocumentRoot getDocumentRoot() {
-        return documentRoot;
+        if (getModel() == null) {
+            throw new Error("model is null");
+        }
+        if (getModel().getDocumentRoot() == null) {
+            MvcDiagnostics.log("documentroot is null, " + this.toString());
+        }
+        return getModel().getDocumentRoot();
     }
 
     //  Use this to observe property changes from registered models
@@ -71,9 +72,11 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         //System.out.println("propertyChange: " + evt.getPropertyName() + " : " + ((evt.getNewValue()!=null)?evt.getNewValue().toString() : "null"));
-        if (!SwingUtilities.isEventDispatchThread()) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
-        }
+
+        // this check fails with automated tests
+//        if (!SwingUtilities.isEventDispatchThread()) {
+//            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
+//        }
         for (View view : registeredViews) {
             view.modelPropertyChange(evt);
         }
@@ -98,34 +101,97 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         return property.get(getModel());
     }
 
-    public void addMetaUndo(String actionName) {
-        if (documentRoot == null) return;
-        documentRoot.getUndoManager().addEdit(new UndoableEditGroup(actionName));
+    public void addMetaUndo(String actionName, FocusEdit focusEdit) {
+        UndoManager undoManager = getUndoManager();
+        if (undoManager == null) {
+            System.out.println("addMetaUndo: no undomanager: " + actionName);
+            return;
+        }
+        undoManager.addEdit(new UndoableEditGroup(actionName, focusEdit));
     }
 
-    public void setModelUndoableProperty(Property property, Object newValue) {
-        if (getUndoManager() == null) {
-            //System.out.println("no undomanager");
-            property.set(getModel(),newValue);
+    public void addMetaUndo(String actionName) {
+        // TODO: add FocusEdit where possible
+        addMetaUndo(actionName, null);
+    }
+
+    protected void setModelUndoableProperty(Property property, Object newValue) {
+        UndoManager undoManager = getUndoManager();
+        if (undoManager == null) {
+            if (!(getModel() instanceof NetDrag)) {
+                MvcDiagnostics.log("setModelUndoableProperty: no undomanager: " + getModel().getClass().toString());
+            }
+            property.set(getModel(), newValue);
         } else {
             Object old_val = property.get(getModel());
             if (old_val == newValue) {
                 return;
             }
-            property.set(getModel(), newValue);
-            UndoableEdit uedit = new UndoablePropertyChange(this, property, old_val, newValue);
-            getUndoManager().addEdit(uedit);
-            if (documentRoot != null) {
-                documentRoot.fireUndoListeners(new UndoableEditEvent(this, uedit));
+            if ((newValue != null) && (newValue.equals(old_val))) {
+                return;
             }
+            UndoableEdit uedit = new UndoablePropertyChange(this, property, old_val, newValue);
+            MvcDiagnostics.log("setModelUndoableProperty property " + ("" + undoManager.isInProgress() + " ") + property.getFriendlyName() + " old:" + old_val + " new:" + newValue + "\n");
+            undoManager.addEdit(uedit);
+            if (getDocumentRoot() != null) {
+                getDocumentRoot().fireUndoListeners(new UndoableEditEvent(this, uedit));
+            } else {
+                System.out.println("DocumentRoot null?");
+            }
+            property.set(getModel(), newValue);
         }
     }
 
-    public UndoManager getUndoManager() {
-        if (documentRoot == null) {
+    public void generic_setModelUndoableProperty(Property property, Object newValue) {
+        // use setModelUndoableProperty where possible in Controller classes
+        setModelUndoableProperty(property, newValue);
+    }
+
+    protected void addUndoableElementToList(ListProperty property, Object newItem) {
+        if (newItem instanceof IModel) {
+            IModel m = (IModel) newItem;
+            if (m.getParent() != getModel()) {
+                System.out.println("error: model parent is wrong!");
+            }
+        }
+        List old = (List) getModelProperty(property);
+        if (old.contains(newItem)) {
+            System.out.println("error: list property already contains element");
+            return;
+        }
+        List list = new ArrayList(old.size() + 1);
+        list.addAll(old);
+        list.add(newItem);
+        setModelUndoableProperty(property, list);
+    }
+
+    public void generic_addUndoableElementToList(ListProperty property, Object newItem) {
+        // use addUndoableElementToList instead (in Controller classes)
+        addUndoableElementToList(property, newItem);
+    }
+
+    protected boolean removeUndoableElementFromList(ListProperty property, Object item) {
+        List old = (List) getModelProperty(property);
+        List list = new ArrayList(old);
+        boolean success = list.remove(item);
+        if (!success) {
+            return false;
+        }
+        setModelUndoableProperty(property, list);
+        return true;
+    }
+
+    public boolean generic_removeUndoableElementFromList(ListProperty property, Object item) {
+        return removeUndoableElementFromList(property, item);
+    }
+
+    public UndoManager1 getUndoManager() {
+        AbstractDocumentRoot dr = getDocumentRoot();
+        if (dr == null) {
             return null;
         }
-        return documentRoot.getUndoManager();
+//        System.out.println("                dr:" + dr.getUndoManager().hashCode());
+        return dr.getUndoManager();
     }
 
 }

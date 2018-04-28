@@ -56,7 +56,7 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE, TFObjName.getText());
+                getController().changeValue(TFObjName.getText());
             }
         });
 
@@ -65,7 +65,7 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE, TFObjName.getText());
+                            getController().changeValue(TFObjName.getText());
                         }
                     });
             }

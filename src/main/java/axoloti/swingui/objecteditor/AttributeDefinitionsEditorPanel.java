@@ -17,7 +17,6 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 import axoloti.object.attribute.AttributeTypes;
@@ -27,10 +26,10 @@ import axoloti.object.attribute.AxoAttribute;
  *
  * @author jtaelman
  */
-public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAttribute> {
+class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAttribute> {
 
-    public AttributeDefinitionsEditorPanel(ObjectController controller) {
-        super(controller, AxoObject.OBJ_ATTRIBUTES, AttributeTypes.getTypes());
+    public AttributeDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
+        super(controller, AxoObject.OBJ_ATTRIBUTES, AttributeTypes.getTypes(), editor);
     }
 
     @Override
@@ -41,11 +40,6 @@ public class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAt
     @Override
     String getAtomTypeName() {
         return "attribute";
-    }
-
-    @Override
-    ArrayController getTController() {
-        return getController().attrs;
     }
 
 }

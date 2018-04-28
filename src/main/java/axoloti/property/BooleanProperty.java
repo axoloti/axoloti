@@ -1,5 +1,7 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
+
 /**
  *
  * @author jtaelman
@@ -25,7 +27,7 @@ public class BooleanProperty extends PropertyReadWrite<Boolean> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         Boolean v = get(o);
         if (v == null) {
             return "";

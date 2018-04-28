@@ -18,9 +18,8 @@
 package axoloti.object.atom;
 
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
-import axoloti.object.ObjectController;
+import axoloti.object.AxoObject;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
@@ -42,6 +41,8 @@ abstract public class AtomDefinition extends AbstractModel {
     String name;
     @Attribute(required = false)
     public String description;
+
+    AxoObject parent;
 
     public AtomDefinition() {
     }
@@ -93,13 +94,25 @@ abstract public class AtomDefinition extends AbstractModel {
 
     abstract public List<Property> getEditableFields();
 
-    // FIXME: violating the MVC pattern for now and use a singleton controller for this model
-    private AtomDefinitionController atomController = null;
+    @Override
+    protected AbstractController createController() {
+        return new AtomDefinitionController(this);
+    }
 
-    public AtomDefinitionController createController(AbstractDocumentRoot documentRoot, AbstractController parent) {
-        if (atomController == null) {
-            atomController = new AtomDefinitionController(this, documentRoot, (ObjectController) parent);
+    @Override
+    public AtomDefinitionController getControllerFromModel() {
+        return (AtomDefinitionController) super.getControllerFromModel();
+    }
+
+    @Override
+    public AxoObject getParent() {
+        if (parent == null) {
+            throw new Error("AtomDefinition: no parent? " + this.getClass().toString() + " " + toString());
         }
-        return atomController;
+        return parent;
+    }
+
+    public void setParent(AxoObject p) {
+        parent = p;
     }
 }

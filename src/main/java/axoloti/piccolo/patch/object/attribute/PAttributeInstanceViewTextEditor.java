@@ -25,7 +25,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
         if (getModel().editor == null) {
             DocumentWindow dw = (DocumentWindow) SwingUtilities.getWindowAncestor(this.getProxyComponent());
             getModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getController(), dw);
-            getModel().editor.setTitle(getController().getParent().getModel().getInstanceName() + "/" + getModel().getModel().getName());
+            getModel().editor.setTitle(getModel().getParent().getInstanceName() + "/" + getModel().getModel().getName());
         }
         getModel().editor.toFront();
 

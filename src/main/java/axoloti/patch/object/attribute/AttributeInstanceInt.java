@@ -20,7 +20,6 @@ package axoloti.patch.object.attribute;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.property.IntegerProperty;
 import axoloti.property.Property;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
@@ -33,7 +32,6 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
 
     @Attribute
     int value;
-    public static final Property ATTR_VALUE = new IntegerProperty("Value", AttributeInstanceInt.class);
 
     AttributeInstanceInt() {
     }
@@ -57,8 +55,18 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
         }
     }
 
-    public Integer getValue() {
+    @Override
+    public Object getValue() {
         return value;
+    }
+
+    public Integer getValueInteger() {
+        return value;
+    }
+
+    @Override
+    public void setValue(Object value) {
+        setValue((Integer) value);
     }
 
     public void setValue(Integer value) {

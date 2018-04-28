@@ -29,12 +29,12 @@ public abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public final InletInstance GetInletInstance(String n) {
+    public final InletInstance findInletInstance(String n) {
         return null;
     }
 
     @Override
-    public final OutletInstance GetOutletInstance(String n) {
+    public final OutletInstance findOutletInstance(String n) {
         return null;
     }
 
@@ -61,10 +61,6 @@ public abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
     @Override
     public final List<DisplayInstance> getDisplayInstances() {
         return new ArrayList<>();
-    }
-
-    @Override
-    public void Remove() {
     }
 
     @Override

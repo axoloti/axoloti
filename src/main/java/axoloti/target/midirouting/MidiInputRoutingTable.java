@@ -3,7 +3,9 @@ package axoloti.target.midirouting;
 import axoloti.connection.CConnection;
 import axoloti.connection.CompletionHandler;
 import axoloti.connection.IConnection;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
@@ -145,5 +147,16 @@ public class MidiInputRoutingTable extends AbstractModel {
         firePropertyChange(
                 MIRT_MAPPING,
                 null, vports);
+    }
+
+    @Override
+    protected AbstractController createController() {
+        return new AbstractController(this) {
+        };
+    }
+
+    @Override
+    public IModel getParent() {
+        return null;
     }
 }

@@ -1,8 +1,8 @@
 package axoloti.patchbank;
 
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
+import java.util.List;
 
 /**
  *
@@ -10,8 +10,11 @@ import axoloti.mvc.IView;
  */
 public class PatchBankController extends AbstractController<PatchBankModel, IView, AbstractController> {
 
-    public PatchBankController(PatchBankModel model, AbstractDocumentRoot documentRoot, AbstractController parent) {
-        super(model, documentRoot, parent);
+    protected PatchBankController(PatchBankModel model) {
+        super(model);
     }
 
+    public void changePatchBankFiles(List files) {
+        setModelUndoableProperty(PatchBankModel.FILES, files);
+    }
 }

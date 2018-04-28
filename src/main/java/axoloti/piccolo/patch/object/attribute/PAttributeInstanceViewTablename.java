@@ -48,7 +48,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
+                            getController().changeValue(TFtableName.getText());
                         }
                     });
 
@@ -82,7 +82,7 @@ public class PAttributeInstanceViewTablename extends PAttributeInstanceViewStrin
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
+                getController().changeValue(TFtableName.getText());
 
             }
         });

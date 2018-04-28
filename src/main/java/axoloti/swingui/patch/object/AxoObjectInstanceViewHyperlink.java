@@ -44,9 +44,9 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
         });
         add(button);
         add(Box.createHorizontalStrut(5));
-        InstanceLabel = new LabelComponent(getModel().getInstanceName());
-        InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        InstanceLabel.addMouseListener(new MouseListener() {
+        instanceLabel = new LabelComponent(getModel().getInstanceName());
+        instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
+        instanceLabel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -57,12 +57,12 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                AxoObjectInstanceViewHyperlink.this.mousePressed(e);
+                /////AxoObjectInstanceViewHyperlink.this.mousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                AxoObjectInstanceViewHyperlink.this.mouseReleased(e);
+                /////AxoObjectInstanceViewHyperlink.this.mouseReleased(e);
             }
 
             @Override
@@ -73,8 +73,8 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
-        InstanceLabel.addMouseMotionListener(this);
-        add(InstanceLabel);
+//        instanceLabel.addMouseMotionListener(this);
+        add(instanceLabel);
         setLocation(getModel().getX(), getModel().getY());
 
         resizeToGrid();

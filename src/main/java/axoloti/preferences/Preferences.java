@@ -19,12 +19,7 @@ package axoloti.preferences;
 
 import axoloti.Axoloti;
 import axoloti.Version;
-import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchViewType;
-import static axoloti.patch.PatchViewType.PICCOLO;
-import axoloti.piccolo.patch.PatchViewPiccolo;
-import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.utils.AxoFileLibrary;
 import axoloti.utils.AxoGitLibrary;
 import axoloti.utils.AxolotiLibrary;
@@ -34,7 +29,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 
@@ -93,7 +94,6 @@ public class Preferences {
     @ElementMap(required = false, entry = "Boards", key = "cpuid", attribute = true, inline = true)
     HashMap<String, String> BoardNames;
 
-//    @Path("outlets")
     @ElementListUnion({
         @ElementList(entry = "gitlib", type = AxoGitLibrary.class, inline = true, required = false),
         @ElementList(entry = "filelib", type = AxoFileLibrary.class, inline = true, required = false)
@@ -506,16 +506,10 @@ public class Preferences {
     }
 
     public PatchViewType getPatchViewType() {
-        patchViewType = PatchViewType.SWING;
-        return patchViewType;
-    }
-
-    public PatchView getPatchView(PatchController patchController) {
-        if (getPatchViewType() == PICCOLO) {
-            return new PatchViewPiccolo(patchController);
-        } else {
-            return new PatchViewSwing(patchController);
+        if (patchViewType == null) {
+            return PatchViewType.SWING;
         }
+        return patchViewType;
     }
 
     public void setMouseWheelPan(Boolean mouseWheelPan) {

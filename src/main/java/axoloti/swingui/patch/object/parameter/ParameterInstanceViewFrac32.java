@@ -71,7 +71,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         if (getModel().getValue() != getControlComponent().getValue()) {
             if (getController() != null) {
                 Double d = getControlComponent().getValue();
-                getController().setModelUndoableProperty(ParameterInstance.VALUE, d);
+                getController().changeValue(d);
             }
         } else {
             return false;

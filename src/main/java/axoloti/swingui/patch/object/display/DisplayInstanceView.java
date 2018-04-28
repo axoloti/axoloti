@@ -14,6 +14,10 @@ abstract class DisplayInstanceView extends ViewPanel<DisplayInstanceController> 
 
     DisplayInstanceView(DisplayInstanceController controller) {
         super(controller);
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        label = new LabelComponent("");
+        add(label);
+        setSize(getPreferredSize());
     }
 
     DisplayInstance getModel() {
@@ -21,10 +25,6 @@ abstract class DisplayInstanceView extends ViewPanel<DisplayInstanceController> 
     }
 
     void PostConstructor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        label = new LabelComponent("");
-        add(label);
-        setSize(getPreferredSize());
     }
 
     @Override
@@ -39,7 +39,11 @@ abstract class DisplayInstanceView extends ViewPanel<DisplayInstanceController> 
             }
             label.setVisible(!b);
         } else if (DisplayInstance.DESCRIPTION.is(evt)) {
-            setToolTipText((String) evt.getNewValue());
+            String s = (String) evt.getNewValue();
+            if ((s != null) && (s.isEmpty())) {
+                s = null;
+            }
+            setToolTipText(s);
         }
     }
 

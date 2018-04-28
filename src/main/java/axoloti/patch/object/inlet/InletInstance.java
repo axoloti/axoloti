@@ -17,10 +17,12 @@
  */
 package axoloti.patch.object.inlet;
 
+import axoloti.mvc.AbstractController;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.inlet.Inlet;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.iolet.IoletInstance;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
@@ -59,7 +61,9 @@ public class InletInstance<T extends Inlet> extends IoletInstance<T> {
         firePropertyChange(NAME, preVal, inletname);
     }
 
+    @Override
     public boolean isSource() {
         return false;
     }
+
 }

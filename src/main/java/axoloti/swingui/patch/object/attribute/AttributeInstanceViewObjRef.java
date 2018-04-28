@@ -10,7 +10,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -59,12 +58,14 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                SwingUtilities.invokeLater(new Runnable() {
+                /* invokeLater should not be needed ???
+                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE, TFObjName.getText());
-                        }
+                            getController().changeValue(TFObjName.getText());                        }
                     });
+                 */
+                getController().changeValue(TFObjName.getText());
             }
 
             @Override
@@ -85,12 +86,12 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().addMetaUndo("edit attribute " + getModel().getName());
+                getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceObjRef.ATTR_VALUE,TFObjName.getText());
+                getController().changeValue(TFObjName.getText());
             }
         });
     }

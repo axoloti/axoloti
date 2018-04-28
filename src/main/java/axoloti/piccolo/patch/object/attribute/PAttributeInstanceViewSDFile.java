@@ -48,7 +48,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, TFFileName.getText());
+                            getController().changeValue(TFFileName.getText());
                         }
                     });
             }
@@ -79,25 +79,25 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, TFFileName.getText());
+                getController().changeValue(TFFileName.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, TFFileName.getText());
+                getController().changeValue(TFFileName.getText());
             }
         });
         ButtonChooseFile = new PButtonComponent("choose", axoObjectInstanceView);
         ButtonChooseFile.addActListener(new PButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(getModel().getObjectInstance().getPatchModel().GetCurrentWorkingDirectory());
+                JFileChooser fc = new JFileChooser(getModel().getParent().getParent().GetCurrentWorkingDirectory());
                 Window window = SwingUtilities.getWindowAncestor(PAttributeInstanceViewSDFile.this.getProxyComponent());
                 int returnVal = fc.showOpenDialog(window);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = getModel().toRelative(fc.getSelectedFile());
                     if (!f.equals(getModel().getValue())) {
-                        getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, f);
+                        getController().changeValue(f);
                     }
                 }
             }

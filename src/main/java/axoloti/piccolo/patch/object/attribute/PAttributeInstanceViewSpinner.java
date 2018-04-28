@@ -25,7 +25,7 @@ public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
     @Override
     public void PostConstructor() {
         super.PostConstructor();
-        int value = getModel().getValue();
+        int value = getModel().getValueInteger();
 
         if (value < getModel().getModel().getMinValue()) {
             getModel().setValue(getModel().getModel().getMinValue());
@@ -44,7 +44,7 @@ public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
                     if (evt.getPropertyName().equals(PROP_VALUE_ADJ_BEGIN)) {
                         getController().addMetaUndo("edit attribute " + getModel().getName());
                     } else if (evt.getPropertyName().equals(PROP_VALUE)) {
-                        controller.setModelUndoableProperty(AttributeInstanceSpinner.ATTR_VALUE,(Integer) (int) spinner.getValue());
+                        controller.changeValue((Integer) (int) spinner.getValue());
                     }
                 }
             });

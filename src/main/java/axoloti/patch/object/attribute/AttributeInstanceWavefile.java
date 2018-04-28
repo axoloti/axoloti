@@ -50,7 +50,7 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     @Override
     public String CValue() {
         String s = " {";
-        File fp = new File(getObjectInstance().getPatchModel().getFileNamePath());
+        File fp = new File(getParent().getParent().getFileNamePath());
         File f = new File(fp.getParent() + "/" + waveFilename);
         System.out.println("waveFilename : " + fp.getParent() + "/" + waveFilename + "\n");
 
@@ -92,6 +92,16 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
             AttributeInstanceWavefile a1 = (AttributeInstanceWavefile) a;
             setWaveFilename(a1.getWaveFilename());
         }
+    }
+
+    @Override
+    public Object getValue() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setValue(Object value) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

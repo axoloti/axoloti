@@ -18,6 +18,7 @@
 package axoloti.patch.object.iolet;
 
 import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractController;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.iolet.Iolet;
@@ -55,7 +56,7 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         objname = axoObj.getInstanceName();
     }
 
-    public IAxoObjectInstance getObjectInstance() {
+    public IAxoObjectInstance getParent() {
         return this.axoObj;
     }
 
@@ -120,6 +121,11 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         return controller;
     }
 
+    @Override
+    public IoletInstanceController getControllerFromModel() {
+        return (IoletInstanceController) super.getControllerFromModel();
+    }
+
     public abstract String getName();
     public abstract boolean isSource();
 
@@ -141,4 +147,10 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         l.add(CONNECTED);
         return l;
     }
+
+    @Override
+    public AbstractController createController() {
+        return new IoletInstanceController(this, null);
+    }
+
 }

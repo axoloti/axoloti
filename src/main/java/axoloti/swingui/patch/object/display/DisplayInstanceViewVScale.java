@@ -10,12 +10,6 @@ class DisplayInstanceViewVScale extends DisplayInstanceView {
 
     DisplayInstanceViewVScale(DisplayInstanceController controller) {
         super(controller);
-    }
-
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
         vlabels = new VValueLabelsComponent(-60, 10, 10);
         add(vlabels);
     }

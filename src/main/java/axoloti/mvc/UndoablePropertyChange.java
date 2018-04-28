@@ -12,9 +12,9 @@ import javax.swing.undo.UndoableEdit;
 public class UndoablePropertyChange implements UndoableEdit {
 
     Object new_value;
-    final Object old_value;
-    final AbstractController controller;
-    final Property property;
+    Object old_value;
+    AbstractController controller;
+    Property property;
 
     public UndoablePropertyChange(AbstractController controller, Property property, Object old_value, Object new_value) {
         this.new_value = new_value;
@@ -32,12 +32,20 @@ public class UndoablePropertyChange implements UndoableEdit {
         return property;
     }
 
+    public Object getOldValue() {
+        return old_value;
+    }
+
     public Object getNewValue() {
         return new_value;
     }
 
     @Override
     public void undo() throws CannotUndoException {
+        MvcDiagnostics.log(String.format("undo propertyChange %08X %s:%s\n",
+                hashCode(),
+                getPresentationName(),
+                (old_value != null) ? old_value.toString() : "null"));
         controller.setModelProperty(property, old_value);
     }
 
@@ -48,6 +56,10 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
+        MvcDiagnostics.log(String.format("redo propertyChange %08X %s:%s\n",
+                hashCode(),
+                getPresentationName(),
+                (new_value != null) ? new_value.toString() : "null"));
         controller.setModelProperty(property, new_value);
     }
 
@@ -58,6 +70,9 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public void die() {
+        new_value = null;
+        old_value = null;
+        controller = null;
     }
 
     @Override
@@ -83,12 +98,12 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public boolean isSignificant() {
-        return true;
+        return false;
     }
 
     @Override
     public String getPresentationName() {
-        return "change";
+        return "change " + property.getFriendlyName();
     }
 
     @Override

@@ -42,7 +42,7 @@ public class PatchSelectionEventHandler extends PSelectionEventHandler {
         parent.getController().SelectNone();
         for (Object o : getSelection()) {
             PAxoObjectInstanceViewAbstract pn = (PAxoObjectInstanceViewAbstract) o;
-            pn.getModel().setSelected(true);
+            pn.getController().changeSelected(true);
         }
     }
 
@@ -106,7 +106,7 @@ public class PatchSelectionEventHandler extends PSelectionEventHandler {
         super.mouseReleased(e);
         if (isDragging) {
             isDragging = false;
-            parent.AdjustSize();
+            parent.updateSize();
             parent.getController().fixNegativeObjectCoordinates();
         }
     }

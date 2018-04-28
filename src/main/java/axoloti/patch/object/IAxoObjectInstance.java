@@ -10,7 +10,6 @@ import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.target.fs.SDFileReference;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,9 +36,9 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
 
     public List<DisplayInstance> getDisplayInstances();
 
-    public InletInstance GetInletInstance(String n);
+    public InletInstance findInletInstance(String n);
 
-    public OutletInstance GetOutletInstance(String n);
+    public OutletInstance findOutletInstance(String n);
 
     public int getX();
 
@@ -47,15 +46,14 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
 
     public Boolean getSelected();
 
-    public void setSelected(Boolean selected);
-
-    public PatchModel getPatchModel();
+    @Override
+    public PatchModel getParent();
 
     public Point getLocation();
 
     public void setLocation(Point p);
 
-    public ArrayList<SDFileReference> getFileDepends();
+    public List<SDFileReference> getFileDepends();
 
     public boolean isTypeWasAmbiguous();
 
@@ -63,5 +61,8 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
 
     public IAxoObject resolveType(String directory);
 
-    public void Remove();
+    void setParent(PatchModel patchModel);
+
+    @Override
+    ObjectInstanceController getControllerFromModel();
 }

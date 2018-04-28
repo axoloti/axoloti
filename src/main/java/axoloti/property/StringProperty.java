@@ -1,5 +1,7 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
+
 /**
  *
  * @author jtaelman
@@ -25,7 +27,7 @@ public class StringProperty extends PropertyReadWrite<String> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         String s = get(o);
         if (s == null) {
             return "";

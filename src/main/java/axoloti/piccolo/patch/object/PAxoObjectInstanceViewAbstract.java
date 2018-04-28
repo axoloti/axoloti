@@ -7,6 +7,7 @@ import axoloti.abstractui.IParameterInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
@@ -192,7 +193,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
             InstanceNameTF = null;
             instanceLabel.setVisible(true);
             getController().addMetaUndo("edit object name");
-            getController().setModelUndoableProperty(AxoObjectInstance.OBJ_INSTANCENAME, s);
+            getController().changeInstanceName(s);
         }
     }
 
@@ -235,7 +236,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         InstanceNameTF.grabFocus();
     }
 
-    @Override
     public void showInstanceName(String InstanceName) {
         instanceLabel.setText(InstanceName);
         resizeToGrid();
@@ -262,6 +262,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         // new objects added to front by default
     }
 
+    @Override
     public void resizeToGrid() {
         invalidate();
         Dimension d = getPreferredSize();
@@ -296,13 +297,13 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (AxoObjectInstance.OBJ_LOCATION.is(evt)) {
+        if (AxoObjectInstanceAbstract.OBJ_LOCATION.is(evt)) {
             Point newValue = (Point) evt.getNewValue();
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
                 if (getInletInstanceViews() != null) {
                     for (IIoletInstanceView i : getInletInstanceViews()) {
-                        INetView n = getPatchView().GetNetView(i);
+                        INetView n = getPatchView().findNetView(i);
                         if (n != null) {
                             n.updateBounds();
                             n.repaint();
@@ -311,7 +312,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
                 }
                 if (getOutletInstanceViews() != null) {
                     for (IIoletInstanceView i : getOutletInstanceViews()) {
-                        INetView n = getPatchView().GetNetView(i);
+                        INetView n = getPatchView().findNetView(i);
                         if (n != null) {
                             n.updateBounds();
                             n.repaint();

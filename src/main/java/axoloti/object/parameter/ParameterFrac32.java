@@ -60,6 +60,8 @@ public abstract class ParameterFrac32<T extends ParameterInstanceFrac32> extends
     }
 
     public void setDefaultValue(Double DefaultValue) {
+        Double prev = getDefaultValue();
         this.DefaultValue = new ValueFrac32(DefaultValue);
+        firePropertyChange(DEFAULTVALUE, prev, DefaultValue);
     }
 }

@@ -58,7 +58,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (link.endsWith(".axp") || link.endsWith(".axh") || link.endsWith(".axs")) {
-            String s = getPatchModel().getFileNamePath();
+            String s = getParent().getFileNamePath();
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {

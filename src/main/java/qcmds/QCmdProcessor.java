@@ -220,7 +220,7 @@ public class QCmdProcessor implements Runnable {
             } catch (InterruptedException ex) {
                 Logger.getLogger(QCmdProcessor.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // FIXME: progress reporting
+            // TODO: progress reporting
             // setProgress(0);
         }
     }

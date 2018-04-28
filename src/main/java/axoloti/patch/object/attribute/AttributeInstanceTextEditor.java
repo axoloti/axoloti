@@ -29,7 +29,7 @@ import org.simpleframework.xml.Element;
  */
 public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttributeTextEditor> {
 
-    public TextEditor editor;
+    public TextEditor editor; // TODO: remove reference to swingui...
 
     @Element(data = true, required = false)
     String sText;
@@ -57,8 +57,12 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     }
 
     @Override
-    public void setValue(String sText) {
+    protected void setValueString(String sText) {
+        String oldvalue = this.sText;
         this.sText = sText;
+        firePropertyChange(
+                ATTR_VALUE,
+                oldvalue, sText);
     }
 
     @Override

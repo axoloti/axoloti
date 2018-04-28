@@ -484,7 +484,7 @@ public class FileManagerFrame extends TJFrame {
                             s += (char) mem.get();
                         }
                         TextModel textModel = new TextModel(s);
-                        TextController textController = new TextController(textModel, null, null);
+                        TextController textController = new TextController(textModel);
                         TextEditor textEditor = new TextEditor(TextModel.TEXT, textController, null);
                         textController.addView(textEditor);
                         textEditor.setTitle(f.getFilename());

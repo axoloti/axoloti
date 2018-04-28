@@ -206,11 +206,11 @@ public class gentools {
         if (o.getLicense() == null) {
             o.setLicense("BSD");
         }
-        if (o.GetIncludes() == null) {
-            o.SetIncludes(null);
+        if (o.getIncludes() == null) {
+            o.setIncludes(null);
         }
-        if ((o.GetIncludes() != null) && o.GetIncludes().isEmpty()) {
-            o.SetIncludes(null);
+        if ((o.getIncludes() != null) && o.getIncludes().isEmpty()) {
+            o.setIncludes(null);
         }
         o.id = catname + "/" + relativeID; // uuid based on full name
 //        String upgradeSha = o.GenerateSHA();

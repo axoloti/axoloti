@@ -37,10 +37,11 @@ public class AxoObjectPatcher extends AxoObject {
     }
 
     public AxoObjectInstancePatcher CreateInstance(PatchController patchController, String InstanceName1, Point location, PatchModel subPatchModel) {
-//        AxoObjectPatcher newObj = new AxoObjectPatcher();
-        ObjectController ctrl1 = createController(patchController.getDocumentRoot(), null);
+        AxoObjectPatcher newObj = new AxoObjectPatcher();
+        newObj.setDocumentRoot(patchController.getDocumentRoot());
+        ObjectController ctrl1 = newObj.getControllerFromModel();
         AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(ctrl1, patchController.getModel(), InstanceName1, location, subPatchModel);
-        subPatchModel.setContainer(o);
+        subPatchModel.setParent(o);
         ctrl1.addView(o);
         return o;
     }

@@ -48,14 +48,14 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             getListView().setSelectedValue(o, true);
             if (getListView().getSelectedValue() != o) {
             }
-            ObjectController oc = o.createController(null, null);
+            ObjectController oc = o.getControllerFromModel();
             AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
             ObjectInstanceController c;
 
             if (objectInstance instanceof AxoObjectInstancePatcher) {
-                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance, null, null);
+                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance);
             } else {
-                c = new ObjectInstanceController(objectInstance, null, null);
+                c = new ObjectInstanceController(objectInstance);
             }
 
             PAxoObjectInstanceViewAbstract objectInstanceView = (

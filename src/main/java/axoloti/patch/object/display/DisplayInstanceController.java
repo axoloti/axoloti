@@ -1,7 +1,6 @@
 package axoloti.patch.object.display;
 
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
 import axoloti.patch.object.ObjectInstanceController;
 
@@ -11,8 +10,8 @@ import axoloti.patch.object.ObjectInstanceController;
  */
 public class DisplayInstanceController extends AbstractController<DisplayInstance, IView, ObjectInstanceController> {
 
-    public DisplayInstanceController(DisplayInstance model, AbstractDocumentRoot documentRoot, AbstractController parent) {
-        super(model, documentRoot, (ObjectInstanceController) parent);
+    protected DisplayInstanceController(DisplayInstance model) {
+        super(model);
     }
 
     void setValue(Object value) {

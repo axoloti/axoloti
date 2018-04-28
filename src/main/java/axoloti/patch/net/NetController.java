@@ -2,7 +2,6 @@ package axoloti.patch.net;
 
 import axoloti.abstractui.INetView;
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
@@ -21,23 +20,22 @@ import java.util.logging.Logger;
  */
 public class NetController extends AbstractController<Net, INetView, PatchController> {
 
-
-    public NetController(Net model, AbstractDocumentRoot documentRoot, PatchController parent) {
-        super(model, documentRoot, parent);
-        if (parent != null) {
-            PatchModel patchModel = parent.getModel();
+    protected NetController(Net model) {
+        super(model);
+        if (model.getParent() != null) {
+            PatchModel patchModel = model.getParent();
             ArrayList<OutletInstance> source2 = new ArrayList<>();
             for (OutletInstance i : model.getSources()) {
                 String objname = i.getObjname();
                 String outletname = i.getName();
 
-                IAxoObjectInstance o = patchModel.GetObjectInstance(objname);
+                IAxoObjectInstance o = patchModel.findObjectInstance(objname);
                 if (o == null) {
                     Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source obj : {0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
                     return;
                 }
-                OutletInstance r = o.GetOutletInstance(outletname);
+                OutletInstance r = o.findOutletInstance(outletname);
                 if (r == null) {
                     Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net source outlet : {0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
@@ -49,13 +47,13 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
             for (InletInstance i : model.getDestinations()) {
                 String objname = i.getObjname();
                 String inletname = i.getName();
-                IAxoObjectInstance o = patchModel.GetObjectInstance(objname);
+                IAxoObjectInstance o = patchModel.findObjectInstance(objname);
                 if (o == null) {
                     Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest obj :{0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
                     return;
                 }
-                InletInstance r = o.GetInletInstance(inletname);
+                InletInstance r = o.findInletInstance(inletname);
                 if (r == null) {
                     Logger.getLogger(NetController.class.getName()).log(Level.SEVERE, "could not resolve net dest inlet :{0}::{1}", new Object[]{i.getObjname(), i.getName()});
                     patchModel.nets.remove(model);
@@ -69,29 +67,38 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
     }
 
     public void connectInlet(InletInstance inlet) {
-        if (inlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
-            return;
-        }
-        inlet.setConnected(true);
+// FIXME: sanity check
+//        if (inlet.getParent().getParent() != getParent().getModel()) {
+//            return;
+//        }
+//        inlet.getControllerFromModel().setModelUndoableProperty(InletInstance.CONNECTED, true);
         ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
         n.add(inlet);
         setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
     }
 
     public void connectOutlet(OutletInstance outlet) {
-        if (outlet.getObjectInstance().getPatchModel() != getParent().getModel()) {
-            return;
-        }
-        outlet.setConnected(true);
+// FIXME: sanity check
+//        if (outlet.getParent().getParent() != getParent().getModel()) {
+//            return;
+//        }
+//        outlet.getControllerFromModel().setModelUndoableProperty(OutletInstance.CONNECTED, true);
         ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
         n.add(outlet);
         setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
     public void disconnect(IoletInstance iolet) {
-        if (iolet.getObjectInstance().getPatchModel() != getParent().getModel()) {
-            return;
-        }
+// FIXME: sanity check
+//        if (iolet.getParent().getParent() != getParent().getModel()) {
+//            return;
+//        }
+
+//        NetController nx = getModel().getParent().getControllerFromModel().getNetFromIolet(iolet);
+//        if (nx == null) {
+//            iolet.getControllerFromModel().setModelUndoableProperty(IoletInstance.CONNECTED, false);
+//        }
+        
         if(iolet.isSource()) {
             List<IoletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
             n.remove(iolet);
@@ -108,14 +115,14 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         // reads before last write on net
         int lastSource = 0;
         for (OutletInstance s : getModel().getSources()) {
-            int i = getParent().getModel().objectinstances.indexOf(s.getObjectInstance());
+            int i = getModel().getParent().getObjectInstances().indexOf(s.getParent());
             if (i > lastSource) {
                 lastSource = i;
             }
         }
         int firstDest = java.lang.Integer.MAX_VALUE;
         for (InletInstance d : getModel().getDestinations()) {
-            int i = getParent().getModel().objectinstances.indexOf(d.getObjectInstance());
+            int i = getModel().getParent().getObjectInstances().indexOf(d.getParent());
             if (i < firstDest) {
                 firstDest = i;
             }
@@ -127,7 +134,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         if (getModel().getSources().length == 1) {
             return true;
         }
-        for (IAxoObjectInstance o : getParent().getModel().objectinstances) {
+        for (IAxoObjectInstance o : getModel().getParent().getObjectInstances()) {
             for (OutletInstance i : o.getOutletInstances()) {
                 List<OutletInstance> outletlist = Arrays.asList(getModel().getSources());
                 if (outletlist.contains(i)) {
@@ -141,7 +148,7 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
     }
 
     public String CName() {
-        int i = getParent().netControllers.indexOf(this);
+        int i = getModel().getParent().getNets().indexOf(getModel());
         return "net" + i;
     }
 }

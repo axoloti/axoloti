@@ -12,11 +12,6 @@ class ParameterInstanceViewFrac32UMapVSlider extends ParameterInstanceViewFrac32
         super(controller, axoObjectInstanceView);
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-    }
-
     /*
      *  Preset logic
      */

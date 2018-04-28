@@ -25,10 +25,8 @@ import axoloti.object.ObjectController;
 import axoloti.patch.PatchController;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.AxoObjectInstanceFactory;
-import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.ObjectInstancePatcherController;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
 import axoloti.utils.Constants;
@@ -393,17 +391,19 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             jList1.setSelectedValue(o, true);
             if (jList1.getSelectedValue() != o) {
             }
-            ObjectController oc = o.createController(null, null);
-            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
+            ObjectController oc = (ObjectController)o.getControllerFromModel();
+            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));            
+            /*
             ObjectInstanceController c;
 
             if (objectInstance instanceof AxoObjectInstancePatcher) {
-                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance, null, null);
+                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance);
             } else {
-                c = new ObjectInstanceController(objectInstance, null, null);
+                c = new ObjectInstanceController(objectInstance);
             }
-
-            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.getInstance().createView(c, null);
+            objectInstance.setControllerFromModel(c);
+            */
+            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.getInstance().createView((ObjectInstanceController)objectInstance.getControllerFromModel(), null);
             jPanel1.removeAll();
             jPanel1.add((AxoObjectInstanceViewAbstract) objectInstanceView);
             objectInstanceView.resizeToGrid();
@@ -509,7 +509,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 ExpandJTreeToEl(listData.get(0));
                 SetPreview(type);
             } else {
-                List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(s, patchController.GetCurrentWorkingDirectory());
+                List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(s, patchController.getModel().GetCurrentWorkingDirectory());
                 if ((objs != null) && (objs.size() > 0)) {
                     jList1.setListData(objs.toArray());
                     SetPreview(objs.get(0));
@@ -531,7 +531,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         setVisible(false);
         IAxoObject x = type;
         if (x == null) {
-            List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.GetCurrentWorkingDirectory());
+            List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.getModel().GetCurrentWorkingDirectory());
             if ((objs != null) && (!objs.isEmpty())) {
                 x = objs.get(0);
                 jTextFieldObjName.setText("");
@@ -539,11 +539,11 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
         if (x != null) {
             if (target_object == null) {
-                    patchController.addMetaUndo("add object");
-                    patchController.AddObjectInstance(x, new Point(patchLocX, patchLocY));
+                patchController.addMetaUndo("add object");
+                patchController.addObjectInstance(x, new Point(patchLocX, patchLocY));
             } else {
-                    patchController.addMetaUndo("change object type");
-                    AxoObjectInstanceAbstract oi = patchController.ChangeObjectInstanceType(target_object, x);
+                patchController.addMetaUndo("change object type");
+                AxoObjectInstanceAbstract oi = patchController.ChangeObjectInstanceType(target_object, x);
             }
         }
         setVisible(false);

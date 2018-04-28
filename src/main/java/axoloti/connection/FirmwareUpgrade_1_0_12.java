@@ -21,7 +21,6 @@ package axoloti.connection;
 * Provides a firmware upgrade method from 1.0.12 firmware to current firmware.
  * Does not support multiple boards connected.
  *
- * TODO: detect 1.0.12 firmware, auto-suggest upgrade * improve error * reporting
  */
 import axoloti.Axoloti;
 import java.io.File;
@@ -36,7 +35,9 @@ import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.CRC32;
-import org.usb4java.*;
+import org.usb4java.DeviceHandle;
+import org.usb4java.LibUsb;
+import org.usb4java.LibUsbException;
 
 /**
  *

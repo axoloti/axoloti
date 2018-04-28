@@ -17,10 +17,10 @@
  */
 package axoloti.patch.object.outlet;
 
-import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.outlet.Outlet;
 import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.atom.AtomInstance;
 import axoloti.patch.object.iolet.IoletInstance;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -57,7 +57,7 @@ public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
     public void setName(String outletname) {
         String preVal = this.outletname;
         this.outletname = outletname;
-        firePropertyChange(AtomDefinition.NAME, preVal, outletname);
+        firePropertyChange(AtomInstance.NAME, preVal, outletname);
     }
 
     public boolean isSource() {

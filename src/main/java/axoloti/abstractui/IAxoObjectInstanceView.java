@@ -41,8 +41,6 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public void addInstanceNameEditor();
 
-    public void showInstanceName(String InstanceName);
-
     public void moveToFront();
 
     public void resizeToGrid();

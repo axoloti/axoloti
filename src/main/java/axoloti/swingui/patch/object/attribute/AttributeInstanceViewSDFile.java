@@ -47,7 +47,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE, TFFileName.getText());
+                            getController().changeValue(TFFileName.getText());
                         }
                     });
             }
@@ -70,24 +70,24 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         TFFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,TFFileName.getText());
+                getController().changeValue(TFFileName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,TFFileName.getText());
+                getController().changeValue(TFFileName.getText());
             }
         });
         ButtonChooseFile = new ButtonComponent("choose");
         ButtonChooseFile.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void OnPushed() {
-                JFileChooser fc = new JFileChooser(getController().getParent().getParent().getModel().GetCurrentWorkingDirectory());
+                JFileChooser fc = new JFileChooser(getController().getModel().getParent().getParent().GetCurrentWorkingDirectory());
                 Window window = SwingUtilities.getWindowAncestor(AttributeInstanceViewSDFile.this);
                 int returnVal = fc.showOpenDialog(window);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String f = getModel().toRelative(fc.getSelectedFile());
-                    getController().setModelUndoableProperty(AttributeInstanceSDFile.ATTR_VALUE,f);
+                    getController().changeValue(f);
                 }
             }
         });

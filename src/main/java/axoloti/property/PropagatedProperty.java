@@ -1,5 +1,6 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 
 /**
@@ -18,14 +19,14 @@ public class PropagatedProperty<T extends Object> extends Property<T> {
     }
 
     @Override
-    public T get(Object obj) {
+    public T get(IModel obj) {
         return (T) parentProperty.get(
                 ((IView) obj).getController().getModel()
         );
     }
 
     @Override
-    public void set(Object obj, Object val) {
+    public void set(IModel obj, Object val) {
         throw new Error("Can''t set PropagatedProperty obj.getClass().getName() + \"::\" + getName()");
     }
 
@@ -45,7 +46,7 @@ public class PropagatedProperty<T extends Object> extends Property<T> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         Object v = get(o);
         if (v == null) {
             return "";

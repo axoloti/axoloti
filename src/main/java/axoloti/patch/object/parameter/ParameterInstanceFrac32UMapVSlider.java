@@ -27,6 +27,7 @@ import org.simpleframework.xml.Attribute;
 public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U<ParameterFrac32UMapVSlider> {
 
     public ParameterInstanceFrac32UMapVSlider() {
+        super();
     }
 
     public ParameterInstanceFrac32UMapVSlider(@Attribute(name = "value") double v) {

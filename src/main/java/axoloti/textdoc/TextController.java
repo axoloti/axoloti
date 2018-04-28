@@ -10,8 +10,8 @@ import axoloti.mvc.IView;
  */
 public class TextController extends AbstractController<TextModel, IView, AbstractController> {
 
-    public TextController(TextModel model, AbstractDocumentRoot documentRoot, AbstractController parent) {
-        super(model, documentRoot, parent);
+    public TextController(TextModel model) {
+        super(model);
     }
 
 }

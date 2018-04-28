@@ -1,5 +1,6 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         List<String> s = get(o);
         if (s == null) {
             return "";

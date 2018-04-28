@@ -98,7 +98,7 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     }
 
     @Override
-    public File GetHelpPatchFile() {
+    public File getHelpPatchFile() {
         return null;
     }
 

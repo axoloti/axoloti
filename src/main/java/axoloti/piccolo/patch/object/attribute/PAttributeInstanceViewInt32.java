@@ -28,14 +28,14 @@ public class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
         super.PostConstructor();
 
         slider = new PVSliderComponent(
-            getModel().getValue(),
-            getModel().getModel().getMinValue(),
+                getModel().getValueInteger(),
+                getModel().getModel().getMinValue(),
             getModel().getModel().getMaxValue(), 1, axoObjectInstanceView);
 
-        if (getModel().getValue() < getModel().getModel().getMinValue()) {
+        if (getModel().getValueInteger() < getModel().getModel().getMinValue()) {
             getModel().setValue(getModel().getModel().getMinValue());
         }
-        if (getModel().getValue() > getModel().getModel().getMaxValue()) {
+        if (getModel().getValueInteger() > getModel().getModel().getMaxValue()) {
             getModel().setValue(getModel().getModel().getMaxValue());
         }
 

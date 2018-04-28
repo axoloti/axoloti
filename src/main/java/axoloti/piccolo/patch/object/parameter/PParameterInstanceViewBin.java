@@ -1,7 +1,6 @@
 package axoloti.piccolo.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceBin;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.preferences.Theme;
@@ -48,7 +47,7 @@ public abstract class PParameterInstanceViewBin extends PParameterInstanceView {
         } else if (getModel().getValue() != (int) getControlComponent().getValue()) {
             if (getController() != null) {
                 Integer vi32 = (int) getControlComponent().getValue();
-                getController().setModelUndoableProperty(ParameterInstance.VALUE, vi32);
+                getController().changeValue(vi32);
             }
         } else {
             return false;

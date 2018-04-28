@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import javax.swing.SwingUtilities;
 
@@ -42,6 +43,10 @@ public class NetDragging extends NetView {
 
     public void SetDragPoint(Point p0) {
         this.p0 = p0;
+        if (patchView != null) {
+            Rectangle r = new Rectangle(p0.x, p0.y, 1, 1);
+            patchView.scrollTo(r);
+        }
         updateBounds();
         repaint();
     }

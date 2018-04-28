@@ -25,31 +25,6 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
     public PInletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         this.controller = controller;
-    }
-
-    @Override
-    public InletInstance getModel() {
-        return (InletInstance) controller.getModel();
-    }
-
-    private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
-        @Override
-        public void mouseEntered(PInputEvent e) {
-            if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(getModel().getModel().getDescription());
-            }
-        }
-
-        @Override
-        public void mouseExited(PInputEvent e) {
-            if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(null);
-            }
-        }
-    };
-
-    @Override
-    public void PostConstructor() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
 
@@ -73,10 +48,31 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
         addInputEventListener(toolTipEventListener);
     }
 
+    @Override
+    public InletInstance getModel() {
+        return (InletInstance) controller.getModel();
+    }
+
+    private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
+        @Override
+        public void mouseEntered(PInputEvent e) {
+            if (e.getInputManager().getMouseFocus() == null) {
+                axoObjectInstanceView.getCanvas().setToolTipText(getModel().getModel().getDescription());
+            }
+        }
+
+        @Override
+        public void mouseExited(PInputEvent e) {
+            if (e.getInputManager().getMouseFocus() == null) {
+                axoObjectInstanceView.getCanvas().setToolTipText(null);
+            }
+        }
+    };
+
     public void setHighlighted(boolean highlighted) {
         if (axoObjectInstanceView != null
                 && axoObjectInstanceView.getPatchView() != null) {
-            INetView netView = axoObjectInstanceView.getPatchView().GetNetView(this);
+            INetView netView = axoObjectInstanceView.getPatchView().findNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);
@@ -86,7 +82,8 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
 
     @Override
     public JPopupMenu getPopup() {
-        return new IoletInstancePopupMenu(getController());
+        return new IoletInstancePopupMenu(getController(),
+                null /* TODO: implement piccolo focusEdit */);
     }
 
     @Override

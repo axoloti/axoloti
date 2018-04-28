@@ -14,7 +14,6 @@ public class ParameterInstanceFactory {
         Parameter model = (Parameter) controller.getModel();
         ParameterInstance view = model.CreateInstance((AxoObjectInstance) obj);
         view.setController(controller);
-        controller.addView(view);
         return view;
     }
 }

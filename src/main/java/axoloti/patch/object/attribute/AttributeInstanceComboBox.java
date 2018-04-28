@@ -61,7 +61,7 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     }
 
     @Override
-    public void setValue(String selection) {
+    protected void setValueString(String selection) {
         String oldvalue = this.selection;
         if (getModel().getMenuEntries().isEmpty()) {
             // no menu entries present

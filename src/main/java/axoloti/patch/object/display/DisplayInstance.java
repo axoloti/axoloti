@@ -93,11 +93,12 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
     public abstract Object getValue();
     public abstract void setValue(Object o);
 
+    private final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{NOLABEL};
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         // triggered by a model definition change, triggering instance view changes
-        final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{NOLABEL};
         for (PropagatedProperty p : propagateProperties) {
             if (p.is(evt)) {
                 firePropertyChange(p,
@@ -119,4 +120,8 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
         return l;
     }
 
+    @Override
+    public DisplayInstanceController createController() {
+        return new DisplayInstanceController(this);
+    }
 }

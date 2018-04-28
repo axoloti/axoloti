@@ -17,12 +17,13 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.FocusEdit;
 import axoloti.mvc.IView;
-import axoloti.mvc.array.ArrayController;
+import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.property.ListProperty;
 import axoloti.property.Property;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,7 +42,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -51,16 +51,18 @@ import javax.swing.table.AbstractTableModel;
  */
 abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView {
 
-    final T[] AtomDefinitionsList;
+    private final T[] AtomDefinitionsList;
     private AtomDefinitionController o;
-    final Property prop;
-    final ObjectController objcontroller;
-    JPanel parentPanel;
+    private final ListProperty prop;
+    private final ObjectController objcontroller;
+    private final AxoObjectEditor editor;
+    private JPanel parentPanel;
 
-    public AtomDefinitionsEditor(ObjectController objcontroller, Property atomfield, T[] atomDefinitionsList) {
+    public AtomDefinitionsEditor(ObjectController objcontroller, ListProperty atomfield, T[] atomDefinitionsList, AxoObjectEditor editor) {
         this.objcontroller = objcontroller;
         this.prop = atomfield;
         this.AtomDefinitionsList = atomDefinitionsList;
+        this.editor = editor;
     }
 
     @Override
@@ -72,9 +74,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
 
     abstract String getAtomTypeName();
 
-    abstract ArrayController getTController();
+    private List<IView> AtomViews = new ArrayList<>();
 
-    ActionListener actionListenerMoveUp = new ActionListener() {
+    private ActionListener actionListenerMoveUp = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -82,23 +84,43 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             if (row < 1) {
                 return;
             }
-            getController().addMetaUndo("move " + getAtomTypeName());
+            FocusEdit focusEdit = new FocusEdit() {
+
+                @Override
+                protected void focus() {
+                    editor.switchToTab(parentPanel);
+                    jTable1.setRowSelectionInterval(row, row);
+                }
+
+            };
+            getController().addMetaUndo("move " + getAtomTypeName(), focusEdit);
 
             ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
             T elem = n.get(row);
             n.remove(row);
             n.add(row - 1, elem);
-            objcontroller.setModelUndoableProperty(prop, n);
+            objcontroller.generic_setModelUndoableProperty(prop, n);
 
             jTable1.setRowSelectionInterval(row - 1, row - 1);
         }
     };
 
-    ActionListener actionListenerMoveDown = new ActionListener() {
+    private ActionListener actionListenerMoveDown = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             int row = jTable1.getSelectedRow();
-            getController().addMetaUndo("move " + getAtomTypeName());
+
+            FocusEdit focusEdit = new FocusEdit() {
+
+                @Override
+                protected void focus() {
+                    editor.switchToTab(parentPanel);
+                    jTable1.setRowSelectionInterval(row, row);
+                }
+
+            };
+
+            getController().addMetaUndo("move " + getAtomTypeName(), focusEdit);
 
             if (row < 0) {
                 return;
@@ -109,13 +131,13 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
             }
             T o = n.remove(row);
             n.add(row + 1, o);
-            objcontroller.setModelUndoableProperty(prop, n);
+            objcontroller.generic_setModelUndoableProperty(prop, n);
 
             jTable1.setRowSelectionInterval(row + 1, row + 1);
         }
     };
 
-    ActionListener actionListenerRemove = new ActionListener() {
+    private ActionListener actionListenerRemove = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             int row = jTable1.getSelectedRow();
@@ -123,10 +145,20 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                 return;
             }
             if (jTable1.getRowCount() >= row) {
-                getController().addMetaUndo("remove " + getAtomTypeName());
+
+                FocusEdit focusEdit = new FocusEdit() {
+
+                    @Override
+                    protected void focus() {
+                        editor.switchToTab(parentPanel);
+                        jTable1.setRowSelectionInterval(row, row);
+                    }
+
+                };
+                getController().addMetaUndo("remove " + getAtomTypeName(), focusEdit);
                 ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
                 n.remove(row);
-                objcontroller.setModelUndoableProperty(prop, n);
+                objcontroller.generic_setModelUndoableProperty(prop, n);
             }
             if (row > 0) {
                 jTable1.setRowSelectionInterval(row - 1, row - 1);
@@ -136,7 +168,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
         }
     };
 
-    ActionListener actionListenerAdd = new ActionListener() {
+    private ActionListener actionListenerAdd = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -156,10 +188,19 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                     }
                 }
                 o2.setName(getDefaultName() + i);
-                getController().addMetaUndo("add " + getAtomTypeName());
-                ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
-                n.add(o2);
-                objcontroller.setModelUndoableProperty(prop, n);
+                o2.setParent((AxoObject) objcontroller.getModel());
+                FocusEdit focusEdit = new FocusEdit() {
+
+                    @Override
+                    protected void focus() {
+                        editor.switchToTab(parentPanel);
+                        int row = jTable1.getRowCount() - 1;
+                        jTable1.setRowSelectionInterval(row, row);
+                    }
+
+                };
+                getController().addMetaUndo("add " + getAtomTypeName(), focusEdit);
+                objcontroller.generic_addUndoableElementToList(prop, o2);
                 UpdateTable2();
             } catch (InstantiationException ex) {
                 Logger.getLogger(AtomDefinitionsEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -243,12 +284,22 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                 if (atomDefinitionController == null) {
                     return;
                 }
+                FocusEdit focusEdit = new FocusEdit() {
+
+                    @Override
+                    protected void focus() {
+                        editor.switchToTab(parentPanel);
+                        jTable1.setRowSelectionInterval(rowIndex, rowIndex);
+                    }
+
+                };
                 switch (columnIndex) {
                     case 0: {
                         assert (value instanceof String);
-                        getController().addMetaUndo("edit " + getAtomTypeName() + " name");
-                        AbstractController ox = getTController().get(rowIndex);
-                        ox.setModelUndoableProperty(AtomDefinition.NAME, value);
+                        getController().addMetaUndo("edit " + getAtomTypeName() + " name", focusEdit);
+                        List atomDefinitions = (List) objcontroller.getModelProperty(prop);
+                        AtomDefinition m = (AtomDefinition) atomDefinitions.get(rowIndex);
+                        m.getControllerFromModel().changeName((String) value);
                     }
                     break;
                     case 1:
@@ -256,10 +307,11 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                             T j = (T) value.getClass().newInstance();
                             j.setName(GetAtomDefinition(rowIndex).getName());
                             j.setDescription(GetAtomDefinition(rowIndex).getDescription());
-                            getController().addMetaUndo("change " + getAtomTypeName() + " type");
-                            ArrayList<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
+                            j.setParent((AxoObject) objcontroller.getModel());
+                            getController().addMetaUndo("change " + getAtomTypeName() + " type", focusEdit);
+                            List<T> n = new ArrayList<>((List<T>) objcontroller.getModelProperty(prop));
                             n.set(rowIndex, j);
-                            objcontroller.setModelUndoableProperty(prop, n);
+                            objcontroller.generic_setModelUndoableProperty(prop, n);
                             UpdateTable2();
                         } catch (InstantiationException ex) {
                             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -269,9 +321,11 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         break;
                     case 2: {
                         assert (value instanceof String);
-                        getController().addMetaUndo("edit " + getAtomTypeName() + " description");
-                        AtomDefinitionController ox = (AtomDefinitionController) getTController().get(rowIndex);
-                        ox.setModelUndoableProperty(AtomDefinition.DESCRIPTION, value);
+                        getController().addMetaUndo("edit " + getAtomTypeName() + " description", focusEdit);
+
+                        List atomDefinitions = (List) objcontroller.getModelProperty(prop);
+                        AtomDefinition m = (AtomDefinition) atomDefinitions.get(rowIndex);
+                        m.getControllerFromModel().changeDescription((String) value);
                     }
                     break;
                 }
@@ -383,7 +437,17 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
                         Class c = property.getType();
                         String svalue = (String) value;
                         Object newValue = property.StringToObj(svalue);
-                        o.setModelUndoableProperty(property, newValue);
+                        int table1row = jTable1.getSelectedRow();
+                        o.addMetaUndo("change " + property.getFriendlyName(), new FocusEdit() {
+
+                            @Override
+                            protected void focus() {
+                                editor.switchToTab(parentPanel);
+                                jTable1.setRowSelectionInterval(table1row, table1row);
+                                jTable2.setRowSelectionInterval(rowIndex, rowIndex);
+                            }
+                        });
+                        o.generic_setModelUndoableProperty(property, newValue);
                         break;
                 }
             }
@@ -426,21 +490,23 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
         jScrollPane2.setViewportView(jTable2);
     }
 
-    List<Property> properties;
+    private List<Property> properties;
 
     void UpdateTable2() {
         jButtonRemove.setEnabled(jTable1.getRowCount() > 0);
-        properties = null;
         List<T> list = (List<T>) objcontroller.getModelProperty(prop);
         int row = jTable1.getSelectedRow();
         if (row != -1 && (row < list.size())) {
-            o = (AtomDefinitionController) getTController().get(row);
+            AtomDefinition m = (AtomDefinition) list.get(row);
+            o = (AtomDefinitionController) m.getControllerFromModel();
             properties = o.getModel().getEditableFields();
+        } else {
+            properties = null;
         }
         ((AbstractTableModel) jTable2.getModel()).fireTableDataChanged();
     }
 
-    void setEditable(boolean editable) {
+    public void setEditable(boolean editable) {
         jTable1.setEnabled(editable);
         jTable2.setEnabled(editable);
         jButtonMoveUp.setEnabled(editable);
@@ -449,22 +515,67 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView 
         jButtonAdd.setEnabled(editable);
     }
 
-    JScrollPane jScrollPane1;
-    JScrollPane jScrollPane2;
-    JTable jTable1;
-    JTable jTable2;
-    JButton jButtonMoveUp;
-    JButton jButtonMoveDown;
-    JButton jButtonRemove;
-    JButton jButtonAdd;
-    JPanel jPanel1;
+    private JScrollPane jScrollPane1;
+    private JScrollPane jScrollPane2;
+    private JTable jTable1;
+    private JTable jTable2;
+    private JButton jButtonMoveUp;
+    private JButton jButtonMoveDown;
+    private JButton jButtonRemove;
+    private JButton jButtonAdd;
+    private JPanel jPanel1;
+
+    class IView1 implements IView<AtomDefinitionController> {
+
+        final AtomDefinitionController c;
+
+        public IView1(AtomDefinitionController c) {
+            this.c = c;
+        }
+
+        @Override
+        public void modelPropertyChange(PropertyChangeEvent evt) {
+            // System.out.println("editor: changed " + evt.getPropertyName());
+            if (jTable1 == null) {
+                return;
+            }
+            AbstractTableModel tm = (AbstractTableModel) jTable1.getModel();
+            if (tm == null) {
+                return;
+            }
+            tm.fireTableDataChanged();
+            UpdateTable2();
+        }
+
+        @Override
+        public AtomDefinitionController getController() {
+            return c;
+        }
+
+        @Override
+        public void dispose() {
+        }
+
+    }
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (prop.is(evt)) {
-            if (jTable1 != null) {
-                jTable1.tableChanged(new TableModelEvent(jTable1.getModel()));
+            for (IView v : AtomViews) {
+                v.getController().removeView(v);
             }
+            AtomViews.clear();
+            List<T> list = (List<T>) evt.getNewValue();
+            for (T t : list) {
+                IView1 v = new IView1(t.getControllerFromModel());
+                t.getControllerFromModel().addView(v);
+                AtomViews.add(v);
+            }
+            if (jTable1 == null) {
+                return;
+            }
+            ((AbstractTableModel) jTable1.getModel()).fireTableDataChanged();
+            UpdateTable2();
         }
     }
 

@@ -18,7 +18,9 @@
 package axoloti.patch.net;
 
 import axoloti.datatypes.DataType;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
@@ -31,7 +33,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.asList;
 import java.util.List;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 /**
  *
@@ -43,6 +46,8 @@ public class Net extends AbstractModel {
     private OutletInstance[] sources;
     private InletInstance[] dests;
     boolean selected = false;
+    
+    PatchModel parent;
 
     public Net(
             @ElementList(name = "source", inline = true, required = false) List<OutletInstance> source,
@@ -94,7 +99,9 @@ public class Net extends AbstractModel {
         this.dests = new InletInstance[]{};
     }
 
-    public Net(OutletInstance[] sources, InletInstance[] dests) {
+    public Net(PatchModel parent, OutletInstance[] sources, InletInstance[] dests) {
+        this.parent = parent;
+        setDocumentRoot(parent.getDocumentRoot());
         this.sources = sources;
         this.dests = dests;
     }
@@ -111,11 +118,11 @@ public class Net extends AbstractModel {
         }
         for (int j = 0; j < dests.length; j++) {
             InletInstance i = dests[j];
-            IAxoObjectInstance o = i.getObjectInstance();
+            IAxoObjectInstance o = i.getParent();
             if (o == null) continue;
             if (!o.getInletInstances().contains(i)) {
                 String inletName = i.getName();
-                InletInstance i2 = o.GetInletInstance(inletName);
+                InletInstance i2 = o.findInletInstance(inletName);
                 if (i2 == null) {
                     throw new Error("detached net");
                 }
@@ -124,11 +131,11 @@ public class Net extends AbstractModel {
         }
         for (int j = 0; j < sources.length; j++) {
             OutletInstance i = sources[j];
-            IAxoObjectInstance o = i.getObjectInstance();
+            IAxoObjectInstance o = i.getParent();
             if (o == null) continue;
             if (!o.getOutletInstances().contains(i)) {
                 String outletName = i.getName();
-                OutletInstance i2 = o.GetOutletInstance(outletName);
+                OutletInstance i2 = o.findOutletInstance(outletName);
                 if (i2 == null) {
                     throw new Error("detached net");
                 }
@@ -201,7 +208,7 @@ public class Net extends AbstractModel {
         this.sources = sources;
         validate();
         for(OutletInstance o : sources) {
-            o.setConnected(true);
+            o.getControllerFromModel().changeConnected(true);
         }
         firePropertyChange(
                 NET_SOURCES,
@@ -214,10 +221,18 @@ public class Net extends AbstractModel {
 
     public void setDestinations(InletInstance[] dests) {
         InletInstance[] old_value = this.dests;
+        List<InletInstance> dests_list = Arrays.asList(dests);
+        if (old_value != null) {
+            for (InletInstance i : old_value) {
+                if (!dests_list.contains(i)) {
+                    i.getControllerFromModel().changeConnected(false);
+                }
+            }
+        }
         this.dests = dests;
         validate();
         for(InletInstance i : dests) {
-            i.setConnected(true);
+            i.getControllerFromModel().changeConnected(true);
         }
         firePropertyChange(
                 NET_DESTINATIONS,
@@ -231,4 +246,24 @@ public class Net extends AbstractModel {
         l.add(NET_DESTINATIONS);
         return l;
     }
+
+    @Override
+    protected AbstractController createController() {
+        return new NetController(this);
+    }
+
+    @Override
+    public NetController getControllerFromModel() {
+        return (NetController) super.getControllerFromModel();
+    }
+
+    @Override
+    public PatchModel getParent() {
+        return parent;
+    }
+
+    public void setParent(PatchModel patchModel) {
+        parent = patchModel;
+    }
+
 }

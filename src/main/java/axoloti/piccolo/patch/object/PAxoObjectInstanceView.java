@@ -6,7 +6,9 @@ import axoloti.abstractui.IDisplayInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.mvc.AbstractController;
+import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayView;
+import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.IAxoObject;
 import axoloti.patch.object.AxoObjectInstance;
@@ -26,11 +28,15 @@ import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFactory;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patch.object.attribute.AttributeInstanceView;
+import axoloti.swingui.patch.object.inlet.InletInstanceView;
+import axoloti.swingui.patch.object.outlet.OutletInstanceView;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
@@ -230,14 +236,20 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
     }
 
+    HashMap<AbstractController, IView> view_cache = new HashMap<>();
+
     ArrayView<IIoletInstanceView> inletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
-            @Override
-            public IIoletInstanceView viewFactory(AbstractController ctrl) {
-                return PInletInstanceViewFactory.createView((IoletInstanceController) ctrl, PAxoObjectInstanceView.this);
+        @Override
+        protected IIoletInstanceView viewFactory(AbstractController ctrl) {
+            IIoletInstanceView view = (InletInstanceView) view_cache.get(ctrl);
+            if (view == null) {
+                view = PInletInstanceViewFactory.createView((IoletInstanceController) ctrl, PAxoObjectInstanceView.this);
             }
+            return view;
+        }
 
             @Override
-            public void updateUI(List<IIoletInstanceView> views) {
+        protected void updateUI(List<IIoletInstanceView> views) {
                 p_inletViews.removeAllChildren();
                 for (IIoletInstanceView c : views) {
                     p_inletViews.addChild((PatchPNode) c);
@@ -245,99 +257,125 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
 
             @Override
-            public void removeView(IIoletInstanceView view) {
+        protected void removeView(IIoletInstanceView view) {
+                view_cache.put(view.getController(), view);
             }
         };
 
     ArrayView<IIoletInstanceView> outletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
-            @Override
-            public IIoletInstanceView viewFactory(AbstractController ctrl) {
-                return POutletInstanceViewFactory.createView((IoletInstanceController) ctrl, PAxoObjectInstanceView.this);
+        @Override
+        protected IIoletInstanceView viewFactory(AbstractController ctrl) {
+            IIoletInstanceView view = (OutletInstanceView) view_cache.get(ctrl);
+            if (view == null) {
+                view = POutletInstanceViewFactory.createView((IoletInstanceController) ctrl, PAxoObjectInstanceView.this);
             }
+            return view;
+        }
 
-            @Override
-            public void updateUI(List<IIoletInstanceView> views) {
-                p_outletViews.removeAllChildren();
-                for (IIoletInstanceView c : views) {
-                    p_outletViews.addChild((PatchPNode) c);
-                }
+        @Override
+        protected void updateUI(List<IIoletInstanceView> views) {
+            p_outletViews.removeAllChildren();
+            for (IIoletInstanceView c : views) {
+                p_outletViews.addChild((PatchPNode) c);
             }
+        }
 
-            @Override
-            public void removeView(IIoletInstanceView view) {
+        @Override
+        protected void removeView(IIoletInstanceView view) {
+                view_cache.put(view.getController(), view);
             }
         };
 
     ArrayView<IAttributeInstanceView> attributeInstanceViewSync = new ArrayView<IAttributeInstanceView>() {
-            @Override
-            public IAttributeInstanceView viewFactory(AbstractController ctrl) {
-                return PAttributeInstanceViewFactory.createView((AttributeInstanceController) ctrl, PAxoObjectInstanceView.this);
-            }
 
-            @Override
-            public void updateUI(List<IAttributeInstanceView> views) {
-                p_attributeViews.removeAllChildren();
-                for (IAttributeInstanceView c : views) {
-                    p_attributeViews.addChild((PatchPNode) c);
-                }
+        @Override
+        protected IAttributeInstanceView viewFactory(AbstractController ctrl) {
+            IAttributeInstanceView view = (AttributeInstanceView) view_cache.get(ctrl);
+            if (view == null) {
+                view = PAttributeInstanceViewFactory.createView((AttributeInstanceController) ctrl, PAxoObjectInstanceView.this);
             }
+            return view;
+        }
 
-            @Override
-            public void removeView(IAttributeInstanceView view) {
+        @Override
+        protected void updateUI(List<IAttributeInstanceView> views) {
+            p_attributeViews.removeAllChildren();
+            for (IAttributeInstanceView c : views) {
+                p_attributeViews.addChild((PatchPNode) c);
             }
-        };
+        }
+
+        @Override
+        protected void removeView(IAttributeInstanceView view) {
+            view_cache.put(view.getController(), view);
+        }
+    };
 
     ArrayView<IParameterInstanceView> parameterInstanceViewSync = new ArrayView<IParameterInstanceView>() {
-            @Override
-            public IParameterInstanceView viewFactory(AbstractController ctrl) {
-                return PParameterInstanceViewFactory.createView((ParameterInstanceController) ctrl, PAxoObjectInstanceView.this);
+        @Override
+        protected IParameterInstanceView viewFactory(AbstractController ctrl) {
+            IParameterInstanceView view = (IParameterInstanceView) view_cache.get(ctrl);
+            if (view == null) {
+                view = PParameterInstanceViewFactory.createView((ParameterInstanceController) ctrl, PAxoObjectInstanceView.this);
             }
+            return view;
+        }
 
-            @Override
-            public void updateUI(List<IParameterInstanceView> views) {
-                p_parameterViews.removeAllChildren();
-                for (IParameterInstanceView c : views) {
-                    p_parameterViews.addChild((PatchPNode) c);
-                }
+        @Override
+        protected void updateUI(List<IParameterInstanceView> views) {
+            p_parameterViews.removeAllChildren();
+            for (IParameterInstanceView c : views) {
+                p_parameterViews.addChild((PatchPNode) c);
             }
+        }
 
-            @Override
-            public void removeView(IParameterInstanceView view) {
-            }
-        };
+        @Override
+        protected void removeView(IParameterInstanceView view) {
+            view_cache.put(view.getController(), view);
+        }
+    };
 
     ArrayView<IDisplayInstanceView> displayInstanceViewSync = new ArrayView<IDisplayInstanceView>() {
-            @Override
-            public IDisplayInstanceView viewFactory(AbstractController ctrl) {
-                return PDisplayInstanceViewFactory.createView((DisplayInstanceController) ctrl, PAxoObjectInstanceView.this);
+        @Override
+        protected IDisplayInstanceView viewFactory(AbstractController ctrl) {
+            IDisplayInstanceView view = (IDisplayInstanceView) view_cache.get(ctrl);
+            if (view == null) {
+                view = PDisplayInstanceViewFactory.createView((DisplayInstanceController) ctrl, PAxoObjectInstanceView.this);
             }
+            return view;
+        }
 
-            @Override
-            public void updateUI(List<IDisplayInstanceView> views) {
-                p_displayViews.removeAllChildren();
-                for (IDisplayInstanceView c : views) {
-                    p_displayViews.addChild((PatchPNode) c);
-                }
+        @Override
+        protected void updateUI(List<IDisplayInstanceView> views) {
+            p_displayViews.removeAllChildren();
+            for (IDisplayInstanceView c : views) {
+                p_displayViews.addChild((PatchPNode) c);
             }
+        }
 
-            @Override
-            public void removeView(IDisplayInstanceView view) {
-            }
-        };
+        @Override
+        protected void removeView(IDisplayInstanceView view) {
+            view_cache.put(view.getController(), view);
+        }
+    };
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (AxoObjectInstance.OBJ_INLET_INSTANCES.is(evt)) {
-            inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().inletInstanceControllers);
+            inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().getModel().getInletInstances());
         } else if (AxoObjectInstance.OBJ_OUTLET_INSTANCES.is(evt)) {
-            outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().outletInstanceControllers);
+            outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().getModel().getOutletInstances());
         } else if (AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES.is(evt)) {
-            attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().attributeInstanceControllers);
+            attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().getModel().getAttributeInstances());
         } else if (AxoObjectInstance.OBJ_PARAMETER_INSTANCES.is(evt)) {
-            parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().parameterInstanceControllers);
+            parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().getModel().getParameterInstances());
         } else if (AxoObjectInstance.OBJ_DISPLAY_INSTANCES.is(evt)) {
-            displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().displayInstanceControllers);
+            displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().getModel().getDisplayInstances());
+        } else if (AxoObject.OBJ_DESCRIPTION.is(evt)
+                || AxoObject.OBJ_AUTHOR.is(evt)
+                || AxoObject.OBJ_LICENSE.is(evt)) {
+            // updateTooltext(); // TODO: implement for piccolo
         }
         resizeToGrid();
     }
@@ -369,12 +407,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
         });
         popup.add(popm_substitute);
-        if (getType().GetHelpPatchFile() != null) {
+        if (getType().getHelpPatchFile() != null) {
             JMenuItem popm_help = new JMenuItem("help");
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    PatchViewSwing.OpenPatch(getType().GetHelpPatchFile());
+                    PatchViewSwing.OpenPatch(getType().getHelpPatchFile());
                 }
             });
             popup.add(popm_help);
@@ -384,7 +422,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getController().getParent().PromoteToOverloadedObj(getModel());
+                    getController().getModel().getParent().getControllerFromModel().PromoteToOverloadedObj(getModel());
                 }
             });
             popup.add(popm_adapt);
@@ -397,7 +435,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
                         getController().addMetaUndo("embed");
-                        getController().getParent().ConvertToPatchPatcher(getModel());
+                        getController().getModel().getParent().getControllerFromModel().ConvertToPatchPatcher(getModel());
                     }
                 }
             });
@@ -408,7 +446,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     getController().addMetaUndo("embed");
-                    getController().getParent().ConvertToEmbeddedObj(getModel());
+                    getController().getModel().getParent().getControllerFromModel().ConvertToEmbeddedObj(getModel());
                 }
             });
             popup.add(popm_embed);

@@ -17,7 +17,6 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 import axoloti.object.parameter.Parameter;
@@ -27,10 +26,10 @@ import axoloti.object.parameter.ParameterTypes;
  *
  * @author jtaelman
  */
-public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
+class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
 
-    public ParamDefinitionsEditorPanel(ObjectController controller) {
-        super(controller, AxoObject.OBJ_PARAMETERS, ParameterTypes.getTypes());
+    public ParamDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
+        super(controller, AxoObject.OBJ_PARAMETERS, ParameterTypes.getTypes(), editor);
     }
 
     @Override
@@ -41,11 +40,6 @@ public class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter
     @Override
     String getAtomTypeName() {
         return "parameter";
-    }
-
-    @Override
-    ArrayController getTController() {
-        return getController().params;
     }
 
 }

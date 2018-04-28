@@ -1,7 +1,7 @@
 package axoloti.swingui.menus;
 
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.UndoUI;
+import axoloti.swingui.mvc.UndoUI;
 import axoloti.target.TargetController;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;

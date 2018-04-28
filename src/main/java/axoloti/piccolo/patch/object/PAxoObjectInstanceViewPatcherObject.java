@@ -47,10 +47,11 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
 
     public void edit() {
         if (aoe == null) {
-            aoe = new AxoObjectEditor(getModel().getAxoObject().createController(null, null));
+            aoe = new AxoObjectEditor(getModel().getAxoObject().getControllerFromModel());
         } else {
             aoe.updateReferenceXML();
         }
+        // TODO: Review, invokeLater should not be needed:
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -67,7 +68,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
     @Override
     public void dispose() {
         if (aoe != null) {
-            aoe.Close();
+            aoe.close();
             aoe = null;
         }
     }

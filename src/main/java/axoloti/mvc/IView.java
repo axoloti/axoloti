@@ -10,7 +10,7 @@ public interface IView<T extends AbstractController> {
 
     abstract void modelPropertyChange(PropertyChangeEvent evt);
 
-    public abstract T getController();
+    abstract T getController();
 
-    public void dispose();
+    void dispose();
 }

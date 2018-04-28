@@ -48,7 +48,7 @@ public abstract class PParameterInstanceViewInt32 extends PParameterInstanceView
             p.setValue((int) getControlComponent().getValue());
         } else if (getModel().getValue() != (int) getControlComponent().getValue()) {
             int v = (int) getControlComponent().getValue();
-            getController().setModelUndoableProperty(ParameterInstance.VALUE, v);
+            getController().changeValue(v);
         } else {
             return false;
         }

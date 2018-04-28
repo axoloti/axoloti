@@ -2,6 +2,8 @@ package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
+import axoloti.abstractui.PatchView;
+import axoloti.mvc.FocusEdit;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.preferences.Theme;
@@ -49,6 +51,17 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
         return getController().getModel();
     }
 
+    protected void scrollTo() {
+        if (axoObjectInstanceView == null) {
+            return;
+        }
+        PatchView pv = axoObjectInstanceView.getPatchView();
+        if (pv == null) {
+            return;
+        }
+        pv.scrollTo(this);
+    }
+
     @Override
     public void PostConstructor() {
         removeAll();
@@ -85,7 +98,14 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                    getController().addMetaUndo("change parameter " + getModel().getName());
+                    getController().addMetaUndo("change parameter " + getModel().getName(), new FocusEdit() {
+
+                        @Override
+                        protected void focus() {
+                            scrollTo();
+                            ctrl.requestFocusInWindow();
+                        }
+                    });
                 } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
                     boolean changed = handleAdjustment();
                     getController().getModel().setNeedsTransmit(true);
@@ -220,7 +240,11 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
             label.setText((String) evt.getNewValue());
             doLayout();
         } else if (ParameterInstance.DESCRIPTION.is(evt)) {
-            setToolTipText((String) evt.getNewValue());
+            String s = (String) evt.getNewValue();
+            if ((s != null) && (s.isEmpty())) {
+                s = null;
+            }
+            setToolTipText(s);
         } else if (ParameterInstance.ON_PARENT.is(evt)) {
             showOnParent((Boolean) evt.getNewValue());
         } else if (ParameterInstance.MIDI_CC.is(evt)) {

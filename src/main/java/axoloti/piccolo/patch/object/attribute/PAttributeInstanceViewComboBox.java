@@ -30,7 +30,7 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
                 @Override
                 public void SelectionChanged() {
                     getController().addMetaUndo("edit attribute " + getModel().getName());
-                    getController().setModelUndoableProperty(AttributeInstanceComboBox.ATTR_VALUE,comboBox.getSelectedItem());
+                    getController().changeValue(comboBox.getSelectedItem());
 
                 }
             });

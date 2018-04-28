@@ -31,8 +31,8 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
             @Override
             public void SelectionChanged() {
-                getController().addMetaUndo("edit attribute " + getModel().getName());
-                getController().setModelUndoableProperty(AttributeInstanceComboBox.ATTR_VALUE,comboBox.getSelectedItem());
+                getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
+                getController().changeValue(comboBox.getSelectedItem());
             }
         });
         add(comboBox);

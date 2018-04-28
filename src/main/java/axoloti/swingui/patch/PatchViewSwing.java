@@ -182,7 +182,7 @@ public class PatchViewSwing extends PatchView {
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
-                    getController().AddObjectInstance(AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
+                    getController().addObjectInstance(AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = Layers.getMousePosition();
@@ -297,7 +297,7 @@ public class PatchViewSwing extends PatchView {
                     Rectangle r = selectionrectangle.getBounds();
                     for (IAxoObjectInstanceView o : objectInstanceViews) {
                         Rectangle bounds = new Rectangle(o.getLocation().x, o.getLocation().y, o.getSize().width, o.getSize().height);
-                        o.getModel().setSelected(bounds.intersects(r));
+                        o.getController().changeSelected(bounds.intersects(r));
                     }
                     selectionrectangle.setVisible(false);
                     me.consume();
@@ -338,6 +338,10 @@ public class PatchViewSwing extends PatchView {
 
         Layers.setDropTarget(dt);
         Layers.setVisible(true);
+    }
+
+    public void scrollTo(Rectangle rect) {
+        getViewportView().getComponent().scrollRectToVisible(rect);
     }
 
     TransferHandler TH = new TransferHandler() {
@@ -407,7 +411,6 @@ public class PatchViewSwing extends PatchView {
 
     @Override
     public void PostConstructor() {
-        super.PostConstructor();
         Layers.setPreferredSize(new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE));
         ShowPreset(0);
     }
@@ -441,7 +444,7 @@ public class PatchViewSwing extends PatchView {
     }
 
     @Override
-    public void AdjustSize() {
+    public void updateSize() {
         int maxX = 0;
         int maxY = 0;
         for (Component c : objectLayerPanel.getComponents()) {
@@ -477,10 +480,12 @@ public class PatchViewSwing extends PatchView {
         }
     }
 
+    @Override
     public PatchViewportView getViewportView() {
         return Layers;
     }
 
+    @Override
     public Point getLocationOnScreen() {
         return objectLayerPanel.getLocationOnScreen();
     }
@@ -507,7 +512,7 @@ public class PatchViewSwing extends PatchView {
         if (objectLayerPanel != null) {
             objectLayerPanel.add((AxoObjectInstanceViewAbstract) v);
             v.resizeToGrid();
-            AdjustSize();
+            updateSize();
             v.repaint();
         }
     }

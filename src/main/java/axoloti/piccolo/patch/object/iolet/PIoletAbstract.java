@@ -80,7 +80,7 @@ public abstract class PIoletAbstract extends PatchPNode {
                 setHighlighted(true);
                 if (!axoObjectInstanceView.isLocked()) {
 		    Net dnet = new NetDrag();
-                    NetController dragNetController = new NetController(dnet, null, getPatchView().getController());
+                    NetController dragNetController = dnet.getControllerFromModel();
                     dragtarget = null;
 		    if (PIoletAbstract.this instanceof PInletInstanceView) {
                         dragNetController.connectInlet((InletInstance) getController().getModel());

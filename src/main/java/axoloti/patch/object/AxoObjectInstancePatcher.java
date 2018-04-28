@@ -44,6 +44,11 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
         super(controller, patch1, InstanceName1, location);
         this.subPatchModel = subPatchModel;
+        if (patch1 != null) {
+            // patch1 is null in objectselector...
+            this.subPatchModel.setDocumentRoot(patch1.getDocumentRoot());
+        }
+        controller.addView(this);
         subPatchModel.setFileNamePath(InstanceName1);
     }
 
@@ -61,5 +66,10 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
         boolean b = super.setInstanceName(s);
         subPatchModel.setFileNamePath(s);
         return b;
+    }
+
+    @Override
+    protected ObjectInstancePatcherController createController() {
+        return new ObjectInstancePatcherController(this);
     }
 }

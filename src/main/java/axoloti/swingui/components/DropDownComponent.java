@@ -110,9 +110,6 @@ public class DropDownComponent extends JComponent implements MouseListener {
         if ((SelectedIndex != index) && (index >= 0)) {
             SelectedIndex = index;
             //ItemEvent ie = new ItemEvent(this, 0, items.get(SelectedIndex), 0);
-            for (DDCListener il : ddcListeners) {
-                il.SelectionChanged();
-            }
             repaint();
         }
     }
@@ -141,6 +138,9 @@ public class DropDownComponent extends JComponent implements MouseListener {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         setSelectedItem(e.getActionCommand());
+                        for (DDCListener il : ddcListeners) {
+                            il.SelectionChanged();
+                        }
                     }
                 });
             }

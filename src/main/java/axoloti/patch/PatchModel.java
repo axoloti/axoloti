@@ -42,6 +42,7 @@ import axoloti.preferences.Preferences;
 import axoloti.preset.Preset;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
+import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
@@ -58,8 +59,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
+import org.simpleframework.xml.Path;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Commit;
 import org.simpleframework.xml.core.Complete;
 import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
@@ -73,7 +81,7 @@ import org.simpleframework.xml.strategy.Strategy;
 @Root
 public class PatchModel extends AbstractModel {
 
-    //TODO - use execution order, rather than UI ordering
+    //TODO (enhancement) use execution order, rather than UI ordering
     static final boolean USE_EXECUTION_ORDER = false;
 
     @Attribute(required = false)
@@ -86,7 +94,8 @@ public class PatchModel extends AbstractModel {
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
     List<IAxoObjectInstance> objectinstances = new ArrayList<>();
-    @ElementList(name = "nets")
+    @Path("nets")
+    @ElementList(inline=true, required=false)
     public List<Net> nets = new ArrayList<>();
     @Element(required = false)
     PatchSettings settings;
@@ -112,6 +121,31 @@ public class PatchModel extends AbstractModel {
 
     AxoObjectInstancePatcher container = null;
 
+    @Override
+    protected PatchController createController() {
+        return new PatchController(this);
+    }
+
+    @Override
+    public AxoObjectInstancePatcher getParent() {
+        return container;
+    }
+
+    @Override
+    public PatchController getControllerFromModel() {
+        return (PatchController)super.getControllerFromModel();
+    }
+
+    @Commit
+    void commit() {
+        for(Net o: nets) {
+            o.setParent(this);
+        }
+        for(IAxoObjectInstance o: objectinstances) {
+            o.setParent(this);
+        }
+    }
+    
     static public class PatchVersionException
             extends RuntimeException {
 
@@ -224,7 +258,7 @@ public class PatchModel extends AbstractModel {
         settings = new PatchSettings();
     }
 
-    public IAxoObjectInstance GetObjectInstance(String n) {
+    public IAxoObjectInstance findObjectInstance(String n) {
         for (IAxoObjectInstance o : objectinstances) {
             if (n.equals(o.getInstanceName())) {
                 return o;
@@ -412,13 +446,13 @@ public class PatchModel extends AbstractModel {
     public HashSet<String> getIncludes() {
         HashSet<String> includes = new HashSet<String>();
         if (controllerObjectInstance != null) {
-            Set<String> i = controllerObjectInstance.getType().GetIncludes();
+            Set<String> i = controllerObjectInstance.getType().getIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
         }
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getType().GetIncludes();
+            Set<String> i = o.getType().getIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
@@ -429,7 +463,7 @@ public class PatchModel extends AbstractModel {
     public HashSet<String> getDepends() {
         HashSet<String> depends = new HashSet<String>();
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getType().GetDepends();
+            Set<String> i = o.getType().getDepends();
             if (i != null) {
                 depends.addAll(i);
             }
@@ -440,7 +474,7 @@ public class PatchModel extends AbstractModel {
     public HashSet<String> getModules() {
         HashSet<String> modules = new HashSet<>();
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getType().GetModules();
+            Set<String> i = o.getType().getModules();
             if (i != null) {
                 modules.addAll(i);
             }
@@ -705,7 +739,7 @@ public class PatchModel extends AbstractModel {
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
         for (IAxoObjectInstance o : objectinstances) {
-            ArrayList<SDFileReference> f2 = o.getFileDepends();
+            List<SDFileReference> f2 = o.getFileDepends();
             if (f2 != null) {
                 files.addAll(f2);
             }
@@ -758,8 +792,8 @@ public class PatchModel extends AbstractModel {
     public final static Property PATCH_LOCKED = new BooleanProperty("Locked", PatchModel.class);
     public final static Property PATCH_FILENAME = new StringPropertyNull("FileNamePath", PatchModel.class);
     public final static Property PATCH_DSPLOAD = new IntegerProperty("DspLoad", PatchModel.class);
-    public final static Property PATCH_OBJECTINSTANCES = new ObjectProperty("Objectinstances", List.class, PatchModel.class);
-    public final static Property PATCH_NETS = new ObjectProperty("Nets", List.class, PatchModel.class);
+    public final static ListProperty PATCH_OBJECTINSTANCES = new ListProperty("Objectinstances", PatchModel.class);
+    public final static ListProperty PATCH_NETS = new ListProperty("Nets", PatchModel.class);
     public final static Property PATCH_AUTHOR = new StringPropertyNull("Author", PatchModel.class);
     public final static Property PATCH_LICENSE = new StringPropertyNull("License", PatchModel.class);
     public final static Property PATCH_ATTRIBUTIONS = new StringPropertyNull("Attributions", PatchModel.class);
@@ -896,7 +930,7 @@ public class PatchModel extends AbstractModel {
 
     public void setSubPatchMode(SubPatchMode mode) {
         settings.subpatchmode = mode;
-        AxoObjectInstancePatcher aoip = getContainer();
+        AxoObjectInstancePatcher aoip = getParent();
         if (aoip != null) {
             AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
             ArrayList<AxoAttribute> ps = new ArrayList<>(aop.getAttributes());
@@ -995,7 +1029,7 @@ public class PatchModel extends AbstractModel {
 
     public void setMidiSelector(Boolean b) {
         settings.HasMidiChannelSelector = b;
-        AxoObjectInstancePatcher aoip = getContainer();
+        AxoObjectInstancePatcher aoip = getParent();
         if (aoip != null) {
             AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
             ArrayList<AxoAttribute> ps = new ArrayList<>(aop.getAttributes());
@@ -1021,11 +1055,7 @@ public class PatchModel extends AbstractModel {
                 null, b);
     }
 
-    public AxoObjectInstancePatcher getContainer() {
-        return container;
-    }
-
-    public void setContainer(AxoObjectInstancePatcher container) {
+    public void setParent(AxoObjectInstancePatcher container) {
         this.container = container;
         setSubPatchMode(getSubPatchMode());
         setMidiSelector(getMidiSelector());

@@ -1,6 +1,8 @@
 package axoloti.textdoc;
 
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import java.util.ArrayList;
@@ -34,6 +36,16 @@ public class TextModel extends AbstractModel {
     public void setText(String text) {
         this.text = text;
         firePropertyChange(TEXT, null, text);
+    }
+
+    @Override
+    protected AbstractController createController() {
+        return new TextController(this);
+    }
+
+    @Override
+    public IModel getParent() {
+        return null; /* fixme */
     }
 
 }

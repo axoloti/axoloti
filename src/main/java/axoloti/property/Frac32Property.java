@@ -1,6 +1,7 @@
 package axoloti.property;
 
 import axoloti.datatypes.ValueFrac32;
+import axoloti.mvc.IModel;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Frac32Property extends PropertyReadWrite<ValueFrac32> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         ValueFrac32 v = get(o);
         if (v == null) {
             return "";

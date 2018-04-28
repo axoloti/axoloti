@@ -24,7 +24,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
     @Override
     void PostConstructor() {
         super.PostConstructor();
-        Integer ival = getModel().getValue();
+        Integer ival = getModel().getValueInteger();
         int value = ival;
 
         if (value < getModel().getModel().getMinValue()) {
@@ -39,9 +39,9 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                    getController().addMetaUndo("edit attribute " + getModel().getName());
+                    getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
                 } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
-                    getController().setModelUndoableProperty(AttributeInstanceSpinner.ATTR_VALUE, (Integer) (int) spinner.getValue());
+                    getController().changeValue((Integer) (int) spinner.getValue());
                 }
             }
         });
@@ -66,13 +66,19 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         super.modelPropertyChange(evt);
         if (AttributeInstanceSpinner.ATTR_VALUE.is(evt)) {
             Integer newValue = (Integer) evt.getNewValue();
-            spinner.setValue(newValue);
+            if (newValue != null) {
+                spinner.setValue(newValue);
+            }
         } else if (AttributeInstanceSpinner.MAXVALUE.is(evt)) {
             Integer newValue = (Integer) evt.getNewValue();
-            spinner.setMax(newValue);
+            if (newValue != null) {
+                spinner.setMax(newValue);
+            }
         } else if (AttributeInstanceSpinner.MINVALUE.is(evt)) {
             Integer newValue = (Integer) evt.getNewValue();
-            spinner.setMin(newValue);
+            if (newValue != null) {
+                spinner.setMin(newValue);
+            }
         }
     }
 

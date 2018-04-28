@@ -19,6 +19,7 @@ package axoloti.patch.object.parameter;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
+import axoloti.datatypes.ValueFrac32;
 import axoloti.object.parameter.ParameterFrac32;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.preset.PresetDouble;
@@ -64,7 +65,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
 
     public ParameterInstanceFrac32(Tx param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
-        //value = new ValueFrac32();
     }
 
     @Override
@@ -119,7 +119,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             if (modulators == null) {
                 modulators = new ArrayList<Modulation>();
             }
-            Modulator modulator = axoObjectInstance.getPatchModel().getPatchModulators().get(index);
+            Modulator modulator = getParent().getParent().getPatchModulators().get(index);
             //System.out.println("updatemodulation2:" + modulator.name);
             Modulation n = null;
             for (Modulation m : modulators) {
@@ -143,10 +143,10 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             n.modName = modulator.name;
             n.setValue(amount);
             n.destination = this;
-            axoObjectInstance.getPatchModel().updateModulation(n);
+            getParent().getParent().updateModulation(n);
         } else {
             // remove modulation target if exists
-            Modulator modulator = axoObjectInstance.getPatchModel().getPatchModulators().get(index);
+            Modulator modulator = getParent().getParent().getPatchModulators().get(index);
             if (modulator == null) {
                 return;
             }
@@ -161,7 +161,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
                 if (n.destination == this) {
                     modulators.remove(n);
                 }
-                axoObjectInstance.getPatchModel().updateModulation(n);
+                getParent().getParent().updateModulation(n);
             }
             if (modulators.isEmpty()) {
                 modulators = null;
@@ -186,6 +186,13 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             modulators = p1.getModulators();
             setValue(p1.getValue());
         }
+    }
+
+    @Override
+    public Tx createParameterForParent() {
+        Tx p = super.createParameterForParent();
+        p.DefaultValue = new ValueFrac32(value);
+        return p;
     }
 
     @Override

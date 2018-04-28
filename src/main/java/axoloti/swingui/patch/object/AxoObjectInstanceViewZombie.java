@@ -43,20 +43,20 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
                                 0, popupIcon.getHeight());
                     }
                 });
-        Titlebar.add(popupIcon);
-        Titlebar.add(idlbl);
+        titlebar.add(popupIcon);
+        titlebar.add(idlbl);
 
-        Titlebar.setToolTipText("<html>" + "Unresolved object!");
+        titlebar.setToolTipText("<html>" + "Unresolved object!");
 
-        Titlebar.setAlignmentX(LEFT_ALIGNMENT);
-        add(Titlebar);
+        titlebar.setAlignmentX(LEFT_ALIGNMENT);
+        add(titlebar);
 
         setOpaque(true);
         setBackground(Theme.getCurrentTheme().Object_Zombie_Background);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        InstanceLabel = new LabelComponent(getController().getModel().getInstanceName());
-        InstanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        InstanceLabel.addMouseListener(new MouseListener() {
+        instanceLabel = new LabelComponent(getController().getModel().getInstanceName());
+        instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
+        instanceLabel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -80,7 +80,7 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
-        add(InstanceLabel);
+        add(instanceLabel);
         setLocation(getController().getModel().getX(), getController().getModel().getY());
 
         resizeToGrid();

@@ -1,6 +1,7 @@
 package axoloti.mvc.array;
 
 import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,15 @@ import java.util.List;
  */
 public abstract class ArrayView<T extends IView> {
 
-    public List<T> Sync(List<T> existingViews, ArrayController controller) {
+    public List<T> Sync(List<T> existingViews, List models) {
+        List<IModel> models1 = (List<IModel>)models;
         ArrayList<T> subviews2;
         if (existingViews == null) {
             subviews2 = new ArrayList<T>();
         } else {
             subviews2 = new ArrayList<T>(existingViews);
             for (T view : existingViews) {
-                if (!controller.subcontrollers.contains(view.getController())) {
+                if (!models.contains(view.getController().getModel())) {
                     subviews2.remove(view);
                     view.dispose();
                     removeView(view);
@@ -26,37 +28,37 @@ public abstract class ArrayView<T extends IView> {
             }
         }
         ArrayList<T> subviews = new ArrayList<T>();
-        for (Object ctrl : controller.subcontrollers) {
+        for (IModel model : models1) {
             // do we have a view already?
             T view = null;
             for (T view2 : subviews2) {
-                if (ctrl == view2.getController()) {
+                if (model.getControllerFromModel() == view2.getController()) {
                     view = view2;
                     break;
                 }
             }
             if (view == null) {
-                view = viewFactory((AbstractController) ctrl);
+                view = viewFactory((AbstractController) model.getControllerFromModel());
                 // the factory method is assumed to add the view to controller
             }
             subviews.add(view);
         }
-        T views[] = (T[]) subviews.toArray(new IView[]{});
-        updateUI(subviews);
-        if (subviews.size() != controller.subcontrollers.size()) {
+        if (!subviews.equals(existingViews)) {
+            updateUI(subviews);
+        }
+        if (subviews.size() != models.size()) {
             throw new Error("sync error");
         }
         return subviews;
     }
 
-    public abstract void updateUI(List<T> views);
-
+    protected abstract void updateUI(List<T> views);
 
     /* Override this method to create a suitable view of the model referenced
      * by the controller. The implementation should also call the addView method
      * of the controller. */
-    public abstract T viewFactory(AbstractController ctrl);
+    protected abstract T viewFactory(AbstractController ctrl);
 
-    public abstract void removeView(T view);
+    protected abstract void removeView(T view);
 
 }

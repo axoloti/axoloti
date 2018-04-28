@@ -31,7 +31,6 @@ public class AxoObjectInstanceFactory {
         AxoObjectInstanceAbstract obji;
         if (objm instanceof AxoObjectUnloaded) {
             objm = ((AxoObjectUnloaded) objm).Load();
-            objc = objm.createController(null, null);
         }
         if (objm instanceof AxoObjectComment) {
             obji = new AxoObjectInstanceComment(objc, patchModel, instanceName, location);
@@ -40,8 +39,10 @@ public class AxoObjectInstanceFactory {
         } else if (objm instanceof AxoObjectPatcher) {
             // every AxoObjectPatcherInstance needs an independent AxoObjectPatcher object
             AxoObjectPatcher obj = new AxoObjectPatcher();
-            objc = new ObjectController(obj, null);
-            obji = new AxoObjectInstancePatcher(objc, patchModel, instanceName, location);
+            if (patchController != null) {
+                obj.setDocumentRoot(patchController.getDocumentRoot());
+            }
+            obji = new AxoObjectInstancePatcher(obj.getControllerFromModel(), patchModel, instanceName, location);
         } else if (objm instanceof AxoObjectPatcherObject) {
             AxoObjectPatcherObject objm1 = new AxoObjectPatcherObject();
             AbstractDocumentRoot dr;
@@ -50,7 +51,8 @@ public class AxoObjectInstanceFactory {
             } else {
                 dr = null;
             }
-            objc = objm1.createController(dr, patchController);
+            objm1.setDocumentRoot(dr);
+            objc = objm1.getControllerFromModel();
             obji = new AxoObjectInstancePatcherObject(objc, patchModel, instanceName, location);
         } else if (objm instanceof AxoObjectZombie) {
             obji = new AxoObjectInstanceZombie(objc, patchModel, instanceName, location);

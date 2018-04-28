@@ -8,11 +8,13 @@ import axoloti.codegen.patch.object.IAxoObjectInstanceCodegenView;
 import axoloti.mvc.View;
 import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.Inlet;
 import axoloti.object.inlet.InletBool32;
 import axoloti.object.inlet.InletCharPtr32;
 import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.Outlet;
 import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletCharPtr32;
 import axoloti.object.outlet.OutletFrac32;
@@ -52,7 +54,8 @@ public class PatchViewCodegen extends View<PatchController> {
     public PatchViewCodegen(PatchController controller) {
         super(controller);
         objectInstanceViews = new ArrayList<>();
-        for(ObjectInstanceController c: controller.objectInstanceControllers) {
+        for(IAxoObjectInstance ox: getController().getModel().getObjectInstances()) {
+            ObjectInstanceController c = (ObjectInstanceController)ox.getControllerFromModel();
             IAxoObjectInstanceCodegenView o = AxoObjectInstanceCodegenViewFactory.createView(c);
             objectInstanceViews.add(o);
         }
@@ -190,10 +193,11 @@ public class PatchViewCodegen extends View<PatchController> {
             }
         }
         c += "/* net latches */\n";
-        for (NetController n : getController().netControllers) {
+        for (Net n : getController().getModel().getNets()) {
+            NetController nc = (NetController)n.getControllerFromModel();
             // check if net has multiple sources
-            if ((n.getModel().CType() != null) && n.NeedsLatch()) {
-                c += "    " + n.getModel().CType() + " " + n.CName() + "Latch" + ";\n";
+            if ((n.CType() != null) && nc.NeedsLatch()) {
+                c += "    " + n.CType() + " " + nc.CName() + "Latch" + ";\n";
             }
         }
         return c;
@@ -447,9 +451,9 @@ public class PatchViewCodegen extends View<PatchController> {
     public String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
         String c = "";
         c += "//--------- <nets> -----------//\n";
-        for (NetController n : getController().netControllers) {
-            if (n.getModel().CType() != null) {
-                c += "    " + n.getModel().CType() + " " + n.CName() + ";\n";
+        for (Net n : getController().getModel().getNets()) {
+            if (n.CType() != null) {
+                c += "    " + n.CType() + " " + ((NetController)n.getControllerFromModel()).CName() + ";\n";
             } else {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Net has no data type!");
             }
@@ -473,7 +477,8 @@ public class PatchViewCodegen extends View<PatchController> {
         c += "//--------- </object calls> ----------//\n";
 
         c += "//--------- <net latch copy> ----------//\n";
-        for (NetController nc : getController().netControllers) {
+        for (Net n : getController().getModel().getNets()) {
+            NetController nc = (NetController)n.getControllerFromModel();
             // check if net has multiple sources
             if (nc.NeedsLatch()) {
                 if (nc.getModel().getDataType() != null) {
@@ -506,7 +511,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 OutletInstance firstSource = java.util.Collections.min(Arrays.asList(n.getSources()));
                 if (i.getDataType().equals(n.getDataType())) {
                     if (nc.NeedsLatch()
-                            && (getModel().objectinstances.indexOf(firstSource.getObjectInstance()) >= getModel().objectinstances.indexOf(o))) {
+                            && (getModel().objectinstances.indexOf(firstSource.getParent()) >= getModel().objectinstances.indexOf(o))) {
                         c += nc.CName() + "Latch";
                     } else {
                         c += nc.CName();
@@ -521,7 +526,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 c += i.getDataType().GenerateSetDefaultValueCode();
             } else if (!nc.getModel().isValidNet()) {
                 c += i.getDataType().GenerateSetDefaultValueCode();
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getObjectInstance().getInstanceName() + ":" + i.getName());
+                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getParent().getInstanceName() + ":" + i.getName());
             }
             needsComma = true;
         }
@@ -837,25 +842,45 @@ public class PatchViewCodegen extends View<PatchController> {
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
             if (typeName.equals("patch/inlet f")) {
-                ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
+                Inlet i = new InletFrac32(o.getInstanceName(), o.getInstanceName());
+                i.setParent(ao);
+                ao.inlets.add(i);
             } else if (typeName.equals("patch/inlet i")) {
-                ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
+                Inlet i = new InletInt32(o.getInstanceName(), o.getInstanceName());
+                i.setParent(ao);
+                ao.inlets.add(i);
             } else if (typeName.equals("patch/inlet b")) {
-                ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
+                Inlet i = new InletBool32(o.getInstanceName(), o.getInstanceName());
+                i.setParent(ao);
+                ao.inlets.add(i);
             } else if (typeName.equals("patch/inlet a")) {
-                ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+                Inlet i = new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName());
+                i.setParent(ao);
+                ao.inlets.add(i);
             } else if (typeName.equals("patch/inlet string")) {
-                ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
+                Inlet i = new InletCharPtr32(o.getInstanceName(), o.getInstanceName());
+                i.setParent(ao);
+                ao.inlets.add(i);
             } else if (typeName.equals("patch/outlet f")) {
-                ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
+                Outlet outlet = new OutletFrac32(o.getInstanceName(), o.getInstanceName());
+                outlet.setParent(ao);
+                ao.outlets.add(outlet);
             } else if (typeName.equals("patch/outlet i")) {
-                ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
+                Outlet outlet = new OutletInt32(o.getInstanceName(), o.getInstanceName());
+                outlet.setParent(ao);
+                ao.outlets.add(outlet);
             } else if (typeName.equals("patch/outlet b")) {
-                ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
+                Outlet outlet = new OutletBool32(o.getInstanceName(), o.getInstanceName());
+                outlet.setParent(ao);
+                ao.outlets.add(outlet);
             } else if (typeName.equals("patch/outlet a")) {
-                ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+                Outlet outlet = new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName());
+                outlet.setParent(ao);
+                ao.outlets.add(outlet);
             } else if (typeName.equals("patch/outlet string")) {
-                ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
+                Outlet outlet = new OutletCharPtr32(o.getInstanceName(), o.getInstanceName());
+                outlet.setParent(ao);
+                ao.outlets.add(outlet);
             }
             for (ParameterInstance p : o.getParameterInstances()) {
                 Boolean op = p.getOnParent();

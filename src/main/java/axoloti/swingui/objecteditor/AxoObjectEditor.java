@@ -20,17 +20,16 @@ package axoloti.swingui.objecteditor;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.mvc.IView;
-import axoloti.mvc.UndoUI;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
 import axoloti.preferences.Preferences;
 import axoloti.property.Property;
+import axoloti.swingui.mvc.UndoUI;
 import axoloti.utils.AxolotiLibrary;
 import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
-import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
@@ -56,18 +55,16 @@ import org.simpleframework.xml.core.Persister;
  */
 public final class AxoObjectEditor extends JFrame implements DocumentWindow, IView {
 
-    final ObjectController controller;
-    private String origXML;
+    private final ObjectController controller;
     private final RSyntaxTextArea jTextAreaLocalData;
     private final RSyntaxTextArea jTextAreaInitCode;
     private final RSyntaxTextArea jTextAreaKRateCode;
     private final RSyntaxTextArea jTextAreaSRateCode;
     private final RSyntaxTextArea jTextAreaDisposeCode;
     private final RSyntaxTextArea jTextAreaMidiCode;
+    private String origXML; // used?
 
     private boolean readonly = false;
-
-    UndoUI undoUi;
 
     static RSyntaxTextArea initCodeEditor(JPanel p) {
         RSyntaxTextArea rsta = new RSyntaxTextArea(20, 60);
@@ -113,11 +110,31 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             jTextAreaMidiCode.setText((String) evt.getNewValue());
         } else if (AxoObject.OBJ_ID.is(evt)) {
             setTitle((String) evt.getNewValue());
+        } else if (false) { // FIXME: add property to model
+            ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
+            if (getModel().includes != null) {
+                for (String i : getModel().includes) {
+                    ((DefaultListModel) jListIncludes.getModel()).addElement(i);
+                }
+            }
+        } else if (false) { // FIXME: add property to model
+            ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
+            if (getModel().depends != null) {
+                for (String i : getModel().depends) {
+                    ((DefaultListModel) jListDepends.getModel()).addElement(i);
+                }
+            }
+        } else if (false) { // FIXME: add property to model
+            if (getModel().modules != null) {
+                for (String i : getModel().modules) {
+                    ((DefaultListModel) jListModules.getModel()).addElement(i);
+                }
+            }
         }
         updateReferenceXML();
     }
 
-    String CleanString(String s) {
+    private String cleanString(String s) {
         if (s == null) {
             return "";
         }
@@ -128,6 +145,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         return s;
     }
 
+    // TODO: reduce to private, review usage
     public void updateReferenceXML() {
         Serializer serializer = new Persister();
         ByteArrayOutputStream origOS = new ByteArrayOutputStream(2048);
@@ -147,7 +165,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             Serializer serializer = new Persister();
             AxoObject objrev = serializer.read(AxoObject.class, origXML);
             editObj.copy(objrev);
-            Close();
+            close();
 
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
@@ -155,14 +173,20 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         */
     }
 
-    void SetUndoablePropString(Property prop, String s) {
+    private void setUndoablePropString(Property prop, String s) {
         String orig = (String) getController().getModelProperty(prop);
         if (s.equals(orig)) {
             return;
         }
         getController().addMetaUndo("edit " + prop.getFriendlyName());
-        getController().setModelUndoableProperty(prop, s);
+        getController().generic_setModelUndoableProperty(prop, s);
     }
+
+    private final InletDefinitionsEditorPanel inlets;
+    private final OutletDefinitionsEditorPanel outlets;
+    private final AttributeDefinitionsEditorPanel attrs;
+    private final ParamDefinitionsEditorPanel params;
+    private final DisplayDefinitionsEditorPanel disps;
 
     public AxoObjectEditor(ObjectController ctrl) {
         initComponents();
@@ -181,7 +205,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         jTextAreaMidiCode = initCodeEditor(jPanelMidiCode2);
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
-        undoUi = new UndoUI(ctrl.getUndoManager());
+        UndoUI undoUi = new UndoUI(ctrl.getUndoManager());
         if (ctrl.getDocumentRoot() != null) {
             ctrl.getDocumentRoot().addUndoListener(undoUi);
         }
@@ -189,11 +213,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         jMenuEdit.add(undoUi.createMenuItemRedo());
 
         initEditFromOrig();
-        InletDefinitionsEditorPanel inlets = new InletDefinitionsEditorPanel(ctrl);
-        OutletDefinitionsEditorPanel outlets = new OutletDefinitionsEditorPanel(ctrl);
-        AttributeDefinitionsEditorPanel attrs = new AttributeDefinitionsEditorPanel(ctrl);
-        ParamDefinitionsEditorPanel params = new ParamDefinitionsEditorPanel(ctrl);
-        DisplayDefinitionsEditorPanel disps = new DisplayDefinitionsEditorPanel(ctrl);
+        inlets = new InletDefinitionsEditorPanel(ctrl, this);
+        outlets = new OutletDefinitionsEditorPanel(ctrl, this);
+        attrs = new AttributeDefinitionsEditorPanel(ctrl, this);
+        params = new ParamDefinitionsEditorPanel(ctrl, this);
+        disps = new DisplayDefinitionsEditorPanel(ctrl, this);
 
         ctrl.addView(inlets);
         ctrl.addView(outlets);
@@ -214,7 +238,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_AUTHOR, jTextFieldAuthor.getText());
+                setUndoablePropString(AxoObject.OBJ_AUTHOR, jTextFieldAuthor.getText());
             }
         });
 
@@ -225,7 +249,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_LICENSE, jTextFieldLicense.getText());
+                setUndoablePropString(AxoObject.OBJ_LICENSE, jTextFieldLicense.getText());
             }
         });
 
@@ -236,7 +260,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_HELPPATCH, jTextFieldHelp.getText().trim());
+                setUndoablePropString(AxoObject.OBJ_HELPPATCH, jTextFieldHelp.getText().trim());
             }
         });
 
@@ -247,7 +271,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_DESCRIPTION, jTextDesc.getText());
+                setUndoablePropString(AxoObject.OBJ_DESCRIPTION, jTextDesc.getText());
             }
         });
 
@@ -259,7 +283,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_LOCAL_DATA, CleanString(jTextAreaLocalData.getText()));
+                setUndoablePropString(AxoObject.OBJ_LOCAL_DATA, cleanString(jTextAreaLocalData.getText()));
             }
         });
         jTextAreaInitCode.addFocusListener(new FocusListener() {
@@ -269,7 +293,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_INIT_CODE, CleanString(jTextAreaInitCode.getText()));
+                setUndoablePropString(AxoObject.OBJ_INIT_CODE, cleanString(jTextAreaInitCode.getText()));
             }
         });
         jTextAreaKRateCode.addFocusListener(new FocusListener() {
@@ -279,7 +303,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_KRATE_CODE, CleanString(jTextAreaKRateCode.getText()));
+                setUndoablePropString(AxoObject.OBJ_KRATE_CODE, cleanString(jTextAreaKRateCode.getText()));
             }
         });
         jTextAreaSRateCode.addFocusListener(new FocusListener() {
@@ -289,7 +313,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_SRATE_CODE, CleanString(jTextAreaSRateCode.getText()));
+                setUndoablePropString(AxoObject.OBJ_SRATE_CODE, cleanString(jTextAreaSRateCode.getText()));
             }
         });
         jTextAreaDisposeCode.addFocusListener(new FocusListener() {
@@ -299,7 +323,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_DISPOSE_CODE, CleanString(jTextAreaDisposeCode.getText()));
+                setUndoablePropString(AxoObject.OBJ_DISPOSE_CODE, cleanString(jTextAreaDisposeCode.getText()));
             }
         });
         jTextAreaMidiCode.addFocusListener(new FocusListener() {
@@ -309,7 +333,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
             @Override
             public void focusLost(FocusEvent e) {
-                SetUndoablePropString(AxoObject.OBJ_MIDI_CODE, CleanString(jTextAreaMidiCode.getText()));
+                setUndoablePropString(AxoObject.OBJ_MIDI_CODE, cleanString(jTextAreaMidiCode.getText()));
             }
         });
         rSyntaxTextAreaXML.setEditable(false);
@@ -324,7 +348,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
                 }
             }
         }
-        if (IsEmbeddedObj()) {
+        if (isEmbeddedObj()) {
             jMenuItemSave.setEnabled(false);
             jLabelLibrary.setText("embedded");
             setTitle("embedded");
@@ -335,7 +359,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         if (sellib != null) {
             jMenuItemSave.setEnabled(!sellib.isReadOnly());
             if (sellib.isReadOnly()) {
-                SetReadOnly(true);
+                setReadOnly(true);
                 jLabelLibrary.setText(sellib.getId() + " (readonly)");
                 setTitle(sellib.getId() + ":" + ctrl.getModel().getId() + " (readonly)");
             } else {
@@ -348,11 +372,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         controller.addView(this);
     }
 
-    boolean IsEmbeddedObj() {
+    boolean isEmbeddedObj() {
         return controller.getModel().getPath().isEmpty();
     }
 
-    void SetReadOnly(boolean readonly) {
+    void setReadOnly(boolean readonly) {
         this.readonly = readonly;
         jTextDesc.setEditable(!readonly);
         jTextFieldAuthor.setEditable(!readonly);
@@ -364,37 +388,15 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         jTextAreaSRateCode.setEditable(!readonly);
         jTextAreaDisposeCode.setEditable(!readonly);
         jTextAreaMidiCode.setEditable(!readonly);
-// FIXME: readonly
-//        inletDefinitionsEditor1.setEditable(!readonly);
-//        outletDefinitionsEditorPanel1.setEditable(!readonly);
-//        paramDefinitionsEditorPanel1.setEditable(!readonly);
-//        attributeDefinitionsEditorPanel1.setEditable(!readonly);
-//        displayDefinitionsEditorPanel1.setEditable(!readonly);
+        inlets.setEditable(!readonly);
+        outlets.setEditable(!readonly);
+        params.setEditable(!readonly);
+        attrs.setEditable(!readonly);
+        disps.setEditable(!readonly);
     }
 
     void initFields() {
         jLabelName.setText(getModel().getCName());
-
-        ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
-        if (getModel().includes != null) {
-            for (String i : getModel().includes) {
-                ((DefaultListModel) jListIncludes.getModel()).addElement(i);
-            }
-        }
-
-        ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
-        if (getModel().depends != null) {
-            for (String i : getModel().depends) {
-                ((DefaultListModel) jListDepends.getModel()).addElement(i);
-            }
-        }
-
-        if (getModel().modules != null) {
-            for (String i : getModel().modules) {
-                ((DefaultListModel) jListModules.getModel()).addElement(i);
-            }
-        }
-
     }
 
     boolean hasChanged() {
@@ -416,8 +418,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     @Override
     public boolean askClose() {
         // if it's an embedded object ("patch/object"), assume the parent patch is saving
-        if (IsEmbeddedObj()) {
-            Close();
+        if (isEmbeddedObj()) {
+            close();
             return false;
         }
         // warn if changes, and its not an embedded object
@@ -435,11 +437,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
                 switch (n) {
                     case 0: // yes
                         jMenuItemSaveActionPerformed(null);
-                        Close();
+                        close();
                         return false;
                     case 1: // revert
                         Revert();
-                        Close();
+                        close();
                         return false;
                     case 2: // cancel
                     default: // closed
@@ -451,23 +453,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             }
         } else {
             // no changes
-            Close();
+            close();
             return false;
         }
     }
 
-    public void Close() {
+    public void close() {
         DocumentWindowList.UnregisterWindow(this);
         dispose();
         getModel().CloseEditor();
     }
 
-    private int getActiveTabIndex() {
-        return this.jTabbedPane1.getSelectedIndex();
-    }
-
-    private void setActiveTabIndex(int n) {
-        this.jTabbedPane1.setSelectedIndex(n);
+    void switchToTab(JPanel panel) {
+        jTabbedPane1.setSelectedComponent(panel);
     }
 
     boolean isCompositeObject() {
@@ -886,7 +884,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     private void jMenuItemCopyToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyToLibraryActionPerformed
         AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, getModel());
         dlg.setVisible(true);
-        Close();
+        close();
     }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -967,22 +965,4 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         super.toFront();
     }
 
-    public class UIState {
-        Rectangle bounds;
-        Integer activeTabIndex;
-    }
-
-    public UIState getUIState() {
-        UIState state = new UIState();
-        state.bounds = getBounds();
-        state.activeTabIndex = getActiveTabIndex();
-        return state;
-    }
-
-    public void restoreTo(UIState state) {
-        if(state != null) {
-            setBounds(state.bounds);
-            setActiveTabIndex(state.activeTabIndex);
-        }
-    }
 }

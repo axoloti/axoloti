@@ -18,16 +18,14 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.display.Display;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
-import axoloti.property.ObjectProperty;
-import axoloti.property.Property;
+import axoloti.property.ListProperty;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -132,18 +130,18 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         return uuid;
     }
 
-    public HashSet<String> GetIncludes() {
+    public HashSet<String> getIncludes() {
         return null;
     }
 
-    public void SetIncludes(HashSet<String> includes) {
+    public void setIncludes(HashSet<String> includes) {
     }
 
-    public Set<String> GetDepends() {
+    public Set<String> getDepends() {
         return null;
     }
 
-    public Set<String> GetModules() {
+    public Set<String> getModules() {
         return null;
     }
 
@@ -170,11 +168,11 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
 
 /* MVC clean methods below... */
-    public static final Property OBJ_INLETS = new ObjectProperty("Inlets", List.class, AxoObjectAbstract.class);
-    public static final Property OBJ_OUTLETS = new ObjectProperty("Outlets", List.class, AxoObjectAbstract.class);
-    public static final Property OBJ_ATTRIBUTES = new ObjectProperty("Attributes", List.class, AxoObjectAbstract.class);
-    public static final Property OBJ_PARAMETERS = new ObjectProperty("Parameters", List.class, AxoObjectAbstract.class);
-    public static final Property OBJ_DISPLAYS = new ObjectProperty("Displays", List.class, AxoObjectAbstract.class);
+    public static final ListProperty OBJ_INLETS = new ListProperty("Inlets", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_OUTLETS = new ListProperty("Outlets", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_ATTRIBUTES = new ListProperty("Attributes", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_PARAMETERS = new ListProperty("Parameters", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_DISPLAYS = new ListProperty("Displays", AxoObjectAbstract.class);
 
     public abstract List<Inlet> getInlets();
 
@@ -191,6 +189,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     public void setOutlets(List<Outlet> outlets) {
     }
+
     public void setAttributes(List<AxoAttribute> attributes) {
     }
 
@@ -270,21 +269,25 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
                 oldvalue, sAuthor);
     }
 
-    // Let's violate the MVC pattern for now and use a singleton controller for this model
-    // how undo/redo must be handled when open documents contain instances is yet unclear...
-    private ObjectController controller;
-
     @Override
-    public ObjectController createController(AbstractDocumentRoot documentRoot, AbstractController parent) {
-        if (controller == null) {
-            controller = new ObjectController(this, documentRoot);
-        }
+    public ObjectController createController() {
+        ObjectController controller = new ObjectController(this);
         return controller;
+    }
+    
+    @Override
+    public ObjectController getControllerFromModel() {
+        return (ObjectController)super.getControllerFromModel();
     }
 
     @Override
     public boolean isCreatedFromRelativePath() {
         return createdFromRelativePath;
+    }
+
+    @Override
+    public IModel getParent() {
+        return null;
     }
 
 }

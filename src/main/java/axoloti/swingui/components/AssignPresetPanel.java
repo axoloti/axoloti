@@ -42,7 +42,7 @@ public class AssignPresetPanel extends JPanel {
 
     public AssignPresetPanel(ParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
-        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getNPresets();
+        int n = parameterInstanceView.getModel().getObjectInstance().getParent().getNPresets();
         ctrls = new ArrayList<ACtrlComponent>(n);
 
         setLayout(new GridBagLayout());
@@ -97,7 +97,7 @@ public class AssignPresetPanel extends JPanel {
                 parameterInstanceView.getController().addMetaUndo("remove preset from parameter " + parameterInstanceView.getModel().getName());
                 parameterInstanceView.getController().RemovePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
+            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
             patchModel.presetUpdatePending = true;
         }
 
@@ -118,7 +118,7 @@ public class AssignPresetPanel extends JPanel {
                 int i = ctrls.indexOf(evt.getSource());
                 if (i >= 0) {
                     if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
-                        PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
+                        PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
                     }
                 }
             } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
@@ -133,7 +133,7 @@ public class AssignPresetPanel extends JPanel {
                         }
                     }
                 }
-                parameterInstanceView.getModel().getObjectInstance().getPatchModel().presetUpdatePending = true;
+                parameterInstanceView.getModel().getObjectInstance().getParent().presetUpdatePending = true;
             }
         }
     };

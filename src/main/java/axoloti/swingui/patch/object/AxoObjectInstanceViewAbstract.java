@@ -6,6 +6,7 @@ import axoloti.abstractui.INetView;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
@@ -16,8 +17,10 @@ import axoloti.swingui.components.TextFieldComponent;
 import axoloti.swingui.mvc.ViewPanel;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.utils.Constants;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -28,26 +31,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceController> implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
 
-    protected MouseListener ml;
-    protected MouseMotionListener mml;
-    protected boolean dragging = false;
+    protected final JPanel titlebar = new JPanel();
+    protected LabelComponent instanceLabel;
+    protected TextFieldComponent InstanceNameTF;
     private Point dragLocation = null;
     private Point dragAnchor = null;
-    final JPanel Titlebar = new JPanel();
-    TextFieldComponent InstanceNameTF;
-    LabelComponent InstanceLabel;
-    private boolean Locked = false;
+    private boolean locked = false;
 
     AxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller);
@@ -62,20 +65,18 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     @Override
     public void Lock() {
-        Locked = true;
+        locked = true;
     }
 
     @Override
     public void Unlock() {
-        Locked = false;
+        locked = false;
     }
 
     @Override
     public boolean isLocked() {
-        return Locked;
+        return locked;
     }
-
-    JPopupMenu popup;
 
     private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
     private static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
@@ -88,20 +89,20 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         //        Short.MAX_VALUE));
 
         setFocusable(true);
-        Titlebar.removeAll();
-        Titlebar.setLayout(new BoxLayout(Titlebar, BoxLayout.LINE_AXIS));
-        Titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
-        Titlebar.setMinimumSize(TITLEBAR_MINIMUM_SIZE);
-        Titlebar.setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
+        titlebar.removeAll();
+        titlebar.setLayout(new BoxLayout(titlebar, BoxLayout.LINE_AXIS));
+        titlebar.setBackground(Theme.getCurrentTheme().Object_TitleBar_Background);
+        titlebar.setMinimumSize(TITLEBAR_MINIMUM_SIZE);
+        titlebar.setMaximumSize(TITLEBAR_MAXIMUM_SIZE);
 
         setBorder(BORDER_UNSELECTED);
 
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
-        Titlebar.addMouseListener(this);
+        titlebar.addMouseListener(this);
         addMouseListener(this);
 
-        Titlebar.addMouseMotionListener(this);
+        titlebar.addMouseMotionListener(this);
         addMouseMotionListener(this);
     }
 
@@ -110,17 +111,25 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         return popup;
     }
 
+    Point localToPatchLocation(Point p, Component sourceComponent) {
+        PatchViewSwing pv = getPatchView();
+        if (pv == null) {
+            return p;
+        }
+        return SwingUtilities.convertPoint(sourceComponent, p, pv.getViewportView().getComponent());
+    }
+
     @Override
     public void mouseClicked(MouseEvent me) {
         if (getPatchView() != null) {
             getPatchView().requestFocus();
             if (me.getClickCount() == 1) {
                 if (me.isShiftDown()) {
-                    getModel().setSelected(!getModel().getSelected());
+                    getController().changeSelected(!getModel().getSelected());
                     me.consume();
                 } else if (!getModel().getSelected()) {
-                    getController().getParent().SelectNone();
-                    getModel().setSelected(true);
+                    getController().getModel().getParent().getControllerFromModel().SelectNone();
+                    getController().changeSelected(true);
                     me.consume();
                 }
             }
@@ -151,10 +160,13 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        if ((getPatchModel() != null) && (draggingObjects != null)) {
-            Point locOnScreen = me.getLocationOnScreen();
-            int dx = locOnScreen.x - dragAnchor.x;
-            int dy = locOnScreen.y - dragAnchor.y;
+        if (getPatchModel() == null) {
+            return;
+        }
+        Point locInPatch = localToPatchLocation(me.getPoint(), me.getComponent());
+        if (draggingObjects != null) {
+            int dx = locInPatch.x - dragAnchor.x;
+            int dy = locInPatch.y - dragAnchor.y;
             for (AxoObjectInstanceViewAbstract o : draggingObjects) {
                 int nx = o.dragLocation.x + dx;
                 int ny = o.dragLocation.y + dy;
@@ -165,6 +177,12 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                 o.getController().changeLocation(nx, ny);
             }
         }
+        PatchViewSwing pv = getPatchView();
+        if (pv != null) {
+            Rectangle r = new Rectangle(locInPatch, new Dimension(1, 1));
+            pv.scrollTo(r);
+        }
+
     }
 
     @Override
@@ -178,18 +196,18 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         }
     }
 
-    ArrayList<AxoObjectInstanceViewAbstract> draggingObjects = null;
+    private LinkedList<AxoObjectInstanceViewAbstract> draggingObjects = null;
 
     protected void handleMousePressed(MouseEvent me) {
         getPatchView().requestFocus();
         if (getPatchView() != null) {
             if (me.isPopupTrigger()) {
                 JPopupMenu p = CreatePopupMenu();
-                p.show(Titlebar, 0, Titlebar.getHeight());
+                p.show(titlebar, 0, titlebar.getHeight());
                 me.consume();
             } else if (!patchView.isLocked()) {
-                draggingObjects = new ArrayList<AxoObjectInstanceViewAbstract>();
-                dragAnchor = me.getLocationOnScreen();
+                draggingObjects = new LinkedList<>();
+                dragAnchor = localToPatchLocation(me.getPoint(), me.getComponent());
                 moveToDraggedLayer(this);
                 draggingObjects.add(this);
                 dragLocation = getLocation();
@@ -220,7 +238,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     protected void handleMouseReleased(MouseEvent me) {
         if (me.isPopupTrigger()) {
             JPopupMenu p = CreatePopupMenu();
-            p.show(Titlebar, 0, Titlebar.getHeight());
+            p.show(titlebar, 0, titlebar.getHeight());
             me.consume();
             return;
         }
@@ -235,8 +253,8 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                     o.repaint();
                 }
                 draggingObjects = null;
-                getPatchView().AdjustSize();
-                getController().getParent().fixNegativeObjectCoordinates();
+                getPatchView().updateSize();
+                getController().getModel().getParent().getControllerFromModel().fixNegativeObjectCoordinates();
             }
             me.consume();
         }
@@ -272,7 +290,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     void handleInstanceNameEditorAction() {
         String s = InstanceNameTF.getText();
         getController().addMetaUndo("edit object name");
-        getController().setModelUndoableProperty(AxoObjectInstance.OBJ_INSTANCENAME, s);
+        getController().changeInstanceName(s);
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }
@@ -317,15 +335,14 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         });
 
         getParent().add(InstanceNameTF, 0);
-        InstanceNameTF.setLocation(getLocation().x, getLocation().y + InstanceLabel.getLocation().y);
+        InstanceNameTF.setLocation(getLocation().x, getLocation().y + instanceLabel.getLocation().y);
         InstanceNameTF.setSize(getWidth(), 15);
         InstanceNameTF.setVisible(true);
         InstanceNameTF.requestFocus();
     }
 
-    @Override
     public void showInstanceName(String InstanceName) {
-        InstanceLabel.setText(InstanceName);
+        instanceLabel.setText(InstanceName);
         resizeToGrid();
     }
 
@@ -344,15 +361,6 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     public void moveToFront() {
         getPatchView().objectLayerPanel.setComponentZOrder(this, 0);
     }
-
-    /*
-    @Override public void validate() {
-        super.validate();
-        Dimension d = getPreferredSize();
-//        setBounds();
-        repaint();
-    }
-    */
 
     @Override
     public void resizeToGrid() {
@@ -386,25 +394,30 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (AxoObjectInstance.OBJ_LOCATION.is(evt)) {
+
+        if (AxoObjectInstanceAbstract.OBJ_LOCATION.is(evt)) {
             Point newValue = (Point) evt.getNewValue();
             setLocation(newValue.x, newValue.y);
+            Set<INetView> netViewsToUpdate = new HashSet<>();
             if (getPatchView() != null) {
                 if (getInletInstanceViews() != null) {
                     for (IIoletInstanceView i : getInletInstanceViews()) {
-                        INetView n = getPatchView().GetNetView(i);
+                        INetView n = getPatchView().findNetView(i);
                         if (n != null) {
-                            n.updateBounds();
+                            netViewsToUpdate.add(n);
                         }
                     }
                 }
                 if (getOutletInstanceViews() != null) {
                     for (IIoletInstanceView i : getOutletInstanceViews()) {
-                        INetView n = getPatchView().GetNetView(i);
+                        INetView n = getPatchView().findNetView(i);
                         if (n != null) {
-                            n.updateBounds();
+                            netViewsToUpdate.add(n);
                         }
                     }
+                }
+                for (INetView n : netViewsToUpdate) {
+                    n.updateBounds();
                 }
             }
         } else if (AxoObjectInstance.OBJ_INSTANCENAME.is(evt)) {

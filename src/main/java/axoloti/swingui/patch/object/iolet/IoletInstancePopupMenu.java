@@ -17,6 +17,7 @@
  */
 package axoloti.swingui.patch.object.iolet;
 
+import axoloti.mvc.FocusEdit;
 import axoloti.patch.PatchController;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.iolet.IoletInstanceController;
@@ -35,10 +36,10 @@ public class IoletInstancePopupMenu extends JPopupMenu {
         return isSource ? "outlet" : "inlet";
     }
 
-    public IoletInstancePopupMenu(IoletInstanceController ioletInstanceController) {
+    public IoletInstancePopupMenu(IoletInstanceController ioletInstanceController, FocusEdit focusEdit) {
         super();
 
-        PatchController pc = ioletInstanceController.getParent().getParent();
+        PatchController pc = ioletInstanceController.getModel().getParent().getParent().getControllerFromModel();
         NetController nc = pc.getNetFromIolet(ioletInstanceController.getModel());
         boolean isSource = ioletInstanceController.getModel().isSource();
 
@@ -54,7 +55,7 @@ public class IoletInstancePopupMenu extends JPopupMenu {
             itemDisconnect.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    ioletInstanceController.addMetaUndo("disconnect " + getDirectionLabel(isSource));
+                    ioletInstanceController.addMetaUndo("disconnect " + getDirectionLabel(isSource), focusEdit);
                     pc.disconnect(ioletInstanceController.getModel());
                 }
             });
@@ -65,7 +66,7 @@ public class IoletInstancePopupMenu extends JPopupMenu {
             itemDelete.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    ioletInstanceController.addMetaUndo("delete net");
+                    ioletInstanceController.addMetaUndo("delete net", focusEdit);
                     pc.delete(nc);
                 }
             });

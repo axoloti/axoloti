@@ -34,6 +34,7 @@ import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchFrame;
+import axoloti.swingui.patch.PatchViewFactory;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
 import axoloti.swingui.preferences.ThemeEditor;
@@ -352,12 +353,14 @@ public final class MainFrame extends TJFrame implements ActionListener {
             }
         }
 
-        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Known issues: \n"
-                + "* removing objects with parameter-on-parent broken\n"
+        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,
+                "Known issues: \n"
+                + "* subpatch objects do not promote their objects? (breaks fx/flanger)\n"
+                + "* piccolo view: nets do not update correctly (swing views are fine)\n"
+                + "* presets are broken\n"
                 + "* modulations are broken\n"
                 + "* zombie objects broken\n"
-                + "* modules are broken\n"
-                + "* create patch/patcher, add object, set parameter on parent, modify on-parent parameter value, undo, undo, redo, redo\n");
+                + "* modules are broken\n");
 
         controller.addView(this);
     }
@@ -662,8 +665,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController(patchModel, null, null);
-            /* fixme: null */
+            PatchController patchController = patchModel.getControllerFromModel();
             String basename = f.getName();
             File testDirName = new File(destinationPath);
             if (!testDirName.isDirectory()) {
@@ -722,9 +724,10 @@ public final class MainFrame extends TJFrame implements ActionListener {
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = new PatchController(patchModel, null, null); /* fixme: null */
-            PatchView patchView = Preferences.getPreferences().getPatchView(patchController);
+            PatchController patchController = patchModel.getControllerFromModel();
             PatchFrame patchFrame = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+            PatchView patchView = PatchViewFactory.patchViewFactory(patchController);
+            patchView.setPatchFrame(patchFrame);
             patchController.addView(patchFrame);
             status = patchModel.save(f);
             if (status == false) {
@@ -760,7 +763,8 @@ public final class MainFrame extends TJFrame implements ActionListener {
     public void NewPatch() {
         PatchModel patchModel = new PatchModel();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-        PatchController patchController = new PatchController(patchModel, documentRoot, null);
+        patchModel.setDocumentRoot(documentRoot);
+        PatchController patchController = patchModel.getControllerFromModel();
         PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
         patchController.addView(pf);
         pf.setVisible(true);

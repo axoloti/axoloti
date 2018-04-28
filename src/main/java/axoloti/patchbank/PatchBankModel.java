@@ -1,7 +1,10 @@
 package axoloti.patchbank;
 
 import axoloti.connection.CConnection;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
+import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.swingui.patch.PatchFrame;
@@ -39,7 +42,7 @@ public class PatchBankModel extends AbstractModel {
     List<File> files;
 
     public final static Property FILE = new ObjectProperty("File", File.class, PatchBankModel.class);
-    public final static Property FILES = new ObjectProperty("Files", List.class, PatchBankModel.class);
+    public final static Property FILES = new ListProperty("Files", PatchBankModel.class);
 
     @Override
     public List<Property> getProperties() {
@@ -152,7 +155,7 @@ public class PatchBankModel extends AbstractModel {
         PatchFrame pf = PatchViewSwing.OpenPatchInvisible(f);
         if (pf != null) {
             boolean isVisible = pf.isVisible();
-            pf.getPatchController().UploadToSDCard();
+            pf.getController().UploadToSDCard();
             if (!isVisible) {
                 pf.Close();
             }
@@ -184,6 +187,21 @@ public class PatchBankModel extends AbstractModel {
             UploadOneFile(f);
         }
         Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Patch bank uploaded");
+    }
+
+    @Override
+    public AbstractController createController() {
+        return new PatchBankController(this);
+    }
+
+    @Override
+    public PatchBankController getControllerFromModel() {
+        return (PatchBankController) super.getControllerFromModel();
+    }
+
+    @Override
+    public IModel getParent() {
+        return null;
     }
 
 }

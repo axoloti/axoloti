@@ -27,6 +27,7 @@ import org.simpleframework.xml.Attribute;
 public abstract class ParameterInstanceFrac32U<T extends ParameterFrac32> extends ParameterInstanceFrac32<T> {
 
     public ParameterInstanceFrac32U() {
+        super();
     }
 
     public ParameterInstanceFrac32U(@Attribute(name = "value") double v) {

@@ -72,7 +72,7 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
         if (getModel().getValue() != getControlComponent().getValue()) {
             if (getController() != null) {
                 Double d = getControlComponent().getValue();
-                getController().setModelUndoableProperty(ParameterInstance.VALUE, d);
+                getController().changeValue(d);
             }
         } else {
             return false;

@@ -43,7 +43,6 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     public PatchSettingsFrame(DocumentWindow parentDocumentWindow, PatchController patchController) {
         super(patchController, parentDocumentWindow);
         initComponents();
-        setTitle("settings");
         setJMenuBar(new StandardMenubar(patchController.getDocumentRoot()));
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMinimum(1);
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMaximum(16);
@@ -104,6 +103,7 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
         jLabel10 = new javax.swing.JLabel();
         jTextFieldAttributions = new javax.swing.JTextField();
 
+        setTitle("Patch settings");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 formComponentHidden(evt);
@@ -320,29 +320,29 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     private void jSpinnerMidiChannelStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerMidiChannelStateChanged
         SpinnerModel nModel = jSpinnerMidiChannel.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().setModelUndoableProperty(PatchModel.PATCH_MIDICHANNEL,((SpinnerNumberModel) nModel).getNumber().intValue());
+            getController().generic_setModelUndoableProperty(PatchModel.PATCH_MIDICHANNEL,((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerMidiChannelStateChanged
 
     private void jComboBoxModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxModeActionPerformed
         switch (jComboBoxMode.getSelectedIndex()) {
             case 0:
-                getController().setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.no);
+                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.no);
                 break;
             case 1:
-                getController().setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.normal);
+                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.normal);
                 break;
             case 2:
-                getController().setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.normalBypass);
+                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.normalBypass);
                 break;
             case 3:
-                getController().setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.polyphonic);
+                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polyphonic);
                 break;
             case 4:
-                getController().setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.polychannel);
+                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polychannel);
                 break;
             case 5:
-                getController().setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.polyexpression);
+                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polyexpression);
                 break;
             default:
                 Logger.getLogger(PatchSettingsFrame.class.getName()).severe("undefined subpatchmode");
@@ -352,43 +352,43 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     private void jSpinnerNumPresetsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNumPresetsStateChanged
         SpinnerModel nModel = jSpinnerNumPresets.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().setModelUndoableProperty(PatchModel.PATCH_NPRESETS,((SpinnerNumberModel) nModel).getNumber().intValue());
+            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NPRESETS,((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerNumPresetsStateChanged
 
     private void jSpinnerPresetEntriesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerPresetEntriesStateChanged
         SpinnerModel nModel = jSpinnerPresetEntries.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().setModelUndoableProperty(PatchModel.PATCH_NPRESETENTRIES,((SpinnerNumberModel) nModel).getNumber().intValue());
+            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NPRESETENTRIES,((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerPresetEntriesStateChanged
 
     private void jSpinnerModulationSourcesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerModulationSourcesStateChanged
         SpinnerModel nModel = jSpinnerModulationSources.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().setModelUndoableProperty(PatchModel.PATCH_NMODULATIONSOURCES,((SpinnerNumberModel) nModel).getNumber().intValue());
+            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NMODULATIONSOURCES,((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerModulationSourcesStateChanged
 
     private void jSpinnerModulationTargetsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerModulationTargetsStateChanged
         SpinnerModel nModel = jSpinnerModulationTargets.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().setModelUndoableProperty(PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE,((SpinnerNumberModel) nModel).getNumber().intValue());
+            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE,((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerModulationTargetsStateChanged
 
     private void jCheckBoxHasChannelAttribActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxHasChannelAttribActionPerformed
-        getController().setModelUndoableProperty(PatchModel.PATCH_MIDISELECTOR,(Boolean)jCheckBoxHasChannelAttrib.isSelected());
+        getController().generic_setModelUndoableProperty(PatchModel.PATCH_MIDISELECTOR,(Boolean)jCheckBoxHasChannelAttrib.isSelected());
     }//GEN-LAST:event_jCheckBoxHasChannelAttribActionPerformed
 
     private void jComboBoxLicenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLicenseActionPerformed
         if (jComboBoxLicense.getSelectedItem() != null) {
-            getController().setModelUndoableProperty(PatchModel.PATCH_LICENSE,jComboBoxLicense.getSelectedItem().toString());
+            getController().generic_setModelUndoableProperty(PatchModel.PATCH_LICENSE,jComboBoxLicense.getSelectedItem().toString());
         }
     }//GEN-LAST:event_jComboBoxLicenseActionPerformed
 
     private void jTextFieldAuthorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusLost
-        getController().setModelUndoableProperty(PatchModel.PATCH_AUTHOR,jTextFieldAuthor.getText());
+        getController().generic_setModelUndoableProperty(PatchModel.PATCH_AUTHOR,jTextFieldAuthor.getText());
     }//GEN-LAST:event_jTextFieldAuthorFocusLost
 
     private void jCheckBoxSaturateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSaturateActionPerformed
@@ -396,7 +396,7 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     }//GEN-LAST:event_jCheckBoxSaturateActionPerformed
 
     private void jTextFieldAttributionsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAttributionsFocusLost
-        getController().setModelUndoableProperty(PatchModel.PATCH_ATTRIBUTIONS,jTextFieldAttributions.getText());
+        getController().generic_setModelUndoableProperty(PatchModel.PATCH_ATTRIBUTIONS,jTextFieldAttributions.getText());
     }//GEN-LAST:event_jTextFieldAttributionsFocusLost
 
     private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden

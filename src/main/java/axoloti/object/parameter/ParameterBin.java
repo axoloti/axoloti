@@ -1,6 +1,5 @@
 package axoloti.object.parameter;
 
-import axoloti.datatypes.ValueInt32;
 import axoloti.patch.object.parameter.ParameterInstanceBin;
 
 /**
@@ -19,8 +18,8 @@ public abstract class ParameterBin<T extends ParameterInstanceBin> extends Param
     public abstract int getNBits();
 
     @Override
-    public ValueInt32 getDefaultValue() {
-        return new ValueInt32(0);
+    public Integer getDefaultValue() {
+        return 0;
     }
 
 }

@@ -124,7 +124,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                                 ArrayList<File> files = new ArrayList<>(getModel().getFiles());
                                 files.set(rowIndex, f);
                                 getController().addMetaUndo("Change");
-                                getController().setModelUndoableProperty(PatchBankModel.FILES, files);
+                                getController().changePatchBankFiles(files);
                             }
                         }
                         break;
@@ -562,7 +562,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         File o = files.remove(row);
         files.add(row - 1, o);
         getController().addMetaUndo("Move up");
-        getController().setModelUndoableProperty(PatchBankModel.FILES, files);
+        getController().changePatchBankFiles(files);
         jTable1.setRowSelectionInterval(row - 1, row - 1);
     }//GEN-LAST:event_jButtonUpActionPerformed
 
@@ -578,7 +578,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         File o = files.remove(row);
         files.add(row + 1, o);
         getController().addMetaUndo("Move down");
-        getController().setModelUndoableProperty(PatchBankModel.FILES, files);
+        getController().changePatchBankFiles(files);
         jTable1.setRowSelectionInterval(row + 1, row + 1);
     }//GEN-LAST:event_jButtonDownActionPerformed
 
@@ -590,7 +590,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         ArrayList<File> files = new ArrayList<>(getModel().getFiles());
         files.remove(row);
         getController().addMetaUndo("Remove");
-        getController().setModelUndoableProperty(PatchBankModel.FILES, files);
+        getController().changePatchBankFiles(files);
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
@@ -602,7 +602,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             ArrayList<File> files = new ArrayList<>(getModel().getFiles());
             files.add(fc.getSelectedFile());
             getController().addMetaUndo("Add");
-            getController().setModelUndoableProperty(PatchBankModel.FILES, files);
+            getController().changePatchBankFiles(files);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
@@ -698,7 +698,8 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                 b = new PatchBankModel(inputStream, filename);
             }
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-            PatchBankController c = new PatchBankController(b, documentRoot, null);
+            b.setDocumentRoot(documentRoot);
+            PatchBankController c = b.getControllerFromModel();
             PatchBank bv = new PatchBank(c);
             documentRoot.getUndoManager().discardAllEdits();
             c.addView(bv);

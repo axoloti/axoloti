@@ -7,52 +7,43 @@ import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
 import axoloti.swingui.components.JackOutputComponent;
-import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.SignalMetaDataIcon;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.swingui.patch.object.iolet.IoletAbstract;
 import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
+import axoloti.swingui.patch.object.iolet.IoletInstanceView;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
 
-public class OutletInstanceView extends IoletAbstract<IoletInstanceController> implements IIoletInstanceView {
-
-    LabelComponent label;
+public class OutletInstanceView extends IoletInstanceView<IoletInstanceController> implements IIoletInstanceView {
 
     public OutletInstanceView(IoletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         super(controller);
         this.axoObj = axoObj;
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-    }
 
-    @Override
-    public void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(Box.createHorizontalGlue());
         if (axoObj.getModel().getType().getOutlets().size() > 1) {
-            label = new LabelComponent(getModel().getModel().getName());
-        } else {
-            label = new LabelComponent("");
+            add(label);
         }
-        add(label);
         add(Box.createHorizontalStrut(2));
         add(new SignalMetaDataIcon(getModel().getModel().GetSignalMetaData()));
         jack = new JackOutputComponent();
         jack.setForeground(getModel().getModel().getDatatype().GetColor());
         add(jack);
 
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseMotionListener);
     }
 
     @Override
     public JPopupMenu getPopup() {
-        return new IoletInstancePopupMenu(getController());
+        return new IoletInstancePopupMenu(getController(), focusEdit);
     }
 
     @Override
@@ -61,7 +52,7 @@ public class OutletInstanceView extends IoletAbstract<IoletInstanceController> i
                 || getRootPane().getCursor() != TransparentCursor.get())
                 && axoObj != null
                 && axoObj.getPatchView() != null) {
-            INetView netView = axoObj.getPatchView().GetNetView(this);
+            INetView netView = axoObj.getPatchView().findNetView(this);
             if (netView != null
                     && netView.getSelected() != highlighted) {
                 netView.setSelected(highlighted);
@@ -71,12 +62,8 @@ public class OutletInstanceView extends IoletAbstract<IoletInstanceController> i
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        if (OutletInstance.NAME.is(evt)) {
-            label.setText((String) evt.getNewValue());
-        } else if (OutletInstance.DESCRIPTION.is(evt)) {
-            setToolTipText((String) evt.getNewValue());
-        }
-        else if (OutletInstance.CONNECTED.is(evt)) {
+        super.modelPropertyChange(evt);
+        if (OutletInstance.CONNECTED.is(evt)) {
             getJack().setConnected((Boolean) evt.getNewValue());
             getJack().repaint();
         }
@@ -89,4 +76,5 @@ public class OutletInstanceView extends IoletAbstract<IoletInstanceController> i
     private JackOutputComponent getJack() {
         return (JackOutputComponent) jack;
     }
+
 }

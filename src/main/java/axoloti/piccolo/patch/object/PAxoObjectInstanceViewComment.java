@@ -33,7 +33,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
             InstanceNameTF = null;
             instanceLabel.setVisible(true);
             getController().addMetaUndo("edit comment");
-            getController().setModelUndoableProperty(AxoObjectInstanceComment.COMMENT, s);
+            getController().changeComment(s);
         }
     }
 

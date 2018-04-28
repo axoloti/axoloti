@@ -1,5 +1,6 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -25,16 +26,28 @@ public abstract class Property<T> {
         return name;
     }
 
-    public abstract T get(Object o);
+    public T cast(Object obj) {
+        return (T) obj;
+    }
 
-    public abstract String getAsString(Object o);
+    public T getNewValue(PropertyChangeEvent evt) {
+        return (T)evt.getNewValue();
+    }
+    
+    public abstract T get(IModel o);
+
+    public abstract String getAsString(IModel o);
 
     public abstract T StringToObj(String v);
 
-    public abstract void set(Object obj, Object val);
+    public abstract void set(IModel obj, Object val);
 
     public String getFriendlyName() {
         return friendlyName;
+    }
+
+    public String getTechyName() {
+        return name;
     }
 
     public abstract Class getType();

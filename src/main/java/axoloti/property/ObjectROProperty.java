@@ -1,5 +1,7 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
+
 /**
  *
  * @author jtaelman
@@ -24,7 +26,7 @@ public class ObjectROProperty extends PropertyReadOnly<Object> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         Object v = get(o);
         if (v == null) {
             return "";

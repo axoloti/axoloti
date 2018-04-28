@@ -1,8 +1,6 @@
 package axoloti.object;
 
 import axoloti.Modulator;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IModel;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.display.Display;
@@ -11,7 +9,6 @@ import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.target.fs.SDFileReference;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,21 +39,24 @@ public interface IAxoObject extends IModel {
 
     public String getHelpPatch();
 
+    public File getHelpPatchFile();
+
     public String getPath();
 
     public String getUUID();
 
     public String getDefaultInstanceName();
 
-    public ObjectController createController(AbstractDocumentRoot documentRoot, AbstractController parent);
+    @Override
+    public ObjectController getControllerFromModel();
 
-    public Set<String> GetIncludes();
+    public Set<String> getIncludes();
 
-    public void SetIncludes(HashSet<String> includes);
+    public void setIncludes(HashSet<String> includes);
 
-    public Set<String> GetDepends();
+    public Set<String> getDepends();
 
-    public Set<String> GetModules();
+    public Set<String> getModules();
 
     public Modulator[] getModulators();
 
@@ -76,9 +76,7 @@ public interface IAxoObject extends IModel {
 
     public Boolean getRotatedParams();
 
-    public File GetHelpPatchFile();
-
     public void OpenEditor();
 
-    public ArrayList<SDFileReference> getFileDepends();
+    public List<SDFileReference> getFileDepends();
 }

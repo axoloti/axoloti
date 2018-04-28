@@ -4,7 +4,9 @@ import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
 import axoloti.connection.CompletionHandler;
 import axoloti.connection.IConnection;
+import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
 import axoloti.property.ObjectProperty;
@@ -334,6 +336,16 @@ public class TargetModel extends AbstractModel {
 
     public void removePoller(PollHandler poller) {
         pollers.remove(poller);
+    }
+
+    @Override
+    protected AbstractController createController() {
+        return new TargetController(this);
+    }
+
+    @Override
+    public IModel getParent() {
+        return null;
     }
 
 }

@@ -41,7 +41,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
+                getController().changeValue(TFtableName.getText());
             }
 
             @Override
@@ -63,12 +63,12 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().addMetaUndo("edit attribute " + getModel().getName());
+                getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().setModelUndoableProperty(AttributeInstanceTablename.ATTR_VALUE, TFtableName.getText());
+                getController().changeValue(TFtableName.getText());
             }
         });
     }

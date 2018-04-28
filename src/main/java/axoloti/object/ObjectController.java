@@ -1,16 +1,10 @@
 package axoloti.object;
 
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
-import axoloti.mvc.array.ArrayController;
-import axoloti.object.atom.AtomDefinitionController;
-import axoloti.object.attribute.AxoAttribute;
-import axoloti.object.display.Display;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
-import java.beans.PropertyChangeEvent;
 
 /**
  *
@@ -18,86 +12,36 @@ import java.beans.PropertyChangeEvent;
  */
 public class ObjectController extends AbstractController<IAxoObject, IView, AbstractController> {
 
-
-    public ArrayController<AtomDefinitionController, Inlet, ObjectController> inlets;
-    public ArrayController<AtomDefinitionController, Outlet, ObjectController> outlets;
-    public ArrayController<AtomDefinitionController, AxoAttribute, ObjectController> attrs;
-    public ArrayController<AtomDefinitionController, Parameter, ObjectController> params;
-    public ArrayController<AtomDefinitionController, Display, ObjectController> disps;
-
-    public ObjectController(IAxoObject model, AbstractDocumentRoot documentRoot) {
-        super(model, documentRoot, null);
-        inlets = new ArrayController<AtomDefinitionController, Inlet, ObjectController>(this, AxoObject.OBJ_INLETS) {
-
-            @Override
-            public AtomDefinitionController createController(Inlet model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                return new AtomDefinitionController(model, documentRoot, parent);
-            }
-
-            @Override
-            public void disposeController(AtomDefinitionController controller) {
-            }
-        };
-        outlets = new ArrayController<AtomDefinitionController, Outlet, ObjectController>(this, AxoObject.OBJ_OUTLETS) {
-
-            @Override
-            public AtomDefinitionController createController(Outlet model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                return new AtomDefinitionController(model, documentRoot, parent);
-            }
-
-            @Override
-            public void disposeController(AtomDefinitionController controller) {
-            }
-        };
-        attrs = new ArrayController<AtomDefinitionController, AxoAttribute, ObjectController>(this, AxoObject.OBJ_ATTRIBUTES) {
-
-            @Override
-            public AtomDefinitionController createController(AxoAttribute model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                return new AtomDefinitionController(model, documentRoot, parent);
-            }
-
-            @Override
-            public void disposeController(AtomDefinitionController controller) {
-            }
-        };
-        params = new ArrayController<AtomDefinitionController, Parameter, ObjectController>(this, AxoObject.OBJ_PARAMETERS) {
-
-            @Override
-            public AtomDefinitionController createController(Parameter model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                return new AtomDefinitionController(model, documentRoot, parent);
-            }
-
-            @Override
-            public void disposeController(AtomDefinitionController controller) {
-            }
-        };
-        disps = new ArrayController<AtomDefinitionController, Display, ObjectController>(this, AxoObject.OBJ_DISPLAYS) {
-
-            @Override
-            public AtomDefinitionController createController(Display model, AbstractDocumentRoot documentRoot, ObjectController parent) {
-                return new AtomDefinitionController(model, documentRoot, parent);
-            }
-
-            @Override
-            public void disposeController(AtomDefinitionController controller) {
-            }
-        };
+    public ObjectController(IAxoObject model) {
+        // TODO: remove public
+        super(model);
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (AxoObject.OBJ_INLETS.is(evt)) {
-            inlets.syncControllers();
-        } else if (AxoObject.OBJ_OUTLETS.is(evt)) {
-            outlets.syncControllers();
-        } else if (AxoObject.OBJ_ATTRIBUTES.is(evt)) {
-            attrs.syncControllers();
-        } else if (AxoObject.OBJ_PARAMETERS.is(evt)) {
-            params.syncControllers();
-        } else if (AxoObject.OBJ_DISPLAYS.is(evt)) {
-            disps.syncControllers();
-        }
-        super.propertyChange(evt);
+    public void addParameter(Parameter parameter) {
+        parameter.setParent((AxoObject) getModel());
+        addUndoableElementToList(AxoObject.OBJ_PARAMETERS, parameter);
+    }
+
+    public void removeParameter(Parameter parameter) {
+        removeUndoableElementFromList(AxoObject.OBJ_PARAMETERS, parameter);
+    }
+
+    public void addInlet(Inlet inlet) {
+        inlet.setParent((AxoObject) getModel());
+        addUndoableElementToList(AxoObject.OBJ_INLETS, inlet);
+    }
+
+    public void removeInlet(Inlet inlet) {
+        removeUndoableElementFromList(AxoObject.OBJ_INLETS, inlet);
+    }
+
+    public void addOutlet(Outlet outlet) {
+        outlet.setParent((AxoObject) getModel());
+        addUndoableElementToList(AxoObject.OBJ_OUTLETS, outlet);
+    }
+
+    public void removeOutlet(Outlet outlet) {
+        removeUndoableElementFromList(AxoObject.OBJ_OUTLETS, outlet);
     }
 
 }

@@ -21,6 +21,7 @@ import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import axoloti.object.atom.AtomDefinition;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.property.PropagatedProperty;
 import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
@@ -36,10 +37,17 @@ import java.util.List;
  */
 public abstract class AtomInstance<T extends AtomDefinition> extends AbstractModel implements IView, IModel {
 
+    IAxoObjectInstance parent;
+    
     public abstract T getModel();
 
     public static final PropagatedProperty NAME = new PropagatedProperty(AtomDefinition.NAME, AtomInstance.class);
     public static final PropagatedProperty DESCRIPTION = new PropagatedProperty(AtomDefinition.DESCRIPTION, AtomInstance.class);
+
+    private final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{
+        NAME,
+        DESCRIPTION
+    };
 
     /**
      *
@@ -47,9 +55,7 @@ public abstract class AtomInstance<T extends AtomDefinition> extends AbstractMod
      */
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-//        super.modelPropertyChange(evt);
         // triggered by a model definition change, triggering instance view changes
-        final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{NAME, DESCRIPTION};
         for (PropagatedProperty p : propagateProperties) {
             if (p.is(evt)) {
                 firePropertyChange(p,
@@ -69,5 +75,14 @@ public abstract class AtomInstance<T extends AtomDefinition> extends AbstractMod
 
     @Override
     public void dispose() {
+    }
+    
+    @Override
+    public IAxoObjectInstance getParent() {
+        return parent;
+    }
+
+    public void setParent(IAxoObjectInstance p) {
+        parent = p;
     }
 }

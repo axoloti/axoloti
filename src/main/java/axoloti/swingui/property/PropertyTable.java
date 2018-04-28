@@ -79,7 +79,7 @@ public class PropertyTable extends JTable implements IView {
             public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
                 switch (columnIndex) {
                     case 1:
-                        controller.setModelUndoableProperty(properties.get(rowIndex),
+                        controller.generic_setModelUndoableProperty(properties.get(rowIndex),
                                 aValue);
                     default:
                 }

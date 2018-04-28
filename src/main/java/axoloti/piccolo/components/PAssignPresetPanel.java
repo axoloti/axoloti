@@ -23,7 +23,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
 
     public PAssignPresetPanel(PParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
-        int n = parameterInstanceView.getModel().getObjectInstance().getPatchModel().getNPresets();
+        int n = parameterInstanceView.getModel().getObjectInstance().getParent().getNPresets();
 
         removeInputEventListener(zoomEventHandler);
         removeInputEventListener(selectionEventHandler);
@@ -93,7 +93,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
                 ctrls.get(i).setEnabled(false);
                 parameterInstanceView.getController().RemovePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
+            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
             patchModel.presetUpdatePending = true;
         }
 
@@ -115,7 +115,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
                 }
             }
             }
-            parameterInstanceView.getModel().getObjectInstance().getPatchModel().presetUpdatePending = true;
+            parameterInstanceView.getModel().getObjectInstance().getParent().presetUpdatePending = true;
         }
 
         @Override
@@ -131,7 +131,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
-                    PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getPatchModel();
+                    PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
                 }
             }
         }

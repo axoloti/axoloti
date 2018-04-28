@@ -2,7 +2,6 @@ package axoloti.patch.object.attribute;
 
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.patch.object.ObjectInstanceController;
 
 /**
@@ -11,8 +10,12 @@ import axoloti.patch.object.ObjectInstanceController;
  */
 public class AttributeInstanceController extends AbstractController<AttributeInstance, IAttributeInstanceView, ObjectInstanceController> {
 
-    public AttributeInstanceController(AttributeInstance model, AbstractDocumentRoot documentRoot, ObjectInstanceController parent) {
-        super(model, documentRoot, parent);
+    protected AttributeInstanceController(AttributeInstance model) {
+        super(model);
+    }
+
+    public void changeValue(Object value) {
+        setModelUndoableProperty(AttributeInstance.ATTR_VALUE, value);
     }
 
 }

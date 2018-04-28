@@ -11,6 +11,9 @@ import java.util.List;
  */
 public abstract class AbstractModel implements IModel {
 
+    private AbstractController controllerOfModel = null;
+    private AbstractDocumentRoot documentRoot;
+
     protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     @Override
@@ -33,4 +36,23 @@ public abstract class AbstractModel implements IModel {
         propertyChangeSupport.firePropertyChange(property.getName(), oldValue, newValue);
     }
 
+    protected abstract AbstractController createController();
+
+    @Override
+    public AbstractController getControllerFromModel() {
+        if (controllerOfModel == null) {
+            controllerOfModel = createController();
+        }
+        return controllerOfModel;
+    }
+
+    @Override
+    public AbstractDocumentRoot getDocumentRoot() {
+        return documentRoot;
+    }
+
+    @Override
+    final public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
+        this.documentRoot = documentRoot;
+    }
 }

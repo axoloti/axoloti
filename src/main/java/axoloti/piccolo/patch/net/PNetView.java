@@ -40,16 +40,17 @@ public class PNetView extends PatchPNode implements INetView {
         super(patchView);
 	this.controller = controller;
         setPickable(false);
+        updateSources();
+        updateDests();
+        updateBounds();
     }
 
-    @Override
-    public void PostConstructor() {
+    private void updateSources() {
         source.clear();
-        dest.clear();
         // resolve inlet/outlet views
         for (OutletInstance i : getController().getModel().getSources()) {
-            IAxoObjectInstance o = i.getObjectInstance();
-            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            IAxoObjectInstance o = i.getParent();
+            IAxoObjectInstanceView ov = patchView.findObjectInstanceView(o);
             if (ov == null) {
                 throw new Error("no corresponding outlet instance view found");
             }
@@ -60,9 +61,13 @@ public class PNetView extends PatchPNode implements INetView {
                 }
             }
         }
+    }
+
+    private void updateDests() {
+        dest.clear();
         for (InletInstance i : getController().getModel().getDestinations()) {
-            IAxoObjectInstance o = i.getObjectInstance();
-            IAxoObjectInstanceView ov = patchView.getObjectInstanceView(o);
+            IAxoObjectInstance o = i.getParent();
+            IAxoObjectInstanceView ov = patchView.findObjectInstanceView(o);
             if (ov == null) {
                 throw new Error("no corresponding inlet instance view found");
             }
@@ -259,9 +264,12 @@ public class PNetView extends PatchPNode implements INetView {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-	if (Net.NET_SOURCES.is(evt)
-	    || Net.NET_DESTINATIONS.is(evt)) {
-            PostConstructor();
+        if (Net.NET_SOURCES.is(evt)) {
+            updateSources();
+            updateBounds();
+            repaint();
+        } else if (Net.NET_DESTINATIONS.is(evt)) {
+            updateDests();
             updateBounds();
             repaint();
         }

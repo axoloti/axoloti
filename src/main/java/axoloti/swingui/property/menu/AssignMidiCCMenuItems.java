@@ -95,10 +95,12 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             Integer i = Integer.parseInt(s.substring(2));
-            ctrl.setModelUndoableProperty(property, i);
+            ctrl.addMetaUndo("change MIDI CC mapping");
+            ctrl.generic_setModelUndoableProperty(property, i);
         } else if (s.equals("none")) {
             Integer v = -1;
-            ctrl.setModelUndoableProperty(property, v);
+            ctrl.addMetaUndo("remove MIDI CC mapping");
+            ctrl.generic_setModelUndoableProperty(property, v);
         }
     }
 }

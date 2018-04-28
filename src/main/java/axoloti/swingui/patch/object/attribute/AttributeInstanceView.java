@@ -2,6 +2,8 @@ package axoloti.swingui.patch.object.attribute;
 
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.PatchView;
+import axoloti.mvc.FocusEdit;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.preferences.Theme;
@@ -24,13 +26,8 @@ public abstract class AttributeInstanceView extends ViewPanel<AttributeInstanceC
     void PostConstructor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
-        label = new LabelComponent(getModel().getModel().getName());
+        label = new LabelComponent("");
         add(label);
-        setSize(getPreferredSize());
-        String description = getModel().getModel().getDescription();
-        if (description != null) {
-            setToolTipText(description);
-        }
     }
 
     @Override
@@ -38,13 +35,37 @@ public abstract class AttributeInstanceView extends ViewPanel<AttributeInstanceC
         return getController().getModel();
     }
 
+    protected void scrollTo() {
+        if (axoObjectInstanceView == null) {
+            return;
+        }
+        PatchView pv = axoObjectInstanceView.getPatchView();
+        if (pv == null) {
+            return;
+        }
+        pv.scrollTo(this);
+    }
+
+    FocusEdit focusEdit = new FocusEdit() {
+
+        @Override
+        protected void focus() {
+            scrollTo();
+        }
+
+    };
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (AttributeInstance.NAME.is(evt)) {
             label.setText((String) evt.getNewValue());
             doLayout();
         } else if (AttributeInstance.DESCRIPTION.is(evt)) {
-            setToolTipText((String) evt.getNewValue());
+            String s = (String) evt.getNewValue();
+            if ((s != null) && (s.isEmpty())) {
+                s = null;
+            }
+            setToolTipText(s);
         }
     }
 

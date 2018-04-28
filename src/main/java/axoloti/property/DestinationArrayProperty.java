@@ -1,6 +1,7 @@
 
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import axoloti.patch.object.inlet.InletInstance;
 
 /**
@@ -24,7 +25,7 @@ public class DestinationArrayProperty extends PropertyReadWrite<InletInstance[]>
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         return null;
     }
 

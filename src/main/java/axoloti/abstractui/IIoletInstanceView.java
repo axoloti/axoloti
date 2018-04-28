@@ -7,8 +7,6 @@ import java.awt.Point;
 
 public interface IIoletInstanceView extends IView<IoletInstanceController> {
 
-    public void PostConstructor();
-
     public IoletInstance getModel();
 
     public void setHighlighted(boolean highlighted);

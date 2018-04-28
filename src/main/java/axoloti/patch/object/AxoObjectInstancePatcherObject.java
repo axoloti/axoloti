@@ -42,6 +42,11 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
     public AxoObjectInstancePatcherObject(ObjectController objectController, PatchModel patch1, String InstanceName1, Point location) {
         super(objectController, patch1, InstanceName1, location);
         ao = (AxoObjectPatcherObject) objectController.getModel();
+        if (patch1 != null) {
+            ao.setDocumentRoot(patch1.getDocumentRoot());
+        } else {
+            System.out.println("AxoObjectInstancePatcherObject: no patch");
+        }
         ao.setId("patch/object");
     }
 

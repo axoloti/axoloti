@@ -14,11 +14,6 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
     }
 
     @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-    }
-
-    @Override
     public ParameterInstanceFrac32SMapVSlider getModel() {
         return (ParameterInstanceFrac32SMapVSlider) super.getModel();
     }

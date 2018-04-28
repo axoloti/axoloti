@@ -1,4 +1,4 @@
-package axoloti.mvc;
+package axoloti.swingui.mvc;
 
 import axoloti.utils.KeyUtils;
 import java.awt.event.ActionEvent;

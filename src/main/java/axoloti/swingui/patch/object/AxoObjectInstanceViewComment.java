@@ -34,10 +34,10 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        InstanceLabel = new LabelComponent(getModel().getCommentText());
-        InstanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-        InstanceLabel.setAlignmentX(CENTER_ALIGNMENT);
-        InstanceLabel.addMouseListener(new MouseListener() {
+        instanceLabel = new LabelComponent(getModel().getCommentText());
+        instanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        instanceLabel.setAlignmentX(CENTER_ALIGNMENT);
+        instanceLabel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getClickCount() == 2) {
@@ -46,11 +46,11 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
                 if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
-                            getModel().setSelected(!getModel().getSelected());
+                            getController().changeSelected(!getModel().getSelected());
                             me.consume();
                         } else if (!getModel().getSelected()) {
-                            getController().getParent().SelectNone();
-                            getModel().setSelected(true);
+                            getController().getModel().getParent().getControllerFromModel().SelectNone();
+                            getController().changeSelected(true);
                             me.consume();
                         }
                     }
@@ -59,12 +59,12 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
             @Override
             public void mousePressed(MouseEvent me) {
-                AxoObjectInstanceViewComment.this.mousePressed(me);
+                //////AxoObjectInstanceViewComment.this.mousePressed(me);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                AxoObjectInstanceViewComment.this.mouseReleased(e);
+                //////AxoObjectInstanceViewComment.this.mouseReleased(e);
             }
 
             @Override
@@ -75,8 +75,8 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
             public void mouseExited(MouseEvent e) {
             }
         });
-        InstanceLabel.addMouseMotionListener(this);
-        add(InstanceLabel);
+        instanceLabel.addMouseMotionListener(this);
+        add(instanceLabel);
         setLocation(getModel().getX(), getModel().getY());
 
         resizeToGrid();
@@ -86,8 +86,11 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
     @Override
     void handleInstanceNameEditorAction() {
         String s = InstanceNameTF.getText();
-        getController().addMetaUndo("edit comment");
-        getController().setModelUndoableProperty(AxoObjectInstanceComment.COMMENT, s);
+        String prev = (String) getController().getModelProperty(AxoObjectInstanceComment.COMMENT);
+        if (!s.equals(prev)) {
+            getController().addMetaUndo("edit comment");
+            getController().changeComment(s);
+        }
         if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
             InstanceNameTF.getParent().remove(InstanceNameTF);
         }
@@ -131,7 +134,7 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
             }
         });
         getParent().add(InstanceNameTF, 0);
-        InstanceNameTF.setLocation(getLocation().x, getLocation().y + InstanceLabel.getLocation().y);
+        InstanceNameTF.setLocation(getLocation().x, getLocation().y + instanceLabel.getLocation().y);
         InstanceNameTF.setSize(getWidth(), 15);
         InstanceNameTF.setVisible(true);
         InstanceNameTF.requestFocus();
@@ -145,7 +148,7 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (AxoObjectInstanceComment.COMMENT.is(evt)) {
-            InstanceLabel.setText((String) evt.getNewValue());
+            instanceLabel.setText((String) evt.getNewValue());
             resizeToGrid();
         }
     }

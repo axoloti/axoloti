@@ -24,6 +24,7 @@ import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
@@ -126,7 +127,7 @@ public class PatchViewPiccolo extends PatchView {
                     || ((e.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(e))) {
                 Point patchPosition = PUtils.asPoint(e.getInputManager().getCurrentCanvasPosition());
                 getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
-                getController().AddObjectInstance(
+                getController().addObjectInstance(
                         AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), patchPosition);
                 e.setHandled(true);
             } else if ((e.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(e)) {
@@ -315,7 +316,7 @@ public class PatchViewPiccolo extends PatchView {
     }
 
     @Override
-    public void AdjustSize() {
+    public void updateSize() {
         int maxX = 0;
         int maxY = 0;
         for(int i = 0; i < getCanvas().getLayer().getChildrenCount(); i++) {
@@ -394,7 +395,7 @@ public class PatchViewPiccolo extends PatchView {
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().addChild(node);
         v.resizeToGrid();
-        AdjustSize();
+        updateSize();
         addFocusables(node.getChildrenIterator());
     }
 
@@ -537,5 +538,10 @@ public class PatchViewPiccolo extends PatchView {
     @Override
     public INetView createNetView(NetController controller, PatchView patchView) {
         return new PNetView(controller, (PatchViewPiccolo) patchView);
+    }
+
+    @Override
+    public void scrollTo(Component c) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

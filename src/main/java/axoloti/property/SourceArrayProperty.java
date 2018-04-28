@@ -1,6 +1,7 @@
 
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import axoloti.patch.object.outlet.OutletInstance;
 
 /**
@@ -24,7 +25,7 @@ public class SourceArrayProperty extends PropertyReadWrite<OutletInstance[]> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         return null;
     }
 

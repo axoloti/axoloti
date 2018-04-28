@@ -118,7 +118,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.simpleframework.xml.*;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.ElementListUnion;
+import org.simpleframework.xml.Path;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Commit;
 
 /**
  *
@@ -287,25 +292,39 @@ public class AxoObject extends AxoObjectAbstract {
         super(id, sDescription);
     }
 
+    @Commit
+    void commit() {
+        for(Inlet o: inlets) {
+            o.setParent(this);
+        }
+        for(Outlet o: outlets) {
+            o.setParent(this);
+        }
+        for(AxoAttribute o: attributes) {
+            o.setParent(this);
+        }
+        for(Parameter o: params) {
+            o.setParent(this);
+        }
+        for(Display o: displays) {
+            o.setParent(this);
+        }
+    }
+
+    // TODO: remove (AxoObjectEditor) reference from model to swingui
     AxoObjectEditor editor;
-    AxoObjectEditor.UIState stateOnPreviousClose;
 
     @Override
     public void OpenEditor() {
         if (editor == null) {
-            ObjectController ctrl = createController(null, null);
-            editor = new AxoObjectEditor(ctrl);
-            editor.restoreTo(stateOnPreviousClose);
+            editor = new AxoObjectEditor(getControllerFromModel());
         }
         editor.setVisible(true);
         editor.toFront();
     }
 
     public void CloseEditor() {
-        if(editor != null) {
-            stateOnPreviousClose = editor.getUIState();
-        }
-        editor = null;
+        editor.setVisible(false);
     }
 
     /*
@@ -408,7 +427,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public HashSet<String> GetIncludes() {
+    public HashSet<String> getIncludes() {
         if ((includes == null) || includes.isEmpty()) {
             return null;
         } else if (getPath() != null) {
@@ -441,22 +460,22 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public void SetIncludes(HashSet<String> includes) {
+    public void setIncludes(HashSet<String> includes) {
         this.includes = includes;
     }
 
     @Override
-    public Set<String> GetDepends() {
+    public Set<String> getDepends() {
         return depends;
     }
 
     @Override
-    public Set<String> GetModules() {
+    public Set<String> getModules() {
         return modules;
     }
 
     @Override
-    public File GetHelpPatchFile() {
+    public File getHelpPatchFile() {
         if ((helpPatch == null) || (getPath() == null) || getPath().isEmpty()) {
             return null;
         }

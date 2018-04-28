@@ -1,5 +1,6 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -25,7 +26,7 @@ public abstract class PropertyReadOnly<T extends Object> extends Property {
     }
 
     @Override
-    public T get(Object obj) {
+    public T get(IModel obj) {
         try {
             Object r = getter.invoke(obj);
             return (T) r;
@@ -36,7 +37,7 @@ public abstract class PropertyReadOnly<T extends Object> extends Property {
     }
 
     @Override
-    public void set(Object obj, Object val) {
+    public void set(IModel obj, Object val) {
         Logger.getLogger(Property.class.getName()).log(Level.SEVERE, obj.getClass().getName() + "::" + getName());
     }
 

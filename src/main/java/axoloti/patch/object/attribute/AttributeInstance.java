@@ -17,15 +17,18 @@
  */
 package axoloti.patch.object.attribute;
 
+import axoloti.mvc.AbstractController;
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.atom.AtomInstance;
-import axoloti.swingui.components.LabelComponent;
+import axoloti.property.ObjectProperty;
+import axoloti.property.Property;
 import axoloti.target.fs.SDFileReference;
 import static axoloti.utils.CharEscape.CharEscape;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -37,10 +40,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
     @Attribute
     String attributeName;
 
-    final AtomDefinitionController controller;
-
-    AxoObjectInstance axoObj;
-    LabelComponent lbl;
+    private final AtomDefinitionController controller;
 
     AttributeInstance() {
         this.controller = null;
@@ -48,7 +48,16 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
 
     AttributeInstance(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         this.controller = controller;
-        axoObj = axoObj1;
+        setParent(axoObj1);
+    }
+
+    public static final ObjectProperty ATTR_VALUE = new ObjectProperty("Value", Object.class, AttributeInstance.class);
+
+    @Override
+    public List<Property> getProperties() {
+        List<Property> l = super.getProperties();
+        l.add(ATTR_VALUE);
+        return l;
     }
 
     public abstract String CValue();
@@ -57,10 +66,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
 
     public String GetCName() {
         return "attr_" + CharEscape(attributeName);
-    }
-
-    public AxoObjectInstance getObjectInstance() {
-        return axoObj;
     }
 
     @Override
@@ -93,6 +98,16 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
         String preVal = this.attributeName;
         this.attributeName = attributeName;
         firePropertyChange(NAME, preVal, attributeName);
+    }
+
+    abstract public Object getValue();
+
+    abstract public void setValue(Object value);
+
+
+    @Override
+    public AbstractController createController() {
+        return new AttributeInstanceController(this);
     }
 
 }

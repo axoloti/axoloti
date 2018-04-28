@@ -1,6 +1,7 @@
 package axoloti.property;
 
 import axoloti.datatypes.ValueInt32;
+import axoloti.mvc.IModel;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Int32Property extends PropertyReadWrite<ValueInt32> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         ValueInt32 v = get(o);
         if (v == null) {
             return "";

@@ -1,6 +1,8 @@
 
 package axoloti.property;
 
+import axoloti.mvc.IModel;
+
 /**
  *
  * @author jtaelman
@@ -22,7 +24,7 @@ public class MidiCCProperty extends PropertyReadWrite<Integer> {
     }
 
     @Override
-    public String getAsString(Object o) {
+    public String getAsString(IModel o) {
         return Integer.toString(get(o));
     }
 

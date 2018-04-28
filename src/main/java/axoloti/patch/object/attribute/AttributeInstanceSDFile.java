@@ -44,7 +44,6 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
     AttributeInstanceSDFile(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
         super(controller, axoObj1);
-        this.axoObj = axoObj1;
     }
 
     @Override
@@ -66,9 +65,9 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public void setValue(String tableName) {
+    public void setValueString(String value) {
         String oldvalue = this.fileName;
-        this.fileName = tableName;
+        this.fileName = value;
         firePropertyChange(
                 ATTR_VALUE,
                 oldvalue, this.fileName);
@@ -85,7 +84,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     File getFile() {
-        Path basePath = FileSystems.getDefault().getPath(getObjectInstance().getPatchModel().getFileNamePath());
+        Path basePath = FileSystems.getDefault().getPath(getParent().getParent().getFileNamePath());
         Path parent = basePath.getParent();
         if (parent == null) {
             return new File(fileName);
@@ -103,7 +102,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         if (f == null) {
             return "";
         }
-        String FilenamePath = getObjectInstance().getPatchModel().getFileNamePath();
+        String FilenamePath = getParent().getParent().getFileNamePath();
         if (FilenamePath != null && !FilenamePath.isEmpty()) {
             Path pathAbsolute = Paths.get(f.getPath());
             String parent = new File(FilenamePath).getParent();

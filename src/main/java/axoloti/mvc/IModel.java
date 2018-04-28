@@ -1,4 +1,3 @@
-
 package axoloti.mvc;
 
 import axoloti.property.Property;
@@ -11,11 +10,20 @@ import java.util.List;
  */
 public interface IModel {
 
-    public List<Property> getProperties();
+    IModel getParent();
 
-    public void addPropertyChangeListener(PropertyChangeListener listener);
+    AbstractDocumentRoot getDocumentRoot();
 
-    public void removePropertyChangeListener(PropertyChangeListener listener);
+    void setDocumentRoot(AbstractDocumentRoot documentRoot);
+
+    List<Property> getProperties();
+
+    void addPropertyChangeListener(PropertyChangeListener listener);
+
+    void removePropertyChangeListener(PropertyChangeListener listener);
 
     void firePropertyChange(Property property, Object oldValue, Object newValue);
+
+    AbstractController getControllerFromModel();
+
 }

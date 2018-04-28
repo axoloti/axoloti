@@ -55,7 +55,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public InletInstance GetInletInstance(String n) {
+    public InletInstance findInletInstance(String n) {
         if (inletInstances != null) {
             for (InletInstance i : inletInstances) {
                 if (i.GetLabel().equals(n)) {
@@ -69,7 +69,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public OutletInstance GetOutletInstance(String n) {
+    public OutletInstance findOutletInstance(String n) {
         if (outletInstances != null) {
             for (OutletInstance i : outletInstances) {
                 if (n.equals(i.GetLabel())) {
@@ -84,7 +84,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 
 //    @Override
 //    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
-//        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getPatchModel().getFileNamePath() + "\"\n";
+//        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getParent().getFileNamePath() + "\"\n";
 //    }
     @Override
     public List<InletInstance> getInletInstances() {
@@ -113,10 +113,6 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-    }
-
-    @Override
-    public void Remove() {
     }
 
     @Override

@@ -8,16 +8,10 @@ import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
-        super(controller);
-    }
-
     private LabelComponent readout;
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
+        super(controller);
         readout = new LabelComponent("xxxxx");
         add(readout);
         readout.setSize(40, 18);

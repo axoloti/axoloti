@@ -27,7 +27,7 @@ public class BooleanProperty extends JCheckBoxMenuItem {
                 } else {
                     o.addMetaUndo("clear " + property.getFriendlyName());
                 }
-                o.setModelUndoableProperty(property, isSelected());
+                o.generic_setModelUndoableProperty(property, isSelected());
             }
         });
     }

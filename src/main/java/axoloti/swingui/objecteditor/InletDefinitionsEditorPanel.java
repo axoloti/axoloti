@@ -17,7 +17,6 @@
  */
 package axoloti.swingui.objecteditor;
 
-import axoloti.mvc.array.ArrayController;
 import axoloti.object.AxoObject;
 import axoloti.object.ObjectController;
 import axoloti.object.inlet.Inlet;
@@ -27,10 +26,10 @@ import axoloti.object.inlet.InletTypes;
  *
  * @author jtaelman
  */
-public class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
+class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
 
-    public InletDefinitionsEditorPanel(ObjectController controller) {
-        super(controller, AxoObject.OBJ_INLETS, InletTypes.getTypes());
+    public InletDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
+        super(controller, AxoObject.OBJ_INLETS, InletTypes.getTypes(), editor);
     }
 
     @Override
@@ -43,8 +42,4 @@ public class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
         return "inlet";
     }
 
-    @Override
-    ArrayController getTController() {
-        return getController().inlets;
-    }
 }

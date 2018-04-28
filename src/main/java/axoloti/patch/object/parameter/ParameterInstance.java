@@ -18,6 +18,7 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.Modulation;
+import axoloti.mvc.AbstractController;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
@@ -58,7 +59,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     protected int index;
     public T parameter;
     protected boolean needsTransmit = false;
-    public AxoObjectInstance axoObjectInstance;
+
     public NativeToReal convs[];
     NativeToReal conversion;
 //    int selectedConv = 0;
@@ -71,7 +72,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     public ParameterInstance(T param, AxoObjectInstance axoObjInstance) {
         super();
         parameter = param;
-        this.axoObjectInstance = axoObjInstance;
+        setParent(axoObjInstance);
         name = parameter.getName();
     }
 
@@ -85,7 +86,6 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 //    public static final String ELEMENT_PARAM_VALUE = "Value";
 //    public static final String ELEMENT_PARAM_PRESETS = "Presets";
 //    public static final String ELEMENT_PARAM_PARAM_ON_PARENT = "ParamOnParent";
-
     @Override
     public List<Property> getProperties() {
         List<Property> l = super.getProperties();
@@ -140,7 +140,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'P';
-        int pid = getObjectInstance().getPatchModel().GetIID();
+        int pid = getObjectInstance().getParent().GetIID();
         data[4] = (byte) pid;
         data[5] = (byte) (pid >> 8);
         data[6] = (byte) (pid >> 16);
@@ -160,7 +160,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
             return null;
         }
         for (Object o : getPresets()) {
-            Preset p = (Preset)o;
+            Preset p = (Preset) o;
             if (p.index == i) {
                 return p;
             }
@@ -180,13 +180,11 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 //        v1.setRaw(v);
 //        setValue(v1);
 //    }
-
 //    public int GetValueRaw() {
 //        return getValue().getRaw();
 //    }
-
     public String indexName() {
-        return "PARAM_INDEX_" + axoObjectInstance.getLegalName() + "_" + getLegalName();
+        return "PARAM_INDEX_" + getParent().getLegalName() + "_" + getLegalName();
     }
 
     public String getLegalName() {
@@ -200,10 +198,10 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     abstract public String valueName(String vprefix);
 
     public String ControlOnParentName() {
-        if (axoObjectInstance.getParameterInstances().size() == 1) {
-            return axoObjectInstance.getInstanceName();
+        if (getParent().getParameterInstances().size() == 1) {
+            return getParent().getInstanceName();
         } else {
-            return axoObjectInstance.getInstanceName() + ":" + parameter.getName();
+            return getParent().getInstanceName() + ":" + parameter.getName();
         }
     }
 
@@ -229,8 +227,8 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     // review!
     public String GetUserParameterName() {
-        if (axoObjectInstance.getParameterInstances().size() == 1) {
-            return axoObjectInstance.getInstanceName();
+        if (getParent().getParameterInstances().size() == 1) {
+            return getParent().getInstanceName();
         } else {
             return getName();
         }
@@ -239,6 +237,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     abstract public String GenerateParameterInitializer();
 
     public abstract int valToInt32(DT o);
+
     public abstract DT int32ToVal(int v);
 
     public String GetCMultiplier() {
@@ -260,15 +259,15 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     }
 
     public T createParameterForParent() {
-        T pcopy = (T)parameter.getClone();
+        T pcopy = (T) parameter.getClone();
         pcopy.setName(ControlOnParentName());
         pcopy.noLabel = null;
-        pcopy.PropagateToChild = axoObjectInstance.getLegalName() + "_" + getLegalName();
+        pcopy.PropagateToChild = getParent().getLegalName() + "_" + getLegalName();
         return pcopy;
     }
 
     public AxoObjectInstance getObjectInstance() {
-        return axoObjectInstance;
+        return (AxoObjectInstance) getParent();
     }
 
     @Override
@@ -370,58 +369,49 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     T paramOnParent;
 
-    public T getParamOnParent() {
-        return paramOnParent;
-    }
-
     public abstract Preset presetFactory(int index, DT value);
 
     public void updateParamOnParent() {
         if (paramOnParent != null) {
             paramOnParent.setName(ControlOnParentName());
             paramOnParent.noLabel = null;
-            paramOnParent.PropagateToChild = axoObjectInstance.getLegalName() + "_" + getLegalName();
+            paramOnParent.PropagateToChild = getParent().getLegalName() + "_" + getLegalName();
         }
-    }
-
-    void setParamOnParent(T paramOnParent) {
-        Parameter prev_value = this.paramOnParent;
-        this.paramOnParent = paramOnParent;
-//      firePropertyChange(ParameterInstanceController.ELEMENT_PARAM_PARAM_ON_PARENT, prev_value, paramOnParent);
-//      PatchController pc = getParent().getParent();
-        PatchModel pm = getObjectInstance().getPatchModel();
-        if (pm == null) return;
-        if (pm.getContainer() == null) return;
-        AxoObjectInstancePatcher aoip = pm.getContainer();
-        AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
-        ArrayList<Parameter> ps = new ArrayList<>(aop.getParameters());
-        if (paramOnParent != null) {
-            ps.add(paramOnParent);
-            // TODO: sort
-        }
-        if (prev_value != null) {
-            ps.remove((Parameter) prev_value);
-        }
-        aop.setParameters(ps);
     }
 
     public void setOnParent(Boolean onParent) {
         if (onParent == null) {
             onParent = false;
         }
-        if (getOnParent() == (boolean)onParent) {
+        if (getOnParent() == (boolean) onParent) {
             return;
         }
         if (!onParent) {
             onParent = null;
         }
         Boolean oldValue = this.onParent;
-        this.onParent = onParent;
-        if (onParent != null && onParent) {
-            setParamOnParent(createParameterForParent());
-        } else {
-            setParamOnParent(null);
+        PatchModel pm = getObjectInstance().getParent();
+        if (pm == null) {
+            return;
         }
+        AxoObjectInstancePatcher aoip = pm.getParent();
+        if (aoip == null) {
+            return;
+        }
+        AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+
+        if (onParent != null && onParent) {
+            if (paramOnParent == null) {
+                paramOnParent = createParameterForParent();
+                paramOnParent.setParent(aop);
+            }
+            aop.getControllerFromModel().addParameter(paramOnParent);
+        } else {
+            if (paramOnParent != null) {
+                aop.getControllerFromModel().removeParameter(paramOnParent);
+            }
+        }
+        this.onParent = onParent;
         firePropertyChange(
                 ParameterInstance.ON_PARENT,
                 oldValue, onParent);
@@ -430,13 +420,14 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     public abstract ArrayList getPresets();
 
     public abstract void setPresets(Object o);
-/*
-    public void setPresets(ArrayList<Preset> presets) {
-        ArrayList<Preset> prevValue = getPresets();
-        this.presets = presets;
-        firePropertyChange(ParameterInstance.ELEMENT_PARAM_PRESETS, prevValue, this.presets);
-    }
-*/
+    /*
+     public void setPresets(ArrayList<Preset> presets) {
+     ArrayList<Preset> prevValue = getPresets();
+     this.presets = presets;
+     firePropertyChange(ParameterInstance.ELEMENT_PARAM_PRESETS, prevValue, this.presets);
+     }
+     */
+
     public String getName() {
         return name;
     }
@@ -447,13 +438,20 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         firePropertyChange(AtomDefinition.NAME, prevValue, name);
     }
 
-
     @Override
     public void dispose() {
         super.dispose();
-        if (paramOnParent!=null) {
-            setParamOnParent(null);
-        }
+        getControllerFromModel().changeOnParent(false);
+    }
+
+    @Override
+    public AbstractController createController() {
+        return new ParameterInstanceController(this);
+    }
+
+    @Override
+    public ParameterInstanceController getControllerFromModel() {
+        return (ParameterInstanceController) super.getControllerFromModel();
     }
 
 }

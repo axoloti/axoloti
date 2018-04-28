@@ -25,27 +25,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     public ParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
-    }
-
-    @Override
-    public ParameterInstanceFrac32UMap getModel() {
-        return (ParameterInstanceFrac32UMap) super.getModel();
-    }
-
-    @Override
-    public DialComponent CreateControl() {
-        DialComponent d = new DialComponent(
-                0.0,
-                getModel().getMin(),
-                getModel().getMax(),
-                getModel().getTick());
-        d.setNative(getModel().getConvs());
-        return d;
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
 
         JPanel btns = new JPanel();
         btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
@@ -65,6 +44,21 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 //        ctrl.setValue(getModel().getValue().getDouble());
     }
 
+    @Override
+    public ParameterInstanceFrac32UMap getModel() {
+        return (ParameterInstanceFrac32UMap) super.getModel();
+    }
+
+    @Override
+    public DialComponent CreateControl() {
+        DialComponent d = new DialComponent(
+                0.0,
+                getModel().getMin(),
+                getModel().getMax(),
+                getModel().getTick());
+        d.setNative(getModel().getConvs());
+        return d;
+    }
 
     /*
      *  Preset logic

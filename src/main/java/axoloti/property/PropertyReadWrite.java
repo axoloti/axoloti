@@ -1,5 +1,6 @@
 package axoloti.property;
 
+import axoloti.mvc.IModel;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ public abstract class PropertyReadWrite<T extends Object> extends Property<T> {
     }
 
     @Override
-    public T get(Object o) {
+    public T get(IModel o) {
         try {
             Object r = getter.invoke(o);
             return (T) r;
@@ -40,8 +41,9 @@ public abstract class PropertyReadWrite<T extends Object> extends Property<T> {
     }
 
     @Override
-    public void set(Object obj, Object val) {
+    public void set(IModel obj, Object val) {
         try {
+            //System.out.println("set property " + getFriendlyName() + " new: " + val.toString());
             setter.invoke(obj, val);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Property.class.getName()).log(Level.SEVERE, obj.getClass().getName() + ".set" + getName() + "(" + val.getClass().getName() + ")", ex);
