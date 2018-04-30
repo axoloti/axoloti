@@ -10,8 +10,8 @@ import java.beans.PropertyChangeEvent;
  */
 public abstract class Property<T> {
 
-    final String name;
-    final String friendlyName;
+    private final String name;
+    private final String friendlyName;
 
     public Property(String name, Class propertyClass, Class containerClass, String friendlyName) {
         this.name = name;

@@ -27,7 +27,7 @@ public class UndoUI implements UndoableEditListener {
 
         public UndoAction() {
             super("Undo");
-            setEnabled(false);
+            UndoAction.this.setEnabled(false);
         }
 
         @Override
@@ -52,7 +52,7 @@ public class UndoUI implements UndoableEditListener {
 
         public RedoAction() {
             super("Redo");
-            setEnabled(false);
+            RedoAction.this.setEnabled(false);
         }
 
         @Override

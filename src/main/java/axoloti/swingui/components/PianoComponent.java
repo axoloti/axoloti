@@ -47,7 +47,10 @@ public abstract class PianoComponent extends JComponent {
 
     public PianoComponent() {
         super();
+        initComponent();
+    }
 
+    private void initComponent() {
         MouseInputAdapter ma = new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

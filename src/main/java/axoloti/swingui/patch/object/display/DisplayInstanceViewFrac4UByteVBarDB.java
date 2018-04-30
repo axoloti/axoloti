@@ -7,15 +7,14 @@ import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac4UByteVBarDB extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceController controller) {
-        super(controller);
-    }
-
     private VLineComponentDB vbar[];
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    DisplayInstanceViewFrac4UByteVBarDB(DisplayInstanceController controller) {
+        super(controller);
+        initComponents();
+    }
+
+    private void initComponents() {
         vbar = new VLineComponentDB[4];
         for (int i = 0; i < 4; i++) {
             vbar[i] = new VLineComponentDB(0, -60, 10);

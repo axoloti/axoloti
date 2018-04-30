@@ -45,7 +45,6 @@ public class PAxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFact
             throw new Error("unknown object type");
         }
         controller.addView(view);
-        view.PostConstructor();
         return view;
     }
 }

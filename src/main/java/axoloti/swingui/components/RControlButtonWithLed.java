@@ -22,8 +22,8 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 /**
  *
@@ -35,10 +35,11 @@ public class RControlButtonWithLed extends Component {
     private static final int inset = 5;
 
     public RControlButtonWithLed() {
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
+        initComponent();
+    }
+
+    private void initComponent() {
+        addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -52,14 +53,6 @@ public class RControlButtonWithLed extends Component {
                     pressed = false;
                     repaint();
                 }
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
     }

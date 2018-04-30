@@ -11,12 +11,10 @@ class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
 
     DisplayInstanceViewInt32HexLabel(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         readout = new LabelComponent("xxxxxxxxxxx");
         add(readout);
         readout.setSize(getSize());

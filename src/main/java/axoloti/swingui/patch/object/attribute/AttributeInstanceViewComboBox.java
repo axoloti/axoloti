@@ -15,6 +15,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
     public AttributeInstanceViewComboBox(AttributeInstanceController controller, AxoObjectInstanceView axoObjectView) {
         super(controller, axoObjectView);
+        initComponents();
     }
 
     @Override
@@ -22,9 +23,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
         return (AttributeInstanceComboBox) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         comboBox = new DropDownComponent(getModel().getModel().getMenuEntries());
         comboBox.setFont(Constants.FONT);
         setString(getModel().getValue());

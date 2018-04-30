@@ -14,6 +14,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
     AttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -21,9 +22,7 @@ class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
         return (AttributeInstanceSpinner) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         Integer ival = getModel().getValueInteger();
         int value = ival;
 

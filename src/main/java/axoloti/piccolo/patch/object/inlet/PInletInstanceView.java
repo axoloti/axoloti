@@ -25,6 +25,10 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
     public PInletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         this.controller = controller;
+        initComponent();
+    }
+
+    private void initComponent() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
 
@@ -69,6 +73,7 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
         }
     };
 
+    @Override
     public void setHighlighted(boolean highlighted) {
         if (axoObjectInstanceView != null
                 && axoObjectInstanceView.getPatchView() != null) {

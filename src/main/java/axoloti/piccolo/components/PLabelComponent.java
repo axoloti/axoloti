@@ -11,8 +11,8 @@ import org.piccolo2d.extras.pswing.PSwing;
 
 public class PLabelComponent extends PatchPNode {
 
-    private final PSwing textNode;
-    private final JLabel label;
+    private PSwing textNode;
+    private JLabel label;
     private boolean trackLabelSize = true;
 
     public PLabelComponent(String text) {
@@ -21,6 +21,10 @@ public class PLabelComponent extends PatchPNode {
 
     public PLabelComponent(String text, boolean trackLabelSize) {
         this.trackLabelSize = trackLabelSize;
+        initComponent(text);
+    }
+
+    private void initComponent(String text) {
         getProxyComponent().setAlignmentX(LEFT_ALIGNMENT);
         label = new JLabel(text);
         textNode = new PSwing(label);

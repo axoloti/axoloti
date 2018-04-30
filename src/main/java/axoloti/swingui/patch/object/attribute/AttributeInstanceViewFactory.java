@@ -45,7 +45,6 @@ public class AttributeInstanceViewFactory {
          return new AttributeInstanceWavefile((AttributeInstanceWavefile)model, obj);
          }
          */
-        view.PostConstructor();
         controller.addView(view);
         return view;
     }

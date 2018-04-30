@@ -16,6 +16,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
 
     public PAxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewPiccolo p) {
         super(controller, p);
+        initComponents();
     }
 
     @Override
@@ -23,9 +24,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
         return (AxoObjectInstancePatcherObject) controller.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         BtnEdit = new PButtonComponent("edit", this);
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);

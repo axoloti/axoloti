@@ -45,6 +45,10 @@ public class ScopeComponent extends ADispComponent {
         for (int i = 0; i < length; i++) {
             xvalue[i] = i + 1;
         }
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(length + 2, vsize + 2);
         setMinimumSize(d);
         setMaximumSize(d);

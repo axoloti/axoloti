@@ -294,7 +294,6 @@ public class FirmwareUpgrade_1_0_12 {
                 offset += nRead;
             } while (tlength > 0);
             inputStream.close();
-            return;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
@@ -463,7 +462,7 @@ public class FirmwareUpgrade_1_0_12 {
         }
     }
 
-    void GoIdleState() {
+    final void GoIdleState() {
         headerstate = 0;
         state = ReceiverState.header;
     }

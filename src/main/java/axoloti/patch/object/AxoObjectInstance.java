@@ -157,18 +157,19 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
         super(controller, patchModel, InstanceName1, location);
+
         switch (typeName) {
             case "patch/outlet a":
-                parentOutlet = new OutletFrac32Buffer(getInstanceName(), "");
+                parentOutlet = new OutletFrac32Buffer();
                 break;
             case "patch/outlet b":
-                parentOutlet = new OutletBool32(getInstanceName(), "");
+                parentOutlet = new OutletBool32();
                 break;
             case "patch/outlet f":
-                parentOutlet = new OutletFrac32(getInstanceName(), "");
+                parentOutlet = new OutletFrac32();
                 break;
             case "patch/outlet i":
-                parentOutlet = new OutletInt32(getInstanceName(), "");
+                parentOutlet = new OutletInt32();
                 break;
             default:
                 parentOutlet = null;
@@ -176,16 +177,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
         switch (typeName) {
             case "patch/inlet a":
-                parentInlet = new InletFrac32Buffer(getInstanceName(), "");
+                parentInlet = new InletFrac32Buffer();
                 break;
             case "patch/inlet b":
-                parentInlet = new InletBool32(getInstanceName(), "");
+                parentInlet = new InletBool32();
                 break;
             case "patch/inlet f":
-                parentInlet = new InletFrac32(getInstanceName(), "");
+                parentInlet = new InletFrac32();
                 break;
             case "patch/inlet i":
-                parentInlet = new InletInt32(getInstanceName(), "");
+                parentInlet = new InletInt32();
                 break;
             default:
                 parentInlet = null;
@@ -195,10 +196,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
             if (parentInlet != null) {
                 parentInlet.setParent(aop);
+                parentInlet.setName(InstanceName1);
                 aop.getControllerFromModel().addInlet(parentInlet);
             }
             if (parentOutlet != null) {
                 parentOutlet.setParent(aop);
+                parentOutlet.setName(InstanceName1);
                 aop.getControllerFromModel().addOutlet(parentOutlet);
             }
         }

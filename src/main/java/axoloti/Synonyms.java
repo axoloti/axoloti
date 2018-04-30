@@ -68,8 +68,8 @@ public class Synonyms {
     static String filename = "objects/synonyms.xml";
 
     protected Synonyms() {
-        inlets = new HashMap<String, String>();
-        outlets= new HashMap<String, String>();
+        inlets = new HashMap<>();
+        outlets= new HashMap<>();
     }
 
     @ElementMap(entry = "inlet", key = "a", value = "b", attribute=true ,inline = false)

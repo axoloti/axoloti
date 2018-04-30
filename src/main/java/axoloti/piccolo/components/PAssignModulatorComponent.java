@@ -42,11 +42,15 @@ public class PAssignModulatorComponent extends PatchPNode {
 
     public PAssignModulatorComponent(PParameterInstanceViewFrac32UMap parameterInstanceView) {
         super(parameterInstanceView.getPatchView());
+        this.parameterInstanceView = parameterInstanceView;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.parameterInstanceView = parameterInstanceView;
         addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void mouseClicked(PInputEvent e) {

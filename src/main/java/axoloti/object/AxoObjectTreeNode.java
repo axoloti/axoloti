@@ -31,8 +31,8 @@ public class AxoObjectTreeNode implements Comparable {
 
     @Attribute
     String id;
-    public TreeMap<String, AxoObjectTreeNode> SubNodes = new TreeMap<String, AxoObjectTreeNode>();
-    public ArrayList<IAxoObject> Objects = new ArrayList<IAxoObject>();
+    public TreeMap<String, AxoObjectTreeNode> SubNodes = new TreeMap<>();
+    public ArrayList<IAxoObject> Objects = new ArrayList<>();
     public IAxoObject NodeObject;
     public String description;
 

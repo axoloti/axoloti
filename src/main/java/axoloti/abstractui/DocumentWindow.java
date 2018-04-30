@@ -18,7 +18,7 @@
 package axoloti.abstractui;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -31,11 +31,11 @@ public interface DocumentWindow {
     public String getTitle();
 
     /*
-    // return true when cancelling an unsaved close
+     * return true when cancelling an unsaved close
      */
     public boolean askClose();
 
     public File getFile();
 
-    public ArrayList<DocumentWindow> getChildDocuments();
+    public List<DocumentWindow> getChildDocuments();
 }

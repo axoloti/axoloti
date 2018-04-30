@@ -14,16 +14,17 @@ import javax.swing.BoxLayout;
 
 public abstract class AttributeInstanceView extends ViewPanel<AttributeInstanceController> implements IAttributeInstanceView {
 
-    IAxoObjectInstanceView axoObjectInstanceView;
+    protected IAxoObjectInstanceView axoObjectInstanceView;
 
-    LabelComponent label;
+    protected LabelComponent label;
 
     AttributeInstanceView(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller);
         this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
-    void PostConstructor() {
+    private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         label = new LabelComponent("");

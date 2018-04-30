@@ -431,7 +431,7 @@ public class AxoObject extends AxoObjectAbstract {
         if ((includes == null) || includes.isEmpty()) {
             return null;
         } else if (getPath() != null) {
-            HashSet<String> r = new HashSet<String>();
+            HashSet<String> r = new HashSet<>();
             for (String s : includes) {
                 if (s.startsWith("./")) {
                     String strippedPath = getPath().substring(0, getPath().lastIndexOf(File.separatorChar));
@@ -491,6 +491,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public AxoObject clone() throws CloneNotSupportedException {
+        super.clone();
         throw new CloneNotSupportedException();
         /*
         // This implementation does not make a shallow clone!

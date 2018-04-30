@@ -22,6 +22,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
 
     AttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -29,9 +30,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         return (AttributeInstanceSDFile) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFFileName = new JTextField(getModel().getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;

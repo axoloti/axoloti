@@ -29,11 +29,16 @@ public class PatchPCanvas extends PSwingCanvas implements PatchViewportView {
 
     public PatchPCanvas(PatchViewPiccolo parent) {
         super();
+        this.parent = parent;
 //        PDebug.debugPrintFrameRate = true;
 //        PDebug.debugThreads = true;
 //        PDebug.debugPaintCalls = true;
 //        PDebug.debugRegionManagement = true;
 //        PDebug.debugBounds = true;
+        initComponent();
+    }
+
+    private void initComponent() {
         setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
         setLocation(0, 0);
         setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);

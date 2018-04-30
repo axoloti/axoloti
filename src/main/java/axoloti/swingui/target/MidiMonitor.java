@@ -16,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class MidiMonitor extends TJFrame {
 
-    final PollHandler poller;
+    PollHandler poller;
 
     /**
      * Creates new form Memory
@@ -24,6 +24,10 @@ public class MidiMonitor extends TJFrame {
     public MidiMonitor(TargetController controller) {
         super(controller);
         initComponents();
+        initComponents2();
+    }
+
+    private void initComponents2() {
         setTitle("MIDI input monitor");
         jMidiMonitorTable.setFont(Font.getFont(Font.MONOSPACED));
         //jTextAreaMemoryContent.setEditable(false);

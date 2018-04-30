@@ -17,6 +17,10 @@ public class PLedstripComponent extends PDispComponentAbstract {
         super(axoObjectInstanceView);
         this.value = 0;
         this.n = n;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(bsize * n + 2, bsize + 2);
         setMinimumSize(d);
         setPreferredSize(d);

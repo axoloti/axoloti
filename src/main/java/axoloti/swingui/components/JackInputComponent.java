@@ -39,6 +39,10 @@ public class JackInputComponent extends JComponent {
     private boolean connected = false;
 
     public JackInputComponent() {
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
@@ -46,6 +50,7 @@ public class JackInputComponent extends JComponent {
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
     }
+
     private final Stroke stroke = new BasicStroke(1.5f);
 
     @Override

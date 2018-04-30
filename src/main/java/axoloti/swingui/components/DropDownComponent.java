@@ -25,8 +25,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
@@ -40,7 +40,7 @@ import javax.swing.JPopupMenu;
  *
  * @author Johannes Taelman
  */
-public class DropDownComponent extends JComponent implements MouseListener {
+public class DropDownComponent extends JComponent {
 
     public interface DDCListener {
 
@@ -52,8 +52,18 @@ public class DropDownComponent extends JComponent implements MouseListener {
 
     public DropDownComponent(List<String> items) {
         SelectedIndex = 0;
+        initComponent(items);
+    }
+
+    private void initComponent(List<String> items) {
+        this.items = items;
         setItems(items);
-        addMouseListener((MouseListener) this);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                doPopup();
+            }
+        });
     }
 
     public void setItems(List<String> items) {
@@ -126,7 +136,7 @@ public class DropDownComponent extends JComponent implements MouseListener {
         return items.get(i);
     }
 
-    ArrayList<DDCListener> ddcListeners = new ArrayList<DDCListener>();
+    ArrayList<DDCListener> ddcListeners = new ArrayList<>();
 
     void doPopup() {
         if (isEnabled()) {
@@ -151,27 +161,6 @@ public class DropDownComponent extends JComponent implements MouseListener {
 
     public void addItemListener(DDCListener itemListener) {
         ddcListeners.add(itemListener);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        doPopup();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
     }
 
 }

@@ -5,7 +5,7 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceInt32BoxSmall;
 import axoloti.piccolo.components.control.PNumberBoxComponent;
 
-public class PParameterInstanceViewInt32BoxSmall extends PParameterInstanceViewInt32Box {
+class PParameterInstanceViewInt32BoxSmall extends PParameterInstanceViewInt32Box {
 
     public PParameterInstanceViewInt32BoxSmall(ParameterInstanceController controller,
             IAxoObjectInstanceView axoObjectInstanceView) {

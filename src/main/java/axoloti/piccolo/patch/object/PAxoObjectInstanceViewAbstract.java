@@ -73,14 +73,18 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         e.getPickedNode().findIntersectingNodes(location, picked);
         Set pickedSet = new HashSet(picked);
         pickedSet.retainAll(popupMenuNodes);
-        return pickedSet.size() == 0;
+        return pickedSet.isEmpty();
     }
 
     PAxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewPiccolo patchView) {
         super(patchView);
         this.controller = controller;
-        setVisible(false);
         titleBar = new PatchPNode(patchView);
+        initComponent();
+    }
+
+    private void initComponent() {
+        setVisible(false);
     }
 
     @Override
@@ -108,8 +112,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     protected static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
     protected static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
 
-    @Override
-    public void PostConstructor() {
+    private void initComponents() {
         setMinimumSize(new Dimension(60, 40));
 
         titleBar.removeAllChildren();
@@ -197,6 +200,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         }
     }
 
+    @Override
     public void addInstanceNameEditor() {
         getController().addMetaUndo("edit object instance name");
         InstanceNameTF = new PTextFieldComponent(getModel().getInstanceName());

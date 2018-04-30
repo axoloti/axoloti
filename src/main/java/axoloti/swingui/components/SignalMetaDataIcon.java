@@ -38,6 +38,10 @@ public class SignalMetaDataIcon extends JComponent {
 
     public SignalMetaDataIcon(SignalMetaData smd) {
         this.smd = smd;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(12, 14);
         setMinimumSize(d);
         setMaximumSize(d);

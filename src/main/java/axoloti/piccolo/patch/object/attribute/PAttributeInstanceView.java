@@ -21,6 +21,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
         super(axoObjectInstanceView.getPatchView());
         this.controller = controller;
         this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
     @Override
@@ -29,7 +30,7 @@ public abstract class PAttributeInstanceView extends PatchPNode implements IAttr
     @Override
     public abstract void UnLock();
 
-    public void PostConstructor() {
+    private void initComponents() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
         label = new PLabelComponent(getModel().getModel().getName());

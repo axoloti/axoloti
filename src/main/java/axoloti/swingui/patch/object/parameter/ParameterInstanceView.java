@@ -19,6 +19,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
@@ -44,6 +45,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
     ParameterInstanceView(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller);
         this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
     @Override
@@ -62,8 +64,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
         pv.scrollTo(this);
     }
 
-    @Override
-    public void PostConstructor() {
+    private void initComponents() {
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
@@ -154,10 +155,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
 
     public abstract ACtrlComponent CreateControl();
 
-    MouseListener popupMouseListener = new MouseListener() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
+    MouseListener popupMouseListener = new MouseAdapter() {
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -175,13 +173,6 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
             }
         }
 
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
     };
 
     @Override

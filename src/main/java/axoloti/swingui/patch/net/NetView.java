@@ -39,7 +39,10 @@ public class NetView extends JComponent implements INetView {
     public NetView(NetController controller, PatchViewSwing patchView) {
         this.patchView = patchView;
         this.controller = controller;
+        initComponent();
+    }
 
+    private void initComponent() {
         setOpaque(false);
         updateSources();
         updateDests();
@@ -127,6 +130,8 @@ public class NetView extends JComponent implements INetView {
         for (IIoletInstanceView i : dest) {
             if (i == null) {
                 System.out.println("null");
+                throw new Error("IIoletInstanceView");
+                // break;
             }
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
@@ -137,6 +142,8 @@ public class NetView extends JComponent implements INetView {
         for (IIoletInstanceView i : source) {
             if (i == null) {
                 System.out.println("null");
+                throw new Error("IIoletInstanceView");
+                // break;
             }
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);

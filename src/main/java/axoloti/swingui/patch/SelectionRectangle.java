@@ -27,6 +27,10 @@ import javax.swing.JPanel;
 public class SelectionRectangle extends JPanel {
 
     public SelectionRectangle() {
+        initComponent();
+    }
+
+    private void initComponent() {
         setLayout(null);
         setBorder(BorderFactory.createEtchedBorder());
     }

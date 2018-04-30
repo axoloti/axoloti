@@ -34,8 +34,6 @@ public class PAttributeInstanceViewFactory {
             view = null;
             throw new Error("unkonwn attribute type");
         }
-
-        view.PostConstructor();
         controller.addView(view);
         return view;
     }

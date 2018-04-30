@@ -7,7 +7,7 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.components.control.PHRadioComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PParameterInstanceViewInt32HRadio extends PParameterInstanceViewInt32 {
+class PParameterInstanceViewInt32HRadio extends PParameterInstanceViewInt32 {
 
     public PParameterInstanceViewInt32HRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

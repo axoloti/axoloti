@@ -13,11 +13,10 @@ class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
     public AxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
+        initComponents();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         BtnEdit = new ButtonComponent("edit");
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);

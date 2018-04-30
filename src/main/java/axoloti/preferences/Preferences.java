@@ -69,7 +69,7 @@ public class Preferences {
     @Element(required = false)
     Boolean ExpertMode;
     @ElementList(required = false)
-    ArrayList<String> recentFiles = new ArrayList<String>();
+    ArrayList<String> recentFiles = new ArrayList<>();
 
     @Deprecated
     @Element(required = false)
@@ -131,7 +131,7 @@ public class Preferences {
             FavouriteDir = "";
         }
         if (BoardNames == null) {
-            BoardNames = new HashMap<String, String>();
+            BoardNames = new HashMap<>();
         }
         if (ControllerObject == null) {
             ControllerObject = "";
@@ -139,7 +139,7 @@ public class Preferences {
         }
 
         if (libraries == null) {
-            libraries = new ArrayList<AxolotiLibrary>();
+            libraries = new ArrayList<>();
         }
     }
 
@@ -433,7 +433,7 @@ public class Preferences {
     }
 
     public final void ResetLibraries(boolean delete) {
-        libraries = new ArrayList<AxolotiLibrary>();
+        libraries = new ArrayList<>();
 
         try {
             AxoGitLibrary factory = new AxoGitLibrary(
@@ -477,7 +477,7 @@ public class Preferences {
     }
 
     private void buildObjectSearchPatch() {
-        ArrayList<String> objPath = new ArrayList<String>();
+        ArrayList<String> objPath = new ArrayList<>();
 
         for (AxolotiLibrary lib : libraries) {
             if (lib.getEnabled()) {

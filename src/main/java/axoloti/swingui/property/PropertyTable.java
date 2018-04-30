@@ -24,6 +24,10 @@ public class PropertyTable extends JTable implements IView {
         super();
         this.properties = properties;
         this.controller = controller;
+        initComponents();
+    }
+
+    private void initComponents() {
         setModel(new AbstractTableModel() {
             private String[] columnNames = {"Property", "Value"};
 

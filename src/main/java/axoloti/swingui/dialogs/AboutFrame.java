@@ -41,6 +41,10 @@ public class AboutFrame extends javax.swing.JFrame {
      */
     public AboutFrame() {
         initComponents();
+        initComponent2();
+    }
+
+    private void initComponent2() {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
         try {
             jTextPane1.setPage(getClass().getResource("/resources/about.html"));

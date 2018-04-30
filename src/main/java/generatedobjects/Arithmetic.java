@@ -110,45 +110,45 @@ public class Arithmetic extends gentools {
         WriteAxoObject(catName, CreateIDivideRemainder());
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKAmp());
             c.add(CreateSAmp());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKGain());
             c.add(CreateSGain());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKRateLeftShift());
             c.add(CreateSRateLeftShift());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKRateRightShift());
             c.add(CreateSRateRightShift());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_Plus1());
             c.add(Create_Plus1i());
             c.add(Create_Plus1Tilde());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_Minus1());
             c.add(Create_Minus1i());
             c.add(Create_Minus1Tilde());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateStarF());
             c.add(CreateStarFS());
             c.add(CreateStarSF());
@@ -159,13 +159,13 @@ public class Arithmetic extends gentools {
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKLog());
             c.add(CreateSLog());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKExp());
             c.add(CreateSExp());
             WriteAxoObject(catName, c);

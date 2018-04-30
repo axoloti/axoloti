@@ -58,11 +58,15 @@ public class DialComponent extends ACtrlComponent {
 
     public DialComponent(double value, double min, double max, double tick) {
         super();
-        setInheritsPopupMenu(true);
         this.value = value;
         this.min = min;
         this.max = max;
         this.tick = tick;
+        initComponent();
+    }
+
+    private void initComponent() {
+        setInheritsPopupMenu(true);
         Dimension d = new Dimension(28, 32);
         setPreferredSize(d);
         setMaximumSize(d);
@@ -433,6 +437,7 @@ public class DialComponent extends ACtrlComponent {
         this.tick = tick;
     }
 
+    @Override
     public void robotMoveToCenter() {
         //getRootPane().setCursor(MainFrame.transparentCursor);
         if (robot != null) {

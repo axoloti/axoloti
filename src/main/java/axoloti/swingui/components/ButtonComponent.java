@@ -27,20 +27,21 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.util.ArrayList;
 import javax.swing.JComponent;
-import javax.swing.event.MouseInputListener;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ButtonComponent extends JComponent implements MouseInputListener, KeyListener {
+public class ButtonComponent extends JComponent {
 
     boolean isHighlighted = false;
     String label;
@@ -49,7 +50,7 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
 
         public void OnPushed();
     }
-    ArrayList<ActListener> actListeners = new ArrayList<ActListener>();
+    ArrayList<ActListener> actListeners = new ArrayList<>();
 
     public void addActListener(ActListener al) {
         actListeners.add(al);
@@ -82,10 +83,13 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
 
     public ButtonComponent(String label) {
         this.label = label;
+        initCompontent();
+    }
+
+    private void initCompontent() {
         FontRenderContext frc = new FontRenderContext(null, true, true);
-        int width = 0;
         TextLayout tl = new TextLayout(label, Constants.FONT, frc);
-        width = (int) tl.getBounds().getWidth();
+        int width = (int) tl.getBounds().getWidth();
         if (width < 20) {
             width = 20;
         }
@@ -95,7 +99,53 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
         setMinimumSize(d);
         setMaximumSize(new Dimension(5000, 18));
         setFocusable(true);
-        addMouseListener(this);
+        addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                grabFocus();
+                DoPushed();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                isHighlighted = false;
+                repaint();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                setHighlighted(true);
+                e.consume();
+                repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                setHighlighted(false);
+                e.consume();
+                repaint();
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (contains(e.getX(), getY())) {
+                    setHighlighted(true);
+                } else {
+                    setHighlighted(false);
+                }
+                e.consume();
+                repaint();
+            }
+        });
         addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -107,21 +157,25 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
                 repaint();
             }
         });
+
+        // keyListener actually unused...
+        KeyListener keyListener = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent ke) {
+                if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
+                    ke.consume();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+                if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
+                    ke.consume();
+                }
+            }
+        };
     }
 
-    @Override
-    public void keyPressed(KeyEvent ke) {
-        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            ke.consume();
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent ke) {
-        if (ke.getKeyCode() == KeyEvent.VK_SPACE) {
-            ke.consume();
-        }
-    }
     private static final Stroke strokeThin = new BasicStroke(1);
     private static final Stroke strokeThick = new BasicStroke(2);
 
@@ -159,52 +213,5 @@ public class ButtonComponent extends JComponent implements MouseInputListener, K
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        grabFocus();
-        DoPushed();
-    }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        isHighlighted = false;
-        repaint();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        setHighlighted(true);
-        e.consume();
-        repaint();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        setHighlighted(false);
-        e.consume();
-        repaint();
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if (contains(e.getX(), getY())) {
-            setHighlighted(true);
-        } else {
-            setHighlighted(false);
-        }
-        e.consume();
-        repaint();
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
 }

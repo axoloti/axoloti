@@ -84,7 +84,7 @@ public class Modulation {
             System.out.println("Modulation source missing");
         } else {
             if (m.Modulations == null) {
-                m.Modulations = new ArrayList<Modulation>();
+                m.Modulations = new ArrayList<>();
             }
             if (!m.Modulations.contains(this)) {
                 m.Modulations.add(this);

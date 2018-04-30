@@ -43,7 +43,11 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     public PatchSettingsFrame(DocumentWindow parentDocumentWindow, PatchController patchController) {
         super(patchController, parentDocumentWindow);
         initComponents();
-        setJMenuBar(new StandardMenubar(patchController.getDocumentRoot()));
+        initComponents2();
+    }
+
+    private void initComponents2() {
+        setJMenuBar(new StandardMenubar(getController().getDocumentRoot()));
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMinimum(1);
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMaximum(16);
         ((SpinnerNumberModel) jSpinnerNumPresets.getModel()).setMinimum(0);

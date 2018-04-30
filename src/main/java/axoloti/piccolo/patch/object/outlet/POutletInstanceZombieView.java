@@ -13,7 +13,10 @@ public class POutletInstanceZombieView extends POutletInstanceView implements II
 
     public POutletInstanceZombieView(IoletInstanceController controller, PAxoObjectInstanceViewAbstract o) {
         super(controller, o);
+        initComponent();
+    }
 
+    private void initComponent() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
 

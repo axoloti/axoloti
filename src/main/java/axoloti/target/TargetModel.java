@@ -206,7 +206,7 @@ public class TargetModel extends AbstractModel {
                 null, linkFirmwareID);
     }
 
-    public void updateLinkFirmwareID() {
+    public final void updateLinkFirmwareID() {
         setFirmwareLinkID(FirmwareID.getFirmwareID());
     }
 

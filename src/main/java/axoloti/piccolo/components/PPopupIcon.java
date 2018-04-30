@@ -14,6 +14,10 @@ public class PPopupIcon extends PatchPNode {
 
     public PPopupIcon(IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(minsize);
         setPreferredSize(maxsize);
         setMaximumSize(maxsize);

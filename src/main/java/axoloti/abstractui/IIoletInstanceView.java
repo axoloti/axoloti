@@ -17,7 +17,4 @@ public interface IIoletInstanceView extends IView<IoletInstanceController> {
 
     public IAxoObjectInstanceView getObjectInstanceView();
 
-    public void setAlignmentX(float alignmentX);
-
-    public void setAlignmentY(float alignmentY);
 }

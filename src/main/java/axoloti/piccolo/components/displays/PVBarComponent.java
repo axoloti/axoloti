@@ -20,6 +20,10 @@ public class PVBarComponent extends PDispComponentAbstract {
         this.max = max;
         this.min = min;
         this.value = value;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(width, height);
         setPreferredSize(d);
         setMaximumSize(d);

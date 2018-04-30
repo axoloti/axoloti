@@ -32,6 +32,7 @@ import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.target.fs.SDFileInfo;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,9 +61,14 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
     public PatchBank(PatchBankController controller) {
         super(controller, null);
         initComponents();
-        StandardMenubar menuBar = new StandardMenubar(controller.getDocumentRoot());
+        initComponents2();
+    }
+
+    private void initComponents2() {
+        StandardMenubar menuBar = new StandardMenubar(getController().getDocumentRoot());
         JMenuItem jMenuItemSave = new JMenuItem("Save");
-        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemSave.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemSaveActionPerformed(evt);
             }
@@ -70,7 +76,8 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         menuBar.fileMenu.add(jMenuItemSave);
 
         JMenuItem jMenuItemSaveAs = new JMenuItem("Save as...");
-        jMenuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemSaveAs.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemSaveAsActionPerformed(evt);
             }

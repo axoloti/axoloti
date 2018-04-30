@@ -6,7 +6,7 @@ import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PVBarComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
+class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
 
     private PVBarComponent vbar;
     private IAxoObjectInstanceView axoObjectInstanceView;
@@ -14,12 +14,10 @@ public class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
     public PDisplayInstanceViewFrac32VBar(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         vbar = new PVBarComponent(0, 0, 64, axoObjectInstanceView);
         vbar.setValue(0);
         addChild(vbar);

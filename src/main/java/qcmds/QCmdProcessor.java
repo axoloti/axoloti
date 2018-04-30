@@ -84,8 +84,8 @@ public class QCmdProcessor implements Runnable {
     }
 
     protected QCmdProcessor() {
-        queue = new ArrayBlockingQueue<QCmd>(16);
-        queueResponse = new ArrayBlockingQueue<QCmd>(16);
+        queue = new ArrayBlockingQueue<>(16);
+        queueResponse = new ArrayBlockingQueue<>(16);
         serialconnection = CConnection.GetConnection();
         pinger = new PeriodicPinger();
         pingerThread = new Thread(pinger);

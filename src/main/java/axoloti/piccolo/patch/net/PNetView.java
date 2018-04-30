@@ -42,6 +42,10 @@ public class PNetView extends PatchPNode implements INetView {
         setPickable(false);
         updateSources();
         updateDests();
+        initComponent();
+    }
+
+    private void initComponent() {
         updateBounds();
     }
 

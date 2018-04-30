@@ -56,8 +56,9 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         objname = axoObj.getInstanceName();
     }
 
+    @Override
     public IAxoObjectInstance getParent() {
-        return this.axoObj;
+        return axoObj;
     }
 
     @Override
@@ -82,10 +83,6 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
 
     public DataType getDataType() {
         return getModel().getDatatype();
-    }
-
-    public String GetCName() {
-        return getModel().GetCName();
     }
 
     public String GetLabel() {

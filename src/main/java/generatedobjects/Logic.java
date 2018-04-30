@@ -54,20 +54,20 @@ public class Logic extends gentools {
         WriteAxoObject(catName + "/decode", Create_decode_int4());
         WriteAxoObject(catName + "/decode", Create_decode_int8());
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateChangeI());
             c.add(CreateChangeF());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateChangeSpeedlimI());
             c.add(CreateChangeSpeedlimF());
             WriteAxoObject(catName, c);
         }
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_SampleHoldK());
             c.add(Create_SampleHoldS());
             WriteAxoObject(catName, c);

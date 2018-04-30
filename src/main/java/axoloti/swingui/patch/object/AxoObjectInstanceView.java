@@ -34,8 +34,8 @@ import java.awt.Component;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -48,16 +48,16 @@ import javax.swing.JPopupMenu;
 public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
 
     LabelComponent IndexLabel;
-    public final JPanel p_attributeViews = new JPanel();
-    public final JPanel p_parameterViews = new JPanel();
-    public final JPanel p_displayViews = new JPanel();
-    public final JPanel p_ioletViews = new JPanel();
-    public final JPanel p_inletViews = new JPanel();
-    public final JPanel p_outletViews = new JPanel();
+    final JPanel p_attributeViews = new JPanel();
+    final JPanel p_parameterViews = new JPanel();
+    final JPanel p_displayViews = new JPanel();
+    final JPanel p_ioletViews = new JPanel();
+    final JPanel p_inletViews = new JPanel();
+    final JPanel p_outletViews = new JPanel();
 
     public AxoObjectInstanceView(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
-        init1();
+        initComponents();
     }
 
     @Override
@@ -69,7 +69,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         return getModel().getType();
     }
 
-    final void init1() {
+    private void initComponents() {
         p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews, BoxLayout.LINE_AXIS));
         p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
@@ -91,6 +91,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         p_displayViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
+
+        initComponents2();
     }
 
     List<IIoletInstanceView> inletInstanceViews;
@@ -116,9 +118,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         titlebar.setToolTipText(tooltiptxt);
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents2() {
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));/* {
          @Override
@@ -163,29 +163,13 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         add(titlebar);
         instanceLabel = new LabelComponent(getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        instanceLabel.addMouseListener(new MouseListener() {
+        instanceLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
                     e.consume();
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
         add(instanceLabel);

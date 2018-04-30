@@ -40,6 +40,10 @@ public class HSliderComponent extends ACtrlComponent {
 
     public HSliderComponent() {
         super();
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(160, 12);
         setMinimumSize(d);
         setPreferredSize(d);

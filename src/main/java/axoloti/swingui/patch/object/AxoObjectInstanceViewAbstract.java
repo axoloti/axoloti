@@ -25,8 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -55,7 +55,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     AxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller);
         this.patchView = patchView;
-        setVisible(false);
+        initComponents();
     }
 
     @Override
@@ -81,8 +81,8 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
     private static final Dimension TITLEBAR_MAXIMUM_SIZE = new Dimension(32768, 12);
 
-    @Override
-    public void PostConstructor() {
+    private void initComponents() {
+        setVisible(false);
         removeAll();
         setMinimumSize(new Dimension(60, 40));
         //setMaximumSize(new Dimension(Short.MAX_VALUE,
@@ -317,14 +317,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
             public void focusGained(FocusEvent e) {
             }
         });
-        InstanceNameTF.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
+        InstanceNameTF.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent ke) {

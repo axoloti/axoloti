@@ -47,6 +47,10 @@ public class PAssignPresetComponent extends PatchPNode {
     public PAssignPresetComponent(ParameterInstanceController parameterInstanceController, PatchView patchView) {
         super(patchView);
         this.parameterInstanceController  = parameterInstanceController;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

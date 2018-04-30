@@ -10,6 +10,10 @@ class DisplayInstanceViewVScale extends DisplayInstanceView {
 
     DisplayInstanceViewVScale(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
+    }
+
+    private void initComponents() {
         vlabels = new VValueLabelsComponent(-60, 10, 10);
         add(vlabels);
     }

@@ -22,6 +22,10 @@ public class OutletInstanceView extends IoletInstanceView<IoletInstanceControlle
     public OutletInstanceView(IoletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         super(controller);
         this.axoObj = axoObj;
+        initComponents();
+    }
+
+    private void initComponents() {
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
@@ -36,13 +40,10 @@ public class OutletInstanceView extends IoletInstanceView<IoletInstanceControlle
         jack = new JackOutputComponent();
         jack.setForeground(getModel().getModel().getDatatype().GetColor());
         add(jack);
-
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseMotionListener);
     }
 
     @Override
-    public JPopupMenu getPopup() {
+    protected JPopupMenu getPopup() {
         return new IoletInstancePopupMenu(getController(), focusEdit);
     }
 

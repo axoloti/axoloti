@@ -42,7 +42,7 @@ public class FirmwareID {
             byte[] bb = new byte[tlength];
             int nRead = inputStream.read(bb, 0, tlength);
             if (nRead != tlength) {
-                Logger.getLogger(FirmwareID.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
+                Logger.getLogger(FirmwareID.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
             }
             CRC32 zcrc = new CRC32();
             zcrc.update(bb);

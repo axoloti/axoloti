@@ -61,7 +61,7 @@ public class PatchViewCodegen extends View<PatchController> {
         }
 
         int i = 0;
-        ParameterInstances = new ArrayList<ParameterInstance>();
+        ParameterInstances = new ArrayList<>();
         for (IAxoObjectInstance o : controller.getModel().objectinstances) {
             for (ParameterInstance p : o.getParameterInstances()) {
                 p.setIndex(i);
@@ -71,7 +71,7 @@ public class PatchViewCodegen extends View<PatchController> {
         }
         int offset = 0;
         i = 0;
-        DisplayInstances = new ArrayList<DisplayInstance>();
+        DisplayInstances = new ArrayList<>();
         for (IAxoObjectInstance o : controller.getModel().objectinstances) {
             for (DisplayInstance p : o.getDisplayInstances()) {
                 p.setOffset(offset);

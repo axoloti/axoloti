@@ -7,16 +7,14 @@ import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceViewFrac32VU(DisplayInstanceController controller) {
-        super(controller);
-    }
-
     private VUComponent vu;
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    DisplayInstanceViewFrac32VU(DisplayInstanceController controller) {
+        super(controller);
+        initComponents();
+    }
 
+    private void initComponents() {
         vu = new VUComponent();
         vu.setValue(0);
         add(vu);

@@ -11,12 +11,10 @@ class DisplayInstanceViewFrac32SDial extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceViewFrac32SDial(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         dial = new DispComponent(0.0, -64.0, 64.0);
         add(dial);
     }

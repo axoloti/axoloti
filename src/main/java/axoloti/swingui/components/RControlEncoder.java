@@ -27,9 +27,8 @@ import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.RenderingHints;
 import java.awt.Robot;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,10 +55,12 @@ public abstract class RControlEncoder extends JComponent {
         } catch (AWTException ex) {
             Logger.getLogger(RControlEncoder.class.getName()).log(Level.SEVERE, null, ex);
         }
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
+
+        initComponent();
+    }
+
+    private void initComponent() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -75,16 +76,6 @@ public abstract class RControlEncoder extends JComponent {
                 robot = null;
             }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
-        });
-
-        addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
                 if ((MousePressedBtn == MouseEvent.BUTTON1)) {
@@ -102,11 +93,9 @@ public abstract class RControlEncoder extends JComponent {
                 }
             }
 
-            @Override
-            public void mouseMoved(MouseEvent e) {
-            }
-        });
-
+        };
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
     }
     double angle = 0;
 

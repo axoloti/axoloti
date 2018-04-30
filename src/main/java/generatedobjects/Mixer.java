@@ -42,26 +42,26 @@ public class Mixer extends gentools {
     static void GenerateAll() {
         String catName = "mix";
         for (int i = 1; i < 9; i++) {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKMixer(i));
             c.add(CreateSMixer(i));
             WriteAxoObject(catName, c);
         }
         for (int i = 1; i < 9; i++) {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKMixerL(i));
             c.add(CreateSMixerL(i));
             WriteAxoObject(catName, c);
         }
         for (int i = 1; i < 9; i++) {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateKMixerSQ(i));
             c.add(CreateSMixerSQ(i));
             WriteAxoObject(catName, c);
         }
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_xfade());
             c.add(Create_xfade2());
             c.add(Create_xfadeTilde());

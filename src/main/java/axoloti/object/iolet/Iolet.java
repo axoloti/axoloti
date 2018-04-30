@@ -21,7 +21,6 @@ import axoloti.datatypes.DataType;
 import axoloti.datatypes.SignalMetaData;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.property.Property;
-import axoloti.utils.CharEscape;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +65,4 @@ public abstract class Iolet extends AtomDefinition implements Cloneable {
         return new ArrayList<>();
     }
 
-    public String GetCName() {
-        return CharEscape.CharEscape(getName());
-    }
 }

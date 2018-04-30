@@ -4,9 +4,8 @@ import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JRootPane;
@@ -41,99 +40,90 @@ public class ResizableUndecoratedFrame extends javax.swing.JFrame {
 
     public ResizableUndecoratedFrame() {
         super();
+        initComponent();
+    }
+
+    private void initComponent() {
         getRootPane().setWindowDecorationStyle(JRootPane.PLAIN_DIALOG);
-        addMouseListener(
-                new MouseListener() {
+        MouseAdapter mouseAdapter = new MouseAdapter() {
 
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        if (!resizing) {
-                            getContentPane().setCursor(null);
-                        }
-                    }
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        if (direction == 0) {
-                            return;
-                        }
-
-        //  Setup for resizing. All future dragging calculations are done based
-                        //  on the original bounds of the component and mouse pressed location.
-                        resizing = true;
-                        pressed = e.getPoint();
-                        SwingUtilities.convertPointToScreen(pressed, ResizableUndecoratedFrame.this);
-                        bounds = getBounds();
-                    }
-
-                    /**
-                     * Restore the original state of the Component
-                     */
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        resizing = false;
-                    }
-
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                    }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if (!resizing) {
+                    getContentPane().setCursor(null);
                 }
-        );
-        addMouseMotionListener(
-                new MouseMotionListener() {
-                    /**
-                     */
-                    @Override
-                    public void mouseMoved(MouseEvent e) {
-                        Point location = e.getPoint();
-                        direction = 0;
+            }
 
-                        if (location.x < dragInsets.left) {
-                            direction += WEST;
-                        } else if (location.x > getWidth() - dragInsets.right - 1) {
-                            direction += EAST;
-                        }
-
-                        if (location.y < dragInsets.top) {
-                            direction += NORTH;
-                        } else if (location.y > getHeight() - dragInsets.bottom - 1) {
-                            direction += SOUTH;
-                        }
-
-                        if (direction == 0) {
-                            //  Mouse is no longer over a resizable border
-                            getContentPane().setCursor(null);
-                        } else // use the appropriate resizable cursor
-                        {
-                            int cursorType = cursors.get(direction);
-                            Cursor cursor = Cursor.getPredefinedCursor(cursorType);
-                            getContentPane().setCursor(cursor);
-                        }
-                    }
-
-                    /**
-                     * Resize the component ensuring that the size is within the
-                     * minimum and maximum constraints.
-                     *
-                     * All calculations are done using the bounds of the
-                     * component when the resizing started.
-                     */
-                    @Override
-                    public void mouseDragged(MouseEvent e) {
-                        if (resizing == false) {
-                            return;
-                        }
-                        Point dragged = e.getPoint();
-                        SwingUtilities.convertPointToScreen(dragged, ResizableUndecoratedFrame.this);
-                        changeBounds(direction, bounds, pressed, dragged);
-                    }
-
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (direction == 0) {
+                    return;
                 }
-        );
+
+                //  Setup for resizing. All future dragging calculations are done based
+                //  on the original bounds of the component and mouse pressed location.
+                resizing = true;
+                pressed = e.getPoint();
+                SwingUtilities.convertPointToScreen(pressed, ResizableUndecoratedFrame.this);
+                bounds = getBounds();
+            }
+
+            /**
+             * Restore the original state of the Component
+             */
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                resizing = false;
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                Point location = e.getPoint();
+                direction = 0;
+
+                if (location.x < dragInsets.left) {
+                    direction += WEST;
+                } else if (location.x > getWidth() - dragInsets.right - 1) {
+                    direction += EAST;
+                }
+
+                if (location.y < dragInsets.top) {
+                    direction += NORTH;
+                } else if (location.y > getHeight() - dragInsets.bottom - 1) {
+                    direction += SOUTH;
+                }
+
+                if (direction == 0) {
+                    //  Mouse is no longer over a resizable border
+                    getContentPane().setCursor(null);
+                } else // use the appropriate resizable cursor
+                {
+                    int cursorType = cursors.get(direction);
+                    Cursor cursor = Cursor.getPredefinedCursor(cursorType);
+                    getContentPane().setCursor(cursor);
+                }
+            }
+
+            /**
+             * Resize the component ensuring that the size is within the minimum
+             * and maximum constraints.
+             *
+             * All calculations are done using the bounds of the component when
+             * the resizing started.
+             */
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (resizing == false) {
+                    return;
+                }
+                Point dragged = e.getPoint();
+                SwingUtilities.convertPointToScreen(dragged, ResizableUndecoratedFrame.this);
+                changeBounds(direction, bounds, pressed, dragged);
+            }
+
+        };
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
     }
 
     /**

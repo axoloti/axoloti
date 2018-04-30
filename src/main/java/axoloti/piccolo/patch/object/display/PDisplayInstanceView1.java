@@ -4,7 +4,7 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance1;
 import axoloti.patch.object.display.DisplayInstanceController;
 
-public abstract class PDisplayInstanceView1 extends PDisplayInstanceView {
+abstract class PDisplayInstanceView1 extends PDisplayInstanceView {
 
     DisplayInstance1 displayInstance;
 

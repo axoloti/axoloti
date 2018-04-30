@@ -16,6 +16,10 @@ public class PSignalMetaDataIcon extends PatchPNode {
     public PSignalMetaDataIcon(SignalMetaData smd, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
         this.smd = smd;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(12, 14);
         setMinimumSize(d);
         setMaximumSize(d);

@@ -1,6 +1,7 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IDisplayInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceBool32;
 import axoloti.patch.object.display.DisplayInstanceController;
@@ -29,7 +30,7 @@ import axoloti.patch.object.display.DisplayInstanceVScale;
  */
 public class DisplayInstanceViewFactory {
 
-    public static DisplayInstanceView createView(DisplayInstanceController controller, IAxoObjectInstanceView obj) {
+    public static IDisplayInstanceView createView(DisplayInstanceController controller, IAxoObjectInstanceView obj) {
         DisplayInstance model = controller.getModel();
         DisplayInstanceView view;
         if (model instanceof DisplayInstanceBool32) {
@@ -74,7 +75,6 @@ public class DisplayInstanceViewFactory {
             view = null;
             throw new Error("unkown Display type");
         }
-        view.PostConstructor();
         controller.addView(view);
         return view;
     }

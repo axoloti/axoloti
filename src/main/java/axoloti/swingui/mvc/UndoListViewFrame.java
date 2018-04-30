@@ -29,6 +29,10 @@ public class UndoListViewFrame extends AJFrame implements IView, DocumentWindow 
     public UndoListViewFrame(DocumentRootController controller, DocumentWindow parent) {
         super(controller, parent);
         initComponents();
+        initComponents2();
+    }
+
+    private void initComponents2() {
         setJMenuBar(new StandardMenubar(controller.getDocumentRoot()));
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Name", "Hash", "old value", "new value"};

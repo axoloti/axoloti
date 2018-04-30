@@ -10,7 +10,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
-public class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt32 {
+class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt32 {
 
     public PParameterInstanceViewInt32VRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

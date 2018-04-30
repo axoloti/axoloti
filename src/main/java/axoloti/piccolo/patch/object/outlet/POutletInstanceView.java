@@ -26,7 +26,10 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
     public POutletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
 	this.controller = controller;
+        initComponent();
+    }
 
+    private void initComponent() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setMaximumSize(new Dimension(32767, 14));
 

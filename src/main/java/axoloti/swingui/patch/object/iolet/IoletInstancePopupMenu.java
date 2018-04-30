@@ -20,7 +20,10 @@ package axoloti.swingui.patch.object.iolet;
 import axoloti.mvc.FocusEdit;
 import axoloti.patch.PatchController;
 import axoloti.patch.net.NetController;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.patch.object.outlet.OutletInstance;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
@@ -38,11 +41,13 @@ public class IoletInstancePopupMenu extends JPopupMenu {
 
     public IoletInstancePopupMenu(IoletInstanceController ioletInstanceController, FocusEdit focusEdit) {
         super();
+        initComponent(ioletInstanceController, focusEdit);
+    }
 
+    private void initComponent(IoletInstanceController ioletInstanceController, FocusEdit focusEdit) {
         PatchController pc = ioletInstanceController.getModel().getParent().getParent().getControllerFromModel();
         NetController nc = pc.getNetFromIolet(ioletInstanceController.getModel());
         boolean isSource = ioletInstanceController.getModel().isSource();
-
 
         JMenuItem itemDisconnect = new JMenuItem("Disconnect " + getDirectionLabel(isSource));
         if (nc == null) {
@@ -56,7 +61,14 @@ public class IoletInstancePopupMenu extends JPopupMenu {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     ioletInstanceController.addMetaUndo("disconnect " + getDirectionLabel(isSource), focusEdit);
-                    pc.disconnect(ioletInstanceController.getModel());
+                    IoletInstance iolet = ioletInstanceController.getModel();
+                    if (iolet instanceof InletInstance) {
+                        pc.disconnect((InletInstance) iolet);
+                    } else if (iolet instanceof OutletInstance) {
+                        pc.disconnect((OutletInstance) iolet);
+                    } else {
+                        throw new Error("iolet is inlet nor outlet???");
+                    }
                 }
             });
         }

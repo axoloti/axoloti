@@ -41,7 +41,7 @@ public class NetDragging extends NetView {
 
     Point p0;
 
-    public void SetDragPoint(Point p0) {
+    public void setDragPoint(Point p0) {
         this.p0 = p0;
         if (patchView != null) {
             Rectangle r = new Rectangle(p0.x, p0.y, 1, 1);

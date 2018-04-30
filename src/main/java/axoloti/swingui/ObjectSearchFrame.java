@@ -42,10 +42,10 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -140,7 +140,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
             }
         });
-        jTree1.addKeyListener(new KeyListener() {
+        jTree1.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -159,15 +159,8 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
             }
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
         });
-        jTree1.addMouseListener(new MouseListener() {
+        jTree1.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -176,21 +169,6 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -210,7 +188,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
             }
         });
-        jList1.addKeyListener(new KeyListener() {
+        jList1.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -223,15 +201,8 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
             }
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
         });
-        jList1.addMouseListener(new MouseListener() {
+        jList1.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -240,21 +211,6 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
 
         jPanel1.setVisible(true);
@@ -265,10 +221,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         jTextPane1.setVisible(true);
         jTextPane1.setContentType("text/html");
 
-        jTextFieldObjName.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
+        jTextFieldObjName.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
@@ -465,7 +418,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     }
 
     public void Search(String s) {
-        ArrayList<IAxoObject> listData = new ArrayList<IAxoObject>();
+        ArrayList<IAxoObject> listData = new ArrayList<>();
         if ((s == null) || s.isEmpty()) {
             for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
                 listData.add(o);

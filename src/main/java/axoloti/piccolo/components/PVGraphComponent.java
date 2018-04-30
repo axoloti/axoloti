@@ -21,7 +21,7 @@ public class PVGraphComponent extends PatchPNode {
     private final double min;
     private final int imax;
     private final int imin;
-    private final int y0;
+    private int y0;
 
     public PVGraphComponent(int length, int vsize, double min, double max, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
@@ -37,6 +37,10 @@ public class PVGraphComponent extends PatchPNode {
             xpoints[i] = i + 1;
             ypoints[i] = vsize;
         }
+        initComponent();
+    }
+
+    private void initComponent() {
         y0 = valToPos(0);
         Dimension d = new Dimension(length + 2, vsize + 2);
         setMinimumSize(d);

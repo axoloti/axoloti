@@ -8,12 +8,13 @@ import axoloti.piccolo.components.control.PDropDownComponent;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString {
+class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString {
 
     PDropDownComponent comboBox;
 
     public PAttributeInstanceViewComboBox(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -21,9 +22,7 @@ public class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString
         return (AttributeInstanceComboBox) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         comboBox = new PDropDownComponent(getModel().getModel().getMenuEntries(), getModel(), axoObjectInstanceView);
         setString(getModel().getValue());
         comboBox.addItemListener(new PDropDownComponent.DDCListener() {

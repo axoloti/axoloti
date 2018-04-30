@@ -22,6 +22,10 @@ public class InletInstanceView extends IoletInstanceView<IoletInstanceController
     public InletInstanceView(IoletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
         super(controller);
         this.axoObj = axoObj;
+        initComponents();
+    }
+
+    private void initComponents() {
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
 
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
@@ -37,19 +41,11 @@ public class InletInstanceView extends IoletInstanceView<IoletInstanceController
             add(label);
         }
         add(Box.createHorizontalGlue());
-
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseMotionListener);
     }
 
     @Override
-    public JPopupMenu getPopup() {
+    protected JPopupMenu getPopup() {
         return new IoletInstancePopupMenu(getController(), focusEdit);
-    }
-
-    public String getInletname() {
-        int sepIndex = name.lastIndexOf(' ');
-        return name.substring(sepIndex + 1);
     }
 
     @Override

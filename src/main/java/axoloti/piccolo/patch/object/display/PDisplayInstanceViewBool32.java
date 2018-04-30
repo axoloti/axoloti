@@ -7,20 +7,18 @@ import axoloti.piccolo.components.displays.PLedstripComponent;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewBool32 extends PDisplayInstanceViewInt32 {
+class PDisplayInstanceViewBool32 extends PDisplayInstanceViewInt32 {
 
     private PLedstripComponent readout;
     private IAxoObjectInstanceView axoObjectInstanceView;
 
     public PDisplayInstanceViewBool32(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
-	this.axoObjectInstanceView = axoObjectInstanceView;
+        this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         readout = new PLedstripComponent(0, 1, axoObjectInstanceView);
         addChild(readout);
         readout.setSize(new Dimension(roundUp(readout.getHeight()), 80));

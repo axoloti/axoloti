@@ -18,6 +18,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
 
     public PAxoObjectInstanceViewComment(ObjectInstanceController controller, PatchViewPiccolo p) {
         super(controller, p);
+        initComponents();
     }
 
     @Override
@@ -75,9 +76,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
         InstanceNameTF.grabFocus();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         setDrawBorder(true);
 
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));

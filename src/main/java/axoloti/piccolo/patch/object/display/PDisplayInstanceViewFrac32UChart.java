@@ -6,7 +6,7 @@ import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PScopeComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewFrac32UChart extends PDisplayInstanceViewFrac32 {
+class PDisplayInstanceViewFrac32UChart extends PDisplayInstanceViewFrac32 {
 
     private PScopeComponent scope;
     private IAxoObjectInstanceView axoObjectInstanceView;
@@ -14,12 +14,10 @@ public class PDisplayInstanceViewFrac32UChart extends PDisplayInstanceViewFrac32
     public PDisplayInstanceViewFrac32UChart(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         scope = new PScopeComponent(0.0, 64, axoObjectInstanceView);
         scope.setValue(64.0);
         addChild(scope);

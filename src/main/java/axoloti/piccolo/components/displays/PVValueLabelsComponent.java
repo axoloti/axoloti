@@ -23,6 +23,10 @@ public class PVValueLabelsComponent extends PatchPNode {
         this.max = max;
         this.min = min;
         this.tick = tick;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(width, height);
         setPreferredSize(d);
         setMaximumSize(d);

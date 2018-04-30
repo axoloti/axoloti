@@ -54,7 +54,6 @@ public class PParameterInstanceViewFactory {
             view = null;
             throw new Error("unknown parameter type");
         }
-        view.PostConstructor();
         controller.addView(view);
         return view;
     }

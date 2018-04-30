@@ -19,6 +19,10 @@ public class PVUComponent extends PDispComponentAbstract {
     public PVUComponent(IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         value = 0;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

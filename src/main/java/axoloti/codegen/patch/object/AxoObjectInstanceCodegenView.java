@@ -183,12 +183,12 @@ typedef struct ui_object {
             }
             for (InletInstance i : getModel().getInletInstances()) {
                 if (i.getDataType() instanceof Frac32buffer) {
-                    s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
+                    s = s.replaceAll(i.getModel().GetCName(), i.getModel().GetCName() + "[buffer_index]");
                 }
             }
             for (OutletInstance i : getModel().getOutletInstances()) {
                 if (i.getDataType() instanceof Frac32buffer) {
-                    s = s.replaceAll(i.GetCName(), i.GetCName() + "[buffer_index]");
+                    s = s.replaceAll(i.getModel().GetCName(), i.getModel().GetCName() + "[buffer_index]");
                 }
             }
 
@@ -208,14 +208,14 @@ typedef struct ui_object {
             if (comma) {
                 s += ",\n";
             }
-            s += "const " + i.getDataType().CType() + " " + i.GetCName();
+            s += "const " + i.getDataType().CType() + " " + i.getModel().GetCName();
             comma = true;
         }
         for (OutletInstance i : getModel().getOutletInstances()) {
             if (comma) {
                 s += ",\n";
             }
-            s += i.getDataType().CType() + " & " + i.GetCName();
+            s += i.getDataType().CType() + " & " + i.getModel().GetCName();
             comma = true;
         }
         for (ParameterInstance i : getModel().getParameterInstances()) {
@@ -312,6 +312,7 @@ typedef struct ui_object {
         }
     }
 
+    @Override
     public String GenerateCallMidiHandler() {
         if ((getModel().getType().getMidiCode() != null) && (!getModel().getType().getMidiCode().isEmpty())) {
             return getModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";

@@ -16,7 +16,7 @@ public class AxoObjectInstanceCodegenViewFactory {
 
     public static IAxoObjectInstanceCodegenView createView(ObjectInstanceController controller) {
         IAxoObjectInstance model = controller.getModel();
-        IAxoObjectInstanceCodegenView view = null;
+        IAxoObjectInstanceCodegenView view;
         if (model instanceof AxoObjectInstancePatcher) {
             view = new AxoObjectInstancePatcherCodegenView((AxoObjectInstancePatcher) model, (ObjectInstancePatcherController) controller);
         } else if (model instanceof AxoObjectInstance) {

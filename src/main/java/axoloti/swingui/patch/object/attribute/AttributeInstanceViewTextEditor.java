@@ -14,6 +14,7 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
 
     AttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -30,9 +31,7 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
         getModel().editor.toFront();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         bEdit = new ButtonComponent("Edit");
         add(bEdit);
         bEdit.addActListener(new ButtonComponent.ActListener() {

@@ -15,11 +15,15 @@ import java.util.ArrayList;
  */
 public abstract class TJFrame extends AJFrame<TargetController> {
 
-    public final StandardMenubar menuBar;
+    public StandardMenubar menuBar;
 
     public TJFrame(TargetController controller) throws HeadlessException {
         super(controller, null);
-        menuBar = new StandardMenubar(controller.getDocumentRoot());
+        initComponents2();
+    }
+
+    private void initComponents2() {
+        menuBar = new StandardMenubar(getController().getDocumentRoot());
         setJMenuBar(menuBar);
     }
 

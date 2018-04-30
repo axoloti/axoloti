@@ -38,7 +38,7 @@ public abstract class PropertyReadOnly<T extends Object> extends Property {
 
     @Override
     public void set(IModel obj, Object val) {
-        Logger.getLogger(Property.class.getName()).log(Level.SEVERE, obj.getClass().getName() + "::" + getName());
+        Logger.getLogger(PropertyReadOnly.class.getName()).log(Level.SEVERE, "{0}::{1}", new Object[]{obj.getClass().getName(), getName()});
     }
 
     @Override

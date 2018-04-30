@@ -14,6 +14,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     public AxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
+        initComponents();
     }
 
     @Override
@@ -39,9 +40,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         pf.setVisible(true);
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         //updateObj();
         ButtonComponent BtnEdit = new ButtonComponent("edit");
         BtnEdit.setAlignmentX(LEFT_ALIGNMENT);

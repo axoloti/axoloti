@@ -65,10 +65,14 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
 
     protected PatchController(PatchModel model) {
         super(model);
+        init();
+    }
+
+    private void init() {
 
         // Now it is the time to cleanup the model, replace object instances with linked objects
-        ArrayList<IAxoObjectInstance> unlinked_object_instances = new ArrayList<>(model.objectinstances);
-        model.objectinstances.clear();
+        ArrayList<IAxoObjectInstance> unlinked_object_instances = new ArrayList<>(getModel().objectinstances);
+        getModel().objectinstances.clear();
         for (IAxoObjectInstance unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
         }
@@ -249,11 +253,10 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 }
             }
             qcmdprocessor.WaitQueueFinished();
-            Calendar cal;
+            Calendar cal = Calendar.getInstance();
             if (true) { // getModel().isDirty()) {
-                cal = Calendar.getInstance();
+                // TODO: use time of last modification?
             } else {
-                cal = Calendar.getInstance();
                 if (getFileNamePath() != null && !getFileNamePath().isEmpty()) {
                     File f = new File(getFileNamePath());
                     if (f.exists()) {
@@ -566,7 +569,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 }
                 n.setSources(source2.toArray(new OutletInstance[]{}));
 
-                ArrayList<InletInstance> dest2 = new ArrayList<InletInstance>();
+                ArrayList<InletInstance> dest2 = new ArrayList<>();
                 for (InletInstance o : n.getDestinations()) {
                     String objname = o.getObjname();
                     String inletname = o.getName();
@@ -851,14 +854,27 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return null;
     }
 
-    public Net disconnect(IoletInstance io) {
-        NetController n = getNetFromIolet(io);
-        io.setConnected(false);
+    public Net disconnect(InletInstance inlet) {
+        NetController n = getNetFromIolet(inlet);
+        inlet.setConnected(false);
         if (n != null) {
             if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
                 delete(n);
             } else {
-                n.disconnect(io);
+                n.disconnect(inlet);
+            }
+        }
+        return null;
+    }
+
+    public Net disconnect(OutletInstance outlet) {
+        NetController n = getNetFromIolet(outlet);
+        outlet.setConnected(false);
+        if (n != null) {
+            if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
+                delete(n);
+            } else {
+                n.disconnect(outlet);
             }
         }
         return null;
@@ -1006,7 +1022,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             return false;
         }
         if (selected != axoObjectInstance.getType()) {
-            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting " + axoObjectInstance + " to " + selected);
+            Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting {0} to {1}", new Object[]{axoObjectInstance, selected});
             ChangeObjectInstanceType(axoObjectInstance, selected);
             return true;
         }

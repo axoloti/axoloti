@@ -51,7 +51,6 @@ public class AxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFacto
         } else {
             throw new Error("unknown object type");
         }
-        view.PostConstructor();
         controller.addView(view);
         return view;
     }

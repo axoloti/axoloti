@@ -35,13 +35,13 @@ public class Spat extends gentools {
     static void GenerateAll() {
         String catName = "spat";
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_pan());
             c.add(Create_pantilde());
             WriteAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_panm());
             c.add(Create_panmtilde());
             WriteAxoObject(catName, c);

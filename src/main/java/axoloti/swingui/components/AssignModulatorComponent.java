@@ -24,8 +24,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
@@ -37,37 +37,26 @@ public class AssignModulatorComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstance parameterInstance;
+    private final ParameterInstance parameterInstance;
 
     public AssignModulatorComponent(ParameterInstance parameterInstance) {
+        this.parameterInstance = parameterInstance;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.parameterInstance = parameterInstance;
 
-        addMouseListener(new MouseListener() {
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 doPopup();
                 e.consume();
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
     }
 

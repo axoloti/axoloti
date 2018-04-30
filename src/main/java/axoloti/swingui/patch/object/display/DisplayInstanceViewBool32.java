@@ -11,11 +11,10 @@ class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
 
     DisplayInstanceViewBool32(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
 
         readout = new LedstripComponent(0, 1);
         add(readout);

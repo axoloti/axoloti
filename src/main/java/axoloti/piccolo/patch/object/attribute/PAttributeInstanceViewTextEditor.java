@@ -8,12 +8,13 @@ import axoloti.piccolo.components.control.PButtonComponent;
 import axoloti.swingui.TextEditor;
 import javax.swing.SwingUtilities;
 
-public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
+class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
     PButtonComponent bEdit;
 
     public PAttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -34,9 +35,7 @@ public class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewStri
         getModel().editor.setVisible(true);
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         bEdit = new PButtonComponent("Edit", axoObjectInstanceView);
         addChild(bEdit);
         bEdit.addActListener(new PButtonComponent.ActListener() {

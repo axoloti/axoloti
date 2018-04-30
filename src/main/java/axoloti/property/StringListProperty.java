@@ -55,7 +55,7 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
         // items separated by comma
         // items can be within quotes
         // backlash to escape quote character
-        ArrayList<String> l = new ArrayList<String>();
+        ArrayList<String> l = new ArrayList<>();
         int si = 0;
         int se = 0;
         boolean quoted = false;

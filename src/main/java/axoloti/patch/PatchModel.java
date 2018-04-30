@@ -434,7 +434,7 @@ public class PatchModel extends AbstractModel {
     }
 
     List<IAxoObject> GetUsedAxoObjects() {
-        ArrayList<IAxoObject> aos = new ArrayList<IAxoObject>();
+        ArrayList<IAxoObject> aos = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
             if (!aos.contains(o.getType())) {
                 aos.add(o.getType());
@@ -444,7 +444,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public HashSet<String> getIncludes() {
-        HashSet<String> includes = new HashSet<String>();
+        HashSet<String> includes = new HashSet<>();
         if (controllerObjectInstance != null) {
             Set<String> i = controllerObjectInstance.getType().getIncludes();
             if (i != null) {
@@ -461,7 +461,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public HashSet<String> getDepends() {
-        HashSet<String> depends = new HashSet<String>();
+        HashSet<String> depends = new HashSet<>();
         for (IAxoObjectInstance o : objectinstances) {
             Set<String> i = o.getType().getDepends();
             if (i != null) {
@@ -737,7 +737,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public ArrayList<SDFileReference> GetDependendSDFiles() {
-        ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
+        ArrayList<SDFileReference> files = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
             List<SDFileReference> f2 = o.getFileDepends();
             if (f2 != null) {

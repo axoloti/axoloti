@@ -17,13 +17,14 @@ import org.piccolo2d.event.PInputEvent;
 
 
 
-public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
+class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFFileName;
     PButtonComponent ButtonChooseFile;
 
     public PAttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -31,9 +32,7 @@ public class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
         return (AttributeInstanceSDFile) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFFileName = new PTextFieldComponent(getModel().getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;

@@ -14,17 +14,18 @@ abstract class DisplayInstanceView extends ViewPanel<DisplayInstanceController> 
 
     DisplayInstanceView(DisplayInstanceController controller) {
         super(controller);
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        label = new LabelComponent("");
-        add(label);
-        setSize(getPreferredSize());
+        initComponents();
     }
 
     DisplayInstance getModel() {
         return getController().getModel();
     }
 
-    void PostConstructor() {
+    private void initComponents() {
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        label = new LabelComponent("");
+        add(label);
+        setSize(getPreferredSize());
     }
 
     @Override

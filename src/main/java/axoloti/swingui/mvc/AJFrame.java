@@ -22,7 +22,11 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
         super();
         this.controller = controller;
         this.parent = parent;
-        super.setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
+        initComponent();
+    }
+
+    private void initComponent() {
+        setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override

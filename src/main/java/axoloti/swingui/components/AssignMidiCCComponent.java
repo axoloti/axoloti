@@ -27,8 +27,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
@@ -40,16 +40,20 @@ public class AssignMidiCCComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    ParameterInstanceController parameterInstanceController;
+    private final ParameterInstanceController parameterInstanceController;
 
     public AssignMidiCCComponent(ParameterInstanceController parameterInstanceController) {
+        this.parameterInstanceController = parameterInstanceController;
+        initComponents();
+    }
+
+    private void initComponents() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.parameterInstanceController = parameterInstanceController;
 
-        addMouseListener(new MouseListener() {
+        addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -57,21 +61,6 @@ public class AssignMidiCCComponent extends JComponent {
                 e.consume();
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
     }
 

@@ -19,6 +19,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
 
     public PAxoObjectInstanceViewHyperlink(ObjectInstanceController controller, PatchViewPiccolo p) {
         super(controller, p);
+        initComponents();
     }
 
     @Override
@@ -26,9 +27,7 @@ public class PAxoObjectInstanceViewHyperlink extends PAxoObjectInstanceViewAbstr
         return (AxoObjectInstanceHyperlink) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
 
         setDrawBorder(true);

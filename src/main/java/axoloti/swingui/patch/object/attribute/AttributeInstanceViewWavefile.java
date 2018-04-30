@@ -6,8 +6,8 @@ import axoloti.patch.object.attribute.AttributeInstanceWavefile;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -18,6 +18,7 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
 
     AttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -25,9 +26,7 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
         return (AttributeInstanceWavefile) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFwaveFilename = new JTextField(getModel().getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
         d.width = 128;
@@ -37,14 +36,7 @@ class AttributeInstanceViewWavefile extends AttributeInstanceView {
         TFwaveFilename.setPreferredSize(d);
         TFwaveFilename.setSize(d);
         add(TFwaveFilename);
-        TFwaveFilename.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
+        TFwaveFilename.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent ke) {

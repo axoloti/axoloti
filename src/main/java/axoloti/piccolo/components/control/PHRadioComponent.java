@@ -22,6 +22,10 @@ public class PHRadioComponent extends PCtrlComponentAbstract {
         this.value = 0;//value;
         this.n = n;
         bsize = 12;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(bsize * n + 2, bsize + 2);
         setMinimumSize(d);
         setMaximumSize(d);

@@ -41,6 +41,10 @@ public class JackOutputComponent extends JComponent {
     private boolean connected = false;
 
     public JackOutputComponent() {
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

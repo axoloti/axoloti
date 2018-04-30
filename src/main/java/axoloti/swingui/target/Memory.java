@@ -18,7 +18,7 @@ import qcmds.QCmdMemRead;
  */
 public class Memory extends TJFrame implements ActionListener {
 
-    final PollHandler poller;
+    PollHandler poller;
 
     /**
      * Creates new form Memory
@@ -26,6 +26,10 @@ public class Memory extends TJFrame implements ActionListener {
     public Memory(TargetController controller) {
         super(controller);
         initComponents();
+        initComponents2();
+    }
+
+    private void initComponents2() {
         setTitle("Memory viewer");
         jTextFieldAddr.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setFont(Font.getFont(Font.MONOSPACED));

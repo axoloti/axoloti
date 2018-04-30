@@ -147,7 +147,7 @@ public abstract class IConnection extends View<TargetController> {
         return null;
     }
 
-    private ArrayList<ConnectionStatusListener> csls = new ArrayList<ConnectionStatusListener>();
+    private ArrayList<ConnectionStatusListener> csls = new ArrayList<>();
 
     public void addConnectionStatusListener(ConnectionStatusListener csl) {
         if (isConnected()) {
@@ -177,7 +177,7 @@ public abstract class IConnection extends View<TargetController> {
         getController().getModel().setConnection(this);
     }
 
-    private ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<SDCardMountStatusListener>();
+    private ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<>();
 
     public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
         if (GetSDCardPresent()) {

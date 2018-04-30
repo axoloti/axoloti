@@ -56,9 +56,13 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     public TargetMenu(TargetController controller) {
         super("Board");
         this.controller = controller;
+        initComponents();
+    }
 
+    private void initComponents() {
         jMenuItemSelectCom = new JMenuItem("Select Device...");
         jMenuItemSelectCom.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemSelectComActionPerformed(evt);
             }
@@ -67,6 +71,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFConnect = new JMenuItem("Connect");
         jMenuItemFConnect.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFConnectActionPerformed(evt);
             }
@@ -75,6 +80,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFDisconnect = new JMenuItem("Disconnect");
         jMenuItemFDisconnect.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFDisconnectActionPerformed(evt);
             }
@@ -84,6 +90,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         jMenuItemPing = new JMenuItem("Ping");
         jMenuItemPing.setEnabled(false);
         jMenuItemPing.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemPingActionPerformed(evt);
             }
@@ -93,6 +100,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         jMenuItemPanic = new JMenuItem("Panic");
         jMenuItemPanic.setEnabled(false);
         jMenuItemPanic.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemPanicActionPerformed(evt);
             }
@@ -101,6 +109,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemMount = new JMenuItem("Enter card reader mode (disconnects editor)");
         jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemMountActionPerformed(evt);
             }
@@ -112,6 +121,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFlashDefault = new JMenuItem("Flash");
         jMenuItemFlashDefault.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFlashDefaultActionPerformed(evt);
             }
@@ -120,6 +130,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFlashDowngrade = new JMenuItem("Flash downgrade to 1.0.12");
         jMenuItemFlashDowngrade.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFlashDowngradeActionPerformed(evt);
             }
@@ -128,6 +139,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFlashUpgrade_v1_v2 = new JMenuItem("Flash upgrade 1.x to 2.0");
         jMenuItemFlashUpgrade_v1_v2.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFlashUpgrade_v1_v2_ActionPerformed(evt);
             }
@@ -137,6 +149,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFlashDFU = new JMenuItem("Flash (Rescue)");
         jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFlashDFUActionPerformed(evt);
             }
@@ -145,6 +158,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemRefreshFWID = new JMenuItem("Refresh Firmware ID");
         jMenuItemRefreshFWID.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemRefreshFWIDActionPerformed(evt);
             }
@@ -156,6 +170,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFCompile = new JMenuItem("Compile");
         jMenuItemFCompile.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFCompileActionPerformed(evt);
             }
@@ -164,6 +179,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemEnterDFU = new JMenuItem("Enter Rescue mode");
         jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemEnterDFUActionPerformed(evt);
             }
@@ -172,6 +188,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
 
         jMenuItemFlashSDR = new JMenuItem("Flash (User)");
         jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemFlashSDRActionPerformed(evt);
             }
@@ -193,6 +210,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         add(jSeparator1);
         jMenuItemKeyboard = new JMenuItem("Keyboard");
         jMenuItemKeyboard.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TargetViews.getTargetViews().showKeyboard();
             }
@@ -200,6 +218,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         add(jMenuItemKeyboard);
         jMenuItemMidiMonitor = new JMenuItem("MIDI Input Monitor");
         jMenuItemMidiMonitor.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TargetViews.getTargetViews().showMidiMonitor();
             }
@@ -207,6 +226,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         add(jMenuItemMidiMonitor);
         jMenuItemMidiRouting = new JMenuItem("MIDI Routing");
         jMenuItemMidiRouting.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TargetViews.getTargetViews().showMidiRouting();
             }
@@ -214,6 +234,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         add(jMenuItemMidiRouting);
         jMenuItemFileManager = new JMenuItem("File manager");
         jMenuItemFileManager.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TargetViews.getTargetViews().showFilemanager();
             }
@@ -221,6 +242,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         add(jMenuItemFileManager);
         jMenuItemRemote = new JMenuItem("Remote");
         jMenuItemRemote.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TargetViews.getTargetViews().showRemote();
             }
@@ -228,6 +250,7 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         add(jMenuItemRemote);
         jMenuItemMemoryViewer = new JMenuItem("Memory Viewer");
         jMenuItemMemoryViewer.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TargetViews.getTargetViews().showMemoryViewer();
             }
@@ -329,8 +352,12 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
             jMenuItemSelectCom.setEnabled(!connect);
             jMenuItemEnterDFU.setEnabled(connect);
             jMenuItemMount.setEnabled(connect);
-            jMenuItemFlashDefault.setEnabled(connect && connection.getTargetProfile().hasSDRAM());
-            jMenuItemFlashSDR.setEnabled(connect && connection.getTargetProfile().hasSDRAM());
+            jMenuItemFlashDefault.setEnabled(
+                    (connection != null)
+                    && connection.getTargetProfile().hasSDRAM());
+            jMenuItemFlashSDR.setEnabled(
+                    (connection != null)
+                    && connection.getTargetProfile().hasSDRAM());
         } else if (TargetModel.HAS_SDCARD.is(evt)) {
             Boolean b = (Boolean) evt.getNewValue();
             jMenuItemMount.setEnabled(b);

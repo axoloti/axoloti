@@ -11,12 +11,10 @@ class DisplayInstanceViewInt32Bar16 extends DisplayInstanceViewInt32 {
 
     DisplayInstanceViewInt32Bar16(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         readout = new LedstripComponent(0, 16);
         add(readout);
         readout.setSize(readout.getHeight(), 80);

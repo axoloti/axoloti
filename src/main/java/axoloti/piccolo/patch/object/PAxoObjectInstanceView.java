@@ -51,29 +51,29 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     PLabelComponent IndexLabel;
 
-    public PatchPNode p_attributeViews;
-    public PatchPNode p_parameterViews;
-    public PatchPNode p_displayViews;
-    public PatchPNode p_ioletViews;
-    public PatchPNode p_inletViews;
-    public PatchPNode p_outletViews;
+    PatchPNode p_attributeViews;
+    PatchPNode p_parameterViews;
+    PatchPNode p_displayViews;
+    PatchPNode p_ioletViews;
+    PatchPNode p_inletViews;
+    PatchPNode p_outletViews;
     boolean deferredObjTypeUpdate = false;
 
     String tooltipText = "<html>";
 
     public PAxoObjectInstanceView(ObjectInstanceController controller, PatchViewPiccolo patchView) {
         super(controller, patchView);
-        instanceLabel = new PLabelComponent(getModel().getInstanceName());
+        instanceLabel = new PLabelComponent(controller.getModel().getInstanceName());
         p_parameterViews = new PatchPNode(patchView);
         p_attributeViews = new PatchPNode(patchView);
         p_inletViews = new PatchPNode(patchView);
         p_outletViews = new PatchPNode(patchView);
         p_displayViews = new PatchPNode(patchView);
         p_ioletViews = new PatchPNode(patchView);
-        init1();
+        initComponents();
     }
 
-    final void init1() {
+    private void initComponents() {
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews.getProxyComponent(), BoxLayout.LINE_AXIS));
         p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
 
@@ -88,6 +88,8 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
         p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
+
+        initComponents2();
     }
 
     @Override
@@ -105,10 +107,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     List<IParameterInstanceView> parameterInstanceViews;
     List<IDisplayInstanceView> displayInstanceViews;
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents2() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.PAGE_AXIS));
 
         setPaint(Theme.getCurrentTheme().Object_Default_Background);

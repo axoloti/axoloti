@@ -21,7 +21,7 @@ import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 
@@ -78,13 +78,13 @@ public class WindowMenu extends JMenu {
         public WindowMenuItem(DocumentWindow documentWindow, String itemname) {
             super(itemname);
             this.documentWindow = documentWindow;
-            addActionListener(wmiAL);
+            WindowMenuItem.this.addActionListener(wmiAL);
         }
 
         public WindowMenuItem(DocumentWindow documentWindow) {
             super(documentWindow.getTitle());
             this.documentWindow = documentWindow;
-            addActionListener(wmiAL);
+            WindowMenuItem.this.addActionListener(wmiAL);
         }
 
         public DocumentWindow getDocumentWindow() {
@@ -92,7 +92,7 @@ public class WindowMenu extends JMenu {
         }
     }
 
-    static void PopulateDocuments(JMenu jMenuWindow, String prefix, ArrayList<DocumentWindow> dwl) {
+    static void PopulateDocuments(JMenu jMenuWindow, String prefix, List<DocumentWindow> dwl) {
         for (DocumentWindow p : dwl) {
             WindowMenuItem wmi = new WindowMenuItem(p, prefix + p.getTitle());
             jMenuWindow.add(wmi);

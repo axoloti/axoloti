@@ -11,12 +11,10 @@ class DisplayInstanceViewFrac32VBar extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceViewFrac32VBar(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         vbar = new VBarComponent(0, 0, 64);
         vbar.setValue(0);
         add(vbar);

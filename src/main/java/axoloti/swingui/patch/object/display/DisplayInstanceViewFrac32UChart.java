@@ -11,12 +11,10 @@ class DisplayInstanceViewFrac32UChart extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceViewFrac32UChart(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         scope = new ScopeComponent(0.0, 64);
         scope.setValue(64.0);
         add(scope);

@@ -17,6 +17,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
     AttributeInstanceViewTablename(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -24,9 +25,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         return (AttributeInstanceTablename) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFtableName = new JTextField(getModel().getValue());
         Dimension d = TFtableName.getSize();
         d.width = 128;

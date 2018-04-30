@@ -117,7 +117,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         if (amount != 0.0) {
             // existing modulation
             if (modulators == null) {
-                modulators = new ArrayList<Modulation>();
+                modulators = new ArrayList<>();
             }
             Modulator modulator = getParent().getParent().getPatchModulators().get(index);
             //System.out.println("updatemodulation2:" + modulator.name);
@@ -150,8 +150,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
             if (modulator == null) {
                 return;
             }
-            for (int i = 0; i < modulator.Modulations.size(); i++) {
-                Modulation n = modulator.Modulations.get(index);
+            for (Modulation n : modulator.Modulations) {
                 if (n.destination == this) {
                     modulator.Modulations.remove(n);
                 }

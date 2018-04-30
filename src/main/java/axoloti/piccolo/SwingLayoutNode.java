@@ -59,6 +59,7 @@ public class SwingLayoutNode extends PNode {
         addChild(getChildrenCount(), child);
     }
 
+    @Override
     public void addChildren(final Collection nodes) {
         final Iterator i = nodes.iterator();
         while (i.hasNext()) {
@@ -67,12 +68,14 @@ public class SwingLayoutNode extends PNode {
         }
     }
 
+    @Override
     public PNode removeChild(final int index) {
         final SwingLayoutNode node = (SwingLayoutNode) super.removeChild(index);
         removeProxyComponent(node);
         return node;
     }
 
+    @Override
     public void removeAllChildren() {
         super.removeAllChildren();
         proxyComponent.removeAll();

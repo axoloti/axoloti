@@ -29,7 +29,7 @@ import javax.swing.event.MenuListener;
  *
  * @author jtaelman
  */
-public class PopulatePatchMenuDynamic extends JMenu implements MenuListener {
+public class PopulatePatchMenuDynamic extends JMenu {
 
     final String ext;
     final File dir;
@@ -38,55 +38,61 @@ public class PopulatePatchMenuDynamic extends JMenu implements MenuListener {
         super(name);
         this.ext = ext;
         this.dir = dir;
-        addMenuListener(this);
+        initComponent();
     }
 
-    @Override
-    public void menuSelected(MenuEvent e) {
-        boolean bEmpty = true;
-        if (dir.exists() && dir.isDirectory()) {
-            for (File subdir : PopulatePatchMenuDynamic.this.dir.listFiles(new java.io.FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return pathname.isDirectory() && !pathname.isHidden();
+    private void initComponent() {
+        addMenuListener(new MenuListener() {
+
+            @Override
+            public void menuSelected(MenuEvent e) {
+                boolean bEmpty = true;
+                if (dir.exists() && dir.isDirectory()) {
+                    for (File subdir : PopulatePatchMenuDynamic.this.dir.listFiles(new java.io.FileFilter() {
+                        @Override
+                        public boolean accept(File pathname) {
+                            return pathname.isDirectory() && !pathname.isHidden();
+                        }
+                    })) {
+                        PopulatePatchMenuDynamic fm = new PopulatePatchMenuDynamic(subdir.getName(), subdir, PopulatePatchMenuDynamic.this.ext);
+                        add(fm);
+                        bEmpty = false;
+                    }
+                    File[] files = PopulatePatchMenuDynamic.this.dir.listFiles(new java.io.FileFilter() {
+                        @Override
+                        public boolean accept(File f) {
+                            return f.isFile() && f.canRead() && f.getName().endsWith(ext);
+                        }
+                    });
+                    Arrays.sort(files);
+                    for (File f : files) {
+                        String fn = f.getName();
+                        String fn2 = fn.substring(0, fn.length() - 4);
+                        JMenuItem fm = new JMenuItem(fn2);
+                        String a = "open:" + dir.getPath() + File.separator + fn;
+                        fm.setActionCommand(a);
+                        fm.addActionListener(MainFrame.mainframe);
+                        add(fm);
+                        bEmpty = false;
+                    }
                 }
-            })) {
-                PopulatePatchMenuDynamic fm = new PopulatePatchMenuDynamic(subdir.getName(), subdir, PopulatePatchMenuDynamic.this.ext);
-                add(fm);
-                bEmpty = false;
-            }
-            File[] files = PopulatePatchMenuDynamic.this.dir.listFiles(new java.io.FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    return f.isFile() && f.canRead() && f.getName().endsWith(ext);
+                if (bEmpty) {
+                    JMenuItem m = new JMenuItem("no patches here");
+                    m.setEnabled(false);
+                    add(m);
                 }
-            });
-            Arrays.sort(files);
-            for (File f : files) {
-                String fn = f.getName();
-                String fn2 = fn.substring(0, fn.length() - 4);
-                JMenuItem fm = new JMenuItem(fn2);
-                String a = "open:" + dir.getPath() + File.separator + fn;
-                fm.setActionCommand(a);
-                fm.addActionListener(MainFrame.mainframe);
-                add(fm);
-                bEmpty = false;
             }
-        }
-        if (bEmpty) {
-            JMenuItem m = new JMenuItem("no patches here");
-            m.setEnabled(false);
-            add(m);
-        }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                removeAll();
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+                removeAll();
+            }
+        });
     }
 
-    @Override
-    public void menuDeselected(MenuEvent e) {
-        removeAll();
-    }
-
-    @Override
-    public void menuCanceled(MenuEvent e) {
-        removeAll();
-    }
 }

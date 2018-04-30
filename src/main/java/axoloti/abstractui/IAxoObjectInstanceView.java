@@ -21,8 +21,6 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     public boolean isLocked();
 
-    public void PostConstructor();
-
     public PatchView getPatchView();
 
     public PatchModel getPatchModel();

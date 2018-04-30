@@ -13,15 +13,19 @@ import javax.swing.undo.UndoableEdit;
 
 public abstract class AbstractController<Model extends IModel, View extends IView, ParentController extends AbstractController> implements PropertyChangeListener {
 
-    private final ArrayList<View> registeredViews = new ArrayList<View>();
+    private final ArrayList<View> registeredViews = new ArrayList<>();
     private final Model model;
 
     protected AbstractController(Model model) {
         if ((model.getDocumentRoot() == null) && (model.getParent() != null)) {
             model.setDocumentRoot(model.getParent().getDocumentRoot());
         }
-        model.addPropertyChangeListener(this);
         this.model = model;
+        init();
+    }
+
+    private void init() {
+        model.addPropertyChangeListener(this);
     }
 
     // to be called in controller.createView()

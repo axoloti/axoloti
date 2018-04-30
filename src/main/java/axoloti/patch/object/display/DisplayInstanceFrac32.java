@@ -44,6 +44,7 @@ public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayIn
         return value;
     }
 
+    @Override
     public void setValue(Object newValue) {
         value = (Double) newValue;
         firePropertyChange(DISP_VALUE, null, value);

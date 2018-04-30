@@ -361,8 +361,11 @@ public final class MainFrame extends TJFrame implements ActionListener {
                 + "* modulations are broken\n"
                 + "* zombie objects broken\n"
                 + "* modules are broken\n");
+        init();
+    }
 
-        controller.addView(this);
+    private void init() {
+        getController().addView(this);
     }
 
     static boolean TestDir(String var, boolean write) {

@@ -38,6 +38,10 @@ public class LedstripComponent extends ADispComponent {
         //setInheritsPopupMenu(true);
         this.value = 0;//value;
         this.n = n;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(bsize * n + 2, bsize + 2);
         setMinimumSize(d);
         setPreferredSize(d);

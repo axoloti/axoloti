@@ -39,6 +39,10 @@ public class VUComponent extends ADispComponent {
 
     public VUComponent() {
         value = 0;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setPreferredSize(dim);
         setMaximumSize(dim);

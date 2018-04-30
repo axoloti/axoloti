@@ -56,7 +56,7 @@ public class PUtils {
 
     public static void printNodeStats(PNode node) {
         int visibleNodes = 0;
-        Map<String, Integer> typeCount = new HashMap<String, Integer>();
+        Map<String, Integer> typeCount = new HashMap<>();
         for (Object n : node.getAllNodes()) {
             if (((PNode) n).getVisible()) {
                 visibleNodes++;

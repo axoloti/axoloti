@@ -73,7 +73,7 @@ public class AxoObjects {
         if (n.startsWith("../") && (cwd != null)) {
             bfname = cwd + "/../" + n.substring(3);
         }
-        ArrayList<IAxoObject> set = new ArrayList<IAxoObject>();
+        ArrayList<IAxoObject> set = new ArrayList<>();
         File f;
         if ((bfname != null) && (cwd != null)) {
             String fnameA = bfname + ".axo";
@@ -95,7 +95,10 @@ public class AxoObjects {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                 }
-                if (loadOK) {
+                if (loadOK
+                        && (of != null)
+                        && (of.objs != null)
+                        && (!of.objs.isEmpty())) {
                     AxoObjectAbstract o = of.objs.get(0);
                     if (o != null) {
                         o.setPath(fnameA);
@@ -156,8 +159,8 @@ public class AxoObjects {
 
     public AxoObjects() {
         ObjectTree = new AxoObjectTreeNode("/");
-        ObjectList = new ArrayList<IAxoObject>();
-        ObjectUUIDMap = new HashMap<String, IAxoObject>();
+        ObjectList = new ArrayList<>();
+        ObjectUUIDMap = new HashMap<>();
     }
 
     public AxoObjectTreeNode LoadAxoObjectsFromFolder(File folder, String prefix) {
@@ -204,7 +207,7 @@ public class AxoObjects {
                 }
             }
         }
-        ArrayList<File> fileList = new ArrayList<File>(Arrays.asList(folder.listFiles()));
+        ArrayList<File> fileList = new ArrayList<>(Arrays.asList(folder.listFiles()));
         Collections.sort(fileList, new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {
@@ -352,8 +355,8 @@ public class AxoObjects {
             @Override
             public void run() {
                 ObjectTree = new AxoObjectTreeNode("/");
-                ObjectList = new ArrayList<IAxoObject>();
-                ObjectUUIDMap = new HashMap<String, IAxoObject>();
+                ObjectList = new ArrayList<>();
+                ObjectUUIDMap = new HashMap<>();
                 String spath[] = Preferences.getPreferences().getObjectSearchPath();
                 if (spath != null) {
                     for (String path : spath) {
@@ -394,7 +397,7 @@ public class AxoObjects {
                 oo.getDisplays().get(0).noLabel = true;
             }
             if (oo.depends == null) {
-                oo.depends = new HashSet<String>();
+                oo.depends = new HashSet<>();
             }
             String c = oo.sSRateCode + oo.sKRateCode + oo.sInitCode + oo.sLocalData;
             if (c.contains("f_open")) {
@@ -474,7 +477,7 @@ public class AxoObjects {
         File f =new File(path);
 
         AxoObjectFile a = new AxoObjectFile();
-        a.objs = new ArrayList<AxoObjectAbstract>();
+        a.objs = new ArrayList<>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
             PostProcessObject(oa);

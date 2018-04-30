@@ -7,8 +7,8 @@ import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import axoloti.swingui.components.control.PulseButtonComponent;
 import axoloti.swingui.patch.PatchViewSwing;
 import static java.awt.Component.LEFT_ALIGNMENT;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.Box;
@@ -20,6 +20,7 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
 
     public AxoObjectInstanceViewHyperlink(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
+        initComponents();
     }
 
     @Override
@@ -27,8 +28,7 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
         return (AxoObjectInstanceHyperlink) super.getModel();
     }
 
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         button = new PulseButtonComponent();
@@ -46,7 +46,7 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
         add(Box.createHorizontalStrut(5));
         instanceLabel = new LabelComponent(getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        instanceLabel.addMouseListener(new MouseListener() {
+        instanceLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -55,25 +55,8 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                /////AxoObjectInstanceViewHyperlink.this.mousePressed(e);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                /////AxoObjectInstanceViewHyperlink.this.mouseReleased(e);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
-//        instanceLabel.addMouseMotionListener(this);
+
         add(instanceLabel);
         setLocation(getModel().getX(), getModel().getY());
 

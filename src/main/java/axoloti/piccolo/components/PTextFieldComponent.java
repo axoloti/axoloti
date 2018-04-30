@@ -26,7 +26,10 @@ public class PTextFieldComponent extends PatchPNode implements PFocusable {
         textFieldNode = new PSwing(textField);
         textField.setFont(Constants.FONT);
         textField.setFocusTraversalKeysEnabled(false);
+        initComponent();
+    }
 
+    private void initComponent() {
         setMinimumSize(textField.getMinimumSize());
         setMaximumSize(textField.getMaximumSize());
         setPreferredSize(textField.getPreferredSize());

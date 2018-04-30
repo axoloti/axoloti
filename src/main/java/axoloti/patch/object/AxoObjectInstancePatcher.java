@@ -48,7 +48,6 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
             // patch1 is null in objectselector...
             this.subPatchModel.setDocumentRoot(patch1.getDocumentRoot());
         }
-        controller.addView(this);
         subPatchModel.setFileNamePath(InstanceName1);
     }
 

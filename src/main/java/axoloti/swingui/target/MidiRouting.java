@@ -24,21 +24,21 @@ import qcmds.QCmdProcessor;
  */
 public class MidiRouting extends TJFrame {
 
-    MidiInputRoutingTable[] inputRoutingTables;
-    MidiOutputRoutingTable[] outputRoutingTables;
+    private MidiInputRoutingTable[] inputRoutingTables;
+    private MidiOutputRoutingTable[] outputRoutingTables;
 
-    JButton buttonRefresh;
-    JButton buttonWriteSettings;
+    private JButton buttonRefresh;
+    private JButton buttonWriteSettings;
 
     public MidiRouting(TargetController controller) {
         super(controller);
         initComponents();
     }
 
-    JTable table_midi_in_routing;
-    JTable table_midi_out_routing;
+    private JTable table_midi_in_routing;
+    private JTable table_midi_out_routing;
 
-    void initComponents() {
+    private void initComponents() {
         setMinimumSize(new java.awt.Dimension(600, 250));
         table_midi_in_routing = new JTable(new AbstractTableModel() {
             @Override

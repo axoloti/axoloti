@@ -28,7 +28,10 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
         super(axoObjectInstanceView);
         this.value = 0;//value;
         this.n = n;
+        initComponent();
+    }
 
+    private void initComponent() {
         Dimension d = new Dimension(bsize * n + 2, bsize + 2);
         setMinimumSize(d);
         setMaximumSize(d);

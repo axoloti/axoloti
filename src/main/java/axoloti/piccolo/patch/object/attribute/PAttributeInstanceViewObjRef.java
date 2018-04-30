@@ -12,12 +12,13 @@ import javax.swing.event.DocumentListener;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
+class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFObjName;
 
     public PAttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -25,8 +26,7 @@ public class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
         return (AttributeInstanceObjRef) super.getModel();
     }
 
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFObjName = new PTextFieldComponent(getModel().getValue());
         Dimension d = TFObjName.getSize();
         d.width = 92;

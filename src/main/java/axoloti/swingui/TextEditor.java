@@ -47,9 +47,13 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
      */
     public TextEditor(Property stringProperty, AbstractController controller, DocumentWindow parent) {
         super(controller, parent);
-        initComponents();
-        setJMenuBar(new StandardMenubar(null));
         this.stringProperty = stringProperty;
+        initComponents();
+        initComponents2();
+    }
+
+    private void initComponents2() {
+        setJMenuBar(new StandardMenubar(null));
         textArea = new RSyntaxTextArea(20, 60);
         textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
         textArea.setCodeFoldingEnabled(true);
@@ -58,7 +62,7 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
         cp.add(sp);
         textArea.setVisible(true);
         setContentPane(cp);
-        textArea.setText((String) this.stringProperty.get(controller.getModel()));
+        textArea.setText((String) this.stringProperty.get(getController().getModel()));
         setVisible(true);
     }
 

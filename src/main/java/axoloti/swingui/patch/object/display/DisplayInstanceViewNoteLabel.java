@@ -12,6 +12,10 @@ class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
+    }
+
+    private void initComponents() {
         readout = new LabelComponent("xxxxx");
         add(readout);
         readout.setSize(40, 18);

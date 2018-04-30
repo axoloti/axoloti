@@ -19,9 +19,8 @@ import axoloti.swingui.patch.object.outlet.OutletInstanceView;
 import java.awt.Component;
 import java.awt.IllegalComponentStateException;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -29,16 +28,140 @@ import javax.swing.SwingUtilities;
 
 public abstract class IoletInstanceView<T extends AbstractController> extends ViewPanel<T> {
 
-    @Deprecated
-    public String name;
-    public String objname;
-
-    public AxoObjectInstanceViewAbstract axoObj;
+    protected AxoObjectInstanceViewAbstract axoObj;
     protected LabelComponent label = new LabelComponent("");
-    public JComponent jack;
+    protected JComponent jack;
 
     public IoletInstanceView(T controller) {
         super(controller);
+        initComponents();
+    }
+
+    private void initComponents() {
+
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
+                    e.consume();
+                } else {
+                    setHighlighted(true);
+                    //            if (!axoObj.isLocked()) {
+                    //                if (dragnet == null) {
+                    Net dnet = new NetDrag();
+                    NetController dragNetController = dnet.getControllerFromModel();
+                    dragtarget = null;
+                    if (IoletInstanceView.this instanceof InletInstanceView) {
+                        dragNetController.connectInlet((InletInstance) getController().getModel());
+                    } else {
+                        dragNetController.connectOutlet((OutletInstance) getController().getModel());
+                    }
+                    dragnet = new NetDragging(dragNetController, getPatchView());
+                    dragNetController.addView(dragnet);
+                    //                }
+                    dragnet.setVisible(true);
+                    if (getPatchView() != null) {
+                        getPatchView().selectionRectLayerPanel.add(dragnet);
+                    }
+                    e.consume();
+                    //            }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
+                    e.consume();
+                } else if ((dragnet != null) && (getPatchView() != null)) {
+                    dragnet.repaint();
+                    getPatchView().selectionRectLayerPanel.remove(dragnet);
+                    dragnet = null;
+                    Net n = null;
+                    if (dragtarget == null) {
+                        Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), getPatchView().selectionRectLayerPanel);
+                        Component c = getPatchView().objectLayerPanel.findComponentAt(p);
+                        while ((c != null) && !(c instanceof IoletInstanceView)) {
+                            c = c.getParent();
+                        }
+
+                        if (IoletInstanceView.this != c) {
+                            if (IoletInstanceView.this instanceof InletInstanceView) {
+                                getPatchView().getController().addMetaUndo("disconnect inlet", focusEdit);
+                                n = getPatchView().getController().disconnect((InletInstance) getController().getModel());
+                            } else {
+                                getPatchView().getController().addMetaUndo("disconnect outlet", focusEdit);
+                                n = getPatchView().getController().disconnect((OutletInstance) getController().getModel());
+                            }
+                        }
+                    } else {
+                        if (IoletInstanceView.this instanceof InletInstanceView) {
+                            if (dragtarget instanceof InletInstanceView) {
+                                getPatchView().getController().addMetaUndo("connect", focusEdit);
+                                n = getPatchView().getController().AddConnection(
+                                        (InletInstance) getController().getModel(),
+                                        (InletInstance) ((InletInstanceView) dragtarget).getController().getModel());
+                            } else if (dragtarget instanceof OutletInstanceView) {
+                                getPatchView().getController().addMetaUndo("connect", focusEdit);
+                                n = getPatchView().getController().AddConnection(
+                                        (InletInstance) getController().getModel(),
+                                        (OutletInstance) ((OutletInstanceView) dragtarget).getController().getModel());
+                            }
+                        } else if (IoletInstanceView.this instanceof OutletInstanceView) {
+                            if (dragtarget instanceof InletInstanceView) {
+                                getPatchView().getController().addMetaUndo("connect", focusEdit);
+                                n = getPatchView().getController().AddConnection((InletInstance) ((InletInstanceView) dragtarget).getController().getModel(),
+                                        (OutletInstance) ((OutletInstanceView) IoletInstanceView.this).getController().getModel());
+                            }
+                        }
+                        getPatchView().getController().PromoteOverloading(false);
+                    }
+                    getPatchView().selectionRectLayerPanel.repaint();
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setHighlighted(true);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setHighlighted(false);
+            }
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (!axoObj.isLocked()) {
+                    Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), getPatchView().objectLayerPanel);
+                    Component c = getPatchView().objectLayerPanel.findComponentAt(p);
+                    while ((c != null) && !(c instanceof IoletInstanceView)) {
+                        c = c.getParent();
+                    }
+                    if ((c != null)
+                            && (c != IoletInstanceView.this)
+                            && (!((IoletInstanceView.this instanceof OutletInstanceView) && (c instanceof OutletInstanceView)))) {
+                        // different target and not myself?
+                        if (c != dragtarget) {
+                            // new target
+                            dragtarget = (IoletInstanceView) c;
+                            Point jackLocation = dragtarget.getJackLocInCanvas();
+                            dragnet.setDragPoint(jackLocation);
+                        }
+                    } else if (dragnet != null) {
+                        dragnet.setDragPoint(p);
+                        dragtarget = null;
+                    }
+                }
+                e.consume();
+            }
+
+        };
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
     }
 
     public AxoObjectInstanceViewAbstract getObjectInstanceView() {
@@ -76,7 +199,7 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
         }
     }
 
-    abstract public JPopupMenu getPopup();
+    abstract protected JPopupMenu getPopup();
 
     public PatchViewSwing getPatchView() {
         return axoObj.getPatchView();
@@ -104,138 +227,6 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
 
     protected NetDragging dragnet = null;
     protected IoletInstanceView dragtarget = null;
-
-    protected MouseListener mouseListener = new MouseListener() {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
-                e.consume();
-            } else {
-                setHighlighted(true);
-//            if (!axoObj.isLocked()) {
-//                if (dragnet == null) {
-                Net dnet = new NetDrag();
-                NetController dragNetController = dnet.getControllerFromModel();
-                dragtarget = null;
-                if (IoletInstanceView.this instanceof InletInstanceView) {
-                    dragNetController.connectInlet((InletInstance) getController().getModel());
-                } else {
-                    dragNetController.connectOutlet((OutletInstance) getController().getModel());
-                }
-                dragnet = new NetDragging(dragNetController, getPatchView());
-                dragNetController.addView(dragnet);
-//                }
-                dragnet.setVisible(true);
-                if (getPatchView() != null) {
-                    getPatchView().selectionRectLayerPanel.add(dragnet);
-                }
-                e.consume();
-//            }
-            }
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
-                e.consume();
-            } else if ((dragnet != null) && (getPatchView() != null)) {
-                dragnet.repaint();
-                getPatchView().selectionRectLayerPanel.remove(dragnet);
-                dragnet = null;
-                Net n = null;
-                if (dragtarget == null) {
-                    Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), getPatchView().selectionRectLayerPanel);
-                    Component c = getPatchView().objectLayerPanel.findComponentAt(p);
-                    while ((c != null) && !(c instanceof IoletInstanceView)) {
-                        c = c.getParent();
-                    }
-
-                    if (IoletInstanceView.this != c) {
-                        if (IoletInstanceView.this instanceof InletInstanceView) {
-                            getPatchView().getController().addMetaUndo("disconnect inlet", focusEdit);
-                            n = getPatchView().getController().disconnect((InletInstance) getController().getModel());
-                        } else {
-                            getPatchView().getController().addMetaUndo("disconnect outlet", focusEdit);
-                            n = getPatchView().getController().disconnect((OutletInstance) getController().getModel());
-                        }
-                    }
-                } else {
-                    if (IoletInstanceView.this instanceof InletInstanceView) {
-                        if (dragtarget instanceof InletInstanceView) {
-                            getPatchView().getController().addMetaUndo("connect", focusEdit);
-                            n = getPatchView().getController().AddConnection(
-                                    (InletInstance) getController().getModel(),
-                                    (InletInstance) ((InletInstanceView) dragtarget).getController().getModel());
-                        } else if (dragtarget instanceof OutletInstanceView) {
-                            getPatchView().getController().addMetaUndo("connect", focusEdit);
-                            n = getPatchView().getController().AddConnection(
-                                    (InletInstance) getController().getModel(),
-                                    (OutletInstance) ((OutletInstanceView) dragtarget).getController().getModel());
-                        }
-                    } else if (IoletInstanceView.this instanceof OutletInstanceView) {
-                        if (dragtarget instanceof InletInstanceView) {
-                            getPatchView().getController().addMetaUndo("connect", focusEdit);
-                            n = getPatchView().getController().AddConnection((InletInstance) ((InletInstanceView) dragtarget).getController().getModel(),
-                                    (OutletInstance) ((OutletInstanceView) IoletInstanceView.this).getController().getModel());
-                        }
-                    }
-                    getPatchView().getController().PromoteOverloading(false);
-                }
-                getPatchView().selectionRectLayerPanel.repaint();
-                e.consume();
-            }
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            setHighlighted(true);
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            setHighlighted(false);
-        }
-    };
-
-    protected MouseMotionListener mouseMotionListener = new MouseMotionListener() {
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            if (!axoObj.isLocked()) {
-                Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), getPatchView().objectLayerPanel);
-                Component c = getPatchView().objectLayerPanel.findComponentAt(p);
-                while ((c != null) && !(c instanceof IoletInstanceView)) {
-                    c = c.getParent();
-                }
-                if ((c != null)
-                        && (c != IoletInstanceView.this)
-                        && (!((IoletInstanceView.this instanceof OutletInstanceView) && (c instanceof OutletInstanceView)))) {
-                    // different target and not myself?
-                    if (c != dragtarget) {
-                        // new target
-                        dragtarget = (IoletInstanceView) c;
-                        Point jackLocation = dragtarget.getJackLocInCanvas();
-                        dragnet.SetDragPoint(jackLocation);
-                    }
-                } else if (dragnet != null) {
-                    dragnet.SetDragPoint(p);
-                    dragtarget = null;
-                }
-            }
-            e.consume();
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent e) {
-        }
-
-    };
 
 
     @Override

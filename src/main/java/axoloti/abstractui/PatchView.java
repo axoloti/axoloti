@@ -10,12 +10,12 @@ import axoloti.connection.IConnection;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.mvc.View;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewCodegen;
-import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
@@ -64,7 +64,7 @@ import qcmds.QCmdStart;
 import qcmds.QCmdStop;
 import qcmds.QCmdUploadPatch;
 
-public abstract class PatchView extends PatchAbstractView {
+public abstract class PatchView extends View<PatchController> {
 
     // shortcut patch names
     public final static String patchComment = "patch/comment";
@@ -87,6 +87,16 @@ public abstract class PatchView extends PatchAbstractView {
 
     public List<IAxoObjectInstanceView> getObjectInstanceViews() {
         return objectInstanceViews;
+    }
+
+    private PatchFrame patchFrame;
+
+    public void setPatchFrame(PatchFrame patchFrame) {
+        this.patchFrame = patchFrame;
+    }
+
+    public PatchFrame getPatchFrame() {
+        return patchFrame;
     }
 
     public abstract PatchViewportView getViewportView();
@@ -123,7 +133,7 @@ public abstract class PatchView extends PatchAbstractView {
         osf.Launch(p, o, searchString);
     }
 
-    private Map<DataType, Boolean> cableTypeEnabled = new HashMap<DataType, Boolean>();
+    private Map<DataType, Boolean> cableTypeEnabled = new HashMap<>();
 
     public void setCableTypeEnabled(DataType type, boolean enabled) {
         cableTypeEnabled.put(type, enabled);
@@ -166,7 +176,7 @@ public abstract class PatchView extends PatchAbstractView {
                 p.objectinstances.add(o.getModel());
             }
         }
-        p.nets = new ArrayList<Net>();
+        p.nets = new ArrayList<>();
         for (INetView n : netViews) {
             int sel = 0;
             for (IIoletInstanceView i : n.getIoletViews()) {

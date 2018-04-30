@@ -64,10 +64,10 @@ public class Net extends AbstractModel {
             this.dests = dest.toArray(new InletInstance[]{});
         }
 
-        for(OutletInstance o : source) {
+        for (OutletInstance o : sources) {
             o.setConnected(true);
         }
-        for(InletInstance i : dest) {
+        for (InletInstance i : dests) {
             i.setConnected(true);
         }
     }

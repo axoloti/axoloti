@@ -18,7 +18,10 @@ public class PPulseButtonComponent extends PCtrlComponentAbstract {
     public PPulseButtonComponent(IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         this.value = 0;
+        initComponent();
+    }
 
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

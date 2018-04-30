@@ -83,6 +83,7 @@ public class ParameterInt32BoxSmall extends ParameterInt32<ParameterInstanceInt3
         return MinValue.getInt();
     }
 
+    @Override
     public void setMinValue(Integer min) {
         this.MinValue = new ValueInt32(min);
         firePropertyChange(VALUE_MIN, null, min);

@@ -40,6 +40,10 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         super();
         this.property = property;
         this.ctrl = ctrl;
+        initComponents();
+    }
+
+    private void initComponents() {
         setText("Midi CC");
 
         /*

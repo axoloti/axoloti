@@ -5,7 +5,7 @@ import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceString;
 import java.beans.PropertyChangeEvent;
 
-public abstract class PAttributeInstanceViewString extends PAttributeInstanceView {
+abstract class PAttributeInstanceViewString extends PAttributeInstanceView {
 
     public PAttributeInstanceViewString(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

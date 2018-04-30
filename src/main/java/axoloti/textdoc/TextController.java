@@ -1,7 +1,6 @@
 package axoloti.textdoc;
 
 import axoloti.mvc.AbstractController;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.IView;
 
 /**

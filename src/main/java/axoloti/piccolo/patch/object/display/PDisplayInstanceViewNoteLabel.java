@@ -7,18 +7,16 @@ import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
+class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
 
     public PDisplayInstanceViewNoteLabel(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     private PLabelComponent readout;
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         readout = new PLabelComponent("xxxxx");
         addChild(readout);
         readout.setSize(new Dimension(40, 18));

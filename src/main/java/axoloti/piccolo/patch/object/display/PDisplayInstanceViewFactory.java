@@ -71,7 +71,6 @@ public class PDisplayInstanceViewFactory {
             view = null;
             throw new Error("unkown Display type");
         }
-        view.PostConstructor();
         controller.addView(view);
         return view;
     }

@@ -7,15 +7,14 @@ import java.beans.PropertyChangeEvent;
 
 class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
-    DisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller) {
-        super(controller);
-    }
-
     private VBarComponentDB vbar;
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    DisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller) {
+        super(controller);
+        initComponents();
+    }
+
+    private void initComponents() {
         vbar = new VBarComponentDB(-200, -60, 10);
         vbar.setValue(0);
         add(vbar);

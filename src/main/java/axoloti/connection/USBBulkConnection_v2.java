@@ -89,7 +89,7 @@ public class USBBulkConnection_v2 extends IConnection {
         this.patch = null;
         disconnectRequested = false;
         connected = false;
-        queueSerialTask = new ArrayBlockingQueue<QCmdSerialTask>(10);
+        queueSerialTask = new ArrayBlockingQueue<>(10);
 
     }
 
@@ -1064,11 +1064,11 @@ public class USBBulkConnection_v2 extends IConnection {
                         break;
                     case LibUsb.ERROR_TIMEOUT:
                         if (state != ReceiverState.header) {
-                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "timeout: " + state);
+                            Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "timeout: {0}", state);
                         }   break;
                     default:
                         String err = LibUsb.errorName(result);
-                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "receive error: " + err);
+                        Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "receive error: {0}", err);
                         disconnectRequested = true;
                         GoIdleState();
                         disconnect();

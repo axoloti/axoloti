@@ -18,6 +18,7 @@
 package axoloti.object.outlet;
 
 import axoloti.object.iolet.Iolet;
+import axoloti.utils.CharEscape;
 
 /**
  *
@@ -33,6 +34,6 @@ public abstract class Outlet extends Iolet {
     }
 
     public String GetCName() {
-        return "outlet_" + super.GetCName();
+        return "inlet_" + CharEscape.CharEscape(getName());
     }
 }

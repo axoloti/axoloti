@@ -4,7 +4,7 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.components.control.PCheckboxComponent;
 
-public class PParameterInstanceViewBin32 extends PParameterInstanceViewInt32 {
+class PParameterInstanceViewBin32 extends PParameterInstanceViewInt32 {
 
     public PParameterInstanceViewBin32(ParameterInstanceController controller,
             IAxoObjectInstanceView axoObjectInstanceView) {

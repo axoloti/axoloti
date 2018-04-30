@@ -27,6 +27,26 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
 
     public PParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponent();
+    }
+
+    private void initComponent() {
+
+        PatchPNode btns = new PatchPNode(getPatchView());
+        btns.setLayout(new BoxLayout(btns.getProxyComponent(), BoxLayout.PAGE_AXIS));
+
+        midiAssign = new PAssignMidiCCComponent(getController(), getPatchView());
+        btns.addChild(midiAssign);
+
+        // FIXME: reintroduce modulator button
+        // modulationAssign = new PAssignModulatorComponent(this);
+        // btns.addChild(modulationAssign);
+        presetAssign = new PAssignPresetComponent(getController(), getPatchView());
+        btns.addChild(presetAssign);
+        addChild(btns);
+
+        addInputEventListener(popupMouseListener);
+
     }
 
     @Override
@@ -43,27 +63,6 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
                 getModel().getTick(), axoObjectInstanceView);
         d.setNative(getModel().getConvs());
         return d;
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
-        PatchPNode btns = new PatchPNode(getPatchView());
-        btns.setLayout(new BoxLayout(btns.getProxyComponent(), BoxLayout.PAGE_AXIS));
-
-        midiAssign = new PAssignMidiCCComponent(getController(), getPatchView());
-        btns.addChild(midiAssign);
-
-        // FIXME: reintroduce modulator button
-        // modulationAssign = new PAssignModulatorComponent(this);
-        // btns.addChild(modulationAssign);
-
-        presetAssign = new PAssignPresetComponent(getController(), getPatchView());
-        btns.addChild(presetAssign);
-        addChild(btns);
-
-        addInputEventListener(popupMouseListener);
     }
 
     /*

@@ -63,7 +63,7 @@ public class AbstractDocumentRoot extends AbstractModel {
     }
 
     public List getUndoEvents() {
-        return new ArrayList<UndoableEdit>(getUndoManager().getEdits());
+        return getUndoManager().getEdits();
     }
 
     public void setEditToBeUndone(UndoableEdit i) {

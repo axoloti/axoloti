@@ -96,7 +96,7 @@ public class GeneratedObjects extends gentools {
         Harmony.GenerateAll();
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_latch());
             c.add(Create_latchi());
             WriteAxoObject("logic", c);
@@ -107,14 +107,14 @@ public class GeneratedObjects extends gentools {
         WriteAxoObject("logic", Create_countersat2());
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateWindow());
             c.add(CreateWindowTilde());
             WriteAxoObject("math", c);
         }
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_accu_sat());
             WriteAxoObject("math", c);
         }

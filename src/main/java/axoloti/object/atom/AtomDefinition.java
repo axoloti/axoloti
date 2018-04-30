@@ -38,11 +38,11 @@ import org.simpleframework.xml.Attribute;
 abstract public class AtomDefinition extends AbstractModel {
 
     @Attribute
-    String name;
+    private String name;
     @Attribute(required = false)
-    public String description;
+    private String description;
 
-    AxoObject parent;
+    private AxoObject parent;
 
     public AtomDefinition() {
     }

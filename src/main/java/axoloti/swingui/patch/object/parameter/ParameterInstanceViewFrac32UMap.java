@@ -25,6 +25,10 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     public ParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponent();
+    }
+
+    private void initComponent() {
 
         JPanel btns = new JPanel();
         btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);

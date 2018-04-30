@@ -14,10 +14,23 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
+abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 
     PParameterInstanceViewFrac32(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponent();
+    }
+
+    private void initComponent() {
+        // TODO : does not belong in view, cfr ParameterInstanceView32
+        if (getModel().getModulators() != null) {
+            List<Modulation> modulators = getModel().getModulators();
+            for (Modulation m : modulators) {
+                System.out.println("mod amount " + m.getValue());
+                m.PostConstructor(getModel());
+            }
+        }
+
     }
 
     @Override
@@ -33,18 +46,6 @@ public abstract class PParameterInstanceViewFrac32 extends PParameterInstanceVie
                 getModel().getConversion().ToReal(new ValueFrac32(
                                                       getModel().getValue())));
             invalidate();
-        }
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        if (getModel().getModulators() != null) {
-            List<Modulation> modulators = getModel().getModulators();
-            for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue());
-                m.PostConstructor(getModel());
-            }
         }
     }
 

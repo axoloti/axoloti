@@ -43,6 +43,10 @@ public class HelpMenu extends JMenu {
     private axoloti.swingui.menus.HelpLibraryMenu helpLibraryMenu1;
 
     public HelpMenu() {
+        initComponent();
+    }
+
+    private void initComponent() {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {

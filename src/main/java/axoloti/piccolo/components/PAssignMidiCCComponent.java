@@ -47,11 +47,15 @@ public class PAssignMidiCCComponent extends PatchPNode {
 
     public PAssignMidiCCComponent(ParameterInstanceController parameterInstanceController, PatchView patchView) {
         super(patchView);
+        this.parameterInstanceController = parameterInstanceController;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);
         setSize(dim);
-        this.parameterInstanceController = parameterInstanceController;
 
         addInputEventListener(new PBasicInputEventHandler() {
             @Override

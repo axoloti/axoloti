@@ -79,6 +79,7 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         return value;
     }
 
+    @Override
     public void setValue(Object value) {
         this.value = (int[]) value;
         firePropertyChange(DISP_VALUE, null, value);

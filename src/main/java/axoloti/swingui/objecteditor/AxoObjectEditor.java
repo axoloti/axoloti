@@ -56,13 +56,12 @@ import org.simpleframework.xml.core.Persister;
 public final class AxoObjectEditor extends JFrame implements DocumentWindow, IView {
 
     private final ObjectController controller;
-    private final RSyntaxTextArea jTextAreaLocalData;
-    private final RSyntaxTextArea jTextAreaInitCode;
-    private final RSyntaxTextArea jTextAreaKRateCode;
-    private final RSyntaxTextArea jTextAreaSRateCode;
-    private final RSyntaxTextArea jTextAreaDisposeCode;
-    private final RSyntaxTextArea jTextAreaMidiCode;
-    private String origXML; // used?
+    private RSyntaxTextArea jTextAreaLocalData;
+    private RSyntaxTextArea jTextAreaInitCode;
+    private RSyntaxTextArea jTextAreaKRateCode;
+    private RSyntaxTextArea jTextAreaSRateCode;
+    private RSyntaxTextArea jTextAreaDisposeCode;
+    private RSyntaxTextArea jTextAreaMidiCode;
 
     private boolean readonly = false;
 
@@ -145,6 +144,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         return s;
     }
 
+    private String origXML; // TODO: Review: used?
+
     // TODO: reduce to private, review usage
     public void updateReferenceXML() {
         Serializer serializer = new Persister();
@@ -170,7 +171,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        */
+         */
     }
 
     private void setUndoablePropString(Property prop, String s) {
@@ -182,18 +183,24 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         getController().generic_setModelUndoableProperty(prop, s);
     }
 
-    private final InletDefinitionsEditorPanel inlets;
-    private final OutletDefinitionsEditorPanel outlets;
-    private final AttributeDefinitionsEditorPanel attrs;
-    private final ParamDefinitionsEditorPanel params;
-    private final DisplayDefinitionsEditorPanel disps;
+    private InletDefinitionsEditorPanel inlets;
+    private OutletDefinitionsEditorPanel outlets;
+    private AttributeDefinitionsEditorPanel attrs;
+    private ParamDefinitionsEditorPanel params;
+    private DisplayDefinitionsEditorPanel disps;
 
     public AxoObjectEditor(ObjectController ctrl) {
-        initComponents();
         this.controller = ctrl;
+        initComponents();
+        initComponents2();
+    }
+
+    void initComponents2() {
         if (OSDetect.getOS() == OSDetect.OS.MAC) {
             jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.TOP);
         }
+
+        ObjectController ctrl = getController();
 
         fileMenu1.initComponents();
         DocumentWindowList.RegisterWindow(this);
@@ -356,7 +363,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             jTextFieldHelp.setVisible(false);
             jLabelHelp.setVisible(false);
         } else // normal objects
-        if (sellib != null) {
+            if (sellib != null) {
             jMenuItemSave.setEnabled(!sellib.isReadOnly());
             if (sellib.isReadOnly()) {
                 setReadOnly(true);

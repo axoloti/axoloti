@@ -9,20 +9,21 @@ import axoloti.piccolo.patch.PatchPNode;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
-public abstract class PDisplayInstanceView extends PatchPNode implements IDisplayInstanceView {
+abstract class PDisplayInstanceView extends PatchPNode implements IDisplayInstanceView {
     DisplayInstanceController controller;
     PLabelComponent label;
 
     PDisplayInstanceView(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
         this.controller = controller;
+        initComponents();
     }
 
     DisplayInstance getModel() {
         return getController().getModel();
     }
 
-    public void PostConstructor() {
+    private void initComponents() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
         setPickable(false);
         label = new PLabelComponent("");

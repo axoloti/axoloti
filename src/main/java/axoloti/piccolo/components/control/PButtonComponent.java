@@ -22,7 +22,7 @@ public class PButtonComponent extends PCtrlComponentAbstract {
 
         public void OnPushed();
     }
-    ArrayList<ActListener> actListeners = new ArrayList<ActListener>();
+    ArrayList<ActListener> actListeners = new ArrayList<>();
 
     public void addActListener(ActListener al) {
         actListeners.add(al);
@@ -55,10 +55,13 @@ public class PButtonComponent extends PCtrlComponentAbstract {
     public PButtonComponent(String label, IAxoObjectInstanceView view) {
         super(view);
         this.label = label;
+        initComponent();
+    }
+
+    private void initComponent() {
         FontRenderContext frc = new FontRenderContext(null, true, true);
-        int width = 0;
         TextLayout tl = new TextLayout(label, Constants.FONT, frc);
-        width = (int) tl.getBounds().getWidth();
+        int width = (int) tl.getBounds().getWidth();
         if (width < 20) {
             width = 20;
         }

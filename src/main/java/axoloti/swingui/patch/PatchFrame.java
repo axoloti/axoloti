@@ -102,13 +102,20 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }
 
     public PatchFrame(final PatchController patchController, QCmdProcessor qcmdprocessor, boolean usePiccolo) {
-        initComponents();
+        this.qcmdprocessor = qcmdprocessor;
+        this.patchController = patchController;
         patchView = PatchViewFactory.patchViewFactory(patchController);
+        initComponents();
+        initComponents2();
+        if (usePiccolo) {
+            initializeZoomMenuItems();
+        }
+    }
+
+    private void initComponents2() {
         patchView.setPatchFrame(this);
         patchView.PostConstructor();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
-        this.qcmdprocessor = qcmdprocessor;
-        this.patchController = patchController;
 
         undoUi = new UndoUI(patchController.getUndoManager());
         if (patchController.getDocumentRoot() != null) {
@@ -274,9 +281,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         getPatchView().getViewportView().getComponent().requestFocusInWindow();
 
-        if (usePiccolo) {
-            initializeZoomMenuItems();
-        }
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -1211,7 +1215,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    ArrayList<DocumentWindow> dwl = new ArrayList<DocumentWindow>();
+    ArrayList<DocumentWindow> dwl = new ArrayList<>();
 
     @Override
     public ArrayList<DocumentWindow> getChildDocuments() {

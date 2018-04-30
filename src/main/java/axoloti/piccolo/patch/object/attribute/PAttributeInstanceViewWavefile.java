@@ -10,12 +10,13 @@ import javax.swing.event.DocumentListener;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
+class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
 
     PTextFieldComponent TFwaveFilename;
 
     public PAttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -23,9 +24,7 @@ public class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
         return (AttributeInstanceWavefile) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFwaveFilename = new PTextFieldComponent(getModel().getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
         d.width = 128;

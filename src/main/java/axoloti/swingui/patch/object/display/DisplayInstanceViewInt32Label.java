@@ -11,12 +11,10 @@ class DisplayInstanceViewInt32Label extends DisplayInstanceViewInt32 {
 
     DisplayInstanceViewInt32Label(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         readout = new LabelComponent("xxxxxx");
         add(readout);
         readout.setSize(80, 18);

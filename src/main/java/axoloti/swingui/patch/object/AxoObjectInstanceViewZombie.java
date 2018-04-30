@@ -11,8 +11,8 @@ import axoloti.swingui.patch.PatchViewSwing;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +24,10 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
 
     public AxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewSwing patchView) {
         super(controller, patchView);
+        initComponents();
     }
 
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         LabelComponent idlbl = new LabelComponent("zombie"); // FIXME: getController().getModel().typeName);
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
@@ -56,28 +56,12 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceViewAbstract {
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         instanceLabel = new LabelComponent(getController().getModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
-        instanceLabel.addMouseListener(new MouseListener() {
+        instanceLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     addInstanceNameEditor();
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
             }
         });
         add(instanceLabel);

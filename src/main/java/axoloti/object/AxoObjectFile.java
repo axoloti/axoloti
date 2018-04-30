@@ -106,7 +106,7 @@ public class AxoObjectFile {
     }
 
     public AxoObjectFile() {
-        objs = new ArrayList<AxoObjectAbstract>();
+        objs = new ArrayList<>();
     }
 
     @Validate

@@ -47,6 +47,10 @@ public class PreferencesFrame extends javax.swing.JDialog {
      */
     public PreferencesFrame() {
         initComponents();
+        initComponents2();
+    }
+
+    private void initComponents2() {
         Preferences prefs = Preferences.getPreferences();
         jTextFieldPollInterval.setText(Integer.toString(prefs.getPollInterval()));
 
@@ -586,14 +590,13 @@ public class PreferencesFrame extends javax.swing.JDialog {
     }//GEN-LAST:event_jDelLibBtnActionPerformed
 
     private void jResetLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetLibActionPerformed
-        boolean delete = false;
 
         int options = JOptionPane.OK_CANCEL_OPTION;
         int res = JOptionPane.showConfirmDialog(this, "Reset will delete existing factory and contrib directories\n Continue?", "Warning", options);
         if (res == JOptionPane.CANCEL_OPTION) {
             return;
         }
-        delete = (res == JOptionPane.OK_OPTION);
+        boolean delete = (res == JOptionPane.OK_OPTION);
 
         Preferences.getPreferences().ResetLibraries(delete);
         PopulateLibrary();

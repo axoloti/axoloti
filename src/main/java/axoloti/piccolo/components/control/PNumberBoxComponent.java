@@ -56,6 +56,10 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
         this.min = min;
         this.max = max;
         this.tick = tick;
+        initComponent(hsize, vsize);
+    }
+
+    private void initComponent(int hsize, int vsize) {
         Dimension d = new Dimension(hsize, vsize);
         setPreferredSize(d);
         setMaximumSize(d);

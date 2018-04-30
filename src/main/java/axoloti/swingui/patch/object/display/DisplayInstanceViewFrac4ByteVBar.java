@@ -11,11 +11,10 @@ class DisplayInstanceViewFrac4ByteVBar extends DisplayInstanceViewFrac32 {
 
     DisplayInstanceViewFrac4ByteVBar(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         vbar = new VLineComponent[4];
         for (int i = 0; i < 4; i++) {
             vbar[i] = new VLineComponent(0, -64, 64);

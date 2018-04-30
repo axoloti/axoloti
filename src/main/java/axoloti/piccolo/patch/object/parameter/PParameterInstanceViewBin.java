@@ -9,7 +9,7 @@ import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import org.piccolo2d.util.PPaintContext;
 
-public abstract class PParameterInstanceViewBin extends PParameterInstanceView {
+abstract class PParameterInstanceViewBin extends PParameterInstanceView {
 
     PParameterInstanceViewBin(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

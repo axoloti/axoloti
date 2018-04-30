@@ -42,6 +42,10 @@ public class DispComponent extends ADispComponent {
         this.value = value;
         this.max = max;
         this.min = min;
+        initComponent();
+    }
+
+    private void initComponent() {
         setPreferredSize(dim);
         setMaximumSize(dim);
         setMinimumSize(dim);

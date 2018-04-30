@@ -72,6 +72,10 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
         this.defCPUID = defCPUID;
         cpuid = defCPUID;
         Populate();
+        initComponents2();
+    }
+
+    private void initComponents2() {
         getRootPane().setDefaultButton(jButtonOK);
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -345,9 +349,8 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
 
     private void onSelect() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int selRow = 0;
         if (jTable1.getSelectedRowCount() > 0) {
-            selRow = jTable1.getSelectedRow();
+            int selRow = jTable1.getSelectedRow();
             cpuid = (String) model.getValueAt(selRow, 3);
         }
         setVisible(false);

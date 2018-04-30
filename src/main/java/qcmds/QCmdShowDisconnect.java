@@ -33,6 +33,7 @@ public class QCmdShowDisconnect implements QCmdGUITask {
         return null;
     }
 
+    @Override
     public void DoGUI(QCmdProcessor processor) {
         processor.serialconnection.ShowDisconnect();
     }

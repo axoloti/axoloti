@@ -7,15 +7,10 @@ import axoloti.piccolo.components.control.PVSliderComponent;
 import axoloti.preferences.Theme;
 import axoloti.preset.PresetDouble;
 
-public class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceViewFrac32S {
+class PParameterInstanceViewFrac32SMapVSlider extends PParameterInstanceViewFrac32S {
 
     public PParameterInstanceViewFrac32SMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
     }
 
     @Override

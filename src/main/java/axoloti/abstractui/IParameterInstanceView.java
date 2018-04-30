@@ -7,8 +7,6 @@ import javax.swing.JPopupMenu;
 
 public interface IParameterInstanceView extends IView<ParameterInstanceController> {
 
-    public void PostConstructor();
-
     public void populatePopup(JPopupMenu m);
 
     public boolean handleAdjustment();

@@ -26,7 +26,7 @@ import java.util.Calendar;
  */
 public class SDCardInfo {
 
-    private final ArrayList<SDFileInfo> files = new ArrayList<SDFileInfo>();
+    private final ArrayList<SDFileInfo> files = new ArrayList<>();
     boolean available = false;
     int clusters = 0;
     int clustersize = 0;

@@ -29,14 +29,17 @@ public class PatchSelectionEventHandler extends PSelectionEventHandler {
         setEventFilter(new PInputEventFilter(InputEvent.BUTTON1_MASK));
 
         setMarqueePaintTransparency(0.3f);
+        init1();
+    }
 
+    private void init1() {
         PNotificationCenter.defaultCenter().addListener(this, "selectionChanged",
                 SELECTION_CHANGED_NOTIFICATION, this);
     }
 
     public void selectionChanged(PNotification notification) {
         if (canvas != null) {
-            canvas.getScrollPane().setKeyActionsDisabled(getSelection().size() != 0);
+            canvas.getScrollPane().setKeyActionsDisabled(!getSelection().isEmpty());
         }
 
         parent.getController().SelectNone();

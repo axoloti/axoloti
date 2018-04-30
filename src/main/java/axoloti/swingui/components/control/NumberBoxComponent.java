@@ -71,11 +71,16 @@ public class NumberBoxComponent extends ACtrlComponent {
 
     public NumberBoxComponent(double value, double min, double max, double tick, int hsize, int vsize) {
         super();
-        setInheritsPopupMenu(true);
         this.value = value;
         this.min = min;
         this.max = max;
         this.tick = tick;
+
+        initComponent(hsize, vsize);
+    }
+
+    private void initComponent(int hsize, int vsize) {
+        setInheritsPopupMenu(true);
         Dimension d = new Dimension(hsize, vsize);
         setSize(d);
         setPreferredSize(d);

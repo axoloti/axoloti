@@ -39,7 +39,7 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
         setItems(items);
     }
 
-    public void setItems(List<String> items) {
+    public final void setItems(List<String> items) {
         this.items = items;
         FontRenderContext frc = new FontRenderContext(null, true, true);
         int maxWidth = 0;

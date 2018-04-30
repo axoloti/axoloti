@@ -17,8 +17,6 @@
  */
 package axoloti.object.attribute;
 
-import axoloti.mvc.IModel;
-import axoloti.object.AxoObject;
 import axoloti.property.Property;
 import axoloti.property.StringListProperty;
 import java.util.ArrayList;

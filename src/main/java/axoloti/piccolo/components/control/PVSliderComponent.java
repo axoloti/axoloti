@@ -26,7 +26,10 @@ public class PVSliderComponent extends PCtrlComponentAbstract {
         this.min = min;
         this.value = value;
         this.tick = tick;
+        initComponent();
+    }
 
+    private void initComponent() {
         setPreferredSize(dim);
         setMaximumSize(dim);
         setMinimumSize(dim);

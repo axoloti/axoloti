@@ -39,7 +39,7 @@ public class PatchBankModel extends AbstractModel {
 
     Boolean dirty = false;
 
-    List<File> files;
+    List<File> files = new ArrayList<>();
 
     public final static Property FILE = new ObjectProperty("File", File.class, PatchBankModel.class);
     public final static Property FILES = new ListProperty("Files", PatchBankModel.class);
@@ -67,7 +67,7 @@ public class PatchBankModel extends AbstractModel {
         }
     }
 
-    File fromRelative(String s) {
+    private File fromRelative(String s) {
         Path basePath = file.toPath();
         Path baseParent = basePath.getParent();
         Path resolvedPath = baseParent.resolve(s);
@@ -75,14 +75,12 @@ public class PatchBankModel extends AbstractModel {
     }
 
     public PatchBankModel() {
-        files = new ArrayList<File>();
     }
 
     public PatchBankModel(InputStream inputStream, String filename) throws IOException {
         file = new File(filename);
         BufferedReader fbs = new BufferedReader(new InputStreamReader(inputStream));
         String s;
-        files = new ArrayList<File>();
         while ((s = fbs.readLine())
                 != null) {
             File ff = fromRelative(s);

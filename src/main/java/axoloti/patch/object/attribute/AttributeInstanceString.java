@@ -35,10 +35,12 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
         super(controller, axoObj1);
     }
 
+    @Override
     public abstract String getValue();
 
     protected abstract void setValueString(String value);
 
+    @Override
     public void setValue(Object value) {
         setValueString((String) value);
     }

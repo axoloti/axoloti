@@ -17,6 +17,7 @@ class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
 
     AttributeInstanceViewInt32(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -24,9 +25,7 @@ class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
         return (AttributeInstanceInt32) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         slider = new JSlider();
         Dimension d = slider.getSize();
         d.width = 128;

@@ -18,6 +18,18 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
     ParameterInstanceViewFrac32(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
+    }
+
+    private void initComponents() {
+        // FIXME: does not belong in view, review
+        if (getModel().getModulators() != null) {
+            List<Modulation> modulators = getModel().getModulators();
+            for (Modulation m : modulators) {
+                System.out.println("mod amount " + m.getValue());
+                m.PostConstructor(getModel());
+            }
+        }
     }
 
     @Override
@@ -31,19 +43,6 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         if (getModel().getConversion() != null) {
             valuelbl.setText(getModel().getConversion().ToReal(new ValueFrac32(
                     getModel().getValue())));
-        }
-    }
-
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-        // FIXME: does not belong in view
-        if (getModel().getModulators() != null) {
-            List<Modulation> modulators = getModel().getModulators();
-            for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue());
-                m.PostConstructor(getModel());
-            }
         }
     }
 

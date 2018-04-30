@@ -44,10 +44,10 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
@@ -159,10 +159,7 @@ public class PatchViewSwing extends PatchView {
         Layers.setEnabled(true);
         Layers.setFocusable(true);
         Layers.setFocusCycleRoot(true);
-        Layers.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent ke) {
-            }
+        Layers.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent ke) {
@@ -250,12 +247,9 @@ public class PatchViewSwing extends PatchView {
                 }
             }
 
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
         });
 
-        Layers.addMouseListener(new MouseListener() {
+        Layers.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
@@ -304,13 +298,6 @@ public class PatchViewSwing extends PatchView {
                 }
             }
 
-            @Override
-            public void mouseEntered(MouseEvent me) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent me) {
-            }
         });
 
         Layers.setVisible(true);

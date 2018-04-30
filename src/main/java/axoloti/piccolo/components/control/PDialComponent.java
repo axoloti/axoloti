@@ -45,6 +45,10 @@ public class PDialComponent extends PCtrlComponentAbstract {
         this.min = min;
         this.max = max;
         this.tick = tick;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(28, 32);
         setMinimumSize(d);
         setMaximumSize(d);

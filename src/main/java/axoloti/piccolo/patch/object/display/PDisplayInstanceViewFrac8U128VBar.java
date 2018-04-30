@@ -7,7 +7,7 @@ import axoloti.patch.object.display.DisplayInstanceFrac8U128VBar;
 import axoloti.piccolo.components.PVGraphComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewFrac8U128VBar extends PDisplayInstanceView {
+class PDisplayInstanceViewFrac8U128VBar extends PDisplayInstanceView {
 
     private PVGraphComponent vgraph;
     private IAxoObjectInstanceView axoObjectInstanceView;
@@ -15,6 +15,7 @@ public class PDisplayInstanceViewFrac8U128VBar extends PDisplayInstanceView {
     public PDisplayInstanceViewFrac8U128VBar(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
     @Override
@@ -22,9 +23,7 @@ public class PDisplayInstanceViewFrac8U128VBar extends PDisplayInstanceView {
         return (DisplayInstanceFrac8U128VBar) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         vgraph = new PVGraphComponent(getModel().getN(), 128, 0, 128, axoObjectInstanceView);
         addChild(vgraph);
     }

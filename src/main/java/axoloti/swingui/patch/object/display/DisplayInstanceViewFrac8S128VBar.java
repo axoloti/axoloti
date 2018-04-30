@@ -12,11 +12,10 @@ class DisplayInstanceViewFrac8S128VBar extends DisplayInstanceView {
 
     DisplayInstanceViewFrac8S128VBar(DisplayInstanceController controller) {
         super(controller);
+        initComponents();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         vgraph = new VGraphComponent(getModel().getN(), 128, -64, 64);
         add(vgraph);
     }

@@ -43,6 +43,7 @@ public class AxoObjectInstanceFactory {
                 obj.setDocumentRoot(patchController.getDocumentRoot());
             }
             obji = new AxoObjectInstancePatcher(obj.getControllerFromModel(), patchModel, instanceName, location);
+            obj.getControllerFromModel().addView(obji);
         } else if (objm instanceof AxoObjectPatcherObject) {
             AxoObjectPatcherObject objm1 = new AxoObjectPatcherObject();
             AbstractDocumentRoot dr;

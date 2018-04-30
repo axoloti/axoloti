@@ -16,9 +16,9 @@ public abstract class ArrayView<T extends IView> {
         List<IModel> models1 = (List<IModel>)models;
         ArrayList<T> subviews2;
         if (existingViews == null) {
-            subviews2 = new ArrayList<T>();
+            subviews2 = new ArrayList<>();
         } else {
-            subviews2 = new ArrayList<T>(existingViews);
+            subviews2 = new ArrayList<>(existingViews);
             for (T view : existingViews) {
                 if (!models.contains(view.getController().getModel())) {
                     subviews2.remove(view);
@@ -27,7 +27,7 @@ public abstract class ArrayView<T extends IView> {
                 }
             }
         }
-        ArrayList<T> subviews = new ArrayList<T>();
+        ArrayList<T> subviews = new ArrayList<>();
         for (IModel model : models1) {
             // do we have a view already?
             T view = null;

@@ -44,6 +44,10 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
         //setInheritsPopupMenu(true);
         this.value = 0;//value;
         this.n = n;
+        initComponent();
+    }
+
+    private void initComponent() {
         SetupTransferHandler();
     }
 

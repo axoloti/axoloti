@@ -20,13 +20,11 @@ package axoloti.swingui.components.control;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
-import java.awt.AWTException;
 import java.awt.BasicStroke;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Stroke;
@@ -34,8 +32,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -60,6 +56,10 @@ public class VSliderComponent extends ACtrlComponent {
         this.min = min;
         this.value = value;
         this.tick = tick;
+        initComponent();
+    }
+
+    private void initComponent() {
         setSize(dim);
         setPreferredSize(dim);
         setMaximumSize(dim);

@@ -40,6 +40,10 @@ public class PulseButtonComponent extends ACtrlComponent {
     public PulseButtonComponent() {
         super();
         this.value = 0;
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

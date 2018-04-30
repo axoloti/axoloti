@@ -6,10 +6,10 @@ import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,8 +88,8 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
     }
 
-    public void disconnect(IoletInstance iolet) {
-// FIXME: sanity check
+    public void disconnect(OutletInstance outlet) {
+// TODO: sanity check
 //        if (iolet.getParent().getParent() != getParent().getModel()) {
 //            return;
 //        }
@@ -98,17 +98,28 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
 //        if (nx == null) {
 //            iolet.getControllerFromModel().setModelUndoableProperty(IoletInstance.CONNECTED, false);
 //        }
-        
-        if(iolet.isSource()) {
-            List<IoletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
-            n.remove(iolet);
-            setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
-        }
-        else {
-            List<IoletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
-            n.remove(iolet);
-            setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
-        }
+        List<OutletInstance> n = new LinkedList<>(Arrays.asList(getModel().getSources()));
+        n.remove(outlet);
+        setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
+        // TODO: migrate NET_SOURCES to ListProperty, so this reduces to:
+        // removeUndoableElementFromList(Net.NET_SOURCES, outlet);
+    }
+
+    public void disconnect(InletInstance inlet) {
+// TODO: sanity check
+//        if (iolet.getParent().getParent() != getParent().getModel()) {
+//            return;
+//        }
+
+//        NetController nx = getModel().getParent().getControllerFromModel().getNetFromIolet(iolet);
+//        if (nx == null) {
+//            iolet.getControllerFromModel().setModelUndoableProperty(IoletInstance.CONNECTED, false);
+//        }
+        List<InletInstance> n = new LinkedList<>(Arrays.asList(getModel().getDestinations()));
+        n.remove(inlet);
+        setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
+        // TODO: migrate NET_SOURCES to ListProperty, so this reduces to:
+        // removeUndoableElementFromList(Net.NET_SOURCES, outlet);
     }
 
     public boolean NeedsLatch() {

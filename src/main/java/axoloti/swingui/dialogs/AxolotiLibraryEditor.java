@@ -31,11 +31,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
      * @param modal
      */
     public AxolotiLibraryEditor(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        initComponents();
-        library = new AxolotiLibrary();
-        populate();
-        setVisible(true);
+        this(parent, modal, new AxolotiLibrary());
     }
 
     public AxolotiLibraryEditor(java.awt.Frame parent, boolean modal, AxolotiLibrary lib) {
@@ -44,6 +40,10 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         library = lib;
         populate();
         jId.setEnabled(false);
+        initComponent();
+    }
+
+    private void initComponent() {
         setVisible(true);
     }
 
@@ -419,7 +419,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         fc.setDialogTitle("Select Directory");
         fc.setDialogType(JFileChooser.SAVE_DIALOG);
         fc.setApproveButtonText("Select");
-        ArrayList<JPanel> jpanels = new ArrayList<JPanel>();
+        ArrayList<JPanel> jpanels = new ArrayList<>();
         for (Component c : fc.getComponents()) {
             if (c instanceof JPanel) {
                 jpanels.add((JPanel) c);

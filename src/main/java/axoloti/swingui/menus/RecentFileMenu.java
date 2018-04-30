@@ -32,7 +32,10 @@ import javax.swing.event.MenuListener;
 public class RecentFileMenu extends JMenu {
 
     public RecentFileMenu() {
+        initComponent();
+    }
 
+    private void initComponent() {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {

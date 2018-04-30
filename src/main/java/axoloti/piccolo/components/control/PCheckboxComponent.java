@@ -27,7 +27,10 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
         super(axoObjectInstanceView);
         this.value = 0;//value;
         this.n = n;
+        initComponent();
+    }
 
+    private void initComponent() {
         Dimension d = new Dimension(bsize * n + 2, bsize + 2);
         setMinimumSize(d);
         setMaximumSize(d);
@@ -250,7 +253,7 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
         callbackData = data;
     }
 
-    private final List<PActionListener> actionListeners = new ArrayList<PActionListener>();
+    private final List<PActionListener> actionListeners = new ArrayList<>();
 
     public void addPActionListener(PActionListener actionListener) {
         actionListeners.add(actionListener);

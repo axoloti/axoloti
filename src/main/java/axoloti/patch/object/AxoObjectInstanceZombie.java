@@ -50,6 +50,7 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
         super(type, patch1, InstanceName1, location);
     }
 
+    @Override
     public String getCInstanceName() {
         return "";
     }

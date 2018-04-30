@@ -9,12 +9,13 @@ import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_B
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
+class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 
     PNumberBoxComponent spinner;
 
     public PAttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -22,9 +23,7 @@ public class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
         return (AttributeInstanceSpinner) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         int value = getModel().getValueInteger();
 
         if (value < getModel().getModel().getMinValue()) {

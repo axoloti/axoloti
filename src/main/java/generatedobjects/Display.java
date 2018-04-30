@@ -85,7 +85,7 @@ public class Display extends gentools {
         WriteAxoObject(catName, CreateDisplayNote());
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(CreateHexDisplayFrac());
             c.add(CreateHexDisplayInt());
             c.add(CreateHexDisplayString());

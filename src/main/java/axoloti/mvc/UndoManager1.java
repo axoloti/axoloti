@@ -1,6 +1,6 @@
 package axoloti.mvc;
 
-import java.util.Vector;
+import java.util.List;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
@@ -23,7 +23,7 @@ public class UndoManager1 extends UndoManager {
         return super.editToBeUndone();
     }
 
-    public Vector<UndoableEdit> getEdits() {
+    public List<UndoableEdit> getEdits() {
         return edits;
     }
 

@@ -19,10 +19,14 @@ import javax.swing.BoxLayout;
 public class PAssignPresetPanel extends PatchPCanvas {
 
     final PParameterInstanceView parameterInstanceView;
-    final ArrayList<PCtrlComponentAbstract> ctrls;
+    ArrayList<PCtrlComponentAbstract> ctrls;
 
     public PAssignPresetPanel(PParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
+        initComponent();
+    }
+
+    private void initComponent() {
         int n = parameterInstanceView.getModel().getObjectInstance().getParent().getNPresets();
 
         removeInputEventListener(zoomEventHandler);
@@ -35,7 +39,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
         container.setEnabled(false);
         getCamera().scaleViewAboutPoint(scale, 0, 0);
 
-        ctrls = new ArrayList<PCtrlComponentAbstract>(n);
+        ctrls = new ArrayList<>(n);
 
         for (int i = 0; i < n; i++) {
             PatchPNode row = new PatchPNode();

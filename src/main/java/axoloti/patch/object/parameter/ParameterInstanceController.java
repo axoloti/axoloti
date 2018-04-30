@@ -18,7 +18,7 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
 
     public Preset AddPreset(int index, Object value) {
         if (getModel().getPresets() == null) {
-            ArrayList<Preset> new_presets = new ArrayList<Preset>();
+            ArrayList<Preset> new_presets = new ArrayList<>();
             Preset p = getModel().presetFactory(index, value);
             new_presets.add(p);
             setModelUndoableProperty(ParameterInstance.PRESETS, new_presets);

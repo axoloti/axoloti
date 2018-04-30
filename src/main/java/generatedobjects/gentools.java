@@ -100,17 +100,17 @@ public class gentools {
         s = s.replaceAll("default", "");
         for (Parameter p : o.params) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object {0}: contains unmarked string {1}\n{2}", new Object[]{o.id, p.getName(), s});
             }
         }
         for (Inlet p : o.inlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object {0}: contains unmarked string {1}\n{2}", new Object[]{o.id, p.getName(), s});
             }
         }
         for (Outlet p : o.outlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object {0}: contains unmarked string {1}\n{2}", new Object[]{o.id, p.getName(), s});
             }
         }
 
@@ -128,7 +128,7 @@ public class gentools {
                 oo.displays.get(0).noLabel = true;
             }
             if (oo.depends == null) {
-                oo.depends = new HashSet<String>();
+                oo.depends = new HashSet<>();
             }
             String c = oo.sSRateCode + oo.sKRateCode + oo.sInitCode + oo.sLocalData;
             if (c.contains("f_open")) {
@@ -365,7 +365,7 @@ public class gentools {
             }
         }
         AxoObjectFile a = new AxoObjectFile();
-        a.objs = new ArrayList<AxoObjectAbstract>();
+        a.objs = new ArrayList<>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
             PostProcessObject(oa, path, fn);
@@ -429,7 +429,7 @@ public class gentools {
     }
 
     static public void WriteAxoObject(String path, AxoObjectAbstract o[]) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         Collections.addAll(a, o);
         WriteAxoObject(path, a);
     }
@@ -546,7 +546,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateKIFracTwoOpLogicOut(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_i = new AxoObject(name, description);
         o_i.outlets.add(new OutletBool32("out", "out"));
         o_i.inlets.add(new InletInt32("in1", "in1"));
@@ -567,7 +567,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateSKFracTwoOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in1", "in1"));
@@ -615,7 +615,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateSKIFracTwoOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         a.add(CreateKFracTwoOp(name, description, expr));
         a.add(CreateSFracTwoOp(name, description, expr));
         a.add(CreateIFracTwoOp(name, description, expr));
@@ -627,7 +627,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateIKFracOneOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in", "in"));
@@ -642,7 +642,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateSKFracOneOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in", "in"));
@@ -657,7 +657,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateSKIFracOneOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in", "in"));
@@ -685,7 +685,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateKFracOneOpFracCLogicOut(String name, String description, String op_prefix, String op_suffix) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.params.add(new ParameterFrac32UMap("c"));
         o_k.outlets.add(new OutletBool32("out", "out"));
@@ -696,7 +696,7 @@ public class gentools {
     }
 
     static ArrayList<AxoObjectAbstract> CreateSKFracOneOpFracC(String name, String description, String op_prefix, String op_suffix) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.params.add(new ParameterFrac32UMap("c"));
         o_k.outlets.add(new OutletFrac32("out", "out"));

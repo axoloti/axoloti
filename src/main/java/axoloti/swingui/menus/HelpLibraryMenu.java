@@ -30,6 +30,10 @@ import javax.swing.event.MenuListener;
 public class HelpLibraryMenu extends JMenu {
 
     public HelpLibraryMenu() {
+        initComponent();
+    }
+
+    private void initComponent() {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {

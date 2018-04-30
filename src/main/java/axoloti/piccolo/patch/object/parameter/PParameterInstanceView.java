@@ -55,16 +55,11 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         super(axoObjectInstanceView.getPatchView());
         this.controller = controller;
         this.axoObjectInstanceView = axoObjectInstanceView;
-    }
-
-    @Override
-    public ParameterInstance getModel() {
-        return controller.getModel();
-    }
-
-    @Override
-    public void PostConstructor() {
         setPickable(false);
+        initComponent();
+    }
+
+    private void initComponent() {
         removeAllChildren();
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
 
@@ -83,11 +78,11 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
             valuelbl.setMaximumSize(d);
             valuelbl.setPickable(true);
             valuelbl.addInputEventListener(new PBasicInputEventHandler() {
-                    @Override
-                    public void mouseClicked(PInputEvent e) {
-                        getModel().cycleConversions();
-                    }
-                });
+                @Override
+                public void mouseClicked(PInputEvent e) {
+                    getModel().cycleConversions();
+                }
+            });
             UpdateUnit();
         }
 
@@ -99,18 +94,24 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
         getControlComponent().addInputEventListener(popupMouseListener);
 
         getControlComponent().addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    if (evt.getPropertyName().equals(PROP_VALUE_ADJ_BEGIN)) {
-                        getController().addMetaUndo("change parameter " + getModel().getName());
-                    } else if (evt.getPropertyName().equals(PROP_VALUE)) {
-                        boolean changed = handleAdjustment();
-                        getController().getModel().setNeedsTransmit(true);
-                    }
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals(PROP_VALUE_ADJ_BEGIN)) {
+                    getController().addMetaUndo("change parameter " + getModel().getName());
+                } else if (evt.getPropertyName().equals(PROP_VALUE)) {
+                    boolean changed = handleAdjustment();
+                    getController().getModel().setNeedsTransmit(true);
                 }
-            });
+            }
+        });
         invalidate();
     }
+
+    @Override
+    public ParameterInstance getModel() {
+        return controller.getModel();
+    }
+
 
     double valueBeforeAdjustment;
 
@@ -164,6 +165,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
      */
     abstract public PCtrlComponentAbstract getControlComponent();
 
+    @Override
     abstract public boolean handleAdjustment();
 
     public abstract PCtrlComponentAbstract CreateControl();
@@ -193,6 +195,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     void UpdateUnit() {
     }
 
+    @Override
     public abstract void ShowPreset(int i);
 
     public boolean isOnParent() {
@@ -202,6 +205,7 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
 
     public int presetEditActive = 0;
 
+    @Override
     public void IncludeInPreset() {
         if (presetEditActive > 0) {
             Preset p = getModel().getPreset(presetEditActive);

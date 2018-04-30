@@ -488,7 +488,7 @@ public class PatchViewPiccolo extends PatchView {
                 restoreConnectionsToExternalOutlets);
     }
 
-    private final List<PFocusable> focusables = new ArrayList<PFocusable>();
+    private final List<PFocusable> focusables = new ArrayList<>();
     private int focusableIndex = 0;
 
     public void addFocusable(PFocusable focusable) {

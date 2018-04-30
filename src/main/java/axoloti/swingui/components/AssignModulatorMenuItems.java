@@ -45,7 +45,7 @@ public class AssignModulatorMenuItems {
     double valueBeforeAdjustment;
 
     public AssignModulatorMenuItems(final ParameterInstance parameterInstance, JComponent parent) {
-        final ArrayList<HSliderComponent> hsls = new ArrayList<HSliderComponent>();
+        final ArrayList<HSliderComponent> hsls = new ArrayList<>();
 
         //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         hsls.clear();
@@ -78,7 +78,7 @@ public class AssignModulatorMenuItems {
                         valueBeforeAdjustment = ((HSliderComponent) evt.getSource()).getValue();
                     } else if (evt.getPropertyName().equals(PROP_VALUE_ADJ_END)) {
                     } else if (evt.getPropertyName().equals(PROP_VALUE)) {
-                    int i = hsls.indexOf(evt.getSource());
+                        int i = hsls.indexOf(evt.getSource());
                         //                            System.out.println("ctrl " + i + parameterInstance.axoObj.patch.Modulators.get(i).objinst.InstanceName);
                         ValueFrac32 v = new ValueFrac32(((HSliderComponent) evt.getSource()).getValue());
                         ((ParameterInstanceFrac32) parameterInstance).updateModulation(i, v.getDouble());

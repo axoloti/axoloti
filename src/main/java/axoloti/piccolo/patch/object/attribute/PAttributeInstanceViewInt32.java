@@ -9,13 +9,14 @@ import axoloti.piccolo.components.control.PCtrlListener;
 import axoloti.piccolo.components.control.PVSliderComponent;
 import java.awt.Dimension;
 
-public class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
+class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
 
     PVSliderComponent slider;
     PLabelComponent vlabel;
 
     public PAttributeInstanceViewInt32(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -23,10 +24,7 @@ public class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
         return (AttributeInstanceInt32) super.getModel();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         slider = new PVSliderComponent(
                 getModel().getValueInteger(),
                 getModel().getModel().getMinValue(),

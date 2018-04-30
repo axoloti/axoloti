@@ -27,6 +27,10 @@ public class PJackInputComponent extends PatchPNode {
 
     public PJackInputComponent(PInletInstanceView inletInstanceView) {
         super(inletInstanceView.getPatchView());
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

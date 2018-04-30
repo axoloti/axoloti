@@ -12,6 +12,10 @@ public class PVRadioComponent extends PHRadioComponent {
     public PVRadioComponent(int value, int n, IAxoObjectInstanceView axoObjectInstanceView) {
         super(value, n, axoObjectInstanceView);
         bsize = 14;
+        initComponent();
+    }
+
+    private void initComponent() {
         Dimension d = new Dimension(bsize + 2, bsize * n + 2);
         setMinimumSize(d);
         setMaximumSize(d);

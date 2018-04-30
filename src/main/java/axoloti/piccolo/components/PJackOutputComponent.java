@@ -22,6 +22,10 @@ public class PJackOutputComponent extends PatchPNode {
 
     public PJackOutputComponent(POutletInstanceView outletInstanceView) {
         super(outletInstanceView.getPatchView());
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(dim);
         setMaximumSize(dim);
         setPreferredSize(dim);

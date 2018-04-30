@@ -27,12 +27,15 @@ import javax.swing.JTextField;
 public class TextFieldComponent extends JTextField {
 
     public TextFieldComponent() {
-        super();
-        setFont(Constants.FONT);
+        this(null);
     }
 
     public TextFieldComponent(String text) {
         super(text);
+        initComponent();
+    }
+
+    private void initComponent() {
         setFont(Constants.FONT);
     }
 }

@@ -6,19 +6,19 @@ import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PVLineComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewFrac4UByteVBar extends PDisplayInstanceViewFrac32 {
+class PDisplayInstanceViewFrac4UByteVBar extends PDisplayInstanceViewFrac32 {
 
     private IAxoObjectInstanceView axoObjectInstanceView;
 
     public PDisplayInstanceViewFrac4UByteVBar(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
+
     private PVLineComponent vbar[];
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         vbar = new PVLineComponent[4];
         for (int i = 0; i < 4; i++) {
             vbar[i] = new PVLineComponent(0, 0, 64, axoObjectInstanceView);

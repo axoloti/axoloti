@@ -337,7 +337,7 @@ public class Midi extends gentools {
         o.outlets.add(new OutletBool32("gate2", "key pressed, retrigger on legato"));
         o.outlets.add(new OutletFrac32Pos("velocity", "note-on velocity"));
         o.outlets.add(new OutletFrac32Pos("releaseVelocity", "note-off velocity"));
-        o.ModulationSources = new ArrayList<String>();
+        o.ModulationSources = new ArrayList<>();
         o.ModulationSources.add("note");
         o.ModulationSources.add("velocity");
         o.ModulationSources.add("releasevelocity");

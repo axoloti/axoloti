@@ -88,7 +88,7 @@ public abstract class QCmdShellTask implements QCmd {
 
 
     public String[] GetEnv() {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         Map<String, String> env = System.getenv();
         for (String v : env.keySet()) {
             list.add((v + "=" + env.get(v)));

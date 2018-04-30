@@ -49,6 +49,11 @@ public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
     }
 
     @Override
+    public T getModel() {
+        return (T) super.getModel();
+    }
+
+    @Override
     public String getName() {
         return outletname;
     }
@@ -60,6 +65,7 @@ public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
         firePropertyChange(AtomInstance.NAME, preVal, outletname);
     }
 
+    @Override
     public boolean isSource() {
         return true;
     }

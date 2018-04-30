@@ -6,7 +6,7 @@ import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PDispComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 {
+class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 {
 
     private PDispComponent dial;
     private IAxoObjectInstanceView axoObjectInstanceView;
@@ -14,12 +14,10 @@ public class PDisplayInstanceViewFrac32UDial extends PDisplayInstanceViewFrac32 
     public PDisplayInstanceViewFrac32UDial(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
+        initComponents();
     }
 
-    @Override
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         dial = new PDispComponent(0.0, 0.0, 64.0, axoObjectInstanceView);
         addChild(dial);
     }

@@ -17,6 +17,10 @@ public class StandardMenubar extends JMenuBar {
     public StandardMenubar(AbstractDocumentRoot documentRoot) {
         fileMenu = new axoloti.swingui.menus.FileMenu("File");
         fileMenu.initComponents();
+        initComponent(documentRoot);
+    }
+
+    private void initComponent(AbstractDocumentRoot documentRoot) {
         add(fileMenu);
 
         if ((documentRoot != null) && (documentRoot.getUndoManager() != null)) {

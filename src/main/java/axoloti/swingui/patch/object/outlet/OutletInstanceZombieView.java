@@ -10,7 +10,10 @@ public class OutletInstanceZombieView extends OutletInstanceView {
 
     public OutletInstanceZombieView(IoletInstanceController controller, AxoObjectInstanceViewAbstract o) {
         super(controller, o);
+        initComponents();
+    }
 
+    private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(Box.createHorizontalGlue());
         add(new LabelComponent(getModel().getName()));

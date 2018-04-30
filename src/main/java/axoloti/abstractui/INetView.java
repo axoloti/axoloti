@@ -14,7 +14,7 @@ public interface INetView extends IView<NetController> {
 
     public List<IIoletInstanceView> getIoletViews();
 
-    public void setVisible(boolean isVisible);
+    public void setVisible(boolean isVisible); // TODO: review
 
     public void repaint();
 }

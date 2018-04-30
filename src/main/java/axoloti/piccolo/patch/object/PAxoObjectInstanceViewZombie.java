@@ -31,11 +31,10 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     public PAxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewPiccolo p) {
         super(controller, p);
+        initComponents();
     }
 
-    public void PostConstructor() {
-        super.PostConstructor();
-
+    private void initComponents() {
         p_ioletViews = new PatchPNode(patchView);
         p_ioletViews.setPickable(false);
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews.getProxyComponent(), BoxLayout.LINE_AXIS));

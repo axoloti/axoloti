@@ -123,6 +123,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         return "noname";
     }
 
+    @Override
     public String getUUID() {
         if (uuid == null) {
             uuid = GenerateUUID();
@@ -130,21 +131,26 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         return uuid;
     }
 
+    @Override
     public HashSet<String> getIncludes() {
         return null;
     }
 
+    @Override
     public void setIncludes(HashSet<String> includes) {
     }
 
+    @Override
     public Set<String> getDepends() {
         return null;
     }
 
+    @Override
     public Set<String> getModules() {
         return null;
     }
 
+    @Override
     public String getDefaultInstanceName() {
         if (shortId == null) {
             return "obj";
@@ -156,6 +162,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         return shortId;
     }
 
+    @Override
     public Modulator[] getModulators() {
         return null;
     }
@@ -174,14 +181,19 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     public static final ListProperty OBJ_PARAMETERS = new ListProperty("Parameters", AxoObjectAbstract.class);
     public static final ListProperty OBJ_DISPLAYS = new ListProperty("Displays", AxoObjectAbstract.class);
 
+    @Override
     public abstract List<Inlet> getInlets();
 
+    @Override
     public abstract List<Outlet> getOutlets();
 
+    @Override
     public abstract List<AxoAttribute> getAttributes();
 
+    @Override
     public abstract List<Parameter> getParameters();
 
+    @Override
     public abstract List<Display> getDisplays();
 
     public void setInlets(List<Inlet> inlets) {
@@ -248,7 +260,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         return StringDenull(sPath);
     }
 
-    public void setPath(String sPath) {
+    public final void setPath(String sPath) {
         String oldvalue = this.sPath;
         this.sPath = sPath;
         firePropertyChange(

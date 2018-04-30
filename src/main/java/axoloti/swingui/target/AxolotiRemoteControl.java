@@ -33,8 +33,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -64,7 +64,7 @@ public class AxolotiRemoteControl extends TJFrame {
     JPanel jPanel5;
     ArrayList<JButton> buttons = new ArrayList<>();
 
-    final PollHandler poller;
+    PollHandler poller;
 
     /**
      * Creates new form AxolotiRemoteControl
@@ -75,6 +75,10 @@ public class AxolotiRemoteControl extends TJFrame {
     public AxolotiRemoteControl(TargetController controller) {
         super(controller);
         initComponents();
+        initComponents2();
+    }
+
+    private void initComponents2() {
         JPanel jPanelY = new JPanel();
         jPanelY.setLayout(new BoxLayout(jPanelY, BoxLayout.Y_AXIS));
         JPanel jPanelX1 = new JPanel();
@@ -140,11 +144,7 @@ public class AxolotiRemoteControl extends TJFrame {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
 
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
+        addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {

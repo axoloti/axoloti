@@ -7,8 +7,8 @@ import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -19,6 +19,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
     AttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);
+        initComponents();
     }
 
     @Override
@@ -26,9 +27,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         return (AttributeInstanceObjRef) super.getModel();
     }
 
-    @Override
-    void PostConstructor() {
-        super.PostConstructor();
+    private void initComponents() {
         TFObjName = new JTextField(getModel().getValue());
         Dimension d = TFObjName.getSize();
         d.width = 92;
@@ -39,7 +38,7 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
         TFObjName.setPreferredSize(d);
         TFObjName.setSize(d);
         add(TFObjName);
-        TFObjName.addKeyListener(new KeyListener() {
+        TFObjName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent ke) {
                 if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -47,13 +46,6 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
                 }
             }
 
-            @Override
-            public void keyReleased(KeyEvent ke) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent ke) {
-            }
         });
         TFObjName.getDocument().addDocumentListener(new DocumentListener() {
 

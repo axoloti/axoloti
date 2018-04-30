@@ -9,7 +9,12 @@ public class FourCC implements Comparable<FourCC> {
     private final int x;
 
     public static String Format(int v) {
-        return String.format("fourcc [%c%c%c%c](0x%08x)", v & 0xFF, (v >> 8) & 0xff, (v >> 16) & 0xFF, (v >> 24) & 0xFF, v);
+        return String.format("fourcc [%c%c%c%c](0x%08x)",
+                (char) (v & 0xFF),
+                (char) ((v >> 8) & 0xff),
+                (char) ((v >> 16) & 0xFF),
+                (char) ((v >> 24) & 0xFF),
+                v);
     }
 
     public FourCC(int x) {

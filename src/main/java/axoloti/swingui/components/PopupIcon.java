@@ -22,15 +22,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JComponent;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class PopupIcon extends JComponent implements MouseListener {
+public class PopupIcon extends JComponent {
 
     public interface PopupIconListener {
 
@@ -43,11 +43,20 @@ public class PopupIcon extends JComponent implements MouseListener {
     private final Dimension maxsize = new Dimension(10, 12);
 
     public PopupIcon() {
+        initComponent();
+    }
+
+    private void initComponent() {
         setMinimumSize(minsize);
         setPreferredSize(maxsize);
         setMaximumSize(maxsize);
         setSize(minsize);
-        addMouseListener(this);
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pl.ShowPopup();
+            }
+        });
     }
 
     public void setPopupIconListener(PopupIconListener pl) {
@@ -73,24 +82,4 @@ public class PopupIcon extends JComponent implements MouseListener {
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        pl.ShowPopup();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
 }

@@ -5,8 +5,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +28,10 @@ public class ThemeEditor extends JFrame {
     private JPanel p;
 
     public ThemeEditor() {
+        initComponents();
+    }
+
+    private void initComponents() {
         setPreferredSize(new Dimension(1000, 1000));
         theme = Theme.getCurrentTheme();
         p = new JPanel();
@@ -38,75 +42,32 @@ public class ThemeEditor extends JFrame {
                 new GridLayout(theme.getClass().getFields().length + 8, 2)
         );
         final JButton load = new JButton("Load");
-        load.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e) {
+        load.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 theme.load(ThemeEditor.this);
                 theme = Theme.getCurrentTheme();
                 update();
             }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
         });
         final JButton save = new JButton("Save");
-        save.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e) {
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 theme.save(ThemeEditor.this);
             }
 
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
         });
 
         final JButton revertToDefault = new JButton("Load Default");
-        revertToDefault.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e) {
+        revertToDefault.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 Theme.loadDefaultTheme();
                 theme = Theme.getCurrentTheme();
                 update();
             }
 
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
         });
 
         p.add(load);
@@ -121,7 +82,7 @@ public class ThemeEditor extends JFrame {
         for (final Field f : theme.getClass().getFields()) {
             p.add(new JLabel(f.getName().replace("_", " ")));
             try {
-                if (f.getName() == "Theme_Name") {
+                if (f.getName().equals("Theme_Name")) {
                     final JTextArea textArea = new JTextArea((String) f.get(theme));
                     p.add(textArea);
                     textArea.getDocument().addDocumentListener(
@@ -148,14 +109,15 @@ public class ThemeEditor extends JFrame {
                     t.setBackground(currentColor);
                     t.setContentAreaFilled(false);
                     t.setOpaque(true);
-                    t.addMouseListener(new MouseListener() {
-                        public void mouseClicked(MouseEvent e) {
+                    t.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
                             try {
-                                Color newColor = pickColor(e.getComponent().getBackground());
+                                Color newColor = pickColor(t.getBackground());
                                 if (newColor != null) {
                                     f.set(theme, newColor);
-                                    e.getComponent().setBackground(newColor);
-                                    e.getComponent().repaint();
+                                    t.setBackground(newColor);
+                                    t.repaint();
                                 }
 
                             } catch (IllegalAccessException ex) {
@@ -163,21 +125,6 @@ public class ThemeEditor extends JFrame {
                             }
                         }
 
-                        public void mousePressed(MouseEvent e) {
-
-                        }
-
-                        public void mouseEntered(MouseEvent e) {
-
-                        }
-
-                        public void mouseExited(MouseEvent e) {
-
-                        }
-
-                        public void mouseReleased(MouseEvent e) {
-
-                        }
                     });
                     p.add(t);
                 }

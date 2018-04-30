@@ -261,7 +261,7 @@ public class Osc extends gentools {
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -279,7 +279,7 @@ public class Osc extends gentools {
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -307,7 +307,7 @@ public class Osc extends gentools {
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMap("detune"));
         //o.params.add(new ParameterFrac32UMap("amt"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p[7];\n";
         o.sInitCode = "int i;\n"
                 + "for(i=0;i<7;i++)\n"
@@ -373,7 +373,7 @@ public class Osc extends gentools {
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "supersaw wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p[7];\n";
         o.sInitCode = "int i;\n"
                 + "for(i=0;i<7;i++)\n"
@@ -406,7 +406,7 @@ public class Osc extends gentools {
 //        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.includes.add("./bltable.h");
         o.sLocalData = "  uint32_t osc_p;\n"
                 + "  static const int blepvoices = 4;\n"
@@ -462,7 +462,7 @@ public class Osc extends gentools {
 //        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -525,7 +525,7 @@ public class Osc extends gentools {
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, non-anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -547,7 +547,7 @@ public class Osc extends gentools {
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new HashSet<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"

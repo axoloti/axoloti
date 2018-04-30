@@ -7,7 +7,7 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
 import axoloti.piccolo.components.control.PNumberBoxComponent;
 import java.beans.PropertyChangeEvent;
 
-public class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 {
+class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 {
 
     public PParameterInstanceViewInt32Box(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
         super(controller, axoObjectInstanceView);

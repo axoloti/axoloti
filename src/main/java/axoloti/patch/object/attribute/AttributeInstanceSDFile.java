@@ -75,7 +75,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
 
     @Override
     public ArrayList<SDFileReference> GetDependendSDFiles() {
-        ArrayList<SDFileReference> files = new ArrayList<SDFileReference>();
+        ArrayList<SDFileReference> files = new ArrayList<>();
         File f = getFile();
         if (f != null && f.exists()) {
             files.add(new SDFileReference(f, f.getName()));

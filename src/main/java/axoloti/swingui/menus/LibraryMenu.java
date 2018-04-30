@@ -31,7 +31,10 @@ import javax.swing.event.MenuListener;
 public class LibraryMenu extends JMenu {
 
     public LibraryMenu() {
+        initComponent();
+    }
 
+    private void initComponent() {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
