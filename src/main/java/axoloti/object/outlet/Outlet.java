@@ -34,6 +34,6 @@ public abstract class Outlet extends Iolet {
     }
 
     public String GetCName() {
-        return "inlet_" + CharEscape.CharEscape(getName());
+        return "outlet_" + CharEscape.CharEscape(getName());
     }
 }
