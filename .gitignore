@@ -28,7 +28,6 @@ patch/xpatch.map
 /build/
 /nbproject/private/
 /dist/
-/test/
 hs_err_*.log
 axoloti_osx.zip
 private_key.*
