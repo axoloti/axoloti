@@ -22,7 +22,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     }
 
     private void initComponents() {
-        // FIXME: does not belong in view, review
+        // TODO: fix modulations: does not belong in view, review
         if (getModel().getModulators() != null) {
             List<Modulation> modulators = getModel().getModulators();
             for (Modulation m : modulators) {

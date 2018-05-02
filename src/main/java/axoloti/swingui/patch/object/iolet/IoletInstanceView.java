@@ -43,6 +43,12 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
 
             @Override
             public void mousePressed(MouseEvent e) {
+                PatchViewSwing pv = getPatchView();
+                if (pv == null) {
+                    // probably in object selector
+                    e.consume();
+                    return;
+                }
                 if (e.isPopupTrigger()) {
                     getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
                     e.consume();
@@ -72,16 +78,22 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
 
             @Override
             public void mouseReleased(MouseEvent e) {
+                PatchViewSwing pv = getPatchView();
+                if (pv == null) {
+                    // probably in object selector
+                    e.consume();
+                    return;
+                }
                 if (e.isPopupTrigger()) {
                     getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
                     e.consume();
-                } else if ((dragnet != null) && (getPatchView() != null)) {
+                } else if (dragnet != null) {
                     dragnet.repaint();
-                    getPatchView().selectionRectLayerPanel.remove(dragnet);
+                    pv.selectionRectLayerPanel.remove(dragnet);
                     dragnet = null;
                     Net n = null;
                     if (dragtarget == null) {
-                        Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), getPatchView().selectionRectLayerPanel);
+                        Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), pv.selectionRectLayerPanel);
                         Component c = getPatchView().objectLayerPanel.findComponentAt(p);
                         while ((c != null) && !(c instanceof IoletInstanceView)) {
                             c = c.getParent();
@@ -135,9 +147,15 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
 
             @Override
             public void mouseDragged(MouseEvent e) {
+                PatchViewSwing pv = getPatchView();
+                if (pv == null) {
+                    // probably in object selector
+                    e.consume();
+                    return;
+                }
                 if (!axoObj.isLocked()) {
-                    Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), getPatchView().objectLayerPanel);
-                    Component c = getPatchView().objectLayerPanel.findComponentAt(p);
+                    Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), pv.objectLayerPanel);
+                    Component c = pv.objectLayerPanel.findComponentAt(p);
                     while ((c != null) && !(c instanceof IoletInstanceView)) {
                         c = c.getParent();
                     }

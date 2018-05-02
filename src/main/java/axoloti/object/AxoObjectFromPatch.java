@@ -61,8 +61,7 @@ public class AxoObjectFromPatch extends AxoObject {
         setPath(f.getAbsolutePath());
         UpdateObject();
 
-        // TODO: review following statement
-        // perhaps source of multiple entries of eg. fx/flanger...
+        // TODO: review, perhaps source of multiple entries of eg. fx/flanger in objectselector
         AxoObjects.getAxoObjects().ObjectList.add(this);
         // strip file extension
     }
