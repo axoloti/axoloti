@@ -31,6 +31,7 @@ public class AxoObjectInstanceFactory {
         AxoObjectInstanceAbstract obji;
         if (objm instanceof AxoObjectUnloaded) {
             objm = ((AxoObjectUnloaded) objm).Load();
+            objc = objm.getControllerFromModel();
         }
         if (objm instanceof AxoObjectComment) {
             obji = new AxoObjectInstanceComment(objc, patchModel, instanceName, location);
