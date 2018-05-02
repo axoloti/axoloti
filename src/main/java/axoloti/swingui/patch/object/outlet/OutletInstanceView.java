@@ -6,7 +6,6 @@ import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
-import axoloti.swingui.components.JackOutputComponent;
 import axoloti.swingui.components.SignalMetaDataIcon;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
@@ -66,7 +65,6 @@ public class OutletInstanceView extends IoletInstanceView<IoletInstanceControlle
         super.modelPropertyChange(evt);
         if (OutletInstance.CONNECTED.is(evt)) {
             getJack().setConnected((Boolean) evt.getNewValue());
-            getJack().repaint();
         }
     }
 

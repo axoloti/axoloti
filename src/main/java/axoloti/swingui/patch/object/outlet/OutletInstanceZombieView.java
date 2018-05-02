@@ -18,7 +18,7 @@ public class OutletInstanceZombieView extends OutletInstanceView {
         add(Box.createHorizontalGlue());
         add(new LabelComponent(getModel().getName()));
         add(Box.createHorizontalStrut(2));
-        jack = new axoloti.swingui.components.JackOutputComponent();
+        jack = new JackOutputComponent();
         jack.setForeground(getModel().getDataType().GetColor());
         add(jack);
     }

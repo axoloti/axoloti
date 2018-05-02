@@ -15,7 +15,7 @@ public class InletInstanceZombieView extends InletInstanceView {
 
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        jack = new axoloti.swingui.components.JackInputComponent();
+        jack = new JackInputComponent();
         jack.setForeground(getModel().getDataType().GetColor());
         add(jack);
         add(Box.createHorizontalStrut(2));

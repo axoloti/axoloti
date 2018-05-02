@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.swingui.components;
+package axoloti.swingui.patch.object.outlet;
 
 import axoloti.preferences.Theme;
 import java.awt.BasicStroke;
@@ -31,7 +31,7 @@ import javax.swing.JComponent;
  *
  * @author Johannes Taelman
  */
-public class JackOutputComponent extends JComponent {
+class JackOutputComponent extends JComponent {
 
     private static final int sz = 10;
     private static final int margin = 2;
@@ -40,7 +40,7 @@ public class JackOutputComponent extends JComponent {
 
     private boolean connected = false;
 
-    public JackOutputComponent() {
+    JackOutputComponent() {
         initComponent();
     }
 
@@ -79,5 +79,6 @@ public class JackOutputComponent extends JComponent {
 
     public void setConnected(boolean connected) {
         this.connected = connected;
+        repaint();
     }
 }
