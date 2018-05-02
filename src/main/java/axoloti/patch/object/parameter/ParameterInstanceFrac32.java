@@ -22,7 +22,7 @@ import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.parameter.ParameterFrac32;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.preset.PresetDouble;
+import axoloti.patch.object.parameter.preset.PresetDouble;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;

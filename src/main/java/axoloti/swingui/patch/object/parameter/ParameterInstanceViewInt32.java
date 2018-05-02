@@ -6,7 +6,7 @@ import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceInt32;
 import axoloti.preferences.Theme;
-import axoloti.preset.PresetInt;
+import axoloti.patch.object.parameter.preset.PresetInt;
 import java.beans.PropertyChangeEvent;
 
 abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {

@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.swingui.components;
+package axoloti.swingui.patch.object.parameter.preset;
 
+import axoloti.mvc.FocusEdit;
 import axoloti.patch.PatchModel;
-import axoloti.preset.Preset;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.swingui.components.control.ACtrlComponent;
 import axoloti.swingui.patch.object.parameter.ParameterInstanceView;
 import java.awt.GridBagConstraints;
@@ -78,6 +79,10 @@ public class AssignPresetPanel extends JPanel {
         }
     }
 
+    private FocusEdit getFocusEdit() {
+        return parameterInstanceView.getFocusEdit();
+    }
+
     ActionListener cbActionListener = new ActionListener() {
 
         @Override
@@ -85,9 +90,12 @@ public class AssignPresetPanel extends JPanel {
             String[] s = e.getActionCommand().split(" ");
             int i = Integer.parseInt(s[1]) - 1;
             if (((JCheckBox) e.getSource()).isSelected()) {
+                parameterInstanceView.getController().addMetaUndo(
+                        "add preset to parameter "
+                        + parameterInstanceView.getModel().getName(),
+                        getFocusEdit());
                 parameterInstanceView.getController().AddPreset(i + 1, parameterInstanceView.getModel().getValue());
                 ctrls.get(i).setEnabled(true);
-                parameterInstanceView.getController().addMetaUndo("add preset to parameter " + parameterInstanceView.getModel().getName());
                 Object v = parameterInstanceView.getModel().getPreset(i + 1).getValue();
                 double vd = 0.0;
                 if (v instanceof Integer) {
@@ -98,7 +106,10 @@ public class AssignPresetPanel extends JPanel {
                 ctrls.get(i).setValue(vd);
             } else {
                 ctrls.get(i).setEnabled(false);
-                parameterInstanceView.getController().addMetaUndo("remove preset from parameter " + parameterInstanceView.getModel().getName());
+                parameterInstanceView.getController().addMetaUndo(
+                        "remove preset from parameter "
+                        + parameterInstanceView.getModel().getName(),
+                        getFocusEdit());
                 parameterInstanceView.getController().RemovePreset(i + 1);
             }
             PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
@@ -113,7 +124,10 @@ public class AssignPresetPanel extends JPanel {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                parameterInstanceView.getController().addMetaUndo("change preset of parameter " + parameterInstanceView.getModel().getName());
+                parameterInstanceView.getController().addMetaUndo(
+                        "change preset of parameter "
+                        + parameterInstanceView.getModel().getName(),
+                        getFocusEdit());
                 int i = ctrls.indexOf(evt.getSource());
                 if (i >= 0) {
                     valueBeforeAdjustment = ctrls.get(i).getValue();

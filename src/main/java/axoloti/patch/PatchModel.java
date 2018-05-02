@@ -39,7 +39,7 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Preferences;
-import axoloti.preset.Preset;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
 import axoloti.property.ListProperty;

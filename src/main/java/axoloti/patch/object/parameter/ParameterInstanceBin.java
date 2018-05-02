@@ -2,7 +2,7 @@ package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterBin;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.preset.PresetInt;
+import axoloti.patch.object.parameter.preset.PresetInt;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;

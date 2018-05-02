@@ -12,7 +12,7 @@ import axoloti.piccolo.components.PAssignPresetComponent;
 import axoloti.piccolo.components.control.PDialComponent;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.preferences.Theme;
-import axoloti.preset.PresetDouble;
+import axoloti.patch.object.parameter.preset.PresetDouble;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;

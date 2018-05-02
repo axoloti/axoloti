@@ -4,7 +4,7 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstanceBin;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.preferences.Theme;
-import axoloti.preset.PresetInt;
+import axoloti.patch.object.parameter.preset.PresetInt;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import org.piccolo2d.util.PPaintContext;

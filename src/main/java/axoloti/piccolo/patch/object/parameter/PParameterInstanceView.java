@@ -11,7 +11,7 @@ import axoloti.piccolo.components.PAssignPresetMenuItems;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.control.PCtrlComponentAbstract;
 import axoloti.piccolo.patch.PatchPNode;
-import axoloti.preset.Preset;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.property.Property;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE_ADJ_BEGIN;

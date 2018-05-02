@@ -11,7 +11,7 @@ import axoloti.piccolo.patch.PatchPCanvas;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.object.parameter.PParameterInstanceView;
 import axoloti.preferences.Theme;
-import axoloti.preset.Preset;
+import axoloti.patch.object.parameter.preset.Preset;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;

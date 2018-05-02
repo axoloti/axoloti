@@ -6,7 +6,7 @@ import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
-import axoloti.preset.PresetDouble;
+import axoloti.patch.object.parameter.preset.PresetDouble;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;

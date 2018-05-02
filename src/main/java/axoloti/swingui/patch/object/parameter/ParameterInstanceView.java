@@ -6,11 +6,11 @@ import axoloti.abstractui.PatchView;
 import axoloti.mvc.FocusEdit;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.preferences.Theme;
-import axoloti.preset.Preset;
 import axoloti.property.Property;
 import axoloti.swingui.components.AssignMidiCCComponent;
-import axoloti.swingui.components.AssignPresetMenuItems;
+import axoloti.swingui.patch.object.parameter.preset.AssignPresetMenuItems;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.control.ACtrlComponent;
 import axoloti.swingui.mvc.ViewPanel;
@@ -99,19 +99,22 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                    getController().addMetaUndo("change parameter " + getModel().getName(), new FocusEdit() {
-
-                        @Override
-                        protected void focus() {
-                            scrollTo();
-                            ctrl.requestFocusInWindow();
-                        }
-                    });
+                    getController().addMetaUndo("change parameter " + getModel().getName(), getFocusEdit());
                 } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
                     boolean changed = handleAdjustment();
                 }
             }
         });
+    }
+
+    public FocusEdit getFocusEdit() {
+        return new FocusEdit() {
+            @Override
+            protected void focus() {
+                scrollTo();
+                ctrl.requestFocusInWindow();
+            }
+        };
     }
 
     void showOnParent(Boolean onParent) {

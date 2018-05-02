@@ -3,7 +3,7 @@ package axoloti.patch.object.parameter;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.preset.Preset;
+import axoloti.patch.object.parameter.preset.Preset;
 import java.util.ArrayList;
 
 /**

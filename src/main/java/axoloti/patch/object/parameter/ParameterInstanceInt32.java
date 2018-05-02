@@ -19,7 +19,7 @@ package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterInt32;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.preset.PresetInt;
+import axoloti.patch.object.parameter.preset.PresetInt;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;

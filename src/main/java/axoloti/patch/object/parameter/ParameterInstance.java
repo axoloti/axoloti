@@ -27,7 +27,7 @@ import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.atom.AtomInstance;
-import axoloti.preset.Preset;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.property.BooleanProperty;
 import axoloti.property.MidiCCProperty;
 import axoloti.property.ObjectProperty;
