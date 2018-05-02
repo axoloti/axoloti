@@ -48,7 +48,7 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
 
     public final static Property NOLABEL = new BooleanProperty("NoLabel", Parameter.class, "Hide label");
 
-    public String PropagateToChild;
+    public String PropagateToChild; // TODO: make private, move to codegen?
 
     public String CType() {
         return "int";

@@ -357,6 +357,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
                 "Known issues: \n"
                 + "* subpatch objects do not promote their objects? (breaks fx/flanger)\n"
                 + "* piccolo view: nets do not update correctly (swing views are fine)\n"
+                + "* preferences->\"controller object\" is broken\n"
                 + "* presets are broken\n"
                 + "* modulations are broken\n"
                 + "* zombie objects broken\n"
@@ -730,7 +731,6 @@ public final class MainFrame extends TJFrame implements ActionListener {
             PatchController patchController = patchModel.getControllerFromModel();
             PatchFrame patchFrame = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
             PatchView patchView = PatchViewFactory.patchViewFactory(patchController);
-            patchView.setPatchFrame(patchFrame);
             patchController.addView(patchFrame);
             status = patchModel.save(f);
             if (status == false) {

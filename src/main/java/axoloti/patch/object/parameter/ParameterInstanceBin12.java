@@ -33,9 +33,5 @@ public class ParameterInstanceBin12 extends ParameterInstanceBin {
         super(v);
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return "";
-    }
 
 }

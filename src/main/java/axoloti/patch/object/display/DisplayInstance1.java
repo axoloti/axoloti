@@ -31,15 +31,8 @@ public abstract class DisplayInstance1<T extends Display> extends DisplayInstanc
     }
 
     @Override
-    public String GenerateCodeInit(String vprefix) {
-        String s = GetCName() + " = 0;\n";
-        return s;
+    public int getLength() {
+        return 1;
     }
-
-    @Override
-    public String valueName(String vprefix) {
-        return "displayVector[" + offset + "]";
-    }
-
 //    public abstract Value getValueRef();
 }

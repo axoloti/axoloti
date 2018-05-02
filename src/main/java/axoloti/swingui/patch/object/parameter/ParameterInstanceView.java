@@ -109,7 +109,6 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
                     });
                 } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
                     boolean changed = handleAdjustment();
-                    getController().getModel().setNeedsTransmit(true);
                 }
             }
         });

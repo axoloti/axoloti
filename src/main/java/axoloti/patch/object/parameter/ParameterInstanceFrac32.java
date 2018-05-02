@@ -23,7 +23,6 @@ import axoloti.datatypes.ValueFrac32;
 import axoloti.object.parameter.ParameterFrac32;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.preset.PresetDouble;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -68,13 +67,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public ByteBuffer getValueBB() {
-        ByteBuffer bb = super.getValueBB();
-        bb.putInt((int) ((1 << 21) * (double) value));
-        return bb;
-    }
-
-    @Override
     public int valToInt32(Double v) {
         int f2i = 1 << 21;
         return (int) Math.round(v * f2i);
@@ -112,6 +104,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         return (PresetDouble) super.getPreset(i);
     }
 
+    // TODO: fix modulations
     public void updateModulation(int index, double amount) {
         //System.out.println("updatemodulation1:" + index);
         if (amount != 0.0) {
@@ -195,38 +188,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public String GenerateParameterInitializer() {
-// { type: param_type_frac, unit: param_unit_abstract, signals: 0, pfunction: 0, d: { frac: { finalvalue:0,  0,  0,  0,  0}}},
-//        String pname = GetUserParameterName();
-        String s = "{ type: " + parameter.GetCType()
-                + ", unit: " + parameter.GetCUnit()
-                + ", signals: 0"
-                + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
-        double v = getValue();
-        s += ", d: { frac: { finalvalue: 0"
-                + ", value: " + valToInt32(v)
-                + ", modvalue: " + valToInt32(v)
-                + ", offset: " + GetCOffset()
-                + ", multiplier: " + GetCMultiplier()
-                + "}}},\n";
-        return s;
-    }
-
-    @Override
-    public String variableName(String vprefix, boolean enableOnParent) {
-        if (getOnParent() && (enableOnParent)) {
-            return "%" + ControlOnParentName() + "%";
-        } else {
-            return PExName(vprefix) + ".d.frac.finalvalue";
-        }
-    }
-
-    @Override
-    public String valueName(String vprefix) {
-        return PExName(vprefix) + ".value";
-    }
-
-    @Override
     public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
         return "";
     }
@@ -247,7 +208,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     public void setValue(Object value) {
         Double oldvalue = this.value;
         this.value = (Double)value;
-        needsTransmit = true;
         firePropertyChange(
                 VALUE,
                 oldvalue, value);

@@ -19,7 +19,6 @@ package axoloti.patch.object.display;
 
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayFrac8U128VBar;
-import java.nio.ByteBuffer;
 
 /**
  *
@@ -33,46 +32,15 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
         super(controller);
     }
 
-    @Override
-    public String GenerateCodeInit(String vprefix) {
-        String s = "{\n"
-                + "   int _i;\n"
-                + "   for(_i=0;_i<" + n + ";_i++)\n"
-                + "   " + GetCName() + "[_i] = 0;\n"
-                + "}\n";
-        return s;
-    }
-
-    @Override
-    public String valueName(String vprefix) {
-        return "(int8_t *)(&displayVector[" + offset + "])";
-    }
-
-    byte dst[] = new byte[n];
-    int idst[] = new int[n];
-    int[] value;
-
-    @Override
-    public void ProcessByteBuffer(ByteBuffer bb) {
-        bb.get(dst);
-        for (int i = 0; i < n; i++) {
-            idst[i] = dst[i];//&0xff;
-        }
-        setValue(idst);
-    }
-
-    @Override
-    public int getLength() {
-        return n / 4;
-    }
-
     public int[] getIDst() {
-        return idst;
+        return value;
     }
 
     public int getN() {
         return n;
     }
+
+    private int[] value;
 
     @Override
     public Object getValue() {

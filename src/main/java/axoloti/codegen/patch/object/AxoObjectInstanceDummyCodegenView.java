@@ -1,20 +1,25 @@
 
 package axoloti.codegen.patch.object;
 
-import axoloti.patch.object.AxoObjectInstanceHyperlink;
+import axoloti.codegen.patch.object.display.DisplayInstanceView;
+import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
+ * Object instances that do not generate any source code :
+ * comments and hyperlink objects
+ * 
  * @author jtaelman
  */
-public class AxoObjectInstanceHyperlinkCodegenView implements IAxoObjectInstanceCodegenView {
+class AxoObjectInstanceDummyCodegenView implements IAxoObjectInstanceCodegenView {
 
     final ObjectInstanceController controller;
 
-    public AxoObjectInstanceHyperlinkCodegenView(AxoObjectInstanceHyperlink model, ObjectInstanceController controller) {
+    AxoObjectInstanceDummyCodegenView(ObjectInstanceController controller) {
         this.controller = controller;
     }
 
@@ -59,6 +64,16 @@ public class AxoObjectInstanceHyperlinkCodegenView implements IAxoObjectInstance
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public List<ParameterInstanceView> getParameterInstanceViews() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<DisplayInstanceView> getDisplayInstanceViews() {
+        return new ArrayList<>();
     }
 
 }

@@ -3,7 +3,6 @@ package axoloti.patch.object.parameter;
 import axoloti.object.parameter.ParameterBin;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.preset.PresetInt;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -37,15 +36,6 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
 
     public ParameterInstanceBin(T param, AxoObjectInstance axoObj1) {
         super(param, axoObj1);
-    }
-
-    @Override
-    public String variableName(String vprefix, boolean enableOnParent) {
-        if (getOnParent() && (enableOnParent)) {
-            return "%" + ControlOnParentName() + "%";
-        } else {
-            return PExName(vprefix) + ".d.bin.finalvalue";
-        }
     }
 
     @Override
@@ -84,27 +74,6 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
         return (PresetInt) super.getPreset(i);
     }
 
-    @Override
-    public String valueName(String vprefix) {
-        return PExName(vprefix) + ".d.bin.value";
-    }
-
-    @Override
-    public String GenerateParameterInitializer() {
-// { type: param_type_frac, unit: param_unit_abstract, signals: 0, pfunction: 0, d: { frac: { finalvalue:0,  0,  0,  0,  0}}},
-//        String pname = GetUserParameterName();
-        String s = "{ type: " + parameter.GetCType()
-                + ", unit: " + parameter.GetCUnit()
-                + ", signals: 0"
-                + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
-        int v = getValue();
-        s += ", d: { bin: { finalvalue: 0"
-                + ", value: " + v
-                + ", modvalue: " + v
-                + ", nbits: " + parameter.getNBits()
-                + "}}},\n";
-        return s;
-    }
 
     @Override
     public void CopyValueFrom(ParameterInstance p) {
@@ -115,12 +84,6 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
         }
     }
 
-    @Override
-    public ByteBuffer getValueBB() {
-        ByteBuffer bb = super.getValueBB();
-        bb.putInt(value);
-        return bb;
-    }
 
     @Override
     public Integer getValue() {
@@ -131,7 +94,6 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     public void setValue(Object value) {
         Integer oldvalue = this.value;
         this.value = (Integer)value;
-        needsTransmit = true;
         firePropertyChange(
                 ParameterInstance.VALUE,
                 oldvalue, value);

@@ -84,36 +84,6 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     }
 
     @Override
-    public String GenerateParameterInitializer() {
-        String s = "{ type: " + parameter.GetCType()
-                + ", unit: " + parameter.GetCUnit()
-                + ", signals: 0"
-                + ", pfunction: " + ((GetPFunction() == null) ? "0" : GetPFunction());
-        int v = getValue();
-        s += ", d: { intt: { finalvalue: 0"
-                + ", value: " + v
-                + ", modvalue: " + v
-                + ", minimum: " + parameter.getMinValue()
-                + ", maximum: " + parameter.getMaxValue()
-                + "}}},\n";
-        return s;
-    }
-
-    @Override
-    public String variableName(String vprefix, boolean enableOnParent) {
-        if (getOnParent() && (enableOnParent)) {
-            return "%" + ControlOnParentName() + "%";
-        } else {
-            return PExName(vprefix) + ".d.intt.finalvalue";
-        }
-    }
-
-    @Override
-    public String valueName(String vprefix) {
-        return PExName(vprefix) + ".t_int.value";
-    }
-
-    @Override
     public void CopyValueFrom(ParameterInstance p) {
         super.CopyValueFrom(p);
         if (p instanceof ParameterInstanceInt32) {
@@ -134,7 +104,6 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     public void setValue(Object value) {
         Integer oldvalue = this.value;
         this.value = (Integer)value;
-        needsTransmit = true;
         firePropertyChange(
                 ParameterInstance.VALUE,
                 oldvalue, value);

@@ -17,8 +17,8 @@
  */
 package qcmds;
 
-import axoloti.patch.PatchViewCodegen;
-import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.live.patch.PatchViewLive;
+import axoloti.live.patch.parameter.ParameterInstanceLiveView;
 
 /**
  *
@@ -29,9 +29,9 @@ public class QCmdGuiDialTx implements QCmdGUITask {
     @Override
     public void DoGUI(QCmdProcessor processor) {
         if (processor.isQueueEmpty()) {
-            PatchViewCodegen patchController = processor.getPatchController();
+            PatchViewLive patchController = processor.getPatchController();
             if (patchController != null) {
-                for (ParameterInstance p : patchController.getParameterInstances()) {
+                for (ParameterInstanceLiveView p : patchController.getParameterInstances()) {
                     if (p.getNeedsTransmit()) {
                         if (processor.hasQueueSpaceLeft()) {
                             processor.AppendToQueue(new QCmdSerialDialTX(p.TXData()));
@@ -41,7 +41,7 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         }
                     }
                 }
-                /* FIXME: live preset updating
+                /* TODO: fix preset logic : live preset updating
                 if (patchController.isPresetUpdatePending() && processor.hasQueueSpaceLeft()) {
                     byte pb[] = new byte[patchModel.getSettings().GetNPresets() * patchModel.getSettings().GetNPresetEntries() * 8];
                     int p = 0;

@@ -1,30 +1,18 @@
 package axoloti.abstractui;
 
-import axoloti.chunks.ChunkData;
-import axoloti.chunks.ChunkParser;
-import axoloti.chunks.Cpatch_display;
-import axoloti.chunks.FourCC;
-import axoloti.chunks.FourCCs;
-import axoloti.connection.CConnection;
-import axoloti.connection.IConnection;
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.View;
 import axoloti.mvc.array.ArrayView;
-import axoloti.object.AxoObjectFromPatch;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewCodegen;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.swingui.ObjectSearchFrame;
 import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
-import axoloti.target.TargetModel;
-import axoloti.target.fs.SDFileReference;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -40,7 +28,6 @@ import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -53,16 +40,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
-import qcmds.QCmdChangeWorkingDirectory;
-import qcmds.QCmdCompileModule;
-import qcmds.QCmdCompilePatch;
-import qcmds.QCmdCreateDirectory;
-import qcmds.QCmdLock;
-import qcmds.QCmdMemRead;
 import qcmds.QCmdProcessor;
-import qcmds.QCmdStart;
-import qcmds.QCmdStop;
-import qcmds.QCmdUploadPatch;
 
 public abstract class PatchView extends View<PatchController> {
 
@@ -89,20 +67,7 @@ public abstract class PatchView extends View<PatchController> {
         return objectInstanceViews;
     }
 
-    private PatchFrame patchFrame;
-
-    public void setPatchFrame(PatchFrame patchFrame) {
-        this.patchFrame = patchFrame;
-    }
-
-    public PatchFrame getPatchFrame() {
-        return patchFrame;
-    }
-
     public abstract PatchViewportView getViewportView();
-
-    public void initViewportView() {
-    }
 
     public abstract Point getLocationOnScreen();
 
@@ -117,11 +82,7 @@ public abstract class PatchView extends View<PatchController> {
         getController().paste(v, pos, restoreConnectionsToExternalOutlets);
     }
 
-    public void setFileNamePath(String FileNamePath) {
-        getController().setFileNamePath(FileNamePath);
-    }
-
-    public ObjectSearchFrame osf;
+    protected ObjectSearchFrame osf;
 
     public void ShowClassSelector(Point p, AxoObjectInstanceViewAbstract o, String searchString) {
         if (isLocked()) {
@@ -145,12 +106,6 @@ public abstract class PatchView extends View<PatchController> {
         } else {
             return true;
         }
-    }
-
-    public AxoObjectFromPatch ObjEditor;
-
-    public void setObjEditor(AxoObjectFromPatch ObjEditor) {
-        this.ObjEditor = ObjEditor;
     }
 
     public void ShowCompileFail() {
@@ -237,75 +192,6 @@ public abstract class PatchView extends View<PatchController> {
         }
     }
 
-    public void GoLive() {
-
-        QCmdProcessor qCmdProcessor = getController().GetQCmdProcessor();
-
-        qCmdProcessor.AppendToQueue(new QCmdStop());
-        if (CConnection.GetConnection().GetSDCardPresent()) {
-
-            String f = "/" + getController().getSDCardPath();
-            //System.out.println("pathf" + f);
-            if (TargetModel.getTargetModel().getSDCardInfo().find(f) == null) {
-                qCmdProcessor.AppendToQueue(new QCmdCreateDirectory(f));
-            }
-            qCmdProcessor.AppendToQueue(new QCmdChangeWorkingDirectory(f));
-            getController().UploadDependentFiles(f);
-        } else {
-            // issue warning when there are dependent files
-            ArrayList<SDFileReference> files = getController().getModel().GetDependendSDFiles();
-            if (files.size() > 0) {
-                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch requires file {0} on SDCard, but no SDCard mounted", files.get(0).targetPath);
-            }
-        }
-        getController().ShowPreset(0);
-        getController().setPresetUpdatePending(false);
-        for (IAxoObjectInstance o : getController().getModel().getObjectInstances()) {
-            for (ParameterInstance pi : o.getParameterInstances()) {
-                pi.ClearNeedsTransmit();
-            }
-        }
-        PatchViewCodegen pvcg = getController().WriteCode();
-        qCmdProcessor.setPatchController(null);
-        for (String module : getController().getModel().getModules()) {
-            qCmdProcessor.AppendToQueue(
-                    new QCmdCompileModule(getController(),
-                            module,
-                            getController().getModel().getModuleDir(module)));
-        }
-        qCmdProcessor.AppendToQueue(new QCmdCompilePatch(getController()));
-        qCmdProcessor.AppendToQueue(new QCmdUploadPatch());
-        qCmdProcessor.AppendToQueue(new QCmdStart(pvcg));
-        qCmdProcessor.AppendToQueue(new QCmdLock(pvcg));
-        qCmdProcessor.AppendToQueue(new QCmdMemRead(CConnection.GetConnection().getTargetProfile().getPatchAddr(), 8, new IConnection.MemReadHandler() {
-            @Override
-            public void Done(ByteBuffer mem) {
-                int signature = mem.getInt();
-                int rootchunk_addr = mem.getInt();
-
-                qCmdProcessor.AppendToQueue(new QCmdMemRead(rootchunk_addr, 8, new IConnection.MemReadHandler() {
-                    @Override
-                    public void Done(ByteBuffer mem) {
-                        int fourcc = mem.getInt();
-                        int length = mem.getInt();
-                        System.out.println("rootchunk " + FourCC.Format(fourcc) + " len = " + length);
-
-                        qCmdProcessor.AppendToQueue(new QCmdMemRead(rootchunk_addr, length + 8, new IConnection.MemReadHandler() {
-                            @Override
-                            public void Done(ByteBuffer mem) {
-                                ChunkParser cp = new ChunkParser(mem);
-                                ChunkData cd = cp.GetOne(FourCCs.PATCH_DISPLAY);
-                                if (cd != null) {
-                                    Cpatch_display cpatch_display = new Cpatch_display(cd);
-                                    CConnection.GetConnection().setDisplayAddr(cpatch_display.pDisplayVector, cpatch_display.nDisplayVector);
-                                }
-                            }
-                        }));
-                    }
-                }));
-            }
-        }));
-    }
 
     public Dimension getInitialSize() {
         int mx = 100; // min size
@@ -334,9 +220,6 @@ public abstract class PatchView extends View<PatchController> {
     public boolean save(File f) {
         boolean b = getController().getModel().save(f);
         getController().getDocumentRoot().markSaved();
-        if (ObjEditor != null) {
-            // ObjEditor.UpdateObject();
-        }
         return b;
     }
 

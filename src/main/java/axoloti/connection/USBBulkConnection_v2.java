@@ -24,10 +24,9 @@ package axoloti.connection;
 import axoloti.HWSignature;
 import axoloti.chunks.ChunkParser;
 import axoloti.chunks.FourCC;
+import axoloti.live.patch.PatchViewLive;
+import axoloti.live.patch.parameter.ParameterInstanceLiveView;
 import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewCodegen;
-import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.dialogs.USBPortSelectionDlg;
 import axoloti.target.TargetController;
@@ -69,7 +68,7 @@ import qcmds.QCmdWriteMem;
  */
 public class USBBulkConnection_v2 extends IConnection {
 
-    private PatchViewCodegen patch;
+    private PatchViewLive patch;
     private boolean disconnectRequested;
     private boolean connected;
     private Thread transmitterThread;
@@ -94,7 +93,7 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     @Override
-    public void setPatch(PatchViewCodegen patchViewCodegen) {
+    public void setPatch(PatchViewLive patchViewCodegen) {
         this.patch = patchViewCodegen;
     }
 
@@ -1225,7 +1224,7 @@ public class USBBulkConnection_v2 extends IConnection {
 
                     return;
                 }
-                ParameterInstance pi = patch.getParameterInstances().get(index);
+                ParameterInstanceLiveView pi = patch.getParameterInstances().get(index);
 
                 if (pi == null) {
                     Logger.getLogger(USBBulkConnection_v2.class
@@ -1234,7 +1233,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 }
 
                 if (!pi.getNeedsTransmit()) {
-                    pi.setValue(pi.int32ToVal(value));
+                    pi.getModel().setValue(pi.getModel().int32ToVal(value));
                 }
 
 //                System.out.println("rcv ppc objname:" + pi.axoObj.getInstanceName() + " pname:"+ pi.name);
@@ -1308,33 +1307,19 @@ public class USBBulkConnection_v2 extends IConnection {
     }
 
     void DistributeToDisplays(final ByteBuffer dispData) {
-//        Logger.getLogger(SerialConnection.class.getName()).info("Distr1");
+        if (patch == null) {
+            return;
+        }
         try {
-            if (patch == null) {
-                return;
-            }
-            if (!getPatchModel().getLocked()) {
-                return;
-            }
-            if (patch.getDisplayInstances() == null) {
-                return;
-            }
             if (!SwingUtilities.isEventDispatchThread()) {
-                //        Logger.getLogger(SerialConnection.class.getName()).info("Distr2");
                 SwingUtilities.invokeAndWait(new Runnable() {
                     @Override
                     public void run() {
-                        dispData.rewind();
-                        for (DisplayInstance d : patch.getDisplayInstances()) {
-                            d.ProcessByteBuffer(dispData);
-                        }
+                        patch.distributeDataToDisplays(dispData);
                     }
                 });
             } else  {
-                dispData.rewind();
-                for (DisplayInstance d : patch.getDisplayInstances()) {
-                    d.ProcessByteBuffer(dispData);
-                }
+                patch.distributeDataToDisplays(dispData);
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);

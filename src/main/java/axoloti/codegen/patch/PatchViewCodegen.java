@@ -1,10 +1,12 @@
-package axoloti.patch;
+package axoloti.codegen.patch;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.abstractui.INetView;
 import axoloti.codegen.patch.object.AxoObjectInstanceCodegenViewFactory;
 import axoloti.codegen.patch.object.IAxoObjectInstanceCodegenView;
+import axoloti.codegen.patch.object.display.DisplayInstanceView;
+import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
 import axoloti.mvc.View;
 import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
@@ -20,11 +22,12 @@ import axoloti.object.outlet.OutletCharPtr32;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
@@ -33,6 +36,7 @@ import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -47,39 +51,43 @@ public class PatchViewCodegen extends View<PatchController> {
     List<IAxoObjectInstanceCodegenView> objectInstanceViews;
     List<INetView> netViews;
 
-    final ArrayList<ParameterInstance> ParameterInstances;
-    final ArrayList<DisplayInstance> DisplayInstances;
+    final public List<ParameterInstanceView> parameterInstances;
+    final public List<DisplayInstanceView> displayInstances;
     final int displayDataLength;
 
     public PatchViewCodegen(PatchController controller) {
         super(controller);
-        objectInstanceViews = new ArrayList<>();
-        for(IAxoObjectInstance ox: getController().getModel().getObjectInstances()) {
-            ObjectInstanceController c = (ObjectInstanceController)ox.getControllerFromModel();
+        PatchModel patchModel = controller.getModel();
+
+        objectInstanceViews = new ArrayList<>(
+                patchModel.getObjectInstances().size()
+        );
+        for (IAxoObjectInstance ox : patchModel.getObjectInstances()) {
+            ObjectInstanceController c = ox.getControllerFromModel();
             IAxoObjectInstanceCodegenView o = AxoObjectInstanceCodegenViewFactory.createView(c);
             objectInstanceViews.add(o);
         }
 
         int i = 0;
-        ParameterInstances = new ArrayList<>();
-        for (IAxoObjectInstance o : controller.getModel().objectinstances) {
-            for (ParameterInstance p : o.getParameterInstances()) {
+        parameterInstances = new LinkedList<>();
+        for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
+            for (ParameterInstanceView p : o.getParameterInstanceViews()) {
                 p.setIndex(i);
                 i++;
-                ParameterInstances.add(p);
+                parameterInstances.add(p);
             }
         }
         int offset = 0;
         i = 0;
-        DisplayInstances = new ArrayList<>();
-        for (IAxoObjectInstance o : controller.getModel().objectinstances) {
-            for (DisplayInstance p : o.getDisplayInstances()) {
+        displayInstances = new ArrayList<>();
+        for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
+            for (DisplayInstanceView p : o.getDisplayInstanceViews()) {
                 p.setOffset(offset);
                 p.setIndex(i);
-                int l = p.getLength();
+                int l = p.getModel().getLength();
                 offset += l;
                 i++;
-                DisplayInstances.add(p);
+                displayInstances.add(p);
             }
         }
         displayDataLength = offset;
@@ -121,22 +129,22 @@ public class PatchViewCodegen extends View<PatchController> {
 
     String GeneratePexchAndDisplayCodeV() {
         String c = "";
-        c += "    static const uint32_t nparams = " + ParameterInstances.size() + ";\n";
+        c += "    static const uint32_t nparams = " + parameterInstances.size() + ";\n";
         c += "    Parameter_t params[nparams] = {\n";
-        for (ParameterInstance param : ParameterInstances) {
+        for (ParameterInstanceView param : parameterInstances) {
             c += param.GenerateParameterInitializer();
         }
         c += "};\n";
         c += "    Parameter_name_t param_names[nparams] = {\n";
-        for (ParameterInstance param : ParameterInstances) {
-            c += "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.GetUserParameterName(), CodeGeneration.param_name_length) + "},\n";
+        for (ParameterInstanceView param : parameterInstances) {
+            c += "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getModel().GetUserParameterName(), CodeGeneration.param_name_length) + "},\n";
         }
         c += "};\n";
         c += "    int32_t displayVector[" + displayDataLength + "];\n";
 
-        c += "    static const uint32_t ndisplay_metas = " + DisplayInstances.size() + ";\n";
+        c += "    static const uint32_t ndisplay_metas = " + displayInstances.size() + ";\n";
         c += "    Display_meta_t display_metas[ndisplay_metas] = {\n";
-        for (DisplayInstance disp : DisplayInstances) {
+        for (DisplayInstanceView disp : displayInstances) {
             c += disp.GenerateDisplayMetaInitializer();
         }
         c += "};\n";
@@ -160,13 +168,13 @@ public class PatchViewCodegen extends View<PatchController> {
         {
             c += "/* parameter instance indices */\n";
             int k = 0;
-            for (ParameterInstance p : ParameterInstances) {
-                c += "static const int PARAM_INDEX_" + p.getObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+            for (ParameterInstanceView p : parameterInstances) {
+                c += "static const int PARAM_INDEX_" + p.getModel().getObjectInstance().getLegalName() + "_" + p.getModel().getLegalName() + " = " + k + ";\n";
                 k++;
             }
         }
 
-// FIXME: enable "controller object" code generation
+// TODO: fix "controller object"
 //        c += "/* controller classes */\n";
 //        if (getModel().controllerObjectInstance != null) {
 //            c += getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent);
@@ -176,7 +184,7 @@ public class PatchViewCodegen extends View<PatchController> {
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c += o.GenerateClass(classname, OnParentAccess, enableOnParent);
         }
-// FIXME (2): enable "controller object" code generation
+// TODO: fix "controller object"
 //        c += "/* controller instances */\n";
 //        if (getModel().controllerObjectInstance != null) {
 //            String s = getModel().controllerObjectInstance.getCInstanceName();
@@ -231,7 +239,7 @@ public class PatchViewCodegen extends View<PatchController> {
 
 
     public String GenerateParamInitCode3(String ClassName) {
-        int s = ParameterInstances.size();
+        int s = parameterInstances.size();
         String c = "   static int32_t * GetInitParams(void){\n"
                 + "      static const int32_t p[" + s + "]= {\n";
         for (int i = 0; i < s; i++) {
@@ -312,7 +320,10 @@ public class PatchViewCodegen extends View<PatchController> {
                     if (j < m.Modulations.size()) {
                         Modulation n = m.Modulations.get(j);
                         ParameterInstance destination = n.destination;
-                        s += "{" + destination.indexName() + ", " + destination.valToInt32(n.getValue()) + "}";
+                        // TODO: fix modulations
+                        //   following line was commented out
+                        //   need to add a method to find ParameterInstanceView from parameter...
+                        // s += "{" + destination.indexName() + ", " + destination.valToInt32(n.getValue()) + "}";
                     } else {
                         s += "{-1,0}";
                     }
@@ -342,6 +353,8 @@ public class PatchViewCodegen extends View<PatchController> {
 
     public String GenerateObjInitCodePlusPlusSub(String className, String parentReference) {
         String c = "";
+
+        /* TODO: fix "controller object"
         if (getModel().controllerObjectInstance != null) {
             String s = getModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
@@ -355,12 +368,12 @@ public class PatchViewCodegen extends View<PatchController> {
                 c += " );\n";
             }
         }
-
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String s = o.getCInstanceName();
+        */
+        for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
+            String s = o.getModel().getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + o.getCInstanceName() + "_i.Init(" + parentReference;
-                for (DisplayInstance i : o.getDisplayInstances()) {
+                c += "   " + o.getModel().getCInstanceName() + "_i.Init(" + parentReference;
+                for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
                     if (i.getModel().getLength() > 0) {
                         c += ", ";
                         c += i.valueName("");
@@ -393,7 +406,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c += "   int j;\n";
         c += "   const int32_t *p;\n";
         c += "   p = GetInitParams();\n";
-        c += "   for(j=0;j<" + ParameterInstances.size() + ";j++){\n";
+        c += "   for(j=0;j<" + parameterInstances.size() + ";j++){\n";
         c += "      Parameter_t *param = &params[j];\n";
         c += "      if (param->pfunction)\n";
         c += "         (param->pfunction)(param);\n";
@@ -467,11 +480,13 @@ public class PatchViewCodegen extends View<PatchController> {
         c += "//--------- </zero> ----------//\n";
 
         c += "//--------- <controller calls> ----------//\n";
+        /*
+        // TODO: fix "controller object"
         if (getModel().controllerObjectInstance != null) {
             c += GenerateDSPCodePlusPlusSubObj(getModel().controllerObjectInstance, ClassName, enableOnParent);
-        }
+        } */
         c += "//--------- <object calls> ----------//\n";
-        for (IAxoObjectInstance o : getModel().objectinstances) {
+        for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c += GenerateDSPCodePlusPlusSubObj(o, ClassName, enableOnParent);
         }
         c += "//--------- </object calls> ----------//\n";
@@ -492,16 +507,16 @@ public class PatchViewCodegen extends View<PatchController> {
         return c;
     }
 
-    String GenerateDSPCodePlusPlusSubObj(IAxoObjectInstance o, String ClassName, boolean enableOnParent) {
+    String GenerateDSPCodePlusPlusSubObj(IAxoObjectInstanceCodegenView o, String ClassName, boolean enableOnParent) {
         String c = "";
-        String s = o.getCInstanceName();
+        String s = o.getModel().getCInstanceName();
         if (s.isEmpty()) {
             return c;
         }
-        c += "  " + o.getCInstanceName() + "_i.dsp( this ";
+        c += "  " + o.getModel().getCInstanceName() + "_i.dsp( this ";
 //            c += "  " + o.GenerateDoFunctionName() + "(this";
         boolean needsComma = true;
-        for (InletInstance i : o.getInletInstances()) {
+        for (InletInstance i : o.getModel().getInletInstances()) {
             if (needsComma) {
                 c += ", ";
             }
@@ -530,7 +545,7 @@ public class PatchViewCodegen extends View<PatchController> {
             }
             needsComma = true;
         }
-        for (OutletInstance i : o.getOutletInstances()) {
+        for (OutletInstance i : o.getModel().getOutletInstances()) {
             if (needsComma) {
                 c += ", ";
             }
@@ -546,8 +561,8 @@ public class PatchViewCodegen extends View<PatchController> {
             }
             needsComma = true;
         }
-        for (ParameterInstance i : o.getParameterInstances()) {
-            if (i.parameter.PropagateToChild == null) {
+        for (ParameterInstanceView i : o.getParameterInstanceViews()) {
+            if (i.getModel().getModel().PropagateToChild == null) {
                 if (needsComma) {
                     c += ", ";
                 }
@@ -555,8 +570,8 @@ public class PatchViewCodegen extends View<PatchController> {
                 needsComma = true;
             }
         }
-        for (DisplayInstance i : o.getDisplayInstances()) {
-            if (i.getModel().getLength() > 0) {
+        for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
+            if (i.getModel().getModel().getLength() > 0) {
                 if (needsComma) {
                     c += ", ";
                 }
@@ -582,7 +597,7 @@ public class PatchViewCodegen extends View<PatchController> {
 
     public String GenerateMidiInCodePlusPlus() {
         String c = "";
-        // fixme: enable controller object
+        // TODO: fix "controller object"
 //        if (getModel().controllerObjectInstance != null) {
 //            c += getModel().controllerObjectInstance.GenerateCallMidiHandler();
 //        }
@@ -729,7 +744,7 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "		},\n"
                 + "		patch_parameter : {\n"
                 + "			header : CHUNK_HEADER(patch_parameter),\n"
-                + "			nparams : " + ParameterInstances.size() + ",\n"
+                + "			nparams : " + parameterInstances.size() + ",\n"
                 + "			pParams : &root.params[0],\n"
                 + "			pParam_names : root.param_names\n"
                 + "		},\n"
@@ -765,7 +780,7 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    String GenerateCode4() {
+    public String GenerateCode4() {
         String c = "";
 
         Set<String> moduleSet = getModel().getModules();
@@ -894,11 +909,6 @@ public class PatchViewCodegen extends View<PatchController> {
         ao.includes = getModel().getIncludes();
         ao.depends = getModel().getDepends();
         ao.modules = getModel().getModules();
-        if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
-            ao.setDescription(getModel().notes);
-        } else {
-            ao.setDescription("no description");
-        }
 
         if (getModel().getMidiSelector()) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
@@ -962,8 +972,10 @@ public class PatchViewCodegen extends View<PatchController> {
         ao.sLocalData += GeneratePexchAndDisplayCode();
         ao.sLocalData += "/* parameter instance indices */\n";
         int k = 0;
-        for (ParameterInstance p : ParameterInstances) {
-            ao.sLocalData += "static const int PARAM_INDEX_" + p.getObjectInstance().getLegalName() + "_" + p.getLegalName() + " = " + k + ";\n";
+        for (ParameterInstanceView p : parameterInstances) {
+            ao.sLocalData += "static const int PARAM_INDEX_"
+                    + p.getModel().getObjectInstance().getLegalName() + "_"
+                    + p.getModel().getLegalName() + " = " + k + ";\n";
             k++;
         }
 
@@ -1361,15 +1373,9 @@ public class PatchViewCodegen extends View<PatchController> {
     AxoObject GenerateAxoObjPoly(AxoObject template) {
         AxoObject ao = template;
         ao.id = "unnamedobject";
-        ao.setDescription(getModel().FileNamePath);
         ao.includes = getModel().getIncludes();
         ao.depends = getModel().getDepends();
         ao.modules = getModel().getModules();
-        if ((getModel().notes != null) && (!getModel().notes.isEmpty())) {
-            ao.setDescription(getModel().notes);
-        } else {
-            ao.setDescription("no description");
-        }
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
         if (getModel().getMidiSelector()) {
@@ -1457,17 +1463,17 @@ public class PatchViewCodegen extends View<PatchController> {
         }
         ao.setAuthor(getModel().getAuthor());
         ao.setLicense(getModel().getLicense());
-        ao.setDescription(getModel().notes);
-        ao.helpPatch = getModel().helpPatch;
+        ao.setDescription(getModel().getNotes());
+        ao.helpPatch = getModel().getHelpPatch();
         return ao;
     }
 
-    public ArrayList<ParameterInstance> getParameterInstances() {
-        return ParameterInstances;
+    public List<ParameterInstanceView> getParameterInstances() {
+        return parameterInstances;
     }
 
-    public ArrayList<DisplayInstance> getDisplayInstances() {
-        return DisplayInstances;
+    public List<DisplayInstanceView> getDisplayInstances() {
+        return displayInstances;
     }
 
     @Override

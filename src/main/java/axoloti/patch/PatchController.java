@@ -3,6 +3,7 @@ package axoloti.patch;
 import axoloti.Axoloti;
 import axoloti.Modulation;
 import axoloti.Modulator;
+import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
 import axoloti.datatypes.DataType;
@@ -88,7 +89,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public void ShowPreset(int i) {
-        // TODO : fix preset logic
+        // TODO: fix preset logic
         //patchView.ShowPreset(i);
     }
 
@@ -157,7 +158,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
 
     String GenerateCode3() {
         Preferences prefs = Preferences.getPreferences();
-        /* FIXME: use "controllerObject"
+        /* TODO: fix "controller object"
         controllerObjectInstance = null;
         String cobjstr = prefs.getControllerObject();
         if (prefs.isControllerEnabled() && cobjstr != null && !cobjstr.isEmpty()) {
@@ -410,9 +411,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public void ShowCompileFail() {
-        // TODO: fixme
         getModel().setLocked(false);
-        // patchView.ShowCompileFail();
     }
 
     private IAxoObjectInstance getObjectAtLocation(int x, int y) {

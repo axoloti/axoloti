@@ -26,9 +26,4 @@ public class ParameterInstance4LevelX16 extends ParameterInstanceInt32 {
     public ParameterInstance4LevelX16() {
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return "";
-    }
-
 }

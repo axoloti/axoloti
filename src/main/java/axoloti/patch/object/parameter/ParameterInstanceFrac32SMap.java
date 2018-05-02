@@ -63,9 +63,4 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
         return "0";
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
-    }
-
 }

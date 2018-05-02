@@ -100,7 +100,6 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
                     getController().addMetaUndo("change parameter " + getModel().getName());
                 } else if (evt.getPropertyName().equals(PROP_VALUE)) {
                     boolean changed = handleAdjustment();
-                    getController().getModel().setNeedsTransmit(true);
                 }
             }
         });

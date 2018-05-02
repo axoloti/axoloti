@@ -36,7 +36,6 @@ import axoloti.property.Property;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.beans.PropertyChangeEvent;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
@@ -56,14 +55,14 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     @Attribute(required = false)
     private Integer MidiCC = null;
 
-    protected int index;
-    public T parameter;
-    protected boolean needsTransmit = false;
+    public T parameter; // TODO: make private, create ParameterInstanceFactory
 
     public NativeToReal convs[];
     NativeToReal conversion;
 //    int selectedConv = 0;
 
+    // TODO: create ParameterController class
+    // replace AtomDefinitionController with ParameterController
     AtomDefinitionController controller;
 
     public ParameterInstance() {
@@ -110,49 +109,9 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         if (p.onParent != null) {
             setOnParent(p.onParent);
         }
+        // TODO: review: preset data type might be incompatible...
         setPresets(p.getPresets());
         setMidiCC(p.MidiCC);
-    }
-
-    @Deprecated // TODO: move live parameter tweaking in a separate view
-    public boolean getNeedsTransmit() {
-        return needsTransmit;
-    }
-
-    @Deprecated // TODO: move live parameter tweaking in a separate view
-    public void ClearNeedsTransmit() {
-        needsTransmit = false;
-    }
-
-    @Deprecated // TODO: move live parameter tweaking in a separate view
-    public void setNeedsTransmit(boolean needsTransmit) {
-        this.needsTransmit = needsTransmit;
-    }
-
-    public ByteBuffer getValueBB() {
-        return ByteBuffer.wrap(new byte[4]);
-    }
-
-    public byte[] TXData() {
-        needsTransmit = false;
-        byte[] data = new byte[14];
-        data[0] = 'A';
-        data[1] = 'x';
-        data[2] = 'o';
-        data[3] = 'P';
-        int pid = getObjectInstance().getParent().GetIID();
-        data[4] = (byte) pid;
-        data[5] = (byte) (pid >> 8);
-        data[6] = (byte) (pid >> 16);
-        data[7] = (byte) (pid >> 24);
-        int tvalue = valToInt32(getValue());
-        data[8] = (byte) tvalue;
-        data[9] = (byte) (tvalue >> 8);
-        data[10] = (byte) (tvalue >> 16);
-        data[11] = (byte) (tvalue >> 24);
-        data[12] = (byte) (index);
-        data[13] = (byte) (index >> 8);
-        return data;
     }
 
     public Preset getPreset(int i) {
@@ -183,19 +142,6 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 //    public int GetValueRaw() {
 //        return getValue().getRaw();
 //    }
-    public String indexName() {
-        return "PARAM_INDEX_" + getParent().getLegalName() + "_" + getLegalName();
-    }
-
-    public String getLegalName() {
-        return CharEscape.CharEscape(getName());
-    }
-
-    public String PExName(String vprefix) {
-        return vprefix + "params[" + indexName() + "]";
-    }
-
-    abstract public String valueName(String vprefix);
 
     public String ControlOnParentName() {
         if (getParent().getParameterInstances().size() == 1) {
@@ -205,24 +151,9 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         }
     }
 
-    abstract public String variableName(String vprefix, boolean enableOnParent);
-
-    public String signalsName(String vprefix) {
-        return PExName(vprefix) + ".signals";
-    }
 
     public String GetPFunction() {
         return "0";
-    }
-
-    public abstract String GenerateCodeMidiHandler(String vprefix);
-
-    public void setIndex(int i) {
-        index = i;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     // review!
@@ -233,8 +164,6 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
             return getName();
         }
     }
-
-    abstract public String GenerateParameterInitializer();
 
     public abstract int valToInt32(DT o);
 
@@ -248,14 +177,8 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         return "0";
     }
 
-    String GenerateMidiCCCodeSub(String vprefix, String value) {
-        if (MidiCC != null) {
-            return "        if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == " + MidiCC + ")) {\n"
-                    + "            ParameterChange(&parent->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
-                    + "        }\n";
-        } else {
-            return "";
-        }
+    public String getLegalName() {
+        return CharEscape.CharEscape(getModel().getName());
     }
 
     public T createParameterForParent() {
@@ -266,6 +189,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         return pcopy;
     }
 
+    // TODO: obsolete: replace with getParent()
     public AxoObjectInstance getObjectInstance() {
         return (AxoObjectInstance) getParent();
     }
@@ -390,28 +314,27 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
             onParent = null;
         }
         Boolean oldValue = this.onParent;
-        PatchModel pm = getObjectInstance().getParent();
-        if (pm == null) {
-            return;
-        }
-        AxoObjectInstancePatcher aoip = pm.getParent();
-        if (aoip == null) {
-            return;
-        }
-        AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
-
         if (onParent != null && onParent) {
             if (paramOnParent == null) {
                 paramOnParent = createParameterForParent();
-                paramOnParent.setParent(aop);
-            }
-            aop.getControllerFromModel().addParameter(paramOnParent);
-        } else {
-            if (paramOnParent != null) {
-                aop.getControllerFromModel().removeParameter(paramOnParent);
             }
         }
         this.onParent = onParent;
+
+        PatchModel pm = getObjectInstance().getParent();
+        if (pm != null) {
+            AxoObjectInstancePatcher aoip = pm.getParent();
+            if (aoip != null) {
+                AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+                if (onParent != null && onParent) {
+                    paramOnParent.setParent(aop);
+                    aop.getControllerFromModel().addParameter(paramOnParent);
+                } else {
+                    aop.getControllerFromModel().removeParameter(paramOnParent);
+                }
+            }
+        }
+
         firePropertyChange(
                 ParameterInstance.ON_PARENT,
                 oldValue, onParent);

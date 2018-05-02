@@ -18,13 +18,13 @@ public class AxoObjectInstanceCodegenViewFactory {
         IAxoObjectInstance model = controller.getModel();
         IAxoObjectInstanceCodegenView view;
         if (model instanceof AxoObjectInstancePatcher) {
-            view = new AxoObjectInstancePatcherCodegenView((AxoObjectInstancePatcher) model, (ObjectInstancePatcherController) controller);
+            view = new AxoObjectInstancePatcherCodegenView((ObjectInstancePatcherController) controller);
         } else if (model instanceof AxoObjectInstance) {
-            view = new AxoObjectInstanceCodegenView((AxoObjectInstance) model, controller);
+            view = new AxoObjectInstanceCodegenView(controller);
         } else if (model instanceof AxoObjectInstanceComment) {
-            view = new AxoObjectInstanceCommentCodegenView((AxoObjectInstanceComment) model, controller);
+            view = new AxoObjectInstanceDummyCodegenView(controller);
         } else if (model instanceof AxoObjectInstanceHyperlink) {
-            view = new AxoObjectInstanceHyperlinkCodegenView((AxoObjectInstanceHyperlink) model, controller);
+            view = new AxoObjectInstanceDummyCodegenView(controller);
         } else {
             return null;
         }

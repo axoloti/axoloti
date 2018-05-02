@@ -51,4 +51,11 @@ public class DisplayFrac8S128VBar extends Display {
         return TypeName;
     }
 
+    final int n = 128;
+
+    @Override
+    public int getLength() {
+        return n / 4;
+    }
+
 }

@@ -23,6 +23,7 @@ import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.abstractui.PatchView;
 import axoloti.connection.CConnection;
+import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObjects;
 import axoloti.patch.PatchController;
@@ -113,7 +114,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }
 
     private void initComponents2() {
-        patchView.setPatchFrame(this);
         patchView.PostConstructor();
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
@@ -849,7 +849,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         String fn = getPatchModel().getFileNamePath();
         if ((fn != null) && (!fn.equals("untitled"))) {
             File f = new File(fn);
-            getPatchView().setFileNamePath(f.getPath());
+            getController().setFileNamePath(f.getPath());
             getPatchView().save(f);
         } else {
             jMenuSaveAsActionPerformed(evt);
@@ -956,7 +956,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
         File fileToBeSaved = FileChooserSave();
         if (fileToBeSaved != null) {
-            getPatchView().setFileNamePath(fileToBeSaved.getPath());
+            getController().setFileNamePath(fileToBeSaved.getPath());
             Preferences.getPreferences().setCurrentFileDirectory(fileToBeSaved.getPath());
             getPatchView().save(fileToBeSaved);
         }
@@ -1142,7 +1142,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     ; // fall thru
             }
         }
-        getPatchView().GoLive();
+        PatchViewLive.GoLive(getController().getModel());
         return true;
     }
 

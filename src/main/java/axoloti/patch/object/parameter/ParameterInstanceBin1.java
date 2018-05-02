@@ -44,9 +44,4 @@ public class ParameterInstanceBin1 extends ParameterInstanceBin<ParameterBin1> {
         super(v);
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2>0)");
-    }
-
 }

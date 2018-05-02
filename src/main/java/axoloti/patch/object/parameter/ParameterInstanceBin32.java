@@ -27,9 +27,4 @@ public class ParameterInstanceBin32 extends ParameterInstanceInt32 {
         super();
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return "";
-    }
-
 }

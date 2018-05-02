@@ -216,6 +216,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (parentOutlet != null) {
             parentOutlet.setName(s);
         }
+        // TODO: add firePropertyChange(...)
         return result;
     }
 
@@ -262,7 +263,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             return null;
         }
         for (ParameterInstance o : parameterInstances) {
-            if (n.equals(o.parameter.getName())) {
+            if (n.equals(o.getModel().getName())) {
                 return o;
             }
         }
@@ -513,6 +514,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
         @Override
         protected void removeView(OutletInstance view) {
+            System.out.println("goddit");
+            PatchModel pm = getParent();
+            if (pm != null) {
+                pm.getControllerFromModel().disconnect(view);
+            } else {
+                System.out.println("AxoObjectInstance : not in a patch?");
+                // it is probably in the objectselector, in which case this is not a problem
+            }
             view.dispose();
         }
     };
@@ -531,6 +540,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
         @Override
         protected void removeView(InletInstance view) {
+            System.out.println("goddit");
+            PatchModel pm = getParent();
+            if (pm != null) {
+                pm.getControllerFromModel().disconnect(view);
+            } else {
+                System.out.println("AxoObjectInstance : not in a patch?");
+                // it is probably in the objectselector, in which case this is not a problem
+            }
             view.dispose();
         }
     };

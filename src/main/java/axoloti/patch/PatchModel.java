@@ -100,20 +100,22 @@ public class PatchModel extends AbstractModel {
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
-    String notes = "";
+    private String notes = "";
     @Element(required = false)
     Rectangle windowPos;
-    String FileNamePath;
+    public String FileNamePath; // TODO: move to DocumentRoot property
 
-    ArrayList<Modulator> Modulators = new ArrayList<>();
+    public ArrayList<Modulator> Modulators = new ArrayList<>(); // TODO: fix modulations, make property, make private
+
     @Element(required = false)
-    String helpPatch;
+    private String helpPatch;
 
     Integer dspLoad = 0;
 
+// TODO: fix "controller object"
     // a "controller object" is magically added to evey top-level patch
     // (configured in preferences)
-    IAxoObjectInstance controllerObjectInstance;
+    public IAxoObjectInstance controllerObjectInstance; // TODO: make private
 
     public boolean presetUpdatePending = false;
 
@@ -635,7 +637,7 @@ public class PatchModel extends AbstractModel {
                 ParameterInstance p7 = (ParameterInstance) param;
                 Preset p = p7.getPreset(i);
                 if (p != null) {
-                    pdata[index * 2] = p7.getIndex();
+                    pdata[index * 2] = 0; //p7.getIndex(); // FIXME!
                     pdata[index * 2 + 1] = 0;// FIXME p.value.getRaw();
                     index++;
                     if (index == getNPresetEntries()) {
@@ -736,6 +738,15 @@ public class PatchModel extends AbstractModel {
         firePropertyChange(PATCH_NOTES, null, notes);
     }
 
+    public String getHelpPatch() {
+        return helpPatch;
+    }
+
+    public void setHelpPatch(String helpPatch) {
+        this.helpPatch = helpPatch;
+        firePropertyChange(PATCH_HELP_PATCH, null, helpPatch);
+    }
+
     public ArrayList<SDFileReference> GetDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
@@ -805,6 +816,7 @@ public class PatchModel extends AbstractModel {
     public final static Property PATCH_MIDICHANNEL = new IntegerProperty("MidiChannel", PatchModel.class);
     public final static Property PATCH_MIDISELECTOR = new BooleanProperty("MidiSelector", PatchModel.class);
     public final static StringProperty PATCH_NOTES = new StringProperty("Notes", PatchModel.class);
+    public final static StringProperty PATCH_HELP_PATCH = new StringProperty("HelpPatch", PatchModel.class);
     public final static Property PATCH_WINDOWPOS = new ObjectProperty("WindowPos", Rectangle.class, PatchModel.class);
 
     @Override
@@ -826,6 +838,8 @@ public class PatchModel extends AbstractModel {
         l.add(PATCH_MIDICHANNEL);
         l.add(PATCH_MIDISELECTOR);
         l.add(PATCH_WINDOWPOS);
+        l.add(PATCH_NOTES);
+        l.add(PATCH_HELP_PATCH);
         return Collections.unmodifiableList(l);
     }
 

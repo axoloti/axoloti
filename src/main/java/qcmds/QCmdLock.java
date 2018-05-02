@@ -17,7 +17,7 @@
  */
 package qcmds;
 
-import axoloti.patch.PatchViewCodegen;
+import axoloti.live.patch.PatchViewLive;
 
 /**
  *
@@ -25,10 +25,10 @@ import axoloti.patch.PatchViewCodegen;
  */
 public class QCmdLock implements QCmdGUITask {
 
-    PatchViewCodegen patchController;
+    PatchViewLive patchController;
 
-    public QCmdLock(PatchViewCodegen patchController) {
-        this.patchController = patchController;
+    public QCmdLock(PatchViewLive patchViewLive) {
+        this.patchController = patchViewLive;
     }
 
     @Override

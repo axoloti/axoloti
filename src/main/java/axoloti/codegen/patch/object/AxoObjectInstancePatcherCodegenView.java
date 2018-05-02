@@ -1,9 +1,9 @@
 package axoloti.codegen.patch.object;
 
+import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewCodegen;
 import axoloti.patch.SubPatchMode;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.ObjectInstancePatcherController;
@@ -14,8 +14,9 @@ import axoloti.patch.object.ObjectInstancePatcherController;
  */
 public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodegenView {
 
-    public AxoObjectInstancePatcherCodegenView(AxoObjectInstancePatcher model, ObjectInstancePatcherController controller) {
-        super(model, controller);
+    AxoObjectInstancePatcherCodegenView(ObjectInstancePatcherController controller) {
+        super(controller);
+        AxoObjectInstancePatcher model = controller.getModel();
         AxoObjectPatcher ao = (AxoObjectPatcher)model.getController().getModel();
         PatchController pc = controller.getSubPatchController();
         PatchModel pm = pc.getModel();

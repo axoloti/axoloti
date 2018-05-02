@@ -7,6 +7,10 @@ import axoloti.mvc.UndoManager1;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.IAxoObject;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.parameter.Parameter;
 import axoloti.object.parameter.ParameterFrac32UMap;
 import axoloti.patch.object.AxoObjectInstancePatcher;
@@ -274,4 +278,34 @@ public class PatchModelTest {
         assertEquals(patcher_obji.getInletInstances().get(0), inlet);
         assertEquals(patcher_obji.getOutletInstances().get(0), outlet);
     }
+
+    /**
+     * Create net, delete inlet, net should be gone
+     */
+    @Test
+    public void testNets1() {
+        PatchModel patch = new PatchModel();
+
+        IAxoObject obj_1 = new AxoObject("obj", "description");
+        Inlet inlet = new InletFrac32("in", "");
+        obj_1.getControllerFromModel().addInlet(inlet);
+        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        InletInstance inleti_1 = obji_1.getInletInstances().get(0);
+
+        IAxoObject obj_2 = new AxoObject("obj", "description");
+        Outlet outlet = new OutletFrac32("out", "");
+        obj_2.getControllerFromModel().addOutlet(outlet);
+        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        OutletInstance outleti_1 = obji_2.getOutletInstances().get(0);
+
+        patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
+
+        assertThat(patch.getNets().size(), equalTo(1));
+
+        obj_2.getControllerFromModel().removeInlet(inlet);
+
+        // TODO: fails
+        assertThat(patch.getNets().size(), equalTo(0));
+    }
+
 }

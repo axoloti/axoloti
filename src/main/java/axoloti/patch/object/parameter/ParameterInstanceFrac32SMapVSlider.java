@@ -34,9 +34,4 @@ public class ParameterInstanceFrac32SMapVSlider extends ParameterInstanceFrac32S
         super(v);
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
-    }
-
 }

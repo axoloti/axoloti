@@ -19,7 +19,7 @@ package qcmds;
 
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
-import axoloti.patch.PatchViewCodegen;
+import axoloti.live.patch.PatchViewLive;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.MainFrame;
 import axoloti.target.PollHandler;
@@ -39,7 +39,7 @@ public class QCmdProcessor implements Runnable {
     private final BlockingQueue<QCmd> queue;
     private final BlockingQueue<QCmd> queueResponse;
     protected IConnection serialconnection;
-    private PatchViewCodegen patchController;
+    private PatchViewLive patchController;
     private final PeriodicPinger pinger;
     private final Thread pingerThread;
     private final PeriodicDialTransmitter dialTransmitter;
@@ -101,7 +101,7 @@ public class QCmdProcessor implements Runnable {
         return singleton;
     }
 
-    public PatchViewCodegen getPatchController() {
+    public PatchViewLive getPatchController() {
         return patchController;
     }
 
@@ -237,7 +237,7 @@ public class QCmdProcessor implements Runnable {
         });
     }
 
-    public void setPatchController(PatchViewCodegen patchController) {
+    public void setPatchController(PatchViewLive patchController) {
         if (this.patchController != null) {
             this.patchController.getController().setLocked(false);
         }

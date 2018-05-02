@@ -23,9 +23,7 @@ import axoloti.patch.object.atom.AtomInstance;
 import axoloti.property.ObjectProperty;
 import axoloti.property.PropagatedProperty;
 import axoloti.property.Property;
-import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
-import java.nio.ByteBuffer;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -39,9 +37,6 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
     String name;
     @Attribute(required = false)
     Boolean onParent;
-    protected int index;
-
-    protected int offset;
 
     AtomDefinitionController controller;
 
@@ -57,40 +52,22 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
         return (T) getController().getModel();
     }
 
-    public String GetCName() {
-        return getModel().GetCName();
+    @Override
+    public DisplayInstanceController getControllerFromModel() {
+        return (DisplayInstanceController) super.getControllerFromModel();
     }
 
-    public int getLength() { // length in 32-bit words
+    /**
+     * Get the data size of this display for use during code generation.
+     *
+     * @return Display size in number of 32bit words
+     */
+    public int getLength() {
         return getModel().getLength();
     }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public void setIndex(int i) {
-        index = i;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public abstract String valueName(String vprefix);
-
-    public abstract String GenerateCodeInit(String vprefix);
-
-    public abstract void ProcessByteBuffer(ByteBuffer bb);
-
-    public String GenerateDisplayMetaInitializer() {
-        String c = "{ display_type: " + getModel().GetCMetaType() + ", name: "
-                + CodeGeneration.CPPCharArrayStaticInitializer(getModel().getName(), CodeGeneration.param_name_length)
-                + ", displaydata: &displayVector[" + offset + "]},\n";
-        return c;
-    }
-
     public abstract Object getValue();
+
     public abstract void setValue(Object o);
 
     private final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{NOLABEL};

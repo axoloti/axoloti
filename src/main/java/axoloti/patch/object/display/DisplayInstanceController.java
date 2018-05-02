@@ -14,7 +14,7 @@ public class DisplayInstanceController extends AbstractController<DisplayInstanc
         super(model);
     }
 
-    void setValue(Object value) {
+    public void setValue(Object value) {
         setModelProperty(DisplayInstance.DISP_VALUE, value);
     }
 }

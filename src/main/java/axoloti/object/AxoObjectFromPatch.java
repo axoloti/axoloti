@@ -18,10 +18,14 @@
 package axoloti.object;
 
 import axoloti.abstractui.PatchView;
+import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.parameter.Parameter;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
-import axoloti.patch.PatchViewCodegen;
 import axoloti.swingui.patch.PatchFrame;
 import java.io.File;
 import java.util.logging.Level;
@@ -75,6 +79,20 @@ public class AxoObjectFromPatch extends AxoObject {
         inlets = o.getInlets();
         outlets = o.getOutlets();
         params = o.getParameters();
+
+        for (Inlet i : inlets) {
+            i.setParent(this);
+        }
+        for (Outlet i : outlets) {
+            i.setParent(this);
+        }
+        for (Parameter i : params) {
+            i.setParent(this);
+        }
+        for (Display i : displays) {
+            i.setParent(this);
+        }
+
         setAuthor(o.getAuthor());
         setDescription(o.getDescription());
         sDisposeCode = o.sDisposeCode;

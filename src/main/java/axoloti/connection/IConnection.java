@@ -2,8 +2,8 @@ package axoloti.connection;
 
 import axoloti.ConnectionStatusListener;
 import axoloti.chunks.ChunkParser;
+import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.View;
-import axoloti.patch.PatchViewCodegen;
 import static axoloti.swingui.dialogs.USBPortSelectionDlg.ErrorString;
 import axoloti.target.TargetController;
 import axoloti.target.fs.SDCardMountStatusListener;
@@ -73,7 +73,7 @@ public abstract class IConnection extends View<TargetController> {
     abstract public boolean WaitSync();
     abstract public void ClearReadSync();
     abstract public boolean WaitReadSync();
-    abstract public void setPatch(PatchViewCodegen patchViewCodegen);
+    abstract public void setPatch(PatchViewLive patchViewLive);
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();

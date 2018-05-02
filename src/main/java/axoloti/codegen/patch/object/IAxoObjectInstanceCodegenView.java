@@ -1,7 +1,10 @@
 package axoloti.codegen.patch.object;
 
+import axoloti.codegen.patch.object.display.DisplayInstanceView;
+import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
 import axoloti.mvc.IView;
 import axoloti.patch.object.IAxoObjectInstance;
+import java.util.List;
 
 /**
  *
@@ -9,15 +12,19 @@ import axoloti.patch.object.IAxoObjectInstance;
  */
 public interface IAxoObjectInstanceCodegenView extends IView {
 
-    public String GenerateUICode(int count[]);
+    String GenerateUICode(int count[]);
 
-    public String GenerateInitCodePlusPlus(String vprefix, boolean enableOnParent);
+    String GenerateInitCodePlusPlus(String vprefix, boolean enableOnParent);
 
-    public String GenerateDisposeCodePlusPlus(String vprefix);
+    String GenerateDisposeCodePlusPlus(String vprefix);
 
-    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent);
+    String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent);
 
-    public String GenerateCallMidiHandler();
+    String GenerateCallMidiHandler();
 
-    public IAxoObjectInstance getModel();
+    IAxoObjectInstance getModel();
+
+    List<ParameterInstanceView> getParameterInstanceViews();
+
+    List<DisplayInstanceView> getDisplayInstanceViews();
 }

@@ -1,7 +1,7 @@
 package axoloti.patch.object.parameter;
 
-import axoloti.abstractui.IParameterInstanceView;
 import axoloti.mvc.AbstractController;
+import axoloti.mvc.IView;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.preset.Preset;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author jtaelman
  */
-public class ParameterInstanceController extends AbstractController<ParameterInstance, IParameterInstanceView, ObjectInstanceController> {
+public class ParameterInstanceController extends AbstractController<ParameterInstance, IView<ParameterInstanceController>, ObjectInstanceController> {
 
     protected ParameterInstanceController(ParameterInstance model) {
         super(model);

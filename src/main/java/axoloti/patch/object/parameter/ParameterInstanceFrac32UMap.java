@@ -58,9 +58,4 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         }
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?data2<<20:0x07FFFFFF");
-    }
-
 }

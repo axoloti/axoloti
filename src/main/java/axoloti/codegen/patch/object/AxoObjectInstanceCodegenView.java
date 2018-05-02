@@ -1,7 +1,12 @@
 package axoloti.codegen.patch.object;
 
+import axoloti.codegen.patch.object.display.DisplayInstanceView;
+import axoloti.codegen.patch.object.display.DisplayInstanceViewFactory;
+import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
+import axoloti.codegen.patch.object.parameter.ParameterInstanceViewFactory;
 import axoloti.datatypes.Frac32buffer;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
@@ -10,17 +15,35 @@ import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.utils.CodeGeneration;
 import java.beans.PropertyChangeEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author jtaelman
  */
-public class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
+class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
 
     final ObjectInstanceController controller;
+    List<ParameterInstanceView> parameterInstances;
+    List<DisplayInstanceView> displayInstances;
 
-    public AxoObjectInstanceCodegenView(AxoObjectInstance model, ObjectInstanceController controller) {
+    AxoObjectInstanceCodegenView(ObjectInstanceController controller) {
         this.controller = controller;
+        IAxoObjectInstance model = controller.getModel();
+
+        parameterInstances = new LinkedList<>();
+        for (ParameterInstance p : model.getParameterInstances()) {
+            ParameterInstanceView pv = ParameterInstanceViewFactory.createView(p.getControllerFromModel());
+            parameterInstances.add(pv);
+        }
+
+        displayInstances = new LinkedList<>();
+        for (DisplayInstance d : model.getDisplayInstances()) {
+            DisplayInstanceView dv = DisplayInstanceViewFactory.createView(d.getControllerFromModel());
+            displayInstances.add(dv);
+        }
+
     }
 
     @Override
@@ -35,6 +58,16 @@ public class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenVi
     @Override
     public AxoObjectInstance getModel() {
         return (AxoObjectInstance)controller.getModel();
+    }
+
+    @Override
+    public List<ParameterInstanceView> getParameterInstanceViews() {
+        return parameterInstances;
+    }
+
+    @Override
+    public List<DisplayInstanceView> getDisplayInstanceViews() {
+        return displayInstances;
     }
 
     @Override
@@ -53,7 +86,7 @@ typedef struct ui_object {
 } ui_object_t;
          */
         int nparams = getModel().getParameterInstances().size();
-        int ndisplays = getModel().getDisplayInstances().size();
+        int ndisplays = displayInstances.size();
         if (nparams + ndisplays == 0) {
             return "";
         }
@@ -61,8 +94,8 @@ typedef struct ui_object {
         String s = "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getModel().getInstanceName(), CodeGeneration.param_name_length)
                 + ", nparams : " + nparams;
         if (nparams > 0) {
-            s += ", params : &params[" + getModel().getParameterInstances().get(0).getIndex() + "]";
-            s += ", param_names : &param_names[" + getModel().getParameterInstances().get(0).getIndex() + "]";
+            s += ", params : &params[" + parameterInstances.get(0).getIndex() + "]";
+            s += ", param_names : &param_names[" + parameterInstances.get(0).getIndex() + "]";
         } else {
             s += ", params : 0";
             s += ", param_names : 0";
@@ -70,7 +103,7 @@ typedef struct ui_object {
 
         if (ndisplays > 0) {
             s += ", ndisplays : " + ndisplays
-                    + ", displays : &display_metas[" + getModel().getDisplayInstances().get(0).getIndex() + "]";
+                    + ", displays : &display_metas[" + displayInstances.get(0).getIndex() + "]";
         } else {
             s += ", ndisplays : 0"
                     + ", displays : 0";
@@ -89,15 +122,15 @@ typedef struct ui_object {
 //        else
 //        if (!classname.equals("one"))
 //        c += "parent = _parent;\n";
-        for (ParameterInstance p : getModel().getParameterInstances()) {
-            if (p.parameter.PropagateToChild != null) {
-                c += "// on Parent: propagate " + p.getName() + " " + enableOnParent + " " + getModel().getLegalName() + "" + p.parameter.PropagateToChild + "\n";
+        for (ParameterInstanceView p : parameterInstances) {
+            if (p.getModel().getModel().PropagateToChild != null) {
+                c += "// on Parent: propagate " + p.getModel().getName() + " " + enableOnParent + " " + getModel().getLegalName() + "" + p.getModel().getModel().PropagateToChild + "\n";
                 c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
                 c += p.PExName("parent->") + ".d.frac.finalvalue = (int32_t)(&(parent->instance"
                         + getModel().getLegalName() + "_i.params[instance" + getModel().getLegalName() + "::PARAM_INDEX_"
-                        + p.parameter.PropagateToChild + "]));\n";
+                        + p.getModel().getModel().PropagateToChild + "]));\n";
             }
-            c += p.GenerateCodeInitModulator("parent->", "");
+            c += p.getModel().GenerateCodeInitModulator("parent->", "");
             //           if ((p.getOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
@@ -106,7 +139,7 @@ typedef struct ui_object {
             //c += "parent->parent->PExch[PARAM_INDEX_" + parentparametername + "_" + getLegalName() + "].finalvalue = (int32_t)(&(" + p.PExName("parent->") + "));\n";
             //         }
         }
-        for (DisplayInstance p : getModel().getDisplayInstances()) {
+        for (DisplayInstanceView p : displayInstances) {
             c += p.GenerateCodeInit("");
         }
         if (getModel().getType().getInitCode() != null) {
@@ -117,14 +150,14 @@ typedef struct ui_object {
             c += s + "\n";
         }
         String d = "  public: void Init(" + classname + " * parent";
-        if (!getModel().getDisplayInstances().isEmpty()) {
-            for (DisplayInstance p : getModel().getDisplayInstances()) {
-                if (p.getModel().getLength() > 0) {
+        if (!displayInstances.isEmpty()) {
+            for (DisplayInstanceView p : displayInstances) {
+                if (p.getModel().getModel().getLength() > 0) {
                     d += ",\n";
-                    if (p.getModel().getDatatype().isPointer()) {
-                        d += p.getModel().getDatatype().CType() + " " + p.GetCName();
+                    if (p.getModel().getModel().getDatatype().isPointer()) {
+                        d += p.getModel().getModel().getDatatype().CType() + " " + p.GetCName();
                     } else {
-                        d += p.getModel().getDatatype().CType() + " & " + p.GetCName();
+                        d += p.getModel().getModel().getDatatype().CType() + " & " + p.GetCName();
                     }
                 }
             }
@@ -219,23 +252,23 @@ typedef struct ui_object {
             comma = true;
         }
         for (ParameterInstance i : getModel().getParameterInstances()) {
-            if (i.parameter.PropagateToChild == null) {
+            if (i.getModel().PropagateToChild == null) {
                 if (comma) {
                     s += ",\n";
                 }
-                s += i.parameter.CType() + " " + i.GetCName();
+                s += i.getModel().CType() + " " + i.GetCName();
                 comma = true;
             }
         }
-        for (DisplayInstance i : getModel().getDisplayInstances()) {
-            if (i.getModel().getLength() > 0) {
+        for (DisplayInstanceView i : displayInstances) {
+            if (i.getModel().getModel().getLength() > 0) {
                 if (comma) {
                     s += ",\n";
                 }
-                if (i.getModel().getDatatype().isPointer()) {
-                    s += i.getModel().getDatatype().CType() + " " + i.GetCName();
+                if (i.getModel().getModel().getDatatype().isPointer()) {
+                    s += i.getModel().getModel().getDatatype().CType() + " " + i.GetCName();
                 } else {
-                    s += i.getModel().getDatatype().CType() + " & " + i.GetCName();
+                    s += i.getModel().getModel().getDatatype().CType() + " & " + i.GetCName();
                 }
                 comma = true;
             }
@@ -296,7 +329,7 @@ typedef struct ui_object {
         if (getModel().getType().getMidiCode() != null) {
             s += getModel().getType().getMidiCode();
         }
-        for (ParameterInstance i : getModel().getParameterInstances()) {
+        for (ParameterInstanceView i : parameterInstances) {
             s += i.GenerateCodeMidiHandler("");
         }
         for (AttributeInstance p : getModel().getAttributeInstances()) {
@@ -317,7 +350,7 @@ typedef struct ui_object {
         if ((getModel().getType().getMidiCode() != null) && (!getModel().getType().getMidiCode().isEmpty())) {
             return getModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
         }
-        for (ParameterInstance pi : getModel().getParameterInstances()) {
+        for (ParameterInstanceView pi : parameterInstances) {
             if (!pi.GenerateCodeMidiHandler("").isEmpty()) {
                 return getModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
             }
@@ -328,4 +361,5 @@ typedef struct ui_object {
     @Override
     public void dispose() {
     }
+
 }

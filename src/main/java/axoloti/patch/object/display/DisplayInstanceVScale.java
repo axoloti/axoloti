@@ -19,30 +19,17 @@ package axoloti.patch.object.display;
 
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayVScale;
-import java.nio.ByteBuffer;
 
 /**
  *
  * @author Johannes Taelman
+ *
+ * TODO: complete DisplayInstanceVScale
  */
 public class DisplayInstanceVScale extends DisplayInstance1<DisplayVScale> {
 
     public DisplayInstanceVScale(AtomDefinitionController controller) {
         super(controller);
-    }
-
-    @Override
-    public String valueName(String vprefix) {
-        return "";
-    }
-
-    @Override
-    public String GenerateCodeInit(String vprefix) {
-        return "";
-    }
-
-    @Override
-    public void ProcessByteBuffer(ByteBuffer bb) {
     }
 
     @Override

@@ -26,9 +26,4 @@ public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
     public ParameterInstanceInt32Box() {
     }
 
-    @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return "";
-    }
-
 }

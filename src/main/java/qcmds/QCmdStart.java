@@ -18,7 +18,7 @@
 package qcmds;
 
 import axoloti.connection.IConnection;
-import axoloti.patch.PatchViewCodegen;
+import axoloti.live.patch.PatchViewLive;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  */
 public class QCmdStart implements QCmdSerialTask {
 
-    final PatchViewCodegen patchViewCodegen;
+    final PatchViewLive patchViewLive;
     final Integer patchIndex;
     final String patchName;
 
@@ -37,23 +37,23 @@ public class QCmdStart implements QCmdSerialTask {
     public QCmdStart() {
         patchIndex = null;
         patchName = null;
-        patchViewCodegen = null;
+        patchViewLive = null;
     }
 
-    public QCmdStart(PatchViewCodegen patchViewCodegen) {
+    public QCmdStart(PatchViewLive patchViewLive) {
         patchIndex = null;
         patchName = null;
-        this.patchViewCodegen = patchViewCodegen;
+        this.patchViewLive = patchViewLive;
     }
 
     public QCmdStart(String patchName) {
-        patchViewCodegen = null;
+        patchViewLive = null;
         patchIndex = null;
         this.patchName = patchName;
     }
 
     public QCmdStart(int patchIndex) {
-        patchViewCodegen = null;
+        patchViewLive = null;
         patchName = null;
         this.patchIndex = patchIndex;
     }
@@ -76,7 +76,7 @@ public class QCmdStart implements QCmdSerialTask {
     public QCmd Do(IConnection connection) {
         connection.ClearSync();
 
-        connection.setPatch(patchViewCodegen);
+        connection.setPatch(patchViewLive);
 
         if (patchName != null) {
             connection.TransmitStart(patchName);
