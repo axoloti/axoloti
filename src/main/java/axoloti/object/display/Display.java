@@ -50,6 +50,13 @@ public abstract class Display<T extends DisplayInstance> extends AtomDefinition 
         return getTypeName();
     }
 
+    /**
+     * Get the data size of this display
+     *
+     * Only to be used in axoloti.patch.object.display.*
+     *
+     * @return Display size in number of 32bit words
+     */
     public int getLength() {
         return 1;
     }

@@ -196,7 +196,10 @@ public class Net extends AbstractModel {
             return null;
         }
     }
+
+    // TODO: migrate NET_SOURCES to ListProperty
     public final static Property NET_SOURCES = new SourceArrayProperty("Sources", Net.class);
+    // TODO: migrate NET_DESTINATIONS to ListProperty
     public final static Property NET_DESTINATIONS = new DestinationArrayProperty("Destinations", Net.class);
 
     public OutletInstance[] getSources() {

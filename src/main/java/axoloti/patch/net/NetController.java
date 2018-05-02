@@ -118,8 +118,8 @@ public class NetController extends AbstractController<Net, INetView, PatchContro
         List<InletInstance> n = new LinkedList<>(Arrays.asList(getModel().getDestinations()));
         n.remove(inlet);
         setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
-        // TODO: migrate NET_SOURCES to ListProperty, so this reduces to:
-        // removeUndoableElementFromList(Net.NET_SOURCES, outlet);
+        // TODO: migrate NET_DESTINATIONS to ListProperty, so this reduces to:
+        // removeUndoableElementFromList(Net.NET_DESTINATIONS, outlet);
     }
 
     public boolean NeedsLatch() {

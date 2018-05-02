@@ -13,7 +13,7 @@ import axoloti.object.parameter.Parameter;
 public class ObjectController extends AbstractController<IAxoObject, IView, AbstractController> {
 
     public ObjectController(IAxoObject model) {
-        // TODO: remove public
+        // TODO: remove public constructor
         super(model);
     }
 

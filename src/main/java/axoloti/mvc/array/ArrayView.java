@@ -38,7 +38,7 @@ public abstract class ArrayView<T extends IView> {
                 }
             }
             if (view == null) {
-                view = viewFactory((AbstractController) model.getControllerFromModel());
+                view = viewFactory(model.getControllerFromModel());
                 // the factory method is assumed to add the view to controller
             }
             subviews.add(view);

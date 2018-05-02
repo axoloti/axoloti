@@ -571,11 +571,6 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         jTextFieldObjName.setMaximumSize(new java.awt.Dimension(2147483647, 26));
         jTextFieldObjName.setMinimumSize(new java.awt.Dimension(40, 26));
         jTextFieldObjName.setPreferredSize(new java.awt.Dimension(800, 20));
-        jTextFieldObjName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldObjNameActionPerformed(evt);
-            }
-        });
         jPanel4.add(jTextFieldObjName);
 
         jButtonCancel.setText("✗");
@@ -695,10 +690,6 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             }
         }
     }//GEN-LAST:event_formWindowLostFocus
-
-    private void jTextFieldObjNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldObjNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldObjNameActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
         Cancel();

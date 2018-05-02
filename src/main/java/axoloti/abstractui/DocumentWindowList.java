@@ -17,7 +17,8 @@
  */
 package axoloti.abstractui;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  */
 public class DocumentWindowList {
 
-    static ArrayList<DocumentWindow> list = new ArrayList<DocumentWindow>();
+    static List<DocumentWindow> list = new LinkedList<DocumentWindow>();
 
     static public void RegisterWindow(DocumentWindow w) {
         if (!list.contains(w)) {
@@ -37,12 +38,13 @@ public class DocumentWindowList {
         list.remove(w);
     }
 
-    static public ArrayList<DocumentWindow> GetList() {
+    static public List<DocumentWindow> GetList() {
         return list;
     }
 
     static public boolean AskCloseAll() {
-        for(DocumentWindow dw : (ArrayList<DocumentWindow>) list.clone()) {
+        List<DocumentWindow> clone = new LinkedList<>(list);
+        for (DocumentWindow dw : clone) {
             if (dw.askClose()) {
                 return true;
             }

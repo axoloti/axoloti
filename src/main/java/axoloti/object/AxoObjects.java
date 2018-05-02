@@ -134,7 +134,7 @@ public class AxoObjects {
             }
         }
         if (set.isEmpty()) {
-            /* todo: needs review
+            /* TODO: subpatches in relative path: needs review
             String spath[] = MainFrame.prefs.getObjectSearchPath();
             for (String s : spath) {
                 String fsname = s + "/" + n + ".axs";
