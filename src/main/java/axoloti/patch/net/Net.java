@@ -210,9 +210,7 @@ public class Net extends AbstractModel {
         OutletInstance[] old_value = this.sources;
         this.sources = sources;
         validate();
-        for(OutletInstance o : sources) {
-            o.getControllerFromModel().changeConnected(true);
-        }
+
         firePropertyChange(
                 NET_SOURCES,
                 old_value, sources);
@@ -224,19 +222,9 @@ public class Net extends AbstractModel {
 
     public void setDestinations(InletInstance[] dests) {
         InletInstance[] old_value = this.dests;
-        List<InletInstance> dests_list = Arrays.asList(dests);
-        if (old_value != null) {
-            for (InletInstance i : old_value) {
-                if (!dests_list.contains(i)) {
-                    i.getControllerFromModel().changeConnected(false);
-                }
-            }
-        }
+
         this.dests = dests;
         validate();
-        for(InletInstance i : dests) {
-            i.getControllerFromModel().changeConnected(true);
-        }
         firePropertyChange(
                 NET_DESTINATIONS,
                 old_value, dests);

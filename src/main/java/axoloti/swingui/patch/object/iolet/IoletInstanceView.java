@@ -1,13 +1,14 @@
 package axoloti.swingui.patch.object.iolet;
 
 import axoloti.abstractui.PatchView;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.FocusEdit;
+import axoloti.patch.PatchController;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.net.NetDrag;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.iolet.IoletInstance;
+import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.mvc.ViewPanel;
@@ -26,11 +27,13 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
-public abstract class IoletInstanceView<T extends AbstractController> extends ViewPanel<T> {
+public abstract class IoletInstanceView<T extends IoletInstanceController> extends ViewPanel<T> {
 
     protected AxoObjectInstanceViewAbstract axoObj;
     protected LabelComponent label = new LabelComponent("");
     protected JComponent jack;
+
+    private boolean saved_connected_state;
 
     public IoletInstanceView(T controller) {
         super(controller);
@@ -59,6 +62,7 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
                     Net dnet = new NetDrag();
                     NetController dragNetController = dnet.getControllerFromModel();
                     dragtarget = null;
+                    saved_connected_state = getController().getModel().getConnected();
                     if (IoletInstanceView.this instanceof InletInstanceView) {
                         dragNetController.connectInlet((InletInstance) getController().getModel());
                     } else {
@@ -90,8 +94,9 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
                 } else if (dragnet != null) {
                     dragnet.repaint();
                     pv.selectionRectLayerPanel.remove(dragnet);
+                    getController().changeConnected(saved_connected_state);
+                    PatchController pc = pv.getController();
                     dragnet = null;
-                    Net n = null;
                     if (dragtarget == null) {
                         Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), pv.selectionRectLayerPanel);
                         Component c = getPatchView().objectLayerPanel.findComponentAt(p);
@@ -101,36 +106,36 @@ public abstract class IoletInstanceView<T extends AbstractController> extends Vi
 
                         if (IoletInstanceView.this != c) {
                             if (IoletInstanceView.this instanceof InletInstanceView) {
-                                getPatchView().getController().addMetaUndo("disconnect inlet", focusEdit);
-                                n = getPatchView().getController().disconnect((InletInstance) getController().getModel());
+                                pc.addMetaUndo("disconnect inlet", focusEdit);
+                                pc.disconnect((InletInstance) getController().getModel());
                             } else {
-                                getPatchView().getController().addMetaUndo("disconnect outlet", focusEdit);
-                                n = getPatchView().getController().disconnect((OutletInstance) getController().getModel());
+                                pc.addMetaUndo("disconnect outlet", focusEdit);
+                                pc.disconnect((OutletInstance) getController().getModel());
                             }
                         }
                     } else {
                         if (IoletInstanceView.this instanceof InletInstanceView) {
                             if (dragtarget instanceof InletInstanceView) {
-                                getPatchView().getController().addMetaUndo("connect", focusEdit);
-                                n = getPatchView().getController().AddConnection(
+                                pc.addMetaUndo("connect", focusEdit);
+                                pc.AddConnection(
                                         (InletInstance) getController().getModel(),
                                         (InletInstance) ((InletInstanceView) dragtarget).getController().getModel());
                             } else if (dragtarget instanceof OutletInstanceView) {
-                                getPatchView().getController().addMetaUndo("connect", focusEdit);
-                                n = getPatchView().getController().AddConnection(
+                                pc.addMetaUndo("connect", focusEdit);
+                                pc.AddConnection(
                                         (InletInstance) getController().getModel(),
                                         (OutletInstance) ((OutletInstanceView) dragtarget).getController().getModel());
                             }
                         } else if (IoletInstanceView.this instanceof OutletInstanceView) {
                             if (dragtarget instanceof InletInstanceView) {
-                                getPatchView().getController().addMetaUndo("connect", focusEdit);
-                                n = getPatchView().getController().AddConnection((InletInstance) ((InletInstanceView) dragtarget).getController().getModel(),
+                                pc.addMetaUndo("connect", focusEdit);
+                                pc.AddConnection((InletInstance) ((InletInstanceView) dragtarget).getController().getModel(),
                                         (OutletInstance) ((OutletInstanceView) IoletInstanceView.this).getController().getModel());
                             }
                         }
-                        getPatchView().getController().PromoteOverloading(false);
+                        pc.PromoteOverloading(false);
                     }
-                    getPatchView().selectionRectLayerPanel.repaint();
+                    pv.selectionRectLayerPanel.repaint();
                     e.consume();
                 }
             }

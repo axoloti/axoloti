@@ -33,6 +33,9 @@ public abstract class PIoletAbstract extends PatchPNode {
     public PLabelComponent lbl;
     public PatchPNode jack;
 
+// TODO: piccolo implement cfr. axoloti.swingui.patch.object.iolet.IoletInstanceView
+    private boolean saved_connected_state;
+
     public PIoletAbstract(IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
         this.axoObjectInstanceView = axoObjectInstanceView;
@@ -111,35 +114,34 @@ public abstract class PIoletAbstract extends PatchPNode {
                 dragnet.repaint();
                 getPatchView().getCanvas().getLayer().removeChild(dragnet);
                 dragnet = null;
-                Net n = null;
                 if (dragtarget == null) {
                     if (!PIoletAbstract.this.getBoundsReference().contains(globalToLocal(e.getPosition()))) {
                         if (PIoletAbstract.this instanceof PInletInstanceView) {
                             getPatchView().getController().addMetaUndo("disconnect inlet");
-                            n = getPatchView().getController().disconnect((InletInstance) getController().getModel());
+                            getPatchView().getController().disconnect((InletInstance) getController().getModel());
                         } else {
                             getPatchView().getController().addMetaUndo("disconnect outlet");
-                            n = getPatchView().getController().disconnect((OutletInstance) getController().getModel());
+                            getPatchView().getController().disconnect((OutletInstance) getController().getModel());
                         }
                     }
                 } else {
                     if (PIoletAbstract.this instanceof PInletInstanceView) {
                         if (dragtarget instanceof PInletInstanceView) {
                             getPatchView().getController().addMetaUndo("connect");
-                            n = getPatchView().getController().AddConnection(
-                                (InletInstance) getController().getModel(),
+                            getPatchView().getController().AddConnection(
+                                    (InletInstance) getController().getModel(),
                                 (InletInstance) ((PInletInstanceView) dragtarget).getController().getModel());
                         } else if (dragtarget instanceof POutletInstanceView) {
                             getPatchView().getController().addMetaUndo("connect");
-                            n = getPatchView().getController().AddConnection(
-                                (InletInstance) getController().getModel(),
+                            getPatchView().getController().AddConnection(
+                                    (InletInstance) getController().getModel(),
                                 (OutletInstance) ((POutletInstanceView) dragtarget).getController().getModel());
                         }
                     } else if (PIoletAbstract.this instanceof POutletInstanceView) {
                         if (dragtarget instanceof PInletInstanceView) {
                             getPatchView().getController().addMetaUndo("connect");
-                            n = getPatchView().getController().AddConnection(
-                                (InletInstance) ((PInletInstanceView) dragtarget).getController().getModel(),
+                            getPatchView().getController().AddConnection(
+                                    (InletInstance) ((PInletInstanceView) dragtarget).getController().getModel(),
                                 (OutletInstance) ((POutletInstanceView) PIoletAbstract.this).getController().getModel());
                         }
                     }

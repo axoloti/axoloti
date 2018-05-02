@@ -853,38 +853,50 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return null;
     }
 
-    public Net disconnect(InletInstance inlet) {
+    /**
+     * Disconnect inlet, remove net if there are no other connections left
+     *
+     * @param inlet
+     * @return true if successful
+     */
+    public boolean disconnect(InletInstance inlet) {
         NetController n = getNetFromIolet(inlet);
-        inlet.setConnected(false);
-        if (n != null) {
-            if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
-                delete(n);
-            } else {
-                n.disconnect(inlet);
-            }
+        if (n == null) {
+            return false;
         }
-        return null;
+        if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
+            delete(n);
+        } else {
+            n.disconnect(inlet);
+        }
+        return true;
     }
 
-    public Net disconnect(OutletInstance outlet) {
+    /**
+     * Disconnect outlet, remove net if there are no other connections left
+     *
+     * @param outlet
+     * @return true if successful
+     */
+    public boolean disconnect(OutletInstance outlet) {
         NetController n = getNetFromIolet(outlet);
-        outlet.setConnected(false);
-        if (n != null) {
-            if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
-                delete(n);
-            } else {
-                n.disconnect(outlet);
-            }
+        if (n == null) {
+            return false;
         }
-        return null;
+        if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
+            delete(n);
+        } else {
+            n.disconnect(outlet);
+        }
+        return true;
     }
 
     public void delete(NetController n) {
         for (InletInstance io : n.getModel().getDestinations()) {
-            io.setConnected(false);
+            io.getControllerFromModel().changeConnected(false);
         }
         for (OutletInstance oi : n.getModel().getSources()) {
-            oi.setConnected(false);
+            oi.getControllerFromModel().changeConnected(false);
         }
         removeUndoableElementFromList(PatchModel.PATCH_NETS, n.getModel());
     }

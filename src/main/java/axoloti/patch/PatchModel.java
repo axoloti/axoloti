@@ -38,8 +38,8 @@ import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.preferences.Preferences;
 import axoloti.patch.object.parameter.preset.Preset;
+import axoloti.preferences.Preferences;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
 import axoloti.property.ListProperty;
@@ -777,6 +777,32 @@ public class PatchModel extends AbstractModel {
             Modulators = new ArrayList<>();
         }
         Modulators.add(m);
+    }
+
+    public void sanityCheck() {
+        List<IAxoObjectInstance> objs = getObjectInstances();
+        for (IAxoObjectInstance obj : objs) {
+            if (obj.getParent() != this) {
+                throw new Error("object parent is not patch");
+            }
+        }
+        for (Net n : getNets()) {
+            if (n.getParent() != this) {
+                throw new Error("object parent is not patch");
+            }
+            for (InletInstance i : n.getDestinations()) {
+                IAxoObjectInstance o = i.getParent();
+                if (!objs.contains(o)) {
+                    throw new Error("net inlet is not in patch");
+                }
+            }
+            for (OutletInstance i : n.getSources()) {
+                IAxoObjectInstance o = i.getParent();
+                if (!objs.contains(o)) {
+                    throw new Error("net outlet is not in patch");
+                }
+            }
+        }
     }
 
     AxoAttributeComboBox attrMidiChannel = new AxoAttributeComboBox("midichannel",

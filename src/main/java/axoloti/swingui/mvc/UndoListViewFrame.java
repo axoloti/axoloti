@@ -35,7 +35,7 @@ public class UndoListViewFrame extends AJFrame implements IView, DocumentWindow 
     private void initComponents2() {
         setJMenuBar(new StandardMenubar(controller.getDocumentRoot()));
         jTable1.setModel(new AbstractTableModel() {
-            private final String[] columnNames = {"Name", "Hash", "old value", "new value"};
+            private final String[] columnNames = {"Name", "Hash", "object", "old value", "new value"};
 
             @Override
             public String getColumnName(int column) {
@@ -75,12 +75,20 @@ public class UndoListViewFrame extends AJFrame implements IView, DocumentWindow 
                     case 2:
                         if (e instanceof UndoablePropertyChange) {
                             UndoablePropertyChange upc = (UndoablePropertyChange) e;
-                            Object val = upc.getOldValue();
+                            Object val = upc.getController().getModel();
                             return (val != null) ? val.toString() : "null";
                         } else {
                             return "";
                         }
                     case 3:
+                        if (e instanceof UndoablePropertyChange) {
+                            UndoablePropertyChange upc = (UndoablePropertyChange) e;
+                            Object val = upc.getOldValue();
+                            return (val != null) ? val.toString() : "null";
+                        } else {
+                            return "";
+                        }
+                    case 4:
                         if (e instanceof UndoablePropertyChange) {
                             UndoablePropertyChange upc = (UndoablePropertyChange) e;
                             Object val = upc.getNewValue();
