@@ -80,11 +80,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         super(patchView);
         this.controller = controller;
         titleBar = new PatchPNode(patchView);
-        initComponent();
-    }
-
-    private void initComponent() {
-        setVisible(false);
+        initComponents();
     }
 
     @Override
@@ -136,6 +132,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         });
 
         setPaint(Theme.getCurrentTheme().Object_Default_Background);
+        setVisible(false);
     }
 
     JPopupMenu CreatePopupMenu() {
