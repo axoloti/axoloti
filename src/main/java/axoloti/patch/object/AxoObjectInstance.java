@@ -514,14 +514,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
         @Override
         protected void removeView(OutletInstance view) {
-            System.out.println("goddit");
-            PatchModel pm = getParent();
-            if (pm != null) {
-                pm.getControllerFromModel().disconnect(view);
-            } else {
-                System.out.println("AxoObjectInstance : not in a patch?");
-                // it is probably in the objectselector, in which case this is not a problem
-            }
             view.dispose();
         }
     };
@@ -540,14 +532,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
         @Override
         protected void removeView(InletInstance view) {
-            System.out.println("goddit");
-            PatchModel pm = getParent();
-            if (pm != null) {
-                pm.getControllerFromModel().disconnect(view);
-            } else {
-                System.out.println("AxoObjectInstance : not in a patch?");
-                // it is probably in the objectselector, in which case this is not a problem
-            }
             view.dispose();
         }
     };

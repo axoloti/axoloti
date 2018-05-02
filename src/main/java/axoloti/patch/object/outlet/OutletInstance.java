@@ -19,6 +19,7 @@ package axoloti.patch.object.outlet;
 
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.outlet.Outlet;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.atom.AtomInstance;
 import axoloti.patch.object.iolet.IoletInstance;
@@ -69,4 +70,21 @@ public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
     public boolean isSource() {
         return true;
     }
+
+    @Override
+    public void dispose() {
+        IAxoObjectInstance oi = getParent();
+        if (oi == null) {
+            System.out.println("AxoObjectInstance : not in an object?");
+            return;
+        }
+        PatchModel pm = oi.getParent();
+        if (pm == null) {
+            System.out.println("AxoObjectInstance : not in a patch?");
+            // it is probably in the objectselector, in which case this is not a problem
+            return;
+        }
+        pm.getControllerFromModel().disconnect(this);
+    }
+
 }

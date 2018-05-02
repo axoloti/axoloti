@@ -19,6 +19,7 @@ package axoloti.patch.object.inlet;
 
 import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.inlet.Inlet;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.iolet.IoletInstance;
 import org.simpleframework.xml.Attribute;
@@ -67,6 +68,22 @@ public class InletInstance<T extends Inlet> extends IoletInstance<T> {
     @Override
     public boolean isSource() {
         return false;
+    }
+
+    @Override
+    public void dispose() {
+        IAxoObjectInstance oi = getParent();
+        if (oi == null) {
+            System.out.println("AxoObjectInstance : not in an object?");
+            return;
+        }
+        PatchModel pm = oi.getParent();
+        if (pm == null) {
+            System.out.println("AxoObjectInstance : not in a patch?");
+            // it is probably in the objectselector, in which case this is not a problem
+            return;
+        }
+        pm.getControllerFromModel().disconnect(this);
     }
 
 }

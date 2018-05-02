@@ -283,7 +283,7 @@ public class PatchModelTest {
      * Create net, delete inlet, net should be gone
      */
     @Test
-    public void testNets1() {
+    public void testNetDisconnectsWhenInletIsDeleted() {
         PatchModel patch = new PatchModel();
 
         IAxoObject obj_1 = new AxoObject("obj", "description");
@@ -301,10 +301,59 @@ public class PatchModelTest {
         patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
 
         assertThat(patch.getNets().size(), equalTo(1));
+        obj_1.getControllerFromModel().removeInlet(inlet);
+        assertThat(patch.getNets().size(), equalTo(0));
+    }
 
-        obj_2.getControllerFromModel().removeInlet(inlet);
+    /**
+     * Create net, delete outlet, net should be gone
+     */
+    @Test
+    public void testNetDisconnectsWhenOutletIsDeleted() {
+        PatchModel patch = new PatchModel();
 
-        // TODO: fails
+        IAxoObject obj_1 = new AxoObject("obj", "description");
+        Inlet inlet = new InletFrac32("in", "");
+        obj_1.getControllerFromModel().addInlet(inlet);
+        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        InletInstance inleti_1 = obji_1.getInletInstances().get(0);
+
+        IAxoObject obj_2 = new AxoObject("obj", "description");
+        Outlet outlet = new OutletFrac32("out", "");
+        obj_2.getControllerFromModel().addOutlet(outlet);
+        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        OutletInstance outleti_1 = obji_2.getOutletInstances().get(0);
+
+        patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
+
+        assertThat(patch.getNets().size(), equalTo(1));
+        obj_2.getControllerFromModel().removeOutlet(outlet);
+        assertThat(patch.getNets().size(), equalTo(0));
+    }
+
+    /**
+     * Create net, delete object, net should be gone
+     */
+    @Test
+    public void testNetDisconnectsWhenObjectIsDeleted() {
+        PatchModel patch = new PatchModel();
+
+        IAxoObject obj_1 = new AxoObject("obj", "description");
+        Inlet inlet = new InletFrac32("in", "");
+        obj_1.getControllerFromModel().addInlet(inlet);
+        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        InletInstance inleti_1 = obji_1.getInletInstances().get(0);
+
+        IAxoObject obj_2 = new AxoObject("obj", "description");
+        Outlet outlet = new OutletFrac32("out", "");
+        obj_2.getControllerFromModel().addOutlet(outlet);
+        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        OutletInstance outleti_1 = obji_2.getOutletInstances().get(0);
+
+        patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
+
+        assertThat(patch.getNets().size(), equalTo(1));
+        patch.getControllerFromModel().delete(obji_2);
         assertThat(patch.getNets().size(), equalTo(0));
     }
 
