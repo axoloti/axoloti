@@ -81,7 +81,7 @@ import org.simpleframework.xml.strategy.Strategy;
 @Root
 public class PatchModel extends AbstractModel {
 
-    //TODO (enhancement) use execution order, rather than UI ordering
+    //TODO: (enhancement) use execution order, rather than UI ordering
     static final boolean USE_EXECUTION_ORDER = false;
 
     @Attribute(required = false)

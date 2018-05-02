@@ -94,6 +94,10 @@ public class USBBulkConnection_v2 extends IConnection {
 
     @Override
     public void setPatch(PatchViewLive patchViewCodegen) {
+        if ((patchViewCodegen == null)
+                && (this.patch != null)) {
+            patch.dispose();
+        }
         this.patch = patchViewCodegen;
     }
 

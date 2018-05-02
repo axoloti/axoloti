@@ -176,7 +176,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         }
          */
         getModel().CreateIID();
-        //TODO - use execution order, rather than UI ordering
+        //TODO: (enhancement) use execution order, rather than UI ordering
         if (USE_EXECUTION_ORDER) {
             getModel().SortByExecution();
         } else {
@@ -325,7 +325,8 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     public IAxoObjectInstance addObjectInstance(IAxoObject obj, Point loc) {
-        if (!isLocked()) {
+        if (true) {
+            /*!isLocked()) {*/
 
             if (obj == null) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "AddObjectInstance NULL");

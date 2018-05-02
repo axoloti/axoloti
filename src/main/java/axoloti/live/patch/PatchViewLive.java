@@ -19,11 +19,13 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDFileReference;
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import qcmds.QCmdChangeWorkingDirectory;
 import qcmds.QCmdCompileModule;
 import qcmds.QCmdCompilePatch;
@@ -54,6 +56,16 @@ public class PatchViewLive extends View<PatchController> {
             c.addView(v1);
             parameterInstanceViews.add(v1);
         }
+        controller.addView(this);
+        // only after view is added...
+        // but disabled for now... testing invited!
+        // enableAutoRecompile();
+    }
+
+    boolean auto_recompile = false;
+
+    void enableAutoRecompile() {
+        auto_recompile = true;
     }
 
     public void distributeDataToDisplays(ByteBuffer dispData) {
@@ -63,12 +75,59 @@ public class PatchViewLive extends View<PatchController> {
         }
     }
 
+    ReschedulableTimer timerTask;
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        dispose();
+                        if (timerTask != null) {
+                            timerTask.purge();
+                        }
+                        System.out.println("do recompile...");
+                        GoLive(getController().getModel());
+                    }
+                });
+            } catch (InterruptedException ex) {
+                Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    };
+
+    public void scheduleRecompile() {
+        if (timerTask == null) {
+            timerTask = new ReschedulableTimer();
+            timerTask.schedule(runnable, 1000 /* milliseconds */);
+        } else {
+            timerTask.reschedule(1000 /* milliseconds */);
+        }
+    }
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+        if (!auto_recompile) {
+            return;
+        }
+        if (PatchModel.PATCH_NETS.is(evt)
+                || PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
+            scheduleRecompile();
+        }
+        // TODO: (enhancement) auto-recompile: add views to trigger recompilation on changing attributes, nets, and object changes
+
     }
 
     @Override
     public void dispose() {
+        for (ParameterInstanceLiveView pilv : parameterInstanceViews) {
+            pilv.getController().removeView(pilv);
+        }
+        getController().removeView(this);
     }
 
     public List<ParameterInstanceLiveView> getParameterInstances() {
@@ -76,10 +135,15 @@ public class PatchViewLive extends View<PatchController> {
     }
 
     static public void GoLive(PatchModel patchModel) {
-
         PatchController patchController = patchModel.getControllerFromModel();
         QCmdProcessor qCmdProcessor = QCmdProcessor.getQCmdProcessor();
 
+        CConnection.GetConnection().setPatch(null);
+        try {
+            qCmdProcessor.WaitQueueFinished();
+        } catch (Exception ex) {
+            Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, null, ex);
+        }
         qCmdProcessor.AppendToQueue(new QCmdStop());
         if (CConnection.GetConnection().GetSDCardPresent()) {
 

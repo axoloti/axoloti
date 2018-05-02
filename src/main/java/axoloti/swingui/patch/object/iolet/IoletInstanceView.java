@@ -158,7 +158,8 @@ public abstract class IoletInstanceView<T extends IoletInstanceController> exten
                     e.consume();
                     return;
                 }
-                if (!axoObj.isLocked()) {
+                if (true) {
+                    /*!axoObj.isLocked()) {*/
                     Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), pv.objectLayerPanel);
                     Component c = pv.objectLayerPanel.findComponentAt(p);
                     while ((c != null) && !(c instanceof IoletInstanceView)) {
