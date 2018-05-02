@@ -20,6 +20,7 @@ package axoloti.object;
 import axoloti.abstractui.PatchView;
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.mvc.AbstractDocumentRoot;
+import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.display.Display;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
@@ -79,6 +80,9 @@ public class AxoObjectFromPatch extends AxoObject {
         outlets = o.getOutlets();
         params = o.getParameters();
 
+        for (AxoAttribute a : attributes) {
+            a.setParent(this);
+        }
         for (Inlet i : inlets) {
             i.setParent(this);
         }

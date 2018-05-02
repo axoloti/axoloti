@@ -25,7 +25,6 @@ import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
-import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.patch.net.Net;
 import axoloti.patch.object.AxoObjectInstance;
@@ -973,17 +972,13 @@ public class PatchModel extends AbstractModel {
         AxoObjectInstancePatcher aoip = getParent();
         if (aoip != null) {
             AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
-            ArrayList<AxoAttribute> ps = new ArrayList<>(aop.getAttributes());
             if (mode == SubPatchMode.polyphonic
                     || mode == SubPatchMode.polychannel
                     || mode == SubPatchMode.polyexpression) {
-                if (!ps.contains(attrPoly)) {
-                    ps.add(attrPoly);
-                }
+                aop.getControllerFromModel().addAttribute(attrPoly);
             } else {
-                ps.remove(attrPoly);
+                aop.getControllerFromModel().removeAttribute(attrPoly);
             }
-            aop.setAttributes(ps);
         }
         firePropertyChange(
                 PATCH_SUBPATCHMODE,
@@ -1072,23 +1067,15 @@ public class PatchModel extends AbstractModel {
         AxoObjectInstancePatcher aoip = getParent();
         if (aoip != null) {
             AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
-            ArrayList<AxoAttribute> ps = new ArrayList<>(aop.getAttributes());
             if (b) {
-                if (!ps.contains(attrMidiChannel)) {
-                    ps.add(attrMidiChannel);
-                }
-                if (!ps.contains(attrMidiPort)) {
-                    ps.add(attrMidiPort);
-                }
-                if (!ps.contains(attrMidiDevice)) {
-                    ps.add(attrMidiDevice);
-                }
+                aop.getControllerFromModel().addAttribute(attrMidiChannel);
+                aop.getControllerFromModel().addAttribute(attrMidiPort);
+                aop.getControllerFromModel().addAttribute(attrMidiDevice);
             } else {
-                ps.remove(attrMidiChannel);
-                ps.remove(attrMidiPort);
-                ps.remove(attrMidiDevice);
+                aop.getControllerFromModel().removeAttribute(attrMidiChannel);
+                aop.getControllerFromModel().removeAttribute(attrMidiPort);
+                aop.getControllerFromModel().removeAttribute(attrMidiDevice);
             }
-            aop.setAttributes(ps);
         }
         firePropertyChange(
                 PATCH_MIDISELECTOR,

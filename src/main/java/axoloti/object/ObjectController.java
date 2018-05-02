@@ -2,6 +2,7 @@ package axoloti.object;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
+import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
@@ -24,6 +25,15 @@ public class ObjectController extends AbstractController<IAxoObject, IView, Abst
 
     public void removeParameter(Parameter parameter) {
         removeUndoableElementFromList(AxoObject.OBJ_PARAMETERS, parameter);
+    }
+
+    public void addAttribute(AxoAttribute attribute) {
+        attribute.setParent((AxoObject) getModel());
+        addUndoableElementToList(AxoObject.OBJ_ATTRIBUTES, attribute);
+    }
+
+    public void removeAttribute(AxoAttribute parameter) {
+        removeUndoableElementFromList(AxoObject.OBJ_ATTRIBUTES, parameter);
     }
 
     public void addInlet(Inlet inlet) {
