@@ -52,7 +52,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
             Logger.getLogger(AttributeInstanceObjRef.class.getName()).log(Level.SEVERE, "incomplete object reference attribute");
         }
         String o2 = "parent->";
-        /* FIXME
+        /* FIXME: object references to object in parent patch...
          if ((o.length() > 3) && (o.substring(0, 3).equals("../"))
          && ((getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polyphonic)
          || (getObjectInstance().getPatchModel().getSettings().subpatchmode == SubPatchMode.polychannel)

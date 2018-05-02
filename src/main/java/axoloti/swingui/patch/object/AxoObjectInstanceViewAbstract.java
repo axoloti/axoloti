@@ -43,7 +43,9 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceController> implements MouseListener, MouseMotionListener, IAxoObjectInstanceView {
+public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceController>
+        implements MouseListener, MouseMotionListener, // TODO: code cleanup: move MouseListener, MouseMotionListener into mouseAdapter
+        IAxoObjectInstanceView {
 
     protected final JPanel titlebar = new JPanel();
     protected LabelComponent instanceLabel;

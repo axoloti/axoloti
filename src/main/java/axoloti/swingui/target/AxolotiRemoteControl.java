@@ -171,7 +171,7 @@ public class AxolotiRemoteControl extends TJFrame {
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
-                                (byte) 0 /*todo modifiers*/,
+                                (byte) 0, // TODO: (low priority) implement modifiers (shift)
                                 (byte) ticks,
                                 VirtualInputEvent.QUADRANT_TOPLEFT
                         )
@@ -185,7 +185,7 @@ public class AxolotiRemoteControl extends TJFrame {
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
-                                (byte) 0 /*todo modifiers*/,
+                                (byte) 0, // TODO: (low priority) implement modifiers (shift)
                                 (byte) ticks,
                                 VirtualInputEvent.QUADRANT_BOTTOMLEFT
                         )
@@ -199,7 +199,7 @@ public class AxolotiRemoteControl extends TJFrame {
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
-                                (byte) 0 /*todo modifiers*/,
+                                (byte) 0, // TODO: (low priority) implement modifiers (shift)
                                 (byte) ticks,
                                 VirtualInputEvent.QUADRANT_TOPRIGHT
                         )
@@ -213,7 +213,7 @@ public class AxolotiRemoteControl extends TJFrame {
                 processor.AppendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
-                                (byte) 0 /*todo modifiers*/,
+                                (byte) 0, // TODO: (low priority) implement modifiers (shift)
                                 (byte) ticks,
                                 VirtualInputEvent.QUADRANT_BOTTOMRIGHT
                         )

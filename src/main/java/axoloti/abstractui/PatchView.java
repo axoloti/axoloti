@@ -361,7 +361,7 @@ public abstract class PatchView extends View<PatchController> {
     }
 
     public void ShowPreset(int i) {
-        // TODO: reconstruct preset logic
+        // TODO: fix preset logic
         /*
          ArrayList<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
          for (IAxoObjectInstanceView o : objectInstanceViewsClone) {

@@ -59,7 +59,11 @@ public class PatchViewLive extends View<PatchController> {
         controller.addView(this);
         // only after view is added...
         // but disabled for now... testing invited!
+
         // enableAutoRecompile();
+        //
+        // currently only triggers on adding/deleting nets, and adding/deleting objects
+        // TODO: auto-recompile: add views to trigger recompilation on changing attributes, nets, and object changes
     }
 
     boolean auto_recompile = false;
@@ -118,7 +122,6 @@ public class PatchViewLive extends View<PatchController> {
                 || PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
             scheduleRecompile();
         }
-        // TODO: (enhancement) auto-recompile: add views to trigger recompilation on changing attributes, nets, and object changes
 
     }
 

@@ -149,7 +149,7 @@ public class PatchBankModel extends AbstractModel {
         if (!f.isFile() || !f.canRead()) {
             return;
         }
-        // todo: do this without swingui references
+        // TODO: avoid swingui references
         PatchFrame pf = PatchViewSwing.OpenPatchInvisible(f);
         if (pf != null) {
             boolean isVisible = pf.isVisible();

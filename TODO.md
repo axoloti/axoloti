@@ -1,4 +1,4 @@
-This branch migrates from Chibios 2.6.x to 16.1.x
+This branch migrates from Chibios 2.6.x to 18.x
 This heavily impacts the usb device stack, moving from byte queues to the synchronous buffer API.
 
 * Note: the MIDI function call API changed from

@@ -23,7 +23,6 @@ public class ParameterInstanceLiveView extends View<ParameterInstanceController>
         return getController().getModel();
     }
 
-    // TODO: move everything related to target interaction to package axoloti.live.*
     public byte[] TXData() {
         needsTransmit = false;
         byte[] data = new byte[14];

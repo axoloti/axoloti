@@ -111,10 +111,10 @@ public class PatchModel extends AbstractModel {
 
     Integer dspLoad = 0;
 
-// TODO: fix "controller object"
-    // a "controller object" is magically added to evey top-level patch
+// TODO: fix "controller object" (and make private)
+    // a "controller object" is magically added to every top-level patch
     // (configured in preferences)
-    public IAxoObjectInstance controllerObjectInstance; // TODO: make private
+    public IAxoObjectInstance controllerObjectInstance;
 
     public boolean presetUpdatePending = false;
 
