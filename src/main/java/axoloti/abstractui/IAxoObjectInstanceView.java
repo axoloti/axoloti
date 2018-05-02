@@ -13,46 +13,46 @@ import javax.swing.JComponent;
 
 public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> {
 
-    public IAxoObjectInstance getModel();
+    IAxoObjectInstance getModel();
 
-    public void Lock();
+    void Lock();
 
-    public void Unlock();
+    void Unlock();
 
-    public boolean isLocked();
+    boolean isLocked();
 
-    public PatchView getPatchView();
+    PatchView getPatchView();
 
-    public PatchModel getPatchModel();
+    PatchModel getPatchModel();
 
-    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance);
+    IIoletInstanceView getInletInstanceView(InletInstance inletInstance);
 
-    public IIoletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
+    IIoletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
 
-    public List<IIoletInstanceView> getInletInstanceViews();
+    List<IIoletInstanceView> getInletInstanceViews();
 
-    public List<IIoletInstanceView> getOutletInstanceViews();
+    List<IIoletInstanceView> getOutletInstanceViews();
 
-    public List<IParameterInstanceView> getParameterInstanceViews();
+    List<IParameterInstanceView> getParameterInstanceViews();
 
-    public void setLocation(int x, int y);
+    void setLocation(int x, int y);
 
-    public void addInstanceNameEditor();
+    void addInstanceNameEditor();
 
-    public void moveToFront();
+    void moveToFront();
 
-    public void resizeToGrid();
+    void resizeToGrid();
 
-    public Point getLocation();
+    Point getLocation();
 
-    public void repaint();
+    void repaint();
 
-    public Dimension getPreferredSize();
+    Dimension getPreferredSize();
 
-    public Dimension getSize();
+    Dimension getSize();
 
-    public JComponent getCanvas();
+    JComponent getCanvas();
 
-    public boolean isZombie();
+    boolean isZombie();
 
 }

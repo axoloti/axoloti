@@ -7,14 +7,14 @@ import java.awt.Point;
 
 public interface IIoletInstanceView extends IView<IoletInstanceController> {
 
-    public IoletInstance getModel();
+    IoletInstance getModel();
 
-    public void setHighlighted(boolean highlighted);
+    void setHighlighted(boolean highlighted);
 
-    public void repaint();
+    void repaint();
 
-    public Point getJackLocInCanvas();
+    Point getJackLocInCanvas();
 
-    public IAxoObjectInstanceView getObjectInstanceView();
+    IAxoObjectInstanceView getObjectInstanceView();
 
 }

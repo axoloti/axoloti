@@ -24,7 +24,7 @@ import org.piccolo2d.util.PPaintContext;
 public class PDropDownComponent extends PCtrlComponentAbstract {
 
     public interface DDCListener {
-        public void SelectionChanged();
+        void SelectionChanged();
     }
 
     int SelectedIndex;

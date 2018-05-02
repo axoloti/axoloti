@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface INetView extends IView<NetController> {
 
-    public void updateBounds();
+    void updateBounds();
 
-    public void setSelected(boolean selected);
+    void setSelected(boolean selected);
 
-    public boolean getSelected();
+    boolean getSelected();
 
-    public List<IIoletInstanceView> getIoletViews();
+    List<IIoletInstanceView> getIoletViews();
 
-    public void setVisible(boolean isVisible); // TODO: review
+    void setVisible(boolean isVisible); // TODO: review
 
-    public void repaint();
+    void repaint();
 }

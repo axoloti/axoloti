@@ -20,7 +20,7 @@ public class PButtonComponent extends PCtrlComponentAbstract {
 
     public interface ActListener {
 
-        public void OnPushed();
+        void OnPushed();
     }
     ArrayList<ActListener> actListeners = new ArrayList<>();
 

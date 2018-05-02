@@ -19,64 +19,64 @@ import java.util.Set;
  */
 public interface IAxoObject extends IModel {
 
-    public List<Inlet> getInlets();
+    List<Inlet> getInlets();
 
-    public List<Outlet> getOutlets();
+    List<Outlet> getOutlets();
 
-    public List<AxoAttribute> getAttributes();
+    List<AxoAttribute> getAttributes();
 
-    public List<Parameter> getParameters();
+    List<Parameter> getParameters();
 
-    public List<Display> getDisplays();
+    List<Display> getDisplays();
 
-    public String getId();
+    String getId();
 
-    public String getDescription();
+    String getDescription();
 
-    public String getAuthor();
+    String getAuthor();
 
-    public String getLicense();
+    String getLicense();
 
-    public String getHelpPatch();
+    String getHelpPatch();
 
-    public File getHelpPatchFile();
+    File getHelpPatchFile();
 
-    public String getPath();
+    String getPath();
 
-    public String getUUID();
+    String getUUID();
 
-    public String getDefaultInstanceName();
+    String getDefaultInstanceName();
 
     @Override
-    public ObjectController getControllerFromModel();
+    ObjectController getControllerFromModel();
 
-    public Set<String> getIncludes();
+    Set<String> getIncludes();
 
-    public void setIncludes(HashSet<String> includes);
+    void setIncludes(HashSet<String> includes);
 
-    public Set<String> getDepends();
+    Set<String> getDepends();
 
-    public Set<String> getModules();
+    Set<String> getModules();
 
-    public Modulator[] getModulators();
+    Modulator[] getModulators();
 
-    public boolean isCreatedFromRelativePath();
+    boolean isCreatedFromRelativePath();
 
-    public String getInitCode();
+    String getInitCode();
 
-    public String getDisposeCode();
+    String getDisposeCode();
 
-    public String getLocalData();
+    String getLocalData();
 
-    public String getKRateCode();
+    String getKRateCode();
 
-    public String getSRateCode();
+    String getSRateCode();
 
-    public String getMidiCode();
+    String getMidiCode();
 
-    public Boolean getRotatedParams();
+    Boolean getRotatedParams();
 
-    public void OpenEditor();
+    void OpenEditor();
 
-    public List<SDFileReference> getFileDepends();
+    List<SDFileReference> getFileDepends();
 }

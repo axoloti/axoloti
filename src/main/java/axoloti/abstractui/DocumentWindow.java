@@ -26,16 +26,16 @@ import java.util.List;
  */
 public interface DocumentWindow {
 
-    public void toFront();
+    void toFront();
 
-    public String getTitle();
+    String getTitle();
 
     /*
      * return true when cancelling an unsaved close
      */
-    public boolean askClose();
+    boolean askClose();
 
-    public File getFile();
+    File getFile();
 
-    public List<DocumentWindow> getChildDocuments();
+    List<DocumentWindow> getChildDocuments();
 }

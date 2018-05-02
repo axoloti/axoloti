@@ -2,9 +2,9 @@ package axoloti.piccolo.components;
 
 public interface PFocusable {
 
-    public void grabFocus();
+    void grabFocus();
 
-    public void setFocusableIndex(int index);
+    void setFocusableIndex(int index);
 
-    public int getFocusableIndex();
+    int getFocusableIndex();
 }

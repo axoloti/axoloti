@@ -7,16 +7,16 @@ import javax.swing.JPopupMenu;
 
 public interface IParameterInstanceView extends IView<ParameterInstanceController> {
 
-    public void populatePopup(JPopupMenu m);
+    void populatePopup(JPopupMenu m);
 
-    public boolean handleAdjustment();
+    boolean handleAdjustment();
 
-    public void ShowPreset(int i);
+    void ShowPreset(int i);
 
-    public void IncludeInPreset();
+    void IncludeInPreset();
 
-    public void ExcludeFromPreset();
+    void ExcludeFromPreset();
 
-    public ParameterInstance getModel();
+    ParameterInstance getModel();
 
 }

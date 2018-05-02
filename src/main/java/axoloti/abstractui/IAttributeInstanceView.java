@@ -6,12 +6,12 @@ import axoloti.patch.object.attribute.AttributeInstanceController;
 
 public interface IAttributeInstanceView extends IView<AttributeInstanceController> {
 
-    public void Lock();
+    void Lock();
 
-    public void UnLock();
+    void UnLock();
 
-    public String getName();
+    String getName();
 
-    public AttributeInstance getModel();
+    AttributeInstance getModel();
 
 }

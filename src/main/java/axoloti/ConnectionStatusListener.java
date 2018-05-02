@@ -22,6 +22,7 @@ package axoloti;
  * @author jtaelman
  */
 public interface ConnectionStatusListener {
-    public void ShowConnect();
-    public void ShowDisconnect();
+    void ShowConnect();
+
+    void ShowDisconnect();
 }

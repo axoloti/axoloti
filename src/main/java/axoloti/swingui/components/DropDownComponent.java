@@ -44,7 +44,7 @@ public class DropDownComponent extends JComponent {
 
     public interface DDCListener {
 
-        public void SelectionChanged();
+        void SelectionChanged();
     }
 
     int SelectedIndex;

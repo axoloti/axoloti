@@ -34,7 +34,7 @@ public class PopupIcon extends JComponent {
 
     public interface PopupIconListener {
 
-        public void ShowPopup();
+        void ShowPopup();
     }
 
     private PopupIconListener pl;

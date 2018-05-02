@@ -48,7 +48,7 @@ public class ButtonComponent extends JComponent {
 
     public interface ActListener {
 
-        public void OnPushed();
+        void OnPushed();
     }
     ArrayList<ActListener> actListeners = new ArrayList<>();
 

@@ -6,5 +6,5 @@ package axoloti.connection;
  */
 public interface CompletionHandler {
 
-    public abstract void done();
+    void done();
 }

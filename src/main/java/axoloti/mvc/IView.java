@@ -8,9 +8,9 @@ import java.beans.PropertyChangeEvent;
  */
 public interface IView<T extends AbstractController> {
 
-    abstract void modelPropertyChange(PropertyChangeEvent evt);
+    void modelPropertyChange(PropertyChangeEvent evt);
 
-    abstract T getController();
+    T getController();
 
     void dispose();
 }

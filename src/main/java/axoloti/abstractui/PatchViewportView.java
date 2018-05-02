@@ -5,15 +5,15 @@ import javax.swing.JScrollPane;
 
 public interface PatchViewportView {
 
-    public JComponent getComponent();
+    JComponent getComponent();
 
-    public double getViewScale();
+    double getViewScale();
 
-    public JScrollPane getScrollPane();
+    JScrollPane getScrollPane();
 
-    public void zoomIn();
+    void zoomIn();
 
-    public void zoomOut();
+    void zoomOut();
 
-    public void zoomDefault();
+    void zoomDefault();
 }

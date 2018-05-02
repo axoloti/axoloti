@@ -25,21 +25,21 @@ import java.awt.Color;
  */
 public interface DataType {
 
-    abstract boolean IsConvertableToType(DataType dest);
+    boolean IsConvertableToType(DataType dest);
 
-    abstract boolean HasDefaultValue();
+    boolean HasDefaultValue();
 
-    abstract String GenerateSetDefaultValueCode();
+    String GenerateSetDefaultValueCode();
 
-    abstract String GenerateConversionToType(DataType dest, String in);
+    String GenerateConversionToType(DataType dest, String in);
 
-    abstract String CType();
+    String CType();
 
-    abstract Color GetColor();
+    Color GetColor();
 
-    abstract String GenerateCopyCode(String dest, String source);
+    String GenerateCopyCode(String dest, String source);
 
-    abstract boolean isPointer();
+    boolean isPointer();
 
-    abstract String UnconnectedSink();
+    String UnconnectedSink();
 }

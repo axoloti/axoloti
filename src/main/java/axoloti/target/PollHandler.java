@@ -6,5 +6,5 @@ package axoloti.target;
  */
 public interface PollHandler {
 
-    public abstract void operation();
+    void operation();
 }

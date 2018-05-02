@@ -18,48 +18,48 @@ import java.util.List;
  */
 public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IModel {
 
-    public IAxoObject getType();
+    IAxoObject getType();
 
-    public String getInstanceName();
+    String getInstanceName();
 
-    public String getCInstanceName();
+    String getCInstanceName();
 
-    public String getLegalName();
+    String getLegalName();
 
-    public List<InletInstance> getInletInstances();
+    List<InletInstance> getInletInstances();
 
-    public List<OutletInstance> getOutletInstances();
+    List<OutletInstance> getOutletInstances();
 
-    public List<ParameterInstance> getParameterInstances();
+    List<ParameterInstance> getParameterInstances();
 
-    public List<AttributeInstance> getAttributeInstances();
+    List<AttributeInstance> getAttributeInstances();
 
-    public List<DisplayInstance> getDisplayInstances();
+    List<DisplayInstance> getDisplayInstances();
 
-    public InletInstance findInletInstance(String n);
+    InletInstance findInletInstance(String n);
 
-    public OutletInstance findOutletInstance(String n);
+    OutletInstance findOutletInstance(String n);
 
-    public int getX();
+    int getX();
 
-    public int getY();
+    int getY();
 
-    public Boolean getSelected();
+    Boolean getSelected();
 
     @Override
-    public PatchModel getParent();
+    PatchModel getParent();
 
-    public Point getLocation();
+    Point getLocation();
 
-    public void setLocation(Point p);
+    void setLocation(Point p);
 
-    public List<SDFileReference> getFileDepends();
+    List<SDFileReference> getFileDepends();
 
-    public boolean isTypeWasAmbiguous();
+    boolean isTypeWasAmbiguous();
 
-    public boolean setInstanceName(String InstanceName);
+    boolean setInstanceName(String InstanceName);
 
-    public IAxoObject resolveType(String directory);
+    IAxoObject resolveType(String directory);
 
     void setParent(PatchModel patchModel);
 
