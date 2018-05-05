@@ -91,46 +91,47 @@ typedef struct ui_object {
             return "";
         }
         count[0]++;
-        String s = "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getModel().getInstanceName(), CodeGeneration.param_name_length)
-                + ", nparams : " + nparams;
+        StringBuilder s = new StringBuilder(
+            "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getModel().getInstanceName(), CodeGeneration.param_name_length)
+            + ", nparams : " + nparams);
         if (nparams > 0) {
-            s += ", params : &params[" + parameterInstances.get(0).getIndex() + "]";
-            s += ", param_names : &param_names[" + parameterInstances.get(0).getIndex() + "]";
+            s.append(", params : &params[" + parameterInstances.get(0).getIndex() + "]");
+            s.append(", param_names : &param_names[" + parameterInstances.get(0).getIndex() + "]");
         } else {
-            s += ", params : 0";
-            s += ", param_names : 0";
+            s.append(", params : 0");
+            s.append(", param_names : 0");
         }
 
         if (ndisplays > 0) {
-            s += ", ndisplays : " + ndisplays
-                    + ", displays : &display_metas[" + displayInstances.get(0).getIndex() + "]";
+            s.append(", ndisplays : " + ndisplays
+                     + ", displays : &display_metas[" + displayInstances.get(0).getIndex() + "]");
         } else {
-            s += ", ndisplays : 0"
-                    + ", displays : 0";
+            s.append(", ndisplays : 0"
+                     + ", displays : 0");
         }
-        s += ", nobjects : 0" // TBC
-                + ", objects : 0";
-        s += "},\n";
-        return s;
+        s.append(", nobjects : 0" // TBC
+                 + ", objects : 0");
+        s.append("},\n");
+        return s.toString();
     }
 
     @Override
     public String GenerateInitCodePlusPlus(String classname, boolean enableOnParent) {
-        String c = "";
+        StringBuilder c = new StringBuilder();
 //        if (hasStruct())
-//            c = "  void " + GenerateInitFunctionName() + "(" + GenerateStructName() + " * x ) {\n";
+//            c = new StringBuilder("  void " + GenerateInitFunctionName() + "(" + GenerateStructName() + " * x ) {\n");
 //        else
 //        if (!classname.equals("one"))
-//        c += "parent = _parent;\n";
+//        c.append("parent = _parent;\n");
         for (ParameterInstanceView p : parameterInstances) {
             if (p.getModel().getModel().PropagateToChild != null) {
-                c += "// on Parent: propagate " + p.getModel().getName() + " " + enableOnParent + " " + getModel().getLegalName() + "" + p.getModel().getModel().PropagateToChild + "\n";
-                c += p.PExName("parent->") + ".pfunction = PropagateToSub;\n";
-                c += p.PExName("parent->") + ".d.frac.finalvalue = (int32_t)(&(parent->instance"
-                        + getModel().getLegalName() + "_i.params[instance" + getModel().getLegalName() + "::PARAM_INDEX_"
-                        + p.getModel().getModel().PropagateToChild + "]));\n";
+                c.append("// on Parent: propagate " + p.getModel().getName() + " " + enableOnParent + " " + getModel().getLegalName() + "" + p.getModel().getModel().PropagateToChild + "\n");
+                c.append(p.PExName("parent->") + ".pfunction = PropagateToSub;\n");
+                c.append(p.PExName("parent->") + ".d.frac.finalvalue = (int32_t)(&(parent->instance"
+                         + getModel().getLegalName() + "_i.params[instance" + getModel().getLegalName() + "::PARAM_INDEX_"
+                         + p.getModel().getModel().PropagateToChild + "]));\n");
             }
-            c += p.getModel().GenerateCodeInitModulator("parent->", "");
+            c.append(p.getModel().GenerateCodeInitModulator("parent->", ""));
             //           if ((p.getOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
@@ -140,30 +141,30 @@ typedef struct ui_object {
             //         }
         }
         for (DisplayInstanceView p : displayInstances) {
-            c += p.GenerateCodeInit("");
+            c.append(p.GenerateCodeInit(""));
         }
         if (getModel().getType().getInitCode() != null) {
             String s = getModel().getType().getInitCode();
             for (AttributeInstance p : getModel().getAttributeInstances()) {
                 s = s.replace(p.GetCName(), p.CValue());
             }
-            c += s + "\n";
+            c.append(s + "\n");
         }
-        String d = "  public: void Init(" + classname + " * parent";
+        StringBuilder d = new StringBuilder("  public: void Init(" + classname + " * parent");
         if (!displayInstances.isEmpty()) {
             for (DisplayInstanceView p : displayInstances) {
                 if (p.getModel().getModel().getLength() > 0) {
-                    d += ",\n";
+                    d.append(",\n");
                     if (p.getModel().getModel().getDatatype().isPointer()) {
-                        d += p.getModel().getModel().getDatatype().CType() + " " + p.GetCName();
+                        d.append(p.getModel().getModel().getDatatype().CType() + " " + p.GetCName());
                     } else {
-                        d += p.getModel().getModel().getDatatype().CType() + " & " + p.GetCName();
+                        d.append(p.getModel().getModel().getDatatype().CType() + " & " + p.GetCName());
                     }
                 }
             }
         }
-        d += ") {\n" + c + "}\n";
-        return d;
+        d.append(") {\n" + c.toString() + "}\n");
+        return d.toString();
     }
 
     @Override
@@ -234,50 +235,49 @@ typedef struct ui_object {
     }
 
     public String GenerateDoFunctionPlusPlus(String ClassName, String OnParentAccess, Boolean enableOnParent) {
-        String s;
+        StringBuilder s = new StringBuilder("  public: void dsp (" + ClassName + " * parent");
         boolean comma = true;
-        s = "  public: void dsp (" + ClassName + " * parent";
         for (InletInstance i : getModel().getInletInstances()) {
             if (comma) {
-                s += ",\n";
+                s.append(",\n");
             }
-            s += "const " + i.getDataType().CType() + " " + i.getModel().GetCName();
+            s.append("const " + i.getDataType().CType() + " " + i.getModel().GetCName());
             comma = true;
         }
         for (OutletInstance i : getModel().getOutletInstances()) {
             if (comma) {
-                s += ",\n";
+                s.append(",\n");
             }
-            s += i.getDataType().CType() + " & " + i.getModel().GetCName();
+            s.append(i.getDataType().CType() + " & " + i.getModel().GetCName());
             comma = true;
         }
         for (ParameterInstance i : getModel().getParameterInstances()) {
             if (i.getModel().PropagateToChild == null) {
                 if (comma) {
-                    s += ",\n";
+                    s.append(",\n");
                 }
-                s += i.getModel().CType() + " " + i.GetCName();
+                s.append(i.getModel().CType() + " " + i.GetCName());
                 comma = true;
             }
         }
         for (DisplayInstanceView i : displayInstances) {
             if (i.getModel().getModel().getLength() > 0) {
                 if (comma) {
-                    s += ",\n";
+                    s.append(",\n");
                 }
                 if (i.getModel().getModel().getDatatype().isPointer()) {
-                    s += i.getModel().getModel().getDatatype().CType() + " " + i.GetCName();
+                    s.append(i.getModel().getModel().getDatatype().CType() + " " + i.GetCName());
                 } else {
-                    s += i.getModel().getModel().getDatatype().CType() + " & " + i.GetCName();
+                    s.append(i.getModel().getModel().getDatatype().CType() + " & " + i.GetCName());
                 }
                 comma = true;
             }
         }
-        s += "  ){\n";
-        s += GenerateKRateCodePlusPlus("", enableOnParent, OnParentAccess);
-        s += GenerateSRateCodePlusPlus("", enableOnParent, OnParentAccess);
-        s += "}\n";
-        return s;
+        s.append("  ){\n");
+        s.append(GenerateKRateCodePlusPlus("", enableOnParent, OnParentAccess));
+        s.append(GenerateSRateCodePlusPlus("", enableOnParent, OnParentAccess));
+        s.append("}\n");
+        return s.toString();
     }
 
     public final static String MidiHandlerFunctionHeader = "void MidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n";
@@ -285,16 +285,14 @@ typedef struct ui_object {
     public String GenerateInstanceDataDeclaration2() {
         String c = "";
         if (getModel().getType().getLocalData() != null) {
-            String s = getModel().getType().getLocalData();
-            s = s.replaceAll("attr_parent", getModel().getCInstanceName());
-            c += s + "\n";
+            c = getModel().getType().getLocalData()
+                .replaceAll("attr_parent", getModel().getCInstanceName()) + "\n";
         }
         return c;
     }
 
     public String GenerateInstanceCodePlusPlus(String classname, boolean enableOnParent) {
-        String c = "";
-        c += GenerateInstanceDataDeclaration2();
+        String c = GenerateInstanceDataDeclaration2();
         for (AttributeInstance p : getModel().getAttributeInstances()) {
             if (p.CValue() != null) {
                 c = c.replaceAll(p.GetCName(), p.CValue());
@@ -305,23 +303,23 @@ typedef struct ui_object {
 
     @Override
     public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
-        String s = "";
-        s += "class " + getModel().getCInstanceName() + "{\n";
-        s += "  public: // v1\n";
-        s += GenerateInstanceCodePlusPlus(ClassName, enableOnParent);
-        s += GenerateInitCodePlusPlus(ClassName, enableOnParent);
-        s += GenerateDisposeCodePlusPlus(ClassName);
-        s += GenerateDoFunctionPlusPlus(ClassName, OnParentAccess, enableOnParent);
+        StringBuilder s = new StringBuilder();
+        s.append("class " + getModel().getCInstanceName() + "{\n");
+        s.append("  public: // v1\n");
+        s.append(GenerateInstanceCodePlusPlus(ClassName, enableOnParent));
+        s.append(GenerateInitCodePlusPlus(ClassName, enableOnParent));
+        s.append(GenerateDisposeCodePlusPlus(ClassName));
+        s.append(GenerateDoFunctionPlusPlus(ClassName, OnParentAccess, enableOnParent));
         {
             String d3 = GenerateCodeMidiHandler("");
             if (!d3.isEmpty()) {
-                s += "void MidiInHandler(" + ClassName + "*parent, midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n";
-                s += d3;
-                s += "}\n";
+                s.append("void MidiInHandler(" + ClassName + "*parent, midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n");
+                s.append(d3);
+                s.append("}\n");
             }
         }
-        s += "}\n;";
-        return s;
+        s.append("}\n;");
+        return s.toString();
     }
 
     public String GenerateCodeMidiHandler(String vprefix) {

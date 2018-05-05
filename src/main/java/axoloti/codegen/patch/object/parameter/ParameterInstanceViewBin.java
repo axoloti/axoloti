@@ -32,17 +32,17 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
 // { type: param_type_frac, unit: param_unit_abstract, signals: 0, pfunction: 0, d: { frac: { finalvalue:0,  0,  0,  0,  0}}},
 //        String pname = GetUserParameterName();
         ParameterBin parameter = (ParameterBin) (getModel().getModel());
-        String s = "{ type: " + parameter.GetCType()
-                + ", unit: " + parameter.GetCUnit()
-                + ", signals: 0"
-                + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction());
         Integer v1 = (Integer) getModel().getValue();
         int v = v1;
-        s += ", d: { bin: { finalvalue: 0"
-                + ", value: " + v
-                + ", modvalue: " + v
-                + ", nbits: " + parameter.getNBits()
-                + "}}},\n";
+        String s = "{ type: " + parameter.GetCType()
+            + ", unit: " + parameter.GetCUnit()
+            + ", signals: 0"
+            + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction())
+            + ", d: { bin: { finalvalue: 0"
+            + ", value: " + v
+            + ", modvalue: " + v
+            + ", nbits: " + parameter.getNBits()
+            + "}}},\n";
         return s;
     }
 

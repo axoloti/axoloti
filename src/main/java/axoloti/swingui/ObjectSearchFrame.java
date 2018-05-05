@@ -244,7 +244,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     protected IAxoObject previewObj;
     int patchLocX;
     int patchLocY;
-    
+
     private Point snapToGrid(Point p) {
         p.x = Constants.X_GRID * (p.x / Constants.X_GRID);
         p.y = Constants.Y_GRID * (p.y / Constants.Y_GRID);
@@ -335,7 +335,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
         else {
             accepted = true;
-            jButtonAccept.setEnabled(true);            
+            jButtonAccept.setEnabled(true);
         }
         if (o != previewObj) {
             previewObj = o;
@@ -345,7 +345,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             if (jList1.getSelectedValue() != o) {
             }
             ObjectController oc = (ObjectController)o.getControllerFromModel();
-            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));            
+            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
             /*
             ObjectInstanceController c;
 
@@ -368,17 +368,17 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 String path = t.getPath() == null ? o.getPath() : t.getPath();
                 String author = t.getAuthor() == null ? o.getAuthor() : t.getAuthor();
                 String license = t.getLicense() == null ? o.getLicense() : t.getLicense();
-                String txt = description;
+                StringBuilder txt = new StringBuilder(description);
                 if ((path != null) && (!path.isEmpty())) {
-                    txt += "\n<p>\nPath: " + path;
+                    txt.append("\n<p>\nPath: " + path);
                 }
                 if ((author != null) && (!author.isEmpty())) {
-                    txt += "\n<p>\nAuthor: " + author;
+                    txt.append("\n<p>\nAuthor: " + author);
                 }
                 if ((license != null) && (!license.isEmpty())) {
-                    txt += "\n<p>\nLicense: " + license;
+                    txt.append("\n<p>\nLicense: " + license);
                 }
-                jTextPane1.setText(txt);
+                jTextPane1.setText(txt.toString());
             }
             jTextPane1.setCaretPosition(0);
         }

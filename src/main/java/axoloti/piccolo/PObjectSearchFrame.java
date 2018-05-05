@@ -95,17 +95,17 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
                 String path = t.getPath() == null ? o.getPath() : t.getPath();
                 String author = t.getAuthor() == null ? o.getAuthor() : t.getAuthor();
                 String license = t.getLicense() == null ? o.getLicense() : t.getLicense();
-                String txt = description;
+                StringBuilder txt = new StringBuilder(description);
                 if ((path != null) && (!path.isEmpty())) {
-                    txt += "\n<p>\nPath: " + path;
+                    txt.append("\n<p>\nPath: " + path);
                 }
                 if ((author != null) && (!author.isEmpty())) {
-                    txt += "\n<p>\nAuthor: " + author;
+                    txt.append("\n<p>\nAuthor: " + author);
                 }
                 if ((license != null) && (!license.isEmpty())) {
-                    txt += "\n<p>\nLicense: " + license;
+                    txt.append("\n<p>\nLicense: " + license);
                 }
-                getTextPane().setText(txt);
+                getTextPane().setText(txt.toString());
             }
             getTextPane().setCaretPosition(0);
         }

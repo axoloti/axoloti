@@ -31,17 +31,17 @@ public class CodeGeneration {
     // returns {'s','t','a','t','i'}
     // not null terminated!
     static public String CPPCharArrayStaticInitializer(String n, int length) {
-        String s = "{";
+        StringBuilder s = new StringBuilder("{");
         int i;
         int ni = (n.length() > length ? length : n.length());
         for (i = 0; i < ni; i++) {
-            s += "'" + n.charAt(i) + "',";
+            s.append("'" + n.charAt(i) + "',");
         }
         while (i < length) {
-            s += " 0 ,";
+            s.append(" 0 ,");
             i++;
         }
-        s += "}";
-        return s;
+        s.append("}");
+        return s.toString();
     }
 }

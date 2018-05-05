@@ -221,17 +221,21 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     private void initializeTooltipText() {
+        StringBuilder tooltipTextBuilder = new StringBuilder();
         if ((getType().getDescription() != null) && (!getType().getDescription().isEmpty())) {
-            tooltipText += getType().getDescription();
+            tooltipTextBuilder.append(getType().getDescription());
         }
         if ((getType().getAuthor() != null) && (!getType().getAuthor().isEmpty())) {
-            tooltipText += "<p>Author: " + getType().getAuthor();
+            tooltipTextBuilder.append("<p>Author: " + getType().getAuthor());
         }
         if ((getType().getLicense() != null) && (!getType().getLicense().isEmpty())) {
-            tooltipText += "<p>License: " + getType().getLicense();
+            tooltipTextBuilder.append("<p>License: " + getType().getLicense());
         }
         if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
-            tooltipText += "<p>Path: " + getType().getPath();
+            tooltipTextBuilder.append("<p>Path: " + getType().getPath());
+        }
+        if(tooltipTextBuilder.length() > 0) {
+            tooltipText = tooltipTextBuilder.toString();
         }
     }
 

@@ -30,61 +30,61 @@ public class PitchToNote implements NativeToReal {
 
     @Override
     public String ToReal(Value v) {
-        String s;
+        StringBuilder s = new StringBuilder();
         int n;
         double f;
         n = (int) Math.round(v.getDouble());
         f = v.getDouble() - n;
         switch ((n + 64) % 12) {
             case 0:
-                s = "C";
+                s.append("C");
                 break;
             case 1:
-                s = "C#";
+                s.append("C#");
                 break;
             case 2:
-                s = "D";
+                s.append("D");
                 break;
             case 3:
-                s = "D#";
+                s.append("D#");
                 break;
             case 4:
-                s = "E";
+                s.append("E");
                 break;
             case 5:
-                s = "F";
+                s.append("F");
                 break;
             case 6:
-                s = "F#";
+                s.append("F#");
                 break;
             case 7:
-                s = "G";
+                s.append("G");
                 break;
             case 8:
-                s = "G#";
+                s.append("G#");
                 break;
             case 9:
-                s = "A";
+                s.append("A");
                 break;
             case 10:
-                s = "A#";
+                s.append("A#");
                 break;
             case 11:
-                s = "B";
+                s.append("B");
                 break;
             default:
-                s = "error";
+                s.append("error");
         }
         int i = (n + 52) / 12;
-        s += Integer.toString(i);
+        s.append(Integer.toString(i));
         if (f > 0) {
-            s += String.format("+%02d", Math.round(f * 100));
+            s.append(String.format("+%02d", Math.round(f * 100)));
         } else if (f < 0) {
-            s += String.format("-%02d", -Math.round(f * 100));
+            s.append(String.format("-%02d", -Math.round(f * 100)));
         } else {
-            s += "   ";
+            s.append("   ");
         }
-        return s;
+        return s.toString();
     }
 
     @Override

@@ -16,18 +16,18 @@ class ParameterInstanceViewInt32 extends ParameterInstanceView {
     @Override
     public String GenerateParameterInitializer() {
         ParameterInt32 parameter = (ParameterInt32) (getModel().getModel());
-        String s = "{ type: " + parameter.GetCType()
-                + ", unit: " + parameter.GetCUnit()
-                + ", signals: 0"
-                + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction());
         Integer v1 = (Integer) getModel().getValue();
         int v = v1;
-        s += ", d: { intt: { finalvalue: 0"
-                + ", value: " + v
-                + ", modvalue: " + v
-                + ", minimum: " + parameter.getMinValue()
-                + ", maximum: " + parameter.getMaxValue()
-                + "}}},\n";
+        String s = "{ type: " + parameter.GetCType()
+            + ", unit: " + parameter.GetCUnit()
+            + ", signals: 0"
+            + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction())
+            + ", d: { intt: { finalvalue: 0"
+            + ", value: " + v
+            + ", modvalue: " + v
+            + ", minimum: " + parameter.getMinValue()
+            + ", maximum: " + parameter.getMaxValue()
+            + "}}},\n";
         return s;
     }
 

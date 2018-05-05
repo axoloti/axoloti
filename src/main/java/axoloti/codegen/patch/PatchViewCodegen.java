@@ -98,222 +98,223 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
     public String generateIncludes() {
-        String inc = "";
+        StringBuilder inc = new StringBuilder();
         Set<String> includes = getModel().getIncludes();
         for (String s : includes) {
             if (s.startsWith("\"")) {
-                inc += "#include " + s + "\n";
+                inc.append("#include " + s + "\n");
             } else {
-                inc += "#include \"" + s + "\"\n";
+                inc.append("#include \"" + s + "\"\n");
             }
         }
-        return inc;
+        return inc.toString();
     }
 
     public String generateModules() {
-        String inc = "";
+        StringBuilder inc = new StringBuilder();
         Set<String> modules = getModel().getModules();
         for (String s : modules) {
-            inc += "#include \"" + s + "_wrapper.h\"\n";
+            inc.append("#include \"" + s + "_wrapper.h\"\n");
         }
-        return inc;
+        return inc.toString();
     }
 
 
     /* the c++ code generator */
     String GeneratePexchAndDisplayCode() {
-        String c = GeneratePexchAndDisplayCodeV();
-        c += "    int32_t PExModulationPrevVal[attr_poly][NMODULATIONSOURCES];\n";
-        return c;
+        StringBuilder c = new StringBuilder(GeneratePexchAndDisplayCodeV());
+        c.append("    int32_t PExModulationPrevVal[attr_poly][NMODULATIONSOURCES];\n");
+        return c.toString();
     }
 
     String GeneratePexchAndDisplayCodeV() {
-        String c = "";
-        c += "    static const uint32_t nparams = " + parameterInstances.size() + ";\n";
-        c += "    Parameter_t params[nparams] = {\n";
+        StringBuilder c = new StringBuilder();
+        c.append("    static const uint32_t nparams = " + parameterInstances.size() + ";\n");
+        c.append("    Parameter_t params[nparams] = {\n");
         for (ParameterInstanceView param : parameterInstances) {
-            c += param.GenerateParameterInitializer();
+            c.append(param.GenerateParameterInitializer());
         }
-        c += "};\n";
-        c += "    Parameter_name_t param_names[nparams] = {\n";
+        c.append("};\n");
+        c.append("    Parameter_name_t param_names[nparams] = {\n");
         for (ParameterInstanceView param : parameterInstances) {
-            c += "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getModel().GetUserParameterName(), CodeGeneration.param_name_length) + "},\n";
+            c.append("{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getModel().GetUserParameterName(), CodeGeneration.param_name_length) + "},\n");
         }
-        c += "};\n";
-        c += "    int32_t displayVector[" + displayDataLength + "];\n";
+        c.append("};\n");
+        c.append("    int32_t displayVector[" + displayDataLength + "];\n");
 
-        c += "    static const uint32_t ndisplay_metas = " + displayInstances.size() + ";\n";
-        c += "    Display_meta_t display_metas[ndisplay_metas] = {\n";
+        c.append("    static const uint32_t ndisplay_metas = " + displayInstances.size() + ";\n");
+        c.append("    Display_meta_t display_metas[ndisplay_metas] = {\n");
         for (DisplayInstanceView disp : displayInstances) {
-            c += disp.GenerateDisplayMetaInitializer();
+            c.append(disp.GenerateDisplayMetaInitializer());
         }
-        c += "};\n";
-        c += "    static const uint32_t NPRESETS = " + getModel().getNPresets() + ";\n";
-        c += "    static const uint32_t NPRESET_ENTRIES = " + getModel().getNPresetEntries() + ";\n";
-        c += "    static const uint32_t NMODULATIONSOURCES = " + getModel().getNModulationSources() + ";\n";
-        c += "    static const uint32_t NMODULATIONTARGETS = " + getModel().getNModulationTargetsPerSource() + ";\n";
-        return c;
+        c.append("};\n");
+        c.append("    static const uint32_t NPRESETS = " + getModel().getNPresets() + ";\n");
+        c.append("    static const uint32_t NPRESET_ENTRIES = " + getModel().getNPresetEntries() + ";\n");
+        c.append("    static const uint32_t NMODULATIONSOURCES = " + getModel().getNModulationSources() + ";\n");
+        c.append("    static const uint32_t NMODULATIONTARGETS = " + getModel().getNModulationTargetsPerSource() + ";\n");
+        return c.toString();
     }
 
     String GenerateObjectCode(String classname, boolean enableOnParent, String OnParentAccess) {
-        String c = "";
+        StringBuilder c = new StringBuilder();
         {
-            c += "/* modsource defines */\n";
+            c.append("/* modsource defines */\n");
             int k = 0;
             for (Modulator m : getModel().Modulators) {
-                c += "static const int " + m.getCName() + " = " + k + ";\n";
+                c.append("static const int " + m.getCName() + " = " + k + ";\n");
                 k++;
             }
         }
         {
-            c += "/* parameter instance indices */\n";
+            c.append("/* parameter instance indices */\n");
             int k = 0;
             for (ParameterInstanceView p : parameterInstances) {
-                c += "static const int PARAM_INDEX_" + p.getModel().getObjectInstance().getLegalName() + "_" + p.getModel().getLegalName() + " = " + k + ";\n";
+                c.append("static const int PARAM_INDEX_" + p.getModel().getObjectInstance().getLegalName() + "_" + p.getModel().getLegalName() + " = " + k + ";\n");
                 k++;
             }
         }
 
 // TODO: fix "controller object"
-//        c += "/* controller classes */\n";
+//        c.append("/* controller classes */\n");
 //        if (getModel().controllerObjectInstance != null) {
-//            c += getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent);
+//            c.append(getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent));
 //        }
 
-        c += "/* object classes */\n";
+        c.append("/* object classes */\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c += o.GenerateClass(classname, OnParentAccess, enableOnParent);
+            c.append(o.GenerateClass(classname, OnParentAccess, enableOnParent));
         }
 // TODO: fix "controller object"
-//        c += "/* controller instances */\n";
+//        c.append("/* controller instances */\n");
 //        if (getModel().controllerObjectInstance != null) {
 //            String s = getModel().controllerObjectInstance.getCInstanceName();
 //            if (!s.isEmpty()) {
-//                c += "     " + s + " " + s + "_i;\n";
+//                c.append("     " + s + " " + s + "_i;\n");
 //            }
 //        }
 
-        c += "/* object instances */\n";
+        c.append("/* object instances */\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             String s = o.getModel().getCInstanceName();
             if (!s.isEmpty()) {
-                c += "     " + s + " " + s + "_i;\n";
+                c.append("     " + s + " " + s + "_i;\n");
             }
         }
-        c += "/* net latches */\n";
+        c.append("/* net latches */\n");
         for (Net n : getController().getModel().getNets()) {
-            NetController nc = (NetController)n.getControllerFromModel();
+            NetController nc = (NetController) n.getControllerFromModel();
             // check if net has multiple sources
             if ((n.CType() != null) && nc.NeedsLatch()) {
-                c += "    " + n.CType() + " " + nc.CName() + "Latch" + ";\n";
+                c.append("    " + n.CType() + " " + nc.CName() + "Latch" + ";\n");
             }
         }
-        return c;
+        return c.toString();
     }
 
     public String GenerateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
-        String c = "";
-        c += GeneratePexchAndDisplayCode();
-        c += GenerateObjectCode(classname, enableOnParent, "parent->");
-        return c;
+        StringBuilder c = new StringBuilder();
+        c.append(GeneratePexchAndDisplayCode());
+        c.append(GenerateObjectCode(classname, enableOnParent, "parent->"));
+        return c.toString();
     }
 
     String GenerateStructCodePlusPlus(String classname, boolean enableOnParent, String parentclassname) {
-        String c = "";
-        c += "class " + classname + "{\n";
-        c += "   public:\n";
-        c += GenerateStructCodePlusPlusSub(parentclassname, enableOnParent);
-        return c;
+        StringBuilder c = new StringBuilder();
+        c.append("class " + classname + "{\n");
+        c.append("   public:\n");
+        c.append(GenerateStructCodePlusPlusSub(parentclassname, enableOnParent));
+        return c.toString();
     }
 
     String GenerateUICode() {
         int count[] = new int[]{0};
-        String c = "";
+        StringBuilder c = new StringBuilder();
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c += o.GenerateUICode(count);
+            c.append(o.GenerateUICode(count));
         }
-        c = "static const int n_ui_objects = " + count[0] + ";\n"
-                + "ui_object_t ui_objects[n_ui_objects] = {\n" + c + "};\n";
-        return c;
+        c.append("static const int n_ui_objects = " + count[0] + ";\n"
+                 + "ui_object_t ui_objects[n_ui_objects] = {\n" + c.toString() + "};\n");
+        return c.toString();
     }
 
 
     public String GenerateParamInitCode3(String ClassName) {
         int s = parameterInstances.size();
-        String c = "   static int32_t * GetInitParams(void){\n"
-                + "      static const int32_t p[" + s + "]= {\n";
+        StringBuilder c = new StringBuilder(
+            "   static int32_t * GetInitParams(void){\n"
+            + "      static const int32_t p[" + s + "]= {\n");
         for (int i = 0; i < s; i++) {
-            c += "      " + 0; //FIXME ParameterInstances.get(i).GetValueRaw();
+            c.append("      " + 0); //FIXME ParameterInstances.get(i).GetValueRaw();
             if (i != s - 1) {
-                c += ",\n";
+                c.append(",\n");
             } else {
-                c += "\n";
+                c.append("\n");
             }
         }
-        c += "      };\n"
-                + "      return (int32_t *)&p[0];\n"
-                + "   }";
-        return c;
+        c.append("      };\n"
+                 + "      return (int32_t *)&p[0];\n"
+                 + "   }");
+        return c.toString();
     }
 
 
     public String GeneratePresetCode3(String ClassName) {
-        String c = "   static const int32_t * GetPresets(void){\n";
-        c += "      static const int32_t p[NPRESETS][NPRESET_ENTRIES][2] = {\n";
+        StringBuilder c = new StringBuilder("   static const int32_t * GetPresets(void){\n");
+        c.append("      static const int32_t p[NPRESETS][NPRESET_ENTRIES][2] = {\n");
         for (int i = 0; i < getModel().getNPresets(); i++) {
-//            c += "// preset " + i + "\n";
-//            c += "pp = (int*)(&Presets[" + i + "]);\n";
+//            c.append("// preset " + i + "\n");
+//            c.append("pp = (int*)(&Presets[" + i + "]);\n");
             int[] dp = getModel().DistillPreset(i + 1);
-            c += "         {\n";
+            c.append("         {\n");
             for (int j = 0; j < getModel().getNPresetEntries(); j++) {
-                c += "           {" + dp[j * 2] + "," + dp[j * 2 + 1] + "}";
+                c.append("           {" + dp[j * 2] + "," + dp[j * 2 + 1] + "}");
                 if (j != getModel().getNPresetEntries() - 1) {
-                    c += ",\n";
+                    c.append(",\n");
                 } else {
-                    c += "\n";
+                    c.append("\n");
                 }
             }
             if (i != getModel().getNPresets() - 1) {
-                c += "         },\n";
+                c.append("         },\n");
             } else {
-                c += "         }\n";
+                c.append("         }\n");
             }
         }
-        c += "      };\n";
-        c += "   return &p[0][0][0];\n";
-        c += "   };\n";
+        c.append("      };\n");
+        c.append("   return &p[0][0][0];\n");
+        c.append("   };\n");
 
-        c += "void ApplyPreset(int index){\n"
-                + "   if (!index) {\n"
-                + "     int i;\n"
-                + "     int32_t *p = GetInitParams();\n"
-                + "     for(i=0;i<nparams;i++){\n"
-                + "        ParameterChange(&params[i], p[i], 0xFFEF);\n"
-                + "     }\n"
-                + "   }\n"
-                + "   index--;\n"
-                + "   if (index < NPRESETS) {\n"
-                + "     PresetParamChange_t *pa = (PresetParamChange_t *)(GetPresets());\n"
-                + "     PresetParamChange_t *p = &pa[index*NPRESET_ENTRIES];\n"
-                + "       int i;\n"
-                + "       for(i=0;i<NPRESET_ENTRIES;i++){\n"
-                + "         PresetParamChange_t *pp = &p[i];\n"
-                + "         if ((pp->pexIndex>=0)&&(pp->pexIndex<nparams)) {\n"
-                + "            ParameterChange(&params[pp->pexIndex],pp->value,0xFFEF);"
-                + "         }\n"
-                + "         else break;\n"
-                + "       }\n"
-                + "   }\n"
-                + "}\n";
-        return c;
+        c.append("void ApplyPreset(int index){\n"
+                 + "   if (!index) {\n"
+                 + "     int i;\n"
+                 + "     int32_t *p = GetInitParams();\n"
+                 + "     for(i=0;i<nparams;i++){\n"
+                 + "        ParameterChange(&params[i], p[i], 0xFFEF);\n"
+                 + "     }\n"
+                 + "   }\n"
+                 + "   index--;\n"
+                 + "   if (index < NPRESETS) {\n"
+                 + "     PresetParamChange_t *pa = (PresetParamChange_t *)(GetPresets());\n"
+                 + "     PresetParamChange_t *p = &pa[index*NPRESET_ENTRIES];\n"
+                 + "       int i;\n"
+                 + "       for(i=0;i<NPRESET_ENTRIES;i++){\n"
+                 + "         PresetParamChange_t *pp = &p[i];\n"
+                 + "         if ((pp->pexIndex>=0)&&(pp->pexIndex<nparams)) {\n"
+                 + "            ParameterChange(&params[pp->pexIndex],pp->value,0xFFEF);"
+                 + "         }\n"
+                 + "         else break;\n"
+                 + "       }\n"
+                 + "   }\n"
+                 + "}\n");
+        return c.toString();
     }
 
     public String GenerateModulationCode3() {
-        String s = "   static PExModulationTarget_t * GetModulationTable(void){\n";
-        s += "    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n";
-        s += "{";
+        StringBuilder s = new StringBuilder("   static PExModulationTarget_t * GetModulationTable(void){\n");
+        s.append("    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n");
+        s.append("{");
         for (int i = 0; i < getModel().getNModulationSources(); i++) {
-            s += "{";
+            s.append("{");
             if (i < getModel().Modulators.size()) {
                 Modulator m = getModel().Modulators.get(i);
                 for (int j = 0; j < getModel().getNModulationTargetsPerSource(); j++) {
@@ -323,202 +324,202 @@ public class PatchViewCodegen extends View<PatchController> {
                         // TODO: fix modulations
                         //   following line was commented out
                         //   need to add a method to find ParameterInstanceView from parameter...
-                        // s += "{" + destination.indexName() + ", " + destination.valToInt32(n.getValue()) + "}";
+                        // s.append("{" + destination.indexName() + ", " + destination.valToInt32(n.getValue()) + "}");
                     } else {
-                        s += "{-1,0}";
+                        s.append("{-1,0}");
                     }
                     if (j != getModel().getNModulationTargetsPerSource() - 1) {
-                        s += ",";
+                        s.append(",");
                     } else {
-                        s += "}";
+                        s.append("}");
                     }
                 }
             } else {
                 for (int j = 0; j < getModel().getNModulationTargetsPerSource() - 1; j++) {
-                    s += "{-1,0},";
+                    s.append("{-1,0},");
                 }
-                s += "{-1,0}}";
+                s.append("{-1,0}}");
             }
             if (i != getModel().getNModulationSources() - 1) {
-                s += ",\n";
+                s.append(",\n");
             }
         }
-        s += "};\n";
-        s += "   return (PExModulationTarget_t *)&PExModulationSources[0][0];\n";
-        s += "   };\n";
+        s.append("};\n");
+        s.append("   return (PExModulationTarget_t *)&PExModulationSources[0][0];\n");
+        s.append("   };\n");
 
-        return s;
+        return s.toString();
     }
 
 
     public String GenerateObjInitCodePlusPlusSub(String className, String parentReference) {
-        String c = "";
+        StringBuilder c = new StringBuilder();
 
         /* TODO: fix "controller object"
         if (getModel().controllerObjectInstance != null) {
             String s = getModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + s + "_i.Init(" + parentReference;
+                c.append("   " + s + "_i.Init(" + parentReference);
                 for (DisplayInstance i : getModel().controllerObjectInstance.getDisplayInstances()) {
                     if (i.getModel().getLength() > 0) {
-                        c += ", ";
-                        c += i.valueName("");
+                        c.append(", ");
+                        c.append(i.valueName(""));
                     }
                 }
-                c += " );\n";
+                c.append(" );\n");
             }
         }
         */
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             String s = o.getModel().getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + o.getModel().getCInstanceName() + "_i.Init(" + parentReference;
+                c.append("   " + o.getModel().getCInstanceName() + "_i.Init(" + parentReference);
                 for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
                     if (i.getModel().getLength() > 0) {
-                        c += ", ";
-                        c += i.valueName("");
+                        c.append(", ");
+                        c.append(i.valueName(""));
                     }
                 }
-                c += " );\n";
+                c.append(" );\n");
             }
         }
         /* // no need for this?
-        c += "      int k;\n"
-                + "      for (k = 0; k < nparams; k++) {"
-                + "        Parameter_t *param = &params[k];\n"
-                + "        switch(param->type) {\n"
-                + "          case param_type_frac: "
-                + "             if (param->pfunction)"
-                + "                 (param->pfunction)(param);\n"
-                + "             else param->finalvalue = param->value;"
-                + "             break;"
-                + "          default: \n"
-                + "            param[k].finalvalue = param[k].value;\n"
-                + "        }\n"
-                + "      }\n";
+           c.append("      int k;\n"
+           + "      for (k = 0; k < nparams; k++) {"
+           + "        Parameter_t *param = &params[k];\n"
+           + "        switch(param->type) {\n"
+           + "          case param_type_frac: "
+           + "             if (param->pfunction)"
+           + "                 (param->pfunction)(param);\n"
+           + "             else param->finalvalue = param->value;"
+           + "             break;"
+           + "          default: \n"
+           + "            param[k].finalvalue = param[k].value;\n"
+           + "        }\n"
+           + "      }\n");
          */
-        return c;
+        return c.toString();
     }
 
     public String GenerateParamInitCodePlusPlusSub(String className, String parentReference) {
-        String c = "// GenerateParamInitCodePlusPlusSub\n";
-        c += "   int i;\n";
-        c += "   int j;\n";
-        c += "   const int32_t *p;\n";
-        c += "   p = GetInitParams();\n";
-        c += "   for(j=0;j<" + parameterInstances.size() + ";j++){\n";
-        c += "      Parameter_t *param = &params[j];\n";
-        c += "      if (param->pfunction)\n";
-        c += "         (param->pfunction)(param);\n";
-        c += "      else\n";
-        c += "         param->d.frac.finalvalue = param->d.frac.modvalue;\n";
-        c += "   }\n";
-        c += "   int32_t *pp = &PExModulationPrevVal[0][0];\n";
-        c += "   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n";
-        c += "      *pp = 0; pp++;\n";
-        c += "   }\n";
-        return c;
+        StringBuilder c = new StringBuilder("// GenerateParamInitCodePlusPlusSub\n");
+        c.append("   int i;\n");
+        c.append("   int j;\n");
+        c.append("   const int32_t *p;\n");
+        c.append("   p = GetInitParams();\n");
+        c.append("   for(j=0;j<" + parameterInstances.size() + ");j++){\n");
+        c.append("      Parameter_t *param = &params[j];\n");
+        c.append("      if (param->pfunction)\n");
+        c.append("         (param->pfunction)(param);\n");
+        c.append("      else\n");
+        c.append("         param->d.frac.finalvalue = param->d.frac.modvalue;\n");
+        c.append("   }\n");
+        c.append("   int32_t *pp = &PExModulationPrevVal[0][0];\n");
+        c.append("   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n");
+        c.append("      *pp = 0; pp++;\n");
+        c.append("   }\n");
+        return c.toString();
     }
 
     String GenerateInitCodePlusPlus(String className) {
-        String c = "";
-        c += "/* init */\n";
-        c += "void Init() {\n";
-        c += GenerateObjInitCodePlusPlusSub("", "this");
-        c += GenerateParamInitCodePlusPlusSub("", "this");
-        c += "}\n\n";
-        return c;
+        StringBuilder c = new StringBuilder();
+        c.append("/* init */\n");
+        c.append("void Init() {\n");
+        c.append(GenerateObjInitCodePlusPlusSub("", "this"));
+        c.append(GenerateParamInitCodePlusPlusSub("", "this"));
+        c.append("}\n\n");
+        return c.toString();
     }
 
 
     public String GenerateDisposeCodePlusPlusSub(String className) {
         // reverse order
-        String c = "";
+        StringBuilder c = new StringBuilder();
         int l = getModel().objectinstances.size();
         for (int i = l - 1; i >= 0; i--) {
             IAxoObjectInstance o = getModel().objectinstances.get(i);
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + o.getCInstanceName() + "_i.Dispose();\n";
+                c.append("   " + o.getCInstanceName() + "_i.Dispose();\n");
             }
         }
         if (getModel().controllerObjectInstance != null) {
             String s = getModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
-                c += "   " + getModel().controllerObjectInstance.getCInstanceName() + "_i.Dispose();\n";
+                c.append("   " + getModel().controllerObjectInstance.getCInstanceName() + "_i.Dispose();\n");
             }
         }
 
-        return c;
+        return c.toString();
     }
 
     String GenerateDisposeCodePlusPlus(String className) {
-        String c = "";
-        c += "/* dispose */\n";
-        c += "void Dispose() {\n";
-        c += GenerateDisposeCodePlusPlusSub(className);
-        c += "}\n\n";
-        return c;
+        StringBuilder c = new StringBuilder();
+        c.append("/* dispose */\n");
+        c.append("void Dispose() {\n");
+        c.append(GenerateDisposeCodePlusPlusSub(className));
+        c.append("}\n\n");
+        return c.toString();
     }
 
     public String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
-        String c = "";
-        c += "//--------- <nets> -----------//\n";
+        StringBuilder c = new StringBuilder();
+        c.append("//--------- <nets> -----------//\n");
         for (Net n : getController().getModel().getNets()) {
             if (n.CType() != null) {
-                c += "    " + n.CType() + " " + ((NetController)n.getControllerFromModel()).CName() + ";\n";
+                c.append("    " + n.CType() + " " + ((NetController)n.getControllerFromModel()).CName() + ";\n");
             } else {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Net has no data type!");
             }
         }
-        c += "//--------- </nets> ----------//\n";
-        c += "//--------- <zero> ----------//\n";
-        c += "  int32_t UNCONNECTED_OUTPUT;\n";
-        c += "  static const int32_t UNCONNECTED_INPUT=0;\n";
-        c += "  static const int32buffer zerobuffer = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};\n";
-        c += "  int32buffer UNCONNECTED_OUTPUT_BUFFER;\n";
-        c += "//--------- </zero> ----------//\n";
+        c.append("//--------- </nets> ----------//\n");
+        c.append("//--------- <zero> ----------//\n");
+        c.append("  int32_t UNCONNECTED_OUTPUT;\n");
+        c.append("  static const int32_t UNCONNECTED_INPUT=0;\n");
+        c.append("  static const int32buffer zerobuffer = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};\n");
+        c.append("  int32buffer UNCONNECTED_OUTPUT_BUFFER;\n");
+        c.append("//--------- </zero> ----------//\n");
 
-        c += "//--------- <controller calls> ----------//\n";
+        c.append("//--------- <controller calls> ----------//\n");
         /*
         // TODO: fix "controller object"
         if (getModel().controllerObjectInstance != null) {
-            c += GenerateDSPCodePlusPlusSubObj(getModel().controllerObjectInstance, ClassName, enableOnParent);
+            c.append(GenerateDSPCodePlusPlusSubObj(getModel().controllerObjectInstance, ClassName, enableOnParent);
         } */
-        c += "//--------- <object calls> ----------//\n";
+        c.append("//--------- <object calls> ----------//\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c += GenerateDSPCodePlusPlusSubObj(o, ClassName, enableOnParent);
+            c.append(GenerateDSPCodePlusPlusSubObj(o, ClassName, enableOnParent));
         }
-        c += "//--------- </object calls> ----------//\n";
+        c.append("//--------- </object calls> ----------//\n");
 
-        c += "//--------- <net latch copy> ----------//\n";
+        c.append("//--------- <net latch copy> ----------//\n");
         for (Net n : getController().getModel().getNets()) {
             NetController nc = (NetController)n.getControllerFromModel();
             // check if net has multiple sources
             if (nc.NeedsLatch()) {
                 if (nc.getModel().getDataType() != null) {
-                    c += nc.getModel().getDataType().GenerateCopyCode(nc.CName() + "Latch", nc.CName());
+                    c.append(nc.getModel().getDataType().GenerateCopyCode(nc.CName() + "Latch", nc.CName()));
                 } else {
                     Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Only inlets connected on net!");
                 }
             }
         }
-        c += "//--------- </net latch copy> ----------//\n";
-        return c;
+        c.append("//--------- </net latch copy> ----------//\n");
+        return c.toString();
     }
 
     String GenerateDSPCodePlusPlusSubObj(IAxoObjectInstanceCodegenView o, String ClassName, boolean enableOnParent) {
-        String c = "";
+        StringBuilder c = new StringBuilder();
         String s = o.getModel().getCInstanceName();
         if (s.isEmpty()) {
-            return c;
+            return c.toString();
         }
-        c += "  " + o.getModel().getCInstanceName() + "_i.dsp( this ";
-//            c += "  " + o.GenerateDoFunctionName() + "(this";
+        c.append("  " + o.getModel().getCInstanceName() + "_i.dsp( this ");
+//            c.append("  " + o.GenerateDoFunctionName() + "(this");
         boolean needsComma = true;
         for (InletInstance i : o.getModel().getInletInstances()) {
             if (needsComma) {
-                c += ", ";
+                c.append(", ");
             }
             NetController nc = getController().getNetFromIolet(i);
             if ((nc != null) && (nc.getModel().isValidNet())) {
@@ -527,328 +528,326 @@ public class PatchViewCodegen extends View<PatchController> {
                 if (i.getDataType().equals(n.getDataType())) {
                     if (nc.NeedsLatch()
                             && (getModel().objectinstances.indexOf(firstSource.getParent()) >= getModel().objectinstances.indexOf(o))) {
-                        c += nc.CName() + "Latch";
+                        c.append(nc.CName() + "Latch");
                     } else {
-                        c += nc.CName();
+                        c.append(nc.CName());
                     }
                 } else if (nc.NeedsLatch()
                         && (getModel().objectinstances.indexOf(firstSource) >= getModel().objectinstances.indexOf(o))) {
-                    c += n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName() + "Latch");
+                    c.append(n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName() + "Latch"));
                 } else {
-                    c += n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName());
+                    c.append(n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName()));
                 }
             } else if (nc == null) { // unconnected input
-                c += i.getDataType().GenerateSetDefaultValueCode();
+                c.append(i.getDataType().GenerateSetDefaultValueCode());
             } else if (!nc.getModel().isValidNet()) {
-                c += i.getDataType().GenerateSetDefaultValueCode();
+                c.append(i.getDataType().GenerateSetDefaultValueCode());
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getParent().getInstanceName() + ":" + i.getName());
             }
             needsComma = true;
         }
         for (OutletInstance i : o.getModel().getOutletInstances()) {
             if (needsComma) {
-                c += ", ";
+                c.append(", ");
             }
             NetController nc = getController().getNetFromIolet(i);
             if ((nc != null) && nc.getModel().isValidNet()) {
                 if (nc.IsFirstOutlet(i)) {
-                    c += nc.CName();
+                    c.append(nc.CName());
                 } else {
-                    c += nc.CName() + "+";
+                    c.append(nc.CName() + "+");
                 }
             } else {
-                c += i.getDataType().UnconnectedSink();
+                c.append(i.getDataType().UnconnectedSink());
             }
             needsComma = true;
         }
         for (ParameterInstanceView i : o.getParameterInstanceViews()) {
             if (i.getModel().getModel().PropagateToChild == null) {
                 if (needsComma) {
-                    c += ", ";
+                    c.append(", ");
                 }
-                c += i.variableName("", false);
+                c.append(i.variableName("", false));
                 needsComma = true;
             }
         }
         for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
             if (i.getModel().getModel().getLength() > 0) {
                 if (needsComma) {
-                    c += ", ";
+                    c.append(", ");
                 }
-                c += i.valueName("");
+                c.append(i.valueName(""));
                 needsComma = true;
             }
         }
-        c += ");\n";
-        return c;
+        c.append(");\n");
+        return c.toString();
     }
 
     String GenerateDSPCodePlusPlus(String ClassName, boolean enableOnParent) {
-        String c;
-        c = "/* krate */\n";
-        c += "void dsp (void) {\n";
-        c += "  int i;\n";
-        c += "  for(i=0;i<BUFSIZE;i++) AudioOutputLeft[i]=0;\n";
-        c += "  for(i=0;i<BUFSIZE;i++) AudioOutputRight[i]=0;\n";
-        c += GenerateDSPCodePlusPlusSub(ClassName, enableOnParent);
-        c += "}\n\n";
-        return c;
+        StringBuilder c = new StringBuilder("/* krate */\n");
+        c.append("void dsp (void) {\n");
+        c.append("  int i;\n");
+        c.append("  for(i=0;i<BUFSIZE;i++) AudioOutputLeft[i]=0;\n");
+        c.append("  for(i=0;i<BUFSIZE;i++) AudioOutputRight[i]=0;\n");
+        c.append(GenerateDSPCodePlusPlusSub(ClassName, enableOnParent));
+        c.append("}\n\n");
+        return c.toString();
     }
 
     public String GenerateMidiInCodePlusPlus() {
-        String c = "";
+        StringBuilder c = new StringBuilder();
         // TODO: fix "controller object"
 //        if (getModel().controllerObjectInstance != null) {
-//            c += getModel().controllerObjectInstance.GenerateCallMidiHandler();
+//            c.append(getModel().controllerObjectInstance.GenerateCallMidiHandler());
 //        }
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c += o.GenerateCallMidiHandler();
+            c.append(o.GenerateCallMidiHandler());
         }
-        return c;
+        return c.toString();
     }
 
 
     String GenerateMidiCodePlusPlus(String ClassName) {
-        String c = "";
-        c += "void MidiInHandler(" + ClassName + " *parent, midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n";
-        c += GenerateMidiInCodePlusPlus();
-        c += "}\n\n";
-        return c;
+        StringBuilder c = new StringBuilder();
+        c.append("void MidiInHandler(" + ClassName + " *parent, midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n");
+        c.append(GenerateMidiInCodePlusPlus());
+        c.append("}\n\n");
+        return c.toString();
     }
 
 
     String GeneratePatchCodePlusPlus(String ClassName) {
-        String c = "";
-        c += "};\n\n";
-        c += "static rootc root;\n";
+        StringBuilder c = new StringBuilder();
+        c.append("};\n\n");
+        c.append("static rootc root;\n");
 
-        c += "void PatchProcess( int32_t * inbuf, int32_t * outbuf) {\n"
-                + "  int i;\n"
-                + "  for(i=0;i<BUFSIZE;i++){\n"
-                + "    AudioInputLeft[i] = inbuf[i*2]>>4;\n"
-                + "    switch(AudioInputMode) {\n"
-                + "       case A_MONO:\n"
-                + "             AudioInputRight[i] = AudioInputLeft[i];break;\n"
-                + "       case A_BALANCED:\n"
-                + "             AudioInputLeft[i] = (AudioInputLeft[i] - (inbuf[i*2+1]>>4) ) >> 1;\n"
-                + "             AudioInputRight[i] = AudioInputLeft[i];"
-                + "             break;\n"
-                + "       case A_STEREO:\n"
-                + "       default:\n"
-                + "             AudioInputRight[i] = inbuf[i*2+1]>>4;\n"
-                + "     }\n"
-                + "  }\n"
-                + "  root.dsp();\n";
+        c.append("void PatchProcess( int32_t * inbuf, int32_t * outbuf) {\n"
+                 + "  int i;\n"
+                 + "  for(i=0;i<BUFSIZE;i++){\n"
+                 + "    AudioInputLeft[i] = inbuf[i*2]>>4;\n"
+                 + "    switch(AudioInputMode) {\n"
+                 + "       case A_MONO:\n"
+                 + "             AudioInputRight[i] = AudioInputLeft[i];break;\n"
+                 + "       case A_BALANCED:\n"
+                 + "             AudioInputLeft[i] = (AudioInputLeft[i] - (inbuf[i*2+1]>>4) ) >> 1;\n"
+                 + "             AudioInputRight[i] = AudioInputLeft[i];"
+                 + "             break;\n"
+                 + "       case A_STEREO:\n"
+                 + "       default:\n"
+                 + "             AudioInputRight[i] = inbuf[i*2+1]>>4;\n"
+                 + "     }\n"
+                 + "  }\n"
+                 + "  root.dsp();\n");
         if (true /*TBC: review: getModel().getSaturate()*/) {
-            c += "  for(i=0;i<BUFSIZE;i++){\n"
-                    + "    outbuf[i*2] = __SSAT(AudioOutputLeft[i],28)<<4;\n"
-                    + "    switch(AudioOutputMode) {\n"
-                    + "       case A_MONO:\n"
-                    + "             outbuf[i*2+1] = 0;break;\n"
-                    + "       case A_BALANCED:\n"
-                    + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
-                    + "       case A_STEREO:\n"
-                    + "       default:\n"
-                    + "             outbuf[i*2+1] = __SSAT(AudioOutputRight[i],28)<<4;\n"
-                    + "     }\n"
-                    + "  }\n";
+            c.append("  for(i=0;i<BUFSIZE;i++){\n"
+                     + "    outbuf[i*2] = __SSAT(AudioOutputLeft[i],28)<<4;\n"
+                     + "    switch(AudioOutputMode) {\n"
+                     + "       case A_MONO:\n"
+                     + "             outbuf[i*2+1] = 0;break;\n"
+                     + "       case A_BALANCED:\n"
+                     + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
+                     + "       case A_STEREO:\n"
+                     + "       default:\n"
+                     + "             outbuf[i*2+1] = __SSAT(AudioOutputRight[i],28)<<4;\n"
+                     + "     }\n"
+                     + "  }\n");
         } else {
-            c += "  for(i=0;i<BUFSIZE;i++){\n"
-                    + "    outbuf[i*2] = AudioOutputLeft[i];\n"
-                    + "    switch(AudioOutputMode) {\n"
-                    + "       case A_MONO:\n"
-                    + "             outbuf[i*2+1] = 0;break;\n"
-                    + "       case A_BALANCED:\n"
-                    + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
-                    + "       case A_STEREO:\n"
-                    + "       default:\n"
-                    + "             outbuf[i*2+1] = AudioOutputRight[i];\n"
-                    + "     }\n"
-                    + "  }\n";
+            c.append("  for(i=0;i<BUFSIZE;i++){\n"
+                     + "    outbuf[i*2] = AudioOutputLeft[i];\n"
+                     + "    switch(AudioOutputMode) {\n"
+                     + "       case A_MONO:\n"
+                     + "             outbuf[i*2+1] = 0;break;\n"
+                     + "       case A_BALANCED:\n"
+                     + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
+                     + "       case A_STEREO:\n"
+                     + "       default:\n"
+                     + "             outbuf[i*2+1] = AudioOutputRight[i];\n"
+                     + "     }\n"
+                     + "  }\n");
         }
-        c += "}\n\n";
+        c.append("}\n\n");
 
-        c += "void ApplyPreset(int32_t i) {\n"
-                + "   root.ApplyPreset(i);\n"
-                + "}\n\n";
+        c.append("void ApplyPreset(int32_t i) {\n"
+                 + "   root.ApplyPreset(i);\n"
+                 + "}\n\n");
 
-        c += "void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n"
-                + "  root.MidiInHandler(&root, dev, port, status, data1, data2);\n"
-                + "}\n\n";
+        c.append("void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n"
+                 + "  root.MidiInHandler(&root, dev, port, status, data1, data2);\n"
+                 + "}\n\n");
 
-        c += "typedef void (*funcp_t)(void);\n"
-                + "typedef funcp_t * funcpp_t;\n"
-                + "extern funcp_t __ctor_array_start;\n"
-                + "extern funcp_t __ctor_array_end;"
-                + "extern funcp_t __dtor_array_start;\n"
-                + "extern funcp_t __dtor_array_end;";
+        c.append("typedef void (*funcp_t)(void);\n"
+                 + "typedef funcp_t * funcpp_t;\n"
+                 + "extern funcp_t __ctor_array_start;\n"
+                 + "extern funcp_t __ctor_array_end;"
+                 + "extern funcp_t __dtor_array_start;\n"
+                 + "extern funcp_t __dtor_array_end;");
 
-        c += "void PatchDispose( ) {\n"
-                + "  root.Dispose();\n"
-                + "  {\n"
-                + "    funcpp_t fpp = &__dtor_array_start;\n"
-                + "    while (fpp < &__dtor_array_end) {\n"
-                + "      (*fpp)();\n"
-                + "      fpp++;\n"
-                + "    }\n"
-                + "  }\n"
-                + "}\n\n";
+        c.append("void PatchDispose( ) {\n"
+                 + "  root.Dispose();\n"
+                 + "  {\n"
+                 + "    funcpp_t fpp = &__dtor_array_start;\n"
+                 + "    while (fpp < &__dtor_array_end) {\n"
+                 + "      (*fpp)();\n"
+                 + "      fpp++;\n"
+                 + "    }\n"
+                 + "  }\n"
+                 + "}\n\n");
 
-        c += "void xpatch_init2(int32_t fwid)\n"
-                + "{\n"
-                + "  if (fwid != 0x" + TargetController.getTargetController().getModel().getFirmwareLinkID() + ") {\n"
-                + "    return;"
-                + "  }\n"
-                + "  extern uint32_t _pbss_start;\n"
-                + "  extern uint32_t _pbss_end;\n"
-                + "  volatile uint32_t *p;\n"
-                + "  for(p=&_pbss_start;p<&_pbss_end;p++) *p=0;\n"
-                + "  {\n"
-                + "    funcpp_t fpp = &__ctor_array_start;\n"
-                + "    while (fpp < &__ctor_array_end) {\n"
-                + "      (*fpp)();\n"
-                + "      fpp++;\n"
-                + "    }\n"
-                + "  }\n"
-                + "  extern char _sdram_dyn_start;\n"
-                + "  extern char _sdram_dyn_end;\n"
-                + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
-                + "  root.Init();\n"
-                + "}\n\n";
+        c.append("void xpatch_init2(int32_t fwid)\n"
+                 + "{\n"
+                 + "  if (fwid != 0x" + TargetController.getTargetController().getModel().getFirmwareLinkID() + ") {\n"
+                 + "    return;"
+                 + "  }\n"
+                 + "  extern uint32_t _pbss_start;\n"
+                 + "  extern uint32_t _pbss_end;\n"
+                 + "  volatile uint32_t *p;\n"
+                 + "  for(p=&_pbss_start;p<&_pbss_end;p++) *p=0;\n"
+                 + "  {\n"
+                 + "    funcpp_t fpp = &__ctor_array_start;\n"
+                 + "    while (fpp < &__ctor_array_end) {\n"
+                 + "      (*fpp)();\n"
+                 + "      fpp++;\n"
+                 + "    }\n"
+                 + "  }\n"
+                 + "  extern char _sdram_dyn_start;\n"
+                 + "  extern char _sdram_dyn_end;\n"
+                 + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
+                 + "  root.Init();\n"
+                 + "}\n\n");
 
-        c += "#define fourcc_patch_root FOURCC('A','X','P','T')\n"
-                + "typedef struct {\n"
-                + "	chunk_header_t header;\n"
-                + "	chunk_patch_meta_t patch_meta;\n"
-                + "	chunk_patch_preset_t patch_preset;\n"
-                + "	chunk_patch_parameter_t patch_parameter;\n"
-                + "	chunk_patch_ui_objects_t patch_ui_objects;\n"
-                + "	chunk_patch_initpreset_t patch_initpreset;\n"
-                + "	chunk_patch_display_t patch_display;\n"
-                + "	chunk_patch_display_meta_t patch_display_meta;\n"
-                + "	chunk_patch_functions_t patch_functions;\n"
-                + "} chunk_patch_root_t;\n"
-                + "\n"
-                + "chunk_patch_root_t patch_root_chunk = {\n"
-                + "		header : CHUNK_HEADER(patch_root),\n"
-                + "		patch_meta : {\n"
-                + "			header : CHUNK_HEADER(patch_meta),\n"
-                + "			patchID : " + getModel().GetIID() + ",\n"
-                + "			patchname : {'p','a','t','c','h'}\n"
-                + "		},\n"
-                + "		patch_preset : {\n"
-                + "			header : CHUNK_HEADER(patch_preset),\n"
-                + "			npresets : " + getModel().getNPresets() + ",\n"
-                + "			npreset_entries : " + getModel().getNPresetEntries() + ",\n"
-                + "			pPresets : 0\n"
-                + "		},\n"
-                + "		patch_parameter : {\n"
-                + "			header : CHUNK_HEADER(patch_parameter),\n"
-                + "			nparams : " + parameterInstances.size() + ",\n"
-                + "			pParams : &root.params[0],\n"
-                + "			pParam_names : root.param_names\n"
-                + "		},\n"
-                + "		patch_ui_objects : {\n"
-                + "			header : CHUNK_HEADER(patch_ui_objects),\n"
-                + "                     nobjects : root.n_ui_objects,\n"
-                + "			pObjects : root.ui_objects,\n"
-                + "		},\n"
-                + "		patch_initpreset : {\n"
-                + "			header : CHUNK_HEADER(patch_initpreset),\n"
-                + "		},\n"
-                + "		patch_display : {\n"
-                + "			header : CHUNK_HEADER(patch_display),\n"
-                + "                     ndisplayVector : " + displayDataLength + ",\n"
-                + "                     pDisplayVector : root.displayVector,\n"
-                + "		},\n"
-                + "		patch_display_meta : {\n"
-                + "			header : CHUNK_HEADER(patch_display_meta),\n"
-                + "			ndisplay_metas : root.ndisplay_metas,\n"
-                + "			pDisplay_metas : &root.display_metas[0]\n"
-                + "		},\n"
-                + "		patch_functions : {\n"
-                + "			header : CHUNK_HEADER(patch_functions),\n"
-                + "					fptr_patch_init: xpatch_init2,\n"
-                + "					fptr_patch_dispose: PatchDispose,\n"
-                + "					fptr_dsp_process: PatchProcess,\n"
-                + "					fptr_MidiInHandler: PatchMidiInHandler,\n"
-                + "					fptr_applyPreset: ApplyPreset,\n"
-                + "		},\n"
-                + "};\n";
+        c.append("#define fourcc_patch_root FOURCC('A','X','P','T')\n"
+                 + "typedef struct {\n"
+                 + "	chunk_header_t header;\n"
+                 + "	chunk_patch_meta_t patch_meta;\n"
+                 + "	chunk_patch_preset_t patch_preset;\n"
+                 + "	chunk_patch_parameter_t patch_parameter;\n"
+                 + "	chunk_patch_ui_objects_t patch_ui_objects;\n"
+                 + "	chunk_patch_initpreset_t patch_initpreset;\n"
+                 + "	chunk_patch_display_t patch_display;\n"
+                 + "	chunk_patch_display_meta_t patch_display_meta;\n"
+                 + "	chunk_patch_functions_t patch_functions;\n"
+                 + "} chunk_patch_root_t;\n"
+                 + "\n"
+                 + "chunk_patch_root_t patch_root_chunk = {\n"
+                 + "		header : CHUNK_HEADER(patch_root),\n"
+                 + "		patch_meta : {\n"
+                 + "			header : CHUNK_HEADER(patch_meta),\n"
+                 + "			patchID : " + getModel().GetIID() + ",\n"
+                 + "			patchname : {'p','a','t','c','h'}\n"
+                 + "		},\n"
+                 + "		patch_preset : {\n"
+                 + "			header : CHUNK_HEADER(patch_preset),\n"
+                 + "			npresets : " + getModel().getNPresets() + ",\n"
+                 + "			npreset_entries : " + getModel().getNPresetEntries() + ",\n"
+                 + "			pPresets : 0\n"
+                 + "		},\n"
+                 + "		patch_parameter : {\n"
+                 + "			header : CHUNK_HEADER(patch_parameter),\n"
+                 + "			nparams : " + parameterInstances.size() + ",\n"
+                 + "			pParams : &root.params[0],\n"
+                 + "			pParam_names : root.param_names\n"
+                 + "		},\n"
+                 + "		patch_ui_objects : {\n"
+                 + "			header : CHUNK_HEADER(patch_ui_objects),\n"
+                 + "                     nobjects : root.n_ui_objects,\n"
+                 + "			pObjects : root.ui_objects,\n"
+                 + "		},\n"
+                 + "		patch_initpreset : {\n"
+                 + "			header : CHUNK_HEADER(patch_initpreset),\n"
+                 + "		},\n"
+                 + "		patch_display : {\n"
+                 + "			header : CHUNK_HEADER(patch_display),\n"
+                 + "                     ndisplayVector : " + displayDataLength + ",\n"
+                 + "                     pDisplayVector : root.displayVector,\n"
+                 + "		},\n"
+                 + "		patch_display_meta : {\n"
+                 + "			header : CHUNK_HEADER(patch_display_meta),\n"
+                 + "			ndisplay_metas : root.ndisplay_metas,\n"
+                 + "			pDisplay_metas : &root.display_metas[0]\n"
+                 + "		},\n"
+                 + "		patch_functions : {\n"
+                 + "			header : CHUNK_HEADER(patch_functions),\n"
+                 + "					fptr_patch_init: xpatch_init2,\n"
+                 + "					fptr_patch_dispose: PatchDispose,\n"
+                 + "					fptr_dsp_process: PatchProcess,\n"
+                 + "					fptr_MidiInHandler: PatchMidiInHandler,\n"
+                 + "					fptr_applyPreset: ApplyPreset,\n"
+                 + "		},\n"
+                 + "};\n");
 
-        return c;
+        return c.toString();
     }
 
 
     public String GenerateCode4() {
-        String c = "";
+        StringBuilder c = new StringBuilder();
 
         Set<String> moduleSet = getModel().getModules();
         if (moduleSet != null) {
-            String modules = "";
-            String moduleDirs = "";
+            StringBuilder modules = new StringBuilder();
+            StringBuilder moduleDirs = new StringBuilder();
             for (String m : moduleSet) {
-                modules += m + " ";
-                moduleDirs
-                        += getModel().getModuleDir(m)
-                        + " ";
+                modules.append(m + " ");
+                moduleDirs.append(
+                    getModel().getModuleDir(m) + " ");
             }
-            c += "//$MODULES=" + modules + "\n";
-            c += "//$MODULE_DIRS=" + moduleDirs + "\n";
+            c.append("//$MODULES=" + modules.toString() + "\n");
+            c.append("//$MODULE_DIRS=" + moduleDirs.toString() + "\n");
         }
 
-        c += generateIncludes();
-        c += "\n";
-        c += generateModules();
-        c += "\n"
-                + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
-                + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n";
+        c.append(generateIncludes());
+        c.append("\n");
+        c.append(generateModules());
+        c.append("\n"
+                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
+                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n");
         if (true == false) {
-            c += "#define MIDICHANNEL 0 // DEPRECATED!\n";
+            c.append("#define MIDICHANNEL 0 // DEPRECATED!\n");
         } else {
-            c += "#define MIDICHANNEL " + (getModel().getMidiChannel() - 1) + " // DEPRECATED!\n";
+            c.append("#define MIDICHANNEL " + (getModel().getMidiChannel() - 1) + " // DEPRECATED!\n");
         }
-        c += "void xpatch_init2(int32_t fwid);\n"
-                + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int32_t fwid){\n"
-                + "  xpatch_init2(fwid);\n"
-                + "}\n\n";
+        c.append("void xpatch_init2(int32_t fwid);\n"
+                 + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int32_t fwid){\n"
+                 + "  xpatch_init2(fwid);\n"
+                 + "}\n\n");
 
-        c += "void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2);\n\n";
+        c.append("void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2);\n\n");
 
-        c += "     int32buffer AudioInputLeft;\n";
-        c += "     int32buffer AudioInputRight;\n";
-        c += "     int32buffer AudioOutputLeft;\n";
-        c += "     int32buffer AudioOutputRight;\n";
-        c += "     typedef enum { A_STEREO, A_MONO, A_BALANCED } AudioModeType;\n";
-        c += "     AudioModeType AudioOutputMode = A_STEREO;\n";
-        c += "     AudioModeType AudioInputMode = A_STEREO;\n";
-        c += "static void PropagateToSub(Parameter_t *origin) {\n"
-                + "      Parameter_t *p = (Parameter_t *)origin->d.frac.finalvalue;\n"
-                //                + "      LogTextMessage(\"tosub %8x\",origin->modvalue);\n"
-                + "      ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
-                + "}\n";
+        c.append("     int32buffer AudioInputLeft;\n");
+        c.append("     int32buffer AudioInputRight;\n");
+        c.append("     int32buffer AudioOutputLeft;\n");
+        c.append("     int32buffer AudioOutputRight;\n");
+        c.append("     typedef enum { A_STEREO, A_MONO, A_BALANCED } AudioModeType;\n");
+        c.append("     AudioModeType AudioOutputMode = A_STEREO;\n");
+        c.append("     AudioModeType AudioInputMode = A_STEREO;\n");
+        c.append("static void PropagateToSub(Parameter_t *origin) {\n"
+                 + "      Parameter_t *p = (Parameter_t *)origin->d.frac.finalvalue;\n"
+                 //                + "      LogTextMessage(\"tosub %8x\",origin->modvalue);\n"
+                 + "      ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
+                 + "}\n");
 
-        c += GenerateStructCodePlusPlus("rootc", false, "rootc")
-                + "static const int polyIndex = 0;\n"
-                + GenerateUICode()
-                + GenerateParamInitCode3("rootc")
-                + GeneratePresetCode3("rootc")
-                + GenerateModulationCode3()
-                + GenerateInitCodePlusPlus("rootc")
-                + GenerateDisposeCodePlusPlus("rootc")
-                + GenerateDSPCodePlusPlus("rootc", false)
-                + GenerateMidiCodePlusPlus("rootc")
-                + GeneratePatchCodePlusPlus("rootc");
+        c.append(GenerateStructCodePlusPlus("rootc", false, "rootc")
+                 + "static const int polyIndex = 0;\n"
+                 + GenerateUICode()
+                 + GenerateParamInitCode3("rootc")
+                 + GeneratePresetCode3("rootc")
+                 + GenerateModulationCode3()
+                 + GenerateInitCodePlusPlus("rootc")
+                 + GenerateDisposeCodePlusPlus("rootc")
+                 + GenerateDSPCodePlusPlus("rootc", false)
+                 + GenerateMidiCodePlusPlus("rootc")
+                 + GeneratePatchCodePlusPlus("rootc"));
 
-        c = c.replace("attr_poly", "1");
-
-        c = c.replace("attr_midichannel", Integer.toString(getModel().getMidiChannel() - 1));
+        String cs = c.toString();
+        cs = cs.replace("attr_poly", "1")
+            .replace("attr_midichannel", Integer.toString(getModel().getMidiChannel() - 1));
 
         if (!getModel().getMidiSelector()) {
-            c = c.replace("attr_mididevice", "0");
-            c = c.replace("attr_midiport", "0");
+            cs = cs.replace("attr_mididevice", "0")
+                .replace("attr_midiport", "0");
         }
-        return c;
+        return cs;
     }
 
 
@@ -926,85 +925,88 @@ public class PatchViewCodegen extends View<PatchController> {
         return ao;
     }
 
-    public void GenerateNormalCode(AxoObject ao){
-        ao.sLocalData = GenerateStructCodePlusPlusSub("attr_parent", true)
-                + "static const int polyIndex = 0;\n";
-        ao.sLocalData += GenerateParamInitCode3("");
-        ao.sLocalData += GeneratePresetCode3("");
-        ao.sLocalData += GenerateModulationCode3();
-        ao.sLocalData = ao.sLocalData.replaceAll("attr_poly", "1");
-        ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this");
-        ao.sInitCode += GenerateObjInitCodePlusPlusSub("attr_parent", "this");
+    public void GenerateNormalCode(AxoObject ao) {
+        StringBuilder sLocalData = new StringBuilder(
+            GenerateStructCodePlusPlusSub("attr_parent", true)
+            + "static const int polyIndex = 0;\n");
+        sLocalData.append(GenerateParamInitCode3(""));
+        sLocalData.append(GeneratePresetCode3(""));
+        sLocalData.append(GenerateModulationCode3());
+        ao.sLocalData = sLocalData.toString().replaceAll("attr_poly", "1");
+
+        ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this") + GenerateObjInitCodePlusPlusSub("attr_parent", "this");
+
         ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");
-        ao.sKRateCode = "int i; /*...*/\n";
+
+        StringBuilder sKRateCode = new StringBuilder("int i; /*...*/\n");
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
             if (typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
+                sKRateCode.append("   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n");
             } else if (typeName.equals("patch/inlet string")) {
-                ao.sKRateCode += "   " + o.getCInstanceName() + "_i._inlet = (char *)inlet_" + o.getLegalName() + ";\n";
+                sKRateCode.append("   " + o.getCInstanceName() + "_i._inlet = (char *)inlet_" + o.getLegalName() + ";\n");
             } else if (typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n";
+                sKRateCode.append("   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n");
             }
-
         }
-        ao.sKRateCode += GenerateDSPCodePlusPlusSub("attr_parent", true);
+        sKRateCode.append(GenerateDSPCodePlusPlusSub("attr_parent", true));
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i") || typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n";
+                sKRateCode.append("   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n");
             } else if (typeName.equals("patch/outlet string")) {
-                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = (char *)" + o.getCInstanceName() + "_i._outlet;\n";
+                sKRateCode.append("   outlet_" + o.getLegalName() + " = (char *)" + o.getCInstanceName() + "_i._outlet;\n");
             } else if (typeName.equals("patch/outlet a")) {
-                ao.sKRateCode += "      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n";
+                sKRateCode.append("      for(i=0;i<BUFSIZE;i++) outlet_" + o.getLegalName() + "[i] = " + o.getCInstanceName() + "_i._outlet[i];\n");
             }
         }
+
+        ao.sKRateCode = sKRateCode.toString();
 
         ao.sMidiCode = ""
                 + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                 + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
                 + GenerateMidiInCodePlusPlus();
-
     }
 
     public void GeneratePolyCode(AxoObject ao) {
-        ao.sLocalData = GenerateParamInitCode3("");
-        ao.sLocalData += GeneratePexchAndDisplayCode();
-        ao.sLocalData += "/* parameter instance indices */\n";
+        StringBuilder sLocalData = new StringBuilder(GenerateParamInitCode3(""));
+        sLocalData.append(GeneratePexchAndDisplayCode());
+        sLocalData.append("/* parameter instance indices */\n");
         int k = 0;
         for (ParameterInstanceView p : parameterInstances) {
-            ao.sLocalData += "static const int PARAM_INDEX_"
-                    + p.getModel().getObjectInstance().getLegalName() + "_"
-                    + p.getModel().getLegalName() + " = " + k + ";\n";
+            sLocalData.append("static const int PARAM_INDEX_"
+                              + p.getModel().getObjectInstance().getLegalName() + "_"
+                              + p.getModel().getLegalName() + " = " + k + ";\n");
             k++;
         }
 
-        ao.sLocalData += GeneratePresetCode3("");
-        ao.sLocalData += GenerateModulationCode3();
-        ao.sLocalData += "class voice {\n";
-        ao.sLocalData += "   public:\n";
-        ao.sLocalData += "   int polyIndex;\n";
-        ao.sLocalData += GeneratePexchAndDisplayCodeV();
-        ao.sLocalData += GenerateObjectCode("voice", true, "parent->common->");
-        ao.sLocalData += "attr_parent *common;\n";
-        ao.sLocalData += "void Init(voice *parent) {\n";
-        ao.sLocalData += GenerateObjInitCodePlusPlusSub("voice", "parent");
-        ao.sLocalData += "}\n\n";
-        ao.sLocalData += "void dsp(void) {\n int i;\n";
-        ao.sLocalData += GenerateDSPCodePlusPlusSub("", true);
-        ao.sLocalData += "}\n";
-        ao.sLocalData += "void dispose(void) {\n int i;\n";
-        ao.sLocalData += GenerateDisposeCodePlusPlusSub("");
-        ao.sLocalData += "}\n";
-        ao.sLocalData += GenerateMidiCodePlusPlus("attr_parent");
-        ao.sLocalData += "};\n";
-        ao.sLocalData += "static voice * getVoices(void){\n"
-                + "     static voice v[attr_poly];\n"
-                + "    return v;\n"
-                + "}\n";
+        sLocalData.append(GeneratePresetCode3(""));
+        sLocalData.append(GenerateModulationCode3());
+        sLocalData.append("class voice {\n");
+        sLocalData.append("   public:\n");
+        sLocalData.append("   int polyIndex;\n");
+        sLocalData.append(GeneratePexchAndDisplayCodeV());
+        sLocalData.append(GenerateObjectCode("voice", true, "parent->common->"));
+        sLocalData.append("attr_parent *common;\n");
+        sLocalData.append("void Init(voice *parent) {\n");
+        sLocalData.append(GenerateObjInitCodePlusPlusSub("voice", "parent"));
+        sLocalData.append("}\n\n");
+        sLocalData.append("void dsp(void) {\n int i;\n");
+        sLocalData.append(GenerateDSPCodePlusPlusSub("", true));
+        sLocalData.append("}\n");
+        sLocalData.append("void dispose(void) {\n int i;\n");
+        sLocalData.append(GenerateDisposeCodePlusPlusSub(""));
+        sLocalData.append("}\n");
+        sLocalData.append(GenerateMidiCodePlusPlus("attr_parent"));
+        sLocalData.append("};\n");
+        sLocalData.append("static voice * getVoices(void){\n"
+                          + "     static voice v[attr_poly];\n"
+                          + "    return v;\n"
+                          + "}\n");
 
         // FIXME
-        ao.sLocalData += "static void PropagateToVoices(Parameter_t *origin) {\n"
+        sLocalData.append("static void PropagateToVoices(Parameter_t *origin) {\n"
                 + "      Parameter_t *p = (Parameter_t *)origin->d.frac.finalvalue;\n"
                 //                + "      LogTextMessage(\"tovcs %8x\",origin->modvalue);\n"
                 + "      int vi;\n"
@@ -1012,25 +1014,28 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "        ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
                 + "          p = (Parameter_t *)((int)p + sizeof(voice)); // dirty trick...\n"
                 + "      }"
-                + "}\n";
+                + "}\n");
 
-        ao.sLocalData += "int8_t notePlaying[attr_poly];\n";
-        ao.sLocalData += "int32_t voicePriority[attr_poly];\n";
-        ao.sLocalData += "int32_t priority;\n";
-        ao.sLocalData += "int32_t sustain;\n";
-        ao.sLocalData += "int8_t pressed[attr_poly];\n";
+        sLocalData.append("int8_t notePlaying[attr_poly];\n");
+        sLocalData.append("int32_t voicePriority[attr_poly];\n");
+        sLocalData.append("int32_t priority;\n");
+        sLocalData.append("int32_t sustain;\n");
+        sLocalData.append("int8_t pressed[attr_poly];\n");
+
+        ao.sLocalData = sLocalData.toString();
 
         ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationSources", "parent->common->PExModulationSources");
         ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationPrevVal", "parent->common->PExModulationPrevVal");
         ao.sLocalData = ao.sLocalData.replaceAll("parent->GetModulationTable", "parent->common->GetModulationTable");
 
-        ao.sInitCode = GenerateParamInitCodePlusPlusSub("", "parent");
-        ao.sInitCode += "int k;\n"
+        StringBuilder sInitCode = new StringBuilder(GenerateParamInitCodePlusPlusSub("", "parent"));
+
+        sInitCode.append("int k;\n"
                 + "   for(k=0;k<nparams;k++){\n"
                 + "      params[k].pfunction = PropagateToVoices;\n"
                 + "      params[k].d.frac.finalvalue = (int32_t) (&(getVoices()[0].params[k]));\n"
-                + "   }\n";
-        ao.sInitCode += "int vi; for(vi=0;vi<attr_poly;vi++) {\n"
+                + "   }\n");
+        sInitCode.append("int vi; for(vi=0;vi<attr_poly;vi++) {\n"
                 + "   voice *v = &getVoices()[vi];\n"
                 + "   v->polyIndex = vi;\n"
                 + "   v->common = this;\n"
@@ -1050,54 +1055,62 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "        }\n"
                 + "      }\n"
                 + "priority=0;\n"
-                + "sustain=0;\n";
+                + "sustain=0;\n");
+
+        ao.sInitCode = sInitCode.toString();
+
         ao.sDisposeCode = "int vi; for(vi=0;vi<attr_poly;vi++) {\n"
                 + "  voice *v = &getVoices()[vi];\n"
                 + "  v->dispose();\n"
                 + "}\n";
-        ao.sKRateCode = "";
+        StringBuilder sKRateCode = new StringBuilder();
+
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b") || typeName.equals("patch/outlet string")) {
-                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = 0;\n";
+                sKRateCode.append("   outlet_" + o.getLegalName() + " = 0;\n");
             } else if (typeName.equals("patch/outlet a")) {
-                ao.sKRateCode += "{\n"
-                        + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] = 0;\n"
-                        + "}\n";
+                sKRateCode.append(
+                    "{\n"
+                    + "      int j;\n"
+                    + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] = 0;\n"
+                    + "}\n");
             }
         }
-        ao.sKRateCode += "int vi; for(vi=0;vi<attr_poly;vi++) {";
+        sKRateCode.append("int vi; for(vi=0;vi<attr_poly;vi++) {");
 
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
             if (typeName.equals("inlet") || typeName.equals("inlet_i") || typeName.equals("inlet_b") || typeName.equals("inlet_")
                     || typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
-                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n";
+                sKRateCode.append("   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n");
             } else if (typeName.equals("inlet_string") || typeName.equals("patch/inlet string")) {
-                ao.sKRateCode += "   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = (char *)inlet_" + o.getLegalName() + ";\n";
+                sKRateCode.append("   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = (char *)inlet_" + o.getLegalName() + ";\n");
             } else if (typeName.equals("inlet~") || typeName.equals("patch/inlet a")) {
-                ao.sKRateCode += "{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getLegalName() + "[j];}\n";
+                sKRateCode.append("{int j; for(j=0;j<BUFSIZE;j++) getVoices()[vi]." + o.getCInstanceName() + "_i._inlet[j] = inlet_" + o.getLegalName() + "[j];}\n");
             }
         }
-        ao.sKRateCode += "getVoices()[vi].dsp();\n";
+        sKRateCode.append("getVoices()[vi].dsp();\n");
         for (IAxoObjectInstance o : getModel().objectinstances) {
             String typeName = o.getType().getId();
             if (typeName.equals("outlet") || typeName.equals("patch/outlet f")
                     || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b")) {
-                ao.sKRateCode += "   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
+                sKRateCode.append("   outlet_" + o.getLegalName() + " += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n");
             } else if (typeName.equals("patch/outlet string")) {
-                ao.sKRateCode += "   outlet_" + o.getLegalName() + " = (char *)getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n";
+                sKRateCode.append("   outlet_" + o.getLegalName() + " = (char *)getVoices()[vi]." + o.getCInstanceName() + "_i._outlet;\n");
             } else if (typeName.equals("patch/outlet a")) {
-                ao.sKRateCode += "{\n"
-                        + "      int j;\n"
-                        + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
-                        + "}\n";
+                sKRateCode.append(
+                    "{\n"
+                    + "      int j;\n"
+                    + "      for(j=0;j<BUFSIZE;j++) outlet_" + o.getLegalName() + "[j] += getVoices()[vi]." + o.getCInstanceName() + "_i._outlet[j];\n"
+                    + "}\n");
             }
         }
-        ao.sKRateCode += "}\n";
+        sKRateCode.append("}\n");
+        ao.sKRateCode = sKRateCode.toString();
+
         ao.sMidiCode = ""
                 + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                 + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
