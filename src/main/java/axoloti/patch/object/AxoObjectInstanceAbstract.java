@@ -100,21 +100,21 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             while ((i < pPathA.length) && (i < oPathA.length) && (oPathA[i].equals(pPathA[i]))) {
                 i++;
             }
-            String rPath = "";
+            StringBuilder rPath = new StringBuilder();
             for (int j = i; j < pPathA.length - 1; j++) {
-                rPath += "../";
+                rPath.append("../");
             }
-            if (rPath.isEmpty()) {
-                rPath = ".";
+            if (rPath.length() == 0) {
+                rPath = new StringBuilder(".");
             } else {
-                rPath = rPath.substring(0, rPath.length() - 1);
+                rPath = new StringBuilder(rPath.substring(0, rPath.length() - 1));
             }
             for (int j = i; j < oPathA.length; j++) {
-                rPath += "/" + oPathA[j];
+                rPath.append("/" + oPathA[j]);
             }
 
-            System.out.println(rPath);
-            typeName = rPath;
+            typeName = rPath.toString();
+            System.out.println(typeName);
         }
 
         typeUUID = type.getUUID();

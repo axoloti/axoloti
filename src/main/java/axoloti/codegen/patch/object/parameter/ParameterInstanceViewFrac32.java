@@ -18,18 +18,18 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 // { type: param_type_frac, unit: param_unit_abstract, signals: 0, pfunction: 0, d: { frac: { finalvalue:0,  0,  0,  0,  0}}},
 //        String pname = GetUserParameterName();
         ParameterFrac32 parameter = (ParameterFrac32) (getModel().getModel());
-        String s = "{ type: " + parameter.GetCType()
-                + ", unit: " + parameter.GetCUnit()
-                + ", signals: 0"
-                + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction());
         Double v1 = (double) getModel().getValue();
         double v = v1;
-        s += ", d: { frac: { finalvalue: 0"
-                + ", value: " + getModel().valToInt32(v)
-                + ", modvalue: " + getModel().valToInt32(v)
-                + ", offset: " + getModel().GetCOffset()
-                + ", multiplier: " + getModel().GetCMultiplier()
-                + "}}},\n";
+        String s = "{ type: " + parameter.GetCType()
+            + ", unit: " + parameter.GetCUnit()
+            + ", signals: 0"
+            + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction())
+            + ", d: { frac: { finalvalue: 0"
+            + ", value: " + getModel().valToInt32(v)
+            + ", modvalue: " + getModel().valToInt32(v)
+            + ", offset: " + getModel().GetCOffset()
+            + ", multiplier: " + getModel().GetCMultiplier()
+            + "}}},\n";
         return s;
     }
 

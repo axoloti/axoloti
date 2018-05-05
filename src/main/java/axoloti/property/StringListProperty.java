@@ -27,18 +27,21 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
     static String StringArrayToString(List<String> va) {
         // items quoted, separated by comma
         // quote characters escaped with backslash
-        String s = "";
+        StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String s1 : va) {
             if (!first) {
-                s += ", ";
+                sb.append(", ");
             }
-            String s2 = s1.replaceAll("\\\\", "\\\\\\");
-            s2 = s2.replaceAll("\"", "\\\\\"");
-            s += "\"" + s2 + "\"";
+
+            sb.append(
+                "\""
+                + s1.replaceAll("\\\\", "\\\\\\")
+                .replaceAll("\"", "\\\\\"")
+                + "\"");
             first = false;
         }
-        return s;
+        return sb.toString();
     }
 
     @Override

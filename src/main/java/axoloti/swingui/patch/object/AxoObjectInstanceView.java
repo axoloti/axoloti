@@ -102,20 +102,20 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     List<IDisplayInstanceView> displayInstanceViews;
 
     void updateTooltext() {
-        String tooltiptxt = "<html>";
+        StringBuilder tooltiptxt = new StringBuilder("<html>");
         if ((getType().getDescription() != null) && (!getType().getDescription().isEmpty())) {
-            tooltiptxt += getType().getDescription();
+            tooltiptxt.append(getType().getDescription());
         }
         if ((getType().getAuthor() != null) && (!getType().getAuthor().isEmpty())) {
-            tooltiptxt += "<p>Author: " + getType().getAuthor();
+            tooltiptxt.append("<p>Author: " + getType().getAuthor());
         }
         if ((getType().getLicense() != null) && (!getType().getLicense().isEmpty())) {
-            tooltiptxt += "<p>License: " + getType().getLicense();
+            tooltiptxt.append("<p>License: " + getType().getLicense());
         }
         if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
-            tooltiptxt += "<p>Path: " + getType().getPath();
+            tooltiptxt.append("<p>Path: " + getType().getPath());
         }
-        titlebar.setToolTipText(tooltiptxt);
+        titlebar.setToolTipText(tooltiptxt.toString());
     }
 
     private void initComponents2() {

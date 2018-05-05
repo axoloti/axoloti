@@ -54,11 +54,11 @@ public class Usb {
     public static String DeviceToPath(Device device) {
         ByteBuffer path = ByteBuffer.allocateDirect(10);
         int n = LibUsb.getPortNumbers(device, path);
-        String paths = "";
+        StringBuilder paths = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            paths += ":" + path.get(i);
+            paths.append(":" + path.get(i));
         }
-        return paths;
+        return paths.toString();
     }
 
     public static void listDevices() {
