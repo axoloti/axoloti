@@ -232,9 +232,10 @@ public class PatchViewCodegen extends View<PatchController> {
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c.append(o.GenerateUICode(count));
         }
-        c.append("static const int n_ui_objects = " + count[0] + ";\n"
-                 + "ui_object_t ui_objects[n_ui_objects] = {\n" + c.toString() + "};\n");
-        return c.toString();
+        c.append("};\n");
+        String r = "static const int n_ui_objects = " + count[0] + ";\n"
+                + "ui_object_t ui_objects[n_ui_objects] = {\n" + c.toString();
+        return r;
     }
 
 
@@ -407,7 +408,7 @@ public class PatchViewCodegen extends View<PatchController> {
         c.append("   int j;\n");
         c.append("   const int32_t *p;\n");
         c.append("   p = GetInitParams();\n");
-        c.append("   for(j=0;j<" + parameterInstances.size() + ");j++){\n");
+        c.append("   for(j=0;j<" + parameterInstances.size() + ";j++){\n");
         c.append("      Parameter_t *param = &params[j];\n");
         c.append("      if (param->pfunction)\n");
         c.append("         (param->pfunction)(param);\n");
