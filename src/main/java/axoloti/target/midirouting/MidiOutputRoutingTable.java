@@ -1,7 +1,7 @@
 package axoloti.target.midirouting;
 
 import axoloti.connection.CConnection;
-import axoloti.connection.CompletionHandler;
+import axoloti.target.CompletionHandler;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;

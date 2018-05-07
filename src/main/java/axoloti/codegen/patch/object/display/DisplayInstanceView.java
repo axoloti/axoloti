@@ -3,7 +3,7 @@ package axoloti.codegen.patch.object.display;
 import axoloti.mvc.View;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceController;
-import axoloti.utils.CodeGeneration;
+import axoloti.codegen.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
 

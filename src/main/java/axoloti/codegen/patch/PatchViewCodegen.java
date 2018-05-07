@@ -32,7 +32,7 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.target.TargetController;
-import axoloti.utils.CodeGeneration;
+import axoloti.codegen.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;

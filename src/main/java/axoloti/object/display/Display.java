@@ -19,7 +19,6 @@ package axoloti.object.display;
 
 import axoloti.datatypes.DataType;
 import axoloti.object.atom.AtomDefinition;
-import axoloti.patch.object.display.DisplayInstance;
 import axoloti.property.BooleanProperty;
 import axoloti.property.Property;
 import java.security.MessageDigest;
@@ -31,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Display<T extends DisplayInstance> extends AtomDefinition implements Cloneable {
+public abstract class Display extends AtomDefinition implements Cloneable {
 
     @Attribute(required = false)
     public Boolean noLabel;

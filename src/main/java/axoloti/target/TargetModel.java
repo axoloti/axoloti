@@ -2,7 +2,6 @@ package axoloti.target;
 
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
-import axoloti.connection.CompletionHandler;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;

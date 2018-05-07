@@ -1,4 +1,4 @@
-package axoloti.connection;
+package axoloti.target;
 
 /**
  *
