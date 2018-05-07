@@ -185,11 +185,6 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public boolean isZombie() {
-        return true;
-    }
-
-    @Override
     public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return inletInstanceViews.get(inletInstance);
     }

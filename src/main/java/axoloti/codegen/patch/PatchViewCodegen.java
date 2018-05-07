@@ -59,6 +59,7 @@ public class PatchViewCodegen extends View<PatchController> {
         super(controller);
         PatchModel patchModel = controller.getModel();
 
+        // TODO: report/fail zombies
         objectInstanceViews = new ArrayList<>(
                 patchModel.getObjectInstances().size()
         );

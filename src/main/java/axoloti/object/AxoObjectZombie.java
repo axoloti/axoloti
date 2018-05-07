@@ -24,7 +24,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root
-public class AxoObjectZombie extends AxoObjectAbstract0 {
+public class AxoObjectZombie extends AxoObject {
 
     public AxoObjectZombie() {
         super();

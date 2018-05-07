@@ -282,11 +282,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public boolean isZombie() {
-        return false;
-    }
-
-    @Override
     public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return null;
     }

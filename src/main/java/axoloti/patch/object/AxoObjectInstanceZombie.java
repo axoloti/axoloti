@@ -17,14 +17,17 @@
  */
 package axoloti.patch.object;
 
+import axoloti.object.AxoObjectZombie;
 import axoloti.object.ObjectController;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.inlet.InletZombie;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.outlet.OutletZombie;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.inlet.InletInstanceZombie;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.outlet.OutletInstanceZombie;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.property.Property;
 import java.awt.Point;
@@ -38,10 +41,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "zombie")
-public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
-
-    public List<InletInstance> inletInstances = new ArrayList<>();
-    public List<OutletInstance> outletInstances = new ArrayList<>();
+public class AxoObjectInstanceZombie extends AxoObjectInstance {
 
     public AxoObjectInstanceZombie() {
     }
@@ -56,47 +56,45 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public InletInstance findInletInstance(String n) {
-        if (inletInstances != null) {
-            for (InletInstance i : inletInstances) {
-                if (i.GetLabel().equals(n)) {
-                    return i;
-                }
-            }
+    public InletInstance findInletInstance(String name) {
+        InletInstance inletInstance = super.findInletInstance(name);
+        if (inletInstance != null) {
+            return inletInstance;
         }
-        InletInstance i = new InletInstanceZombie(this, n);
-        inletInstances.add(i);
-        return i;
+        // add zombie inlet
+        AxoObjectZombie obj = (AxoObjectZombie) getController().getModel();
+        Inlet inlet = new InletZombie(name);
+        obj.getControllerFromModel().addInlet(inlet);
+        // now try again...
+        inletInstance = super.findInletInstance(name);
+        if (inletInstance != null) {
+            return inletInstance;
+        }
+        throw new Error("zombie inlet failed");
     }
 
     @Override
-    public OutletInstance findOutletInstance(String n) {
-        if (outletInstances != null) {
-            for (OutletInstance i : outletInstances) {
-                if (n.equals(i.GetLabel())) {
-                    return i;
-                }
-            }
+    public OutletInstance findOutletInstance(String name) {
+        OutletInstance outletInstance = super.findOutletInstance(name);
+        if (outletInstance != null) {
+            return outletInstance;
         }
-        OutletInstance i = new OutletInstanceZombie(this, n);
-        outletInstances.add(i);
-        return i;
+        // add zombie outlet
+        AxoObjectZombie obj = (AxoObjectZombie) getController().getModel();
+        Outlet outlet = new OutletZombie(name);
+        obj.getControllerFromModel().addOutlet(outlet);
+        // now try again...
+        outletInstance = super.findOutletInstance(name);
+        if (outletInstance != null) {
+            return outletInstance;
+        }
+        throw new Error("zombie outlet failed");
     }
 
 //    @Override
 //    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
 //        return "\n#error \"unresolved object: " + getInstanceName() + " in patch: " + getParent().getFileNamePath() + "\"\n";
 //    }
-    @Override
-    public List<InletInstance> getInletInstances() {
-        return inletInstances;
-    }
-
-    @Override
-    public List<OutletInstance> getOutletInstances() {
-        return outletInstances;
-    }
-
     @Override
     public List<ParameterInstance> getParameterInstances() {
         return new ArrayList<>();
@@ -114,12 +112,14 @@ public class AxoObjectInstanceZombie extends AxoObjectInstanceAbstract {
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
     }
 
     @Override
     public List<Property> getProperties() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return super.getProperties();
     }
+
     @Override
     public void dispose() {
     }

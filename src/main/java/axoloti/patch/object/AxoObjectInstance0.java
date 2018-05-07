@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author jtaelman
  */
-public abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
+abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
 
     public AxoObjectInstance0() {
         super();

@@ -53,6 +53,4 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     JComponent getCanvas();
 
-    boolean isZombie();
-
 }

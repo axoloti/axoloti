@@ -373,11 +373,6 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     }
 
     @Override
-    public boolean isZombie() {
-        return false;
-    }
-
-    @Override
     public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return null;
     }

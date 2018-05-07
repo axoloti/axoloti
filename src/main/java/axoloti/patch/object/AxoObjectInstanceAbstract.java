@@ -22,6 +22,7 @@ import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectUnloaded;
+import axoloti.object.AxoObjectZombie;
 import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
@@ -145,6 +146,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             List<IAxoObject> types = AxoObjects.getAxoObjects().GetAxoObjectFromName(typeName, directory);
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
+                return new AxoObjectZombie(typeName, "");
             } else { // pick first
                 if (types.size() > 1) {
                     typeWasAmbiguous = true;
@@ -153,8 +155,8 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
                 if (type instanceof AxoObjectUnloaded) {
                     AxoObjectUnloaded aou = (AxoObjectUnloaded) type;
                     type = aou.Load();
-                    return (AxoObject) type;
                 }
+                return type;
             }
         }
         return type;
