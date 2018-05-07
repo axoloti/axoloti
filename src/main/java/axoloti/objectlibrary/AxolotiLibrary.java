@@ -1,4 +1,4 @@
-package axoloti.utils;
+package axoloti.objectlibrary;
 
 import axoloti.Axoloti;
 import axoloti.Version;

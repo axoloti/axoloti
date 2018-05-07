@@ -33,7 +33,7 @@ import axoloti.object.outlet.OutletInt32;
 import axoloti.object.parameter.Parameter;
 import axoloti.object.parameter.ParameterFrac32UMap;
 import axoloti.preferences.Preferences;
-import axoloti.utils.AxolotiLibrary;
+import axoloti.objectlibrary.AxolotiLibrary;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

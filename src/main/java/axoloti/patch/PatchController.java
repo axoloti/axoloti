@@ -14,7 +14,7 @@ import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
 import axoloti.object.inlet.Inlet;

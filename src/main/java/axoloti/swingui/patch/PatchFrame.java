@@ -17,7 +17,7 @@
  */
 package axoloti.swingui.patch;
 
-import axoloti.ConnectionStatusListener;
+import axoloti.connection.ConnectionStatusListener;
 import axoloti.FileUtils;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
@@ -25,7 +25,7 @@ import axoloti.abstractui.PatchView;
 import axoloti.connection.CConnection;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.IView;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewType;

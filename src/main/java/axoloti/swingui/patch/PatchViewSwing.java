@@ -22,7 +22,7 @@ import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
 import axoloti.abstractui.PatchViewportView;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.NetController;

@@ -18,10 +18,10 @@
 package axoloti.swingui;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.object.AxoObjectTreeNode;
-import axoloti.object.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
+import axoloti.objectlibrary.AxoObjectTreeNode;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.AxoObjectInstanceFactory;

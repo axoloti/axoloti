@@ -1,6 +1,5 @@
 package axoloti.connection;
 
-import axoloti.ConnectionStatusListener;
 import axoloti.chunks.ChunkParser;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.View;

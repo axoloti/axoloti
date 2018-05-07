@@ -2,7 +2,7 @@ package axoloti.preferences;
 
 import axoloti.FileUtils;
 import static axoloti.FileUtils.axtFileFilter;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.swingui.MainFrame;
 import axoloti.utils.ColorConverter;
 import java.awt.Color;

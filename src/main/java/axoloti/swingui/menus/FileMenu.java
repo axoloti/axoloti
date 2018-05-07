@@ -19,7 +19,7 @@ package axoloti.swingui.menus;
 
 import axoloti.FileUtils;
 import axoloti.abstractui.PatchView;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.MainFrame;
@@ -27,7 +27,7 @@ import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
 import axoloti.swingui.preferences.PreferencesFrame;
-import axoloti.utils.AxolotiLibrary;
+import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import generatedobjects.GeneratedObjects;
 import java.awt.event.KeyEvent;

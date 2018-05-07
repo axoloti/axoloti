@@ -28,7 +28,7 @@ import axoloti.abstractui.PatchView;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
@@ -42,7 +42,7 @@ import axoloti.swingui.target.TJFrame;
 import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
-import axoloti.utils.AxolotiLibrary;
+import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -360,7 +360,6 @@ public final class MainFrame extends TJFrame implements ActionListener {
                 + "* preferences->\"controller object\" is broken\n"
                 + "* presets are broken\n"
                 + "* modulations are broken\n"
-                + "* zombie objects broken\n"
                 + "* modules are broken\n");
         init();
     }

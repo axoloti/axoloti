@@ -2,9 +2,9 @@ package axoloti.swingui.dialogs;
 
 import axoloti.Axoloti;
 import axoloti.preferences.Preferences;
-import axoloti.utils.AxoFileLibrary;
-import axoloti.utils.AxoGitLibrary;
-import axoloti.utils.AxolotiLibrary;
+import axoloti.objectlibrary.AxoFileLibrary;
+import axoloti.objectlibrary.AxoGitLibrary;
+import axoloti.objectlibrary.AxolotiLibrary;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;

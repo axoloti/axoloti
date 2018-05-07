@@ -15,10 +15,16 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-package axoloti.object;
+package axoloti.objectlibrary;
 
+import axoloti.object.AxoObject;
+import axoloti.object.AxoObjectAbstract;
+import axoloti.object.AxoObjectFile;
+import axoloti.object.AxoObjectFromPatch;
+import axoloti.object.AxoObjectUnloaded;
+import axoloti.object.IAxoObject;
 import axoloti.preferences.Preferences;
-import axoloti.utils.AxolotiLibrary;
+import axoloti.objectlibrary.AxolotiLibrary;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

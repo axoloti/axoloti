@@ -17,6 +17,7 @@
  */
 package axoloti.object;
 
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.abstractui.PatchView;
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.mvc.AbstractDocumentRoot;

@@ -23,7 +23,7 @@ import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectUnloaded;
 import axoloti.object.AxoObjectZombie;
-import axoloti.object.AxoObjects;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
 import axoloti.patch.PatchModel;

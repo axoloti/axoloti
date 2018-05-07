@@ -17,7 +17,7 @@
  */
 package axoloti.swingui.patchbank;
 
-import axoloti.ConnectionStatusListener;
+import axoloti.connection.ConnectionStatusListener;
 import static axoloti.FileUtils.axpFileFilter;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
