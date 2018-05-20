@@ -2,8 +2,8 @@ package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
-import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.piccolo.components.control.PDropDownComponent;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
@@ -12,39 +12,38 @@ class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString {
 
     PDropDownComponent comboBox;
 
-    public PAttributeInstanceViewComboBox(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewComboBox(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceComboBox getModel() {
-        return (AttributeInstanceComboBox) super.getModel();
+    public AttributeInstanceComboBox getDModel() {
+        return (AttributeInstanceComboBox) super.getDModel();
     }
 
     private void initComponents() {
-        comboBox = new PDropDownComponent(getModel().getModel().getMenuEntries(), getModel(), axoObjectInstanceView);
-        setString(getModel().getValue());
+        comboBox = new PDropDownComponent(getDModel().getDModel().getMenuEntries(), getDModel(), axoObjectInstanceView);
+        setString(getDModel().getValue());
         comboBox.addItemListener(new PDropDownComponent.DDCListener() {
                 @Override
-                public void SelectionChanged() {
-                    getController().addMetaUndo("edit attribute " + getModel().getName());
-                    getController().changeValue(comboBox.getSelectedItem());
-
+                public void selectionChanged() {
+                    attribute.getController().addMetaUndo("edit attribute " + getDModel().getName());
+                    attribute.getController().changeValue(comboBox.getSelectedItem());
                 }
             });
         addChild(comboBox);
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (comboBox != null) {
             comboBox.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (comboBox != null) {
             comboBox.setEnabled(true);
         }
@@ -52,10 +51,10 @@ class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString {
 
     @Override
     public void setString(String s) {
-        AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getController().getModel();
+        AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getDModel();
         int index = aic.getIndex(s);
-        if (aic.getModel().getMenuEntries().size() > 0) {
-            comboBox.setSelectedItem(aic.getModel().getMenuEntries().get(index));
+        if (aic.getDModel().getMenuEntries().size() > 0) {
+            comboBox.setSelectedItem(aic.getDModel().getMenuEntries().get(index));
         }
     }
 

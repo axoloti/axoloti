@@ -1,22 +1,24 @@
 package axoloti.swingui.patch.object;
 
 import axoloti.abstractui.IAttributeInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.IAxoObject;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.attribute.AttributeInstanceController;
-import axoloti.patch.object.display.DisplayInstanceController;
-import axoloti.patch.object.iolet.IoletInstanceController;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.atom.AtomInstance;
+import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.components.LabelComponent;
@@ -44,10 +46,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.border.LineBorder;
 
-public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
+public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
 
-    LabelComponent IndexLabel;
+    LabelComponent indexLabel;
     final JPanel p_attributeViews = new JPanel();
     final JPanel p_parameterViews = new JPanel();
     final JPanel p_displayViews = new JPanel();
@@ -55,24 +58,25 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     final JPanel p_inletViews = new JPanel();
     final JPanel p_outletViews = new JPanel();
 
-    public AxoObjectInstanceView(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public AxoObjectInstanceView(IAxoObjectInstance objectInstance, PatchViewSwing patchView) {
+        super(objectInstance, patchView);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstance getModel() {
-        return (AxoObjectInstance) super.getModel();
+    public IAxoObjectInstance getDModel() {
+        return (AxoObjectInstance) super.getDModel();
     }
 
     public IAxoObject getType() {
-        return getModel().getType();
+        return getDModel().getDModel();
     }
 
     private void initComponents() {
         p_ioletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_ioletViews.setLayout(new BoxLayout(p_ioletViews, BoxLayout.LINE_AXIS));
         p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
+        p_ioletViews.setAlignmentY(TOP_ALIGNMENT);
 
         p_inletViews.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         p_inletViews.setLayout(new BoxLayout(p_inletViews, BoxLayout.PAGE_AXIS));
@@ -95,8 +99,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         initComponents2();
     }
 
-    List<IIoletInstanceView> inletInstanceViews;
-    List<IIoletInstanceView> outletInstanceViews;
+    List<IInletInstanceView> inletInstanceViews;
+    List<IOutletInstanceView> outletInstanceViews;
     List<IAttributeInstanceView> attributeInstanceViews;
     List<IParameterInstanceView> parameterInstanceViews;
     List<IDisplayInstanceView> displayInstanceViews;
@@ -107,35 +111,29 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             tooltiptxt.append(getType().getDescription());
         }
         if ((getType().getAuthor() != null) && (!getType().getAuthor().isEmpty())) {
-            tooltiptxt.append("<p>Author: " + getType().getAuthor());
+            tooltiptxt.append("<p>Author: ");
+            tooltiptxt.append(getType().getAuthor());
         }
         if ((getType().getLicense() != null) && (!getType().getLicense().isEmpty())) {
-            tooltiptxt.append("<p>License: " + getType().getLicense());
+            tooltiptxt.append("<p>License: ");
+            tooltiptxt.append(getType().getLicense());
         }
         if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
-            tooltiptxt.append("<p>Path: " + getType().getPath());
+            tooltiptxt.append("<p>Path: ");
+            tooltiptxt.append(getType().getPath());
         }
         titlebar.setToolTipText(tooltiptxt.toString());
     }
 
     private void initComponents2() {
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));/* {
-         @Override
-         public Dimension preferredLayoutSize(Container target) {
-         Dimension d = super.preferredLayoutSize(target);
-         d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
-         d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
-         return d;
-         }
-
-         });*/
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
         final PopupIcon popupIcon = new PopupIcon();
         popupIcon.setPopupIconListener(new PopupIcon.PopupIconListener() {
             @Override
-            public void ShowPopup() {
-                JPopupMenu popup = CreatePopupMenu();
+            public void showPopup() {
+                JPopupMenu popup = createPopupMenu();
                 popupIcon.add(popup);
                 popup.show(popupIcon,
                         0, popupIcon.getHeight());
@@ -143,7 +141,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         });
         titlebar.add(popupIcon);
 
-        LabelComponent idlbl = new LabelComponent(getModel().getTypeName());
+        LabelComponent idlbl = new LabelComponent(model.getTypeName());
         idlbl.setAlignmentX(LEFT_ALIGNMENT);
         idlbl.setForeground(Theme.getCurrentTheme().Object_TitleBar_Foreground);
         titlebar.add(idlbl);
@@ -161,7 +159,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         //IndexLabel.setAlignmentX(RIGHT_ALIGNMENT);
         titlebar.setAlignmentX(LEFT_ALIGNMENT);
         add(titlebar);
-        instanceLabel = new LabelComponent(getModel().getInstanceName());
+        instanceLabel = new LabelComponent(getDModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         instanceLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -174,15 +172,14 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         });
         add(instanceLabel);
 
-        p_ioletViews.setLayout(new BoxLayout(p_ioletViews, BoxLayout.LINE_AXIS));
-        p_ioletViews.setAlignmentX(LEFT_ALIGNMENT);
+        // without this invisible border, initial size is incorrect
+        // for patch/patcher inlets/outlets?
+        p_ioletViews.setBorder(new LineBorder(Theme.getCurrentTheme().Object_Default_Background));
 
-        p_inletViews.setLayout(new BoxLayout(p_inletViews, BoxLayout.PAGE_AXIS));
-        p_inletViews.setAlignmentY(TOP_ALIGNMENT);
+//        p_outletViews.setBorder(new LineBorder(Color.red));
+//        p_ioletViews.setBorder(new LineBorder(Color.green));
 //        p_inletViews.setBorder(new LineBorder(Color.yellow));
 
-        p_outletViews.setLayout(new BoxLayout(p_outletViews, BoxLayout.PAGE_AXIS));
-        p_outletViews.setAlignmentY(TOP_ALIGNMENT);
         if (getType().getRotatedParams()) {
             p_parameterViews.setLayout(new BoxLayout(p_parameterViews, BoxLayout.LINE_AXIS));
         } else {
@@ -203,28 +200,47 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         add(p_attributeViews);
         add(p_parameterViews);
         add(p_displayViews);
-        p_parameterViews.setAlignmentX(LEFT_ALIGNMENT);
-        p_displayViews.setAlignmentX(LEFT_ALIGNMENT);
 
         resizeToGrid();
         setVisible(true);
+        repaint();
         revalidate();
     }
 
-    HashMap<AbstractController, IView> view_cache = new HashMap<>();
+    @Override
+    public void resizeToGrid() {
+        boolean dbg_print = false;
+        if (dbg_print) {
+            System.out.println("inlets  : ");
+            for (Component c : p_inletViews.getComponents()) {
+                System.out.println("    - " + c.toString());
+            }
+            System.out.println("outlets  : ");
+            for (Component c : p_outletViews.getComponents()) {
+                System.out.println("    - " + c.toString());
+            }
+            System.out.println("params: ");
+            for (Component c : p_parameterViews.getComponents()) {
+                System.out.println("    - " + c.toString());
+            }
+        }
+        super.resizeToGrid();
+    }
 
-    ArrayView<IIoletInstanceView> inletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
+    HashMap<AtomInstance, IView> view_cache = new HashMap<>();
+
+    ArrayView<IInletInstanceView, InletInstance> inletInstanceViewSync = new ArrayView<IInletInstanceView, InletInstance>() {
         @Override
-        protected InletInstanceView viewFactory(AbstractController ctrl) {
-            InletInstanceView view = (InletInstanceView) view_cache.get(ctrl);
+        protected InletInstanceView viewFactory(InletInstance inlet) {
+            InletInstanceView view = (InletInstanceView) view_cache.get(inlet);
             if (view == null) {
-                view = InletInstanceViewFactory.createView((IoletInstanceController) ctrl, AxoObjectInstanceView.this);
+                view = InletInstanceViewFactory.createView(inlet, AxoObjectInstanceView.this);
             }
             return view;
         }
 
         @Override
-        protected void updateUI(List<IIoletInstanceView> views) {
+        protected void updateUI(List<IInletInstanceView> views) {
             p_inletViews.removeAll();
             for (IIoletInstanceView c : views) {
                 p_inletViews.add((Component) c);
@@ -233,23 +249,23 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         }
 
         @Override
-        protected void removeView(IIoletInstanceView view) {
-            view_cache.put(view.getController(), view);
+        protected void removeView(IInletInstanceView view) {
+            view_cache.put(view.getDModel(), view);
         }
     };
 
-    ArrayView<IIoletInstanceView> outletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
+    ArrayView<IOutletInstanceView, OutletInstance> outletInstanceViewSync = new ArrayView<IOutletInstanceView, OutletInstance>() {
         @Override
-        protected OutletInstanceView viewFactory(AbstractController ctrl) {
-            OutletInstanceView view = (OutletInstanceView) view_cache.get(ctrl);
+        protected OutletInstanceView viewFactory(OutletInstance outlet) {
+            OutletInstanceView view = (OutletInstanceView) view_cache.get(outlet);
             if (view == null) {
-                view = OutletInstanceViewFactory.createView((IoletInstanceController) ctrl, AxoObjectInstanceView.this);
+                view = OutletInstanceViewFactory.createView(outlet, AxoObjectInstanceView.this);
             }
             return view;
         }
 
         @Override
-        protected void updateUI(List<IIoletInstanceView> views) {
+        protected void updateUI(List<IOutletInstanceView> views) {
             p_outletViews.removeAll();
             for (IIoletInstanceView c : views) {
                 p_outletViews.add((Component) c);
@@ -258,17 +274,17 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         }
 
         @Override
-        protected void removeView(IIoletInstanceView view) {
-            view_cache.put(view.getController(), view);
+        protected void removeView(IOutletInstanceView view) {
+            view_cache.put(view.getDModel(), view);
         }
     };
 
-    ArrayView<IAttributeInstanceView> attributeInstanceViewSync = new ArrayView<IAttributeInstanceView>() {
+    ArrayView<IAttributeInstanceView, AttributeInstance> attributeInstanceViewSync = new ArrayView<IAttributeInstanceView, AttributeInstance>() {
         @Override
-        protected AttributeInstanceView viewFactory(AbstractController ctrl) {
-            AttributeInstanceView view = (AttributeInstanceView) view_cache.get(ctrl);
+        protected AttributeInstanceView viewFactory(AttributeInstance attribute) {
+            AttributeInstanceView view = (AttributeInstanceView) view_cache.get(attribute);
             if (view == null) {
-                view = AttributeInstanceViewFactory.createView((AttributeInstanceController) ctrl, AxoObjectInstanceView.this);
+                view = AttributeInstanceViewFactory.createView(attribute, AxoObjectInstanceView.this);
             }
             return view;
         }
@@ -284,16 +300,16 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         @Override
         protected void removeView(IAttributeInstanceView view) {
-            view_cache.put(view.getController(), view);
+            view_cache.put(view.getDModel(), view);
         }
     };
 
-    ArrayView<IParameterInstanceView> parameterInstanceViewSync = new ArrayView<IParameterInstanceView>() {
+    ArrayView<IParameterInstanceView, ParameterInstance> parameterInstanceViewSync = new ArrayView<IParameterInstanceView, ParameterInstance>() {
         @Override
-        protected IParameterInstanceView viewFactory(AbstractController ctrl) {
-            IParameterInstanceView view = (IParameterInstanceView) view_cache.get(ctrl);
+        protected IParameterInstanceView viewFactory(ParameterInstance parameter) {
+            IParameterInstanceView view = (IParameterInstanceView) view_cache.get(parameter);
             if (view == null) {
-                view = ParameterInstanceViewFactory.createView((ParameterInstanceController) ctrl, AxoObjectInstanceView.this);
+                view = ParameterInstanceViewFactory.createView(parameter, AxoObjectInstanceView.this);
             }
             return view;
         }
@@ -309,16 +325,16 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         @Override
         protected void removeView(IParameterInstanceView view) {
-            view_cache.put(view.getController(), view);
+            view_cache.put(view.getDModel(), view);
         }
     };
 
-    ArrayView<IDisplayInstanceView> displayInstanceViewSync = new ArrayView<IDisplayInstanceView>() {
+    ArrayView<IDisplayInstanceView, DisplayInstance> displayInstanceViewSync = new ArrayView<IDisplayInstanceView, DisplayInstance>() {
         @Override
-        protected IDisplayInstanceView viewFactory(AbstractController ctrl) {
-            IDisplayInstanceView view = (IDisplayInstanceView) view_cache.get(ctrl);
+        protected IDisplayInstanceView viewFactory(DisplayInstance display) {
+            IDisplayInstanceView view = (IDisplayInstanceView) view_cache.get(display);
             if (view == null) {
-                view = DisplayInstanceViewFactory.createView((DisplayInstanceController) ctrl, AxoObjectInstanceView.this);
+                view = DisplayInstanceViewFactory.createView(display, AxoObjectInstanceView.this);
             }
             return view;
         }
@@ -334,7 +350,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
 
         @Override
         protected void removeView(IDisplayInstanceView view) {
-            view_cache.put(view.getController(), view);
+            view_cache.put(view.getDModel(), view);
         }
     };
 
@@ -342,15 +358,15 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (AxoObjectInstance.OBJ_INLET_INSTANCES.is(evt)) {
-            inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().getModel().getInletInstances());
+            inletInstanceViews = inletInstanceViewSync.sync(inletInstanceViews, getDModel().getInletInstances());
         } else if (AxoObjectInstance.OBJ_OUTLET_INSTANCES.is(evt)) {
-            outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().getModel().getOutletInstances());
+            outletInstanceViews = outletInstanceViewSync.sync(outletInstanceViews, getDModel().getOutletInstances());
         } else if (AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES.is(evt)) {
-            attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().getModel().getAttributeInstances());
+            attributeInstanceViews = attributeInstanceViewSync.sync(attributeInstanceViews, getDModel().getAttributeInstances());
         } else if (AxoObjectInstance.OBJ_PARAMETER_INSTANCES.is(evt)) {
-            parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().getModel().getParameterInstances());
+            parameterInstanceViews = parameterInstanceViewSync.sync(parameterInstanceViews, getDModel().getParameterInstances());
         } else if (AxoObjectInstance.OBJ_DISPLAY_INSTANCES.is(evt)) {
-            displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().getModel().getDisplayInstances());
+            displayInstanceViews = displayInstanceViewSync.sync(displayInstanceViews, getDModel().getDisplayInstances());
         } else if (AxoObject.OBJ_DESCRIPTION.is(evt)
                 || AxoObject.OBJ_AUTHOR.is(evt)
                 || AxoObject.OBJ_LICENSE.is(evt)) {
@@ -359,13 +375,13 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
     }
 
     @Override
-    JPopupMenu CreatePopupMenu() {
-        JPopupMenu popup = super.CreatePopupMenu();
+    JPopupMenu createPopupMenu() {
+        JPopupMenu popup = super.createPopupMenu();
         JMenuItem popm_edit = new JMenuItem("edit object definition");
         popm_edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                OpenEditor();
+                openEditor();
             }
         });
         popup.add(popm_edit);
@@ -381,7 +397,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getPatchView().ShowClassSelector(AxoObjectInstanceView.this.getLocation(), AxoObjectInstanceView.this, null);
+                getPatchView().showClassSelector(AxoObjectInstanceView.this.getLocation(), AxoObjectInstanceView.this, null);
             }
         });
         popup.add(popm_substitute);
@@ -390,7 +406,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    PatchViewSwing.OpenPatch(getType().getHelpPatchFile());
+                    PatchViewSwing.openPatch(getType().getHelpPatchFile());
                 }
             });
             popup.add(popm_help);
@@ -400,20 +416,20 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getController().getModel().getParent().getControllerFromModel().PromoteToOverloadedObj(getModel());
+                    getDModel().getParent().getController().promoteToOverloadedObj(getDModel());
                 }
             });
             popup.add(popm_adapt);
         }
 
-        if (getModel().getType() instanceof AxoObjectFromPatch) {
+        if (getDModel().getDModel() instanceof AxoObjectFromPatch) {
             JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
-                        getController().addMetaUndo("embed");
-                        getController().getModel().getParent().getControllerFromModel().ConvertToPatchPatcher(getModel());
+                        model.getController().addMetaUndo("embed");
+                        getDModel().getParent().getController().convertToPatchPatcher(getDModel());
                     }
                 }
             });
@@ -423,8 +439,8 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getController().addMetaUndo("embed");
-                    getController().getModel().getParent().getControllerFromModel().ConvertToEmbeddedObj(getModel());
+                    model.getController().addMetaUndo("embed");
+                    model.getParent().getController().convertToEmbeddedObj(getDModel());
                 }
             });
             popup.add(popm_embed);
@@ -432,33 +448,33 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract impleme
         return popup;
     }
 
-    public void OpenEditor() {
-        getType().OpenEditor();
+    public void openEditor() {
+        getType().openEditor();
     }
 
     @Override
-    public void Lock() {
-        super.Lock();
+    public void lock() {
+        super.lock();
         for (IAttributeInstanceView a : attributeInstanceViews) {
-            a.Lock();
+            a.lock();
         }
     }
 
     @Override
-    public void Unlock() {
-        super.Unlock();
+    public void unlock() {
+        super.unlock();
         for (IAttributeInstanceView a : attributeInstanceViews) {
-            a.UnLock();
+            a.unlock();
         }
     }
 
     @Override
-    public List<IIoletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return inletInstanceViews;
     }
 
     @Override
-    public List<IIoletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return outletInstanceViews;
     }
 

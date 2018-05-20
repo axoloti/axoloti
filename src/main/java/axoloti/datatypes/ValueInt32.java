@@ -47,11 +47,6 @@ public class ValueInt32 extends Value {
     }
 
     @Override
-    public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public int getFrac() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

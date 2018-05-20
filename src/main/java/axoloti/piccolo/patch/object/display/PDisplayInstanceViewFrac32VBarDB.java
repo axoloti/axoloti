@@ -2,15 +2,14 @@ package axoloti.piccolo.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PVBarComponentDB;
 import java.beans.PropertyChangeEvent;
 
 class PDisplayInstanceViewFrac32VBarDB extends PDisplayInstanceViewFrac32 {
 
     private IAxoObjectInstanceView axoObjectInstanceView;
-    public PDisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PDisplayInstanceViewFrac32VBarDB(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();
     }

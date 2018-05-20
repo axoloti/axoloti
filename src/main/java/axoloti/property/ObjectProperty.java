@@ -32,7 +32,7 @@ public class ObjectProperty extends PropertyReadWrite<Object> {
     }
 
     @Override
-    public Object StringToObj(String v) {
+    public Object convertStringToObj(String v) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

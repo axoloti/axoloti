@@ -154,7 +154,7 @@ public class MidiControllerNames {
         "Polyphonic"
     };
 
-    public static String GetNameFromCC(int cc) {
+    public static String getNameFromCC(int cc) {
         if ((cc > 0) && (cc < 128)) {
             return ccnames[cc];
         } else {

@@ -19,10 +19,10 @@ package axoloti.preferences;
 
 import axoloti.Axoloti;
 import axoloti.Version;
-import axoloti.patch.PatchViewType;
 import axoloti.objectlibrary.AxoFileLibrary;
 import axoloti.objectlibrary.AxoGitLibrary;
 import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.patch.PatchViewType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -144,16 +144,16 @@ public class Preferences {
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         // called prior to serialization
         appVersion = Version.AXOLOTI_SHORT_VERSION;
     }
 
-    void SetDirty() {
+    void setDirty() {
         isDirty = true;
     }
 
-    void ClearDirty() {
+    void clearDirty() {
         isDirty = false;
     }
 
@@ -192,7 +192,7 @@ public class Preferences {
             libraries.add(newlib);
         }
         buildObjectSearchPatch();
-        SetDirty();
+        setDirty();
     }
 
     public void removeLibrary(String id) {
@@ -202,7 +202,7 @@ public class Preferences {
                 return;
             }
         }
-        SetDirty();
+        setDirty();
         buildObjectSearchPatch();
     }
 
@@ -212,7 +212,7 @@ public class Preferences {
                 lib.setEnabled(e);
             }
         }
-        SetDirty();
+        setDirty();
         buildObjectSearchPatch();
     }
 
@@ -232,7 +232,7 @@ public class Preferences {
             i = minimumPollInterval;
         }
         PollInterval = i;
-        SetDirty();
+        setDirty();
     }
 
     public void setCurrentFileDirectory(String CurrentFileDirectory) {
@@ -240,11 +240,11 @@ public class Preferences {
             return;
         }
         this.CurrentFileDirectory = CurrentFileDirectory;
-        SavePrefs();
-        SetDirty();
+        savePrefs();
+        setDirty();
     }
 
-    static String GetPrefsFileLoc() {
+    static String getPrefsFileLoc() {
         return System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti.prefs";
     }
 
@@ -252,7 +252,7 @@ public class Preferences {
 
     public static Preferences getPreferences() {
         if (singleton == null) {
-            File p = new File(Preferences.GetPrefsFileLoc());
+            File p = new File(Preferences.getPrefsFileLoc());
             if (p.exists()) {
                 Preferences prefs = null;
                 Serializer serializer = new Persister();
@@ -276,20 +276,20 @@ public class Preferences {
                 if (prefs.RuntimeDir
                         == null) {
                     prefs.RuntimeDir = System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
-                    prefs.SetDirty();
+                    prefs.setDirty();
                 } else {
                     System.setProperty(axoloti.Axoloti.RUNTIME_DIR, prefs.RuntimeDir);
                 }
                 if (prefs.FirmwareDir
                         == null) {
                     prefs.FirmwareDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
-                    prefs.SetDirty();
+                    prefs.setDirty();
                 } else {
                     System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, prefs.FirmwareDir);
                 }
 
                 if (prefs.libraries.isEmpty()) {
-                    prefs.ResetLibraries(false);
+                    prefs.resetLibraries(false);
                 }
 
                 prefs.buildObjectSearchPatch();
@@ -297,17 +297,17 @@ public class Preferences {
                 singleton.MidiInputDevice = null; // clear it out for the future
             } else {
                 singleton = new Preferences();
-                singleton.ResetLibraries(false);
+                singleton.resetLibraries(false);
             }
         }
         return singleton;
     }
 
-    public void SavePrefs() {
+    public void savePrefs() {
         Logger.getLogger(Preferences.class
                 .getName()).log(Level.INFO, "Saving preferences...");
         Serializer serializer = new Persister();
-        File f = new File(GetPrefsFileLoc());
+        File f = new File(getPrefsFileLoc());
 
         Logger.getLogger(Preferences.class
                 .getName()).log(Level.INFO, "preferences path : {0}", f.getAbsolutePath());
@@ -318,7 +318,7 @@ public class Preferences {
             Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        ClearDirty();
+        clearDirty();
     }
 
     @Deprecated
@@ -339,7 +339,7 @@ public class Preferences {
             return;
         }
         this.MouseDialAngular = MouseDialAngular;
-        SetDirty();
+        setDirty();
     }
 
     public boolean getMouseDoNotRecenterWhenAdjustingControls() {
@@ -351,7 +351,7 @@ public class Preferences {
             return;
         }
         this.MouseDoNotRecenterWhenAdjustingControls = MouseDoNotRecenterWhenAdjustingControls;
-        SetDirty();
+        setDirty();
     }
 
     public Boolean getExpertMode() {
@@ -372,7 +372,7 @@ public class Preferences {
             recentFiles.remove(0);
         }
         recentFiles.add(filename);
-        SetDirty();
+        setDirty();
     }
 
     public String getFavouriteDir() {
@@ -384,15 +384,15 @@ public class Preferences {
             return;
         }
         this.FavouriteDir = favouriteDir;
-        SetDirty();
+        setDirty();
     }
 
-    public void SetFirmwareDir(String dir) {
+    public void setFirmwareDir(String dir) {
         FirmwareDir = dir;
         System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, dir);
     }
 
-    public void SetRuntimeDir(String dir) {
+    public void setRuntimeDir(String dir) {
         RuntimeDir = dir;
         System.setProperty(axoloti.Axoloti.RUNTIME_DIR, dir);
     }
@@ -413,7 +413,7 @@ public class Preferences {
         } else {
             BoardNames.put(cpuid, name);
         }
-        SetDirty();
+        setDirty();
     }
 
     public String getControllerObject() {
@@ -432,7 +432,7 @@ public class Preferences {
         return ControllerEnabled;
     }
 
-    public final void ResetLibraries(boolean delete) {
+    public final void resetLibraries(boolean delete) {
         libraries = new ArrayList<>();
 
         try {
@@ -498,7 +498,7 @@ public class Preferences {
 
     public void setThemePath(String themePath) {
         this.themePath = themePath;
-        SavePrefs();
+        savePrefs();
     }
 
     public void setPatchViewType(PatchViewType patchViewType) {

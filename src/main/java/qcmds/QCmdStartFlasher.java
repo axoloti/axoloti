@@ -28,17 +28,17 @@ public class QCmdStartFlasher extends QCmdStart {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start flashing...";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "flashing... (ready when the green LED is steady on)";
     }
 
     @Override
-    public String GetTimeOutMessage() {
+    public String getTimeOutMessage() {
         return "Firmware flashing in progress, do not unplug the board until the leds stop blinking! You can connect again after the leds stop blinking.";
     }
 

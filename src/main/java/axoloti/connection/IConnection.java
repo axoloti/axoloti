@@ -3,8 +3,7 @@ package axoloti.connection;
 import axoloti.chunks.ChunkParser;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.View;
-import static axoloti.swingui.dialogs.USBPortSelectionDlg.ErrorString;
-import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.targetprofile.axoloti_core;
 import axoloti.usb.LibUSBContext;
@@ -20,71 +19,72 @@ import org.usb4java.DeviceList;
 import org.usb4java.LibUsb;
 import org.usb4java.LibUsbException;
 import qcmds.QCmdSerialTask;
+import static axoloti.swingui.dialogs.USBPortSelectionDlg.convertErrorToString;
 
 /**
  *
  * @author jtaelman
  */
-public abstract class IConnection extends View<TargetController> {
+public abstract class IConnection extends View<TargetModel> {
 
-    public IConnection(TargetController controller) {
-        super(controller);
+    public IConnection(TargetModel targetModel) {
+        super(targetModel);
     }
 
     public interface MemReadHandler
     {
-        public void Done(ByteBuffer mem);
+        public void done(ByteBuffer mem);
     }
 
     abstract public boolean isConnected();
     abstract public void disconnect();
     abstract public boolean connect(String cpuid);
-    abstract public void SelectPort();
-    abstract public void TransmitStop();
-    abstract public void TransmitStart();
-    abstract public void TransmitStart(String patchName);
-    abstract public void TransmitStart(int patchIndex);
-    abstract public void TransmitPing();
-    abstract public void TransmitRecallPreset(int presetNo);
-    abstract public void UploadFragment(byte[] buffer, int offset);
-    abstract public void TransmitGetFileList();
-    abstract public void TransmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3);
-    abstract public void TransmitCreateFile(String filename, int size);
-    abstract public void TransmitGetFileInfo(String filename);
-    abstract public void TransmitGetFileContents(String filename, MemReadHandler handler);
-    abstract public void TransmitCreateFile(String filename, int size, Calendar date);
-    abstract public void TransmitCreateDirectory(String filename, Calendar date);
-    abstract public void TransmitDeleteFile(String filename);
-    abstract public void TransmitChangeWorkingDirectory(String path);
-    abstract public void TransmitAppendFile(byte[] buffer);
-    abstract public void TransmitCloseFile();
-    abstract public void TransmitMemoryRead(int addr, int length, MemReadHandler handler);
-    abstract public void TransmitMemoryRead(int addr, int length);
-    abstract public void TransmitMemoryRead1Word(int addr);
-    abstract public void SendUpdatedPreset(byte[] b);
-    abstract public void SendMidi(int cable, int m0, int m1, int m2);
-    abstract public boolean AppendToQueue(QCmdSerialTask cmd);
-    abstract public void TransmitGetFWVersion();
-    abstract public void TransmitCopyToFlash();
-    abstract public void BringToDFU();
-    abstract public void ClearSync();
-    abstract public boolean WaitSync(int msec);
-    abstract public boolean WaitSync();
-    abstract public void ClearReadSync();
-    abstract public boolean WaitReadSync();
+    abstract public void selectPort();
+    abstract public void transmitStop();
+    abstract public void transmitStart();
+    abstract public void transmitStart(String patchName);
+    abstract public void transmitStart(int patchIndex);
+    abstract public void transmitPing();
+    abstract public void transmitRecallPreset(int presetNo);
+    abstract public void uploadFragment(byte[] buffer, int offset);
+    abstract public void transmitGetFileList();
+    abstract public void transmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3);
+    abstract public void transmitCreateFile(String filename, int size);
+    abstract public void transmitGetFileInfo(String filename);
+    abstract public void transmitGetFileContents(String filename, MemReadHandler handler);
+    abstract public void transmitCreateFile(String filename, int size, Calendar date);
+    abstract public void transmitCreateDirectory(String filename, Calendar date);
+    abstract public void transmitDeleteFile(String filename);
+    abstract public void transmitChangeWorkingDirectory(String path);
+    abstract public void transmitAppendFile(byte[] buffer);
+    abstract public void transmitCloseFile();
+    abstract public void transmitMemoryRead(int addr, int length, MemReadHandler handler);
+    abstract public void transmitMemoryRead(int addr, int length);
+    abstract public void transmitMemoryRead1Word(int addr);
+    abstract public void sendUpdatedPreset(byte[] b);
+    abstract public void sendMidi(int cable, int m0, int m1, int m2);
+    abstract public boolean appendToQueue(QCmdSerialTask cmd);
+    abstract public void transmitGetFWVersion();
+    abstract public void transmitCopyToFlash();
+    abstract public void bringToDFU();
+    abstract public void clearSync();
+    abstract public boolean waitSync(int msec);
+    abstract public boolean waitSync();
+    abstract public void clearReadSync();
+    abstract public boolean waitReadSync();
     abstract public void setPatch(PatchViewLive patchViewLive);
     abstract public axoloti_core getTargetProfile();
     abstract public ByteBuffer getMemReadBuffer();
     abstract public int getMemRead1Word();
-    abstract public boolean GetSDCardPresent();
+    abstract public boolean getSDCardPresent();
     abstract public void setDisplayAddr(int a, int l);
-    abstract public ChunkParser GetFWChunks();
+    abstract public ChunkParser getFWChunks();
     abstract public String getFWID();
 
     private final static short bulkVID = (short) 0x16C0;
     private final static short bulkPID = (short) 0x0442;
 
-    public static DeviceHandle OpenDeviceHandle(String _cpuid) {
+    public static DeviceHandle openDeviceHandle(String _cpuid) {
         // Read the USB device list
         DeviceList list = new DeviceList();
         int result = LibUsb.getDeviceList(LibUSBContext.getContext(), list);
@@ -105,7 +105,7 @@ public abstract class IConnection extends View<TargetController> {
                     DeviceHandle h = new DeviceHandle();
                     result = LibUsb.open(d, h);
                     if (result < 0) {
-                        Logger.getLogger(IConnection.class.getName()).log(Level.INFO, ErrorString(result));
+                        Logger.getLogger(IConnection.class.getName()).log(Level.INFO, convertErrorToString(result));
                     } else {
                         String serial = LibUsb.getStringDescriptor(h, descriptor.iSerialNumber());
                         if (_cpuid != null) {
@@ -131,7 +131,7 @@ public abstract class IConnection extends View<TargetController> {
                     DeviceHandle h = new DeviceHandle();
                     result = LibUsb.open(d, h);
                     if (result < 0) {
-                        Logger.getLogger(IConnection.class.getName()).log(Level.INFO, ErrorString(result));
+                        Logger.getLogger(IConnection.class.getName()).log(Level.INFO, convertErrorToString(result));
                     } else {
                         return h;
                     }
@@ -150,9 +150,9 @@ public abstract class IConnection extends View<TargetController> {
 
     public void addConnectionStatusListener(ConnectionStatusListener csl) {
         if (isConnected()) {
-            csl.ShowConnect();
+            csl.showConnect();
         } else {
-            csl.ShowDisconnect();
+            csl.showDisconnect();
         }
         csls.add(csl);
     }
@@ -161,28 +161,28 @@ public abstract class IConnection extends View<TargetController> {
         csls.remove(csl);
     }
 
-    public void ShowDisconnect() {
+    public void showDisconnect() {
         for (ConnectionStatusListener csl : csls) {
-            csl.ShowDisconnect();
+            csl.showDisconnect();
         }
-        getController().getModel().setConnection(null);
-        getController().getModel().setWarnedAboutFWCRCMismatch(false);
+        getDModel().setConnection(null);
+        getDModel().setWarnedAboutFWCRCMismatch(false);
     }
 
-    public void ShowConnect() {
+    public void showConnect() {
         for (ConnectionStatusListener csl : csls) {
-            csl.ShowConnect();
+            csl.showConnect();
         }
-        getController().getModel().setConnection(this);
+        getDModel().setConnection(this);
     }
 
     private ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<>();
 
     public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
-        if (GetSDCardPresent()) {
-            sdcml.ShowSDCardMounted();
+        if (getSDCardPresent()) {
+            sdcml.showSDCardMounted();
         } else {
-            sdcml.ShowSDCardUnmounted();
+            sdcml.showSDCardUnmounted();
         }
         sdcmls.add(sdcml);
     }
@@ -191,19 +191,19 @@ public abstract class IConnection extends View<TargetController> {
         sdcmls.remove(sdcml);
     }
 
-    public void ShowSDCardMounted() {
+    public void showSDCardMounted() {
         for (SDCardMountStatusListener sdcml : sdcmls) {
-            sdcml.ShowSDCardMounted();
+            sdcml.showSDCardMounted();
         }
-        getController().getModel().setSDCardMounted(true);
+        getDModel().setSDCardMounted(true);
     }
 
-    public void ShowSDCardUnmounted() {
+    public void showSDCardUnmounted() {
         for (SDCardMountStatusListener sdcml : sdcmls) {
-            sdcml.ShowSDCardUnmounted();
+            sdcml.showSDCardUnmounted();
         }
-        getController().getModel().getSDCardInfo().SetInfo(0, 0, 0);
-        getController().getModel().setSDCardMounted(false);
+        getDModel().getSDCardInfo().setInfo(0, 0, 0);
+        getDModel().setSDCardMounted(false);
     }
 
     @Deprecated

@@ -25,18 +25,18 @@ import axoloti.object.inlet.InletInt32;
 import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class LTC extends gentools {
+class LTC extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "ltc";
-        WriteAxoObject(catName, Create_Generator());
-        WriteAxoObject(catName, Create_Decoder());
+        writeAxoObject(catName, Create_Generator());
+        writeAxoObject(catName, Create_Decoder());
 //UNRELEASED        WriteAxoObject(catName, Create_FSync());
 //UNRELEASED        WriteAxoObject(catName, Create_FSyncCoded());
     }

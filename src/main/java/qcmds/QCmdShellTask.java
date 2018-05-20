@@ -33,10 +33,10 @@ import java.util.logging.Logger;
  */
 public abstract class QCmdShellTask implements QCmd {
 
-    abstract String GetExec();
+    abstract String getExec();
     boolean success;
 
-    class StreamHandlerThread implements Runnable {
+    static class StreamHandlerThread implements Runnable {
 
         InputStream in;
         QCmdProcessor shellProcessor;
@@ -70,48 +70,47 @@ public abstract class QCmdShellTask implements QCmd {
         return success;
     }
 
-    public String RuntimeDir() {
+    public String getRuntimeDir() {
         return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
     }
 
-    public String HomeDir() {
+    public String getHomeDir() {
         return System.getProperty(axoloti.Axoloti.HOME_DIR);
     }
 
-    public String ReleaseDir() {
+    public String getReleaseDir() {
         return System.getProperty(axoloti.Axoloti.RELEASE_DIR);
     }
 
-    public String FirmwareDir() {
+    public String getFirmwareDir() {
         return System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
     }
 
-
-    public String[] GetEnv() {
+    public String[] getEnvironment() {
         ArrayList<String> list = new ArrayList<>();
         Map<String, String> env = System.getenv();
         for (String v : env.keySet()) {
             list.add((v + "=" + env.get(v)));
         }
-        list.add((axoloti.Axoloti.RUNTIME_DIR + "=" + RuntimeDir()));
-        list.add((axoloti.Axoloti.HOME_DIR + "=" + HomeDir()));
-        list.add((axoloti.Axoloti.RELEASE_DIR + "=" + ReleaseDir()));
-        list.add((axoloti.Axoloti.FIRMWARE_DIR + "=" + FirmwareDir()));
+        list.add((axoloti.Axoloti.RUNTIME_DIR + "=" + getRuntimeDir()));
+        list.add((axoloti.Axoloti.HOME_DIR + "=" + getHomeDir()));
+        list.add((axoloti.Axoloti.RELEASE_DIR + "=" + getReleaseDir()));
+        list.add((axoloti.Axoloti.FIRMWARE_DIR + "=" + getFirmwareDir()));
 
         String vars[] = new String[list.size()];
         list.toArray(vars);
         return vars;
     }
 
-    public File GetWorkingDir() {
-        return new File(HomeDir()+"/build");
+    public File getWorkingDir() {
+        return new File(getHomeDir() + "/build");
     }
 
-    public QCmd Do(QCmdProcessor shellProcessor) {
+    public QCmd performShellTask(QCmdProcessor shellProcessor) {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process p1;
-            p1 = runtime.exec(GetExec(), GetEnv(), GetWorkingDir());
+            p1 = runtime.exec(getExec(), getEnvironment(), getWorkingDir());
 
             Thread thd_out = new Thread(new StreamHandlerThread(shellProcessor, p1.getInputStream()));
             thd_out.start();

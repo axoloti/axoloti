@@ -18,7 +18,7 @@
 package axoloti.patch.object;
 
 import axoloti.object.AxoObjectZombie;
-import axoloti.object.ObjectController;
+import axoloti.object.IAxoObject;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.inlet.InletZombie;
 import axoloti.object.outlet.Outlet;
@@ -46,8 +46,8 @@ public class AxoObjectInstanceZombie extends AxoObjectInstance {
     public AxoObjectInstanceZombie() {
     }
 
-    public AxoObjectInstanceZombie(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type, patch1, InstanceName1, location);
+    public AxoObjectInstanceZombie(IAxoObject obj, PatchModel patch1, String InstanceName1, Point location) {
+        super(obj, patch1, InstanceName1, location);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class AxoObjectInstanceZombie extends AxoObjectInstance {
             return inletInstance;
         }
         // add zombie inlet
-        AxoObjectZombie obj = (AxoObjectZombie) getController().getModel();
+        AxoObjectZombie obj = (AxoObjectZombie) getDModel();
         Inlet inlet = new InletZombie(name);
-        obj.getControllerFromModel().addInlet(inlet);
+        obj.getController().addInlet(inlet);
         // now try again...
         inletInstance = super.findInletInstance(name);
         if (inletInstance != null) {
@@ -80,9 +80,9 @@ public class AxoObjectInstanceZombie extends AxoObjectInstance {
             return outletInstance;
         }
         // add zombie outlet
-        AxoObjectZombie obj = (AxoObjectZombie) getController().getModel();
+        AxoObjectZombie obj = (AxoObjectZombie) getDModel();
         Outlet outlet = new OutletZombie(name);
-        obj.getControllerFromModel().addOutlet(outlet);
+        obj.getController().addOutlet(outlet);
         // now try again...
         outletInstance = super.findOutletInstance(name);
         if (outletInstance != null) {

@@ -23,7 +23,6 @@ import axoloti.preferences.Preferences;
 import axoloti.swingui.TextEditor;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardInfo;
 import axoloti.target.fs.SDFileInfo;
@@ -70,8 +69,8 @@ public class FileManagerFrame extends TJFrame {
     /**
      * Creates new form FileManagerFrame
      */
-    public FileManagerFrame(TargetController controller) {
-        super(controller);
+    public FileManagerFrame(TargetModel targetModel) {
+        super(targetModel);
         initComponents();
         jLabelSDInfo.setText("");
 
@@ -168,16 +167,16 @@ public class FileManagerFrame extends TJFrame {
                     evt.acceptDrop(DnDConstants.ACTION_COPY);
                     List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-                    if (CConnection.GetConnection().isConnected()) {
+                    if (CConnection.getConnection().isConnected()) {
                         for (File f : droppedFiles) {
                             System.out.println(f.getName());
                             if (!f.canRead()) {
                                 Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
                             } else {
-                                processor.AppendToQueue(new QCmdUploadFile(f, f.getName()));
+                                processor.appendToQueue(new QCmdUploadFile(f, f.getName()));
                             }
                         }
-                        RequestRefresh();
+                        requestRefresh();
                     }
                 } catch (UnsupportedFlavorException ex) {
                     Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,17 +189,17 @@ public class FileManagerFrame extends TJFrame {
         jFileTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                UpdateButtons();
+                updateButtons();
             }
         });
     }
 
-    void UpdateButtons() {
+    void updateButtons() {
         int row = jFileTable.getSelectedRow();
         if (row < 0) {
             jButtonDelete.setEnabled(false);
             jButtonOpen.setEnabled(false);
-            ButtonUploadDefaultName();
+            setButtonUploadDefaultName();
         } else {
             jButtonDelete.setEnabled(true);
             SDFileInfo f = getSDCardInfo().getFiles().get(row);
@@ -209,13 +208,13 @@ public class FileManagerFrame extends TJFrame {
                 jButtonCreateDir.setText("Create directory in " + f.getFilename() + " ...");
                 jButtonOpen.setEnabled(false);
             } else {
-                ButtonUploadDefaultName();
+                setButtonUploadDefaultName();
                 jButtonOpen.setEnabled(true);
             }
         }
     }
 
-    void ButtonUploadDefaultName() {
+    void setButtonUploadDefaultName() {
         jButtonUpload.setText("Upload ...");
         jButtonCreateDir.setText("Create directory ...");
     }
@@ -358,16 +357,16 @@ public class FileManagerFrame extends TJFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void RequestRefresh() {
-        if (CConnection.GetConnection().isConnected()) {
-            CConnection.GetConnection().AppendToQueue(new QCmdStop());
-            CConnection.GetConnection().WaitSync();
-            CConnection.GetConnection().AppendToQueue(new QCmdGetFileList());
+    void requestRefresh() {
+        if (CConnection.getConnection().isConnected()) {
+            CConnection.getConnection().appendToQueue(new QCmdStop());
+            CConnection.getConnection().waitSync();
+            CConnection.getConnection().appendToQueue(new QCmdGetFileList());
         }
     }
 
     private void jButton1RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1RefreshActionPerformed
-        RequestRefresh();
+        requestRefresh();
     }//GEN-LAST:event_jButton1RefreshActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
@@ -380,7 +379,7 @@ public class FileManagerFrame extends TJFrame {
                 dir = f.getFilename();
             }
         }
-        if (CConnection.GetConnection().isConnected()) {
+        if (CConnection.getConnection().isConnected()) {
             final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
             int returnVal = fc.showOpenDialog(this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -391,7 +390,7 @@ public class FileManagerFrame extends TJFrame {
                         Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
                         return;
                     }
-                    processor.AppendToQueue(new QCmdUploadFile(f, dir + f.getName()));
+                    processor.appendToQueue(new QCmdUploadFile(f, dir + f.getName()));
                 }
             }
         }
@@ -410,13 +409,13 @@ public class FileManagerFrame extends TJFrame {
         if (rowIndex >= 0) {
             SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
             if (!f.isDirectory()) {
-                processor.AppendToQueue(new QCmdDeleteFile(f.getFilename()));
+                processor.appendToQueue(new QCmdDeleteFile(f.getFilename()));
             } else {
                 String ff = f.getFilename();
                 if (ff.endsWith("/")) {
                     ff = ff.substring(0, ff.length() - 1);
                 }
-                processor.AppendToQueue(new QCmdDeleteFile(ff));
+                processor.appendToQueue(new QCmdDeleteFile(ff));
             }
         }
         jFileTable.clearSelection();
@@ -434,12 +433,12 @@ public class FileManagerFrame extends TJFrame {
         String fn = JOptionPane.showInputDialog(this, "Directory name?");
         if (fn != null && !fn.isEmpty()) {
             QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-            processor.AppendToQueue(new QCmdCreateDirectory(dir + fn));
+            processor.appendToQueue(new QCmdCreateDirectory(dir + fn));
         }
-        UpdateButtons();
+        updateButtons();
     }//GEN-LAST:event_jButtonCreateDirActionPerformed
 
-    class ByteBufferBackedInputStream extends InputStream {
+    static class ByteBufferBackedInputStream extends InputStream {
 
         ByteBuffer buf;
 
@@ -473,9 +472,9 @@ public class FileManagerFrame extends TJFrame {
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         if (rowIndex >= 0) {
             SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
-            processor.AppendToQueue(new QCmdGetFileContents(f.getFilename(), new IConnection.MemReadHandler() {
+            processor.appendToQueue(new QCmdGetFileContents(f.getFilename(), new IConnection.MemReadHandler() {
                 @Override
-                public void Done(ByteBuffer mem) {
+                public void done(ByteBuffer mem) {
                     if (mem == null) {
                         Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Open: failed");
                         return;
@@ -487,7 +486,7 @@ public class FileManagerFrame extends TJFrame {
                         }
                         TextModel textModel = new TextModel(s);
                         TextController textController = new TextController(textModel);
-                        TextEditor textEditor = new TextEditor(TextModel.TEXT, textController, null);
+                        TextEditor textEditor = new TextEditor(TextModel.TEXT, textModel, null);
                         textController.addView(textEditor);
                         textEditor.setTitle(f.getFilename());
                         textEditor.setVisible(true);
@@ -498,10 +497,10 @@ public class FileManagerFrame extends TJFrame {
                             patchname = patchname.substring(1);
                         }
                         InputStream inputStream = new ByteBufferBackedInputStream(mem);
-                        PatchBank.OpenPatchBankEditor(inputStream, f.getFilename());
+                        PatchBank.openPatchBankEditor(inputStream, patchname);
                     } else if (f.getFilename().endsWith("/patch.bin")) {
                         String patchname = f.getFilename();
-                        processor.AppendToQueue(new QCmdStart(patchname));
+                        processor.appendToQueue(new QCmdStart(patchname));
                     } else if (f.getFilename().endsWith("/patch.axp")) {
                         // convert "/xyz/patch.axp" into "xyz.axp"
                         String patchname = f.getFilename().substring(0, f.getFilename().length() - 10) + ".axp";
@@ -509,7 +508,7 @@ public class FileManagerFrame extends TJFrame {
                             patchname = patchname.substring(1);
                         }
                         InputStream input = new ByteBufferBackedInputStream(mem);
-                        PatchViewSwing.OpenPatch(patchname, input);
+                        PatchViewSwing.openPatch(patchname, input);
                     } else if (f.getExtension().equals("axr")) {
                         System.out.println("midi routing file contents:");
                         while (mem.remaining() > 0) {
@@ -527,11 +526,9 @@ public class FileManagerFrame extends TJFrame {
                         mem.rewind();
                         System.out.println("file contents written to download.txt");
                         File f1 = new File("download.txt");
-                        try {
-                            FileOutputStream fos = new FileOutputStream(f1);
+                        try (FileOutputStream fos = new FileOutputStream(f1)) {
                             WritableByteChannel channel = Channels.newChannel(fos);
                             channel.write(mem);
-                            fos.close();
                         } catch (IOException ex) {
                             Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -564,7 +561,7 @@ public class FileManagerFrame extends TJFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    void ShowConnect(boolean status) {
+    void showConnect(boolean status) {
         jButton1Refresh.setEnabled(status);
         jButtonUpload.setEnabled(status);
         jFileTable.setEnabled(status);
@@ -576,10 +573,10 @@ public class FileManagerFrame extends TJFrame {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (TargetModel.CONNECTION.is(evt)) {
-            ShowConnect(evt.getNewValue() != null);
+            showConnect(evt.getNewValue() != null);
         } else if (TargetModel.HAS_SDCARD.is(evt)) {
             Boolean b = (Boolean) evt.getNewValue();
-            ShowConnect(b);
+            showConnect(b);
         } else if (TargetModel.SDCARDINFO.is(evt)) {
             int clusters = getSDCardInfo().getClusters();
             int clustersize = getSDCardInfo().getClustersize();
@@ -590,7 +587,7 @@ public class FileManagerFrame extends TJFrame {
     }
 
     private SDCardInfo getSDCardInfo() {
-        return getModel().getSDCardInfo();
+        return getDModel().getSDCardInfo();
     }
 
 }

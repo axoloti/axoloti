@@ -1,7 +1,7 @@
 package axoloti.swingui.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceTablename;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
@@ -13,20 +13,20 @@ import javax.swing.event.DocumentListener;
 
 class AttributeInstanceViewTablename extends AttributeInstanceViewString {
 
-    JTextField TFtableName;
+    private JTextField TFtableName;
 
-    AttributeInstanceViewTablename(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    AttributeInstanceViewTablename(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceTablename getModel() {
-        return (AttributeInstanceTablename) super.getModel();
+    public AttributeInstanceTablename getDModel() {
+        return (AttributeInstanceTablename) super.getDModel();
     }
 
     private void initComponents() {
-        TFtableName = new JTextField(getModel().getValue());
+        TFtableName = new JTextField(getDModel().getValue());
         Dimension d = TFtableName.getSize();
         d.width = 128;
         d.height = 22;
@@ -40,7 +40,7 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getController().changeValue(TFtableName.getText());
+                model.getController().changeValue(TFtableName.getText());
             }
 
             @Override
@@ -62,25 +62,25 @@ class AttributeInstanceViewTablename extends AttributeInstanceViewString {
         TFtableName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
+                model.getController().addMetaUndo("edit attribute " + getDModel().getName(), focusEdit);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().changeValue(TFtableName.getText());
+                model.getController().changeValue(TFtableName.getText());
             }
         });
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (TFtableName != null) {
             TFtableName.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (TFtableName != null) {
             TFtableName.setEnabled(true);
         }

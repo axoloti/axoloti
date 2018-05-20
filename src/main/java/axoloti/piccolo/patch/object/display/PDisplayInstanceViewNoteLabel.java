@@ -2,15 +2,14 @@ package axoloti.piccolo.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 
 class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
 
-    public PDisplayInstanceViewNoteLabel(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PDisplayInstanceViewNoteLabel(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(displayInstance, axoObjectInstanceView);
         initComponents();
     }
 

@@ -2,27 +2,28 @@ package axoloti.codegen.patch.object.parameter;
 
 import axoloti.object.parameter.Parameter;
 import axoloti.object.parameter.ParameterInt32;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
+
 /**
  *
  * @author jtaelman
  */
 class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
-    ParameterInstanceViewInt32(ParameterInstanceController controller) {
-        super(controller);
+    ParameterInstanceViewInt32(ParameterInstance parameterInstance) {
+        super(parameterInstance);
     }
 
     @Override
-    public String GenerateParameterInitializer() {
-        ParameterInt32 parameter = (ParameterInt32) (getModel().getModel());
-        Integer v1 = (Integer) getModel().getValue();
+    public String generateParameterInitializer() {
+        ParameterInt32 parameter = (ParameterInt32) (getDModel().getDModel());
+        Integer v1 = (Integer) getDModel().getValue();
         int v = v1;
-        String s = "{ type: " + parameter.GetCType()
-            + ", unit: " + parameter.GetCUnit()
+        String s = "{ type: " + parameter.getCType()
+            + ", unit: " + parameter.getCUnit()
             + ", signals: 0"
-            + ", pfunction: " + ((getModel().GetPFunction() == null) ? "0" : getModel().GetPFunction())
-            + ", d: { intt: { finalvalue: 0"
+                + ", pfunction: " + ((getDModel().getPFunction() == null) ? "0" : getDModel().getPFunction())
+                + ", d: { intt: { finalvalue: 0"
             + ", value: " + v
             + ", modvalue: " + v
             + ", minimum: " + parameter.getMinValue()
@@ -33,8 +34,8 @@ class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
     @Override
     public String variableName(String vprefix, boolean enableOnParent) {
-        if (getModel().getOnParent() && (enableOnParent)) {
-            return "%" + getModel().ControlOnParentName() + "%";
+        if (getDModel().getOnParent() && (enableOnParent)) {
+            return "%" + getDModel().getControlOnParentName() + "%";
         } else {
             return PExName(vprefix) + ".d.intt.finalvalue";
         }
@@ -46,12 +47,12 @@ class ParameterInstanceViewInt32 extends ParameterInstanceView {
     }
 
     @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        Parameter parameter = getController().getModel().getModel();
+    public String generateCodeMidiHandler(String vprefix) {
+        Parameter parameter = model.getDModel();
         // TODO: midi mapping: validate minimum value...
         // hmm this is only one possible behavior - could also map to full MIDI range...
         int max = ((ParameterInt32) parameter).getMaxValue();
-        return GenerateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
+        return generateMidiCCCodeSub(vprefix, "(data2<" + max + ")?data2:" + (max - 1));
     }
 
 }

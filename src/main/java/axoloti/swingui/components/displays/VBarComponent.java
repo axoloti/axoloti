@@ -53,7 +53,7 @@ public class VBarComponent extends ADispComponent {
 
     final int margin = 2;
 
-    int ValToPos(double v) {
+    int valToPos(double v) {
         return (int) (margin + ((max - v) * (height - 2 * margin)) / (max - min));
     }
 
@@ -69,8 +69,8 @@ public class VBarComponent extends ADispComponent {
         g2.fillRect(0, 0, getWidth(), height);
         g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(0, 0, getWidth(), height);
-        int p = ValToPos(value);
-        int p1 = ValToPos(0);
+        int p = valToPos(value);
+        int p1 = valToPos(0);
         g2.setPaint(Theme.getCurrentTheme().Component_Mid);
         g2.fillRect(margin, p, width - margin * 2, p1 - p);
         //String s = String.format("%5.2f", value);

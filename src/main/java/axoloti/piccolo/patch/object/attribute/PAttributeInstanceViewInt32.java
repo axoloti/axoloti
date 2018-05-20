@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceInt32;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.control.PCtrlEvent;
@@ -14,27 +14,27 @@ class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
     PVSliderComponent slider;
     PLabelComponent vlabel;
 
-    public PAttributeInstanceViewInt32(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewInt32(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceInt32 getModel() {
-        return (AttributeInstanceInt32) super.getModel();
+    public AttributeInstanceInt32 getDModel() {
+        return (AttributeInstanceInt32) super.getDModel();
     }
 
     private void initComponents() {
         slider = new PVSliderComponent(
-                getModel().getValueInteger(),
-                getModel().getModel().getMinValue(),
-            getModel().getModel().getMaxValue(), 1, axoObjectInstanceView);
+                getDModel().getValueInteger(),
+                getDModel().getDModel().getMinValue(),
+            getDModel().getDModel().getMaxValue(), 1, axoObjectInstanceView);
 
-        if (getModel().getValueInteger() < getModel().getModel().getMinValue()) {
-            getModel().setValue(getModel().getModel().getMinValue());
+        if (getDModel().getValueInteger() < getDModel().getDModel().getMinValue()) {
+            getDModel().setValue(getDModel().getDModel().getMinValue());
         }
-        if (getModel().getValueInteger() > getModel().getModel().getMaxValue()) {
-            getModel().setValue(getModel().getModel().getMaxValue());
+        if (getDModel().getValueInteger() > getDModel().getDModel().getMaxValue()) {
+            getDModel().setValue(getDModel().getDModel().getMaxValue());
         }
 
         Dimension d = slider.getSize();
@@ -46,7 +46,7 @@ class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
         slider.setSize(d);
 
         addChild(slider);
-        vlabel = new PLabelComponent("       " + getModel().getValue());
+        vlabel = new PLabelComponent("       " + getDModel().getValue());
         addChild(vlabel);
 
         slider.addPCtrlListener(new PCtrlListener() {
@@ -60,21 +60,21 @@ class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
 
             @Override
             public void PCtrlAdjustmentFinished(PCtrlEvent e) {
-                getModel().setValue((int) slider.getValue());
-                vlabel.setText("" + getModel().getValue());
+                getDModel().setValue((int) slider.getValue());
+                vlabel.setText("" + getDModel().getValue());
             }
         });
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (slider != null) {
             slider.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (slider != null) {
             slider.setEnabled(true);
         }

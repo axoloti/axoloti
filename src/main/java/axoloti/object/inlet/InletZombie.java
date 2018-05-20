@@ -13,7 +13,7 @@ public class InletZombie extends Inlet {
     }
 
     @Override
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return new axoloti.datatypes.DTZombie();
     }
 

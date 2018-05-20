@@ -32,18 +32,18 @@ public class QCmdShowCompileFail implements QCmdGUITask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start reporting compile faillure";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done reporting compile faillure";
     }
 
     @Override
-    public void DoGUI(QCmdProcessor processor) {
-        processor.ClearQueue();
-        patchController.ShowCompileFail();
+    public void performGUIAction(QCmdProcessor processor) {
+        processor.clearQueue();
+        patchController.showCompileFail();
     }
 }

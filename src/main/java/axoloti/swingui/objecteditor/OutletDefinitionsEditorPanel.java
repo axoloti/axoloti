@@ -18,7 +18,6 @@
 package axoloti.swingui.objecteditor;
 
 import axoloti.object.AxoObject;
-import axoloti.object.ObjectController;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.outlet.OutletTypes;
 
@@ -28,8 +27,8 @@ import axoloti.object.outlet.OutletTypes;
  */
 class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> {
 
-    public OutletDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
-        super(controller, AxoObject.OBJ_OUTLETS, OutletTypes.getTypes(), editor);
+    public OutletDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+        super(obj, AxoObject.OBJ_OUTLETS, OutletTypes.getTypes(), editor);
     }
 
     @Override

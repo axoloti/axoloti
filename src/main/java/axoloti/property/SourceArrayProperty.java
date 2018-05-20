@@ -30,7 +30,7 @@ public class SourceArrayProperty extends PropertyReadWrite<OutletInstance[]> {
     }
 
     @Override
-    public OutletInstance[] StringToObj(String v) {
+    public OutletInstance[] convertStringToObj(String v) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

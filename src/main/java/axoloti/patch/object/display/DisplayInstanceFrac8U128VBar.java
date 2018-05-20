@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayFrac8U128VBar;
 
 /**
@@ -28,8 +27,8 @@ public class DisplayInstanceFrac8U128VBar extends DisplayInstance<DisplayFrac8U1
 
     final int n = 128;
 
-    DisplayInstanceFrac8U128VBar(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceFrac8U128VBar(DisplayFrac8U128VBar display) {
+        super(display);
     }
 
     public int[] getIDst() {

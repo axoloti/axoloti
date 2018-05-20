@@ -43,7 +43,7 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AssignPresetMenuItems.this.param.IncludeInPreset();
+                    AssignPresetMenuItems.this.param.includeInPreset();
                 }
             });
             parent.add(mi);
@@ -53,7 +53,7 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AssignPresetMenuItems.this.param.ExcludeFromPreset();
+                    AssignPresetMenuItems.this.param.excludeFromPreset();
                 }
             });
             parent.add(mi);
@@ -63,8 +63,8 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (AssignPresetMenuItems.this.param.getModel().getPresets() != null) {
-                        AssignPresetMenuItems.this.param.getModel().getPresets().clear();
+                    if (AssignPresetMenuItems.this.param.getDModel().getPresets() != null) {
+                        AssignPresetMenuItems.this.param.getDModel().getPresets().clear();
                     }
                 }
             });

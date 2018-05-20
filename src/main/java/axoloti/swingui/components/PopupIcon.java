@@ -34,7 +34,7 @@ public class PopupIcon extends JComponent {
 
     public interface PopupIconListener {
 
-        void ShowPopup();
+        void showPopup();
     }
 
     private PopupIconListener pl;
@@ -54,7 +54,7 @@ public class PopupIcon extends JComponent {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                pl.ShowPopup();
+                pl.showPopup();
             }
         });
     }

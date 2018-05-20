@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeTextEditor;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.swingui.TextEditor;
@@ -38,8 +37,8 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
         super();
     }
 
-    AttributeInstanceTextEditor(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceTextEditor(AxoAttributeTextEditor attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     public void dispose() {
         super.dispose();
         if (editor != null) {
-            editor.Close();
+            editor.close();
         }
         editor = null;
     }

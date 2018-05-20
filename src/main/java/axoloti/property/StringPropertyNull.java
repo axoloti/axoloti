@@ -37,7 +37,7 @@ public class StringPropertyNull extends PropertyReadWrite<String> {
     }
 
     @Override
-    public String StringToObj(String v) {
+    public String convertStringToObj(String v) {
         return v;
     }
 }

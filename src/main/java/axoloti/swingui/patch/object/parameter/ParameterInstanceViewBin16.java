@@ -1,17 +1,17 @@
 package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.swingui.components.control.CheckboxComponent;
 
 class ParameterInstanceViewBin16 extends ParameterInstanceViewBin {
 
-    public ParameterInstanceViewBin16(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public ParameterInstanceViewBin16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public CheckboxComponent CreateControl() {
+    public CheckboxComponent createControl() {
         return new CheckboxComponent(0, 16);
     }
 

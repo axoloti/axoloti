@@ -55,11 +55,11 @@ public abstract class PianoComponent extends JComponent {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == 1) {
-                    int i = HitTest(e.getX(), e.getY());
+                    int i = findKeyFromCoordinates(e.getX(), e.getY());
                     if (i >= 0) {
                         mouseDownNote = i;
                         selection[i] = true;
-                        KeyDown(i);
+                        keyDown(i);
                         repaint();
                     }
                 }
@@ -67,14 +67,14 @@ public abstract class PianoComponent extends JComponent {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                int i = HitTest(e.getX(), e.getY());
+                int i = findKeyFromCoordinates(e.getX(), e.getY());
                 if (i != mouseDownNote) {
                     selection[mouseDownNote] = false;
-                    KeyUp(mouseDownNote);
+                    keyUp(mouseDownNote);
                     if (i >= 0) {
                         selection[i] = true;
                         mouseDownNote = i;
-                        KeyDown(i);
+                        keyDown(i);
                     }
                     repaint();
                 }
@@ -84,7 +84,7 @@ public abstract class PianoComponent extends JComponent {
             public void mouseReleased(MouseEvent e) {
                 if (e.isShiftDown() == false) {
                     selection[mouseDownNote] = false;
-                    KeyUp(mouseDownNote);
+                    keyUp(mouseDownNote);
                     repaint();
                 }
             }
@@ -95,9 +95,9 @@ public abstract class PianoComponent extends JComponent {
         addMouseMotionListener(ma);
     }
 
-    public abstract void KeyUp(int key);
+    public abstract void keyUp(int key);
 
-    public abstract void KeyDown(int key);
+    public abstract void keyDown(int key);
 
     public void clear() {
         for (int i=0;i<selection.length;i++) {
@@ -196,7 +196,7 @@ public abstract class PianoComponent extends JComponent {
         g2.dispose();
     }
 
-    int HitTest(int x, int y) {
+    int findKeyFromCoordinates(int x, int y) {
         if (!isEnabled()) {
             return -1;
         }

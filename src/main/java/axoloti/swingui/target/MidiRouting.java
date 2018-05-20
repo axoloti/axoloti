@@ -1,6 +1,5 @@
 package axoloti.swingui.target;
 
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.midirouting.MidiInputRoutingTable;
 import axoloti.target.midirouting.MidiOutputRoutingTable;
@@ -30,8 +29,8 @@ public class MidiRouting extends TJFrame {
     private JButton buttonRefresh;
     private JButton buttonWriteSettings;
 
-    public MidiRouting(TargetController controller) {
-        super(controller);
+    public MidiRouting(TargetModel targetModel) {
+        super(targetModel);
         initComponents();
     }
 
@@ -280,6 +279,18 @@ public class MidiRouting extends TJFrame {
         bPane.add(buttonWriteSettings);
         vPane.add(bPane);
         this.add(vPane);
+
+        table_midi_out_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
+        for (int i = 1; i < 17; i++) {
+            table_midi_out_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
+        }
+        table_midi_out_routing.doLayout();
+
+        table_midi_in_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
+        for (int i = 1; i < 17; i++) {
+            table_midi_in_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
+        }
+        table_midi_in_routing.doLayout();
     }
 
     void showConnect1(boolean connected) {
@@ -290,14 +301,14 @@ public class MidiRouting extends TJFrame {
     }
 
     void apply() {
-        getController().getModel().applyToTarget();
+        getDModel().applyToTarget();
     }
 
     void writeSettings() {
         QCmdProcessor p = QCmdProcessor.getQCmdProcessor();
-        p.AppendToQueue(new QCmdCreateDirectory("/settings"));
-        p.AppendToQueue(new QCmdCreateDirectory("/settings/midi-in"));
-        p.AppendToQueue(new QCmdCreateDirectory("/settings/midi-out"));
+        p.appendToQueue(new QCmdCreateDirectory("/settings"));
+        p.appendToQueue(new QCmdCreateDirectory("/settings/midi-in"));
+        p.appendToQueue(new QCmdCreateDirectory("/settings/midi-out"));
         for (MidiOutputRoutingTable mort : outputRoutingTables) {
             if (mort == null) {
                 continue;
@@ -333,35 +344,17 @@ public class MidiRouting extends TJFrame {
     };
 
     private void refreshInputs() {
-        table_midi_in_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
-        for (int i = 1; i < 17; i++) {
-            table_midi_in_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
-        }
-        table_midi_in_routing.doLayout();
-        ((AbstractTableModel) table_midi_in_routing.getModel()).fireTableDataChanged();
-    }
-
-    private void populateInputTable() {
         ((AbstractTableModel) table_midi_in_routing.getModel()).fireTableDataChanged();
     }
 
     final int ntargets = 4;
 
     private void refreshOutputs() {
-        table_midi_out_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
-        for (int i = 1; i < 17; i++) {
-            table_midi_out_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
-        }
-        table_midi_out_routing.doLayout();
-        ((AbstractTableModel) table_midi_out_routing.getModel()).fireTableDataChanged();
-    }
-
-    private void populateOutputTable() {
         ((AbstractTableModel) table_midi_out_routing.getModel()).fireTableDataChanged();
     }
 
     void refresh() {
-        getController().getModel().readFromTarget();
+        getDModel().readFromTarget();
     }
 
     @Override

@@ -17,8 +17,6 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceBin12;
-
 /**
  *
  * @author Johannes Taelman
@@ -30,11 +28,6 @@ public class ParameterBin12 extends ParameterBin {
 
     public ParameterBin12(String name) {
         super(name);
-    }
-
-    @Override
-    public ParameterInstanceBin12 InstanceFactory() {
-        return new ParameterInstanceBin12();
     }
 
     static public final String TypeName = "bin12";

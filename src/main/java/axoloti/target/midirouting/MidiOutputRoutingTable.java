@@ -38,14 +38,14 @@ public class MidiOutputRoutingTable extends AbstractModel {
 
     public void retrieve(IConnection conn, int addr, CompletionHandler completionHandler) {
         this.addr = addr;
-        conn.AppendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
+        conn.appendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
             @Override
-            public void Done(ByteBuffer mem1) {
+            public void done(ByteBuffer mem1) {
                 int name_addr = mem1.getInt();
 
-                conn.AppendToQueue(new QCmdMemRead(name_addr, 60, new IConnection.MemReadHandler() {
+                conn.appendToQueue(new QCmdMemRead(name_addr, 60, new IConnection.MemReadHandler() {
                     @Override
-                    public void Done(ByteBuffer mem) {
+                    public void done(ByteBuffer mem) {
                         String c = "";
                         byte b = mem.get();
                         while (b != 0) {
@@ -58,9 +58,9 @@ public class MidiOutputRoutingTable extends AbstractModel {
                         if (nports == 0) {
                             completionHandler.done();
                         } else {
-                            conn.AppendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
+                            conn.appendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
                                 @Override
-                                public void Done(ByteBuffer mem) {
+                                public void done(ByteBuffer mem) {
                                     int vports1[] = new int[nports];
                                     for (int i = 0; i < nports; i++) {
                                         vports1[i] = mem.getInt();
@@ -87,7 +87,7 @@ public class MidiOutputRoutingTable extends AbstractModel {
                 bb.putInt(v);
                 System.out.println(String.format("set outputMap %s %d %08X", portname, i++, v));
             }
-            conn.AppendToQueue(new QCmdWriteMem(getTableAddr(), b));
+            conn.appendToQueue(new QCmdWriteMem(getTableAddr(), b));
         }
     }
 
@@ -120,7 +120,7 @@ public class MidiOutputRoutingTable extends AbstractModel {
     public void setMapping(int[] vports) {
         if (this.vports != vports) {
             this.vports = vports;
-            IConnection conn = CConnection.GetConnection();
+            IConnection conn = CConnection.getConnection();
             apply(conn);
         }
         firePropertyChange(
@@ -141,9 +141,9 @@ public class MidiOutputRoutingTable extends AbstractModel {
         bb.get(b);
         InputStream is = new ByteArrayInputStream(b);
         QCmdProcessor p = QCmdProcessor.getQCmdProcessor();
-        p.AppendToQueue(new QCmdUploadFile(is, fn));
+        p.appendToQueue(new QCmdUploadFile(is, fn));
         try {
-            p.WaitQueueFinished();
+            p.waitQueueFinished();
         } catch (Exception ex) {
             Logger.getLogger(MidiOutputRoutingTable.class.getName()).log(Level.SEVERE, null, ex);
         }

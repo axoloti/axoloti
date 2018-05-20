@@ -1,5 +1,5 @@
 package axoloti.codegen.patch.object.parameter;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 
 /**
  *
@@ -7,8 +7,8 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
  */
 class ParameterInstanceViewBinN extends ParameterInstanceViewBin {
 
-    ParameterInstanceViewBinN(ParameterInstanceController controller) {
-        super(controller);
+    ParameterInstanceViewBinN(ParameterInstance parameterInstance) {
+        super(parameterInstance);
     }
 
 }

@@ -171,7 +171,7 @@ public class Theme {
     @Element
     public Color Patch_Border = new Color(0.0f, 0.0f, 0.0f, 0.1f);
 
-    private File FileChooserSave(JFrame frame) {
+    private File askFileToSave(JFrame frame) {
         final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(FileUtils.axtFileFilter);
@@ -251,19 +251,19 @@ public class Theme {
         }
     }
 
-    public JFileChooser GetFileChooser() {
+    private static JFileChooser getFileChooser() {
         JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(axtFileFilter);
         return fc;
     }
 
-    public void load(JFrame frame) {
-        JFileChooser fc = GetFileChooser();
+    public static void load(JFrame frame) {
+        JFileChooser fc = getFileChooser();
         int returnVal = fc.showOpenDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             Preferences.getPreferences().setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
-            Preferences.getPreferences().SavePrefs();
+            Preferences.getPreferences().savePrefs();
             File f = fc.getSelectedFile();
             if (axtFileFilter.accept(f)) {
                 try {
@@ -278,7 +278,7 @@ public class Theme {
     }
 
     public void save(JFrame frame) {
-        File fileToBeSaved = FileChooserSave(frame);
+        File fileToBeSaved = askFileToSave(frame);
         if (fileToBeSaved != null) {
             try {
                 Theme.SERIALIZER.write(this, fileToBeSaved);

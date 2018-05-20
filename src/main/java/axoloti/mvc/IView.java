@@ -6,11 +6,11 @@ import java.beans.PropertyChangeEvent;
  *
  * @author jtaelman
  */
-public interface IView<T extends AbstractController> {
+public interface IView<M extends IModel> {
 
     void modelPropertyChange(PropertyChangeEvent evt);
 
-    T getController();
+    M getDModel();
 
     void dispose();
 }

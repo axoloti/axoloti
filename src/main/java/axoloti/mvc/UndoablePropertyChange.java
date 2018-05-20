@@ -13,19 +13,19 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     Object new_value;
     Object old_value;
-    AbstractController controller;
+    IModel model;
     Property property;
 
-    public UndoablePropertyChange(AbstractController controller, Property property, Object old_value, Object new_value) {
+    public UndoablePropertyChange(IModel model, Property property, Object old_value, Object new_value) {
         this.new_value = new_value;
-        this.controller = controller;
+        this.model = model;
         this.property = property;
         this.old_value = old_value;
         //System.out.println("undoablePropChange: " + propertyName + " : " + ((new_value!=null)?new_value.toString() : "null"));
     }
 
-    public AbstractController getController() {
-        return controller;
+    public IModel getModel() {
+        return model;
     }
 
     public Property getProperty() {
@@ -42,11 +42,11 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public void undo() throws CannotUndoException {
-        MvcDiagnostics.log(String.format("undo propertyChange %08X %s:%s\n",
+        MvcDiagnostics.log(String.format("undo propertyChange %08X %s:%s%n",
                 hashCode(),
                 getPresentationName(),
                 (old_value != null) ? old_value.toString() : "null"));
-        controller.setModelProperty(property, old_value);
+        model.getController().setModelProperty(property, old_value);
     }
 
     @Override
@@ -56,11 +56,11 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
-        MvcDiagnostics.log(String.format("redo propertyChange %08X %s:%s\n",
+        MvcDiagnostics.log(String.format("redo propertyChange %08X %s:%s%n",
                 hashCode(),
                 getPresentationName(),
                 (new_value != null) ? new_value.toString() : "null"));
-        controller.setModelProperty(property, new_value);
+        model.getController().setModelProperty(property, new_value);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UndoablePropertyChange implements UndoableEdit {
     public void die() {
         new_value = null;
         old_value = null;
-        controller = null;
+        model = null;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class UndoablePropertyChange implements UndoableEdit {
             return false;
         }
         UndoablePropertyChange anAbsEdit = (UndoablePropertyChange) anEdit;
-        if (anAbsEdit.getController() != controller) {
+        if (anAbsEdit.getModel() != model) {
             return false;
         }
         if (!(property == anAbsEdit.getProperty())) {

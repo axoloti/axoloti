@@ -40,7 +40,7 @@ public class DisplayFrac32SChart extends Display {
     }
 
     @Override
-    public Int32 getDatatype() {
+    public Int32 getDataType() {
         return Int32.d;
     }
     static public final String TypeName = "frac32.s.chart";
@@ -51,7 +51,7 @@ public class DisplayFrac32SChart extends Display {
     }
 
     @Override
-    public String GetCMetaType() {
+    public String getCMetaType() {
         return "display_meta_type_chart_sq27";
     }
 }

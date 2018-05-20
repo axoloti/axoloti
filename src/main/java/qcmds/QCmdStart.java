@@ -59,36 +59,36 @@ public class QCmdStart implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Starting patch...";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done starting patch";
     }
 
-    public String GetTimeOutMessage() {
+    public String getTimeOutMessage() {
         return "patch start taking too long, disconnecting";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
 
         connection.setPatch(patchViewLive);
 
         if (patchName != null) {
-            connection.TransmitStart(patchName);
+            connection.transmitStart(patchName);
         } else if (patchIndex != null) {
-            connection.TransmitStart(patchIndex);
+            connection.transmitStart(patchIndex);
         } else {
-            connection.TransmitStart();
+            connection.transmitStart();
         }
-        if (connection.WaitSync(patch_start_timeout)) {
+        if (connection.waitSync(patch_start_timeout)) {
             return this;
         } else {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, GetTimeOutMessage());
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, getTimeOutMessage());
             return new QCmdDisconnect();
         }
     }

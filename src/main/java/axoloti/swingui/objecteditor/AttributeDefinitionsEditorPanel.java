@@ -18,7 +18,6 @@
 package axoloti.swingui.objecteditor;
 
 import axoloti.object.AxoObject;
-import axoloti.object.ObjectController;
 import axoloti.object.attribute.AttributeTypes;
 import axoloti.object.attribute.AxoAttribute;
 
@@ -28,8 +27,8 @@ import axoloti.object.attribute.AxoAttribute;
  */
 class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAttribute> {
 
-    public AttributeDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
-        super(controller, AxoObject.OBJ_ATTRIBUTES, AttributeTypes.getTypes(), editor);
+    public AttributeDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+        super(obj, AxoObject.OBJ_ATTRIBUTES, AttributeTypes.getTypes(), editor);
     }
 
     @Override

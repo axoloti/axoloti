@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.swingui.components.LabelComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -9,8 +8,8 @@ class DisplayInstanceViewInt32HexLabel extends DisplayInstanceViewInt32 {
 
     private LabelComponent readout;
 
-    DisplayInstanceViewInt32HexLabel(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewInt32HexLabel(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

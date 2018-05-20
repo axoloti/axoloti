@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.outlet;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.outlet.Outlet;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
@@ -31,7 +30,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "source")
-public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
+public class OutletInstance extends IoletInstance<Outlet> {
 
     @Attribute(name = "outlet", required = false)
     String outletname;
@@ -45,13 +44,8 @@ public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
         this.outletname = outletname;
     }
 
-    public OutletInstance(AtomDefinitionController outletController, IAxoObjectInstance axoObj) {
-        super(outletController, axoObj);
-    }
-
-    @Override
-    public T getModel() {
-        return (T) super.getModel();
+    public OutletInstance(Outlet outlet, IAxoObjectInstance axoObj) {
+        super(outlet, axoObj);
     }
 
     @Override
@@ -84,7 +78,7 @@ public class OutletInstance<T extends Outlet> extends IoletInstance<T> {
             // it is probably in the objectselector, in which case this is not a problem
             return;
         }
-        pm.getControllerFromModel().disconnect(this);
+        pm.getController().disconnect(this);
     }
 
 }

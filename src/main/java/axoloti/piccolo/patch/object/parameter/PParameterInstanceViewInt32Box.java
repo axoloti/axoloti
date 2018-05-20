@@ -2,27 +2,27 @@ package axoloti.piccolo.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.parameter.ParameterInt32;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
 import axoloti.piccolo.components.control.PNumberBoxComponent;
 import java.beans.PropertyChangeEvent;
 
 class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32Box(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PParameterInstanceViewInt32Box(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public ParameterInstanceInt32Box getModel() {
-        return (ParameterInstanceInt32Box) super.getModel();
+    public ParameterInstanceInt32Box getDModel() {
+        return (ParameterInstanceInt32Box) super.getDModel();
     }
 
     @Override
-    public PNumberBoxComponent CreateControl() {
+    public PNumberBoxComponent createControl() {
         PNumberBoxComponent n = new PNumberBoxComponent(
-            0.0, getModel().getMinValue(),
-            getModel().getMaxValue(), 1.0, axoObjectInstanceView);
+            0.0, getDModel().getMinValue(),
+            getDModel().getMaxValue(), 1.0, axoObjectInstanceView);
         return n;
     }
 

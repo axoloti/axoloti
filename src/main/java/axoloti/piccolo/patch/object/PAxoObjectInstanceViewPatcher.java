@@ -1,8 +1,8 @@
 package axoloti.piccolo.patch.object;
 
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.ObjectInstancePatcherController;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.piccolo.components.control.PButtonComponent;
 import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.swingui.patch.PatchFrame;
@@ -12,28 +12,24 @@ import qcmds.QCmdProcessor;
 
 public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
 
-    private PButtonComponent BtnUpdate;
+    private PButtonComponent buttonUpdate;
     private PatchFrame pf;
 
-    public PAxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewPiccolo p) {
-        super(controller, p);
+    public PAxoObjectInstanceViewPatcher(IAxoObjectInstance objectInstance, PatchViewPiccolo p) {
+        super(objectInstance, p);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstancePatcher getModel() {
-        return (AxoObjectInstancePatcher) super.getModel();
-    }
-
-    @Override
-    public ObjectInstancePatcherController getController() {
-        return (ObjectInstancePatcherController) super.getController();
+    public AxoObjectInstancePatcher getDModel() {
+        return (AxoObjectInstancePatcher) super.getDModel();
     }
 
     public void initSubpatchFrame() {
         if (pf == null) {
-            pf = new PatchFrame(getController().getSubPatchController(), QCmdProcessor.getQCmdProcessor(), true);
-            getController().getSubPatchController().addView(pf);
+            PatchModel subpatch = getDModel().getSubPatchModel();
+            pf = new PatchFrame(subpatch, QCmdProcessor.getQCmdProcessor(), true);
+            subpatch.getController().addView(pf);
         }
     }
 
@@ -49,7 +45,7 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);
         BtnEdit.addActListener(new PButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
+            public void fire() {
                 edit();
             }
         });
@@ -58,25 +54,25 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
     }
 
     @Override
-    public void Unlock() {
-        super.Unlock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(true);
+    public void unlock() {
+        super.unlock();
+        if (buttonUpdate != null) {
+            buttonUpdate.setEnabled(true);
         }
     }
 
     @Override
-    public void Lock() {
-        super.Lock();
-        if (BtnUpdate != null) {
-            BtnUpdate.setEnabled(false);
+    public void lock() {
+        super.lock();
+        if (buttonUpdate != null) {
+            buttonUpdate.setEnabled(false);
         }
     }
 
     @Override
     public void dispose() {
         if (pf != null) {
-            pf.Close();
+            pf.close();
             pf = null;
         }
     }

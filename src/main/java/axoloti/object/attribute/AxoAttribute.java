@@ -46,8 +46,8 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
         md.update(getName().getBytes());
     }
 
-    public String GetCName() {
-        return "attr_" + CharEscape.CharEscape(getName());
+    public String getCName() {
+        return "attr_" + CharEscape.charEscape(getName());
     }
 
     @Override

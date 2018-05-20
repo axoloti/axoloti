@@ -9,9 +9,9 @@ import java.util.List;
  *
  * @author jtaelman
  */
-public abstract class AbstractModel implements IModel {
+public abstract class AbstractModel<C extends AbstractController> implements IModel {
 
-    private AbstractController controllerOfModel = null;
+    private C controllerOfModel = null;
     private AbstractDocumentRoot documentRoot;
 
     protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
@@ -36,10 +36,10 @@ public abstract class AbstractModel implements IModel {
         propertyChangeSupport.firePropertyChange(property.getName(), oldValue, newValue);
     }
 
-    protected abstract AbstractController createController();
+    protected abstract C createController();
 
     @Override
-    public AbstractController getControllerFromModel() {
+    public C getController() {
         if (controllerOfModel == null) {
             controllerOfModel = createController();
         }
@@ -55,4 +55,5 @@ public abstract class AbstractModel implements IModel {
     final public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
         this.documentRoot = documentRoot;
     }
+
 }

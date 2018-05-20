@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceWavefile;
 import axoloti.piccolo.components.PTextFieldComponent;
 import java.awt.Dimension;
@@ -14,18 +14,18 @@ class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
 
     PTextFieldComponent TFwaveFilename;
 
-    public PAttributeInstanceViewWavefile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewWavefile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceWavefile getModel() {
-        return (AttributeInstanceWavefile) super.getModel();
+    public AttributeInstanceWavefile getDModel() {
+        return (AttributeInstanceWavefile) super.getDModel();
     }
 
     private void initComponents() {
-        TFwaveFilename = new PTextFieldComponent(getModel().getWaveFilename());
+        TFwaveFilename = new PTextFieldComponent(getDModel().getWaveFilename());
         Dimension d = TFwaveFilename.getSize();
         d.width = 128;
         d.height = 22;
@@ -56,7 +56,7 @@ class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
         TFwaveFilename.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                getModel().setWaveFilename(TFwaveFilename.getText());
+                getDModel().setWaveFilename(TFwaveFilename.getText());
             }
 
             @Override
@@ -78,14 +78,14 @@ class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (TFwaveFilename != null) {
             TFwaveFilename.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (TFwaveFilename != null) {
             TFwaveFilename.setEnabled(true);
         }

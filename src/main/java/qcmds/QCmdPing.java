@@ -28,12 +28,12 @@ import java.util.logging.Logger;
 public class QCmdPing implements QCmdSerialTask {
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;//"Start ping";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;//"Done ping";
     }
     private boolean noCauseDisconnect;
@@ -47,10 +47,10 @@ public class QCmdPing implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitPing();
-        if (connection.WaitSync() || (noCauseDisconnect)) {
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitPing();
+        if (connection.waitSync() || (noCauseDisconnect)) {
             return this;
         } else {
             if (connection.isConnected()) {

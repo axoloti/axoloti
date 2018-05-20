@@ -2,21 +2,18 @@ package axoloti.abstractui;
 
 import axoloti.mvc.IView;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import javax.swing.JPopupMenu;
 
-public interface IParameterInstanceView extends IView<ParameterInstanceController> {
+public interface IParameterInstanceView extends IView<ParameterInstance> {
 
     void populatePopup(JPopupMenu m);
 
     boolean handleAdjustment();
 
-    void ShowPreset(int i);
+    void showPreset(int i);
 
-    void IncludeInPreset();
+    void includeInPreset();
 
-    void ExcludeFromPreset();
-
-    ParameterInstance getModel();
+    void excludeFromPreset();
 
 }

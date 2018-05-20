@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class LFOPeriod implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double hz = 440.0 * Math.pow(2.0, (v.getDouble() + 64 - 69) / 12.0) / 64;
         double t = 1.0 / hz;
         if (t > 1) {
@@ -42,7 +42,7 @@ public class LFOPeriod implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[mM]?)[sS]");
         Matcher matcher = pattern.matcher(s);
 

@@ -34,7 +34,7 @@ public class Int32Property extends PropertyReadWrite<ValueInt32> {
     }
 
     @Override
-    public ValueInt32 StringToObj(String v) {
+    public ValueInt32 convertStringToObj(String v) {
         if (allowNull() && ((v == null) || v.isEmpty())) {
             return null;
         }

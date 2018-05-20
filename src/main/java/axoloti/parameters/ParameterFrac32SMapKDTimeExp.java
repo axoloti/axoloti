@@ -20,9 +20,11 @@
 package axoloti.parameters;
 
 import axoloti.object.parameter.ParameterFrac32SMap;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 import axoloti.realunits.LinearTimeExp;
 import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -39,12 +41,16 @@ public class ParameterFrac32SMapKDTimeExp extends ParameterFrac32SMap {
     }
 
     @Override
-    public ParameterInstanceFrac32SMap InstanceFactory() {
-        ParameterInstanceFrac32SMap p = super.InstanceFactory();
-        p.SetPFunction("parameter_function::pf_kexpdtime");
-        NativeToReal convs[] = {new LinearTimeExp()};
-        p.convs = convs;
-        return p;
+    public String getPFunction() {
+        return "parameter_function::pf_kexpdtime";
+    }
+
+    private static final NativeToReal convs[] = {new LinearTimeExp()};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
+    @Override
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     static public final String TypeName = "frac32.s.map.kdecaytime.exp";

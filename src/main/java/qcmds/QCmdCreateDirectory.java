@@ -46,19 +46,19 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Creating directory on sdcard : " + filename;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done creating directory";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitCreateDirectory(filename, date);
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitCreateDirectory(filename, date);
         String fn1 = filename;
         if (!fn1.endsWith("/")) {
             fn1 = fn1 + "/";
@@ -69,7 +69,7 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
                 @Override
                 public void run() {
                     SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-                    sdcardinfo.AddFile(fn, 0, date);
+                    sdcardinfo.addFile(fn, 0, date);
                     TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                 }
             });

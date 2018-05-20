@@ -2,12 +2,9 @@ package axoloti.abstractui;
 
 import axoloti.mvc.IView;
 import axoloti.patch.object.iolet.IoletInstance;
-import axoloti.patch.object.iolet.IoletInstanceController;
 import java.awt.Point;
 
-public interface IIoletInstanceView extends IView<IoletInstanceController> {
-
-    IoletInstance getModel();
+public interface IIoletInstanceView<T extends IoletInstance> extends IView<T> {
 
     void setHighlighted(boolean highlighted);
 

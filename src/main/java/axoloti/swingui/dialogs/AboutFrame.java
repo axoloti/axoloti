@@ -34,7 +34,7 @@ import javax.swing.event.HyperlinkListener;
  */
 public class AboutFrame extends javax.swing.JFrame {
 
-    public static AboutFrame aboutFrame = new AboutFrame();
+    public static final AboutFrame aboutFrame = new AboutFrame();
 
     /**
      * Creates new form AboutFrame

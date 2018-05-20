@@ -33,7 +33,7 @@ public class DisplayBool32 extends Display {
     }
 
     @Override
-    public Int32 getDatatype() {
+    public Int32 getDataType() {
         return Int32.d;
     }
 

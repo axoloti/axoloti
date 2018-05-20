@@ -34,19 +34,19 @@ public class QCmdGetFileContents implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start get file contents : " + filename;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done getting file contents";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitGetFileContents(filename, doneHandler);
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitGetFileContents(filename, doneHandler);
         return this;
     }
 

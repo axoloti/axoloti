@@ -25,20 +25,20 @@ import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletFrac32BufferPos;
 import axoloti.object.outlet.OutletFrac32Pos;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Math extends gentools {
+class Math extends GenTools {
 
-    static void GenerateAll() {
-        WriteAxoObject("math", new AxoObject[]{CreateQuantize(), CreateQuantizeTilde()});
-        WriteAxoObject("math", new AxoObject[]{CreateWrap(), CreateWrapTilde()});
+    static void generateAll() {
+        writeAxoObject("math", new AxoObject[]{createQuantize(), createQuantizeTilde()});
+        writeAxoObject("math", new AxoObject[]{createWrap(), createWrapTilde()});
     }
 
-    static AxoObject CreateQuantize() {
+    static AxoObject createQuantize() {
         AxoObject o = new AxoObject("quantize", "quantize to n bits");
         o.outlets.add(new OutletFrac32("b", "quant(a)"));
         o.inlets.add(new InletFrac32("a", "a"));
@@ -47,7 +47,7 @@ public class Math extends gentools {
         return o;
     }
 
-    static AxoObject CreateQuantizeTilde() {
+    static AxoObject createQuantizeTilde() {
         AxoObject o = new AxoObject("quantize", "quantize to n bits");
         o.outlets.add(new OutletFrac32Buffer("b", "quant(a)"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));
@@ -56,7 +56,7 @@ public class Math extends gentools {
         return o;
     }
 
-    static AxoObject CreateWrap() {
+    static AxoObject createWrap() {
         AxoObject o = new AxoObject("wrap", "wrap to 0..64 range after multiplying with 2^bits");
         o.outlets.add(new OutletFrac32Pos("b", "quant(a)"));
         o.inlets.add(new InletFrac32("a", "a"));
@@ -65,7 +65,7 @@ public class Math extends gentools {
         return o;
     }
 
-    static AxoObject CreateWrapTilde() {
+    static AxoObject createWrapTilde() {
         AxoObject o = new AxoObject("wrap", "wrap to 0..64 range after multiplying with 2^bits");
         o.outlets.add(new OutletFrac32BufferPos("b", "quant(a)"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));

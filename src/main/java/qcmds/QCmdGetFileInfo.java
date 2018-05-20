@@ -32,19 +32,19 @@ public class QCmdGetFileInfo implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start get file info : " + filename;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done getting file info";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitGetFileInfo(filename);
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitGetFileInfo(filename);
         return this;
     }
 

@@ -19,11 +19,9 @@ package axoloti.object.parameter;
 
 import axoloti.datatypes.DataType;
 import axoloti.object.atom.AtomDefinition;
-import axoloti.object.atom.AtomDefinitionController;
-import axoloti.patch.object.AxoObjectInstance;
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.property.BooleanProperty;
 import axoloti.property.Property;
+import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import generatedobjects.GeneratedObjects;
 import java.io.ByteArrayInputStream;
@@ -41,7 +39,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public abstract class Parameter<T extends ParameterInstance> extends AtomDefinition implements Cloneable {
+public abstract class Parameter extends AtomDefinition implements Cloneable {
 
     @Attribute(required = false)
     public Boolean noLabel;
@@ -61,8 +59,8 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
         super(name, null);
     }
 
-    public String GetCName() {
-        return "param_" + CharEscape.CharEscape(getName());
+    public String getCName() {
+        return "param_" + CharEscape.charEscape(getName());
     }
 
     @Override
@@ -70,21 +68,13 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
         return getTypeName();
     }
 
-    public ParameterInstance CreateInstance(AxoObjectInstance o) {
-        ParameterInstance pi = InstanceFactory();
-        AtomDefinitionController c = (AtomDefinitionController)getControllerFromModel();
-        pi.setController(c);
-        c.addView(pi);
-        pi.setParent(o);
-        pi.name = getName();
-        pi.parameter = this;
-        pi.getControllerFromModel().applyDefaultValue();
-        return pi;
+    public abstract List<NativeToReal> getConversions();
+
+    public String getPFunction() {
+        return null;
     }
 
     abstract public Object getDefaultValue();
-
-    public abstract T InstanceFactory();
 
     public Parameter getClone() {
         Serializer serializer = new Persister();
@@ -99,7 +89,7 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
         return p;
     }
 
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return null;
     }
 
@@ -120,11 +110,11 @@ public abstract class Parameter<T extends ParameterInstance> extends AtomDefinit
         return l;
     }
 
-    public String GetCType() {
+    public String getCType() {
         return "param_type_undefined";
     }
 
-    public String GetCUnit() {
+    public String getCUnit() {
         return "param_unit_abstract";
     }
 

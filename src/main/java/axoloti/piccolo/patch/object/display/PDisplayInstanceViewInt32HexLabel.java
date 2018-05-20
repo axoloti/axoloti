@@ -2,7 +2,6 @@ package axoloti.piccolo.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.PLabelComponent;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
@@ -11,8 +10,8 @@ class PDisplayInstanceViewInt32HexLabel extends PDisplayInstanceViewInt32 {
 
     private PLabelComponent readout;
 
-    public PDisplayInstanceViewInt32HexLabel(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PDisplayInstanceViewInt32HexLabel(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(displayInstance, axoObjectInstanceView);
         initComponents();
     }
 

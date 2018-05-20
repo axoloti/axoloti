@@ -2,7 +2,7 @@ package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
 import axoloti.piccolo.components.control.PButtonComponent;
 import axoloti.swingui.TextEditor;
@@ -12,27 +12,27 @@ class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
     PButtonComponent bEdit;
 
-    public PAttributeInstanceViewTextEditor(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewTextEditor(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceTextEditor getModel() {
-        return (AttributeInstanceTextEditor) super.getModel();
+    public AttributeInstanceTextEditor getDModel() {
+        return (AttributeInstanceTextEditor) super.getDModel();
     }
 
     void showEditor() {
-        if (getModel().editor == null) {
+        if (getDModel().editor == null) {
             DocumentWindow dw = (DocumentWindow) SwingUtilities.getWindowAncestor(this.getProxyComponent());
-            getModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getController(), dw);
-            getModel().editor.setTitle(getModel().getParent().getInstanceName() + "/" + getModel().getModel().getName());
+            getDModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getDModel(), dw);
+            getDModel().editor.setTitle(getDModel().getParent().getInstanceName() + "/" + getDModel().getDModel().getName());
         }
-        getModel().editor.toFront();
+        getDModel().editor.toFront();
 
-        // TODO verify this
-        getModel().editor.setState(java.awt.Frame.NORMAL);
-        getModel().editor.setVisible(true);
+        // TODO: piccolo verify this
+        getDModel().editor.setState(java.awt.Frame.NORMAL);
+        getDModel().editor.setVisible(true);
     }
 
     private void initComponents() {
@@ -40,21 +40,21 @@ class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
         addChild(bEdit);
         bEdit.addActListener(new PButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
+            public void fire() {
                 showEditor();
             }
         });
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (bEdit != null) {
             bEdit.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (bEdit != null) {
             bEdit.setEnabled(true);
         }
@@ -62,9 +62,9 @@ class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
     @Override
     public void setString(String sText) {
-        getModel().setValue(sText);
-        if (getModel().editor != null) {
-            getModel().editor.SetText(sText);
+        getDModel().setValue(sText);
+        if (getDModel().editor != null) {
+            getDModel().editor.setText(sText);
         }
     }
 

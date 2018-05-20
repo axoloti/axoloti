@@ -2,8 +2,6 @@ package axoloti.swingui.mvc;
 
 import axoloti.abstractui.DocumentWindow;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.DocumentRootController;
-import axoloti.mvc.IView;
 import axoloti.mvc.UndoableEditGroup;
 import axoloti.mvc.UndoablePropertyChange;
 import axoloti.swingui.menus.StandardMenubar;
@@ -19,21 +17,21 @@ import javax.swing.undo.UndoableEdit;
  *
  * @author jtaelman
  */
-public class UndoListViewFrame extends AJFrame implements IView, DocumentWindow {
+public class UndoListViewFrame extends AJFrame<AbstractDocumentRoot> {
 
     private List<UndoableEdit> undoList = new ArrayList<>();
 
     /**
      * Creates new form UndoListViewFrame
      */
-    public UndoListViewFrame(DocumentRootController controller, DocumentWindow parent) {
-        super(controller, parent);
+    public UndoListViewFrame(AbstractDocumentRoot documentRoot, DocumentWindow parent) {
+        super(documentRoot, parent);
         initComponents();
         initComponents2();
     }
 
     private void initComponents2() {
-        setJMenuBar(new StandardMenubar(controller.getDocumentRoot()));
+        setJMenuBar(new StandardMenubar(model));
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Name", "Hash", "object", "old value", "new value"};
 
@@ -75,7 +73,7 @@ public class UndoListViewFrame extends AJFrame implements IView, DocumentWindow 
                     case 2:
                         if (e instanceof UndoablePropertyChange) {
                             UndoablePropertyChange upc = (UndoablePropertyChange) e;
-                            Object val = upc.getController().getModel();
+                            Object val = upc.getModel();
                             return (val != null) ? val.toString() : "null";
                         } else {
                             return "";
@@ -154,7 +152,7 @@ public class UndoListViewFrame extends AJFrame implements IView, DocumentWindow 
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxDetailsActionPerformed
-        List<UndoableEdit> list = (List<UndoableEdit>) AbstractDocumentRoot.UNDO_EVENTS.get(getController().getModel());
+        List<UndoableEdit> list = (List<UndoableEdit>) AbstractDocumentRoot.UNDO_EVENTS.get(model);
         updateList(list);
     }//GEN-LAST:event_jCheckBoxDetailsActionPerformed
 

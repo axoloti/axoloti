@@ -17,14 +17,16 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.datatypes.ValueInt32;
-import axoloti.patch.object.parameter.ParameterInstance4LevelX16;
+import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Parameter4LevelX16 extends Parameter<ParameterInstance4LevelX16> {
+public class Parameter4LevelX16 extends Parameter {
 
     public Parameter4LevelX16() {
     }
@@ -33,14 +35,17 @@ public class Parameter4LevelX16 extends Parameter<ParameterInstance4LevelX16> {
         super(name);
     }
 
+    private static final NativeToReal convs[] = {};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstance4LevelX16 InstanceFactory() {
-        return new ParameterInstance4LevelX16();
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     @Override
-    public ValueInt32 getDefaultValue() {
-        return new ValueInt32(0);
+    public Integer getDefaultValue() {
+        return 0;
     }
 
     static public final String TypeName = "int2x16";

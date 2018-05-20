@@ -18,7 +18,7 @@
 package axoloti.piccolo.components;
 
 import axoloti.abstractui.PatchView;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.PatchViewPiccolo;
@@ -42,11 +42,11 @@ public class PAssignPresetComponent extends PatchPNode {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceController parameterInstanceController;
+    final ParameterInstance parameterInstance;
 
-    public PAssignPresetComponent(ParameterInstanceController parameterInstanceController, PatchView patchView) {
+    public PAssignPresetComponent(ParameterInstance parameterInstance, PatchView patchView) {
         super(patchView);
-        this.parameterInstanceController  = parameterInstanceController;
+        this.parameterInstance = parameterInstance;
         initComponent();
     }
 
@@ -76,7 +76,7 @@ public class PAssignPresetComponent extends PatchPNode {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, (int) getWidth(), (int) getHeight());
-        if ((parameterInstanceController.getModel().getPresets() != null) && (!parameterInstanceController.getModel().getPresets().isEmpty())) {
+        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, (int) getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);

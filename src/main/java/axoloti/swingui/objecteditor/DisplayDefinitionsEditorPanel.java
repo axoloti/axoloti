@@ -18,7 +18,6 @@
 package axoloti.swingui.objecteditor;
 
 import axoloti.object.AxoObject;
-import axoloti.object.ObjectController;
 import axoloti.object.display.Display;
 import axoloti.object.display.DisplayTypes;
 
@@ -28,8 +27,8 @@ import axoloti.object.display.DisplayTypes;
  */
 class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
 
-    public DisplayDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
-        super(controller, AxoObject.OBJ_DISPLAYS, DisplayTypes.getTypes(), editor);
+    public DisplayDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+        super(obj, AxoObject.OBJ_DISPLAYS, DisplayTypes.getTypes(), editor);
     }
 
     @Override

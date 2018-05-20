@@ -37,10 +37,10 @@ public class QCmdUploadPatchSD extends QCmdUploadFile {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
+    public QCmd performAction(IConnection connection) {
         try {
             inputStream = new ByteArrayInputStream(PatchFileBinary.getPatchFileBinary());
-            return super.Do(connection);
+            return super.performAction(connection);
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "IOException", ex);
         }

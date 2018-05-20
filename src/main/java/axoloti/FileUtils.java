@@ -136,7 +136,7 @@ public class FileUtils {
         }
     };
 
-    public static JFileChooser GetFileChooser() {
+    public static JFileChooser getFileChooser() {
         JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh", "axs", "axb"));
@@ -147,14 +147,14 @@ public class FileUtils {
         return fc;
     }
 
-    public static void Open(JFrame frame) {
-        JFileChooser fc = GetFileChooser();
+    public static void open(JFrame frame) {
+        JFileChooser fc = getFileChooser();
         int returnVal = fc.showOpenDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             Preferences.getPreferences().setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
-            Preferences.getPreferences().SavePrefs();
+            Preferences.getPreferences().savePrefs();
             File f = fc.getSelectedFile();
-            for (DocumentWindow dw : DocumentWindowList.GetList()) {
+            for (DocumentWindow dw : DocumentWindowList.getList()) {
                 if (f.equals(dw.getFile())) {
                     dw.toFront();
                     return;
@@ -163,10 +163,10 @@ public class FileUtils {
             if (axpFileFilter.accept(f)
                     || axsFileFilter.accept(f)
                     || axhFileFilter.accept(f)) {
-                PatchViewSwing.OpenPatch(f);
+                PatchViewSwing.openPatch(f);
                 Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             } else if (axbFileFilter.accept(f)) {
-                PatchBank.OpenPatchBankEditor(f);
+                PatchBank.openPatchBankEditor(f);
                 Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             }
         }

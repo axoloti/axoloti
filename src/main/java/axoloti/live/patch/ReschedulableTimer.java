@@ -10,7 +10,7 @@ import java.util.TimerTask;
 public class ReschedulableTimer extends Timer {
 
     private Runnable task;
-    private TimerTask timerTask;
+    private TimerTask timerTask = null;
 
     public void schedule(Runnable runnable, long delay) {
         task = runnable;

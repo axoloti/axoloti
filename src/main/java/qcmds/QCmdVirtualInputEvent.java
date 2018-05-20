@@ -33,19 +33,19 @@ public class QCmdVirtualInputEvent implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitVirtualInputEvent(evt.getQuadrant(), evt.getModifiers(), evt.getValue(), evt.getButton());
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitVirtualInputEvent(evt.getQuadrant(), evt.getModifiers(), evt.getValue(), evt.getButton());
         return this;
     }
 }

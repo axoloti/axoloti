@@ -28,7 +28,7 @@ public class DoubleProperty extends PropertyReadWrite<Double> {
     }
 
     @Override
-    public Double StringToObj(String v) {
+    public Double convertStringToObj(String v) {
         if (allowNull() && ((v == null) || v.isEmpty())) {
             return null;
         }

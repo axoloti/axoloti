@@ -56,7 +56,7 @@ public abstract class ACtrlComponent extends JComponent {
     public final static String PROP_VALUE_ADJ_END = "prop_value_end";
     public final static String PROP_VALUE = "prop_value";
 
-    protected Color customBackgroundColor;
+    protected Color customBackgroundColor = null;
 
     public ACtrlComponent() {
         super();
@@ -134,7 +134,7 @@ public abstract class ACtrlComponent extends JComponent {
         firePropertyChange(PROP_VALUE_ADJ_END, null, null);
     }
 
-    void SetupTransferHandler() {
+    void setupTransferHandler() {
         TransferHandler TH = new TransferHandler() {
             @Override
             public int getSourceActions(JComponent c) {

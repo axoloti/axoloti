@@ -65,12 +65,12 @@ public class QCmdUploadFile implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start uploading file to sdcard : " + filename;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         if (success) {
             return "Done uploading file";
         } else {
@@ -79,8 +79,8 @@ public class QCmdUploadFile implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
         try {
             if (inputStream == null) {
                 if (!file.isFile()) {
@@ -108,7 +108,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
             int tlength = inputStream.available();
             int remLength = inputStream.available();
             size = tlength;
-            connection.TransmitCreateFile(filename, tlength, ts);
+            connection.transmitCreateFile(filename, tlength, ts);
             int MaxBlockSize = 32768;
             int pct = 0;
             do {
@@ -125,7 +125,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
-                connection.TransmitAppendFile(buffer);
+                connection.transmitAppendFile(buffer);
                 int newpct = (100 * (tlength - remLength) / tlength);
                 if (newpct != pct) {
                     Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.INFO, "uploading : {0}%", newpct);
@@ -135,13 +135,13 @@ public class QCmdUploadFile implements QCmdSerialTask {
             } while (remLength > 0);
 
             inputStream.close();
-            connection.TransmitCloseFile();
+            connection.transmitCloseFile();
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     @Override
                     public void run() {
                         SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-                        sdcardinfo.AddFile(filename, (int) size, ts);
+                        sdcardinfo.addFile(filename, (int) size, ts);
                         TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                     }
                 });

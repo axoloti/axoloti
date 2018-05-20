@@ -2,15 +2,14 @@ package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
-import axoloti.preferences.Theme;
 import axoloti.patch.object.parameter.preset.Preset;
+import axoloti.preferences.Theme;
 import axoloti.swingui.components.AssignMidiCCComponent;
 import axoloti.swingui.components.AssignModulatorComponent;
 import axoloti.swingui.components.AssignModulatorMenuItems;
-import axoloti.swingui.patch.object.parameter.preset.AssignPresetComponent;
 import axoloti.swingui.components.control.DialComponent;
+import axoloti.swingui.patch.object.parameter.preset.AssignPresetComponent;
 import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
@@ -23,8 +22,8 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    public ParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32UMap(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
         initComponent();
     }
 
@@ -34,12 +33,12 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
         btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
-        midiAssign = new AssignMidiCCComponent(getController());
+        midiAssign = new AssignMidiCCComponent(getDModel());
         btns.add(midiAssign);
 // FIXME: reintroduce modulator button
 //        modulationAssign = new AssignModulatorComponent(this);
 //        btns.add(modulationAssign);
-        presetAssign = new AssignPresetComponent(getController());
+        presetAssign = new AssignPresetComponent(getDModel());
         btns.add(presetAssign);
         add(btns);
 
@@ -49,18 +48,18 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     }
 
     @Override
-    public ParameterInstanceFrac32UMap getModel() {
-        return (ParameterInstanceFrac32UMap) super.getModel();
+    public ParameterInstanceFrac32UMap getDModel() {
+        return (ParameterInstanceFrac32UMap) super.getDModel();
     }
 
     @Override
-    public DialComponent CreateControl() {
+    public DialComponent createControl() {
         DialComponent d = new DialComponent(
                 0.0,
-                getModel().getMin(),
-                getModel().getMax(),
-                getModel().getTick());
-        d.setNative(getModel().getConvs());
+                getDModel().getMin(),
+                getDModel().getMax(),
+                getDModel().getTick());
+        d.setNative(getDModel().getConvs());
         return d;
     }
 
@@ -68,20 +67,20 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
      *  Preset logic
      */
     @Override
-    public void ShowPreset(int i) {
+    public void showPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().getPreset(presetEditActive);
+            Preset p = getDModel().getPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue((Double)p.getValue());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue());
+                ctrl.setValue(getDModel().getValue());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue());
+            ctrl.setValue(getDModel().getValue());
         }
         /*
          if ((presets != null) && (!presets.isEmpty())) {
@@ -97,7 +96,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
         super.populatePopup(m);
         JMenu m2 = new JMenu("Modulation");
         // FIXME : reintroduce midi/modulation popup menu
-        new AssignModulatorMenuItems(getModel(), m2);
+        new AssignModulatorMenuItems(getDModel(), m2);
         m.add(m2);
     }
 
@@ -108,7 +107,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
     @Override
     public void updateModulation(int index, double amount) {
-        getModel().updateModulation(index, amount);
+        getDModel().updateModulation(index, amount);
         if (modulationAssign != null) {
             modulationAssign.repaint();
         }

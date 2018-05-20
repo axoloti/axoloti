@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeTablename;
 import axoloti.patch.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
@@ -36,8 +35,8 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
         super();
     }
 
-    AttributeInstanceTablename(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceTablename(AxoAttributeTablename attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttri
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         if (tableName == null) {
             tableName = "";
         }

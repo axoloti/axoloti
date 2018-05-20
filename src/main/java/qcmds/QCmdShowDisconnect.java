@@ -24,17 +24,17 @@ package qcmds;
 public class QCmdShowDisconnect implements QCmdGUITask {
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
     }
 
     @Override
-    public void DoGUI(QCmdProcessor processor) {
-        processor.serialconnection.ShowDisconnect();
+    public void performGUIAction(QCmdProcessor processor) {
+        processor.serialconnection.showDisconnect();
     }
 }

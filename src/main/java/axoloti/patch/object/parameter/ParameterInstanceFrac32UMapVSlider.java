@@ -18,6 +18,7 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterFrac32UMapVSlider;
+import axoloti.patch.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -32,6 +33,10 @@ public class ParameterInstanceFrac32UMapVSlider extends ParameterInstanceFrac32U
 
     public ParameterInstanceFrac32UMapVSlider(@Attribute(name = "value") double v) {
         super(v);
+    }
+
+    public ParameterInstanceFrac32UMapVSlider(ParameterFrac32UMapVSlider param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
 }

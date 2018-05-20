@@ -49,19 +49,19 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
             int i = localPosition.x / bsize;
             if ((i >= 0) && (i < n)) {
                 selIndex = i;
-                SetFieldValue(i, dragValue);
+                setFieldValue(i, dragValue);
             }
         }
     }
 
-    private void SetFieldValue(int position, int val) {
+    private void setFieldValue(int position, int val) {
         int mask = 3 << (position * 2);
         int v = (int) value;
         v = (v & ~mask) + (val << (position * 2));
         fireValue((double) v);
     }
 
-    private int GetFieldValue(int position) {
+    private int getFieldValue(int position) {
         return (((int) value) >> (position * 2)) & 3;
     }
 
@@ -75,11 +75,11 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
                 if ((i >= 0) && (i < n)) {
                     fireEventAdjustmentBegin();
                     if (e.isShiftDown()) {
-                        dragValue = GetFieldValue(i);
+                        dragValue = getFieldValue(i);
                     } else {
-                        dragValue = (GetFieldValue(i) + 1) & 3;
+                        dragValue = (getFieldValue(i) + 1) & 3;
                     }
-                    SetFieldValue(i, dragValue);
+                    setFieldValue(i, dragValue);
                     selIndex = i;
                     dragAction = true;
                 }
@@ -123,37 +123,37 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
                 return;
             }
             case KeyEvent.VK_UP: {
-                int v = GetFieldValue(selIndex) + 1;
+                int v = getFieldValue(selIndex) + 1;
                 if (v > 3) {
                     v = 3;
                 }
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, v);
+                setFieldValue(selIndex, v);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_DOWN: {
-                int v = GetFieldValue(selIndex) - 1;
+                int v = getFieldValue(selIndex) - 1;
                 if (v < 0) {
                     v = 0;
                 }
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, v);
+                setFieldValue(selIndex, v);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_PAGE_UP: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, 3);
+                setFieldValue(selIndex, 3);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_PAGE_DOWN: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, 0);
+                setFieldValue(selIndex, 0);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
@@ -163,31 +163,31 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
         switch (ke.getKeyChar()) {
             case '0':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, 0);
+                setFieldValue(selIndex, 0);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case '1':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, 1);
+                setFieldValue(selIndex, 1);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case '2':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, 2);
+                setFieldValue(selIndex, 2);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case '3':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, 3);
+                setFieldValue(selIndex, 3);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case ' ':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, (GetFieldValue(selIndex) + 1) & 3);
+                setFieldValue(selIndex, (getFieldValue(selIndex) + 1) & 3);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;

@@ -14,7 +14,7 @@ import javax.swing.undo.UndoableEdit;
  *
  * @author jtaelman
  */
-public class AbstractDocumentRoot extends AbstractModel {
+public class AbstractDocumentRoot extends AbstractModel<DocumentRootController> {
 
     private final UndoManager1 undoManager = new UndoManager1(this);
     private UndoableEdit lastUndoableEditEventWhenSaved = null;
@@ -98,13 +98,8 @@ public class AbstractDocumentRoot extends AbstractModel {
     }
 
     @Override
-    protected AbstractController createController() {
+    protected DocumentRootController createController() {
         return new DocumentRootController(this);
-    }
-
-    @Override
-    public DocumentRootController getControllerFromModel() {
-        return (DocumentRootController) super.getControllerFromModel();
     }
 
 }

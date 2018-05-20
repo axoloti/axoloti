@@ -17,7 +17,7 @@
  */
 package axoloti.swingui.patch.object.parameter.preset;
 
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Theme;
 import axoloti.swingui.components.control.HSliderComponent;
 import axoloti.utils.Constants;
@@ -39,10 +39,10 @@ public class AssignPresetComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstanceController parameterInstanceController;
+    final ParameterInstance parameterInstance;
 
-    public AssignPresetComponent(ParameterInstanceController parameterInstanceController) {
-        this.parameterInstanceController  = parameterInstanceController;
+    public AssignPresetComponent(ParameterInstance parameterInstance) {
+        this.parameterInstance = parameterInstance;
         initComponents();
     }
 
@@ -77,7 +77,7 @@ public class AssignPresetComponent extends JComponent {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, getWidth(), getHeight());
-        if ((parameterInstanceController.getModel().getPresets() != null) && (!parameterInstanceController.getModel().getPresets().isEmpty())) {
+        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);

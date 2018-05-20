@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class PitchToNote implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         StringBuilder s = new StringBuilder();
         int n;
         double f;
@@ -88,7 +88,7 @@ public class PitchToNote implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<note>[a-gA-G])\\p{Space}*(?<sharp>[#bB]?)\\p{Space}*(?<oct>\\d+)\\p{Space}*(?<sign>[-\\+]?)\\p{Space}*(?<delta>\\d*)");
         Matcher matcher = pattern.matcher(s);
 

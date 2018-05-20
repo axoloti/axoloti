@@ -1,8 +1,7 @@
 package axoloti.swingui.patch.object;
 
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.ObjectInstancePatcherController;
 import axoloti.swingui.components.ButtonComponent;
 import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewSwing;
@@ -12,25 +11,21 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     private PatchFrame pf;
 
-    public AxoObjectInstanceViewPatcher(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher objectInstance, PatchViewSwing patchView) {
+        super(objectInstance, patchView);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstancePatcher getModel() {
-        return (AxoObjectInstancePatcher) super.getModel();
-    }
-
-    @Override
-    public ObjectInstancePatcherController getController() {
-        return (ObjectInstancePatcherController) super.getController();
+    public AxoObjectInstancePatcher getDModel() {
+        return (AxoObjectInstancePatcher) super.getDModel();
     }
 
     public void initSubpatchFrame() {
         if (pf == null) {
-            pf = new PatchFrame(getController().getSubPatchController(), QCmdProcessor.getQCmdProcessor());
-            getController().getSubPatchController().addView(pf);
+            PatchModel subpatch = getDModel().getSubPatchModel();
+            pf = new PatchFrame(subpatch, QCmdProcessor.getQCmdProcessor());
+            subpatch.getController().addView(pf);
         }
     }
 
@@ -47,7 +42,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         BtnEdit.setAlignmentY(TOP_ALIGNMENT);
         BtnEdit.addActListener(new ButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
+            public void fire() {
                 edit();
             }
         });
@@ -58,7 +53,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
     @Override
     public void dispose() {
         if (pf != null) {
-            pf.Close();
+            pf.close();
             pf = null;
         }
     }

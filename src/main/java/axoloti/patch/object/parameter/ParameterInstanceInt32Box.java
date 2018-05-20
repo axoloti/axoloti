@@ -17,6 +17,9 @@
  */
 package axoloti.patch.object.parameter;
 
+import axoloti.object.parameter.ParameterInt32;
+import axoloti.patch.object.AxoObjectInstance;
+
 /**
  *
  * @author Johannes Taelman
@@ -24,6 +27,10 @@ package axoloti.patch.object.parameter;
 public class ParameterInstanceInt32Box extends ParameterInstanceInt32 {
 
     public ParameterInstanceInt32Box() {
+    }
+
+    public ParameterInstanceInt32Box(ParameterInt32 param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
 }

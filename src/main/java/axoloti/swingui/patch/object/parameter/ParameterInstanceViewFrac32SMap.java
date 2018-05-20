@@ -1,11 +1,11 @@
 package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 
 class ParameterInstanceViewFrac32SMap extends ParameterInstanceViewFrac32UMap {
 
-    public ParameterInstanceViewFrac32SMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32SMap(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 }

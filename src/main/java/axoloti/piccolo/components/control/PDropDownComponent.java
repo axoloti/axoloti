@@ -24,10 +24,10 @@ import org.piccolo2d.util.PPaintContext;
 public class PDropDownComponent extends PCtrlComponentAbstract {
 
     public interface DDCListener {
-        void SelectionChanged();
+        void selectionChanged();
     }
 
-    int SelectedIndex;
+    int selectedIndex;
     List<String> items;
 
     final private AttributeInstanceComboBox parent;
@@ -35,7 +35,7 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
     public PDropDownComponent(List<String> items, AttributeInstanceComboBox parent, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
         this.parent = parent;
-        SelectedIndex = 0;
+        selectedIndex = 0;
         setItems(items);
     }
 
@@ -79,28 +79,28 @@ public class PDropDownComponent extends PCtrlComponentAbstract {
         PUtils.setRenderQualityToHigh(g2);
         if (items.size() > 0) {
             g2.setFont(Constants.FONT);
-            g2.drawString(items.get(SelectedIndex), 4, 12);
+            g2.drawString(items.get(selectedIndex), 4, 12);
         }
         PUtils.setRenderQualityToLow(g2);
     }
 
     public int getSelectedIndex() {
-        return SelectedIndex;
+        return selectedIndex;
     }
 
     public void setSelectedItem(String selection) {
         int index = items.indexOf(selection);
-        if ((SelectedIndex != index) && (index >= 0)) {
-            SelectedIndex = index;
+        if ((selectedIndex != index) && (index >= 0)) {
+            selectedIndex = index;
             for (DDCListener il : ddcListeners) {
-                il.SelectionChanged();
+                il.selectionChanged();
             }
         }
         repaint();
     }
 
     public String getSelectedItem() {
-        return items.get(SelectedIndex);
+        return items.get(selectedIndex);
     }
 
     public int getItemCount() {

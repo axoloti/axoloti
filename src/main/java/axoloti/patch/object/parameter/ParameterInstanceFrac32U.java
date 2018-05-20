@@ -18,6 +18,7 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterFrac32;
+import axoloti.patch.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
 
 /**
@@ -32,6 +33,10 @@ public abstract class ParameterInstanceFrac32U<T extends ParameterFrac32> extend
 
     public ParameterInstanceFrac32U(@Attribute(name = "value") double v) {
         super(v);
+    }
+
+    public ParameterInstanceFrac32U(T param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
     @Override

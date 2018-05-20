@@ -34,7 +34,7 @@ public class InletCharPtr32 extends Inlet {
     }
 
     @Override
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return CharPtr32.d;
     }
 

@@ -17,7 +17,7 @@
  */
 package axoloti.patch.object;
 
-import axoloti.object.ObjectController;
+import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
@@ -32,32 +32,39 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     PatchModel subPatchModel;
 
     public AxoObjectInstancePatcher() {
-        if (subPatchModel == null) {
-            subPatchModel = new PatchModel();
-        }
     }
 
-    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location) {
-        this(controller, patch1, InstanceName1, location, new PatchModel());
+    public AxoObjectInstancePatcher(IAxoObject obj, PatchModel patch1, String InstanceName1, Point location) {
+        super(obj, patch1, InstanceName1, location);
+        //subPatchModel.setFileNamePath(InstanceName1); // TODO: review
     }
 
-    public AxoObjectInstancePatcher(ObjectController controller, PatchModel patch1, String InstanceName1, Point location, PatchModel subPatchModel) {
-        super(controller, patch1, InstanceName1, location);
+    public void setSubPatchModel(PatchModel subPatchModel) {
         this.subPatchModel = subPatchModel;
-        if (patch1 != null) {
-            // patch1 is null in objectselector...
-            this.subPatchModel.setDocumentRoot(patch1.getDocumentRoot());
+        subPatchModel.setParent(this);
+        subPatchModel.getController();
+        PatchModel parentPatch = getParent();
+        if (parentPatch != null) {
+            // parentPatch is null in objectselector...
+            this.subPatchModel.setDocumentRoot(parentPatch.getDocumentRoot());
         }
-        subPatchModel.setFileNamePath(InstanceName1);
     }
 
     public PatchModel getSubPatchModel() {
+        if (subPatchModel == null) {
+            subPatchModel = new PatchModel();
+            subPatchModel.setParent(this);
+        }
         return subPatchModel;
     }
 
     @Override
-    public void Close() {
-        super.Close();
+    public void applyValues(IAxoObjectInstance sourceObject) {
+        if (sourceObject instanceof AxoObjectInstancePatcher) {
+            setSubPatchModel(((AxoObjectInstancePatcher) sourceObject).getSubPatchModel());
+        }
+        getDModel().getController().addView(this);
+        super.applyValues(sourceObject);
     }
 
     @Override
@@ -71,4 +78,10 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     protected ObjectInstancePatcherController createController() {
         return new ObjectInstancePatcherController(this);
     }
+
+    @Override
+    public ObjectInstancePatcherController getController() {
+        return (ObjectInstancePatcherController) super.getController();
+    }
+
 }

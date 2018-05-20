@@ -28,21 +28,21 @@ public class DocumentWindowList {
 
     static List<DocumentWindow> list = new LinkedList<DocumentWindow>();
 
-    static public void RegisterWindow(DocumentWindow w) {
+    static public void registerWindow(DocumentWindow w) {
         if (!list.contains(w)) {
             list.add(w);
         }
     }
 
-    static public void UnregisterWindow(DocumentWindow w) {
+    static public void unregisterWindow(DocumentWindow w) {
         list.remove(w);
     }
 
-    static public List<DocumentWindow> GetList() {
+    static public List<DocumentWindow> getList() {
         return list;
     }
 
-    static public boolean AskCloseAll() {
+    static public boolean askCloseAll() {
         List<DocumentWindow> clone = new LinkedList<>(list);
         for (DocumentWindow dw : clone) {
             if (dw.askClose()) {

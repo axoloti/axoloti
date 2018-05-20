@@ -24,6 +24,6 @@ public interface IModel {
 
     void firePropertyChange(Property property, Object oldValue, Object newValue);
 
-    AbstractController getControllerFromModel();
+    AbstractController getController();
 
 }

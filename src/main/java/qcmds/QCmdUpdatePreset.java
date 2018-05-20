@@ -32,19 +32,19 @@ public class QCmdUpdatePreset implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.SendUpdatedPreset(b);
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.sendUpdatedPreset(b);
         return this;
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
     }
 }

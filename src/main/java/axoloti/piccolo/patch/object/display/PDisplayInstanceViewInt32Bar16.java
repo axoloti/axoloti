@@ -2,7 +2,6 @@ package axoloti.piccolo.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.displays.PLedstripComponent;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
@@ -12,8 +11,8 @@ class PDisplayInstanceViewInt32Bar16 extends PDisplayInstanceViewInt32 {
     private PLedstripComponent readout;
     private IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewInt32Bar16(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PDisplayInstanceViewInt32Bar16(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();
     }

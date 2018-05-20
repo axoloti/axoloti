@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceSpinner;
 import axoloti.piccolo.components.control.PNumberBoxComponent;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
@@ -13,51 +13,51 @@ class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 
     PNumberBoxComponent spinner;
 
-    public PAttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewSpinner(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceSpinner getModel() {
-        return (AttributeInstanceSpinner) super.getModel();
+    public AttributeInstanceSpinner getDModel() {
+        return (AttributeInstanceSpinner) super.getDModel();
     }
 
     private void initComponents() {
-        int value = getModel().getValueInteger();
+        int value = getDModel().getValueInteger();
 
-        if (value < getModel().getModel().getMinValue()) {
-            getModel().setValue(getModel().getModel().getMinValue());
+        if (value < getDModel().getDModel().getMinValue()) {
+            getDModel().setValue(getDModel().getDModel().getMinValue());
         }
-        if (value > getModel().getModel().getMaxValue()) {
-            getModel().setValue(getModel().getModel().getMaxValue());
+        if (value > getDModel().getDModel().getMaxValue()) {
+            getDModel().setValue(getDModel().getDModel().getMaxValue());
         }
         spinner = new PNumberBoxComponent(
             value,
-            getModel().getModel().getMinValue(),
-            getModel().getModel().getMaxValue(), 1.0, axoObjectInstanceView);
+            getDModel().getDModel().getMinValue(),
+            getDModel().getDModel().getMaxValue(), 1.0, axoObjectInstanceView);
         addChild(spinner);
         spinner.addPropertyChangeListener(new PropertyChangeListener() {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (evt.getPropertyName().equals(PROP_VALUE_ADJ_BEGIN)) {
-                        getController().addMetaUndo("edit attribute " + getModel().getName());
+                        getDModel().getController().addMetaUndo("edit attribute " + getDModel().getName());
                     } else if (evt.getPropertyName().equals(PROP_VALUE)) {
-                        controller.changeValue((Integer) (int) spinner.getValue());
+                        getDModel().getController().changeValue((Integer) (int) spinner.getValue());
                     }
                 }
             });
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (spinner != null) {
             spinner.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (spinner != null) {
             spinner.setEnabled(true);
         }

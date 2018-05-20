@@ -3,6 +3,7 @@ package axoloti.codegen.patch;
 import axoloti.Modulation;
 import axoloti.Modulator;
 import axoloti.abstractui.INetView;
+import axoloti.codegen.CodeGeneration;
 import axoloti.codegen.patch.object.AxoObjectInstanceCodegenViewFactory;
 import axoloti.codegen.patch.object.IAxoObjectInstanceCodegenView;
 import axoloti.codegen.patch.object.display.DisplayInstanceView;
@@ -22,17 +23,14 @@ import axoloti.object.outlet.OutletCharPtr32;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.target.TargetController;
-import axoloti.codegen.CodeGeneration;
+import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +44,7 @@ import java.util.logging.Logger;
  *
  * @author jtaelman
  */
-public class PatchViewCodegen extends View<PatchController> {
+public class PatchViewCodegen extends View<PatchModel> {
 
     List<IAxoObjectInstanceCodegenView> objectInstanceViews;
     List<INetView> netViews;
@@ -55,17 +53,15 @@ public class PatchViewCodegen extends View<PatchController> {
     final public List<DisplayInstanceView> displayInstances;
     final int displayDataLength;
 
-    public PatchViewCodegen(PatchController controller) {
-        super(controller);
-        PatchModel patchModel = controller.getModel();
+    public PatchViewCodegen(PatchModel patchModel) {
+        super(patchModel);
 
         // TODO: report/fail zombies
         objectInstanceViews = new ArrayList<>(
                 patchModel.getObjectInstances().size()
         );
         for (IAxoObjectInstance ox : patchModel.getObjectInstances()) {
-            ObjectInstanceController c = ox.getControllerFromModel();
-            IAxoObjectInstanceCodegenView o = AxoObjectInstanceCodegenViewFactory.createView(c);
+            IAxoObjectInstanceCodegenView o = AxoObjectInstanceCodegenViewFactory.createView(ox);
             objectInstanceViews.add(o);
         }
 
@@ -85,7 +81,7 @@ public class PatchViewCodegen extends View<PatchController> {
             for (DisplayInstanceView p : o.getDisplayInstanceViews()) {
                 p.setOffset(offset);
                 p.setIndex(i);
-                int l = p.getModel().getLength();
+                int l = p.getDModel().getLength();
                 offset += l;
                 i++;
                 displayInstances.add(p);
@@ -94,13 +90,9 @@ public class PatchViewCodegen extends View<PatchController> {
         displayDataLength = offset;
     }
 
-    private PatchModel getModel() {
-        return getController().getModel();
-    }
-
     public String generateIncludes() {
         StringBuilder inc = new StringBuilder();
-        Set<String> includes = getModel().getIncludes();
+        Set<String> includes = getDModel().getIncludes();
         for (String s : includes) {
             if (s.startsWith("\"")) {
                 inc.append("#include " + s + "\n");
@@ -113,7 +105,7 @@ public class PatchViewCodegen extends View<PatchController> {
 
     public String generateModules() {
         StringBuilder inc = new StringBuilder();
-        Set<String> modules = getModel().getModules();
+        Set<String> modules = getDModel().getModules();
         for (String s : modules) {
             inc.append("#include \"" + s + "_wrapper.h\"\n");
         }
@@ -122,23 +114,23 @@ public class PatchViewCodegen extends View<PatchController> {
 
 
     /* the c++ code generator */
-    String GeneratePexchAndDisplayCode() {
-        StringBuilder c = new StringBuilder(GeneratePexchAndDisplayCodeV());
+    String generatePexchAndDisplayCode() {
+        StringBuilder c = new StringBuilder(generatePexchAndDisplayCodeV());
         c.append("    int32_t PExModulationPrevVal[attr_poly][NMODULATIONSOURCES];\n");
         return c.toString();
     }
 
-    String GeneratePexchAndDisplayCodeV() {
+    String generatePexchAndDisplayCodeV() {
         StringBuilder c = new StringBuilder();
         c.append("    static const uint32_t nparams = " + parameterInstances.size() + ";\n");
         c.append("    Parameter_t params[nparams] = {\n");
         for (ParameterInstanceView param : parameterInstances) {
-            c.append(param.GenerateParameterInitializer());
+            c.append(param.generateParameterInitializer());
         }
         c.append("};\n");
         c.append("    Parameter_name_t param_names[nparams] = {\n");
         for (ParameterInstanceView param : parameterInstances) {
-            c.append("{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getModel().GetUserParameterName(), CodeGeneration.param_name_length) + "},\n");
+            c.append("{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getDModel().getUserParameterName(), CodeGeneration.param_name_length) + "},\n");
         }
         c.append("};\n");
         c.append("    int32_t displayVector[" + displayDataLength + "];\n");
@@ -146,22 +138,22 @@ public class PatchViewCodegen extends View<PatchController> {
         c.append("    static const uint32_t ndisplay_metas = " + displayInstances.size() + ";\n");
         c.append("    Display_meta_t display_metas[ndisplay_metas] = {\n");
         for (DisplayInstanceView disp : displayInstances) {
-            c.append(disp.GenerateDisplayMetaInitializer());
+            c.append(disp.generateDisplayMetaInitializer());
         }
         c.append("};\n");
-        c.append("    static const uint32_t NPRESETS = " + getModel().getNPresets() + ";\n");
-        c.append("    static const uint32_t NPRESET_ENTRIES = " + getModel().getNPresetEntries() + ";\n");
-        c.append("    static const uint32_t NMODULATIONSOURCES = " + getModel().getNModulationSources() + ";\n");
-        c.append("    static const uint32_t NMODULATIONTARGETS = " + getModel().getNModulationTargetsPerSource() + ";\n");
+        c.append("    static const uint32_t NPRESETS = " + getDModel().getNPresets() + ";\n");
+        c.append("    static const uint32_t NPRESET_ENTRIES = " + getDModel().getNPresetEntries() + ";\n");
+        c.append("    static const uint32_t NMODULATIONSOURCES = " + getDModel().getNModulationSources() + ";\n");
+        c.append("    static const uint32_t NMODULATIONTARGETS = " + getDModel().getNModulationTargetsPerSource() + ";\n");
         return c.toString();
     }
 
-    String GenerateObjectCode(String classname, boolean enableOnParent, String OnParentAccess) {
+    String generateObjectCode(String classname, boolean enableOnParent, String OnParentAccess) {
         StringBuilder c = new StringBuilder();
         {
             c.append("/* modsource defines */\n");
             int k = 0;
-            for (Modulator m : getModel().Modulators) {
+            for (Modulator m : getDModel().Modulators) {
                 c.append("static const int " + m.getCName() + " = " + k + ";\n");
                 k++;
             }
@@ -170,7 +162,7 @@ public class PatchViewCodegen extends View<PatchController> {
             c.append("/* parameter instance indices */\n");
             int k = 0;
             for (ParameterInstanceView p : parameterInstances) {
-                c.append("static const int PARAM_INDEX_" + p.getModel().getObjectInstance().getLegalName() + "_" + p.getModel().getLegalName() + " = " + k + ";\n");
+                c.append("static const int PARAM_INDEX_" + p.getDModel().getObjectInstance().getLegalName() + "_" + p.getDModel().getLegalName() + " = " + k + ";\n");
                 k++;
             }
         }
@@ -183,7 +175,7 @@ public class PatchViewCodegen extends View<PatchController> {
 
         c.append("/* object classes */\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c.append(o.GenerateClass(classname, OnParentAccess, enableOnParent));
+            c.append(o.generateClass(classname, OnParentAccess, enableOnParent));
         }
 // TODO: fix "controller object"
 //        c.append("/* controller instances */\n");
@@ -196,42 +188,42 @@ public class PatchViewCodegen extends View<PatchController> {
 
         c.append("/* object instances */\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            String s = o.getModel().getCInstanceName();
+            String s = o.getDModel().getCInstanceName();
             if (!s.isEmpty()) {
                 c.append("     " + s + " " + s + "_i;\n");
             }
         }
         c.append("/* net latches */\n");
-        for (Net n : getController().getModel().getNets()) {
-            NetController nc = (NetController) n.getControllerFromModel();
+        for (Net n : model.getNets()) {
+            NetController nc = (NetController) n.getController();
             // check if net has multiple sources
-            if ((n.CType() != null) && nc.NeedsLatch()) {
-                c.append("    " + n.CType() + " " + nc.CName() + "Latch" + ";\n");
+            if ((n.CType() != null) && n.needsLatch()) {
+                c.append("    " + n.CType() + " " + n.getCName() + "Latch" + ";\n");
             }
         }
         return c.toString();
     }
 
-    public String GenerateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
+    public String generateStructCodePlusPlusSub(String classname, boolean enableOnParent) {
         StringBuilder c = new StringBuilder();
-        c.append(GeneratePexchAndDisplayCode());
-        c.append(GenerateObjectCode(classname, enableOnParent, "parent->"));
+        c.append(generatePexchAndDisplayCode());
+        c.append(generateObjectCode(classname, enableOnParent, "parent->"));
         return c.toString();
     }
 
-    String GenerateStructCodePlusPlus(String classname, boolean enableOnParent, String parentclassname) {
+    String generateStructCodePlusPlus(String classname, boolean enableOnParent, String parentclassname) {
         StringBuilder c = new StringBuilder();
         c.append("class " + classname + "{\n");
         c.append("   public:\n");
-        c.append(GenerateStructCodePlusPlusSub(parentclassname, enableOnParent));
+        c.append(generateStructCodePlusPlusSub(parentclassname, enableOnParent));
         return c.toString();
     }
 
-    String GenerateUICode() {
+    String generateUICode() {
         int count[] = new int[]{0};
         StringBuilder c = new StringBuilder();
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c.append(o.GenerateUICode(count));
+            c.append(o.generateUICode(count));
         }
         c.append("};\n");
         String r = "static const int n_ui_objects = " + count[0] + ";\n"
@@ -240,7 +232,7 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    public String GenerateParamInitCode3(String ClassName) {
+    public String generateParamInitCode3(String ClassName) {
         int s = parameterInstances.size();
         StringBuilder c = new StringBuilder(
             "   static int32_t * GetInitParams(void){\n"
@@ -260,23 +252,23 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    public String GeneratePresetCode3(String ClassName) {
+    public String generatePresetCode3(String ClassName) {
         StringBuilder c = new StringBuilder("   static const int32_t * GetPresets(void){\n");
         c.append("      static const int32_t p[NPRESETS][NPRESET_ENTRIES][2] = {\n");
-        for (int i = 0; i < getModel().getNPresets(); i++) {
+        for (int i = 0; i < getDModel().getNPresets(); i++) {
 //            c.append("// preset " + i + "\n");
 //            c.append("pp = (int*)(&Presets[" + i + "]);\n");
-            int[] dp = getModel().DistillPreset(i + 1);
+            int[] dp = getDModel().distillPreset(i + 1);
             c.append("         {\n");
-            for (int j = 0; j < getModel().getNPresetEntries(); j++) {
+            for (int j = 0; j < getDModel().getNPresetEntries(); j++) {
                 c.append("           {" + dp[j * 2] + "," + dp[j * 2 + 1] + "}");
-                if (j != getModel().getNPresetEntries() - 1) {
+                if (j != getDModel().getNPresetEntries() - 1) {
                     c.append(",\n");
                 } else {
                     c.append("\n");
                 }
             }
-            if (i != getModel().getNPresets() - 1) {
+            if (i != getDModel().getNPresets() - 1) {
                 c.append("         },\n");
             } else {
                 c.append("         }\n");
@@ -311,15 +303,15 @@ public class PatchViewCodegen extends View<PatchController> {
         return c.toString();
     }
 
-    public String GenerateModulationCode3() {
+    public String generateModulationCode3() {
         StringBuilder s = new StringBuilder("   static PExModulationTarget_t * GetModulationTable(void){\n");
         s.append("    static const PExModulationTarget_t PExModulationSources[NMODULATIONSOURCES][NMODULATIONTARGETS] = \n");
         s.append("{");
-        for (int i = 0; i < getModel().getNModulationSources(); i++) {
+        for (int i = 0; i < getDModel().getNModulationSources(); i++) {
             s.append("{");
-            if (i < getModel().Modulators.size()) {
-                Modulator m = getModel().Modulators.get(i);
-                for (int j = 0; j < getModel().getNModulationTargetsPerSource(); j++) {
+            if (i < getDModel().Modulators.size()) {
+                Modulator m = getDModel().Modulators.get(i);
+                for (int j = 0; j < getDModel().getNModulationTargetsPerSource(); j++) {
                     if (j < m.Modulations.size()) {
                         Modulation n = m.Modulations.get(j);
                         ParameterInstance destination = n.destination;
@@ -330,19 +322,19 @@ public class PatchViewCodegen extends View<PatchController> {
                     } else {
                         s.append("{-1,0}");
                     }
-                    if (j != getModel().getNModulationTargetsPerSource() - 1) {
+                    if (j != getDModel().getNModulationTargetsPerSource() - 1) {
                         s.append(",");
                     } else {
                         s.append("}");
                     }
                 }
             } else {
-                for (int j = 0; j < getModel().getNModulationTargetsPerSource() - 1; j++) {
+                for (int j = 0; j < getDModel().getNModulationTargetsPerSource() - 1; j++) {
                     s.append("{-1,0},");
                 }
                 s.append("{-1,0}}");
             }
-            if (i != getModel().getNModulationSources() - 1) {
+            if (i != getDModel().getNModulationSources() - 1) {
                 s.append(",\n");
             }
         }
@@ -354,7 +346,7 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    public String GenerateObjInitCodePlusPlusSub(String className, String parentReference) {
+    public String generateObjInitCodePlusPlusSub(String className, String parentReference) {
         StringBuilder c = new StringBuilder();
 
         /* TODO: fix "controller object"
@@ -373,11 +365,11 @@ public class PatchViewCodegen extends View<PatchController> {
         }
         */
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            String s = o.getModel().getCInstanceName();
+            String s = o.getDModel().getCInstanceName();
             if (!s.isEmpty()) {
-                c.append("   " + o.getModel().getCInstanceName() + "_i.Init(" + parentReference);
+                c.append("   " + o.getDModel().getCInstanceName() + "_i.Init(" + parentReference);
                 for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
-                    if (i.getModel().getLength() > 0) {
+                    if (i.getDModel().getLength() > 0) {
                         c.append(", ");
                         c.append(i.valueName(""));
                     }
@@ -403,7 +395,7 @@ public class PatchViewCodegen extends View<PatchController> {
         return c.toString();
     }
 
-    public String GenerateParamInitCodePlusPlusSub(String className, String parentReference) {
+    public String generateParamInitCodePlusPlusSub(String className, String parentReference) {
         StringBuilder c = new StringBuilder("// GenerateParamInitCodePlusPlusSub\n");
         c.append("   int i;\n");
         c.append("   int j;\n");
@@ -423,53 +415,53 @@ public class PatchViewCodegen extends View<PatchController> {
         return c.toString();
     }
 
-    String GenerateInitCodePlusPlus(String className) {
+    String generateInitCodePlusPlus(String className) {
         StringBuilder c = new StringBuilder();
         c.append("/* init */\n");
         c.append("void Init() {\n");
-        c.append(GenerateObjInitCodePlusPlusSub("", "this"));
-        c.append(GenerateParamInitCodePlusPlusSub("", "this"));
+        c.append(generateObjInitCodePlusPlusSub("", "this"));
+        c.append(generateParamInitCodePlusPlusSub("", "this"));
         c.append("}\n\n");
         return c.toString();
     }
 
 
-    public String GenerateDisposeCodePlusPlusSub(String className) {
+    public String generateDisposeCodePlusPlusSub(String className) {
         // reverse order
         StringBuilder c = new StringBuilder();
-        int l = getModel().objectinstances.size();
+        int l = getDModel().objectinstances.size();
         for (int i = l - 1; i >= 0; i--) {
-            IAxoObjectInstance o = getModel().objectinstances.get(i);
+            IAxoObjectInstance o = getDModel().objectinstances.get(i);
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
                 c.append("   " + o.getCInstanceName() + "_i.Dispose();\n");
             }
         }
-        if (getModel().controllerObjectInstance != null) {
-            String s = getModel().controllerObjectInstance.getCInstanceName();
+        if (getDModel().controllerObjectInstance != null) {
+            String s = getDModel().controllerObjectInstance.getCInstanceName();
             if (!s.isEmpty()) {
-                c.append("   " + getModel().controllerObjectInstance.getCInstanceName() + "_i.Dispose();\n");
+                c.append("   " + getDModel().controllerObjectInstance.getCInstanceName() + "_i.Dispose();\n");
             }
         }
 
         return c.toString();
     }
 
-    String GenerateDisposeCodePlusPlus(String className) {
+    String generateDisposeCodePlusPlus(String className) {
         StringBuilder c = new StringBuilder();
         c.append("/* dispose */\n");
         c.append("void Dispose() {\n");
-        c.append(GenerateDisposeCodePlusPlusSub(className));
+        c.append(generateDisposeCodePlusPlusSub(className));
         c.append("}\n\n");
         return c.toString();
     }
 
-    public String GenerateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
+    public String generateDSPCodePlusPlusSub(String ClassName, boolean enableOnParent) {
         StringBuilder c = new StringBuilder();
         c.append("//--------- <nets> -----------//\n");
-        for (Net n : getController().getModel().getNets()) {
+        for (Net n : model.getNets()) {
             if (n.CType() != null) {
-                c.append("    " + n.CType() + " " + ((NetController)n.getControllerFromModel()).CName() + ";\n");
+                c.append("    " + n.CType() + " " + n.getCName() + ";\n");
             } else {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Net has no data type!");
             }
@@ -490,17 +482,16 @@ public class PatchViewCodegen extends View<PatchController> {
         } */
         c.append("//--------- <object calls> ----------//\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c.append(GenerateDSPCodePlusPlusSubObj(o, ClassName, enableOnParent));
+            c.append(generateDSPCodePlusPlusSubObj(o, ClassName, enableOnParent));
         }
         c.append("//--------- </object calls> ----------//\n");
 
         c.append("//--------- <net latch copy> ----------//\n");
-        for (Net n : getController().getModel().getNets()) {
-            NetController nc = (NetController)n.getControllerFromModel();
+        for (Net n : model.getNets()) {
             // check if net has multiple sources
-            if (nc.NeedsLatch()) {
-                if (nc.getModel().getDataType() != null) {
-                    c.append(nc.getModel().getDataType().GenerateCopyCode(nc.CName() + "Latch", nc.CName()));
+            if (n.needsLatch()) {
+                if (n.getDataType() != null) {
+                    c.append(n.getDataType().generateCopyCode(n.getCName() + "Latch", n.getCName()));
                 } else {
                     Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Only inlets connected on net!");
                 }
@@ -510,62 +501,61 @@ public class PatchViewCodegen extends View<PatchController> {
         return c.toString();
     }
 
-    String GenerateDSPCodePlusPlusSubObj(IAxoObjectInstanceCodegenView o, String ClassName, boolean enableOnParent) {
+    String generateDSPCodePlusPlusSubObj(IAxoObjectInstanceCodegenView o, String ClassName, boolean enableOnParent) {
         StringBuilder c = new StringBuilder();
-        String s = o.getModel().getCInstanceName();
+        String s = o.getDModel().getCInstanceName();
         if (s.isEmpty()) {
             return c.toString();
         }
-        c.append("  " + o.getModel().getCInstanceName() + "_i.dsp( this ");
+        c.append("  " + o.getDModel().getCInstanceName() + "_i.dsp( this ");
 //            c.append("  " + o.GenerateDoFunctionName() + "(this");
         boolean needsComma = true;
-        for (InletInstance i : o.getModel().getInletInstances()) {
+        for (InletInstance i : o.getDModel().getInletInstances()) {
             if (needsComma) {
                 c.append(", ");
             }
-            NetController nc = getController().getNetFromIolet(i);
-            if ((nc != null) && (nc.getModel().isValidNet())) {
-                Net n = nc.getModel();
+            Net n = getDModel().getController().getNetFromIolet(i);
+            if ((n != null) && (n.isValidNet())) {
                 OutletInstance firstSource = java.util.Collections.min(Arrays.asList(n.getSources()));
                 if (i.getDataType().equals(n.getDataType())) {
-                    if (nc.NeedsLatch()
-                            && (getModel().objectinstances.indexOf(firstSource.getParent()) >= getModel().objectinstances.indexOf(o))) {
-                        c.append(nc.CName() + "Latch");
+                    if (n.needsLatch()
+                            && (getDModel().objectinstances.indexOf(firstSource.getParent()) >= getDModel().objectinstances.indexOf(o))) {
+                        c.append(n.getCName() + "Latch");
                     } else {
-                        c.append(nc.CName());
+                        c.append(n.getCName());
                     }
-                } else if (nc.NeedsLatch()
-                        && (getModel().objectinstances.indexOf(firstSource) >= getModel().objectinstances.indexOf(o))) {
-                    c.append(n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName() + "Latch"));
+                } else if (n.needsLatch()
+                        && (getDModel().objectinstances.indexOf(firstSource) >= getDModel().objectinstances.indexOf(o))) {
+                    c.append(n.getDataType().generateConversionToType(i.getDataType(), n.getCName() + "Latch"));
                 } else {
-                    c.append(n.getDataType().GenerateConversionToType(i.getDataType(), nc.CName()));
+                    c.append(n.getDataType().generateConversionToType(i.getDataType(), n.getCName()));
                 }
-            } else if (nc == null) { // unconnected input
-                c.append(i.getDataType().GenerateSetDefaultValueCode());
-            } else if (!nc.getModel().isValidNet()) {
-                c.append(i.getDataType().GenerateSetDefaultValueCode());
+            } else if (n == null) { // unconnected input
+                c.append(i.getDataType().generateSetDefaultValueCode());
+            } else if (!n.isValidNet()) {
+                c.append(i.getDataType().generateSetDefaultValueCode());
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "Patch contains invalid net! {0}", i.getParent().getInstanceName() + ":" + i.getName());
             }
             needsComma = true;
         }
-        for (OutletInstance i : o.getModel().getOutletInstances()) {
+        for (OutletInstance i : o.getDModel().getOutletInstances()) {
             if (needsComma) {
                 c.append(", ");
             }
-            NetController nc = getController().getNetFromIolet(i);
-            if ((nc != null) && nc.getModel().isValidNet()) {
-                if (nc.IsFirstOutlet(i)) {
-                    c.append(nc.CName());
+            Net net = model.getController().getNetFromIolet(i);
+            if ((net != null) && net.isValidNet()) {
+                if (net.isFirstOutlet(i)) {
+                    c.append(net.getCName());
                 } else {
-                    c.append(nc.CName() + "+");
+                    c.append(net.getCName() + "+");
                 }
             } else {
-                c.append(i.getDataType().UnconnectedSink());
+                c.append(i.getDataType().unconnectedSink());
             }
             needsComma = true;
         }
         for (ParameterInstanceView i : o.getParameterInstanceViews()) {
-            if (i.getModel().getModel().PropagateToChild == null) {
+            if (i.getDModel().getDModel().PropagateToChild == null) {
                 if (needsComma) {
                     c.append(", ");
                 }
@@ -574,7 +564,7 @@ public class PatchViewCodegen extends View<PatchController> {
             }
         }
         for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
-            if (i.getModel().getModel().getLength() > 0) {
+            if (i.getDModel().getDModel().getLength() > 0) {
                 if (needsComma) {
                     c.append(", ");
                 }
@@ -586,40 +576,40 @@ public class PatchViewCodegen extends View<PatchController> {
         return c.toString();
     }
 
-    String GenerateDSPCodePlusPlus(String ClassName, boolean enableOnParent) {
+    String generateDSPCodePlusPlus(String ClassName, boolean enableOnParent) {
         StringBuilder c = new StringBuilder("/* krate */\n");
         c.append("void dsp (void) {\n");
         c.append("  int i;\n");
         c.append("  for(i=0;i<BUFSIZE;i++) AudioOutputLeft[i]=0;\n");
         c.append("  for(i=0;i<BUFSIZE;i++) AudioOutputRight[i]=0;\n");
-        c.append(GenerateDSPCodePlusPlusSub(ClassName, enableOnParent));
+        c.append(generateDSPCodePlusPlusSub(ClassName, enableOnParent));
         c.append("}\n\n");
         return c.toString();
     }
 
-    public String GenerateMidiInCodePlusPlus() {
+    public String generateMidiInCodePlusPlus() {
         StringBuilder c = new StringBuilder();
         // TODO: fix "controller object"
 //        if (getModel().controllerObjectInstance != null) {
 //            c.append(getModel().controllerObjectInstance.GenerateCallMidiHandler());
 //        }
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
-            c.append(o.GenerateCallMidiHandler());
+            c.append(o.generateCallMidiHandler());
         }
         return c.toString();
     }
 
 
-    String GenerateMidiCodePlusPlus(String ClassName) {
+    String generateMidiCodePlusPlus(String ClassName) {
         StringBuilder c = new StringBuilder();
         c.append("void MidiInHandler(" + ClassName + " *parent, midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n");
-        c.append(GenerateMidiInCodePlusPlus());
+        c.append(generateMidiInCodePlusPlus());
         c.append("}\n\n");
         return c.toString();
     }
 
 
-    String GeneratePatchCodePlusPlus(String ClassName) {
+    String generatePatchCodePlusPlus(String ClassName) {
         StringBuilder c = new StringBuilder();
         c.append("};\n\n");
         c.append("static rootc root;\n");
@@ -698,8 +688,7 @@ public class PatchViewCodegen extends View<PatchController> {
 
         c.append("void xpatch_init2(int32_t fwid)\n"
                  + "{\n"
-                 + "  if (fwid != 0x" + TargetController.getTargetController().getModel().getFirmwareLinkID() + ") {\n"
-                 + "    return;"
+                + "  if (fwid != 0x" + TargetModel.getTargetModel().getFirmwareLinkID() + ") {\n"                 + "    return;"
                  + "  }\n"
                  + "  extern uint32_t _pbss_start;\n"
                  + "  extern uint32_t _pbss_end;\n"
@@ -735,13 +724,12 @@ public class PatchViewCodegen extends View<PatchController> {
                  + "		header : CHUNK_HEADER(patch_root),\n"
                  + "		patch_meta : {\n"
                  + "			header : CHUNK_HEADER(patch_meta),\n"
-                 + "			patchID : " + getModel().GetIID() + ",\n"
-                 + "			patchname : {'p','a','t','c','h'}\n"
+                + "			patchID : " + getDModel().getIID() + ",\n"                 + "			patchname : {'p','a','t','c','h'}\n"
                  + "		},\n"
                  + "		patch_preset : {\n"
                  + "			header : CHUNK_HEADER(patch_preset),\n"
-                 + "			npresets : " + getModel().getNPresets() + ",\n"
-                 + "			npreset_entries : " + getModel().getNPresetEntries() + ",\n"
+                 + "			npresets : " + getDModel().getNPresets() + ",\n"
+                 + "			npreset_entries : " + getDModel().getNPresetEntries() + ",\n"
                  + "			pPresets : 0\n"
                  + "		},\n"
                  + "		patch_parameter : {\n"
@@ -782,17 +770,17 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    public String GenerateCode4() {
+    public String generateCode4() {
         StringBuilder c = new StringBuilder();
 
-        Set<String> moduleSet = getModel().getModules();
+        Set<String> moduleSet = getDModel().getModules();
         if (moduleSet != null) {
             StringBuilder modules = new StringBuilder();
             StringBuilder moduleDirs = new StringBuilder();
             for (String m : moduleSet) {
                 modules.append(m + " ");
                 moduleDirs.append(
-                    getModel().getModuleDir(m) + " ");
+                    getDModel().getModuleDir(m) + " ");
             }
             c.append("//$MODULES=" + modules.toString() + "\n");
             c.append("//$MODULE_DIRS=" + moduleDirs.toString() + "\n");
@@ -807,7 +795,7 @@ public class PatchViewCodegen extends View<PatchController> {
         if (true == false) {
             c.append("#define MIDICHANNEL 0 // DEPRECATED!\n");
         } else {
-            c.append("#define MIDICHANNEL " + (getModel().getMidiChannel() - 1) + " // DEPRECATED!\n");
+            c.append("#define MIDICHANNEL " + (getDModel().getMidiChannel() - 1) + " // DEPRECATED!\n");
         }
         c.append("void xpatch_init2(int32_t fwid);\n"
                  + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int32_t fwid){\n"
@@ -829,23 +817,22 @@ public class PatchViewCodegen extends View<PatchController> {
                  + "      ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
                  + "}\n");
 
-        c.append(GenerateStructCodePlusPlus("rootc", false, "rootc")
-                 + "static const int polyIndex = 0;\n"
-                 + GenerateUICode()
-                 + GenerateParamInitCode3("rootc")
-                 + GeneratePresetCode3("rootc")
-                 + GenerateModulationCode3()
-                 + GenerateInitCodePlusPlus("rootc")
-                 + GenerateDisposeCodePlusPlus("rootc")
-                 + GenerateDSPCodePlusPlus("rootc", false)
-                 + GenerateMidiCodePlusPlus("rootc")
-                 + GeneratePatchCodePlusPlus("rootc"));
+        c.append(generateStructCodePlusPlus("rootc", false, "rootc")                 + "static const int polyIndex = 0;\n"
+                + generateUICode()
+                + generateParamInitCode3("rootc")
+                + generatePresetCode3("rootc")
+                + generateModulationCode3()
+                + generateInitCodePlusPlus("rootc")
+                + generateDisposeCodePlusPlus("rootc")
+                + generateDSPCodePlusPlus("rootc", false)
+                + generateMidiCodePlusPlus("rootc")
+                + generatePatchCodePlusPlus("rootc"));
 
         String cs = c.toString();
         cs = cs.replace("attr_poly", "1")
-            .replace("attr_midichannel", Integer.toString(getModel().getMidiChannel() - 1));
+            .replace("attr_midichannel", Integer.toString(getDModel().getMidiChannel() - 1));
 
-        if (!getModel().getMidiSelector()) {
+        if (!getDModel().getMidiSelector()) {
             cs = cs.replace("attr_mididevice", "0")
                 .replace("attr_midiport", "0");
         }
@@ -853,10 +840,10 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    public AxoObject GenerateAxoObjNormal(AxoObject template) {
+    public AxoObject generateAxoObjNormal(AxoObject template) {
         AxoObject ao = template;
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f")) {
                 Inlet i = new InletFrac32(o.getInstanceName(), o.getInstanceName());
                 i.setParent(ao);
@@ -907,11 +894,11 @@ public class PatchViewCodegen extends View<PatchController> {
         }
         /* object structures */
 //         ao.sCName = fnNoExtension;
-        ao.includes = getModel().getIncludes();
-        ao.depends = getModel().getDepends();
-        ao.modules = getModel().getModules();
+        ao.includes = getDModel().getIncludes();
+        ao.depends = getDModel().getDepends();
+        ao.modules = getDModel().getModules();
 
-        if (getModel().getMidiSelector()) {
+        if (getDModel().getMidiSelector()) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
@@ -923,26 +910,26 @@ public class PatchViewCodegen extends View<PatchController> {
             String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
-        GenerateNormalCode(ao);
+        generateNormalCode(ao);
         return ao;
     }
 
-    public void GenerateNormalCode(AxoObject ao) {
+    public void generateNormalCode(AxoObject ao) {
         StringBuilder sLocalData = new StringBuilder(
-            GenerateStructCodePlusPlusSub("attr_parent", true)
-            + "static const int polyIndex = 0;\n");
-        sLocalData.append(GenerateParamInitCode3(""));
-        sLocalData.append(GeneratePresetCode3(""));
-        sLocalData.append(GenerateModulationCode3());
+                generateStructCodePlusPlusSub("attr_parent", true)
+                + "static const int polyIndex = 0;\n");
+        sLocalData.append(generateParamInitCode3(""));
+        sLocalData.append(generatePresetCode3(""));
+        sLocalData.append(generateModulationCode3());
         ao.sLocalData = sLocalData.toString().replaceAll("attr_poly", "1");
 
-        ao.sInitCode = GenerateParamInitCodePlusPlusSub("attr_parent", "this") + GenerateObjInitCodePlusPlusSub("attr_parent", "this");
+        ao.sInitCode = generateParamInitCodePlusPlusSub("attr_parent", "this") + generateObjInitCodePlusPlusSub("attr_parent", "this");
 
-        ao.sDisposeCode = GenerateDisposeCodePlusPlusSub("attr_parent");
+        ao.sDisposeCode = generateDisposeCodePlusPlusSub("attr_parent");
 
         StringBuilder sKRateCode = new StringBuilder("int i; /*...*/\n");
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 sKRateCode.append("   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n");
             } else if (typeName.equals("patch/inlet string")) {
@@ -951,9 +938,9 @@ public class PatchViewCodegen extends View<PatchController> {
                 sKRateCode.append("   for(i=0;i<BUFSIZE;i++) " + o.getCInstanceName() + "_i._inlet[i] = inlet_" + o.getLegalName() + "[i];\n");
             }
         }
-        sKRateCode.append(GenerateDSPCodePlusPlusSub("attr_parent", true));
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        sKRateCode.append(generateDSPCodePlusPlusSub("attr_parent", true));
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i") || typeName.equals("patch/outlet b")) {
                 sKRateCode.append("   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n");
             } else if (typeName.equals("patch/outlet string")) {
@@ -968,39 +955,39 @@ public class PatchViewCodegen extends View<PatchController> {
         ao.sMidiCode = ""
                 + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
                 + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
-                + GenerateMidiInCodePlusPlus();
+                + generateMidiInCodePlusPlus();
     }
 
-    public void GeneratePolyCode(AxoObject ao) {
-        StringBuilder sLocalData = new StringBuilder(GenerateParamInitCode3(""));
-        sLocalData.append(GeneratePexchAndDisplayCode());
+    public void generatePolyCode(AxoObject ao) {
+        StringBuilder sLocalData = new StringBuilder(generateParamInitCode3(""));
+        sLocalData.append(generatePexchAndDisplayCode());
         sLocalData.append("/* parameter instance indices */\n");
         int k = 0;
         for (ParameterInstanceView p : parameterInstances) {
             sLocalData.append("static const int PARAM_INDEX_"
-                              + p.getModel().getObjectInstance().getLegalName() + "_"
-                              + p.getModel().getLegalName() + " = " + k + ";\n");
+                              + p.getDModel().getObjectInstance().getLegalName() + "_"
+                              + p.getDModel().getLegalName() + " = " + k + ";\n");
             k++;
         }
 
-        sLocalData.append(GeneratePresetCode3(""));
-        sLocalData.append(GenerateModulationCode3());
+        sLocalData.append(generatePresetCode3(""));
+        sLocalData.append(generateModulationCode3());
         sLocalData.append("class voice {\n");
         sLocalData.append("   public:\n");
         sLocalData.append("   int polyIndex;\n");
-        sLocalData.append(GeneratePexchAndDisplayCodeV());
-        sLocalData.append(GenerateObjectCode("voice", true, "parent->common->"));
+        sLocalData.append(generatePexchAndDisplayCodeV());
+        sLocalData.append(generateObjectCode("voice", true, "parent->common->"));
         sLocalData.append("attr_parent *common;\n");
         sLocalData.append("void Init(voice *parent) {\n");
-        sLocalData.append(GenerateObjInitCodePlusPlusSub("voice", "parent"));
+        sLocalData.append(generateObjInitCodePlusPlusSub("voice", "parent"));
         sLocalData.append("}\n\n");
         sLocalData.append("void dsp(void) {\n int i;\n");
-        sLocalData.append(GenerateDSPCodePlusPlusSub("", true));
+        sLocalData.append(generateDSPCodePlusPlusSub("", true));
         sLocalData.append("}\n");
         sLocalData.append("void dispose(void) {\n int i;\n");
-        sLocalData.append(GenerateDisposeCodePlusPlusSub(""));
+        sLocalData.append(generateDisposeCodePlusPlusSub(""));
         sLocalData.append("}\n");
-        sLocalData.append(GenerateMidiCodePlusPlus("attr_parent"));
+        sLocalData.append(generateMidiCodePlusPlus("attr_parent"));
         sLocalData.append("};\n");
         sLocalData.append("static voice * getVoices(void){\n"
                           + "     static voice v[attr_poly];\n"
@@ -1030,7 +1017,7 @@ public class PatchViewCodegen extends View<PatchController> {
         ao.sLocalData = ao.sLocalData.replaceAll("parent->PExModulationPrevVal", "parent->common->PExModulationPrevVal");
         ao.sLocalData = ao.sLocalData.replaceAll("parent->GetModulationTable", "parent->common->GetModulationTable");
 
-        StringBuilder sInitCode = new StringBuilder(GenerateParamInitCodePlusPlusSub("", "parent"));
+        StringBuilder sInitCode = new StringBuilder(generateParamInitCodePlusPlusSub("", "parent"));
 
         sInitCode.append("int k;\n"
                 + "   for(k=0;k<nparams;k++){\n"
@@ -1067,8 +1054,8 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "}\n";
         StringBuilder sKRateCode = new StringBuilder();
 
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b") || typeName.equals("patch/outlet string")) {
                 sKRateCode.append("   outlet_" + o.getLegalName() + " = 0;\n");
@@ -1082,8 +1069,8 @@ public class PatchViewCodegen extends View<PatchController> {
         }
         sKRateCode.append("int vi; for(vi=0;vi<attr_poly;vi++) {");
 
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("inlet") || typeName.equals("inlet_i") || typeName.equals("inlet_b") || typeName.equals("inlet_")
                     || typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 sKRateCode.append("   getVoices()[vi]." + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n");
@@ -1094,8 +1081,8 @@ public class PatchViewCodegen extends View<PatchController> {
             }
         }
         sKRateCode.append("getVoices()[vi].dsp();\n");
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("outlet") || typeName.equals("patch/outlet f")
                     || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b")) {
@@ -1161,8 +1148,8 @@ public class PatchViewCodegen extends View<PatchController> {
                 + "}\n";
     }
 
-    public void GeneratePolyChannelCode(AxoObject o) {
-        GeneratePolyCode(o);
+    public void generatePolyChannelCode(AxoObject o) {
+        generatePolyCode(o);
         o.sLocalData
                 += "int8_t voiceChannel[attr_poly];\n";
         o.sInitCode
@@ -1239,8 +1226,8 @@ public class PatchViewCodegen extends View<PatchController> {
     }
 
 
-    public void GeneratePolyExpressionCode(AxoObject o) {
-        GeneratePolyCode(o);
+    public void generatePolyExpressionCode(AxoObject o) {
+        generatePolyCode(o);
         o.sLocalData
                 += "int8_t voiceChannel[attr_poly];\n"
                 + "int8_t pitchbendRange;\n"
@@ -1385,15 +1372,15 @@ public class PatchViewCodegen extends View<PatchController> {
 //        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
 //    }
     // Poly voices from one (or omni) midi channel
-    AxoObject GenerateAxoObjPoly(AxoObject template) {
+    AxoObject generateAxoObjPoly(AxoObject template) {
         AxoObject ao = template;
         ao.id = "unnamedobject";
-        ao.includes = getModel().getIncludes();
-        ao.depends = getModel().getDepends();
-        ao.modules = getModel().getModules();
+        ao.includes = getDModel().getIncludes();
+        ao.depends = getDModel().getDepends();
+        ao.modules = getDModel().getModules();
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
         ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
-        if (getModel().getMidiSelector()) {
+        if (getDModel().getMidiSelector()) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
@@ -1406,8 +1393,8 @@ public class PatchViewCodegen extends View<PatchController> {
             ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
 
-        for (IAxoObjectInstance o : getModel().objectinstances) {
-            String typeName = o.getType().getId();
+        for (IAxoObjectInstance o : getDModel().objectinstances) {
+            String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet i")) {
@@ -1436,50 +1423,50 @@ public class PatchViewCodegen extends View<PatchController> {
                 }
             }
         }
-        GeneratePolyCode(ao);
+        generatePolyCode(ao);
         return ao;
     }
 
     // Poly (Multi) Channel supports per Channel CC/Touch
     // all channels are independent
-    AxoObject GenerateAxoObjPolyChannel(AxoObject template) {
-        AxoObject o = GenerateAxoObjPoly(template);
-        GeneratePolyChannelCode(o);
+    AxoObject generateAxoObjPolyChannel(AxoObject template) {
+        AxoObject o = generateAxoObjPoly(template);
+        generatePolyChannelCode(o);
         return o;
     }
 
     // Poly Expression supports the Midi Polyphonic Expression (MPE) Spec
     // Can be used with (or without) the MPE objects
     // the midi channel of the patch is the 'main/global channel'
-    AxoObject GenerateAxoObjPolyExpression(AxoObject template) {
-        AxoObject o = GenerateAxoObjPoly(template);
-        GeneratePolyExpressionCode(o);
+    AxoObject generateAxoObjPolyExpression(AxoObject template) {
+        AxoObject o = generateAxoObjPoly(template);
+        generatePolyExpressionCode(o);
         return o;
     }
 
-    public AxoObject GenerateAxoObj(AxoObject template) {
+    public AxoObject generateAxoObj(AxoObject template) {
         AxoObject ao;
-        switch (getModel().getSubPatchMode()) {
+        switch (getDModel().getSubPatchMode()) {
             case no:
             case normal:
-                ao = GenerateAxoObjNormal(template);
+                ao = generateAxoObjNormal(template);
                 break;
             case polyphonic:
-                ao = GenerateAxoObjPoly(template);
+                ao = generateAxoObjPoly(template);
                 break;
             case polychannel:
-                ao = GenerateAxoObjPolyChannel(template);
+                ao = generateAxoObjPolyChannel(template);
                 break;
             case polyexpression:
-                ao = GenerateAxoObjPolyExpression(template);
+                ao = generateAxoObjPolyExpression(template);
                 break;
             default:
                 return null;
         }
-        ao.setAuthor(getModel().getAuthor());
-        ao.setLicense(getModel().getLicense());
-        ao.setDescription(getModel().getNotes());
-        ao.helpPatch = getModel().getHelpPatch();
+        ao.setAuthor(getDModel().getAuthor());
+        ao.setLicense(getDModel().getLicense());
+        ao.setDescription(getDModel().getNotes());
+        ao.helpPatch = getDModel().getHelpPatch();
         return ao;
     }
 

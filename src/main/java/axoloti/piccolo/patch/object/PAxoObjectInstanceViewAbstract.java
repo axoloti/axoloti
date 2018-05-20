@@ -1,15 +1,15 @@
 package axoloti.piccolo.patch.object;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.INetView;
+import axoloti.abstractui.IOutletInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.PUtils;
@@ -45,20 +45,20 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     protected MouseListener ml;
     protected MouseMotionListener mml;
     protected boolean dragging = false;
-    final PatchPNode titleBar;
-    PTextFieldComponent InstanceNameTF;
-    public PLabelComponent instanceLabel;
-    private boolean Locked = false;
+    protected PatchPNode titleBar;
+    protected PTextFieldComponent textFieldInstanceName;
+    protected PLabelComponent instanceLabel;
+    private boolean locked = false;
 
-    final ObjectInstanceController controller;
+    protected final IAxoObjectInstance objectInstance;
 
     protected final Set popupMenuNodes = new HashSet();
     protected final PPopupIcon popupIcon = new PPopupIcon(this);
 
-    public void ShowPopup(PInputEvent e) {
+    public void showPopup(PInputEvent e) {
         PatchPCanvas canvas = getPatchPCanvas();
         if (!canvas.isPopupVisible()) {
-            JPopupMenu popup = CreatePopupMenu();
+            JPopupMenu popup = createPopupMenu();
             Point popupLocation = PUtils.getPopupLocation(popupIcon, e);
             popup.show(canvas, popupLocation.x, popupLocation.y);
             canvas.setPopupParent(popupIcon);
@@ -76,31 +76,31 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         return pickedSet.isEmpty();
     }
 
-    PAxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewPiccolo patchView) {
+    PAxoObjectInstanceViewAbstract(IAxoObjectInstance objectInstance, PatchViewPiccolo patchView) {
         super(patchView);
-        this.controller = controller;
+        this.objectInstance = objectInstance;
         titleBar = new PatchPNode(patchView);
         initComponents();
     }
 
     @Override
-    public IAxoObjectInstance getModel() {
-        return getController().getModel();
+    public IAxoObjectInstance getDModel() {
+        return objectInstance;
     }
 
     @Override
-    public void Lock() {
-        Locked = true;
+    public void lock() {
+        locked = true;
     }
 
     @Override
-    public void Unlock() {
-        Locked = false;
+    public void unlock() {
+        locked = false;
     }
 
     @Override
     public boolean isLocked() {
-        return Locked;
+        return locked;
     }
 
     JPopupMenu popup;
@@ -127,7 +127,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         popupIcon.addInputEventListener(new PBasicInputEventHandler() {
             @Override
             public void mousePressed(PInputEvent e) {
-                ShowPopup(e);
+                showPopup(e);
             }
         });
 
@@ -135,7 +135,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
         setVisible(false);
     }
 
-    JPopupMenu CreatePopupMenu() {
+    JPopupMenu createPopupMenu() {
         JPopupMenu popup = new JPopupMenu();
         return popup;
     }
@@ -152,7 +152,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public Point getLocation() {
-        return new Point(getModel().getX(), getModel().getY());
+        return new Point(getDModel().getX(), getDModel().getY());
     }
 
     @Override
@@ -162,16 +162,16 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public PatchModel getPatchModel() {
-        return patchView.getController().getModel();
+        return patchView.getDModel();
     }
 
     @Override
-    public List<IIoletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return null;
     }
 
     @Override
-    public List<IIoletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return null;
     }
 
@@ -182,26 +182,26 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
     @Override
     public void setLocation(int x, int y) {
-        getController().changeLocation(x, y);
+        objectInstance.getController().changeLocation(x, y);
         setOffset(x, y);
     }
 
     protected void handleInstanceNameEditorAction() {
-        if(InstanceNameTF != null) {
-            String s = InstanceNameTF.getText();
-            removeChild(InstanceNameTF);
-            InstanceNameTF = null;
+        if(textFieldInstanceName != null) {
+            String s = textFieldInstanceName.getText();
+            removeChild(textFieldInstanceName);
+            textFieldInstanceName = null;
             instanceLabel.setVisible(true);
-            getController().addMetaUndo("edit object name");
-            getController().changeInstanceName(s);
+            objectInstance.getController().addMetaUndo("edit object name");
+            objectInstance.getController().changeInstanceName(s);
         }
     }
 
     @Override
     public void addInstanceNameEditor() {
-        getController().addMetaUndo("edit object instance name");
-        InstanceNameTF = new PTextFieldComponent(getModel().getInstanceName());
-        InstanceNameTF.selectAll();
+        objectInstance.getController().addMetaUndo("edit object instance name");
+        textFieldInstanceName = new PTextFieldComponent(getDModel().getInstanceName());
+        textFieldInstanceName.selectAll();
         PBasicInputEventHandler inputEventHandler = new PBasicInputEventHandler() {
             @Override
             public void keyboardFocusLost(PInputEvent e) {
@@ -210,7 +210,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                InstanceNameTF.selectAll();
+                textFieldInstanceName.selectAll();
             }
 
             @Override
@@ -221,20 +221,20 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
             }
         };
 
-        InstanceNameTF.addInputEventListener(inputEventHandler);
+        textFieldInstanceName.addInputEventListener(inputEventHandler);
 
-        Dimension d = InstanceNameTF.getSize();
+        Dimension d = textFieldInstanceName.getSize();
         d.width = (int) getWidth() - 1;
         d.height = 15;
-        InstanceNameTF.setMaximumSize(d);
-        InstanceNameTF.setMinimumSize(d);
-        InstanceNameTF.setPreferredSize(d);
-        InstanceNameTF.setSize(d);
+        textFieldInstanceName.setMaximumSize(d);
+        textFieldInstanceName.setMinimumSize(d);
+        textFieldInstanceName.setPreferredSize(d);
+        textFieldInstanceName.setSize(d);
 
-        addChild(1, InstanceNameTF);
-        InstanceNameTF.raiseToTop();
-        InstanceNameTF.setTransform(instanceLabel.getTransform());
-        InstanceNameTF.grabFocus();
+        addChild(1, textFieldInstanceName);
+        textFieldInstanceName.raiseToTop();
+        textFieldInstanceName.setTransform(instanceLabel.getTransform());
+        textFieldInstanceName.grabFocus();
     }
 
     public void showInstanceName(String InstanceName) {
@@ -252,10 +252,6 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
             setBorder(BORDER_UNSELECTED);
         }
         repaint();
-    }
-
-    public void SetLocation(int x1, int y1) {
-        setLocation(x1, y1);
     }
 
     @Override
@@ -282,12 +278,12 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
+    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return null;
     }
 
     @Override
-    public IIoletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
     }
 
@@ -298,7 +294,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
             setLocation(newValue.x, newValue.y);
             if (getPatchView() != null) {
                 if (getInletInstanceViews() != null) {
-                    for (IIoletInstanceView i : getInletInstanceViews()) {
+                    for (IInletInstanceView i : getInletInstanceViews()) {
                         INetView n = getPatchView().findNetView(i);
                         if (n != null) {
                             n.updateBounds();
@@ -307,7 +303,7 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
                     }
                 }
                 if (getOutletInstanceViews() != null) {
-                    for (IIoletInstanceView i : getOutletInstanceViews()) {
+                    for (IOutletInstanceView i : getOutletInstanceViews()) {
                         INetView n = getPatchView().findNetView(i);
                         if (n != null) {
                             n.updateBounds();
@@ -325,16 +321,11 @@ public class PAxoObjectInstanceViewAbstract extends PatchPNode implements IAxoOb
     }
 
     @Override
-    public ObjectInstanceController getController() {
-        return controller;
-    }
-
-    @Override
     public void dispose() {
     }
 
     @Override
     public Boolean isSelected() {
-        return getModel().getSelected();
+        return getDModel().getSelected();
     }
 }

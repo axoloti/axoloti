@@ -13,23 +13,23 @@ import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
 
 public class PAttributeInstanceViewFactory {
 
-    public static PAttributeInstanceView createView(AttributeInstanceController controller, IAxoObjectInstanceView obj) {
-        AttributeInstance model = controller.getModel();
+    public static PAttributeInstanceView createView(AttributeInstance model, IAxoObjectInstanceView obj) {
+        AttributeInstanceController controller = model.getController();
         PAttributeInstanceView view;
         if (model instanceof AttributeInstanceComboBox) {
-            view = new PAttributeInstanceViewComboBox(controller, obj);
+            view = new PAttributeInstanceViewComboBox(model, obj);
         } else if (model instanceof AttributeInstanceInt32) {
-            view = new PAttributeInstanceViewInt32(controller, obj);
+            view = new PAttributeInstanceViewInt32(model, obj);
         } else if (model instanceof AttributeInstanceObjRef) {
-            view = new PAttributeInstanceViewObjRef(controller, obj);
+            view = new PAttributeInstanceViewObjRef(model, obj);
         } else if (model instanceof AttributeInstanceSDFile) {
-            view = new PAttributeInstanceViewSDFile(controller, obj);
+            view = new PAttributeInstanceViewSDFile(model, obj);
         } else if (model instanceof AttributeInstanceSpinner) {
-            view = new PAttributeInstanceViewSpinner(controller, obj);
+            view = new PAttributeInstanceViewSpinner(model, obj);
         } else if (model instanceof AttributeInstanceTablename) {
-            view = new PAttributeInstanceViewTablename(controller, obj);
+            view = new PAttributeInstanceViewTablename(model, obj);
         } else if (model instanceof AttributeInstanceTextEditor) {
-            view = new PAttributeInstanceViewTextEditor(controller, obj);
+            view = new PAttributeInstanceViewTextEditor(model, obj);
         } else {
             view = null;
             throw new Error("unkonwn attribute type");

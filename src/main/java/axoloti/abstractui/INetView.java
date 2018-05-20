@@ -1,10 +1,10 @@
 package axoloti.abstractui;
 
 import axoloti.mvc.IView;
-import axoloti.patch.net.NetController;
+import axoloti.patch.net.Net;
 import java.util.List;
 
-public interface INetView extends IView<NetController> {
+public interface INetView extends IView<Net> {
 
     void updateBounds();
 
@@ -12,9 +12,11 @@ public interface INetView extends IView<NetController> {
 
     boolean getSelected();
 
-    List<IIoletInstanceView> getIoletViews();
+    List<IInletInstanceView> getInletViews();
 
-    void setVisible(boolean isVisible); // TODO: review
+    List<IOutletInstanceView> getOutletViews();
+
+    void setVisible(boolean isVisible);
 
     void repaint();
 }

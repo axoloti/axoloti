@@ -2,11 +2,10 @@ package axoloti.codegen.patch.object;
 
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.object.AxoObjectPatcher;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.SubPatchMode;
 import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.patch.object.ObjectInstancePatcherController;
+import axoloti.patch.object.IAxoObjectInstance;
 
 /**
  *
@@ -14,13 +13,12 @@ import axoloti.patch.object.ObjectInstancePatcherController;
  */
 public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodegenView {
 
-    AxoObjectInstancePatcherCodegenView(ObjectInstancePatcherController controller) {
-        super(controller);
-        AxoObjectInstancePatcher model = controller.getModel();
-        AxoObjectPatcher ao = (AxoObjectPatcher)model.getController().getModel();
-        PatchController pc = controller.getSubPatchController();
-        PatchModel pm = pc.getModel();
-        PatchViewCodegen pvcg = new PatchViewCodegen(pc);
+    AxoObjectInstancePatcherCodegenView(IAxoObjectInstance objectInstance) {
+        super(objectInstance);
+        AxoObjectInstancePatcher model = (AxoObjectInstancePatcher) objectInstance;
+        AxoObjectPatcher ao = (AxoObjectPatcher) model.getDModel();
+        PatchModel pm = model.getSubPatchModel();
+        PatchViewCodegen pvcg = new PatchViewCodegen(pm);
 
         // from GenerateAxoObjNormal
         if (pm.getSubPatchMode() == SubPatchMode.no ||
@@ -66,13 +64,13 @@ public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodege
                     + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
                     + pvcg.GenerateMidiInCodePlusPlus();
 */
-            pvcg.GenerateNormalCode(ao);
+            pvcg.generateNormalCode(ao);
         } else if (pm.getSubPatchMode() == SubPatchMode.polyphonic) {
-            pvcg.GeneratePolyCode(ao);
+            pvcg.generatePolyCode(ao);
         } else if (pm.getSubPatchMode() == SubPatchMode.polychannel) {
-            pvcg.GeneratePolyChannelCode(ao);
+            pvcg.generatePolyChannelCode(ao);
         } else if (pm.getSubPatchMode() == SubPatchMode.polyexpression) {
-            pvcg.GeneratePolyExpressionCode(ao);
+            pvcg.generatePolyExpressionCode(ao);
         }
     }
 

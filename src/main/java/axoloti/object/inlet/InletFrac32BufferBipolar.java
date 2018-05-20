@@ -33,7 +33,7 @@ public class InletFrac32BufferBipolar extends InletFrac32Buffer {
     }
 
     @Override
-    public SignalMetaData GetSignalMetaData() {
+    public SignalMetaData getSignalMetaData() {
         return SignalMetaData.bipolar;
     }
 

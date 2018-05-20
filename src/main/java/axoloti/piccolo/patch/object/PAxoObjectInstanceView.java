@@ -1,22 +1,24 @@
 package axoloti.piccolo.patch.object;
 
 import axoloti.abstractui.IAttributeInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.IAxoObject;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.attribute.AttributeInstanceController;
-import axoloti.patch.object.display.DisplayInstanceController;
-import axoloti.patch.object.iolet.IoletInstanceController;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.IAxoObjectInstance;
+import axoloti.patch.object.atom.AtomInstance;
+import axoloti.patch.object.attribute.AttributeInstance;
+import axoloti.patch.object.display.DisplayInstance;
+import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.outlet.OutletInstance;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.PatchViewPiccolo;
@@ -44,12 +46,12 @@ import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract implements IAxoObjectInstanceView {
+public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
 
     public static final int MIN_HEIGHT = 40;
     public static final int MIN_WIDTH = 80;
 
-    PLabelComponent IndexLabel;
+    PLabelComponent indexLabel;
 
     PatchPNode p_attributeViews;
     PatchPNode p_parameterViews;
@@ -61,9 +63,9 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     String tooltipText = "<html>";
 
-    public PAxoObjectInstanceView(ObjectInstanceController controller, PatchViewPiccolo patchView) {
-        super(controller, patchView);
-        instanceLabel = new PLabelComponent(controller.getModel().getInstanceName());
+    public PAxoObjectInstanceView(IAxoObjectInstance objectInstance, PatchViewPiccolo patchView) {
+        super(objectInstance, patchView);
+        instanceLabel = new PLabelComponent(objectInstance.getInstanceName());
         p_parameterViews = new PatchPNode(patchView);
         p_attributeViews = new PatchPNode(patchView);
         p_inletViews = new PatchPNode(patchView);
@@ -93,16 +95,16 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public AxoObjectInstance getModel() {
-        return (AxoObjectInstance) super.getModel();
+    public AxoObjectInstance getDModel() {
+        return (AxoObjectInstance) super.getDModel();
     }
 
     public IAxoObject getType() {
-        return getModel().getType();
+        return getDModel().getDModel();
     }
 
-    List<IIoletInstanceView> inletInstanceViews;
-    List<IIoletInstanceView> outletInstanceViews;
+    List<IInletInstanceView> inletInstanceViews;
+    List<IOutletInstanceView> outletInstanceViews;
     List<IAttributeInstanceView> attributeInstanceViews;
     List<IParameterInstanceView> parameterInstanceViews;
     List<IDisplayInstanceView> displayInstanceViews;
@@ -111,7 +113,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.PAGE_AXIS));
 
         setPaint(Theme.getCurrentTheme().Object_Default_Background);
-        setLocation(getModel().getX(), getModel().getY());
+        setLocation(getDModel().getX(), getDModel().getY());
         setDrawBorder(true);
 
         p_parameterViews.setPickable(false);
@@ -123,7 +125,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         titleBar.addChild(popupIcon);
 
-        PLabelComponent titleBarLabel = new PLabelComponent(getModel().getTypeName());
+        PLabelComponent titleBarLabel = new PLabelComponent(getDModel().getTypeName());
         titleBarLabel.setAlignmentX(LEFT_ALIGNMENT);
         titleBarLabel.setPickable(false);
 
@@ -183,7 +185,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             @Override
             public void mousePressed(PInputEvent e) {
                 if (e.isPopupTrigger() && !overPickableChild(e)) {
-                    ShowPopup(e);
+                    showPopup(e);
                 }
             }
 
@@ -216,7 +218,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
     private void showReplaceClassSelector(PInputEvent e) {
         if (e.isLeftMouseButton() && e.getClickCount() == 2) {
-            ((PatchViewPiccolo) getPatchView()).ShowClassSelector(PAxoObjectInstanceView.this.getLocation(), null, PAxoObjectInstanceView.this, null);
+            ((PatchViewPiccolo) getPatchView()).showClassSelector(PAxoObjectInstanceView.this.getLocation(), null, PAxoObjectInstanceView.this, null);
         }
     }
 
@@ -226,33 +228,36 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             tooltipTextBuilder.append(getType().getDescription());
         }
         if ((getType().getAuthor() != null) && (!getType().getAuthor().isEmpty())) {
-            tooltipTextBuilder.append("<p>Author: " + getType().getAuthor());
+            tooltipTextBuilder.append("<p>Author: ");
+            tooltipTextBuilder.append(getType().getAuthor());
         }
         if ((getType().getLicense() != null) && (!getType().getLicense().isEmpty())) {
-            tooltipTextBuilder.append("<p>License: " + getType().getLicense());
+            tooltipTextBuilder.append("<p>License: ");
+            tooltipTextBuilder.append(getType().getLicense());
         }
         if ((getType().getPath() != null) && (!getType().getPath().isEmpty())) {
-            tooltipTextBuilder.append("<p>Path: " + getType().getPath());
+            tooltipTextBuilder.append("<p>Path: ");
+            tooltipTextBuilder.append(getType().getPath());
         }
         if(tooltipTextBuilder.length() > 0) {
             tooltipText = tooltipTextBuilder.toString();
         }
     }
 
-    HashMap<AbstractController, IView> view_cache = new HashMap<>();
+    HashMap<AtomInstance, IView> view_cache = new HashMap<>();
 
-    ArrayView<IIoletInstanceView> inletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
+    ArrayView<IInletInstanceView, InletInstance> inletInstanceViewSync = new ArrayView<IInletInstanceView, InletInstance>() {
         @Override
-        protected IIoletInstanceView viewFactory(AbstractController ctrl) {
-            IIoletInstanceView view = (InletInstanceView) view_cache.get(ctrl);
+        protected IInletInstanceView viewFactory(InletInstance inlet) {
+            IInletInstanceView view = (InletInstanceView) view_cache.get(inlet);
             if (view == null) {
-                view = PInletInstanceViewFactory.createView((IoletInstanceController) ctrl, PAxoObjectInstanceView.this);
+                view = PInletInstanceViewFactory.createView(inlet, PAxoObjectInstanceView.this);
             }
             return view;
         }
 
             @Override
-        protected void updateUI(List<IIoletInstanceView> views) {
+        protected void updateUI(List<IInletInstanceView> views) {
                 p_inletViews.removeAllChildren();
                 for (IIoletInstanceView c : views) {
                     p_inletViews.addChild((PatchPNode) c);
@@ -260,23 +265,23 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             }
 
             @Override
-        protected void removeView(IIoletInstanceView view) {
-                view_cache.put(view.getController(), view);
+        protected void removeView(IInletInstanceView view) {
+                view_cache.put(view.getDModel(), view);
             }
         };
 
-    ArrayView<IIoletInstanceView> outletInstanceViewSync = new ArrayView<IIoletInstanceView>() {
+    ArrayView<IOutletInstanceView, OutletInstance> outletInstanceViewSync = new ArrayView<IOutletInstanceView, OutletInstance>() {
         @Override
-        protected IIoletInstanceView viewFactory(AbstractController ctrl) {
-            IIoletInstanceView view = (OutletInstanceView) view_cache.get(ctrl);
+        protected IOutletInstanceView viewFactory(OutletInstance outlet) {
+            IOutletInstanceView view = (OutletInstanceView) view_cache.get(outlet);
             if (view == null) {
-                view = POutletInstanceViewFactory.createView((IoletInstanceController) ctrl, PAxoObjectInstanceView.this);
+                view = POutletInstanceViewFactory.createView(outlet, PAxoObjectInstanceView.this);
             }
             return view;
         }
 
         @Override
-        protected void updateUI(List<IIoletInstanceView> views) {
+        protected void updateUI(List<IOutletInstanceView> views) {
             p_outletViews.removeAllChildren();
             for (IIoletInstanceView c : views) {
                 p_outletViews.addChild((PatchPNode) c);
@@ -284,18 +289,18 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         }
 
         @Override
-        protected void removeView(IIoletInstanceView view) {
-                view_cache.put(view.getController(), view);
+        protected void removeView(IOutletInstanceView view) {
+            view_cache.put(view.getDModel(), view);
             }
         };
 
-    ArrayView<IAttributeInstanceView> attributeInstanceViewSync = new ArrayView<IAttributeInstanceView>() {
+    ArrayView<IAttributeInstanceView, AttributeInstance> attributeInstanceViewSync = new ArrayView<IAttributeInstanceView, AttributeInstance>() {
 
         @Override
-        protected IAttributeInstanceView viewFactory(AbstractController ctrl) {
-            IAttributeInstanceView view = (AttributeInstanceView) view_cache.get(ctrl);
+        protected IAttributeInstanceView viewFactory(AttributeInstance attribute) {
+            IAttributeInstanceView view = (AttributeInstanceView) view_cache.get(attribute);
             if (view == null) {
-                view = PAttributeInstanceViewFactory.createView((AttributeInstanceController) ctrl, PAxoObjectInstanceView.this);
+                view = PAttributeInstanceViewFactory.createView(attribute, PAxoObjectInstanceView.this);
             }
             return view;
         }
@@ -310,16 +315,16 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         @Override
         protected void removeView(IAttributeInstanceView view) {
-            view_cache.put(view.getController(), view);
+            view_cache.put(view.getDModel(), view);
         }
     };
 
-    ArrayView<IParameterInstanceView> parameterInstanceViewSync = new ArrayView<IParameterInstanceView>() {
+    ArrayView<IParameterInstanceView, ParameterInstance> parameterInstanceViewSync = new ArrayView<IParameterInstanceView, ParameterInstance>() {
         @Override
-        protected IParameterInstanceView viewFactory(AbstractController ctrl) {
-            IParameterInstanceView view = (IParameterInstanceView) view_cache.get(ctrl);
+        protected IParameterInstanceView viewFactory(ParameterInstance parameter) {
+            IParameterInstanceView view = (IParameterInstanceView) view_cache.get(parameter);
             if (view == null) {
-                view = PParameterInstanceViewFactory.createView((ParameterInstanceController) ctrl, PAxoObjectInstanceView.this);
+                view = PParameterInstanceViewFactory.createView(parameter, PAxoObjectInstanceView.this);
             }
             return view;
         }
@@ -334,16 +339,16 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         @Override
         protected void removeView(IParameterInstanceView view) {
-            view_cache.put(view.getController(), view);
+            view_cache.put(view.getDModel(), view);
         }
     };
 
-    ArrayView<IDisplayInstanceView> displayInstanceViewSync = new ArrayView<IDisplayInstanceView>() {
+    ArrayView<IDisplayInstanceView, DisplayInstance> displayInstanceViewSync = new ArrayView<IDisplayInstanceView, DisplayInstance>() {
         @Override
-        protected IDisplayInstanceView viewFactory(AbstractController ctrl) {
-            IDisplayInstanceView view = (IDisplayInstanceView) view_cache.get(ctrl);
+        protected IDisplayInstanceView viewFactory(DisplayInstance display) {
+            IDisplayInstanceView view = (IDisplayInstanceView) view_cache.get(display);
             if (view == null) {
-                view = PDisplayInstanceViewFactory.createView((DisplayInstanceController) ctrl, PAxoObjectInstanceView.this);
+                view = PDisplayInstanceViewFactory.createView(display, PAxoObjectInstanceView.this);
             }
             return view;
         }
@@ -358,7 +363,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
 
         @Override
         protected void removeView(IDisplayInstanceView view) {
-            view_cache.put(view.getController(), view);
+            view_cache.put(view.getDModel(), view);
         }
     };
 
@@ -366,31 +371,31 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (AxoObjectInstance.OBJ_INLET_INSTANCES.is(evt)) {
-            inletInstanceViews = inletInstanceViewSync.Sync(inletInstanceViews, getController().getModel().getInletInstances());
+            inletInstanceViews = inletInstanceViewSync.sync(inletInstanceViews, getDModel().getInletInstances());
         } else if (AxoObjectInstance.OBJ_OUTLET_INSTANCES.is(evt)) {
-            outletInstanceViews = outletInstanceViewSync.Sync(outletInstanceViews, getController().getModel().getOutletInstances());
+            outletInstanceViews = outletInstanceViewSync.sync(outletInstanceViews, getDModel().getOutletInstances());
         } else if (AxoObjectInstance.OBJ_ATTRIBUTE_INSTANCES.is(evt)) {
-            attributeInstanceViews = attributeInstanceViewSync.Sync(attributeInstanceViews, getController().getModel().getAttributeInstances());
+            attributeInstanceViews = attributeInstanceViewSync.sync(attributeInstanceViews, getDModel().getAttributeInstances());
         } else if (AxoObjectInstance.OBJ_PARAMETER_INSTANCES.is(evt)) {
-            parameterInstanceViews = parameterInstanceViewSync.Sync(parameterInstanceViews, getController().getModel().getParameterInstances());
+            parameterInstanceViews = parameterInstanceViewSync.sync(parameterInstanceViews, getDModel().getParameterInstances());
         } else if (AxoObjectInstance.OBJ_DISPLAY_INSTANCES.is(evt)) {
-            displayInstanceViews = displayInstanceViewSync.Sync(displayInstanceViews, getController().getModel().getDisplayInstances());
+            displayInstanceViews = displayInstanceViewSync.sync(displayInstanceViews, getDModel().getDisplayInstances());
         } else if (AxoObject.OBJ_DESCRIPTION.is(evt)
                 || AxoObject.OBJ_AUTHOR.is(evt)
                 || AxoObject.OBJ_LICENSE.is(evt)) {
-            // updateTooltext(); // TODO: implement for piccolo
+            // updateTooltext(); // TODO: piccolo: implement for piccolo
         }
         resizeToGrid();
     }
 
     @Override
-    JPopupMenu CreatePopupMenu() {
-        JPopupMenu popup = super.CreatePopupMenu();
+    JPopupMenu createPopupMenu() {
+        JPopupMenu popup = super.createPopupMenu();
         JMenuItem popm_edit = new JMenuItem("edit object definition");
         popm_edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                OpenEditor();
+                openEditor();
             }
         });
         popup.add(popm_edit);
@@ -406,7 +411,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ((PatchViewPiccolo) getPatchView()).ShowClassSelector(PAxoObjectInstanceView.this.getLocation(), null, PAxoObjectInstanceView.this, null);
+                ((PatchViewPiccolo) getPatchView()).showClassSelector(PAxoObjectInstanceView.this.getLocation(), null, PAxoObjectInstanceView.this, null);
             }
         });
         popup.add(popm_substitute);
@@ -415,7 +420,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             popm_help.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    PatchViewSwing.OpenPatch(getType().getHelpPatchFile());
+                    PatchViewSwing.openPatch(getType().getHelpPatchFile());
                 }
             });
             popup.add(popm_help);
@@ -425,20 +430,20 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             popm_adapt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getController().getModel().getParent().getControllerFromModel().PromoteToOverloadedObj(getModel());
+                    getDModel().getParent().getController().promoteToOverloadedObj(getDModel());
                 }
             });
             popup.add(popm_adapt);
         }
 
-        if (getModel().getType() instanceof AxoObjectFromPatch) {
+        if (getType() instanceof AxoObjectFromPatch) {
             JMenuItem popm_embed = new JMenuItem("embed as patch/patcher");
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     if (!getPatchView().isLocked()) {
-                        getController().addMetaUndo("embed");
-                        getController().getModel().getParent().getControllerFromModel().ConvertToPatchPatcher(getModel());
+                        getDModel().getParent().getController().addMetaUndo("embed");
+                        getDModel().getParent().getController().convertToPatchPatcher(getDModel());
                     }
                 }
             });
@@ -448,8 +453,8 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
             popm_embed.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    getController().addMetaUndo("embed");
-                    getController().getModel().getParent().getControllerFromModel().ConvertToEmbeddedObj(getModel());
+                    getDModel().getParent().getController().addMetaUndo("embed");
+                    getDModel().getParent().getController().convertToEmbeddedObj(getDModel());
                 }
             });
             popup.add(popm_embed);
@@ -457,23 +462,23 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
         return popup;
     }
 
-    public void OpenEditor() {
-        getType().OpenEditor();
+    public void openEditor() {
+        getType().openEditor();
     }
 
     @Override
-    public void Lock() {
-        super.Lock();
+    public void lock() {
+        super.lock();
         for (IAttributeInstanceView a : attributeInstanceViews) {
-            a.Lock();
+            a.lock();
         }
     }
 
     @Override
-    public void Unlock() {
-        super.Unlock();
+    public void unlock() {
+        super.unlock();
         for (IAttributeInstanceView a : attributeInstanceViews) {
-            a.UnLock();
+            a.unlock();
         }
         if (deferredObjTypeUpdate) {
             //model.updateObj();
@@ -482,12 +487,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract imple
     }
 
     @Override
-    public List<IIoletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return inletInstanceViews;
     }
 
     @Override
-    public List<IIoletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return outletInstanceViews;
     }
 

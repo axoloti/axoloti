@@ -53,7 +53,7 @@ public class VValueLabelsComponent extends JComponent {
 
     final int margin = 0;
 
-    int ValToPos(double v) {
+    int valToPos(double v) {
         return (int) (margin + ((max - v) * (height - 2 * margin)) / (max - min));
     }
 
@@ -69,7 +69,7 @@ public class VValueLabelsComponent extends JComponent {
         g2.setPaint(getForeground());
         int inset = 3;
         for (double v = min + tick; v < max; v += tick) {
-            int y = ValToPos(v);
+            int y = valToPos(v);
             g2.drawLine(width - inset, y, width, y);
             String s;
             if (Math.rint(v) == v) {

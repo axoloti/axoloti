@@ -38,12 +38,12 @@ public class QCmdCompilePatch extends QCmdShellTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start compiling patch";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         if (success) {
             return "Done compiling patch";
         } else {
@@ -52,9 +52,9 @@ public class QCmdCompilePatch extends QCmdShellTask {
     }
 
     @Override
-    public String[] GetEnv() {
+    public String[] getEnvironment() {
         ArrayList<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(super.GetEnv()));
+        list.addAll(Arrays.asList(super.getEnvironment()));
         /*
         Set<String> moduleSet = this.patchController.getModel().getModules();
         if(moduleSet!=null) {
@@ -76,14 +76,14 @@ public class QCmdCompilePatch extends QCmdShellTask {
     }
 
     @Override
-    public File GetWorkingDir() {
-        return new File(FirmwareDir());
+    public File getWorkingDir() {
+        return new File(getFirmwareDir());
     }
 
     @Override
-    String GetExec() {
+    String getExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return FirmwareDir() + "/compile_patch_win.bat";
+            return getFirmwareDir() + "/compile_patch_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
             return "/bin/sh ./compile_patch_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {

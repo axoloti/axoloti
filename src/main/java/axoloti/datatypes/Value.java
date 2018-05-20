@@ -21,7 +21,7 @@ package axoloti.datatypes;
  *
  * @author Johannes Taelman
  */
-public abstract class Value implements Comparable {
+public abstract class Value {
 
     public Value() {
     }

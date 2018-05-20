@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class LinearTimeReverse implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double t = (1.0 / v.getDouble()) * (16 / 48000.0) * 8192;
         if (t > 1.0) {
             return (String.format("%.2f s", t));
@@ -41,7 +41,7 @@ public class LinearTimeReverse implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[mM]?)[sS]");
         Matcher matcher = pattern.matcher(s);
 

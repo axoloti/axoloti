@@ -1,7 +1,7 @@
 package axoloti.swingui.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
 import axoloti.swingui.components.ButtonComponent;
 import axoloti.utils.Constants;
@@ -17,38 +17,33 @@ import javax.swing.event.DocumentListener;
 
 class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
 
-    JTextField TFFileName;
-    ButtonComponent ButtonChooseFile;
+    JTextField textFieldFileName;
+    ButtonComponent buttonChooseFile;
 
-    AttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    AttributeInstanceViewSDFile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceSDFile getModel() {
-        return (AttributeInstanceSDFile) super.getModel();
+    public AttributeInstanceSDFile getDModel() {
+        return (AttributeInstanceSDFile) super.getDModel();
     }
 
     private void initComponents() {
-        TFFileName = new JTextField(getModel().getValue());
-        Dimension d = TFFileName.getSize();
+        textFieldFileName = new JTextField(getDModel().getValue());
+        Dimension d = textFieldFileName.getSize();
         d.width = 128;
         d.height = 22;
-        TFFileName.setFont(Constants.FONT);
-        TFFileName.setMaximumSize(d);
-        TFFileName.setMinimumSize(d);
-        TFFileName.setPreferredSize(d);
-        TFFileName.setSize(d);
-        add(TFFileName);
-        TFFileName.getDocument().addDocumentListener(new DocumentListener() {
+        textFieldFileName.setFont(Constants.FONT);
+        textFieldFileName.setMaximumSize(d);
+        textFieldFileName.setMinimumSize(d);
+        textFieldFileName.setPreferredSize(d);
+        textFieldFileName.setSize(d);
+        add(textFieldFileName);
+        textFieldFileName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {
-                SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            getController().changeValue(TFFileName.getText());
-                        }
-                    });
+                model.getController().changeValue(textFieldFileName.getText());
             }
 
             @Override
@@ -66,57 +61,60 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
                 update();
             }
         });
-        TFFileName.addFocusListener(new FocusListener() {
+        textFieldFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().changeValue(TFFileName.getText());
+                model.getController().changeValue(textFieldFileName.getText());
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().changeValue(TFFileName.getText());
+                model.getController().changeValue(textFieldFileName.getText());
             }
         });
-        ButtonChooseFile = new ButtonComponent("choose");
-        ButtonChooseFile.addActListener(new ButtonComponent.ActListener() {
+        buttonChooseFile = new ButtonComponent("choose");
+        buttonChooseFile.addActListener(new ButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
-                JFileChooser fc = new JFileChooser(getController().getModel().getParent().getParent().GetCurrentWorkingDirectory());
+            public void fire() {
+                JFileChooser fc = new JFileChooser(getDModel().getParent().getParent().getCurrentWorkingDirectory());
                 Window window = SwingUtilities.getWindowAncestor(AttributeInstanceViewSDFile.this);
                 int returnVal = fc.showOpenDialog(window);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String f = getModel().toRelative(fc.getSelectedFile());
-                    getController().changeValue(f);
+                    String f = getDModel().toRelative(fc.getSelectedFile());
+                    model.getController().changeValue(f);
                 }
             }
         });
-        add(ButtonChooseFile);
+        add(buttonChooseFile);
     }
 
     @Override
-    public void Lock() {
-        if (TFFileName != null) {
-            TFFileName.setEnabled(false);
+    public void lock() {
+        if (textFieldFileName != null) {
+            textFieldFileName.setEnabled(false);
         }
-        if (ButtonChooseFile != null) {
-            ButtonChooseFile.setEnabled(false);
+        if (buttonChooseFile != null) {
+            buttonChooseFile.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
-        if (TFFileName != null) {
-            TFFileName.setEnabled(true);
+    public void unlock() {
+        if (textFieldFileName != null) {
+            textFieldFileName.setEnabled(true);
         }
-        if (ButtonChooseFile != null) {
-            ButtonChooseFile.setEnabled(true);
+        if (buttonChooseFile != null) {
+            buttonChooseFile.setEnabled(true);
         }
     }
 
     @Override
     public void setString(String tableName) {
-        if (TFFileName != null) {
-            TFFileName.setText(tableName);
+        if (textFieldFileName == null) {
+            return;
+        }
+        if (!textFieldFileName.getText().equals(tableName)) {
+            textFieldFileName.setText(tableName);
         }
     }
 }

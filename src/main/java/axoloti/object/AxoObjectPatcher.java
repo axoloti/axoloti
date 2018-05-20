@@ -17,11 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.patch.PatchController;
-import axoloti.patch.PatchModel;
-import axoloti.patch.object.AxoObjectInstancePatcher;
-import java.awt.Point;
-
 /**
  *
  * @author Johannes Taelman
@@ -34,16 +29,6 @@ public class AxoObjectPatcher extends AxoObject {
 
     public AxoObjectPatcher(String id, String sDescription) {
         super(id, sDescription);
-    }
-
-    public AxoObjectInstancePatcher CreateInstance(PatchController patchController, String InstanceName1, Point location, PatchModel subPatchModel) {
-        AxoObjectPatcher newObj = new AxoObjectPatcher();
-        newObj.setDocumentRoot(patchController.getDocumentRoot());
-        ObjectController ctrl1 = newObj.getControllerFromModel();
-        AxoObjectInstancePatcher o = new AxoObjectInstancePatcher(ctrl1, patchController.getModel(), InstanceName1, location, subPatchModel);
-        subPatchModel.setParent(o);
-        ctrl1.addView(o);
-        return o;
     }
 
 }

@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceObjRef;
 import axoloti.piccolo.components.PTextFieldComponent;
 import java.awt.Dimension;
@@ -16,18 +16,18 @@ class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFObjName;
 
-    public PAttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewObjRef(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceObjRef getModel() {
-        return (AttributeInstanceObjRef) super.getModel();
+    public AttributeInstanceObjRef getDModel() {
+        return (AttributeInstanceObjRef) super.getDModel();
     }
 
     private void initComponents() {
-        TFObjName = new PTextFieldComponent(getModel().getValue());
+        TFObjName = new PTextFieldComponent(getDModel().getValue());
         Dimension d = TFObjName.getSize();
         d.width = 92;
         d.height = 22;
@@ -51,12 +51,12 @@ class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                getController().addMetaUndo("edit attribute " + getModel().getName());
+                getDModel().getController().addMetaUndo("edit attribute " + getDModel().getName());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                getController().changeValue(TFObjName.getText());
+                getDModel().getController().changeValue(TFObjName.getText());
             }
         });
 
@@ -65,7 +65,7 @@ class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().changeValue(TFObjName.getText());
+                            getDModel().getController().changeValue(TFObjName.getText());
                         }
                     });
             }
@@ -88,14 +88,14 @@ class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (TFObjName != null) {
             TFObjName.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (TFObjName != null) {
             TFObjName.setEnabled(true);
         }

@@ -53,9 +53,9 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public final class AxoObjectEditor extends JFrame implements DocumentWindow, IView {
+public final class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject> {
 
-    private final ObjectController controller;
+    private final AxoObject obj;
     private RSyntaxTextArea jTextAreaLocalData;
     private RSyntaxTextArea jTextAreaInitCode;
     private RSyntaxTextArea jTextAreaKRateCode;
@@ -76,13 +76,13 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         return rsta;
     }
 
-    @Override
-    public ObjectController getController() {
-        return controller;
+    private ObjectController getObjectController() {
+        return obj.getController();
     }
 
-    AxoObject getModel() {
-        return (AxoObject) (getController().getModel());
+    @Override
+    public AxoObject getDModel() {
+        return obj;
     }
 
     @Override
@@ -111,21 +111,21 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             setTitle((String) evt.getNewValue());
         } else if (false) { // FIXME: add property to model
             ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
-            if (getModel().includes != null) {
-                for (String i : getModel().includes) {
+            if (getDModel().includes != null) {
+                for (String i : getDModel().includes) {
                     ((DefaultListModel) jListIncludes.getModel()).addElement(i);
                 }
             }
         } else if (false) { // FIXME: add property to model
             ((DefaultListModel) jListIncludes.getModel()).removeAllElements();
-            if (getModel().depends != null) {
-                for (String i : getModel().depends) {
+            if (getDModel().depends != null) {
+                for (String i : getDModel().depends) {
                     ((DefaultListModel) jListDepends.getModel()).addElement(i);
                 }
             }
         } else if (false) { // FIXME: add property to model
-            if (getModel().modules != null) {
-                for (String i : getModel().modules) {
+            if (getDModel().modules != null) {
+                for (String i : getDModel().modules) {
                     ((DefaultListModel) jListModules.getModel()).addElement(i);
                 }
             }
@@ -151,7 +151,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         Serializer serializer = new Persister();
         ByteArrayOutputStream origOS = new ByteArrayOutputStream(2048);
         try {
-            serializer.write(controller.getModel(), origOS);
+            serializer.write(getDModel(), origOS);
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -159,7 +159,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         rSyntaxTextAreaXML.setText(origXML);
     }
 
-    void Revert() {
+    void revert() {
         // needs review
         /*
         try {
@@ -175,12 +175,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     }
 
     private void setUndoablePropString(Property prop, String s) {
-        String orig = (String) getController().getModelProperty(prop);
+        String orig = (String) getObjectController().getModelProperty(prop);
         if (s.equals(orig)) {
             return;
         }
-        getController().addMetaUndo("edit " + prop.getFriendlyName());
-        getController().generic_setModelUndoableProperty(prop, s);
+        getObjectController().addMetaUndo("edit " + prop.getFriendlyName());
+        getObjectController().generic_setModelUndoableProperty(prop, s);
     }
 
     private InletDefinitionsEditorPanel inlets;
@@ -189,8 +189,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     private ParamDefinitionsEditorPanel params;
     private DisplayDefinitionsEditorPanel disps;
 
-    public AxoObjectEditor(ObjectController ctrl) {
-        this.controller = ctrl;
+    public AxoObjectEditor(AxoObject obj) {
+        this.obj = obj;
         initComponents();
         initComponents2();
     }
@@ -200,10 +200,10 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.TOP);
         }
 
-        ObjectController ctrl = getController();
+        ObjectController ctrl = getObjectController();
 
         fileMenu1.initComponents();
-        DocumentWindowList.RegisterWindow(this);
+        DocumentWindowList.registerWindow(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
         jTextAreaInitCode = initCodeEditor(jPanelInitCode);
         jTextAreaKRateCode = initCodeEditor(jPanelKRateCode2);
@@ -220,11 +220,11 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         jMenuEdit.add(undoUi.createMenuItemRedo());
 
         initEditFromOrig();
-        inlets = new InletDefinitionsEditorPanel(ctrl, this);
-        outlets = new OutletDefinitionsEditorPanel(ctrl, this);
-        attrs = new AttributeDefinitionsEditorPanel(ctrl, this);
-        params = new ParamDefinitionsEditorPanel(ctrl, this);
-        disps = new DisplayDefinitionsEditorPanel(ctrl, this);
+        inlets = new InletDefinitionsEditorPanel(obj, this);
+        outlets = new OutletDefinitionsEditorPanel(obj, this);
+        attrs = new AttributeDefinitionsEditorPanel(obj, this);
+        params = new ParamDefinitionsEditorPanel(obj, this);
+        disps = new DisplayDefinitionsEditorPanel(obj, this);
 
         ctrl.addView(inlets);
         ctrl.addView(outlets);
@@ -348,7 +348,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         // is it from the factory?
         AxolotiLibrary sellib = null;
         for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
-            if (ctrl.getModel().getPath() != null && ctrl.getModel().getPath().startsWith(lib.getLocalLocation())) {
+            if (obj.getPath() != null && obj.getPath().startsWith(lib.getLocalLocation())) {
 
                 if (sellib == null || sellib.getLocalLocation().length() < lib.getLocalLocation().length()) {
                     sellib = lib;
@@ -368,19 +368,19 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
             if (sellib.isReadOnly()) {
                 setReadOnly(true);
                 jLabelLibrary.setText(sellib.getId() + " (readonly)");
-                setTitle(sellib.getId() + ":" + ctrl.getModel().getId() + " (readonly)");
+                setTitle(sellib.getId() + ":" + obj.getId() + " (readonly)");
             } else {
                 jLabelLibrary.setText(sellib.getId());
-                setTitle(sellib.getId() + ":" + ctrl.getModel().getId());
+                setTitle(sellib.getId() + ":" + obj.getId());
             }
         }
 
         jTextDesc.requestFocus();
-        controller.addView(this);
+        obj.getController().addView(this);
     }
 
     boolean isEmbeddedObj() {
-        return controller.getModel().getPath().isEmpty();
+        return getDModel().getPath().isEmpty();
     }
 
     void setReadOnly(boolean readonly) {
@@ -403,7 +403,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     }
 
     void initFields() {
-        jLabelName.setText(getModel().getCName());
+        jLabelName.setText(getDModel().getCName());
     }
 
     boolean hasChanged() {
@@ -411,7 +411,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
         ByteArrayOutputStream editOS = new ByteArrayOutputStream(2048);
         try {
-            serializer.write(getModel(), editOS);
+            serializer.write(getDModel(), editOS);
         } catch (Exception ex) {
             Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -447,7 +447,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
                         close();
                         return false;
                     case 1: // revert
-                        Revert();
+                        revert();
                         close();
                         return false;
                     case 2: // cancel
@@ -466,9 +466,9 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     }
 
     public void close() {
-        DocumentWindowList.UnregisterWindow(this);
+        DocumentWindowList.unregisterWindow(this);
         dispose();
-        getModel().CloseEditor();
+        getDModel().closeEditor();
     }
 
     void switchToTab(JPanel panel) {
@@ -476,12 +476,12 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     }
 
     boolean isCompositeObject() {
-        if (getModel().getPath() == null) {
+        if (getDModel().getPath() == null) {
             return false;
         }
         int count = 0;
-        for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
-            if (getModel().getPath().equalsIgnoreCase(o.getPath())) {
+        for (IAxoObject o : AxoObjects.getAxoObjects().objectList) {
+            if (getDModel().getPath().equalsIgnoreCase(o.getPath())) {
                 count++;
             }
         }
@@ -871,17 +871,17 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
         if (!isCompositeObject()) {
-            AxoObjects.getAxoObjects().WriteAxoObject(getModel().getPath(), getModel());
+            AxoObjects.getAxoObjects().writeAxoObject(getDModel().getPath(), getDModel());
             updateReferenceXML();
-            AxoObjects.getAxoObjects().LoadAxoObjects();
+            AxoObjects.getAxoObjects().loadAxoObjects1();
         } else {
-            JOptionPane.showMessageDialog(null, "The original object file " + getModel().getPath() + " contains multiple objects, the object editor does not support this.\n"
+            JOptionPane.showMessageDialog(null, "The original object file " + getDModel().getPath() + " contains multiple objects, the object editor does not support this.\n"
                     + "Your changes are NOT saved!");
         }
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemCopyToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyToLibraryActionPerformed
-        AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, getModel());
+        AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, getDModel());
         dlg.setVisible(true);
         close();
     }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed

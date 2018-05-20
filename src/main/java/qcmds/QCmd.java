@@ -23,7 +23,7 @@ package qcmds;
  */
 public interface QCmd {
 
-    public String GetStartMessage();
+    public String getStartMessage();
 
-    public String GetDoneMessage();
+    public String getDoneMessage();
 }

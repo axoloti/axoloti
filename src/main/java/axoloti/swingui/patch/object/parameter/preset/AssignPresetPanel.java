@@ -43,7 +43,7 @@ public class AssignPresetPanel extends JPanel {
 
     public AssignPresetPanel(ParameterInstanceView parameterInstanceView) {
         this.parameterInstanceView = parameterInstanceView;
-        int n = parameterInstanceView.getModel().getObjectInstance().getParent().getNPresets();
+        int n = parameterInstanceView.getDModel().getObjectInstance().getParent().getNPresets();
         ctrls = new ArrayList<>(n);
         initComponent(n);
     }
@@ -59,9 +59,9 @@ public class AssignPresetPanel extends JPanel {
             cb.addActionListener(cbActionListener);
             add(cb, c);
             c.gridx = 1;
-            ACtrlComponent ctrl = parameterInstanceView.CreateControl();
+            ACtrlComponent ctrl = parameterInstanceView.createControl();
             ctrls.add(ctrl);
-            Preset p = parameterInstanceView.getModel().getPreset(i + 1);
+            Preset p = parameterInstanceView.getDModel().getPreset(i + 1);
             if (p != null) {
                 cb.setSelected(true);
                 Object o = p.getValue();
@@ -90,13 +90,13 @@ public class AssignPresetPanel extends JPanel {
             String[] s = e.getActionCommand().split(" ");
             int i = Integer.parseInt(s[1]) - 1;
             if (((JCheckBox) e.getSource()).isSelected()) {
-                parameterInstanceView.getController().addMetaUndo(
+                parameterInstanceView.getDModel().getController().addMetaUndo(
                         "add preset to parameter "
-                        + parameterInstanceView.getModel().getName(),
+                        + parameterInstanceView.getDModel().getName(),
                         getFocusEdit());
-                parameterInstanceView.getController().AddPreset(i + 1, parameterInstanceView.getModel().getValue());
+                parameterInstanceView.getDModel().getController().addPreset(i + 1, parameterInstanceView.getDModel().getValue());
                 ctrls.get(i).setEnabled(true);
-                Object v = parameterInstanceView.getModel().getPreset(i + 1).getValue();
+                Object v = parameterInstanceView.getDModel().getPreset(i + 1).getValue();
                 double vd = 0.0;
                 if (v instanceof Integer) {
                     vd = (Integer)v;
@@ -106,13 +106,13 @@ public class AssignPresetPanel extends JPanel {
                 ctrls.get(i).setValue(vd);
             } else {
                 ctrls.get(i).setEnabled(false);
-                parameterInstanceView.getController().addMetaUndo(
+                parameterInstanceView.getDModel().getController().addMetaUndo(
                         "remove preset from parameter "
-                        + parameterInstanceView.getModel().getName(),
+                        + parameterInstanceView.getDModel().getName(),
                         getFocusEdit());
-                parameterInstanceView.getController().RemovePreset(i + 1);
+                parameterInstanceView.getDModel().getController().removePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
+            PatchModel patchModel = parameterInstanceView.getDModel().getObjectInstance().getParent();
             patchModel.presetUpdatePending = true;
         }
 
@@ -124,9 +124,9 @@ public class AssignPresetPanel extends JPanel {
         @Override
         public void propertyChange(PropertyChangeEvent evt) {
             if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                parameterInstanceView.getController().addMetaUndo(
+                parameterInstanceView.getDModel().getController().addMetaUndo(
                         "change preset of parameter "
-                        + parameterInstanceView.getModel().getName(),
+                        + parameterInstanceView.getDModel().getName(),
                         getFocusEdit());
                 int i = ctrls.indexOf(evt.getSource());
                 if (i >= 0) {
@@ -136,7 +136,7 @@ public class AssignPresetPanel extends JPanel {
                 int i = ctrls.indexOf(evt.getSource());
                 if (i >= 0) {
                     if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
-                        PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
+                        PatchModel patchModel = parameterInstanceView.getDModel().getObjectInstance().getParent();
                     }
                 }
             } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
@@ -144,14 +144,14 @@ public class AssignPresetPanel extends JPanel {
                 if (i >= 0) {
                     if (ctrls.get(i).isEnabled()) {
                         // FIXME
-                        if (parameterInstanceView.getModel().getValue() instanceof Integer) {
-                            parameterInstanceView.getController().AddPreset(i + 1, (int) ctrls.get(i).getValue());
-                        } else if (parameterInstanceView.getModel().getValue() instanceof Double) {
-                            parameterInstanceView.getController().AddPreset(i + 1, (double)ctrls.get(i).getValue());
+                        if (parameterInstanceView.getDModel().getValue() instanceof Integer) {
+                            parameterInstanceView.getDModel().getController().addPreset(i + 1, (int) ctrls.get(i).getValue());
+                        } else if (parameterInstanceView.getDModel().getValue() instanceof Double) {
+                            parameterInstanceView.getDModel().getController().addPreset(i + 1, (double) ctrls.get(i).getValue());
                         }
                     }
                 }
-                parameterInstanceView.getModel().getObjectInstance().getParent().presetUpdatePending = true;
+                parameterInstanceView.getDModel().getObjectInstance().getParent().presetUpdatePending = true;
             }
         }
     };

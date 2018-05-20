@@ -280,7 +280,7 @@
             <Property name="text" type="java.lang.String" value="Board"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetMenu(axoloti.target.TargetController.getTargetController())"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetMenu(axoloti.target.TargetModel.getTargetModel())"/>
           </AuxValues>
         </Menu>
         <Menu class="axoloti.swingui.menus.WindowMenu" name="windowMenu1">

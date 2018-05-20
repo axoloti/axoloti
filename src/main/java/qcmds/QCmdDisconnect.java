@@ -27,18 +27,18 @@ public class QCmdDisconnect implements QCmdGUITask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start disconnect";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done disconnect";
     }
 
     @Override
-    public void DoGUI(QCmdProcessor processor) {
-        processor.ClearQueue();
+    public void performGUIAction(QCmdProcessor processor) {
+        processor.clearQueue();
         processor.serialconnection.disconnect();
     }
 }

@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.swingui.components.displays.ScopeComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -9,8 +8,8 @@ class DisplayInstanceViewFrac32SChart extends DisplayInstanceViewFrac32 {
 
     private ScopeComponent scope;
 
-    DisplayInstanceViewFrac32SChart(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewFrac32SChart(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

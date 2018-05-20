@@ -17,7 +17,6 @@
  */
 package axoloti.object.atom;
 
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObject;
 import axoloti.property.Property;
@@ -35,7 +34,7 @@ import org.simpleframework.xml.Attribute;
  * An Axoloti Object Definition is composed out of AtomDefinition
  *
  */
-abstract public class AtomDefinition extends AbstractModel {
+abstract public class AtomDefinition extends AbstractModel<AtomDefinitionController> {
 
     @Attribute
     private String name;
@@ -95,13 +94,8 @@ abstract public class AtomDefinition extends AbstractModel {
     abstract public List<Property> getEditableFields();
 
     @Override
-    protected AbstractController createController() {
+    protected AtomDefinitionController createController() {
         return new AtomDefinitionController(this);
-    }
-
-    @Override
-    public AtomDefinitionController getControllerFromModel() {
-        return (AtomDefinitionController) super.getControllerFromModel();
     }
 
     @Override

@@ -3,19 +3,19 @@ package axoloti.swingui.patch.object.parameter;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.parameter.ParameterInt32;
 import axoloti.object.parameter.ParameterInt32HRadio;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.swingui.components.control.HRadioComponent;
 import java.beans.PropertyChangeEvent;
 
 class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32HRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public ParameterInstanceViewInt32HRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public HRadioComponent CreateControl() {
-        return new HRadioComponent(0, ((ParameterInt32HRadio) getModel().getModel()).getMaxValue());
+    public HRadioComponent createControl() {
+        return new HRadioComponent(0, ((ParameterInt32HRadio) getDModel().getDModel()).getMaxValue());
     }
 
     @Override

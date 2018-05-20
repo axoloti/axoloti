@@ -49,7 +49,7 @@ public class CheckboxComponent extends ACtrlComponent {
     private boolean dragAction = false;
     private boolean dragValue = false;
 
-    private void SetFieldValue(int position, boolean val) {
+    private void setFieldValue(int position, boolean val) {
         if (position >= n) {
             return;
         }
@@ -66,7 +66,7 @@ public class CheckboxComponent extends ACtrlComponent {
         fireValue((double) v);
     }
 
-    private boolean GetFieldValue(int position) {
+    private boolean getFieldValue(int position) {
         return (((int) value) & (1 << position)) != 0;
     }
 
@@ -75,7 +75,7 @@ public class CheckboxComponent extends ACtrlComponent {
         if (dragAction) {
             int i = e.getX() / bsize;
             if (i < n) {
-                SetFieldValue(i, dragValue);
+                setFieldValue(i, dragValue);
                 selIndex = i;
                 repaint();
             }
@@ -93,11 +93,11 @@ public class CheckboxComponent extends ACtrlComponent {
                     fireEventAdjustmentBegin();
                     dragAction = true;
                     if (e.isShiftDown()) {
-                        dragValue = GetFieldValue(i);
+                        dragValue = getFieldValue(i);
                     } else {
-                        dragValue = !GetFieldValue(i);
+                        dragValue = !getFieldValue(i);
                     }
-                    SetFieldValue(i, dragValue);
+                    setFieldValue(i, dragValue);
                     selIndex = i;
                 }
             }
@@ -140,28 +140,28 @@ public class CheckboxComponent extends ACtrlComponent {
             }
             case KeyEvent.VK_UP: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, true);
+                setFieldValue(selIndex, true);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_DOWN: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, false);
+                setFieldValue(selIndex, false);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_PAGE_UP: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, true);
+                setFieldValue(selIndex, true);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 return;
             }
             case KeyEvent.VK_PAGE_DOWN: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, false);
+                setFieldValue(selIndex, false);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 return;
@@ -170,19 +170,19 @@ public class CheckboxComponent extends ACtrlComponent {
         switch (ke.getKeyChar()) {
             case '0':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, false);
+                setFieldValue(selIndex, false);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case '1':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, true);
+                setFieldValue(selIndex, true);
                 fireEventAdjustmentFinished();
                 ke.consume();
                 break;
             case ' ':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, !GetFieldValue(selIndex));
+                setFieldValue(selIndex, !getFieldValue(selIndex));
                 fireEventAdjustmentFinished();
                 ke.consume();
                 break;

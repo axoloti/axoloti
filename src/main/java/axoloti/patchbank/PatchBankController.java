@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author jtaelman
  */
-public class PatchBankController extends AbstractController<PatchBankModel, IView, AbstractController> {
+public class PatchBankController extends AbstractController<PatchBankModel, IView> {
 
     protected PatchBankController(PatchBankModel model) {
         super(model);

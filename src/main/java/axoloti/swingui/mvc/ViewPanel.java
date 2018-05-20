@@ -1,6 +1,6 @@
 package axoloti.swingui.mvc;
 
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import javax.swing.JPanel;
 
@@ -8,17 +8,17 @@ import javax.swing.JPanel;
  *
  * @author jtaelman
  */
-public abstract class ViewPanel<T extends AbstractController> extends JPanel implements IView<T> {
+public abstract class ViewPanel<T extends IModel> extends JPanel implements IView<T> {
 
-    final private T controller;
+    final protected T model;
 
-    public ViewPanel(T controller) {
-        this.controller = controller;
+    public ViewPanel(T model) {
+        this.model = model;
     }
 
     @Override
-    public T getController() {
-        return controller;
+    public T getDModel() {
+        return model;
     }
 
 }

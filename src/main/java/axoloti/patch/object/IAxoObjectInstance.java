@@ -18,9 +18,11 @@ import java.util.List;
  */
 public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IModel {
 
-    IAxoObject getType();
+    IAxoObject getDModel();
 
     String getInstanceName();
+
+    String getTypeName();
 
     String getCInstanceName();
 
@@ -64,5 +66,5 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
     void setParent(PatchModel patchModel);
 
     @Override
-    ObjectInstanceController getControllerFromModel();
+    ObjectInstanceController getController();
 }

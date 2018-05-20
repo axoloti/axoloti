@@ -17,17 +17,19 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.PitchHz;
 import axoloti.realunits.PitchToNote;
 import axoloti.realunits.PitchToRatio;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterFrac32SMapPitch extends ParameterFrac32SMap {
+public final class ParameterFrac32SMapPitch extends ParameterFrac32SMap {
 
     public ParameterFrac32SMapPitch() {
         super();
@@ -37,12 +39,12 @@ public class ParameterFrac32SMapPitch extends ParameterFrac32SMap {
         super(name);
     }
 
+    private static final NativeToReal convs[] = {new PitchHz(), new PitchToNote(), new PitchToRatio()};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32SMap InstanceFactory() {
-        ParameterInstanceFrac32SMap p = super.InstanceFactory();
-        NativeToReal convs[] = {new PitchHz(), new PitchToNote(), new PitchToRatio()};
-        p.convs = convs;
-        return p;
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     static public final String TypeName = "frac32.s.map.pitch";

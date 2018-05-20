@@ -2,7 +2,6 @@ package axoloti.swingui.patch.object.attribute;
 
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
-import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.swingui.components.DropDownComponent;
 import axoloti.swingui.patch.object.AxoObjectInstanceView;
 import axoloti.utils.Constants;
@@ -11,41 +10,41 @@ import java.util.List;
 
 class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
-    DropDownComponent comboBox;
+    private DropDownComponent comboBox;
 
-    public AttributeInstanceViewComboBox(AttributeInstanceController controller, AxoObjectInstanceView axoObjectView) {
-        super(controller, axoObjectView);
+    public AttributeInstanceViewComboBox(AttributeInstanceComboBox attribute, AxoObjectInstanceView axoObjectView) {
+        super(attribute, axoObjectView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceComboBox getModel() {
-        return (AttributeInstanceComboBox) super.getModel();
+    public AttributeInstanceComboBox getDModel() {
+        return (AttributeInstanceComboBox) super.getDModel();
     }
 
     private void initComponents() {
-        comboBox = new DropDownComponent(getModel().getModel().getMenuEntries());
+        comboBox = new DropDownComponent(getDModel().getDModel().getMenuEntries());
         comboBox.setFont(Constants.FONT);
-        setString(getModel().getValue());
+        setString(getDModel().getValue());
         comboBox.addItemListener(new DropDownComponent.DDCListener() {
             @Override
-            public void SelectionChanged() {
-                getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
-                getController().changeValue(comboBox.getSelectedItem());
+            public void selectionChanged() {
+                model.getController().addMetaUndo("edit attribute " + getDModel().getName(), focusEdit);
+                model.getController().changeValue(comboBox.getSelectedItem());
             }
         });
         add(comboBox);
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (comboBox != null) {
             comboBox.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (comboBox != null) {
             comboBox.setEnabled(true);
         }
@@ -53,10 +52,10 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
     @Override
     public void setString(String s) {
-        AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getController().getModel();
+        AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getDModel();
         int index = aic.getIndex(s);
-        if (aic.getModel().getMenuEntries().size() > 0) {
-            comboBox.setSelectedItem(aic.getModel().getMenuEntries().get(index));
+        if (aic.getDModel().getMenuEntries().size() > 0) {
+            comboBox.setSelectedItem(aic.getDModel().getMenuEntries().get(index));
         }
     }
 

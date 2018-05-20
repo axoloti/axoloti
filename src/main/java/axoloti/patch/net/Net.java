@@ -18,7 +18,6 @@
 package axoloti.patch.net;
 
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
@@ -33,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import static java.util.Arrays.asList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -41,7 +42,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "net")
-public class Net extends AbstractModel {
+public class Net extends AbstractModel<NetController> {
 
     private OutletInstance[] sources;
     private InletInstance[] dests;
@@ -158,15 +159,15 @@ public class Net extends AbstractModel {
             return false;
         }
         for (InletInstance s : dests) {
-            if (!getDataType().IsConvertableToType(s.getDataType())) {
+            if (!getDataType().isConvertableToType(s.getDataType())) {
                 return false;
             }
         }
         return true;
     }
 
-    Color GetColor() {
-        Color c = getDataType().GetColor();
+    Color getColor() {
+        Color c = getDataType().getColor();
         if (c == null) {
             c = Theme.getCurrentTheme().Cable_Default;
         }
@@ -195,6 +196,47 @@ public class Net extends AbstractModel {
         } else {
             return null;
         }
+    }
+
+    public String getCName() {
+        int i = getParent().getNets().indexOf(this);
+        return "net" + i;
+    }
+
+    public boolean needsLatch() {
+        // reads before last write on net
+        int lastSource = 0;
+        for (OutletInstance s : getSources()) {
+            int i = getParent().getObjectInstances().indexOf(s.getParent());
+            if (i > lastSource) {
+                lastSource = i;
+            }
+        }
+        int firstDest = java.lang.Integer.MAX_VALUE;
+        for (InletInstance d : getDestinations()) {
+            int i = getParent().getObjectInstances().indexOf(d.getParent());
+            if (i < firstDest) {
+                firstDest = i;
+            }
+        }
+        return (firstDest <= lastSource);
+    }
+
+    public boolean isFirstOutlet(OutletInstance oi) {
+        if (getSources().length == 1) {
+            return true;
+        }
+        for (IAxoObjectInstance o : getParent().getObjectInstances()) {
+            for (OutletInstance i : o.getOutletInstances()) {
+                List<OutletInstance> outletlist = Arrays.asList(getSources());
+                if (outletlist.contains(i)) {
+                    // o is first objectinstance connected to this net
+                    return oi == i;
+                }
+            }
+        }
+        Logger.getLogger(Net.class.getName()).log(Level.SEVERE, "IsFirstOutlet: shouldn't get here");
+        return false;
     }
 
     // TODO: migrate NET_SOURCES to ListProperty
@@ -239,13 +281,8 @@ public class Net extends AbstractModel {
     }
 
     @Override
-    protected AbstractController createController() {
+    protected NetController createController() {
         return new NetController(this);
-    }
-
-    @Override
-    public NetController getControllerFromModel() {
-        return (NetController) super.getControllerFromModel();
     }
 
     @Override

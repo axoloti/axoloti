@@ -4,17 +4,17 @@ package axoloti.mvc;
  *
  * @author jtaelman
  */
-public abstract class View<T extends AbstractController> implements IView<T> {
+public abstract class View<M extends IModel> implements IView<M> {
 
-    final T controller;
+    final protected M model;
 
     @Override
-    public T getController() {
-        return controller;
+    public M getDModel() {
+        return model;
     }
 
-    public View(T controller) {
-        this.controller = controller;
+    public View(M model) {
+        this.model = model;
     }
 
 }

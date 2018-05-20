@@ -1,6 +1,6 @@
 package axoloti.codegen.patch.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 
 /**
  *
@@ -8,12 +8,12 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
  */
 public class ParameterInstanceView4LevelX16 extends ParameterInstanceViewInt32 {
 
-    ParameterInstanceView4LevelX16(ParameterInstanceController controller) {
-        super(controller);
+    ParameterInstanceView4LevelX16(ParameterInstance parameterInstance) {
+        super(parameterInstance);
     }
 
     @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
+    public String generateCodeMidiHandler(String vprefix) {
         return "";
     }
 

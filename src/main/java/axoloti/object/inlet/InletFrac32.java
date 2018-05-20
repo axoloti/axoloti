@@ -35,7 +35,7 @@ public class InletFrac32 extends Inlet {
     }
 
     @Override
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return Frac32.d;
     }
 

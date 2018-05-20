@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.patch.object.display.DisplayInstanceNoteLabel;
 import axoloti.swingui.components.LabelComponent;
 import java.beans.PropertyChangeEvent;
@@ -10,8 +9,8 @@ class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
 
     private LabelComponent readout;
 
-    DisplayInstanceViewNoteLabel(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewNoteLabel(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 
@@ -22,8 +21,8 @@ class DisplayInstanceViewNoteLabel extends DisplayInstanceViewFrac32 {
     }
 
     @Override
-    DisplayInstanceNoteLabel getModel() {
-        return (DisplayInstanceNoteLabel) super.getModel();
+    public DisplayInstanceNoteLabel getDModel() {
+        return (DisplayInstanceNoteLabel) super.getDModel();
     }
 
     @Override

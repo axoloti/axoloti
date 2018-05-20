@@ -76,8 +76,8 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
 
 
     @Override
-    public void CopyValueFrom(ParameterInstance p) {
-        super.CopyValueFrom(p);
+    public void copyValueFrom(ParameterInstance p) {
+        super.copyValueFrom(p);
         if (p instanceof ParameterInstanceBin) {
             ParameterInstanceBin p1 = (ParameterInstanceBin) p;
             setValue(p1.getValue());

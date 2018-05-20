@@ -40,7 +40,7 @@ public class DisplayNoteLabel extends Display {
     }
 
     @Override
-    public Frac32 getDatatype() {
+    public Frac32 getDataType() {
         return Frac32.d;
     }
 

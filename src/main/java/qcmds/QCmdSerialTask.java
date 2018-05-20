@@ -25,5 +25,5 @@ import axoloti.connection.IConnection;
  */
 public interface QCmdSerialTask extends QCmd {
 
-    public QCmd Do(IConnection connection);
+    public QCmd performAction(IConnection connection);
 }

@@ -30,10 +30,9 @@ public class QCmdMemRead implements QCmdSerialTask {
     final int addr;
     final int length;
     ByteBuffer result = null;
-    IConnection connection;
     MemReadHandler doneHandler;
 
-    class Sync {
+    static class Sync {
 
         boolean ready = false;
     }
@@ -52,12 +51,11 @@ public class QCmdMemRead implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        this.connection = connection;
+    public QCmd performAction(IConnection connection) {
         if (length != 0) {
-            connection.ClearReadSync();
-            connection.TransmitMemoryRead(addr, length, doneHandler);
-            connection.WaitReadSync();
+            connection.clearReadSync();
+            connection.transmitMemoryRead(addr, length, doneHandler);
+            connection.waitReadSync();
             result = connection.getMemReadBuffer();
             sync.ready = true;
             synchronized (sync) {
@@ -86,12 +84,12 @@ public class QCmdMemRead implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
     }
 }

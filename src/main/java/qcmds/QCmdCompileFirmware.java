@@ -30,26 +30,26 @@ import java.util.logging.Logger;
 public class QCmdCompileFirmware extends QCmdShellTask {
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start compiling firmware";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         TargetModel.getTargetModel().updateLinkFirmwareID();
         TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(false);
         return "Done compiling firmware";
     }
 
     @Override
-    public File GetWorkingDir() {
-        return new File(FirmwareDir());
+    public File getWorkingDir() {
+        return new File(getFirmwareDir());
     }
 
     @Override
-    String GetExec() {
+    String getExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return FirmwareDir()+"/compile_firmware_win.bat";
+            return getFirmwareDir()+"/compile_firmware_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
             return "/bin/sh ./compile_firmware_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {

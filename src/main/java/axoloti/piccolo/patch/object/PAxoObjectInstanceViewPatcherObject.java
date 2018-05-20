@@ -1,7 +1,8 @@
 package axoloti.piccolo.patch.object;
 
+import axoloti.object.AxoObject;
 import axoloti.patch.object.AxoObjectInstancePatcherObject;
-import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.piccolo.components.control.PButtonComponent;
 import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.swingui.objecteditor.AxoObjectEditor;
@@ -11,46 +12,46 @@ import javax.swing.SwingUtilities;
 
 public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView {
 
-    PButtonComponent BtnEdit;
-    AxoObjectEditor aoe;
+    private PButtonComponent buttonEdit;
+    private AxoObjectEditor aoe;
 
-    public PAxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewPiccolo p) {
-        super(controller, p);
+    public PAxoObjectInstanceViewPatcherObject(IAxoObjectInstance objectInstance, PatchViewPiccolo p) {
+        super(objectInstance, p);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstancePatcherObject getModel() {
-        return (AxoObjectInstancePatcherObject) controller.getModel();
+    public AxoObjectInstancePatcherObject getDModel() {
+        return (AxoObjectInstancePatcherObject) super.getDModel();
     }
 
     private void initComponents() {
-        BtnEdit = new PButtonComponent("edit", this);
-        BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
-        BtnEdit.setAlignmentY(TOP_ALIGNMENT);
-        BtnEdit.addActListener(new PButtonComponent.ActListener() {
+        buttonEdit = new PButtonComponent("edit", this);
+        buttonEdit.setAlignmentX(LEFT_ALIGNMENT);
+        buttonEdit.setAlignmentY(TOP_ALIGNMENT);
+        buttonEdit.addActListener(new PButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
+            public void fire() {
                 edit();
             }
         });
 
-        addChild(BtnEdit);
+        addChild(buttonEdit);
         resizeToGrid();
     }
 
     @Override
-    public void OpenEditor() {
+    public void openEditor() {
         edit();
     }
 
     public void edit() {
         if (aoe == null) {
-            aoe = new AxoObjectEditor(getModel().getAxoObject().getControllerFromModel());
+            aoe = new AxoObjectEditor((AxoObject) getDModel().getDModel());
         } else {
             aoe.updateReferenceXML();
         }
-        // TODO: Review, invokeLater should not be needed:
+        // TODO: piccolo: Review, invokeLater should not be needed:
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

@@ -25,7 +25,6 @@ import axoloti.swingui.components.RControlButtonWithLed;
 import axoloti.swingui.components.RControlColorLed;
 import axoloti.swingui.components.RControlEncoder;
 import axoloti.target.PollHandler;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.remote.VirtualInputEvent;
 import java.awt.Component;
@@ -41,7 +40,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.beans.PropertyChangeEvent;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -57,14 +57,13 @@ import qcmds.QCmdVirtualInputEvent;
  */
 public class AxolotiRemoteControl extends TJFrame {
 
-    JPanel jPanel1;
-    JPanel jPanel2;
-    JPanel jPanel3;
-    JPanel jPanel4;
-    JPanel jPanel5;
-    ArrayList<JButton> buttons = new ArrayList<>();
-
-    PollHandler poller;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JPanel jPanel5;
+    private List<JButton> buttons = new LinkedList<>();
+    private PollHandler poller;
 
     /**
      * Creates new form AxolotiRemoteControl
@@ -72,8 +71,8 @@ public class AxolotiRemoteControl extends TJFrame {
      * TODO: (low priority) add virtual LEDs
      *
      */
-    public AxolotiRemoteControl(TargetController controller) {
-        super(controller);
+    public AxolotiRemoteControl(TargetModel targetModel) {
+        super(targetModel);
         initComponents();
         initComponents2();
     }
@@ -148,7 +147,7 @@ public class AxolotiRemoteControl extends TJFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                VirtualInputEvent evt = KeyToVirtualEvent(e, true);
+                VirtualInputEvent evt = convertKeyToVirtualEvent(e, true);
                 if (evt != null) {
                     tx(evt);
                 }
@@ -156,7 +155,7 @@ public class AxolotiRemoteControl extends TJFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                VirtualInputEvent evt = KeyToVirtualEvent(e, false);
+                VirtualInputEvent evt = convertKeyToVirtualEvent(e, false);
                 if (evt != null) {
                     tx(evt);
                 }
@@ -166,9 +165,9 @@ public class AxolotiRemoteControl extends TJFrame {
 
         encoders[0] = new RControlEncoder() {
             @Override
-            public void DoRotation(int ticks) {
+            public void fireRotation(int ticks) {
                 QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-                processor.AppendToQueue(new QCmdVirtualInputEvent(
+                processor.appendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
                                 (byte) 0, // TODO: (low priority) implement modifiers (shift)
@@ -180,9 +179,9 @@ public class AxolotiRemoteControl extends TJFrame {
         };
         encoders[1] = new RControlEncoder() {
             @Override
-            public void DoRotation(int ticks) {
+            public void fireRotation(int ticks) {
                 QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-                processor.AppendToQueue(new QCmdVirtualInputEvent(
+                processor.appendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
                                 (byte) 0, // TODO: (low priority) implement modifiers (shift)
@@ -194,9 +193,9 @@ public class AxolotiRemoteControl extends TJFrame {
         };
         encoders[2] = new RControlEncoder() {
             @Override
-            public void DoRotation(int ticks) {
+            public void fireRotation(int ticks) {
                 QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-                processor.AppendToQueue(new QCmdVirtualInputEvent(
+                processor.appendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
                                 (byte) 0, // TODO: (low priority) implement modifiers (shift)
@@ -208,9 +207,9 @@ public class AxolotiRemoteControl extends TJFrame {
         };
         encoders[3] = new RControlEncoder() {
             @Override
-            public void DoRotation(int ticks) {
+            public void fireRotation(int ticks) {
                 QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-                processor.AppendToQueue(new QCmdVirtualInputEvent(
+                processor.appendToQueue(new QCmdVirtualInputEvent(
                         new VirtualInputEvent(
                                 VirtualInputEvent.BTN_ENCODER,
                                 (byte) 0, // TODO: (low priority) implement modifiers (shift)
@@ -308,7 +307,7 @@ public class AxolotiRemoteControl extends TJFrame {
         setPolling(false);
     }
 
-    VirtualInputEvent KeyToVirtualEvent(KeyEvent e, boolean pressed) {
+    VirtualInputEvent convertKeyToVirtualEvent(KeyEvent e, boolean pressed) {
         byte modifiers = e.isShiftDown() ? VirtualInputEvent.MODIFIER_SHIFT : 0;
         byte value = pressed ? (byte) 1 : 0;
         switch (e.getKeyCode()) {
@@ -335,7 +334,7 @@ public class AxolotiRemoteControl extends TJFrame {
         }
     }
 
-    class MouseListerTxer implements MouseListener {
+    static class MouseListerTxer implements MouseListener {
 
         final byte button;
         final byte quadrant;
@@ -352,7 +351,7 @@ public class AxolotiRemoteControl extends TJFrame {
         @Override
         public void mousePressed(MouseEvent e) {
             QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-            processor.AppendToQueue(new QCmdVirtualInputEvent(
+            processor.appendToQueue(new QCmdVirtualInputEvent(
                     new VirtualInputEvent(
                             button,
                             e.isShiftDown() ? VirtualInputEvent.MODIFIER_SHIFT : (byte) 0,
@@ -365,7 +364,7 @@ public class AxolotiRemoteControl extends TJFrame {
         @Override
         public void mouseReleased(MouseEvent e) {
             QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-            processor.AppendToQueue(new QCmdVirtualInputEvent(
+            processor.appendToQueue(new QCmdVirtualInputEvent(
                     new VirtualInputEvent(
                             button,
                             e.isShiftDown() ? VirtualInputEvent.MODIFIER_SHIFT : (byte) 0,
@@ -406,20 +405,20 @@ public class AxolotiRemoteControl extends TJFrame {
 
     void tx(VirtualInputEvent evt) {
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        processor.AppendToQueue(new QCmdVirtualInputEvent(evt));
+        processor.appendToQueue(new QCmdVirtualInputEvent(evt));
     }
 
     public void refreshFB() {
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        ChunkData framebuffer = CConnection.GetConnection().GetFWChunks().GetOne(FourCCs.FW_LCD_FRAMEBUFFER);
+        ChunkData framebuffer = CConnection.getConnection().getFWChunks().getOne(FourCCs.FW_LCD_FRAMEBUFFER);
         framebuffer.data.rewind();
         int width = framebuffer.data.getInt();
         int height = framebuffer.data.getInt();
         int pixeltype = framebuffer.data.getInt();
         int addr = framebuffer.data.getInt();
-        processor.AppendToQueue(new QCmdMemRead(addr, 128 * 64 / 8, new IConnection.MemReadHandler() {
+        processor.appendToQueue(new QCmdMemRead(addr, 128 * 64 / 8, new IConnection.MemReadHandler() {
             @Override
-            public void Done(ByteBuffer mem) {
+            public void done(ByteBuffer mem) {
                 updateFB(mem);
             }
         }));

@@ -62,10 +62,10 @@ public class TargetModel extends AbstractModel {
     MidiMonitorData midiMonitor;
     String patchName;
     int patchIndex;
-    public boolean WarnedAboutFWCRCMismatch = false;
+    public boolean warnedAboutFWCRCMismatch = false;
 
     void readInputMapFromTarget() {
-        ChunkData chunk_input = connection.GetFWChunks().GetOne(FourCCs.FW_MIDI_INPUT_ROUTING);
+        ChunkData chunk_input = connection.getFWChunks().getOne(FourCCs.FW_MIDI_INPUT_ROUTING);
         chunk_input.data.rewind();
         int n_input_interfaces = chunk_input.data.remaining() / 4;
         MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[n_input_interfaces];
@@ -94,7 +94,7 @@ public class TargetModel extends AbstractModel {
     }
 
     void readOutputMapFromTarget() {
-        ChunkData chunk_output = connection.GetFWChunks().GetOne(FourCCs.FW_MIDI_OUTPUT_ROUTING);
+        ChunkData chunk_output = connection.getFWChunks().getOne(FourCCs.FW_MIDI_OUTPUT_ROUTING);
         chunk_output.data.rewind();
         int n_output_interfaces = chunk_output.data.remaining() / 4;
         MidiOutputRoutingTable[] cors = new MidiOutputRoutingTable[n_output_interfaces];
@@ -213,10 +213,10 @@ public class TargetModel extends AbstractModel {
         updateLinkFirmwareID();
         File p = new File(fname_fw);
         if (p.canRead()) {
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStop());
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdUploadFWSDRam(p));
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdUploadPatch(fname_flasher));
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStartFlasher());
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStop());
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdUploadFWSDRam(p));
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdUploadPatch(fname_flasher));
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStartFlasher());
         } else {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", fname_fw);
         }
@@ -256,11 +256,11 @@ public class TargetModel extends AbstractModel {
     }
 
     public Boolean getWarnedAboutFWCRCMismatch() {
-        return WarnedAboutFWCRCMismatch;
+        return warnedAboutFWCRCMismatch;
     }
 
     public void setWarnedAboutFWCRCMismatch(Boolean WarnedAboutFWCRCMismatch) {
-        this.WarnedAboutFWCRCMismatch = WarnedAboutFWCRCMismatch;
+        this.warnedAboutFWCRCMismatch = WarnedAboutFWCRCMismatch;
         firePropertyChange(WARNEDABOUTFWCRCMISMATCH, null, WarnedAboutFWCRCMismatch);
     }
 
@@ -283,20 +283,20 @@ public class TargetModel extends AbstractModel {
     }
 
     public void readPatchName() {
-        if (connection.GetFWChunks() == null) {
+        if (connection.getFWChunks() == null) {
             setPatchName("disconnected");
             return;
         }
-        ChunkData chunk_output = connection.GetFWChunks().GetOne(FourCCs.FW_PATCH_NAME);
+        ChunkData chunk_output = connection.getFWChunks().getOne(FourCCs.FW_PATCH_NAME);
         if (chunk_output == null) {
             setPatchName("???");
             return;
         }
         chunk_output.data.rewind();
         int addr = chunk_output.data.getInt();
-        connection.AppendToQueue(new QCmdMemRead(addr, 32, new IConnection.MemReadHandler() {
+        connection.appendToQueue(new QCmdMemRead(addr, 32, new IConnection.MemReadHandler() {
             @Override
-            public void Done(ByteBuffer mem) {
+            public void done(ByteBuffer mem) {
                 if (mem == null) {
                     setPatchName("failed");
                     return;

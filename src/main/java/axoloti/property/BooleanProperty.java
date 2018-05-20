@@ -37,7 +37,7 @@ public class BooleanProperty extends PropertyReadWrite<Boolean> {
     }
 
     @Override
-    public Boolean StringToObj(String v) {
+    public Boolean convertStringToObj(String v) {
         if (allowNull() && ((v == null) || v.isEmpty())) {
             return null;
         }

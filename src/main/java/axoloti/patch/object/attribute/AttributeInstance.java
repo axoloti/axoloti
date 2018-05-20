@@ -17,37 +17,35 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.mvc.AbstractController;
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.atom.AtomInstance;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.target.fs.SDFileReference;
-import static axoloti.utils.CharEscape.CharEscape;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
+import static axoloti.utils.CharEscape.charEscape;
 
 /**
  *
  * @author Johannes Taelman
  */
-public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInstance<T> {
+public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInstance<T, AttributeInstanceController> {
 
     @Attribute
     String attributeName;
 
-    private final AtomDefinitionController controller;
+    private final T attribute;
 
     AttributeInstance() {
-        this.controller = null;
+        this.attribute = null;
     }
 
-    AttributeInstance(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        this.controller = controller;
+    AttributeInstance(T attribute, AxoObjectInstance axoObj1) {
+        this.attribute = attribute;
         setParent(axoObj1);
     }
 
@@ -62,18 +60,18 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
 
     public abstract String CValue();
 
-    public abstract void CopyValueFrom(AttributeInstance a1);
+    public abstract void copyValueFrom(AttributeInstance a1);
 
-    public String GetCName() {
-        return "attr_" + CharEscape(attributeName);
+    public String getCName() {
+        return "attr_" + charEscape(attributeName);
     }
 
     @Override
-    public T getModel() {
-        return (T) getController().getModel();
+    public T getDModel() {
+        return attribute;
     }
 
-    public ArrayList<SDFileReference> GetDependendSDFiles() {
+    public ArrayList<SDFileReference> getDependendSDFiles() {
         return null;
     }
 
@@ -83,11 +81,6 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
         if (AxoAttribute.NAME.is(evt)) {
             setName((String) evt.getNewValue());
         }
-    }
-
-    @Override
-    public AtomDefinitionController getController() {
-        return controller;
     }
 
     public String getName() {
@@ -106,8 +99,13 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
 
 
     @Override
-    public AbstractController createController() {
+    public AttributeInstanceController createController() {
         return new AttributeInstanceController(this);
+    }
+
+    @Override
+    public AttributeInstanceController getController() {
+        return super.getController();
     }
 
 }

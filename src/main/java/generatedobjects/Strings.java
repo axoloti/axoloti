@@ -21,18 +21,18 @@ import axoloti.object.AxoObject;
 import axoloti.object.attribute.AxoAttributeTablename;
 import axoloti.object.inlet.InletInt32;
 import axoloti.object.outlet.OutletCharPtr32;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Strings extends gentools {
+class Strings extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "string";
-        WriteAxoObject(catName, Generate_ConstString());
-        WriteAxoObject(catName, Generate_ConstStringi());
+        writeAxoObject(catName, Generate_ConstString());
+        writeAxoObject(catName, Generate_ConstStringi());
     }
 
     static AxoObject Generate_ConstString() {

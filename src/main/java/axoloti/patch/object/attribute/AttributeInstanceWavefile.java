@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeWavefile;
 import axoloti.patch.object.AxoObjectInstance;
 import java.io.File;
@@ -43,8 +42,8 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     @Attribute
     String waveFilename;
 
-    AttributeInstanceWavefile(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceWavefile(AxoAttributeWavefile attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
     }
 
     @Override
-    public void CopyValueFrom(AttributeInstance a) {
+    public void copyValueFrom(AttributeInstance a) {
         if (a instanceof AttributeInstanceWavefile) {
             AttributeInstanceWavefile a1 = (AttributeInstanceWavefile) a;
             setWaveFilename(a1.getWaveFilename());

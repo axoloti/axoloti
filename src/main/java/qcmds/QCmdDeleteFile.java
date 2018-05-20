@@ -36,23 +36,23 @@ public class QCmdDeleteFile implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start deleting file on sdcard : " + filename;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         SDCardInfo sdcardinfo = TargetModel.getTargetModel().getSDCardInfo();
-        sdcardinfo.Delete(filename);
+        sdcardinfo.removeFile(filename);
         TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
         return "Done deleting file";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
         Logger.getLogger(QCmdDeleteFile.class.getName()).log(Level.INFO, "deleting: {0}", filename);
-        connection.TransmitDeleteFile(filename);
+        connection.transmitDeleteFile(filename);
         return this;
     }
 

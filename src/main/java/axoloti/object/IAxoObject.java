@@ -48,7 +48,7 @@ public interface IAxoObject extends IModel {
     String getDefaultInstanceName();
 
     @Override
-    ObjectController getControllerFromModel();
+    ObjectController getController();
 
     Set<String> getIncludes();
 
@@ -76,7 +76,7 @@ public interface IAxoObject extends IModel {
 
     Boolean getRotatedParams();
 
-    void OpenEditor();
+    void openEditor();
 
     List<SDFileReference> getFileDepends();
 }

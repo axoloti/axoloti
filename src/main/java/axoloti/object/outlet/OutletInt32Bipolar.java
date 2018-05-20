@@ -34,7 +34,7 @@ public class OutletInt32Bipolar extends OutletInt32 {
     }
 
     @Override
-    public SignalMetaData GetSignalMetaData() {
+    public SignalMetaData getSignalMetaData() {
         return SignalMetaData.bipolar;
     }
 

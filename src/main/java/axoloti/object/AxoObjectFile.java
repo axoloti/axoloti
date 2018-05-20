@@ -110,7 +110,7 @@ public class AxoObjectFile {
     }
 
     @Validate
-    public void Validate() {
+    public void validate() {
         // called after deserialializtion, stops validation
         if (appVersion != null
                 && !appVersion.equals(Version.AXOLOTI_SHORT_VERSION)) {
@@ -141,7 +141,7 @@ public class AxoObjectFile {
 
 
     @Persist
-    public void Persist() {
+    public void persist() {
         // called prior to serialization
         appVersion = Version.AXOLOTI_SHORT_VERSION;
     }

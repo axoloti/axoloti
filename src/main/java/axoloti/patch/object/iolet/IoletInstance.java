@@ -18,9 +18,7 @@
 package axoloti.patch.object.iolet;
 
 import axoloti.datatypes.DataType;
-import axoloti.mvc.AbstractController;
 import axoloti.object.atom.AtomDefinition;
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.iolet.Iolet;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.atom.AtomInstance;
@@ -35,7 +33,7 @@ import org.simpleframework.xml.core.Persist;
  *
  * @author Johannes Taelman
  */
-public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> implements Comparable<IoletInstance> {
+public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T, IoletInstanceController> implements Comparable<IoletInstance> {
 
     @Deprecated
     @Attribute(required = false)
@@ -43,7 +41,7 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
     @Attribute(name = "obj", required = false)
     protected String objname;
 
-    final private AtomDefinitionController controller;
+    final private T iolet;
 
     protected IAxoObjectInstance axoObj;
 
@@ -52,7 +50,7 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
     public final static Property CONNECTED = new BooleanProperty("Connected", IoletInstance.class);
 
     @Persist
-    public void Persist() {
+    public void persist() {
         objname = axoObj.getInstanceName();
     }
 
@@ -62,12 +60,12 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
     }
 
     @Override
-    public T getModel() {
-        return (T) getController().getModel();
+    public T getDModel() {
+        return iolet;
     }
 
     public IoletInstance() {
-        this.controller = null;
+        this.iolet = null;
         this.axoObj = null;
     }
 
@@ -76,17 +74,17 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         this.objname = objname;
     }
 
-    public IoletInstance(AtomDefinitionController outletController, IAxoObjectInstance axoObj) {
-        this.controller = outletController;
+    public IoletInstance(T iolet, IAxoObjectInstance axoObj) {
+        this.iolet = iolet;
         this.axoObj = axoObj;
     }
 
     public DataType getDataType() {
-        return getModel().getDatatype();
+        return getDModel().getDataType();
     }
 
-    public String GetLabel() {
-        return getModel().getName();
+    public String getLabel() {
+        return getDModel().getName();
     }
 
     @Override
@@ -113,16 +111,6 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
         }
     }
 
-    @Override
-    public AtomDefinitionController getController() {
-        return controller;
-    }
-
-    @Override
-    public IoletInstanceController getControllerFromModel() {
-        return (IoletInstanceController) super.getControllerFromModel();
-    }
-
     public abstract String getName();
     public abstract boolean isSource();
 
@@ -146,8 +134,13 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T> imp
     }
 
     @Override
-    public AbstractController createController() {
+    public IoletInstanceController createController() {
         return new IoletInstanceController(this, null);
+    }
+
+    @Override
+    public IoletInstanceController getController() {
+        return super.getController();
     }
 
 }

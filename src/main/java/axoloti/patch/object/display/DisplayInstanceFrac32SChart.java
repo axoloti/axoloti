@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayFrac32SChart;
 
 /**
@@ -26,8 +25,8 @@ import axoloti.object.display.DisplayFrac32SChart;
  */
 public class DisplayInstanceFrac32SChart extends DisplayInstanceFrac32<DisplayFrac32SChart> {
 
-    DisplayInstanceFrac32SChart(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceFrac32SChart(DisplayFrac32SChart display) {
+        super(display);
     }
 
 }

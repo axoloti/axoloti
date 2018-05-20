@@ -33,7 +33,7 @@ public class ListProperty extends PropertyReadWrite<Object> {
     }
 
     @Override
-    public List StringToObj(String v) {
+    public List convertStringToObj(String v) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

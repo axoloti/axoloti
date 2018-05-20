@@ -23,7 +23,7 @@ public class ChunkData {
     }
 
     public void dumpHead() {
-        System.out.println("chunk head " + FourCC.Format(fourcc.getInt()));
+        System.out.println("chunk head " + FourCC.format(fourcc.getInt()));
         System.out.print("chunk data: ");
         ByteBuffer d = data.duplicate();
         d.rewind();

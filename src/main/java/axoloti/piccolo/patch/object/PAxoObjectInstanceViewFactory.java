@@ -25,22 +25,22 @@ public class PAxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFact
     }
 
     @Override
-    public IAxoObjectInstanceView createView(ObjectInstanceController controller, PatchView pv) {
-        IAxoObjectInstance model = controller.getModel();
+    public IAxoObjectInstanceView createView(IAxoObjectInstance model, PatchView pv) {
+        ObjectInstanceController controller = model.getController();
         PAxoObjectInstanceViewAbstract view = null;
         PatchViewPiccolo pvp = (PatchViewPiccolo) pv;
         if (model instanceof AxoObjectInstanceComment) {
-            view = new PAxoObjectInstanceViewComment(controller, pvp);
+            view = new PAxoObjectInstanceViewComment(model, pvp);
         } else if (model instanceof AxoObjectInstanceHyperlink) {
-            view = new PAxoObjectInstanceViewHyperlink(controller, pvp);
+            view = new PAxoObjectInstanceViewHyperlink(model, pvp);
         } else if (model instanceof AxoObjectInstanceZombie) {
-            view = new PAxoObjectInstanceViewZombie(controller, pvp);
+            view = new PAxoObjectInstanceViewZombie(model, pvp);
         } else if (model instanceof AxoObjectInstancePatcherObject) {
-            view = new PAxoObjectInstanceViewPatcherObject(controller, pvp);
+            view = new PAxoObjectInstanceViewPatcherObject(model, pvp);
         } else if (model instanceof AxoObjectInstancePatcher) {
-            view = new PAxoObjectInstanceViewPatcher(controller, pvp);
+            view = new PAxoObjectInstanceViewPatcher(model, pvp);
         } else if (model instanceof AxoObjectInstance) {
-            view = new PAxoObjectInstanceView(controller, pvp);
+            view = new PAxoObjectInstanceView(model, pvp);
         } else {
             throw new Error("unknown object type");
         }

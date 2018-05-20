@@ -1,17 +1,17 @@
 package axoloti.piccolo.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.piccolo.components.control.PPulseButtonComponent;
 
 class PParameterInstanceViewBin1Momentary extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin1Momentary(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PParameterInstanceViewBin1Momentary(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public PPulseButtonComponent CreateControl() {
+    public PPulseButtonComponent createControl() {
         return new PPulseButtonComponent(axoObjectInstanceView);
     }
 

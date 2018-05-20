@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeInt32;
 import axoloti.patch.object.AxoObjectInstance;
 
@@ -30,8 +29,8 @@ public class AttributeInstanceInt32 extends AttributeInstanceInt<AxoAttributeInt
     AttributeInstanceInt32() {
     }
 
-    AttributeInstanceInt32(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceInt32(AxoAttributeInt32 attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override

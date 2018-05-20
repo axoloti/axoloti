@@ -34,7 +34,7 @@ public class Frac32Property extends PropertyReadWrite<ValueFrac32> {
     }
 
     @Override
-    public ValueFrac32 StringToObj(String v) {
+    public ValueFrac32 convertStringToObj(String v) {
         if (allowNull() && ((v == null) || v.isEmpty())) {
             return null;
         }

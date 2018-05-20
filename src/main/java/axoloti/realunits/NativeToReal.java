@@ -26,6 +26,6 @@ import java.text.ParseException;
  */
 public interface NativeToReal {
 
-    String ToReal(Value v);
-    double FromReal(String s) throws ParseException;
+    String convertToReal(Value v);
+    double convertFromReal(String s) throws ParseException;
 }

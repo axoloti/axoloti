@@ -17,7 +17,6 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceBin1Momentary;
 import java.security.MessageDigest;
 
 /**
@@ -34,11 +33,6 @@ public class ParameterBin1Momentary extends ParameterBin {
     }
 
     @Override
-    public ParameterInstanceBin1Momentary InstanceFactory() {
-        return new ParameterInstanceBin1Momentary();
-    }
-
-    @Override
     public void updateSHA(MessageDigest md) {
         super.updateSHA(md);
         md.update("bool32.b".getBytes());
@@ -52,7 +46,7 @@ public class ParameterBin1Momentary extends ParameterBin {
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_bin_1bit_momentary";
     }
 

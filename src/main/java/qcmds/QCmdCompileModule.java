@@ -42,12 +42,12 @@ public class QCmdCompileModule extends QCmdShellTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start compiling module " + module;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         if (success) {
             return "Done compiling module " + module;
          } else {
@@ -56,9 +56,9 @@ public class QCmdCompileModule extends QCmdShellTask {
     }
 
     @Override
-    public String[] GetEnv() {
+    public String[] getEnvironment() {
         ArrayList<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(super.GetEnv()));
+        list.addAll(Arrays.asList(super.getEnvironment()));
 
         list.add("MODULE=" + module);
         list.add("MODULE_DIR=" + moduleDir);
@@ -69,14 +69,14 @@ public class QCmdCompileModule extends QCmdShellTask {
     }
 
     @Override
-    public File GetWorkingDir() {
-        return new File(FirmwareDir());
+    public File getWorkingDir() {
+        return new File(getFirmwareDir());
     }
 
     @Override
-    String GetExec() {
+    String getExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return FirmwareDir() + "/compile_module_win.bat";
+            return getFirmwareDir() + "/compile_module_win.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
             return "/bin/sh ./compile_module_osx.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {

@@ -55,7 +55,7 @@ public class FirmwareUpgrade_1_0_12 {
         this.sync = new Sync();
         this.readsync = new Sync();
         disconnectRequested = false;
-        GoIdleState();
+        goIdleState();
         if (handle == null) {
             return;
         }
@@ -69,7 +69,7 @@ public class FirmwareUpgrade_1_0_12 {
                 throw new LibUsbException("Unable to claim interface", result);
             }
 
-            GoIdleState();
+            goIdleState();
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
             receiverThread = new Thread(new Receiver());
             receiverThread.setName("Receiver");
@@ -103,7 +103,7 @@ public class FirmwareUpgrade_1_0_12 {
         //System.out.println(transfered.get() + " bytes sent");
     }
 
-    public void TransmitGetFWVersion() {
+    public void transmitGetFWVersion() {
         byte[] data = new byte[4];
         data[0] = 'A';
         data[1] = 'x';
@@ -112,23 +112,23 @@ public class FirmwareUpgrade_1_0_12 {
         writeBytes(data);
     }
 
-    public void SelectPort() {
+    public void selectPort() {
         // stripped
     }
 
-    class Sync {
+    static class Sync {
         boolean Acked = false;
     }
     final Sync sync;
     final Sync readsync;
 
-    public void ClearSync() {
+    public void clearSync() {
         synchronized (sync) {
             sync.Acked = false;
         }
     }
 
-    public boolean WaitSync(int msec) {
+    public boolean waitSync(int msec) {
         synchronized (sync) {
             if (sync.Acked) {
                 return sync.Acked;
@@ -141,17 +141,17 @@ public class FirmwareUpgrade_1_0_12 {
         }
     }
 
-    public boolean WaitSync() {
-        return WaitSync(1000);
+    public boolean waitSync() {
+        return waitSync(1000);
     }
 
-    public void ClearReadSync() {
+    public void clearReadSync() {
         synchronized (readsync) {
             readsync.Acked = false;
         }
     }
 
-    public boolean WaitReadSync() {
+    public boolean waitReadSync() {
         synchronized (readsync) {
             if (readsync.Acked) {
                 return readsync.Acked;
@@ -168,19 +168,19 @@ public class FirmwareUpgrade_1_0_12 {
     private final byte[] stopPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('S')};
     private final byte[] pingPckt = new byte[]{(byte) ('A'), (byte) ('x'), (byte) ('o'), (byte) ('p')};
 
-    public void TransmitStart() {
+    public void transmitStart() {
         writeBytes(startPckt);
     }
 
-    public void TransmitStop() {
+    public void transmitStop() {
         writeBytes(stopPckt);
     }
 
-    public void TransmitPing() {
+    public void transmitPing() {
         writeBytes(pingPckt);
     }
 
-    public void UploadFragment(byte[] buffer, int offset) {
+    public void uploadFragment(byte[] buffer, int offset) {
         byte[] data = new byte[12];
         data[0] = 'A';
         data[1] = 'x';
@@ -196,10 +196,10 @@ public class FirmwareUpgrade_1_0_12 {
         data[9] = (byte) (nRead >> 8);
         data[10] = (byte) (nRead >> 16);
         data[11] = (byte) (nRead >> 24);
-        ClearSync();
+        clearSync();
         writeBytes(data);
         writeBytes(buffer);
-        WaitSync();
+        waitSync();
         Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "block uploaded @ 0x{0} length {1}", new Object[]{Integer.toHexString(offset).toUpperCase(), Integer.toString(buffer.length)});
     }
 
@@ -232,7 +232,7 @@ public class FirmwareUpgrade_1_0_12 {
     }
 
     public void uploadFWSDRam(File firmwareFile) {
-        ClearSync();
+        clearSync();
         try {
             if (firmwareFile == null) {
                 String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
@@ -273,7 +273,7 @@ public class FirmwareUpgrade_1_0_12 {
             header[13] = (byte) (zcrcv >> 8);
             header[14] = (byte) (zcrcv >> 16);
             header[15] = (byte) (zcrcv >> 24);
-            UploadFragment(header, getSDRAMAddr() + offset);
+            uploadFragment(header, getSDRAMAddr() + offset);
             offset += header.length;
             int MaxBlockSize = 32768;
             do {
@@ -290,7 +290,7 @@ public class FirmwareUpgrade_1_0_12 {
                 if (nRead != l) {
                     Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
-                UploadFragment(buffer, getSDRAMAddr() + offset);
+                uploadFragment(buffer, getSDRAMAddr() + offset);
                 offset += nRead;
             } while (tlength > 0);
             inputStream.close();
@@ -303,27 +303,27 @@ public class FirmwareUpgrade_1_0_12 {
 
     void uploadFirmwareFlasher(File f) throws FileNotFoundException, IOException {
         int tlength = (int) f.length();
-        FileInputStream inputStream = new FileInputStream(f);
-        int offset = 0;
-        int MaxBlockSize = 32768;
-        do {
-            int l;
-            if (tlength > MaxBlockSize) {
-                l = MaxBlockSize;
-                tlength -= MaxBlockSize;
-            } else {
-                l = tlength;
-                tlength = 0;
-            }
-            byte[] buffer = new byte[l];
-            int nRead = inputStream.read(buffer, 0, l);
-            if (nRead != l) {
-                Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
-            }
-            UploadFragment(buffer, 0x20011000 + offset);
-            offset += nRead;
-        } while (tlength > 0);
-        inputStream.close();
+        try (FileInputStream inputStream = new FileInputStream(f)) {
+            int offset = 0;
+            int MaxBlockSize = 32768;
+            do {
+                int l;
+                if (tlength > MaxBlockSize) {
+                    l = MaxBlockSize;
+                    tlength -= MaxBlockSize;
+                } else {
+                    l = tlength;
+                    tlength = 0;
+                }
+                byte[] buffer = new byte[l];
+                int nRead = inputStream.read(buffer, 0, l);
+                if (nRead != l) {
+                    Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
+                }
+                uploadFragment(buffer, 0x20011000 + offset);
+                offset += nRead;
+            } while (tlength > 0);
+        }
     }
 
     class Transmitter implements Runnable {
@@ -331,22 +331,22 @@ public class FirmwareUpgrade_1_0_12 {
         @Override
         public void run() {
             try {
-                TransmitStop();
-                TransmitPing();
-                TransmitPing();
-                WaitSync();
+                transmitStop();
+                transmitPing();
+                transmitPing();
+                waitSync();
                 uploadFWSDRam(null);
-                ClearSync();
-                TransmitPing();
-                WaitSync();
+                clearSync();
+                transmitPing();
+                waitSync();
                 String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/old_firmware/firmware-1.0.12/flasher.bin";
                 File firmwareFile = new File(pname);
                 uploadFirmwareFlasher(firmwareFile);
-                ClearSync();
-                TransmitPing();
-                WaitSync();
-                TransmitStart();
-            } catch (Exception ex) {
+                clearSync();
+                transmitPing();
+                waitSync();
+                transmitStart();
+            } catch (IOException ex) {
                 Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, null, ex);
             }
             disconnectRequested = true;
@@ -370,12 +370,12 @@ public class FirmwareUpgrade_1_0_12 {
         }
     }
 
-    int CpuId0 = 0;
-    int CpuId1 = 0;
-    int CpuId2 = 0;
+    int cpuId0 = 0;
+    int cpuId1 = 0;
+    int cpuId2 = 0;
     int fwcrc = -1;
 
-    void Acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
+    void acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
         synchronized (sync) {
             sync.Acked = true;
             sync.notifyAll();
@@ -445,7 +445,7 @@ public class FirmwareUpgrade_1_0_12 {
 
     }
 
-    void DisplayPackHeader(int i1, int i2) {
+    void displayPackHeader(int i1, int i2) {
         if (i2 > 1024) {
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.FINE, "Lots of data coming! {0} / {1}", new Object[]{Integer.toHexString(i1), Integer.toHexString(i2)});
         } else {
@@ -458,11 +458,11 @@ public class FirmwareUpgrade_1_0_12 {
             dispData.order(ByteOrder.LITTLE_ENDIAN);
             state = ReceiverState.displayPckt;
         } else {
-            GoIdleState();
+            goIdleState();
         }
     }
 
-    final void GoIdleState() {
+    final void goIdleState() {
         headerstate = 0;
         state = ReceiverState.header;
     }
@@ -486,14 +486,14 @@ public class FirmwareUpgrade_1_0_12 {
                         if (c == 'x') {
                             headerstate = 2;
                         } else {
-                            GoIdleState();
+                            goIdleState();
                         }
                         break;
                     case 2:
                         if (c == 'o') {
                             headerstate = 3;
                         } else {
-                            GoIdleState();
+                            goIdleState();
                         }
                         break;
                     case 3:
@@ -565,13 +565,13 @@ public class FirmwareUpgrade_1_0_12 {
                                 dataIndex = 0;
                                 break;
                             default:
-                                GoIdleState();
+                                goIdleState();
                                 break;
                         }
                         break;
                     default:
                         Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "receiver: invalid header");
-                        GoIdleState();
+                        goIdleState();
 
                         break;
                 }
@@ -583,7 +583,7 @@ public class FirmwareUpgrade_1_0_12 {
 //                    System.out.println("pch packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
                 if (dataIndex == dataLength) {
                     //System.out.println("param packet complete 0x" + Integer.toHexString(packetData[1]) + "    0x" + Integer.toHexString(packetData[0]));
-                    GoIdleState();
+                    goIdleState();
                 }
                 break;
             case ackPckt:
@@ -593,8 +593,8 @@ public class FirmwareUpgrade_1_0_12 {
                 }
                 if (dataIndex == dataLength) {
                     //System.out.println("ack packet complete");
-                    Acknowledge(packetData[1], packetData[2], packetData[3], packetData[4], packetData[5]);
-                    GoIdleState();
+                    acknowledge(packetData[1], packetData[2], packetData[3], packetData[4], packetData[5]);
+                    goIdleState();
                 }
                 break;
             case lcdPckt:
@@ -605,7 +605,7 @@ public class FirmwareUpgrade_1_0_12 {
                 }
                 if (dataIndex == dataLength) {
                     lcdRcvBuffer.rewind();
-                    GoIdleState();
+                    goIdleState();
                 }
                 break;
             case displayPcktHdr:
@@ -614,7 +614,7 @@ public class FirmwareUpgrade_1_0_12 {
                 }
 //                    System.out.println("pch packet i=" +dataIndex + " v=" + c + " c="+ (char)(cc));
                 if (dataIndex == dataLength) {
-                    DisplayPackHeader(packetData[0], packetData[1]);
+                    displayPackHeader(packetData[0], packetData[1]);
                 }
                 break;
             case displayPckt:
@@ -623,7 +623,7 @@ public class FirmwareUpgrade_1_0_12 {
                     dataIndex++;
                 }
                 if (dataIndex == dataLength) {
-                    GoIdleState();
+                    goIdleState();
                 }
                 break;
             case textPckt:
@@ -634,7 +634,7 @@ public class FirmwareUpgrade_1_0_12 {
                     textRcvBuffer.limit(textRcvBuffer.position());
                     textRcvBuffer.rewind();
                     Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.WARNING, "{0}", textRcvBuffer.toString());
-                    GoIdleState();
+                    goIdleState();
                 }
                 break;
             case sdinfo:
@@ -649,7 +649,7 @@ public class FirmwareUpgrade_1_0_12 {
 //                            + sdinfoRcvBuffer.asIntBuffer().get(0) + " "
 //                            + sdinfoRcvBuffer.asIntBuffer().get(1) + " "
 //                            + sdinfoRcvBuffer.asIntBuffer().get(2));
-                    GoIdleState();
+                    goIdleState();
                 }
                 break;
             case fileinfo:
@@ -671,7 +671,7 @@ public class FirmwareUpgrade_1_0_12 {
                         fname = fname.substring(0, fname.length() - 1);
                     }
 //                    Logger.getLogger(USBBulkConnection.class.getName()).info("fileinfo: " + cb.toString());
-                    GoIdleState();
+                    goIdleState();
                     if (fname.equals("/")) {
                         // end of index
 //                        System.out.println("sdfilelist done");
@@ -735,7 +735,7 @@ public class FirmwareUpgrade_1_0_12 {
                                 readsync.Acked = true;
                                 readsync.notifyAll();
                             }
-                            GoIdleState();
+                            goIdleState();
                         }
                 }
                 dataIndex++;
@@ -771,7 +771,7 @@ public class FirmwareUpgrade_1_0_12 {
                             readsync.Acked = true;
                             readsync.notifyAll();
                         }
-                        GoIdleState();
+                        goIdleState();
                 }
                 dataIndex++;
                 break;
@@ -817,14 +817,14 @@ public class FirmwareUpgrade_1_0_12 {
                         Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).info(String.format("Firmware version: %d.%d.%d.%d, crc=0x%s, entrypoint=0x%08X",
                                 fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
                         //MainFrame.mainframe.setFirmwareID(sFwcrc);
-                        GoIdleState();
+                        goIdleState();
                         break;
                 }
                 dataIndex++;
                 break;
 
             default:
-                GoIdleState();
+                goIdleState();
                 break;
         }
     }

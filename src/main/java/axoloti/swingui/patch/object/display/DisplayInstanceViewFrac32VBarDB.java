@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.swingui.components.displays.VBarComponentDB;
 import java.beans.PropertyChangeEvent;
 
@@ -9,8 +8,8 @@ class DisplayInstanceViewFrac32VBarDB extends DisplayInstanceViewFrac32 {
 
     private VBarComponentDB vbar;
 
-    DisplayInstanceViewFrac32VBarDB(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewFrac32VBarDB(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

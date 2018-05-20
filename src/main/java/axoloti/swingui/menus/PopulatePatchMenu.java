@@ -30,7 +30,7 @@ import javax.swing.JMenuItem;
  */
 public class PopulatePatchMenu {
 
-    static void PopulatePatchMenu(JMenu parent, String path, String ext) {
+    static void populatePatchMenu(JMenu parent, String path, String ext) {
         File dir = new File(path);
         if (!dir.isDirectory()) {
             JMenuItem mi = new JMenuItem("no help patches found");
@@ -49,7 +49,7 @@ public class PopulatePatchMenu {
         Arrays.sort(files);
         for (File subdir : files) {
             JMenu fm = new JMenu(subdir.getName());
-            PopulatePatchMenu(fm, subdir.getPath(), extension);
+            populatePatchMenu(fm, subdir.getPath(), extension);
             if (fm.getItemCount() > 0) {
                 parent.add(fm);
             }

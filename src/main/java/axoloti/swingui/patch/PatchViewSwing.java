@@ -23,11 +23,9 @@ import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
 import axoloti.abstractui.PatchViewportView;
 import axoloti.objectlibrary.AxoObjects;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
-import axoloti.patch.net.NetController;
+import axoloti.patch.net.Net;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.net.NetView;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
@@ -73,7 +71,7 @@ import org.simpleframework.xml.core.Persister;
 @Root(name = "patch-1.0")
 public class PatchViewSwing extends PatchView {
 
-    class JPanelAbsoluteLayout extends JPanel {
+    static class JPanelAbsoluteLayout extends JPanel {
 
         JPanelAbsoluteLayout() {
             super(null);
@@ -87,7 +85,7 @@ public class PatchViewSwing extends PatchView {
         }
     }
 
-    public PatchLayeredPane Layers = new PatchLayeredPane();
+    public PatchLayeredPane layers = new PatchLayeredPane();
 
     public JPanel objectLayerPanel = new JPanelAbsoluteLayout();
     public JPanel draggedObjectLayerPanel = new JPanelAbsoluteLayout();
@@ -98,12 +96,12 @@ public class PatchViewSwing extends PatchView {
     Point selectionRectStart;
     Point panOrigin;
 
-    public PatchViewSwing(PatchController patchController) {
-        super(patchController);
+    public PatchViewSwing(PatchModel patchModel) {
+        super(patchModel);
 
-        Layers.setLayout(null);
-        Layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
-        Layers.setLocation(0, 0);
+        layers.setLayout(null);
+        layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
+        layers.setLocation(0, 0);
 
         JComponent[] layerComponents = {
             objectLayerPanel, draggedObjectLayerPanel, netLayerPanel,
@@ -115,10 +113,10 @@ public class PatchViewSwing extends PatchView {
             c.setOpaque(false);
         }
 
-        Layers.add(objectLayerPanel, new Integer(1));
-        Layers.add(netLayerPanel, new Integer(2));
-        Layers.add(draggedObjectLayerPanel, new Integer(3));
-        Layers.add(selectionRectLayerPanel, new Integer(4));
+        layers.add(objectLayerPanel, new Integer(1));
+        layers.add(netLayerPanel, new Integer(2));
+        layers.add(draggedObjectLayerPanel, new Integer(3));
+        layers.add(selectionRectLayerPanel, new Integer(4));
 
         netLayerPanel.setName("netLayerPanel");
         selectionRectLayerPanel.setName("selectionRectLayerPanel");
@@ -132,15 +130,15 @@ public class PatchViewSwing extends PatchView {
         selectionrectangle.setOpaque(false);
         selectionrectangle.setVisible(false);
 
-        Layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
-        Layers.setVisible(true);
-        Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
-        Layers.setOpaque(true);
-        Layers.revalidate();
+        layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
+        layers.setVisible(true);
+        layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+        layers.setOpaque(true);
+        layers.revalidate();
 
-        Layers.setTransferHandler(TH);
+        layers.setTransferHandler(TH);
 
-        InputMap inputMap = Layers.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        InputMap inputMap = layers.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,
                 KeyUtils.CONTROL_OR_CMD_MASK), "cut");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C,
@@ -148,7 +146,7 @@ public class PatchViewSwing extends PatchView {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V,
                 KeyUtils.CONTROL_OR_CMD_MASK), "paste");
 
-        ActionMap map = Layers.getActionMap();
+        ActionMap map = layers.getActionMap();
         map.put(TransferHandler.getCutAction().getValue(Action.NAME),
                 TransferHandler.getCutAction());
         map.put(TransferHandler.getCopyAction().getValue(Action.NAME),
@@ -156,10 +154,10 @@ public class PatchViewSwing extends PatchView {
         map.put(TransferHandler.getPasteAction().getValue(Action.NAME),
                 TransferHandler.getPasteAction());
 
-        Layers.setEnabled(true);
-        Layers.setFocusable(true);
-        Layers.setFocusCycleRoot(true);
-        Layers.addKeyListener(new KeyAdapter() {
+        layers.setEnabled(true);
+        layers.setFocusable(true);
+        layers.setFocusCycleRoot(true);
+        layers.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent ke) {
@@ -172,102 +170,103 @@ public class PatchViewSwing extends PatchView {
                 if ((ke.getKeyCode() == KeyEvent.VK_SPACE)
                         || ((ke.getKeyCode() == KeyEvent.VK_N) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_1) && KeyUtils.isControlOrCommandDown(ke))) {
-                    Point p = Layers.getMousePosition();
+                    Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null, null);
+                        showClassSelector(p, null, null);
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
-                    getController().addObjectInstance(AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), Layers.getMousePosition());
+                    // TODO: add metaUndo
+                    model.getController().addObjectInstance(AxoObjects.getAxoObjects().getAxoObjectFromName(patchComment, null).get(0), layers.getMousePosition());
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
-                    Point p = Layers.getMousePosition();
+                    Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null, patchInlet);
+                        showClassSelector(p, null, patchInlet);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_O) && !KeyUtils.isControlOrCommandDown(ke)) {
-                    Point p = Layers.getMousePosition();
+                    Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null, patchOutlet);
+                        showClassSelector(p, null, patchOutlet);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_D) && !KeyUtils.isControlOrCommandDown(ke)) {
-                    Point p = Layers.getMousePosition();
+                    Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        ShowClassSelector(p, null, patchDisplay);
+                        showClassSelector(p, null, patchDisplay);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_M) && !KeyUtils.isControlOrCommandDown(ke)) {
-                    Point p = Layers.getMousePosition();
+                    Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         if (ke.isShiftDown()) {
-                            ShowClassSelector(p, null, patchMidiKey);
+                            showClassSelector(p, null, patchMidiKey);
                         } else {
-                            ShowClassSelector(p, null, patchMidi);
+                            showClassSelector(p, null, patchMidi);
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_A) && !KeyUtils.isControlOrCommandDown(ke)) {
-                    Point p = Layers.getMousePosition();
+                    Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         if (ke.isShiftDown()) {
-                            ShowClassSelector(p, null, patchAudioOut);
+                            showClassSelector(p, null, patchAudioOut);
                         } else {
-                            ShowClassSelector(p, null, patchAudio);
+                            showClassSelector(p, null, patchAudio);
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                    List<ObjectInstanceController> selected = getController().getSelectedObjects();
+                    List<IAxoObjectInstance> selected = model.getController().getSelectedObjects();
                     if (!selected.isEmpty()) {
-                        getController().addMetaUndo("delete objects");
-                        for (ObjectInstanceController o : selected) {
-                            getController().delete(o.getModel());
+                        model.getController().addMetaUndo("delete objects");
+                        for (IAxoObjectInstance o : selected) {
+                            model.getController().delete(o);
                         }
                     }
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_UP) {
-                    getController().addMetaUndo("move up");
-                    MoveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
+                    model.getController().addMetaUndo("move up");
+                    moveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_DOWN) {
-                    getController().addMetaUndo("move down");
-                    MoveSelectedAxoObjInstances(Direction.DOWN, xsteps, ysteps);
+                    model.getController().addMetaUndo("move down");
+                    moveSelectedAxoObjInstances(Direction.DOWN, xsteps, ysteps);
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    getController().addMetaUndo("move right");
-                    MoveSelectedAxoObjInstances(Direction.RIGHT, xsteps, ysteps);
+                    model.getController().addMetaUndo("move right");
+                    moveSelectedAxoObjInstances(Direction.RIGHT, xsteps, ysteps);
                     ke.consume();
                 } else if (ke.getKeyCode() == KeyEvent.VK_LEFT) {
-                    getController().addMetaUndo("move left");
-                    MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
+                    model.getController().addMetaUndo("move left");
+                    moveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                     ke.consume();
                 }
             }
 
         });
 
-        Layers.addMouseListener(new MouseAdapter() {
+        layers.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 if (me.getButton() == MouseEvent.BUTTON1) {
-                    getController().SelectNone();
+                    model.getController().selectNone();
                     if (me.getClickCount() == 2) {
-                        ShowClassSelector(me.getPoint(), null, null);
+                        showClassSelector(me.getPoint(), null, null);
                     } else {
                         if ((osf != null) && osf.isVisible()) {
-                            osf.Accept();
+                            osf.accept();
                         }
-                        Layers.requestFocusInWindow();
+                        layers.requestFocusInWindow();
                     }
                     me.consume();
                 } else {
                     if ((osf != null) && osf.isVisible()) {
-                        osf.Cancel();
+                        osf.cancel();
                     }
-                    Layers.requestFocusInWindow();
+                    layers.requestFocusInWindow();
                     me.consume();
                 }
             }
@@ -279,7 +278,7 @@ public class PatchViewSwing extends PatchView {
                     selectionrectangle.setBounds(me.getX(), me.getY(), 1, 1);
                     selectionrectangle.setVisible(true);
 
-                    Layers.requestFocusInWindow();
+                    layers.requestFocusInWindow();
                     me.consume();
                 } else {
                 }
@@ -291,7 +290,7 @@ public class PatchViewSwing extends PatchView {
                     Rectangle r = selectionrectangle.getBounds();
                     for (IAxoObjectInstanceView o : objectInstanceViews) {
                         Rectangle bounds = new Rectangle(o.getLocation().x, o.getLocation().y, o.getSize().width, o.getSize().height);
-                        o.getController().changeSelected(bounds.intersects(r));
+                        o.getDModel().getController().changeSelected(bounds.intersects(r));
                     }
                     selectionrectangle.setVisible(false);
                     me.consume();
@@ -300,9 +299,9 @@ public class PatchViewSwing extends PatchView {
 
         });
 
-        Layers.setVisible(true);
+        layers.setVisible(true);
 
-        Layers.addMouseMotionListener(new MouseMotionAdapter() {
+        layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
                 if (selectionrectangle.isVisible()) {
@@ -323,8 +322,8 @@ public class PatchViewSwing extends PatchView {
             }
         });
 
-        Layers.setDropTarget(dt);
-        Layers.setVisible(true);
+        layers.setDropTarget(dt);
+        layers.setVisible(true);
     }
 
     public void scrollTo(Rectangle rect) {
@@ -354,9 +353,9 @@ public class PatchViewSwing extends PatchView {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (action == MOVE) {
-                getController().addMetaUndo("cut");
+                model.getController().addMetaUndo("cut");
                 for (IAxoObjectInstance o : p.getObjectInstances()) {
-                    getController().delete(o);
+                    model.getController().delete(o);
                 }
             }
         }
@@ -397,35 +396,35 @@ public class PatchViewSwing extends PatchView {
     };
 
     @Override
-    public void PostConstructor() {
-        Layers.setPreferredSize(new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE));
-        ShowPreset(0);
+    public void postConstructor() {
+        layers.setPreferredSize(new Dimension(Constants.PATCH_SIZE, Constants.PATCH_SIZE));
+        showPreset(0);
     }
 
     @Override
     public void setCordsInBackground(boolean b) {
         if (b) {
-            Layers.removeAll();
-            Layers.add(netLayerPanel, new Integer(1));
-            Layers.add(objectLayerPanel, new Integer(2));
-            Layers.add(draggedObjectLayerPanel, new Integer(3));
-            Layers.add(selectionRectLayerPanel, new Integer(4));
+            layers.removeAll();
+            layers.add(netLayerPanel, new Integer(1));
+            layers.add(objectLayerPanel, new Integer(2));
+            layers.add(draggedObjectLayerPanel, new Integer(3));
+            layers.add(selectionRectLayerPanel, new Integer(4));
         } else {
-            Layers.removeAll();
-            Layers.add(objectLayerPanel, new Integer(1));
-            Layers.add(netLayerPanel, new Integer(2));
-            Layers.add(draggedObjectLayerPanel, new Integer(3));
-            Layers.add(selectionRectLayerPanel, new Integer(4));
+            layers.removeAll();
+            layers.add(objectLayerPanel, new Integer(1));
+            layers.add(netLayerPanel, new Integer(2));
+            layers.add(draggedObjectLayerPanel, new Integer(3));
+            layers.add(selectionRectLayerPanel, new Integer(4));
         }
     }
 
     void clampLayerSize(Dimension s) {
-        if (Layers.getParent() != null) {
-            if (s.width < Layers.getParent().getWidth()) {
-                s.width = Layers.getParent().getWidth();
+        if (layers.getParent() != null) {
+            if (s.width < layers.getParent().getWidth()) {
+                s.width = layers.getParent().getWidth();
             }
-            if (s.height < Layers.getParent().getHeight()) {
-                s.height = Layers.getParent().getHeight();
+            if (s.height < layers.getParent().getHeight()) {
+                s.height = layers.getParent().getHeight();
             }
         }
     }
@@ -447,11 +446,11 @@ public class PatchViewSwing extends PatchView {
         }
         Dimension s = new Dimension(maxX, maxY);
         clampLayerSize(s);
-        if (!Layers.getSize().equals(s)) {
-            Layers.setSize(s);
+        if (!layers.getSize().equals(s)) {
+            layers.setSize(s);
         }
-        if (!Layers.getPreferredSize().equals(s)) {
-            Layers.setPreferredSize(s);
+        if (!layers.getPreferredSize().equals(s)) {
+            layers.setPreferredSize(s);
         }
     }
 
@@ -460,16 +459,16 @@ public class PatchViewSwing extends PatchView {
         super.modelPropertyChange(evt);
         if (PatchModel.PATCH_LOCKED.is(evt)) {
             if ((Boolean)evt.getNewValue() == false) {
-                Layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
+                layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
-                Layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
+                layers.setBackground(Theme.getCurrentTheme().Patch_Locked_Background);
             }
         }
     }
 
     @Override
     public PatchViewportView getViewportView() {
-        return Layers;
+        return layers;
     }
 
     @Override
@@ -479,7 +478,7 @@ public class PatchViewSwing extends PatchView {
 
     @Override
     public void requestFocus() {
-        Layers.requestFocus();
+        layers.requestFocus();
     }
 
     @Override
@@ -536,7 +535,7 @@ public class PatchViewSwing extends PatchView {
     }
 
     @Override
-    public INetView createNetView(NetController controller, PatchView patchView) {
-        return new NetView(controller, (PatchViewSwing) patchView);
+    public INetView createNetView(Net net, PatchView patchView) {
+        return new NetView(net, (PatchViewSwing) patchView);
     }
 }

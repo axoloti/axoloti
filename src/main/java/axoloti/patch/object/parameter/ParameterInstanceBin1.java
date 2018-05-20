@@ -18,6 +18,7 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterBin1;
+import axoloti.patch.object.AxoObjectInstance;
 import static axoloti.patch.object.parameter.ParameterInstance.MIDI_CC;
 import axoloti.property.Property;
 import java.util.List;
@@ -42,6 +43,10 @@ public class ParameterInstanceBin1 extends ParameterInstanceBin<ParameterBin1> {
 
     public ParameterInstanceBin1(@Attribute(name = "value") int v) {
         super(v);
+    }
+
+    public ParameterInstanceBin1(ParameterBin1 param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
 }

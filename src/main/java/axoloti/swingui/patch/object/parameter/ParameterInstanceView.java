@@ -5,15 +5,14 @@ import axoloti.abstractui.IParameterInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.mvc.FocusEdit;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.preferences.Theme;
 import axoloti.property.Property;
 import axoloti.swingui.components.AssignMidiCCComponent;
-import axoloti.swingui.patch.object.parameter.preset.AssignPresetMenuItems;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.control.ACtrlComponent;
 import axoloti.swingui.mvc.ViewPanel;
+import axoloti.swingui.patch.object.parameter.preset.AssignPresetMenuItems;
 import axoloti.swingui.property.menu.ViewFactory;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MouseInputAdapter;
 
-public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceController> implements ActionListener, IParameterInstanceView {
+public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance> implements ActionListener, IParameterInstanceView {
 
     LabelComponent valuelbl = new LabelComponent("123456789");
     ACtrlComponent ctrl;
@@ -42,15 +41,10 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
 
     IAxoObjectInstanceView axoObjectInstanceView;
 
-    ParameterInstanceView(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller);
+    ParameterInstanceView(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance);
         this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();
-    }
-
-    @Override
-    public ParameterInstance getModel() {
-        return getController().getModel();
     }
 
     protected void scrollTo() {
@@ -71,10 +65,10 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
         JPanel lbls = new JPanel();
         lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));
         this.add(lbls);
-        label.setText(getModel().getModel().getName());
+        label.setText(getDModel().getDModel().getName());
         lbls.add(label);
 
-        if (getModel().getConvs() != null) {
+        if (getDModel().getConvs() != null) {
             lbls.add(valuelbl);
             Dimension d = new Dimension(50, 10);
             valuelbl.setMinimumSize(d);
@@ -84,13 +78,13 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
             valuelbl.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    getModel().cycleConversions();
+                    getDModel().cycleConversions();
                 }
             });
-            UpdateUnit();
+            updateUnit();
         }
 
-        ctrl = CreateControl();
+        ctrl = createControl();
 
         add(getControlComponent());
         getControlComponent().addMouseListener(popupMouseListener);
@@ -99,7 +93,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                    getController().addMetaUndo("change parameter " + getModel().getName(), getFocusEdit());
+                    model.getController().addMetaUndo("change parameter " + getDModel().getName(), getFocusEdit());
                 } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
                     boolean changed = handleAdjustment();
                 }
@@ -133,9 +127,9 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
 
     @Override
     public void populatePopup(JPopupMenu m) {
-        List<Property> ps = getModel().getEditableFields();
+        List<Property> ps = getDModel().getEditableFields();
         for (Property p : ps) {
-            Component mi = ViewFactory.createMenuItemView(getController(), p);
+            Component mi = ViewFactory.createMenuItemView(getDModel(), p);
             if (mi != null) {
                 m.add(mi);
             }
@@ -155,7 +149,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
     @Override
     abstract public boolean handleAdjustment();
 
-    public abstract ACtrlComponent CreateControl();
+    public abstract ACtrlComponent createControl();
 
     MouseListener popupMouseListener = new MouseAdapter() {
 
@@ -181,7 +175,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
     public void actionPerformed(ActionEvent e) {
     }
 
-    void UpdateUnit() {
+    void updateUnit() {
 //        if (getModel().getConvs() != null) {
 //            valuelbl.setText(getModel().getConversion().ToReal(
 //                    getModel().getValue().));
@@ -189,38 +183,38 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstanceC
     }
 
     @Override
-    public abstract void ShowPreset(int i);
+    public abstract void showPreset(int i);
 
     public int presetEditActive = 0;
 
     @Override
-    public void IncludeInPreset() {
+    public void includeInPreset() {
         if (presetEditActive > 0) {
-            Preset p = getModel().getPreset(presetEditActive);
+            Preset p = getDModel().getPreset(presetEditActive);
             if (p != null) {
                 return;
             }
-            if (getModel().getPresets() == null) {
-                getModel().setPresets(new ArrayList<Preset>());
+            if (getDModel().getPresets() == null) {
+                getDModel().setPresets(new ArrayList<Preset>());
             }
-            p = getModel().presetFactory(presetEditActive, getModel().getValue());
-            getModel().getPresets().add(p);
+            p = getDModel().presetFactory(presetEditActive, getDModel().getValue());
+            getDModel().getPresets().add(p);
         }
-        ShowPreset(presetEditActive);
+        showPreset(presetEditActive);
     }
 
     @Override
-    public void ExcludeFromPreset() {
+    public void excludeFromPreset() {
         if (presetEditActive > 0) {
-            Preset p = getModel().getPreset(presetEditActive);
+            Preset p = getDModel().getPreset(presetEditActive);
             if (p != null) {
-                getModel().getPresets().remove(p);
-                if (getModel().getPresets().isEmpty()) {
-                    getModel().setPresets(null);
+                getDModel().getPresets().remove(p);
+                if (getDModel().getPresets().isEmpty()) {
+                    getDModel().setPresets(null);
                 }
             }
         }
-        ShowPreset(presetEditActive);
+        showPreset(presetEditActive);
     }
 
     public IAxoObjectInstanceView getAxoObjectInstanceView() {

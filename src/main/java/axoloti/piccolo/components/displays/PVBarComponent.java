@@ -33,7 +33,7 @@ public class PVBarComponent extends PDispComponentAbstract {
 
     final int margin = 2;
 
-    int ValToPos(double v) {
+    int valToPos(double v) {
         return (int) (margin + ((max - v) * (height - 2 * margin)) / (max - min));
     }
 
@@ -44,8 +44,8 @@ public class PVBarComponent extends PDispComponentAbstract {
         g2.fillRect(0, 0, (int) getBoundsReference().width, height);
         g2.setPaint(Theme.getCurrentTheme().Component_Primary);
         g2.drawRect(0, 0, (int) getBoundsReference().width, height);
-        int p = ValToPos(value);
-        int p1 = ValToPos(0);
+        int p = valToPos(value);
+        int p1 = valToPos(0);
         g2.setPaint(Theme.getCurrentTheme().Component_Mid);
         g2.fillRect(margin, p, width - margin * 2, p1 - p);
     }

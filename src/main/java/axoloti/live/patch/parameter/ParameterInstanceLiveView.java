@@ -2,25 +2,20 @@ package axoloti.live.patch.parameter;
 
 import axoloti.mvc.View;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import java.beans.PropertyChangeEvent;
 
 /**
  *
  * @author jtaelman
  */
-public class ParameterInstanceLiveView extends View<ParameterInstanceController> {
+public class ParameterInstanceLiveView extends View<ParameterInstance> {
 
     protected boolean needsTransmit = false;
     protected final int index;
 
-    public ParameterInstanceLiveView(ParameterInstanceController controller, int index) {
-        super(controller);
+    public ParameterInstanceLiveView(ParameterInstance parameterInstance, int index) {
+        super(parameterInstance);
         this.index = index;
-    }
-
-    public ParameterInstance getModel() {
-        return getController().getModel();
     }
 
     public byte[] TXData() {
@@ -30,12 +25,12 @@ public class ParameterInstanceLiveView extends View<ParameterInstanceController>
         data[1] = 'x';
         data[2] = 'o';
         data[3] = 'P';
-        int pid = getModel().getObjectInstance().getParent().GetIID();
+        int pid = model.getObjectInstance().getParent().getIID();
         data[4] = (byte) pid;
         data[5] = (byte) (pid >> 8);
         data[6] = (byte) (pid >> 16);
         data[7] = (byte) (pid >> 24);
-        int tvalue = getModel().valToInt32(getModel().getValue());
+        int tvalue = getDModel().valToInt32(getDModel().getValue());
         data[8] = (byte) tvalue;
         data[9] = (byte) (tvalue >> 8);
         data[10] = (byte) (tvalue >> 16);
@@ -49,7 +44,7 @@ public class ParameterInstanceLiveView extends View<ParameterInstanceController>
         return needsTransmit;
     }
 
-    public void ClearNeedsTransmit() {
+    public void clearNeedsTransmit() {
         needsTransmit = false;
     }
 

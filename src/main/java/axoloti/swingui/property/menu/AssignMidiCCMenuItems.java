@@ -17,7 +17,7 @@
  */
 package axoloti.swingui.property.menu;
 
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import axoloti.property.MidiCCProperty;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -34,12 +34,12 @@ import javax.swing.JRadioButton;
 public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
 
     final MidiCCProperty property;
-    final AbstractController ctrl;
+    final IModel model;
 
-    public AssignMidiCCMenuItems(AbstractController ctrl, MidiCCProperty property) {
+    public AssignMidiCCMenuItems(IModel model, MidiCCProperty property) {
         super();
         this.property = property;
-        this.ctrl = ctrl;
+        this.model = model;
         initComponents();
     }
 
@@ -66,7 +66,7 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
-        Integer cc = property.get(ctrl.getModel());
+        Integer cc = property.get(model);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 8; j++) {
                 int k = i + j * 16;
@@ -99,12 +99,12 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             Integer i = Integer.parseInt(s.substring(2));
-            ctrl.addMetaUndo("change MIDI CC mapping");
-            ctrl.generic_setModelUndoableProperty(property, i);
+            model.getController().addMetaUndo("change MIDI CC mapping");
+            model.getController().generic_setModelUndoableProperty(property, i);
         } else if (s.equals("none")) {
             Integer v = -1;
-            ctrl.addMetaUndo("remove MIDI CC mapping");
-            ctrl.generic_setModelUndoableProperty(property, v);
+            model.getController().addMetaUndo("remove MIDI CC mapping");
+            model.getController().generic_setModelUndoableProperty(property, v);
         }
     }
 }

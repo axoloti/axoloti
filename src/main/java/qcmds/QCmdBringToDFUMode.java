@@ -26,12 +26,12 @@ import axoloti.connection.IConnection;
 public class QCmdBringToDFUMode implements QCmdSerialTask {
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start enabling DFU";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done enabling DFU. The regular USB communication will now abort, "
                 + "and Axoloti Core will restart itself in \"rescue\" (DFU) mode."
                 + "\"Flash (rescue)\" will restart Axoloti Core again in normal mode when completed."
@@ -39,8 +39,8 @@ public class QCmdBringToDFUMode implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.BringToDFU();
+    public QCmd performAction(IConnection connection) {
+        connection.bringToDFU();
         return this;
     }
 }

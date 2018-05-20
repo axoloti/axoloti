@@ -17,6 +17,8 @@
  */
 package axoloti.patch.object.parameter;
 
+import axoloti.object.parameter.ParameterInt32;
+import axoloti.patch.object.AxoObjectInstance;
 import static axoloti.patch.object.parameter.ParameterInstance.MIDI_CC;
 import axoloti.property.Property;
 import java.util.List;
@@ -28,6 +30,10 @@ import java.util.List;
 public class ParameterInstanceInt32VRadio extends ParameterInstanceInt32 {
 
     public ParameterInstanceInt32VRadio() {
+    }
+
+    public ParameterInstanceInt32VRadio(ParameterInt32 param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
     @Override

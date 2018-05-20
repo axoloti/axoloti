@@ -1,6 +1,6 @@
 package axoloti.codegen.patch.object.display;
 
-import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstance;
 import java.nio.ByteBuffer;
 
 /**
@@ -9,13 +9,13 @@ import java.nio.ByteBuffer;
  */
 class DisplayInstanceViewFrac32 extends DisplayInstanceView {
 
-    DisplayInstanceViewFrac32(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewFrac32(DisplayInstance displayInstance) {
+        super(displayInstance);
     }
 
     @Override
-    public String GenerateCodeInit(String vprefix) {
-        String s = GetCName() + " = 0;\n";
+    public String generateCodeInit(String vprefix) {
+        String s = getCName() + " = 0;\n";
         return s;
     }
 
@@ -25,8 +25,8 @@ class DisplayInstanceViewFrac32 extends DisplayInstanceView {
     }
 
     @Override
-    public void ProcessByteBuffer(ByteBuffer bb) {
+    public void processByteBuffer(ByteBuffer bb) {
         int i = bb.getInt();
-        getController().setValue(i * 1.0 / (1 << 21));
+        model.getController().setValue(i * 1.0 / (1 << 21));
     }
 }

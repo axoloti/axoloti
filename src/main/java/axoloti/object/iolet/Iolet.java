@@ -39,20 +39,20 @@ public abstract class Iolet extends AtomDefinition implements Cloneable {
         super(name, description);
     }
 
-    public abstract DataType getDatatype();
+    public abstract DataType getDataType();
 
     @Override
     public String toString() {
         return getTypeName();
     }
 
-    public SignalMetaData GetSignalMetaData() {
+    public SignalMetaData getSignalMetaData() {
         return SignalMetaData.none;
     }
 
     public void updateSHA(MessageDigest md) {
         md.update(getName().getBytes());
-        md.update((byte) getDatatype().hashCode());
+        md.update((byte) getDataType().hashCode());
     }
 
     @Override

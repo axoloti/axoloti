@@ -1,5 +1,5 @@
 package axoloti.codegen.patch.object.parameter;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 
 /**
  *
@@ -7,13 +7,13 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
  */
 class ParameterInstanceViewFrac32S extends ParameterInstanceViewFrac32 {
 
-    ParameterInstanceViewFrac32S(ParameterInstanceController controller) {
-        super(controller);
+    ParameterInstanceViewFrac32S(ParameterInstance parameterInstance) {
+        super(parameterInstance);
     }
 
     @Override
-    public String GenerateCodeMidiHandler(String vprefix) {
-        return GenerateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
+    public String generateCodeMidiHandler(String vprefix) {
+        return generateMidiCCCodeSub(vprefix, "(data2!=127)?(data2-64)<<21:0x07FFFFFF");
     }
 
 }

@@ -25,25 +25,25 @@ import axoloti.live.patch.PatchViewLive;
  */
 public class QCmdLock implements QCmdGUITask {
 
-    PatchViewLive patchController;
+    PatchViewLive patchViewLive;
 
     public QCmdLock(PatchViewLive patchViewLive) {
-        this.patchController = patchViewLive;
+        this.patchViewLive = patchViewLive;
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start locking";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done locking";
     }
 
     @Override
-    public void DoGUI(QCmdProcessor processor) {
-        processor.setPatchController(patchController);
-        patchController.getController().setLocked(true);
+    public void performGUIAction(QCmdProcessor processor) {
+        processor.setPatchController(patchViewLive);
+        patchViewLive.getDModel().getController().setLocked(true);
     }
 }

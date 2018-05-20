@@ -1,12 +1,12 @@
-package axoloti.piccolo.iolet;
+package axoloti.piccolo.patch.object.iolet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.mvc.AbstractController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
 import axoloti.patch.net.NetDrag;
 import axoloti.patch.object.inlet.InletInstance;
+import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.components.PLabelComponent;
@@ -69,6 +69,8 @@ public abstract class PIoletAbstract extends PatchPNode {
     PNetDragging dragnet = null;
     PIoletAbstract dragtarget = null;
 
+    public abstract IoletInstance getDModel();
+
     private PBasicInputEventHandler inputEventListener = new PBasicInputEventHandler() {
 
         @Override
@@ -83,14 +85,14 @@ public abstract class PIoletAbstract extends PatchPNode {
                 setHighlighted(true);
                 if (!axoObjectInstanceView.isLocked()) {
 		    Net dnet = new NetDrag();
-                    NetController dragNetController = dnet.getControllerFromModel();
+                    NetController dragNetController = dnet.getController();
                     dragtarget = null;
 		    if (PIoletAbstract.this instanceof PInletInstanceView) {
-                        dragNetController.connectInlet((InletInstance) getController().getModel());
+                        dragNetController.connectInlet((InletInstance) getDModel());
                     } else {
-                        dragNetController.connectOutlet((OutletInstance) getController().getModel());
+                        dragNetController.connectOutlet((OutletInstance) getDModel());
                     }
-                    dragnet = new PNetDragging(dragNetController, getPatchView());
+                    dragnet = new PNetDragging(dnet, getPatchView());
                     dragNetController.addView(dragnet);
 
                     dragnet.setVisible(true);
@@ -117,35 +119,33 @@ public abstract class PIoletAbstract extends PatchPNode {
                 if (dragtarget == null) {
                     if (!PIoletAbstract.this.getBoundsReference().contains(globalToLocal(e.getPosition()))) {
                         if (PIoletAbstract.this instanceof PInletInstanceView) {
-                            getPatchView().getController().addMetaUndo("disconnect inlet");
-                            getPatchView().getController().disconnect((InletInstance) getController().getModel());
+                            getPatchView().getDModel().getController().addMetaUndo("disconnect inlet");
+                            getPatchView().getDModel().getController().disconnect((InletInstance) getDModel());
                         } else {
-                            getPatchView().getController().addMetaUndo("disconnect outlet");
-                            getPatchView().getController().disconnect((OutletInstance) getController().getModel());
+                            getPatchView().getDModel().getController().addMetaUndo("disconnect outlet");
+                            getPatchView().getDModel().getController().disconnect((OutletInstance) getDModel());
                         }
                     }
                 } else {
                     if (PIoletAbstract.this instanceof PInletInstanceView) {
                         if (dragtarget instanceof PInletInstanceView) {
-                            getPatchView().getController().addMetaUndo("connect");
-                            getPatchView().getController().AddConnection(
-                                    (InletInstance) getController().getModel(),
-                                (InletInstance) ((PInletInstanceView) dragtarget).getController().getModel());
+                            getPatchView().getDModel().getController().addMetaUndo("connect");
+                            getPatchView().getDModel().getController().addConnection((InletInstance) getDModel(),
+                                    (InletInstance) ((PInletInstanceView) dragtarget).getDModel());
                         } else if (dragtarget instanceof POutletInstanceView) {
-                            getPatchView().getController().addMetaUndo("connect");
-                            getPatchView().getController().AddConnection(
-                                    (InletInstance) getController().getModel(),
-                                (OutletInstance) ((POutletInstanceView) dragtarget).getController().getModel());
+                            getPatchView().getDModel().getController().addMetaUndo("connect");
+                            getPatchView().getDModel().getController().addConnection((InletInstance) getDModel(),
+                                    (OutletInstance) ((POutletInstanceView) dragtarget).getDModel());
                         }
                     } else if (PIoletAbstract.this instanceof POutletInstanceView) {
                         if (dragtarget instanceof PInletInstanceView) {
-                            getPatchView().getController().addMetaUndo("connect");
-                            getPatchView().getController().AddConnection(
-                                    (InletInstance) ((PInletInstanceView) dragtarget).getController().getModel(),
-                                (OutletInstance) ((POutletInstanceView) PIoletAbstract.this).getController().getModel());
+                            getPatchView().getDModel().getController().addMetaUndo("connect");
+                            getPatchView().getDModel().getController().addConnection(
+                                    (InletInstance) ((PInletInstanceView) dragtarget).getDModel(),
+                                    (OutletInstance) ((POutletInstanceView) PIoletAbstract.this).getDModel());
                         }
                     }
-                    getPatchView().getController().PromoteOverloading(false);
+                    getPatchView().getDModel().getController().promoteOverloading(false);
                     dragtarget.repaint();
                 }
                 PIoletAbstract.this.repaint();
@@ -191,12 +191,12 @@ public abstract class PIoletAbstract extends PatchPNode {
                         // new target
                         dragtarget = (PIoletAbstract) c;
                         Point jackLocation = dragtarget.getJackLocInCanvas();
-                        dragnet.SetDragPoint(jackLocation);
+                        dragnet.setDragPoint(jackLocation);
                     }
                 } else // floating
                 {
                     if (dragnet != null) {
-                        dragnet.SetDragPoint(new Point((int) p.getX(), (int) p.getY()));
+                        dragnet.setDragPoint(new Point((int) p.getX(), (int) p.getY()));
                         dragtarget = null;
                     }
                 }
@@ -211,5 +211,4 @@ public abstract class PIoletAbstract extends PatchPNode {
         return inputEventListener;
     }
 
-    public abstract AbstractController getController();
 }

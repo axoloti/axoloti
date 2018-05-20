@@ -26,24 +26,24 @@ import axoloti.object.inlet.InletFrac32;
 import axoloti.object.inlet.InletFrac32Buffer;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32Bipolar;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Wave extends gentools {
+class Wave extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "wave";
-        WriteAxoObject(catName, Create_playWaveMono());
-        WriteAxoObject(catName, Create_playWaveStereo());
-        WriteAxoObject(catName, Create_playWaveMono_fn());
-        WriteAxoObject(catName, Create_playWaveStereo_fn());
+        writeAxoObject(catName, Create_playWaveMono());
+        writeAxoObject(catName, Create_playWaveStereo());
+        writeAxoObject(catName, Create_playWaveMono_fn());
+        writeAxoObject(catName, Create_playWaveStereo_fn());
 //UNRELEASED        WriteAxoObject(catName, Create_playWave3Stereo_fn_32());
-        WriteAxoObject(catName, Create_playFlashWave());
-        WriteAxoObject(catName, Create_FlashWaveRead());
-        WriteAxoObject(catName, Create_Benchmark());
+        writeAxoObject(catName, Create_playFlashWave());
+        writeAxoObject(catName, Create_FlashWaveRead());
+        writeAxoObject(catName, Create_Benchmark());
 //UNRELEASED         WriteAxoObject(catName, Create_recWave2());
     }
 

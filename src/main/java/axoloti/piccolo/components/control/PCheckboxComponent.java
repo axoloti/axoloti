@@ -41,7 +41,7 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
     private boolean dragAction = false;
     private boolean dragValue = false;
 
-    private void SetFieldValue(int position, boolean val) {
+    private void setFieldValue(int position, boolean val) {
         if (position >= n) {
             return;
         }
@@ -59,7 +59,7 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
         notifyActionListeners();
     }
 
-    private boolean GetFieldValue(int position) {
+    private boolean getFieldValue(int position) {
         return (((int) value) & (1 << position)) != 0;
     }
 
@@ -69,7 +69,7 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
             Point localPosition = PUtils.asPoint(e.getPositionRelativeTo(this));
             int i = localPosition.x / bsize;
             if (i < n) {
-                SetFieldValue(i, dragValue);
+                setFieldValue(i, dragValue);
                 selIndex = i;
                 repaint();
             }
@@ -89,11 +89,11 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
                     fireEventAdjustmentBegin();
                     dragAction = true;
                     if (e.isShiftDown()) {
-                        dragValue = GetFieldValue(i);
+                        dragValue = getFieldValue(i);
                     } else {
-                        dragValue = !GetFieldValue(i);
+                        dragValue = !getFieldValue(i);
                     }
-                    SetFieldValue(i, dragValue);
+                    setFieldValue(i, dragValue);
                     selIndex = i;
                 }
             }
@@ -136,28 +136,28 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
             }
             case KeyEvent.VK_UP: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, true);
+                setFieldValue(selIndex, true);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_DOWN: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, false);
+                setFieldValue(selIndex, false);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_PAGE_UP: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, true);
+                setFieldValue(selIndex, true);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
             }
             case KeyEvent.VK_PAGE_DOWN: {
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, false);
+                setFieldValue(selIndex, false);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 return;
@@ -166,19 +166,19 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
         switch (ke.getKeyChar()) {
             case '0':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, false);
+                setFieldValue(selIndex, false);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case '1':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, true);
+                setFieldValue(selIndex, true);
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
             case ' ':
                 fireEventAdjustmentBegin();
-                SetFieldValue(selIndex, !GetFieldValue(selIndex));
+                setFieldValue(selIndex, !getFieldValue(selIndex));
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;

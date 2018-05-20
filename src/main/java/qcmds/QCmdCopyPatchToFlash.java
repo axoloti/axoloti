@@ -31,10 +31,10 @@ public class QCmdCopyPatchToFlash implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitCopyToFlash();
-        if (connection.WaitSync(5000)) {
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitCopyToFlash();
+        if (connection.waitSync(5000)) {
             return this;
         } else {
             Logger.getLogger(QCmdCopyPatchToFlash.class.getName()).log(Level.SEVERE, "flashing failed? (timeout)");
@@ -43,12 +43,12 @@ public class QCmdCopyPatchToFlash implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start writing patch to flash";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done writing patch to flash";
     }
 

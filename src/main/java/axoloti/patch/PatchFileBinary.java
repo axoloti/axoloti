@@ -20,7 +20,7 @@ public class PatchFileBinary {
         // also firmware ignores them...
 
         String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
-        IConnection connection = CConnection.GetConnection();
+        IConnection connection = CConnection.getConnection();
         int nsegments = 3;
         File f[] = new File[nsegments];
         int offsets[] = new int[nsegments];

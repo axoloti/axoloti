@@ -40,7 +40,7 @@ public class AxoObjectUnloaded extends AxoObjectAbstract0 {
 
     AxoObjectFromPatch loadedObject;
 
-    public AxoObjectFromPatch Load() {
+    public AxoObjectFromPatch load() {
         if (loadedObject == null) {
             loadedObject = new AxoObjectFromPatch(f);
             loadedObject.id = id;
@@ -49,7 +49,7 @@ public class AxoObjectUnloaded extends AxoObjectAbstract0 {
     }
 
     @Override
-    public String GenerateUUID() {
+    public String generateUUID() {
         return "unloaded";
     }
 

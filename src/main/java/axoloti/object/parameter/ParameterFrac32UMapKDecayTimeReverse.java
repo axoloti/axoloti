@@ -17,9 +17,11 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
 import axoloti.realunits.DecayTimeReverse;
 import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -35,12 +37,12 @@ public class ParameterFrac32UMapKDecayTimeReverse extends ParameterFrac32UMap {
         super(name);
     }
 
+    private static final NativeToReal convs[] = {new DecayTimeReverse()};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32UMap InstanceFactory() {
-        ParameterInstanceFrac32UMap p = super.InstanceFactory();
-        NativeToReal convs[] = {new DecayTimeReverse()};
-        p.convs = convs;
-        return p;
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     static public final String TypeName = "frac32.u.map.kdecaytime.reverse";

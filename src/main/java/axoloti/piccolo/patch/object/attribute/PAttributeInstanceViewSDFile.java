@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
 import axoloti.piccolo.components.PTextFieldComponent;
 import axoloti.piccolo.components.control.PButtonComponent;
@@ -20,20 +20,20 @@ import org.piccolo2d.event.PInputEvent;
 class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFFileName;
-    PButtonComponent ButtonChooseFile;
+    PButtonComponent buttonChooseFile;
 
-    public PAttributeInstanceViewSDFile(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PAttributeInstanceViewSDFile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceSDFile getModel() {
-        return (AttributeInstanceSDFile) super.getModel();
+    public AttributeInstanceSDFile getDModel() {
+        return (AttributeInstanceSDFile) super.getDModel();
     }
 
     private void initComponents() {
-        TFFileName = new PTextFieldComponent(getModel().getValue());
+        TFFileName = new PTextFieldComponent(getDModel().getValue());
         Dimension d = TFFileName.getSize();
         d.width = 128;
         d.height = 22;
@@ -47,7 +47,7 @@ class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            getController().changeValue(TFFileName.getText());
+                            getDModel().getController().changeValue(TFFileName.getText());
                         }
                     });
             }
@@ -78,49 +78,49 @@ class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
 
             @Override
             public void keyboardFocusGained(PInputEvent e) {
-                getController().changeValue(TFFileName.getText());
+                getDModel().getController().changeValue(TFFileName.getText());
             }
 
             @Override
             public void keyboardFocusLost(PInputEvent e) {
-                getController().changeValue(TFFileName.getText());
+                getDModel().getController().changeValue(TFFileName.getText());
             }
         });
-        ButtonChooseFile = new PButtonComponent("choose", axoObjectInstanceView);
-        ButtonChooseFile.addActListener(new PButtonComponent.ActListener() {
+        buttonChooseFile = new PButtonComponent("choose", axoObjectInstanceView);
+        buttonChooseFile.addActListener(new PButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
-                JFileChooser fc = new JFileChooser(getModel().getParent().getParent().GetCurrentWorkingDirectory());
+            public void fire() {
+                JFileChooser fc = new JFileChooser(getDModel().getParent().getParent().getCurrentWorkingDirectory());
                 Window window = SwingUtilities.getWindowAncestor(PAttributeInstanceViewSDFile.this.getProxyComponent());
                 int returnVal = fc.showOpenDialog(window);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String f = getModel().toRelative(fc.getSelectedFile());
-                    if (!f.equals(getModel().getValue())) {
-                        getController().changeValue(f);
+                    String f = getDModel().toRelative(fc.getSelectedFile());
+                    if (!f.equals(getDModel().getValue())) {
+                        getDModel().getController().changeValue(f);
                     }
                 }
             }
         });
-        addChild(ButtonChooseFile);
+        addChild(buttonChooseFile);
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (TFFileName != null) {
             TFFileName.setEnabled(false);
         }
-        if (ButtonChooseFile != null) {
-            ButtonChooseFile.setEnabled(false);
+        if (buttonChooseFile != null) {
+            buttonChooseFile.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (TFFileName != null) {
             TFFileName.setEnabled(true);
         }
-        if (ButtonChooseFile != null) {
-            ButtonChooseFile.setEnabled(true);
+        if (buttonChooseFile != null) {
+            buttonChooseFile.setEnabled(true);
         }
     }
 

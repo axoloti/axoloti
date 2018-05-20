@@ -55,7 +55,7 @@ public class WindowMenu extends JMenu {
     }
 
     private void jMenuWindowMenuSelected(javax.swing.event.MenuEvent evt) {
-        PopulateWindowMenu(this);
+        populateWindowMenu(this);
     }
 
     private void jMenuWindowMenuDeselected(javax.swing.event.MenuEvent evt) {
@@ -92,18 +92,18 @@ public class WindowMenu extends JMenu {
         }
     }
 
-    static void PopulateDocuments(JMenu jMenuWindow, String prefix, List<DocumentWindow> dwl) {
+    static void populateDocuments(JMenu jMenuWindow, String prefix, List<DocumentWindow> dwl) {
         for (DocumentWindow p : dwl) {
             WindowMenuItem wmi = new WindowMenuItem(p, prefix + p.getTitle());
             jMenuWindow.add(wmi);
             if (p.getChildDocuments() != null) {
-                PopulateDocuments(jMenuWindow, "> " + prefix, p.getChildDocuments());
+                populateDocuments(jMenuWindow, "> " + prefix, p.getChildDocuments());
             }
         }
     }
 
-    static void PopulateWindowMenu(JMenu jMenuWindow) {
+    static void populateWindowMenu(JMenu jMenuWindow) {
         jMenuWindow.removeAll();
-        PopulateDocuments(jMenuWindow, "", DocumentWindowList.GetList());
+        populateDocuments(jMenuWindow, "", DocumentWindowList.getList());
     }
 }

@@ -1,11 +1,11 @@
 package axoloti.swingui.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 
 abstract class AttributeInstanceViewInt extends AttributeInstanceView {
 
-    AttributeInstanceViewInt(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    AttributeInstanceViewInt(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
     }
 }

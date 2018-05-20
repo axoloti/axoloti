@@ -17,18 +17,20 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 import axoloti.realunits.LFOBPM;
 import axoloti.realunits.LFOPeriod;
 import axoloti.realunits.LFOPitchHz;
 import axoloti.realunits.LFORatio;
 import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterFrac32SMapLFOPitch extends ParameterFrac32SMap {
+public final class ParameterFrac32SMapLFOPitch extends ParameterFrac32SMap {
 
     public ParameterFrac32SMapLFOPitch() {
         super();
@@ -38,12 +40,12 @@ public class ParameterFrac32SMapLFOPitch extends ParameterFrac32SMap {
         super(name);
     }
 
+    private static final NativeToReal convs[] = {new LFOPitchHz(), new LFORatio(), new LFOPeriod(), new LFOBPM()};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32SMap InstanceFactory() {
-        ParameterInstanceFrac32SMap p = super.InstanceFactory();
-        NativeToReal convs[] = {new LFOPitchHz(), new LFORatio(), new LFOPeriod(), new LFOBPM()};
-        p.convs = convs;
-        return p;
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     static public final String TypeName = "frac32.s.map.lfopitch";

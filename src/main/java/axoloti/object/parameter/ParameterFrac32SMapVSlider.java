@@ -18,7 +18,10 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
+import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -27,9 +30,11 @@ import org.simpleframework.xml.Element;
  */
 public class ParameterFrac32SMapVSlider extends ParameterFrac32 {
 
-    @Element
+    @Deprecated
+    @Element(required = false)
     ValueFrac32 MinValue;
-    @Element
+    @Deprecated
+    @Element(required = false)
     ValueFrac32 MaxValue;
 
     public ParameterFrac32SMapVSlider() {
@@ -43,9 +48,12 @@ public class ParameterFrac32SMapVSlider extends ParameterFrac32 {
         MaxValue = new ValueFrac32(64);
     }
 
+    private static final NativeToReal convs[] = {};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32SMapVSlider InstanceFactory() {
-        return new ParameterInstanceFrac32SMapVSlider();
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     static public final String TypeName = "frac32.s.mapvsl";

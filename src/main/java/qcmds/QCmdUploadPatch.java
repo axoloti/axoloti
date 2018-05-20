@@ -43,18 +43,18 @@ public class QCmdUploadPatch implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start uploading patch";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done uploading patch";
     }
 
-    void UploadBinFile(IConnection connection, File f, int baseaddr) throws FileNotFoundException, IOException {
-            int tlength = (int) f.length();
-            FileInputStream inputStream = new FileInputStream(f);
+    void uploadBinFile(IConnection connection, File f, int baseaddr) throws FileNotFoundException, IOException {
+        int tlength = (int) f.length();
+        try (FileInputStream inputStream = new FileInputStream(f)) {
             int offset = 0;
             int MaxBlockSize = 32768;
             do {
@@ -71,26 +71,26 @@ public class QCmdUploadPatch implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
-                connection.UploadFragment(buffer, baseaddr + offset);
+                connection.uploadFragment(buffer, baseaddr + offset);
                 offset += nRead;
             } while (tlength > 0);
-            inputStream.close();
+        }
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
         try {
             // from now on there can be multiple segments!
             File f = new File(basepath + ".sram1.bin");
             File f2 = new File(basepath + ".sram3.bin");
             File f3 = new File(basepath + ".sdram.bin");
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath() + " " + f2.getAbsolutePath());
-            UploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
+            uploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
             if (f2.length() > 0)
-                UploadBinFile(connection, f2, connection.getTargetProfile().getSRAM3Addr());
+                uploadBinFile(connection, f2, connection.getTargetProfile().getSRAM3Addr());
             if (f3.length() > 0)
-                UploadBinFile(connection, f3, connection.getTargetProfile().getSDRAMAddr());
+                uploadBinFile(connection, f3, connection.getTargetProfile().getSDRAMAddr());
             return this;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);

@@ -35,7 +35,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
 public class AxoGitLibrary extends AxolotiLibrary {
 
-    public static String TYPE = "git";
+    public static final String TYPE = "git";
 
     public AxoGitLibrary(String id, String type, String lloc, boolean e, String rloc, boolean auto) {
         super(id, type, lloc, e, rloc, auto);

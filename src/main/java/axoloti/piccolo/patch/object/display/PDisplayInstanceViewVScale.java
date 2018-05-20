@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object.display;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstance;
 import axoloti.piccolo.components.displays.PVValueLabelsComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -10,8 +10,8 @@ public class PDisplayInstanceViewVScale extends PDisplayInstanceView {
     private IAxoObjectInstanceView axoObjectInstanceView;
 
 
-    public PDisplayInstanceViewVScale(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PDisplayInstanceViewVScale(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
     }
 

@@ -35,7 +35,7 @@ public class InletInt32 extends Inlet {
     }
 
     @Override
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return Int32.d;
     }
 

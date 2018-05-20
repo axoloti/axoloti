@@ -40,7 +40,7 @@ public class HelpLibraryMenu extends JMenu {
                 for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
                     JMenu mi = new JMenu(lib.getId());
                     String dir = lib.getLocalLocation() + "objects/";
-                    PopulatePatchMenu.PopulatePatchMenu(mi, dir, ".axh");
+                    PopulatePatchMenu.populatePatchMenu(mi, dir, ".axh");
                     HelpLibraryMenu.this.add(mi);
                 }
             }

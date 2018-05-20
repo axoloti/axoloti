@@ -32,19 +32,19 @@ public class QCmdChangeWorkingDirectory implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Changing working directory on sdcard : " + filename;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done changing working directory";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitChangeWorkingDirectory(filename);
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitChangeWorkingDirectory(filename);
         return this;
     }
 

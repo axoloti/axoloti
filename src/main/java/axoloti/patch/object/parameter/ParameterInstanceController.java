@@ -2,7 +2,6 @@ package axoloti.patch.object.parameter;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.parameter.preset.Preset;
 import java.util.ArrayList;
 
@@ -10,13 +9,13 @@ import java.util.ArrayList;
  *
  * @author jtaelman
  */
-public class ParameterInstanceController extends AbstractController<ParameterInstance, IView<ParameterInstanceController>, ObjectInstanceController> {
+public class ParameterInstanceController extends AbstractController<ParameterInstance, IView<ParameterInstance>> {
 
     protected ParameterInstanceController(ParameterInstance model) {
         super(model);
     }
 
-    public Preset AddPreset(int index, Object value) {
+    public Preset addPreset(int index, Object value) {
         if (getModel().getPresets() == null) {
             ArrayList<Preset> new_presets = new ArrayList<>();
             Preset p = getModel().presetFactory(index, value);
@@ -35,7 +34,7 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
         return pnew;
     }
 
-    public void RemovePreset(int index) {
+    public void removePreset(int index) {
         Preset p = getModel().getPreset(index);
         if (p != null) {
             ArrayList<Preset> presets = (ArrayList<Preset>) getModel().getPresets().clone();

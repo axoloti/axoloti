@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.object;
 
 import axoloti.patch.object.AxoObjectInstanceComment;
-import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.PTextFieldComponent;
 import axoloti.piccolo.patch.PatchViewPiccolo;
@@ -16,32 +16,32 @@ import org.piccolo2d.event.PInputEvent;
 
 public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstract {
 
-    public PAxoObjectInstanceViewComment(ObjectInstanceController controller, PatchViewPiccolo p) {
-        super(controller, p);
+    public PAxoObjectInstanceViewComment(IAxoObjectInstance objectInstance, PatchViewPiccolo p) {
+        super(objectInstance, p);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstanceComment getModel() {
-        return (AxoObjectInstanceComment) super.getModel();
+    public AxoObjectInstanceComment getDModel() {
+        return (AxoObjectInstanceComment) super.getDModel();
     }
 
     @Override
     protected void handleInstanceNameEditorAction() {
-        if(InstanceNameTF != null) {
-            String s = InstanceNameTF.getText();
-            removeChild(InstanceNameTF);
-            InstanceNameTF = null;
+        if(textFieldInstanceName != null) {
+            String s = textFieldInstanceName.getText();
+            removeChild(textFieldInstanceName);
+            textFieldInstanceName = null;
             instanceLabel.setVisible(true);
-            getController().addMetaUndo("edit comment");
-            getController().changeComment(s);
+            getDModel().getController().addMetaUndo("edit comment");
+            getDModel().getController().changeComment(s);
         }
     }
 
     @Override
     public void addInstanceNameEditor() {
-        InstanceNameTF = new PTextFieldComponent(getModel().getCommentText());
-        InstanceNameTF.selectAll();
+        textFieldInstanceName = new PTextFieldComponent(getDModel().getCommentText());
+        textFieldInstanceName.selectAll();
         PBasicInputEventHandler inputEventHandler = new PBasicInputEventHandler() {
                 @Override
                 public void keyboardFocusLost(PInputEvent e) {
@@ -50,7 +50,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
 
                 @Override
                 public void keyboardFocusGained(PInputEvent e) {
-                    InstanceNameTF.selectAll();
+                    textFieldInstanceName.selectAll();
                 }
 
                 @Override
@@ -61,19 +61,19 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
                 }
             };
 
-        InstanceNameTF.addInputEventListener(inputEventHandler);
+        textFieldInstanceName.addInputEventListener(inputEventHandler);
 
         instanceLabel.setVisible(false);
 
-        Dimension d = InstanceNameTF.getSize();
+        Dimension d = textFieldInstanceName.getSize();
         d.width = (int) getWidth();
         d.height = 15;
-        InstanceNameTF.setSize(d);
+        textFieldInstanceName.setSize(d);
 
-        addChild(1, InstanceNameTF);
-        InstanceNameTF.raiseToTop();
-        InstanceNameTF.setTransform(instanceLabel.getTransform());
-        InstanceNameTF.grabFocus();
+        addChild(1, textFieldInstanceName);
+        textFieldInstanceName.raiseToTop();
+        textFieldInstanceName.setTransform(instanceLabel.getTransform());
+        textFieldInstanceName.grabFocus();
     }
 
     private void initComponents() {
@@ -81,7 +81,7 @@ public class PAxoObjectInstanceViewComment extends PAxoObjectInstanceViewAbstrac
 
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.LINE_AXIS));
 
-        instanceLabel = new PLabelComponent(getModel().getCommentText());
+        instanceLabel = new PLabelComponent(getDModel().getCommentText());
         instanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         instanceLabel.setAlignmentX(CENTER_ALIGNMENT);
 

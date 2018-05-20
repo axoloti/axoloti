@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayVScale;
 
 /**
@@ -28,8 +27,8 @@ import axoloti.object.display.DisplayVScale;
  */
 public class DisplayInstanceVScale extends DisplayInstance1<DisplayVScale> {
 
-    public DisplayInstanceVScale(AtomDefinitionController controller) {
-        super(controller);
+    public DisplayInstanceVScale(DisplayVScale display) {
+        super(display);
     }
 
     @Override

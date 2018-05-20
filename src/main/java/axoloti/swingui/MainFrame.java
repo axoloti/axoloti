@@ -29,6 +29,7 @@ import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.objectlibrary.AxoObjects;
+import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
@@ -39,10 +40,8 @@ import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
 import axoloti.swingui.preferences.ThemeEditor;
 import axoloti.swingui.target.TJFrame;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
-import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -101,8 +100,8 @@ public final class MainFrame extends TJFrame implements ActionListener {
      *
      * @param args command line arguments
      */
-    public MainFrame(String args[], TargetController controller) {
-        super(controller);
+    public MainFrame(String args[], TargetModel targetModel) {
+        super(targetModel);
         initComponents();
         jLabelVoltages.setSize(jLabelVoltages.getPreferredSize());
         fileMenu.initComponents();
@@ -227,18 +226,18 @@ public final class MainFrame extends TJFrame implements ActionListener {
         themeEditor.setTitle("Theme Editor");
         themeEditor.setVisible(false);
 
-        if (!TestDir(HOME_DIR, true)) {
+        if (!getTestDir(HOME_DIR, true)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Home directory is invalid:{0}, does it exist?, can it be written to?", System.getProperty(Axoloti.HOME_DIR));
         }
 
-        if (!TestDir(RELEASE_DIR, false)) {
+        if (!getTestDir(RELEASE_DIR, false)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Release directory is invalid:{0}, does it exist?", System.getProperty(Axoloti.RELEASE_DIR));
         }
-        if (!TestDir(RUNTIME_DIR, false)) {
+        if (!getTestDir(RUNTIME_DIR, false)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Runtime directory is invalid:{0}, is the runtime installed? correctly?", System.getProperty(Axoloti.RUNTIME_DIR));
         }
 
-        if (!TestDir(FIRMWARE_DIR, false)) {
+        if (!getTestDir(FIRMWARE_DIR, false)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware directory is invalid:{0}, does it exist?", System.getProperty(Axoloti.FIRMWARE_DIR));
         }
 
@@ -315,7 +314,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
                     AxoObjects.loadAxoObjects();
 
                     if (!Axoloti.isFailSafeMode()) {
-                        boolean success = CConnection.GetConnection().connect(null);
+                        boolean success = CConnection.getConnection().connect(null);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -335,10 +334,10 @@ public final class MainFrame extends TJFrame implements ActionListener {
                             public void run() {
                                 try {
                                     // wait for objects be loaded
-                                    if (AxoObjects.getAxoObjects().LoaderThread.isAlive()) {
+                                    if (AxoObjects.getAxoObjects().loaderThread.isAlive()) {
                                         EventQueue.invokeLater(this);
                                     } else {
-                                        PatchViewSwing.OpenPatch(f);
+                                        PatchViewSwing.openPatch(f);
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -365,10 +364,10 @@ public final class MainFrame extends TJFrame implements ActionListener {
     }
 
     private void init() {
-        getController().addView(this);
+        model.getController().addView(this);
     }
 
-    static boolean TestDir(String var, boolean write) {
+    static boolean getTestDir(String var, boolean write) {
         String ev = System.getProperty(var);
         File f = new File(ev);
         if (!f.exists()) {
@@ -408,7 +407,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         jLabelSDCardPresent = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0), new java.awt.Dimension(32767, 0));
         jPanel5 = new javax.swing.JPanel();
-        jPanel4 = new axoloti.swingui.target.TargetRTInfo(getController());
+        jPanel4 = new axoloti.swingui.target.TargetRTInfo(getDModel());
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
@@ -420,7 +419,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         fileMenu = new axoloti.swingui.menus.FileMenu();
         jMenuEdit = new javax.swing.JMenu();
         jMenuItemCopy = new javax.swing.JMenuItem();
-        jMenuBoard = new axoloti.swingui.target.TargetMenu(getController());
+        jMenuBoard = new axoloti.swingui.target.TargetMenu(getDModel());
         windowMenu1 = new axoloti.swingui.menus.WindowMenu();
         helpMenu1 = new axoloti.swingui.menus.HelpMenu();
 
@@ -488,7 +487,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
 
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.PAGE_AXIS));
 
-        getController().addView((axoloti.swingui.target.TargetRTInfo)jPanel4);
+        getDModel().getController().addView((axoloti.swingui.target.TargetRTInfo)jPanel4);
         jPanel5.add(jPanel4);
         jPanel5.add(filler2);
 
@@ -533,7 +532,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
 
         jMenuBar1.add(jMenuEdit);
 
-        getController().addView((axoloti.swingui.target.TargetMenu)jMenuBoard);
+        getDModel().getController().addView((axoloti.swingui.target.TargetMenu)jMenuBoard);
         jMenuBoard.setText("Board");
         jMenuBar1.add(jMenuBoard);
         jMenuBar1.add(windowMenu1);
@@ -552,14 +551,14 @@ public final class MainFrame extends TJFrame implements ActionListener {
 
     private void jCheckBoxConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxConnectActionPerformed
         if (!jCheckBoxConnect.isSelected()) {
-            IConnection connection = getController().getModel().getConnection();
+            IConnection connection = getDModel().getConnection();
             if (connection != null) {
                 connection.disconnect();
             }
         } else {
-            QCmdProcessor.getQCmdProcessor().Panic();
+            QCmdProcessor.getQCmdProcessor().panic();
             jCheckBoxConnect.setEnabled(false);
-            boolean success = CConnection.GetConnection().connect(null);
+            boolean success = CConnection.getConnection().connect(null);
         }
     }//GEN-LAST:event_jCheckBoxConnectActionPerformed
 
@@ -668,14 +667,14 @@ public final class MainFrame extends TJFrame implements ActionListener {
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.getControllerFromModel();
+            PatchController patchController = patchModel.getController();
             String basename = f.getName();
             File testDirName = new File(destinationPath);
             if (!testDirName.isDirectory()) {
                 testDirName.mkdir();
             }
             String outFileName = destinationPath + File.separator + basename.substring(0, basename.lastIndexOf('.'));
-            patchController.WriteCode(outFileName);
+            patchController.writeCode(outFileName);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath(), ex);
@@ -727,9 +726,9 @@ public final class MainFrame extends TJFrame implements ActionListener {
         try {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.getControllerFromModel();
-            PatchFrame patchFrame = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
-            PatchView patchView = PatchViewFactory.patchViewFactory(patchController);
+            PatchController patchController = patchModel.getController();
+            PatchFrame patchFrame = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
+            PatchView patchView = PatchViewFactory.patchViewFactory(patchModel);
             patchController.addView(patchFrame);
             status = patchModel.save(f);
             if (status == false) {
@@ -743,10 +742,10 @@ public final class MainFrame extends TJFrame implements ActionListener {
     }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        Quit();
+        quit();
     }//GEN-LAST:event_formWindowClosing
 
-    public void OpenURL() {
+    public void openPatchFromURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
         if (url == null) {
             return;
@@ -754,7 +753,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         try {
             InputStream input = new URL(url).openStream();
             String name = url.substring(url.lastIndexOf("/") + 1, url.length());
-            PatchViewSwing.OpenPatch(name, input);
+            PatchViewSwing.openPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
@@ -762,12 +761,12 @@ public final class MainFrame extends TJFrame implements ActionListener {
         }
     }
 
-    public void NewPatch() {
+    public void createNewPatch() {
         PatchModel patchModel = new PatchModel();
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         patchModel.setDocumentRoot(documentRoot);
-        PatchController patchController = patchModel.getControllerFromModel();
-        PatchFrame pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+        PatchController patchController = patchModel.getController();
+        PatchFrame pf = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
         patchController.addView(pf);
         pf.setVisible(true);
     }
@@ -804,15 +803,15 @@ public final class MainFrame extends TJFrame implements ActionListener {
     private axoloti.swingui.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
 
-    public void SetProgressValue(int i) {
+    public void setProgressValue(int i) {
         jProgressBar1.setValue(i);
     }
 
-    public void SetProgressMessage(String s) {
+    public void setProgressMessage(String s) {
         jLabelProgress.setText(s);
     }
 
-    private void ShowConnectDisconnect(boolean connect) {
+    private void showConnectDisconnect(boolean connect) {
         jCheckBoxConnect.setSelected(connect);
         jCheckBoxConnect.setEnabled(true);
         if (!connect) {
@@ -826,12 +825,12 @@ public final class MainFrame extends TJFrame implements ActionListener {
         }
     }
 
-    public void Quit() {
-        if(DocumentWindowList.AskCloseAll()) {
+    public void quit() {
+        if (DocumentWindowList.askCloseAll()) {
             return;
         }
 
-        Preferences.getPreferences().SavePrefs();
+        Preferences.getPreferences().savePrefs();
         dispose();
         System.exit(0);
     }
@@ -850,7 +849,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
     }
 
     void setFirmwareID(String firmwareId) {
-        String linkFwId = getController().getModel().getFirmwareLinkID();
+        String linkFwId = getDModel().getFirmwareLinkID();
         if (!firmwareId.equals(linkFwId)) {
             if (!TargetModel.getTargetModel().getWarnedAboutFWCRCMismatch()) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, linkFwId});
@@ -933,7 +932,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         if (s == 0) {
             String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
             String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-            getController().getModel().flashUsingSDRam(fname, pname);
+            getDModel().flashUsingSDRam(fname, pname);
         }
     }
 
@@ -943,9 +942,9 @@ public final class MainFrame extends TJFrame implements ActionListener {
         if (cmd.startsWith("open:")) {
             String fn = cmd.substring(5);
             if (fn.endsWith(".axb")) {
-                PatchBank.OpenPatchBankEditor(new File(fn));
+                PatchBank.openPatchBankEditor(new File(fn));
             } else if (fn.endsWith(".axp") || fn.endsWith(".axs") || fn.endsWith(".axh")) {
-                PatchViewSwing.OpenPatch(new File(fn));
+                PatchViewSwing.openPatch(new File(fn));
             }
         }
     }
@@ -969,7 +968,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         } else if (TargetModel.CONNECTION.is(evt)) {
             IConnection connection = (IConnection)evt.getNewValue();
             boolean isConneced = evt.getNewValue() != null;
-            ShowConnectDisconnect(isConneced);
+            showConnectDisconnect(isConneced);
             if (connection != null) {
                 setCpuID(connection.getTargetProfile().getCPUSerialString());
                 setFirmwareID(connection.getFWID());

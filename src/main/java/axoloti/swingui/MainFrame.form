@@ -29,8 +29,8 @@
             <Property name="text" type="java.lang.String" value="Board"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetMenu(getController())"/>
-            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="getController().addView((axoloti.swingui.target.TargetMenu)jMenuBoard);"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetMenu(getDModel())"/>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="getDModel().getController().addView((axoloti.swingui.target.TargetMenu)jMenuBoard);"/>
           </AuxValues>
         </Menu>
         <Menu class="axoloti.swingui.menus.WindowMenu" name="windowMenu1">
@@ -191,8 +191,8 @@
           <SubComponents>
             <Container class="javax.swing.JPanel" name="jPanel4">
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetRTInfo(getController())"/>
-                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="getController().addView((axoloti.swingui.target.TargetRTInfo)jPanel4);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new axoloti.swingui.target.TargetRTInfo(getDModel())"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="getDModel().getController().addView((axoloti.swingui.target.TargetRTInfo)jPanel4);"/>
               </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>

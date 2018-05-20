@@ -18,8 +18,10 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32UMapVSlider;
+import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -28,25 +30,26 @@ import org.simpleframework.xml.Element;
  */
 public class ParameterFrac32UMapVSlider extends ParameterFrac32 {
 
-    @Element
+    @Deprecated
+    @Element(required = false)
     ValueFrac32 MinValue;
-    @Element
+    @Deprecated
+    @Element(required = false)
     ValueFrac32 MaxValue;
 
     public ParameterFrac32UMapVSlider() {
-        MinValue = new ValueFrac32(0);
-        MaxValue = new ValueFrac32(64);
     }
 
     public ParameterFrac32UMapVSlider(String name) {
         super(name);
-        MinValue = new ValueFrac32(0);
-        MaxValue = new ValueFrac32(64);
     }
 
+    private static final NativeToReal convs[] = {};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstance InstanceFactory() {
-        return new ParameterInstanceFrac32UMapVSlider();
+    public List<NativeToReal> getConversions() {
+        return listConvs;
     }
 
     static public final String TypeName = "frac32.u.mapvsl";
@@ -57,7 +60,7 @@ public class ParameterFrac32UMapVSlider extends ParameterFrac32 {
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_frac_uq27";
     }
 }

@@ -2,7 +2,6 @@ package axoloti.patch.object;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author jtaelman
  */
-public class ObjectInstanceController extends AbstractController<IAxoObjectInstance, IView, PatchController> {
+public class ObjectInstanceController extends AbstractController<IAxoObjectInstance, IView> {
 
     public ObjectInstanceController(IAxoObjectInstance model) {
         super(model);
@@ -48,7 +47,7 @@ public class ObjectInstanceController extends AbstractController<IAxoObjectInsta
         PatchModel patch = getModel().getParent();
         if (patch != null) {
             IAxoObjectInstance o1 = patch.findObjectInstance(instanceName);
-            if ((o1 != null) && (o1 != this)) {
+            if ((o1 != null) && (o1 != getModel())) {
                 Logger.getLogger(ObjectInstanceController.class.getName()).log(Level.SEVERE, "Object name \"{0}\" already exists in patch!", instanceName);
                 return false;
             }

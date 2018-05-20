@@ -1,7 +1,7 @@
 package axoloti.swingui.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceObjRef;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
@@ -15,30 +15,30 @@ import javax.swing.event.DocumentListener;
 
 class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
 
-    JTextField TFObjName;
+    private JTextField textFieldObjName;
 
-    AttributeInstanceViewObjRef(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    AttributeInstanceViewObjRef(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceObjRef getModel() {
-        return (AttributeInstanceObjRef) super.getModel();
+    public AttributeInstanceObjRef getDModel() {
+        return (AttributeInstanceObjRef) super.getDModel();
     }
 
     private void initComponents() {
-        TFObjName = new JTextField(getModel().getValue());
-        Dimension d = TFObjName.getSize();
+        textFieldObjName = new JTextField(getDModel().getValue());
+        Dimension d = textFieldObjName.getSize();
         d.width = 92;
         d.height = 22;
-        TFObjName.setFont(Constants.FONT);
-        TFObjName.setMaximumSize(d);
-        TFObjName.setMinimumSize(d);
-        TFObjName.setPreferredSize(d);
-        TFObjName.setSize(d);
-        add(TFObjName);
-        TFObjName.addKeyListener(new KeyAdapter() {
+        textFieldObjName.setFont(Constants.FONT);
+        textFieldObjName.setMaximumSize(d);
+        textFieldObjName.setMinimumSize(d);
+        textFieldObjName.setPreferredSize(d);
+        textFieldObjName.setSize(d);
+        add(textFieldObjName);
+        textFieldObjName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent ke) {
                 if (ke.getKeyChar() == KeyEvent.VK_ENTER) {
@@ -47,17 +47,10 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
             }
 
         });
-        TFObjName.getDocument().addDocumentListener(new DocumentListener() {
+        textFieldObjName.getDocument().addDocumentListener(new DocumentListener() {
 
             void update() {
-                /* invokeLater should not be needed ???
-                 SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            getController().changeValue(TFObjName.getText());                        }
-                    });
-                 */
-                getController().changeValue(TFObjName.getText());
+                model.getController().changeValue(textFieldObjName.getText());
             }
 
             @Override
@@ -75,38 +68,38 @@ class AttributeInstanceViewObjRef extends AttributeInstanceViewString {
                 update();
             }
         });
-        TFObjName.addFocusListener(new FocusListener() {
+        textFieldObjName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
+                model.getController().addMetaUndo("edit attribute " + getDModel().getName(), focusEdit);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                getController().changeValue(TFObjName.getText());
+                model.getController().changeValue(textFieldObjName.getText());
             }
         });
     }
 
     @Override
-    public void Lock() {
-        if (TFObjName != null) {
-            TFObjName.setEnabled(false);
+    public void lock() {
+        if (textFieldObjName != null) {
+            textFieldObjName.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
-        if (TFObjName != null) {
-            TFObjName.setEnabled(true);
+    public void unlock() {
+        if (textFieldObjName != null) {
+            textFieldObjName.setEnabled(true);
         }
     }
 
     @Override
     public void setString(String objName) {
-        if (TFObjName != null) {
-            if (!TFObjName.getText().equals(objName)) {
-                TFObjName.setText(objName);
+        if (textFieldObjName != null) {
+            if (!textFieldObjName.getText().equals(objName)) {
+                textFieldObjName.setText(objName);
             }
         }
     }

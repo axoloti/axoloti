@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class PitchHz implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double hz = 440.0 * Math.pow(2.0, (v.getDouble() + 64 - 69) / 12.0);
         if (hz > 10000.0) {
             return (String.format("%.2f kHz", hz / 1000));
@@ -46,7 +46,7 @@ public class PitchHz implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[kKmM]?)[hH][zZ]?");
         Matcher matcher = pattern.matcher(s);
         if (matcher.matches()) {

@@ -37,6 +37,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 /**
  *
@@ -49,7 +50,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     private double max;
     private double min;
     private double tick;
-    private NativeToReal convs[];
+    private List<NativeToReal> convs;
     private String keybBuffer = "";
 
     private boolean hiliteUp = false;
@@ -61,7 +62,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     int rmargin = 5;
     int htick = 3;
 
-    public void setNative(NativeToReal convs[]) {
+    public void setNative(List<NativeToReal> convs) {
         this.convs = convs;
     }
 
@@ -97,7 +98,7 @@ public class NumberBoxComponent extends ACtrlComponent {
                 keybBuffer = "";
             }
         });
-        SetupTransferHandler();
+        setupTransferHandler();
     }
 
     final int layoutTick = 3;
@@ -106,7 +107,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     protected void mouseDragged(MouseEvent e) {
         if (isEnabled() && dragging) {
             double v;
-            if ((MousePressedBtn == MouseEvent.BUTTON1)) {
+            if ((mousePressedBtn == MouseEvent.BUTTON1)) {
                 double t = tick;
                 t = t * 0.1;
                 if (e.isShiftDown()) {
@@ -115,10 +116,10 @@ public class NumberBoxComponent extends ACtrlComponent {
                 if (KeyUtils.isControlOrCommandDown(e)) {
                     t = t * 0.1;
                 }
-                v = value + t * (MousePressedCoordY - e.getYOnScreen());
+                v = value + t * (mousePressedCoordY - e.getYOnScreen());
                 this.robotMoveToCenter();
                 if (robot == null) {
-                    MousePressedCoordY = e.getYOnScreen();
+                    mousePressedCoordY = e.getYOnScreen();
                 }
                 if (v > max) {
                     v = max;
@@ -130,9 +131,10 @@ public class NumberBoxComponent extends ACtrlComponent {
             }
         }
     }
-    int MousePressedCoordX = 0;
-    int MousePressedCoordY = 0;
-    int MousePressedBtn = 0;
+
+    private int mousePressedCoordX = 0;
+    private int mousePressedCoordY = 0;
+    private int mousePressedBtn = 0;
 
     @Override
     protected void mousePressed(MouseEvent e) {
@@ -156,9 +158,9 @@ public class NumberBoxComponent extends ACtrlComponent {
                 }
             } else {
                 dragging = true;
-                MousePressedCoordX = e.getXOnScreen();
-                MousePressedCoordY = e.getYOnScreen();
-                MousePressedBtn = e.getButton();
+                mousePressedCoordX = e.getXOnScreen();
+                mousePressedCoordY = e.getYOnScreen();
+                mousePressedBtn = e.getButton();
                 if (!Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
                     getRootPane().setCursor(TransparentCursor.get());
                 }
@@ -378,7 +380,7 @@ public class NumberBoxComponent extends ACtrlComponent {
             Point p = getParent().getLocationOnScreen();
             String s = "<html>";
             for (NativeToReal c : convs) {
-                s += c.ToReal(new ValueFrac32(value)) + "<br>";
+                s += c.convertToReal(new ValueFrac32(value)) + "<br>";
             }
             this.setToolTipText(s);
         }
@@ -443,7 +445,7 @@ public class NumberBoxComponent extends ACtrlComponent {
     public void robotMoveToCenter() {
         if (robot != null) {
             getRootPane().setCursor(TransparentCursor.get());
-            robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+            robot.mouseMove(mousePressedCoordX, mousePressedCoordY);
         }
     }
 }

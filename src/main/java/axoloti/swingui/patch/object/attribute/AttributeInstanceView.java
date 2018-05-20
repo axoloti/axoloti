@@ -5,21 +5,21 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.mvc.FocusEdit;
 import axoloti.patch.object.attribute.AttributeInstance;
-import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.preferences.Theme;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.mvc.ViewPanel;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
-public abstract class AttributeInstanceView extends ViewPanel<AttributeInstanceController> implements IAttributeInstanceView {
+public abstract class AttributeInstanceView extends ViewPanel<AttributeInstance> implements IAttributeInstanceView {
 
-    protected IAxoObjectInstanceView axoObjectInstanceView;
+    // TODO: add metaUndo to attributeInstanceViews
+    IAxoObjectInstanceView axoObjectInstanceView;
 
-    protected LabelComponent label;
+    LabelComponent label;
 
-    AttributeInstanceView(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller);
+    AttributeInstanceView(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute);
         this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();
     }
@@ -31,12 +31,7 @@ public abstract class AttributeInstanceView extends ViewPanel<AttributeInstanceC
         add(label);
     }
 
-    @Override
-    public AttributeInstance getModel() {
-        return getController().getModel();
-    }
-
-    protected void scrollTo() {
+    private void scrollTo() {
         if (axoObjectInstanceView == null) {
             return;
         }

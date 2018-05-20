@@ -33,7 +33,7 @@ public class InletInt32Pos extends InletInt32 {
     }
 
     @Override
-    public SignalMetaData GetSignalMetaData() {
+    public SignalMetaData getSignalMetaData() {
         return SignalMetaData.positive;
     }
 

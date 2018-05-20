@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.Display;
 import axoloti.patch.object.atom.AtomInstance;
 import axoloti.property.ObjectProperty;
@@ -31,30 +30,30 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class DisplayInstance<T extends Display> extends AtomInstance<T> {
+public abstract class DisplayInstance<T extends Display> extends AtomInstance<T, DisplayInstanceController> {
 
     @Attribute
     String name;
     @Attribute(required = false)
     Boolean onParent;
 
-    AtomDefinitionController controller;
+    T display;
 
     public static final Property DISP_VALUE = new ObjectProperty("Value", Object.class, DisplayInstance.class);
     public static final PropagatedProperty NOLABEL = new PropagatedProperty(Display.NOLABEL, DisplayInstance.class);
 
-    public DisplayInstance(AtomDefinitionController controller) {
-        this.controller = controller;
+    public DisplayInstance(T display) {
+        this.display = display;
     }
 
     @Override
-    public T getModel() {
-        return (T) getController().getModel();
+    public T getDModel() {
+        return display;
     }
 
     @Override
-    public DisplayInstanceController getControllerFromModel() {
-        return (DisplayInstanceController) super.getControllerFromModel();
+    public DisplayInstanceController getController() {
+        return super.getController();
     }
 
     /**
@@ -63,7 +62,7 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
      * @return Display size in number of 32bit words
      */
     public int getLength() {
-        return getModel().getLength();
+        return getDModel().getLength();
     }
 
     public abstract Object getValue();
@@ -86,11 +85,6 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
     }
 
     @Override
-    public AtomDefinitionController getController() {
-        return controller;
-    }
-
-    @Override
     public List<Property> getProperties() {
         List<Property> l = super.getProperties();
         l.add(NOLABEL);
@@ -98,7 +92,7 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T>
     }
 
     @Override
-    public DisplayInstanceController createController() {
+    protected DisplayInstanceController createController() {
         return new DisplayInstanceController(this);
     }
 }

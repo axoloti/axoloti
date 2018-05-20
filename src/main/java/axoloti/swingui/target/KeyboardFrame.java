@@ -20,7 +20,6 @@ package axoloti.swingui.target;
 import axoloti.swingui.components.PianoComponent;
 import axoloti.swingui.components.control.ACtrlComponent;
 import axoloti.swingui.components.control.DialComponent;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
@@ -50,18 +49,18 @@ public class KeyboardFrame extends TJFrame {
     }
 
 
-    public KeyboardFrame(TargetController controller) {
-        super(controller);
+    public KeyboardFrame(TargetModel targetModel) {
+        super(targetModel);
         initComponents();
         piano = new PianoComponent() {
             @Override
-            public void KeyDown(int key) {
-                getController().getModel().getConnection().SendMidi(getCable(), 0x90 + getChannel(), key & 0x7F, jSliderVelocity.getValue());
+            public void keyDown(int key) {
+                getDModel().getConnection().sendMidi(getCable(), 0x90 + getChannel(), key & 0x7F, jSliderVelocity.getValue());
             }
 
             @Override
-            public void KeyUp(int key) {
-                getController().getModel().getConnection().SendMidi(getCable(), 0x80 + getChannel(), key & 0x7F, 80);
+            public void keyUp(int key) {
+                getDModel().getConnection().sendMidi(getCable(), 0x80 + getChannel(), key & 0x7F, 80);
             }
 
         };
@@ -77,7 +76,7 @@ public class KeyboardFrame extends TJFrame {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
-                    getController().getModel().getConnection().SendMidi(getCable(), 0xE0 + getChannel(), 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
+                    getDModel().getConnection().sendMidi(getCable(), 0xE0 + getChannel(), 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
                 }
             }
         });
@@ -178,7 +177,7 @@ public class KeyboardFrame extends TJFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        getController().getModel().getConnection().SendMidi(getCable(), 0xB0 + getChannel(), 0x7B, 80);
+        getDModel().getConnection().sendMidi(getCable(), 0xB0 + getChannel(), 0x7B, 80);
         piano.clear();
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 

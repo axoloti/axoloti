@@ -20,7 +20,7 @@ public class PButtonComponent extends PCtrlComponentAbstract {
 
     public interface ActListener {
 
-        void OnPushed();
+        void fire();
     }
     ArrayList<ActListener> actListeners = new ArrayList<>();
 
@@ -28,10 +28,10 @@ public class PButtonComponent extends PCtrlComponentAbstract {
         actListeners.add(al);
     }
 
-    void DoPushed() {
+    void doPushed() {
         if (isEnabled()) {
             for (ActListener al : actListeners) {
-                al.OnPushed();
+                al.fire();
             }
         }
     }
@@ -123,7 +123,7 @@ public class PButtonComponent extends PCtrlComponentAbstract {
     @Override
     public void mouseClicked(PInputEvent e) {
         grabFocus();
-        DoPushed();
+        doPushed();
     }
 
     @Override

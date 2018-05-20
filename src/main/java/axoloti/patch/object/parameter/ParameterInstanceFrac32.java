@@ -56,15 +56,15 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         //value = new ValueFrac32();
     }
 
+    public ParameterInstanceFrac32(Tx param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
+    }
+
     public abstract double getMin();
 
     public abstract double getMax();
 
     public abstract double getTick();
-
-    public ParameterInstanceFrac32(Tx param, AxoObjectInstance axoObj1) {
-        super(param, axoObj1);
-    }
 
     @Override
     public int valToInt32(Double v) {
@@ -171,8 +171,8 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public void CopyValueFrom(ParameterInstance p) {
-        super.CopyValueFrom(p);
+    public void copyValueFrom(ParameterInstance p) {
+        super.copyValueFrom(p);
         if (p instanceof ParameterInstanceFrac32) {
             ParameterInstanceFrac32 p1 = (ParameterInstanceFrac32) p;
             modulators = p1.getModulators();
@@ -188,13 +188,11 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
+    public String generateCodeInitModulator(String vprefix, String StructAccces) {
+        // TODO: fix modulations
         return "";
     }
 
-    /**
-     * **
-     */
     @Override
     public Double getValue() {
         if (value == null) {

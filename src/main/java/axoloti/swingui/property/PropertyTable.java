@@ -1,6 +1,6 @@
 package axoloti.swingui.property;
 
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
@@ -17,13 +17,13 @@ import javax.swing.table.AbstractTableModel;
  */
 public class PropertyTable extends JTable implements IView {
 
-    final List<Property> properties;
-    final AbstractController controller;
+    final private List<Property> properties;
+    final private IModel model;
 
-    public PropertyTable(AbstractController controller, List<Property> properties) {
+    public PropertyTable(IModel model, List<Property> properties) {
         super();
         this.properties = properties;
-        this.controller = controller;
+        this.model = model;
         initComponents();
     }
 
@@ -63,7 +63,7 @@ public class PropertyTable extends JTable implements IView {
                     case 0:
                         return properties.get(rowIndex).getFriendlyName();
                     case 1:
-                        return properties.get(rowIndex).get(controller.getModel());
+                        return properties.get(rowIndex).get(model);
                     default:
                         return null;
                 }
@@ -83,7 +83,7 @@ public class PropertyTable extends JTable implements IView {
             public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
                 switch (columnIndex) {
                     case 1:
-                        controller.generic_setModelUndoableProperty(properties.get(rowIndex),
+                        model.getController().generic_setModelUndoableProperty(properties.get(rowIndex),
                                 aValue);
                     default:
                 }
@@ -97,15 +97,15 @@ public class PropertyTable extends JTable implements IView {
         for (int i = 0; i < properties.size(); i++) {
             Property p = properties.get(i);
             if (p.is(evt)) {
-                ((AbstractTableModel) getModel()).fireTableCellUpdated(i, 1);
+                ((AbstractTableModel) getDModel()).fireTableCellUpdated(i, 1);
                 break;
             }
         }
     }
 
     @Override
-    public AbstractController getController() {
-        return controller;
+    public IModel getDModel() {
+        return model;
     }
 
     @Override

@@ -2,13 +2,9 @@ package axoloti.piccolo;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.IAxoObject;
-import axoloti.object.ObjectController;
-import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.AxoObjectInstanceFactory;
-import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.patch.object.ObjectInstanceController;
-import axoloti.patch.object.ObjectInstancePatcherController;
 import axoloti.piccolo.patch.PatchPCanvas;
 import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.piccolo.patch.object.PAxoObjectInstanceViewAbstract;
@@ -22,18 +18,18 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
     private double scale = 1.0;
     private PatchViewPiccolo patchView;
 
-    public PObjectSearchFrame(PatchController patchController, PatchViewPiccolo patchView) {
-        super(patchController);
+    public PObjectSearchFrame(PatchModel patchModel, PatchViewPiccolo patchView) {
+        super(patchModel);
         this.patchView = patchView;
         this.scale = patchView.getViewportView().getViewScale();
     }
 
     @Override
-    public void SetPreview(IAxoObject o) {
-        SetPreview(o, false);
+    public void setPreview(IAxoObject o) {
+        setPreview(o, false);
     }
 
-    private void SetPreview(IAxoObject o, boolean scaleChanged) {
+    private void setPreview(IAxoObject o, boolean scaleChanged) {
         if (o == null) {
             previewObj = null;
             type = null;
@@ -44,23 +40,18 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
         if (o != previewObj || scaleChanged) {
             previewObj = o;
             type = o;
-            ExpandJTreeToEl(o);
+            expandJTreeToEl(o);
             getListView().setSelectedValue(o, true);
             if (getListView().getSelectedValue() != o) {
             }
-            ObjectController oc = o.getControllerFromModel();
-            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
-            ObjectInstanceController c;
+            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(o, null, "dummy", new Point(5, 5));
+            // TODO: piccolo review
 
-            if (objectInstance instanceof AxoObjectInstancePatcher) {
-                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance);
-            } else {
-                c = new ObjectInstanceController(objectInstance);
-            }
 
-            PAxoObjectInstanceViewAbstract objectInstanceView = (
-                (PAxoObjectInstanceViewAbstract)
-                PAxoObjectInstanceViewFactory.getInstance().createView(c, patchView));
+            PAxoObjectInstanceViewAbstract objectInstanceView
+                    = (PAxoObjectInstanceViewAbstract) PAxoObjectInstanceViewFactory.getInstance().createView(
+                            objectInstance,
+                            patchView);
 
             getMainView().removeAll();
             PatchPCanvas container = new PatchPCanvas();
@@ -89,7 +80,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
             getMainView().revalidate();
             getMainView().repaint();
 
-            IAxoObject t = objectInstanceView.getModel().getType();
+            IAxoObject t = objectInstanceView.getDModel().getDModel();
             if (t != null) {
                 String description = t.getDescription() == null || t.getDescription().isEmpty() ? o.getDescription() : t.getDescription();
                 String path = t.getPath() == null ? o.getPath() : t.getPath();
@@ -112,12 +103,12 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
     }
 
     @Override
-    public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
-        super.Launch(patchLoc, o, searchString, false);
+    public void launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
+        super.launch(patchLoc, o, searchString, false);
 
         if (scale != patchView.getViewportView().getViewScale()) {
             this.scale = patchView.getViewportView().getViewScale();
-            SetPreview(previewObj, true);
+            setPreview(previewObj, true);
         }
     }
 }

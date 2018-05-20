@@ -3,7 +3,7 @@ package axoloti.piccolo.patch.object.parameter;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.parameter.ParameterInt32;
 import axoloti.object.parameter.ParameterInt32VRadio;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.piccolo.components.PAssignMidiCCMenuItems;
 import axoloti.piccolo.components.control.PVRadioComponent;
 import java.beans.PropertyChangeEvent;
@@ -12,13 +12,13 @@ import javax.swing.JPopupMenu;
 
 class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32VRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PParameterInstanceViewInt32VRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public PVRadioComponent CreateControl() {
-        return new PVRadioComponent(0, ((ParameterInt32VRadio) getModel().getModel()).getMaxValue(), axoObjectInstanceView);
+    public PVRadioComponent createControl() {
+        return new PVRadioComponent(0, ((ParameterInt32VRadio) getDModel().getDModel()).getMaxValue(), axoObjectInstanceView);
     }
 
     @Override

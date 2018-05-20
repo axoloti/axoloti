@@ -60,13 +60,13 @@ public abstract class Display extends AtomDefinition implements Cloneable {
         return 1;
     }
 
-    public String GetCName() {
+    public String getCName() {
         return "disp_" + getName();
     }
 
-    public abstract DataType getDatatype();
+    public abstract DataType getDataType();
 
-    public String GetCMetaType() {
+    public String getCMetaType() {
         return "display_meta_type_undefined";
     }
 

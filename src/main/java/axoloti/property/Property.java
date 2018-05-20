@@ -38,7 +38,7 @@ public abstract class Property<T> {
 
     public abstract String getAsString(IModel o);
 
-    public abstract T StringToObj(String v);
+    public abstract T convertStringToObj(String v);
 
     public abstract void set(IModel obj, Object val);
 

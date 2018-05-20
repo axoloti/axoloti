@@ -34,7 +34,7 @@ public class InletBool32RisingFalling extends InletBool32 {
     }
 
     @Override
-    public SignalMetaData GetSignalMetaData() {
+    public SignalMetaData getSignalMetaData() {
         return SignalMetaData.risingfalling;
     }
 

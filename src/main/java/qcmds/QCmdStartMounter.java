@@ -28,17 +28,17 @@ public class QCmdStartMounter extends QCmdStart {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start mounting sdcard...";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "mounting...";
     }
 
     @Override
-    public String GetTimeOutMessage() {
+    public String getTimeOutMessage() {
         return "SDCard mounter active, editor connection lost. Unmount/eject the sdcard volume in Explorer or Finder to enable editor connection again.";
     }
 

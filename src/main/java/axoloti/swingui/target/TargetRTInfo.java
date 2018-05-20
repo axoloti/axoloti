@@ -1,7 +1,6 @@
 package axoloti.swingui.target;
 
 import axoloti.mvc.IView;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 
@@ -9,15 +8,15 @@ import java.beans.PropertyChangeEvent;
  *
  * @author jtaelman
  */
-public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetController> {
+public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetModel> {
 
-    final TargetController controller;
+    final TargetModel targetModel;
 
     /**
      * Creates new form TargetRTInfo
      */
-    public TargetRTInfo(TargetController controller) {
-        this.controller = controller;
+    public TargetRTInfo(TargetModel targetModel) {
+        this.targetModel = targetModel;
         initComponents();
         jLabelVuIn1.setSize(jLabelVuIn1.getPreferredSize());
         jLabelVuIn2.setSize(jLabelVuIn2.getPreferredSize());
@@ -109,8 +108,8 @@ public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetCont
     }
 
     @Override
-    public TargetController getController() {
-        return controller;
+    public TargetModel getDModel() {
+        return targetModel;
     }
 
     @Override

@@ -26,47 +26,47 @@ import axoloti.patch.object.display.DisplayInstanceVScale;
 
 public class PDisplayInstanceViewFactory {
 
-    public static IDisplayInstanceView createView(DisplayInstanceController controller, IAxoObjectInstanceView obj) {
-        DisplayInstance model = controller.getModel();
+    public static IDisplayInstanceView createView(DisplayInstance model, IAxoObjectInstanceView obj) {
+        DisplayInstanceController controller = model.getController();
         PDisplayInstanceView view;
         if (model instanceof DisplayInstanceBool32) {
-            view = new PDisplayInstanceViewBool32(controller, obj);
+            view = new PDisplayInstanceViewBool32(model, obj);
         } else if (model instanceof DisplayInstanceFrac32SChart) {
-            view = new PDisplayInstanceViewFrac32SChart(controller, obj);
+            view = new PDisplayInstanceViewFrac32SChart(model, obj);
         } else if (model instanceof DisplayInstanceFrac32SDial) {
-            view = new PDisplayInstanceViewFrac32SDial(controller, obj);
+            view = new PDisplayInstanceViewFrac32SDial(model, obj);
         } else if (model instanceof DisplayInstanceFrac32UChart) {
-            view = new PDisplayInstanceViewFrac32UChart(controller, obj);
+            view = new PDisplayInstanceViewFrac32UChart(model, obj);
         } else if (model instanceof DisplayInstanceFrac32UDial) {
-            view = new PDisplayInstanceViewFrac32UDial(controller, obj);
+            view = new PDisplayInstanceViewFrac32UDial(model, obj);
         } else if (model instanceof DisplayInstanceFrac32VBar) {
-            view = new PDisplayInstanceViewFrac32VBar(controller, obj);
+            view = new PDisplayInstanceViewFrac32VBar(model, obj);
         } else if (model instanceof DisplayInstanceFrac32VBarDB) {
-            view = new PDisplayInstanceViewFrac32VBarDB(controller, obj);
+            view = new PDisplayInstanceViewFrac32VBarDB(model, obj);
         } else if (model instanceof DisplayInstanceFrac32VU) {
-            view = new PDisplayInstanceViewFrac32VU(controller, obj);
+            view = new PDisplayInstanceViewFrac32VU(model, obj);
         } else if (model instanceof DisplayInstanceFrac4ByteVBar) {
-            view = new PDisplayInstanceViewFrac4ByteVBar(controller, obj);
+            view = new PDisplayInstanceViewFrac4ByteVBar(model, obj);
         } else if (model instanceof DisplayInstanceFrac4UByteVBar) {
-            view = new PDisplayInstanceViewFrac4UByteVBar(controller, obj);
+            view = new PDisplayInstanceViewFrac4UByteVBar(model, obj);
         } else if (model instanceof DisplayInstanceFrac4UByteVBarDB) {
-            view = new PDisplayInstanceViewFrac4UByteVBarDB(controller, obj);
+            view = new PDisplayInstanceViewFrac4UByteVBarDB(model, obj);
         } else if (model instanceof DisplayInstanceFrac8S128VBar) {
-            view = new PDisplayInstanceViewFrac8S128VBar(controller, obj);
+            view = new PDisplayInstanceViewFrac8S128VBar(model, obj);
         } else if (model instanceof DisplayInstanceFrac8U128VBar) {
-            view = new PDisplayInstanceViewFrac8U128VBar(controller, obj);
+            view = new PDisplayInstanceViewFrac8U128VBar(model, obj);
         } else if (model instanceof DisplayInstanceInt32Bar16) {
-            view = new PDisplayInstanceViewInt32Bar16(controller, obj);
+            view = new PDisplayInstanceViewInt32Bar16(model, obj);
         } else if (model instanceof DisplayInstanceInt32Bar32) {
-            view = new PDisplayInstanceViewInt32Bar32(controller, obj);
+            view = new PDisplayInstanceViewInt32Bar32(model, obj);
         } else if (model instanceof DisplayInstanceInt32HexLabel) {
-            view = new PDisplayInstanceViewInt32HexLabel(controller, obj);
+            view = new PDisplayInstanceViewInt32HexLabel(model, obj);
         } else if (model instanceof DisplayInstanceInt32Label) {
-            view = new PDisplayInstanceViewInt32Label(controller, obj);
+            view = new PDisplayInstanceViewInt32Label(model, obj);
         } else if (model instanceof DisplayInstanceNoteLabel) {
-            view = new PDisplayInstanceViewNoteLabel(controller, obj);
+            view = new PDisplayInstanceViewNoteLabel(model, obj);
         } else if (model instanceof DisplayInstanceVScale) {
-            view = new PDisplayInstanceViewVScale(controller, obj);
+            view = new PDisplayInstanceViewVScale(model, obj);
         } else {
             view = null;
             throw new Error("unkown Display type");

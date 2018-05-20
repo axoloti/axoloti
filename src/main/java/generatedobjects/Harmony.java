@@ -23,21 +23,21 @@ import axoloti.object.inlet.InletFrac32Bipolar;
 import axoloti.object.inlet.InletInt32;
 import axoloti.object.outlet.OutletFrac32Bipolar;
 import axoloti.object.parameter.ParameterBin12;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Harmony extends gentools {
+class Harmony extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "harmony";
-        WriteAxoObject(catName, CreateNoteQuantizer());
+        writeAxoObject(catName, createNoteQuantizer());
 
     }
 
-    static AxoObject CreateNoteQuantizer() {
+    static AxoObject createNoteQuantizer() {
         AxoObject o = new AxoObject("note quantizer", "quantize note input to a scale");
         o.inlets.add(new InletFrac32Bipolar("note", "note number (-64..63)"));
         o.inlets.add(new InletInt32("tonic", "tonic note number (0-11)"));

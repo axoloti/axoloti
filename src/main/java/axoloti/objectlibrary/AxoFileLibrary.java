@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class AxoFileLibrary
         extends AxolotiLibrary {
 
-    public static String TYPE="local";
+    public static final String TYPE = "local";
 
     public AxoFileLibrary() {
         super();

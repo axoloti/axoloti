@@ -2,7 +2,7 @@ package axoloti.swingui.menus;
 
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.swingui.mvc.UndoUI;
-import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
@@ -32,7 +32,7 @@ public class StandardMenubar extends JMenuBar {
             add(editMenu);
         }
 
-        JMenu boardMenu = new axoloti.swingui.target.TargetMenu(TargetController.getTargetController());
+        JMenu boardMenu = new axoloti.swingui.target.TargetMenu(TargetModel.getTargetModel());
         add(boardMenu);
 
         JMenu windowMenu1 = new axoloti.swingui.menus.WindowMenu();

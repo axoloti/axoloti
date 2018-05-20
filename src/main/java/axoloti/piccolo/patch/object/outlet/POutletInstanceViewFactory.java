@@ -1,14 +1,14 @@
 package axoloti.piccolo.patch.object.outlet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.object.outlet.OutletInstance;
 
 public class POutletInstanceViewFactory {
 
-    public static IIoletInstanceView createView(IoletInstanceController controller, IAxoObjectInstanceView obj) {
-        IIoletInstanceView view = new POutletInstanceView(controller, obj);
-        controller.addView(view);
+    public static IOutletInstanceView createView(OutletInstance outletInstance, IAxoObjectInstanceView obj) {
+        IOutletInstanceView view = new POutletInstanceView(outletInstance, obj);
+        outletInstance.getController().addView(view);
         return view;
     }
 

@@ -1,14 +1,14 @@
 package axoloti.swingui.patch.object;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.INetView;
+import axoloti.abstractui.IOutletInstanceView;
 import axoloti.abstractui.IParameterInstanceView;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.preferences.Theme;
@@ -18,6 +18,7 @@ import axoloti.swingui.mvc.ViewPanel;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.utils.Constants;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -43,41 +44,58 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceController>
+public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
         implements MouseListener, MouseMotionListener, // TODO: code cleanup: move MouseListener, MouseMotionListener into mouseAdapter
         IAxoObjectInstanceView {
 
     protected final JPanel titlebar = new JPanel();
     protected LabelComponent instanceLabel;
-    protected TextFieldComponent InstanceNameTF;
+    protected TextFieldComponent textFieldInstanceName;
     private Point dragLocation = null;
     private Point dragAnchor = null;
     private boolean locked = false;
 
-    AxoObjectInstanceViewAbstract(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller);
+    AxoObjectInstanceViewAbstract(IAxoObjectInstance objectInstance, PatchViewSwing patchView) {
+        super(objectInstance);
         this.patchView = patchView;
         initComponents();
     }
 
     @Override
-    public IAxoObjectInstance getModel() {
-        return getController().getModel();
+    public IAxoObjectInstance getDModel() {
+        return model;
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         locked = true;
     }
 
     @Override
-    public void Unlock() {
+    public void unlock() {
         locked = false;
     }
 
     @Override
     public boolean isLocked() {
         return locked;
+    }
+
+    static class BoxLayoutGrid extends BoxLayout {
+
+        public BoxLayoutGrid(Container target, int axis) {
+            super(target, axis);
+        }
+
+        @Override
+        public Dimension preferredLayoutSize(Container target) {
+            Dimension d = super.preferredLayoutSize(target);
+            d.width = ((d.width + Constants.X_GRID - 1) / Constants.X_GRID) * Constants.X_GRID;
+            d.height = ((d.height + Constants.Y_GRID - 1) / Constants.Y_GRID) * Constants.Y_GRID;
+            System.out.println("pref layout size = " + d);
+            return d;
+        }
+
     }
 
     private static final Dimension TITLEBAR_MINIMUM_SIZE = new Dimension(40, 12);
@@ -108,7 +126,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         addMouseMotionListener(this);
     }
 
-    JPopupMenu CreatePopupMenu() {
+    JPopupMenu createPopupMenu() {
         JPopupMenu popup = new JPopupMenu();
         return popup;
     }
@@ -127,16 +145,16 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
             getPatchView().requestFocus();
             if (me.getClickCount() == 1) {
                 if (me.isShiftDown()) {
-                    getController().changeSelected(!getModel().getSelected());
+                    model.getController().changeSelected(!getDModel().getSelected());
                     me.consume();
-                } else if (!getModel().getSelected()) {
-                    getController().getModel().getParent().getControllerFromModel().SelectNone();
-                    getController().changeSelected(true);
+                } else if (!getDModel().getSelected()) {
+                    model.getParent().getController().selectNone();
+                    model.getController().changeSelected(true);
                     me.consume();
                 }
             }
             if (me.getClickCount() == 2) {
-                getPatchView().ShowClassSelector(AxoObjectInstanceViewAbstract.this.getLocation(), AxoObjectInstanceViewAbstract.this, null);
+                getPatchView().showClassSelector(AxoObjectInstanceViewAbstract.this.getLocation(), AxoObjectInstanceViewAbstract.this, null);
                 me.consume();
             }
         }
@@ -176,7 +194,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                     nx = ((nx + (Constants.X_GRID / 2)) / Constants.X_GRID) * Constants.X_GRID;
                     ny = ((ny + (Constants.Y_GRID / 2)) / Constants.Y_GRID) * Constants.Y_GRID;
                 }
-                o.getController().changeLocation(nx, ny);
+                o.getDModel().getController().changeLocation(nx, ny);
             }
         }
         PatchViewSwing pv = getPatchView();
@@ -204,7 +222,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
         getPatchView().requestFocus();
         if (getPatchView() != null) {
             if (me.isPopupTrigger()) {
-                JPopupMenu p = CreatePopupMenu();
+                JPopupMenu p = createPopupMenu();
                 p.show(titlebar, 0, titlebar.getHeight());
                 me.consume();
             } else if (!patchView.isLocked()) {
@@ -213,10 +231,10 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                 moveToDraggedLayer(this);
                 draggingObjects.add(this);
                 dragLocation = getLocation();
-                getController().addMetaUndo("move");
-                if (getModel().getSelected()) {
+                model.getController().addMetaUndo("move");
+                if (getDModel().getSelected()) {
                     for (IAxoObjectInstanceView o : getPatchView().getObjectInstanceViews()) {
-                        if (o.getModel().getSelected()) {
+                        if (o.getDModel().getSelected()) {
                             AxoObjectInstanceViewAbstract oa = (AxoObjectInstanceViewAbstract) o;
                             moveToDraggedLayer(oa);
                             draggingObjects.add(oa);
@@ -239,7 +257,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     protected void handleMouseReleased(MouseEvent me) {
         if (me.isPopupTrigger()) {
-            JPopupMenu p = CreatePopupMenu();
+            JPopupMenu p = createPopupMenu();
             p.show(titlebar, 0, titlebar.getHeight());
             me.consume();
             return;
@@ -256,7 +274,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                 }
                 draggingObjects = null;
                 getPatchView().updateSize();
-                getController().getModel().getParent().getControllerFromModel().fixNegativeObjectCoordinates();
+                model.getParent().getController().fixNegativeObjectCoordinates();
             }
             me.consume();
         }
@@ -271,16 +289,16 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
 
     @Override
     public PatchModel getPatchModel() {
-        return patchView.getController().getModel();
+        return patchView.getDModel();
     }
 
     @Override
-    public List<IIoletInstanceView> getInletInstanceViews() {
+    public List<IInletInstanceView> getInletInstanceViews() {
         return null;
     }
 
     @Override
-    public List<IIoletInstanceView> getOutletInstanceViews() {
+    public List<IOutletInstanceView> getOutletInstanceViews() {
         return null;
     }
 
@@ -290,26 +308,26 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     }
 
     void handleInstanceNameEditorAction() {
-        String s = InstanceNameTF.getText();
-        getController().addMetaUndo("edit object name");
-        getController().changeInstanceName(s);
-        if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
-            InstanceNameTF.getParent().remove(InstanceNameTF);
+        String s = textFieldInstanceName.getText();
+        model.getController().addMetaUndo("edit object name");
+        model.getController().changeInstanceName(s);
+        if (textFieldInstanceName != null && textFieldInstanceName.getParent() != null) {
+            textFieldInstanceName.getParent().remove(textFieldInstanceName);
         }
     }
 
     @Override
     public void addInstanceNameEditor() {
-        getController().addMetaUndo("edit object instance name");
-        InstanceNameTF = new TextFieldComponent(getModel().getInstanceName());
-        InstanceNameTF.selectAll();
-        InstanceNameTF.addActionListener(new ActionListener() {
+        model.getController().addMetaUndo("edit object instance name");
+        textFieldInstanceName = new TextFieldComponent(getDModel().getInstanceName());
+        textFieldInstanceName.selectAll();
+        textFieldInstanceName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 handleInstanceNameEditorAction();
             }
         });
-        InstanceNameTF.addFocusListener(new FocusListener() {
+        textFieldInstanceName.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
                 handleInstanceNameEditorAction();
@@ -319,7 +337,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
             public void focusGained(FocusEvent e) {
             }
         });
-        InstanceNameTF.addKeyListener(new KeyAdapter() {
+        textFieldInstanceName.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent ke) {
@@ -329,11 +347,11 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
             }
         });
 
-        getParent().add(InstanceNameTF, 0);
-        InstanceNameTF.setLocation(getLocation().x, getLocation().y + instanceLabel.getLocation().y);
-        InstanceNameTF.setSize(getWidth(), 15);
-        InstanceNameTF.setVisible(true);
-        InstanceNameTF.requestFocus();
+        getParent().add(textFieldInstanceName, 0);
+        textFieldInstanceName.setLocation(getLocation().x, getLocation().y + instanceLabel.getLocation().y);
+        textFieldInstanceName.setSize(getWidth(), 15);
+        textFieldInstanceName.setVisible(true);
+        textFieldInstanceName.requestFocus();
     }
 
     public void showInstanceName(String InstanceName) {
@@ -373,12 +391,12 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
     }
 
     @Override
-    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
+    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return null;
     }
 
     @Override
-    public IIoletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return null;
     }
 
@@ -391,7 +409,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
             Set<INetView> netViewsToUpdate = new HashSet<>();
             if (getPatchView() != null) {
                 if (getInletInstanceViews() != null) {
-                    for (IIoletInstanceView i : getInletInstanceViews()) {
+                    for (IInletInstanceView i : getInletInstanceViews()) {
                         INetView n = getPatchView().findNetView(i);
                         if (n != null) {
                             netViewsToUpdate.add(n);
@@ -399,7 +417,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<ObjectInstanceContr
                     }
                 }
                 if (getOutletInstanceViews() != null) {
-                    for (IIoletInstanceView i : getOutletInstanceViews()) {
+                    for (IOutletInstanceView i : getOutletInstanceViews()) {
                         INetView n = getPatchView().findNetView(i);
                         if (n != null) {
                             netViewsToUpdate.add(n);

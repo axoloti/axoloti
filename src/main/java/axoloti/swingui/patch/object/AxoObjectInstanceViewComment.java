@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object;
 
 import axoloti.patch.object.AxoObjectInstanceComment;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.TextFieldComponent;
 import axoloti.swingui.patch.PatchViewSwing;
@@ -19,20 +18,20 @@ import javax.swing.BoxLayout;
 
 class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
-    public AxoObjectInstanceViewComment(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public AxoObjectInstanceViewComment(AxoObjectInstanceComment objectInstance, PatchViewSwing patchView) {
+        super(objectInstance, patchView);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstanceComment getModel() {
-        return (AxoObjectInstanceComment) super.getModel();
+    public AxoObjectInstanceComment getDModel() {
+        return (AxoObjectInstanceComment) super.getDModel();
     }
 
     private void initComponents() {
         setOpaque(true);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        instanceLabel = new LabelComponent(getModel().getCommentText());
+        instanceLabel = new LabelComponent(getDModel().getCommentText());
         instanceLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         instanceLabel.setAlignmentX(CENTER_ALIGNMENT);
         instanceLabel.addMouseListener(new MouseAdapter() {
@@ -44,11 +43,11 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
                 if (getPatchView() != null) {
                     if (me.getClickCount() == 1) {
                         if (me.isShiftDown()) {
-                            getController().changeSelected(!getModel().getSelected());
+                            model.getController().changeSelected(!getDModel().getSelected());
                             me.consume();
-                        } else if (!getModel().getSelected()) {
-                            getController().getModel().getParent().getControllerFromModel().SelectNone();
-                            getController().changeSelected(true);
+                        } else if (!getDModel().getSelected()) {
+                            getDModel().getParent().getController().selectNone();
+                            model.getController().changeSelected(true);
                             me.consume();
                         }
                     }
@@ -58,7 +57,7 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
         });
         instanceLabel.addMouseMotionListener(this);
         add(instanceLabel);
-        setLocation(getModel().getX(), getModel().getY());
+        setLocation(getDModel().getX(), getDModel().getY());
 
         resizeToGrid();
         setVisible(true);
@@ -66,29 +65,29 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
     @Override
     void handleInstanceNameEditorAction() {
-        String s = InstanceNameTF.getText();
-        String prev = (String) getController().getModelProperty(AxoObjectInstanceComment.COMMENT);
+        String s = textFieldInstanceName.getText();
+        String prev = (String) model.getController().getModelProperty(AxoObjectInstanceComment.COMMENT);
         if (!s.equals(prev)) {
-            getController().addMetaUndo("edit comment");
-            getController().changeComment(s);
+            model.getController().addMetaUndo("edit comment");
+            model.getController().changeComment(s);
         }
-        if (InstanceNameTF != null && InstanceNameTF.getParent() != null) {
-            InstanceNameTF.getParent().remove(InstanceNameTF);
+        if (textFieldInstanceName != null && textFieldInstanceName.getParent() != null) {
+            textFieldInstanceName.getParent().remove(textFieldInstanceName);
         }
     }
 
     @Override
     public void addInstanceNameEditor() {
-        InstanceNameTF = new TextFieldComponent(getModel().getCommentText());
-        InstanceNameTF.selectAll();
+        textFieldInstanceName = new TextFieldComponent(getDModel().getCommentText());
+        textFieldInstanceName.selectAll();
 //        InstanceNameTF.setInputVerifier(new AxoObjectInstanceNameVerifier());
-        InstanceNameTF.addActionListener(new ActionListener() {
+        textFieldInstanceName.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 handleInstanceNameEditorAction();
             }
         });
-        InstanceNameTF.addFocusListener(new FocusListener() {
+        textFieldInstanceName.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
                 handleInstanceNameEditorAction();
@@ -98,7 +97,7 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
             public void focusGained(FocusEvent e) {
             }
         });
-        InstanceNameTF.addKeyListener(new KeyAdapter() {
+        textFieldInstanceName.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent ke) {
@@ -107,11 +106,11 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
                 }
             }
         });
-        getParent().add(InstanceNameTF, 0);
-        InstanceNameTF.setLocation(getLocation().x, getLocation().y + instanceLabel.getLocation().y);
-        InstanceNameTF.setSize(getWidth(), 15);
-        InstanceNameTF.setVisible(true);
-        InstanceNameTF.requestFocus();
+        getParent().add(textFieldInstanceName, 0);
+        textFieldInstanceName.setLocation(getLocation().x, getLocation().y + instanceLabel.getLocation().y);
+        textFieldInstanceName.setSize(getWidth(), 15);
+        textFieldInstanceName.setVisible(true);
+        textFieldInstanceName.requestFocus();
     }
 
     @Override

@@ -38,7 +38,7 @@ public class PJackInputComponent extends PatchPNode {
         setAlignmentY(CENTER_ALIGNMENT);
         setAlignmentX(RIGHT_ALIGNMENT);
     }
-    private final Stroke stroke = new BasicStroke(1.5f);
+    private final static Stroke stroke = new BasicStroke(1.5f);
 
     @Override
     protected void paint(PPaintContext paintContext) {

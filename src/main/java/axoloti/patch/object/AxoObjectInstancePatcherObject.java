@@ -19,7 +19,7 @@ package axoloti.patch.object;
 
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectPatcherObject;
-import axoloti.object.ObjectController;
+import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import java.awt.Point;
 import org.simpleframework.xml.Element;
@@ -31,7 +31,7 @@ import org.simpleframework.xml.Element;
 public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     @Element(name = "object")
-    public AxoObjectPatcherObject ao;
+    private AxoObjectPatcherObject ao = null;
 
     public AxoObjectInstancePatcherObject() {
         if (ao == null) {
@@ -39,9 +39,9 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         }
     }
 
-    public AxoObjectInstancePatcherObject(ObjectController objectController, PatchModel patch1, String InstanceName1, Point location) {
-        super(objectController, patch1, InstanceName1, location);
-        ao = (AxoObjectPatcherObject) objectController.getModel();
+    public AxoObjectInstancePatcherObject(IAxoObject obj, PatchModel patch1, String InstanceName1, Point location) {
+        super(obj, patch1, InstanceName1, location);
+        ao = (AxoObjectPatcherObject) obj;
         if (patch1 != null) {
             ao.setDocumentRoot(patch1.getDocumentRoot());
         } else {
@@ -50,13 +50,23 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         ao.setId("patch/object");
     }
 
-    public AxoObject getAxoObject() {
+    @Override
+    public AxoObject getDModel() {
         return ao;
     }
 
     @Override
-    public void Close() {
-        super.Close();
+    public IAxoObject resolveType(String directory) {
+        return ao;
+    }
+
+    @Override
+    public void applyValues(IAxoObjectInstance sourceObject) {
+        if (sourceObject instanceof AxoObjectInstancePatcherObject) {
+            ao = ((AxoObjectInstancePatcherObject) sourceObject).ao;
+        }
+        ao.getController().addView(this);
+        super.applyValues(sourceObject);
     }
 
     @Override

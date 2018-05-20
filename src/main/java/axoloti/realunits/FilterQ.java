@@ -29,13 +29,13 @@ import java.util.regex.Pattern;
 public class FilterQ implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double q = 32 / (64 - v.getDouble());
         return (String.format("Q=%.1f", q));
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<unit1>[qQ]?)(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit2>[qQ]?)");
         Matcher matcher = pattern.matcher(s);
 

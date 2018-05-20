@@ -36,11 +36,11 @@ public class axoloti_core {
 
     cputype_e cputype;
 
-    public ByteBuffer CreateOTPInfo() {
-        return CreateOTPInfo(1, 1, 0, 8);
+    public ByteBuffer createOTPInfo() {
+        return createOTPInfo(1, 1, 0, 8);
     }
 
-    public ByteBuffer CreateOTPInfo(
+    public ByteBuffer createOTPInfo(
             int boardtype,
             int boardmajorversion,
             int boardminorversion,

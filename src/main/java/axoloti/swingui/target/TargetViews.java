@@ -1,7 +1,7 @@
 package axoloti.swingui.target;
 
 import axoloti.mvc.IView;
-import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JFrame;
 
@@ -9,18 +9,18 @@ import javax.swing.JFrame;
  *
  * @author jtaelman
  */
-public class TargetViews implements IView<TargetController> {
+public class TargetViews implements IView<TargetModel> {
 
     private static TargetViews targetViews;
 
     public static TargetViews getTargetViews() {
         if (targetViews == null) {
-            targetViews = new TargetViews(TargetController.getTargetController());
+            targetViews = new TargetViews(TargetModel.getTargetModel());
         }
         return targetViews;
     }
 
-    final TargetController controller;
+    final TargetModel targetModel;
 
     KeyboardFrame keyboard;
     FileManagerFrame fileManager;
@@ -30,13 +30,13 @@ public class TargetViews implements IView<TargetController> {
     Memory memory;
 
 
-    public TargetViews(TargetController controller) {
-        this.controller = controller;
+    public TargetViews(TargetModel targetModel) {
+        this.targetModel = targetModel;
     }
 
     @Override
-    public TargetController getController() {
-        return controller;
+    public TargetModel getDModel() {
+        return targetModel;
     }
 
     private static void popWindow(JFrame frame) {
@@ -46,8 +46,8 @@ public class TargetViews implements IView<TargetController> {
 
     public void showRemote() {
         if (remote == null) {
-            remote = new AxolotiRemoteControl(getController());
-            getController().addView(remote);
+            remote = new AxolotiRemoteControl(targetModel);
+            targetModel.getController().addView(remote);
             remote.setTitle("Remote");
             remote.setVisible(true);
         } else {
@@ -57,8 +57,8 @@ public class TargetViews implements IView<TargetController> {
 
     public void showMidiRouting() {
         if (midiRouting == null) {
-            midiRouting = new MidiRouting(getController());
-            getController().addView(midiRouting);
+            midiRouting = new MidiRouting(targetModel);
+            targetModel.getController().addView(midiRouting);
             midiRouting.setTitle("MIDI Routing");
             midiRouting.setVisible(true);
         } else {
@@ -68,8 +68,8 @@ public class TargetViews implements IView<TargetController> {
 
     public void showKeyboard() {
         if (keyboard == null) {
-            keyboard = new KeyboardFrame(getController());
-            getController().addView(keyboard);
+            keyboard = new KeyboardFrame(targetModel);
+            targetModel.getController().addView(keyboard);
             //piano.setAlwaysOnTop(true);
             keyboard.setTitle("Keyboard");
             keyboard.setVisible(true);
@@ -80,8 +80,8 @@ public class TargetViews implements IView<TargetController> {
 
     public void showFilemanager() {
         if (fileManager == null) {
-            fileManager = new FileManagerFrame(getController());
-            getController().addView(fileManager);
+            fileManager = new FileManagerFrame(targetModel);
+            targetModel.getController().addView(fileManager);
             fileManager.setTitle("File Manager");
             fileManager.setVisible(true);
         } else {
@@ -91,8 +91,8 @@ public class TargetViews implements IView<TargetController> {
 
     public void showMemoryViewer() {
         if (memory == null) {
-            memory = new axoloti.swingui.target.Memory(getController());
-            getController().addView(memory);
+            memory = new axoloti.swingui.target.Memory(targetModel);
+            targetModel.getController().addView(memory);
             memory.setVisible(true);
         } else {
             popWindow(memory);
@@ -101,8 +101,8 @@ public class TargetViews implements IView<TargetController> {
 
     public void showMidiMonitor() {
         if (midiMonitor == null) {
-            midiMonitor = new axoloti.swingui.target.MidiMonitor(getController());
-            getController().addView(midiMonitor);
+            midiMonitor = new axoloti.swingui.target.MidiMonitor(targetModel);
+            targetModel.getController().addView(midiMonitor);
             midiMonitor.setVisible(true);
         } else {
             popWindow(midiMonitor);

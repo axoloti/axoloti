@@ -111,6 +111,7 @@ import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
 import axoloti.swingui.objecteditor.AxoObjectEditor;
 import axoloti.target.fs.SDFileReference;
+import axoloti.utils.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -315,15 +316,18 @@ public class AxoObject extends AxoObjectAbstract {
     AxoObjectEditor editor;
 
     @Override
-    public void OpenEditor() {
+    public void openEditor() {
         if (editor == null) {
-            editor = new AxoObjectEditor(getControllerFromModel());
+            editor = new AxoObjectEditor(this);
         }
         editor.setVisible(true);
         editor.toFront();
     }
 
-    public void CloseEditor() {
+    public void closeEditor() {
+        if (editor == null) {
+            return;
+        }
         editor.setVisible(false);
     }
 
@@ -360,7 +364,7 @@ public class AxoObject extends AxoObjectAbstract {
         return providesModulationSource;
     }
 
-    public void SetProvidesModulationSource() {
+    public void setProvidesModulationSource() {
         providesModulationSource = true;
     }
 
@@ -391,7 +395,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public String GenerateUUID() {
+    public String generateUUID() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
@@ -629,16 +633,9 @@ public class AxoObject extends AxoObjectAbstract {
         return l;
     }
 
-    private String StringDenull(String s) {
-        if (s == null) {
-            return "";
-        }
-        return s;
-    }
-
     @Override
     public String getHelpPatch() {
-        return StringDenull(helpPatch);
+        return StringUtils.denullString(helpPatch);
     }
 
     public void setHelpPatch(String helpPatch) {
@@ -739,7 +736,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public String getInitCode() {
-        return StringDenull(sInitCode);
+        return StringUtils.denullString(sInitCode);
     }
 
     public void setInitCode(String sInitCode) {
@@ -750,7 +747,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public String getDisposeCode() {
-        return StringDenull(sDisposeCode);
+        return StringUtils.denullString(sDisposeCode);
     }
 
     public void setDisposeCode(String sDisposeCode) {
@@ -761,7 +758,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public String getLocalData() {
-        return StringDenull(sLocalData);
+        return StringUtils.denullString(sLocalData);
     }
 
     public void setLocalData(String sLocalData) {
@@ -772,7 +769,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public String getKRateCode() {
-        return StringDenull(sKRateCode);
+        return StringUtils.denullString(sKRateCode);
     }
 
     public void setKRateCode(String sKRateCode) {
@@ -783,7 +780,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public String getSRateCode() {
-        return StringDenull(sSRateCode);
+        return StringUtils.denullString(sSRateCode);
     }
 
     public void setSRateCode(String sSRateCode) {
@@ -794,7 +791,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public String getMidiCode() {
-        return StringDenull(sMidiCode);
+        return StringUtils.denullString(sMidiCode);
     }
 
     public void setMidiCode(String sMidiCode) {

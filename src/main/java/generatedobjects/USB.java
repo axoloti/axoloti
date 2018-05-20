@@ -20,17 +20,17 @@ package generatedobjects;
 import axoloti.object.AxoObject;
 import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletInt32;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class USB extends gentools {
+class USB extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "usb";
-        WriteAxoObject(catName, Generate_mouse());
+        writeAxoObject(catName, Generate_mouse());
     }
 
     static AxoObject Generate_mouse() {

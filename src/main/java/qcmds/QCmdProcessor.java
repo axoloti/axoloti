@@ -39,7 +39,7 @@ public class QCmdProcessor implements Runnable {
     private final BlockingQueue<QCmd> queue;
     private final BlockingQueue<QCmd> queueResponse;
     protected IConnection serialconnection;
-    private PatchViewLive patchController;
+    private PatchViewLive patchViewLive;
     private final PeriodicPinger pinger;
     private final Thread pingerThread;
     private final PeriodicDialTransmitter dialTransmitter;
@@ -86,7 +86,7 @@ public class QCmdProcessor implements Runnable {
     protected QCmdProcessor() {
         queue = new ArrayBlockingQueue<>(16);
         queueResponse = new ArrayBlockingQueue<>(16);
-        serialconnection = CConnection.GetConnection();
+        serialconnection = CConnection.getConnection();
         pinger = new PeriodicPinger();
         pingerThread = new Thread(pinger);
         dialTransmitter = new PeriodicDialTransmitter();
@@ -102,19 +102,19 @@ public class QCmdProcessor implements Runnable {
     }
 
     public PatchViewLive getPatchController() {
-        return patchController;
+        return patchViewLive;
     }
 
-    public boolean AppendToQueue(QCmd cmd) {
+    public boolean appendToQueue(QCmd cmd) {
         return queue.add(cmd);
     }
 
-    public void Abort() {
+    public void abort() {
         queue.clear();
         queueResponse.clear();
     }
 
-    public void Panic() {
+    public void panic() {
         queue.clear();
 //        shellprocessor.Panic();
 //        serialconnection.Panic();
@@ -125,11 +125,11 @@ public class QCmdProcessor implements Runnable {
             @Override
             public void run() {
                 if (QCmdGUITask.class.isInstance(cmd)) {
-                    ((QCmdGUITask) cmd).DoGUI(QCmdProcessor.this);
+                    ((QCmdGUITask) cmd).performGUIAction(QCmdProcessor.this);
                 }
-                String m = ((QCmd) cmd).GetDoneMessage();
+                String m = ((QCmd) cmd).getDoneMessage();
                 if (m != null) {
-                    MainFrame.mainframe.SetProgressMessage(m);
+                    MainFrame.mainframe.setProgressMessage(m);
                 }
             }
         });
@@ -140,12 +140,12 @@ public class QCmdProcessor implements Runnable {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MainFrame.mainframe.SetProgressMessage(m);
+                MainFrame.mainframe.setProgressMessage(m);
             }
         });
     }
 
-    public void WaitQueueFinished() throws Exception {
+    public void waitQueueFinished() throws Exception {
         int t = 0;
         while (true) {
             if (queue.isEmpty() && queueResponse.isEmpty()) {
@@ -186,7 +186,7 @@ public class QCmdProcessor implements Runnable {
                     //System.out.println(cmd);
                     //setProgress((100 * (queue.size() + 1)) / (queue.size() + 2));
                 }
-                String m = currentcmd.GetStartMessage();
+                String m = currentcmd.getStartMessage();
                 if (m != null) {
                     publish(m);
                     println(m);
@@ -194,14 +194,14 @@ public class QCmdProcessor implements Runnable {
                 if (QCmdShellTask.class.isInstance(currentcmd)) {
                     //                shellprocessor.AppendToQueue((QCmdShellTask)cmd);
                     //                publish(queueResponse.take());
-                    QCmd response = ((QCmdShellTask) currentcmd).Do(this);
+                    QCmd response = ((QCmdShellTask) currentcmd).performShellTask(this);
                     if ((response != null)) {
-                        ((QCmdGUITask) response).DoGUI(this);
+                        ((QCmdGUITask) response).performGUIAction(this);
                     }
                 }
                 if (QCmdSerialTask.class.isInstance(currentcmd)) {
                     if (serialconnection.isConnected()) {
-                        serialconnection.AppendToQueue((QCmdSerialTask) currentcmd);
+                        serialconnection.appendToQueue((QCmdSerialTask) currentcmd);
                         QCmd response = queueResponse.take();
                         publish(response);
                         if (response instanceof QCmdDisconnect) {
@@ -212,7 +212,7 @@ public class QCmdProcessor implements Runnable {
                 if (QCmdGUITask.class.isInstance(currentcmd)) {
                     publish(currentcmd);
                 }
-                m = currentcmd.GetDoneMessage();
+                m = currentcmd.getDoneMessage();
                 if (m != null) {
                     println(m);
                     publish(m);
@@ -237,18 +237,18 @@ public class QCmdProcessor implements Runnable {
         });
     }
 
-    public void setPatchController(PatchViewLive patchController) {
-        if (this.patchController != null) {
-            this.patchController.getController().setLocked(false);
+    public void setPatchController(PatchViewLive patchViewLive) {
+        if (this.patchViewLive != null) {
+            this.patchViewLive.getDModel().getController().setLocked(false);
         }
-        this.patchController = patchController;
+        this.patchViewLive = patchViewLive;
     }
 
     public BlockingQueue<QCmd> getQueueResponse() {
         return queueResponse;
     }
 
-    public void ClearQueue() {
+    public void clearQueue() {
         queue.clear();
     }
 

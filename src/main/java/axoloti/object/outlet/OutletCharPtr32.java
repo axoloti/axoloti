@@ -35,7 +35,7 @@ public class OutletCharPtr32 extends Outlet {
     }
 
     @Override
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return CharPtr32.d;
     }
 

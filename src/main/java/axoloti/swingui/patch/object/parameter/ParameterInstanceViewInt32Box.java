@@ -2,25 +2,25 @@ package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.parameter.ParameterInt32;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
 import axoloti.swingui.components.control.NumberBoxComponent;
 import java.beans.PropertyChangeEvent;
 
 class ParameterInstanceViewInt32Box extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32Box(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public ParameterInstanceViewInt32Box(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public ParameterInstanceInt32Box getModel() {
-        return (ParameterInstanceInt32Box) super.getModel();
+    public ParameterInstanceInt32Box getDModel() {
+        return (ParameterInstanceInt32Box) super.getDModel();
     }
 
     @Override
-    public NumberBoxComponent CreateControl() {
-        NumberBoxComponent n = new NumberBoxComponent(0.0, getModel().getMinValue(), getModel().getMaxValue(), 1.0);
+    public NumberBoxComponent createControl() {
+        NumberBoxComponent n = new NumberBoxComponent(0.0, getDModel().getMinValue(), getDModel().getMaxValue(), 1.0);
         return n;
     }
 

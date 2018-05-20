@@ -11,10 +11,10 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
-public abstract class AbstractController<Model extends IModel, View extends IView, ParentController extends AbstractController> implements PropertyChangeListener {
+public abstract class AbstractController<Model extends IModel, View extends IView> implements PropertyChangeListener {
 
     private final ArrayList<View> registeredViews = new ArrayList<>();
-    private final Model model;
+    protected final Model model;
 
     protected AbstractController(Model model) {
         if ((model.getDocumentRoot() == null) && (model.getParent() != null)) {
@@ -35,8 +35,8 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
                 System.out.println("view already added : " + view.toString());
 //                throw new Error("view already added");
             } else {
-                for (Property property : getModel().getProperties()) {
-                    Object propertyValue = property.get(getModel());
+                for (Property property : model.getProperties()) {
+                    Object propertyValue = property.get(model);
                     PropertyChangeEvent evt = new PropertyChangeEvent(model, property.getName(), null, propertyValue);
                     view.modelPropertyChange(evt);
                 }
@@ -57,18 +57,18 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         registeredViews.remove(view);
     }
 
-    public Model getModel() {
+    protected Model getModel() {
         return model;
     }
 
     public AbstractDocumentRoot getDocumentRoot() {
-        if (getModel() == null) {
+        if (model == null) {
             throw new Error("model is null");
         }
-        if (getModel().getDocumentRoot() == null) {
+        if (model.getDocumentRoot() == null) {
             MvcDiagnostics.log("documentroot is null, " + this.toString());
         }
-        return getModel().getDocumentRoot();
+        return model.getDocumentRoot();
     }
 
     //  Use this to observe property changes from registered models
@@ -98,11 +98,11 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
      * property.
      */
     protected void setModelProperty(Property property, Object newValue) {
-        property.set(getModel(), newValue);
+        property.set(model, newValue);
     }
 
     public Object getModelProperty(Property property) {
-        return property.get(getModel());
+        return property.get(model);
     }
 
     public void addMetaUndo(String actionName, FocusEdit focusEdit) {
@@ -122,19 +122,19 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     protected void setModelUndoableProperty(Property property, Object newValue) {
         UndoManager undoManager = getUndoManager();
         if (undoManager == null) {
-            if (!(getModel() instanceof NetDrag)) {
-                MvcDiagnostics.log("setModelUndoableProperty: no undomanager: " + getModel().getClass().toString());
+            if (!(model instanceof NetDrag)) {
+                MvcDiagnostics.log("setModelUndoableProperty: no undomanager: " + model.getClass().toString());
             }
-            property.set(getModel(), newValue);
+            property.set(model, newValue);
         } else {
-            Object old_val = property.get(getModel());
+            Object old_val = property.get(model);
             if (old_val == newValue) {
                 return;
             }
             if ((newValue != null) && (newValue.equals(old_val))) {
                 return;
             }
-            UndoableEdit uedit = new UndoablePropertyChange(this, property, old_val, newValue);
+            UndoableEdit uedit = new UndoablePropertyChange(getModel(), property, old_val, newValue);
             MvcDiagnostics.log("setModelUndoableProperty property " + ("" + undoManager.isInProgress() + " ") + property.getFriendlyName() + " old:" + old_val + " new:" + newValue + "\n");
             undoManager.addEdit(uedit);
             if (getDocumentRoot() != null) {
@@ -142,7 +142,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
             } else {
                 System.out.println("DocumentRoot null?");
             }
-            property.set(getModel(), newValue);
+            property.set(model, newValue);
         }
     }
 
@@ -154,7 +154,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     protected void addUndoableElementToList(ListProperty property, Object newItem) {
         if (newItem instanceof IModel) {
             IModel m = (IModel) newItem;
-            if (m.getParent() != getModel()) {
+            if (m.getParent() != model) {
                 System.out.println("error: model parent is wrong!");
             }
         }

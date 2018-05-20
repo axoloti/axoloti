@@ -63,11 +63,11 @@ public class PatchModelTest {
     public void testObjectInstanceNaming() {
         PatchModel patch = new PatchModel();
         IAxoObject obj = new AxoObject("obj", "description");
-        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj, new Point(10, 10));
-        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj, new Point(50, 10));
+        IAxoObjectInstance obji_1 = patch.getController().addObjectInstance(obj, new Point(10, 10));
+        IAxoObjectInstance obji_2 = patch.getController().addObjectInstance(obj, new Point(50, 10));
         String objname = "duplicate_name";
-        assert (obji_1.getControllerFromModel().changeInstanceName(objname));
-        assertFalse(obji_2.getControllerFromModel().changeInstanceName(objname));
+        assert (obji_1.getController().changeInstanceName(objname));
+        assertFalse(obji_2.getController().changeInstanceName(objname));
         assertThat(obji_1.getInstanceName(), equalTo(objname));
         assertThat(obji_2.getInstanceName(), not(equalTo(objname)));
     }
@@ -81,8 +81,8 @@ public class PatchModelTest {
         IAxoObject obj = new AxoObject("obj", "description");
         Double v = 3.125;
         Parameter param = new ParameterFrac32UMap("param", new ValueFrac32(v));
-        obj.getControllerFromModel().addParameter(param);
-        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj, new Point(10, 10));
+        obj.getController().addParameter(param);
+        IAxoObjectInstance obji_1 = patch.getController().addObjectInstance(obj, new Point(10, 10));
         ParameterInstance parami = obji_1.getParameterInstances().get(0);
         Double v2 = (Double) parami.getValue();
         assertThat(v2, equalTo(v));
@@ -94,24 +94,24 @@ public class PatchModelTest {
     @Test
     public void testParamOnParentRemoval() {
         PatchModel patch = new PatchModel();
-        IAxoObject patcher_obj = new AxoObjectPatcher("patch/patcher", "p");
-        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getControllerFromModel().addObjectInstance(patcher_obj, new Point(10, 10));
+        IAxoObject patcher_obj = new AxoObjectPatcher();
+        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getController().addObjectInstance(patcher_obj, new Point(10, 10));
 
         PatchModel subpatch = patcher_obji.getSubPatchModel();
         IAxoObject obj = new AxoObject("obj", "description");
-        IAxoObjectInstance obji_1 = subpatch.getControllerFromModel().addObjectInstance(obj, new Point(10, 10));
+        IAxoObjectInstance obji_1 = subpatch.getController().addObjectInstance(obj, new Point(10, 10));
 
         Parameter param = new ParameterFrac32UMap("param", new ValueFrac32(0));
-        obj.getControllerFromModel().addParameter(param);
+        obj.getController().addParameter(param);
 
         ParameterInstance parami = obji_1.getParameterInstances().get(0);
         assertNotNull(parami);
-        parami.getControllerFromModel().changeOnParent(true);
+        parami.getController().changeOnParent(true);
 
         ParameterInstance parent_parami = patcher_obji.getParameterInstances().get(0);
         assertNotNull(parent_parami);
 
-        subpatch.getControllerFromModel().delete(obji_1);
+        subpatch.getController().delete(obji_1);
         assert (patcher_obji.getParameterInstances().isEmpty());
     }
 
@@ -121,21 +121,21 @@ public class PatchModelTest {
     @Test
     public void testParamOnParentDefault() {
         PatchModel patch = new PatchModel();
-        IAxoObject patcher_obj = new AxoObjectPatcher("patch/patcher", "p");
-        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getControllerFromModel().addObjectInstance(patcher_obj, new Point(10, 10));
+        IAxoObject patcher_obj = new AxoObjectPatcher();
+        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getController().addObjectInstance(patcher_obj, new Point(10, 10));
 
         PatchModel subpatch = patcher_obji.getSubPatchModel();
         IAxoObject obj = new AxoObject("obj", "description");
-        IAxoObjectInstance obji_1 = subpatch.getControllerFromModel().addObjectInstance(obj, new Point(10, 10));
+        IAxoObjectInstance obji_1 = subpatch.getController().addObjectInstance(obj, new Point(10, 10));
 
         Parameter param = new ParameterFrac32UMap("param", new ValueFrac32(0));
-        obj.getControllerFromModel().addParameter(param);
+        obj.getController().addParameter(param);
 
         ParameterInstance parami = obji_1.getParameterInstances().get(0);
         assertNotNull(parami);
         Double v = 3.25;
-        parami.getControllerFromModel().changeValue(v);
-        parami.getControllerFromModel().changeOnParent(true);
+        parami.getController().changeValue(v);
+        parami.getController().changeOnParent(true);
 
         ParameterInstance parent_parami = patcher_obji.getParameterInstances().get(0);
         assertNotNull(parent_parami);
@@ -144,8 +144,8 @@ public class PatchModelTest {
 
         // and changes default when param-on-parent changes value
         v = 4.75;
-        parami.getControllerFromModel().changeValue(v);
-        parent_parami.getControllerFromModel().applyDefaultValue();
+        parami.getController().changeValue(v);
+        parent_parami.getController().applyDefaultValue();
         v2 = (Double) parent_parami.getValue();
         assertThat(v2, equalTo(v));
     }
@@ -180,30 +180,30 @@ public class PatchModelTest {
     public void testParamOnParentUndo() {
         PatchModel patch = new PatchModel();
         patch.setDocumentRoot(new AbstractDocumentRoot());
-        PatchController pc = patch.getControllerFromModel();
+        PatchController pc = patch.getController();
         pc.addMetaUndo("undo 6");
-        IAxoObject patcher_obj = new AxoObjectPatcher("patch/patcher", "p");
-        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getControllerFromModel().addObjectInstance(patcher_obj, new Point(10, 10));
+        IAxoObject patcher_obj = new AxoObjectPatcher();
+        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getController().addObjectInstance(patcher_obj, new Point(10, 10));
         pc.addMetaUndo("undo 5");
         PatchModel subpatch = patcher_obji.getSubPatchModel();
         IAxoObject obj = new AxoObject("obj", "description");
-        IAxoObjectInstance obji_1 = subpatch.getControllerFromModel().addObjectInstance(obj, new Point(10, 10));
+        IAxoObjectInstance obji_1 = subpatch.getController().addObjectInstance(obj, new Point(10, 10));
         pc.addMetaUndo("undo 4");
         Parameter param = new ParameterFrac32UMap("param", new ValueFrac32(0));
-        obj.getControllerFromModel().addParameter(param);
+        obj.getController().addParameter(param);
         pc.addMetaUndo("undo 3");
         ParameterInstance parami = obji_1.getParameterInstances().get(0);
         assertNotNull(parami);
         Double v1 = 3.25;
-        parami.getControllerFromModel().changeValue(v1);
+        parami.getController().changeValue(v1);
         pc.addMetaUndo("undo 2");
-        parami.getControllerFromModel().changeOnParent(true);
+        parami.getController().changeOnParent(true);
         pc.addMetaUndo("undo 1");
 
         ParameterInstance parent_parami = patcher_obji.getParameterInstances().get(0);
         assertNotNull(parent_parami);
         Double v2 = 7.0;
-        parent_parami.getControllerFromModel().changeValue(v2);
+        parent_parami.getController().changeValue(v2);
 
         UndoManager1 u = pc.getUndoManager();
         u.undo();
@@ -231,19 +231,19 @@ public class PatchModelTest {
     public void testInletObjectInSubpatch() {
         PatchModel patch = new PatchModel();
         patch.setDocumentRoot(new AbstractDocumentRoot());
-        PatchController pc = patch.getControllerFromModel();
-        IAxoObject patcher_obj = new AxoObjectPatcher("patch/patcher", "p");
-        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getControllerFromModel().addObjectInstance(patcher_obj, new Point(10, 10));
+        PatchController pc = patch.getController();
+        IAxoObject patcher_obj = new AxoObjectPatcher();
+        AxoObjectInstancePatcher patcher_obji = (AxoObjectInstancePatcher) patch.getController().addObjectInstance(patcher_obj, new Point(10, 10));
         PatchModel subpatch = patcher_obji.getSubPatchModel();
         IAxoObject obj_1 = new AxoObject("patch/inlet f", "description");
-        IAxoObjectInstance obji_1 = subpatch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        IAxoObjectInstance obji_1 = subpatch.getController().addObjectInstance(obj_1, new Point(10, 10));
         String inletname = "inletname";
-        obji_1.getControllerFromModel().changeInstanceName(inletname);
+        obji_1.getController().changeInstanceName(inletname);
 
         IAxoObject obj_2 = new AxoObject("patch/outlet f", "description");
-        IAxoObjectInstance obji_2 = subpatch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        IAxoObjectInstance obji_2 = subpatch.getController().addObjectInstance(obj_2, new Point(10, 10));
         String outletname = "outletname";
-        obji_2.getControllerFromModel().changeInstanceName(outletname);
+        obji_2.getController().changeInstanceName(outletname);
 
         // verify that the inlet appears in parent
         InletInstance inlet = patcher_obji.getInletInstances().get(0);
@@ -256,12 +256,12 @@ public class PatchModelTest {
         // verify that the changing the inlet object instancename
         // also changes the inlet name
         String inletname2 = "inletname2";
-        obji_1.getControllerFromModel().changeInstanceName(inletname2);
+        obji_1.getController().changeInstanceName(inletname2);
         assertThat(inletname2, equalTo(inlet.getName()));
         // verify that the changing the outlet object instancename
         // also changes the outlet name
         String outletname2 = "outletname2";
-        obji_2.getControllerFromModel().changeInstanceName(outletname2);
+        obji_2.getController().changeInstanceName(outletname2);
         assertThat(outletname2, equalTo(outlet.getName()));
 
         pc.addMetaUndo("undo 1");
@@ -288,20 +288,20 @@ public class PatchModelTest {
 
         IAxoObject obj_1 = new AxoObject("obj", "description");
         Inlet inlet = new InletFrac32("in", "");
-        obj_1.getControllerFromModel().addInlet(inlet);
-        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        obj_1.getController().addInlet(inlet);
+        IAxoObjectInstance obji_1 = patch.getController().addObjectInstance(obj_1, new Point(10, 10));
         InletInstance inleti_1 = obji_1.getInletInstances().get(0);
 
         IAxoObject obj_2 = new AxoObject("obj", "description");
         Outlet outlet = new OutletFrac32("out", "");
-        obj_2.getControllerFromModel().addOutlet(outlet);
-        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        obj_2.getController().addOutlet(outlet);
+        IAxoObjectInstance obji_2 = patch.getController().addObjectInstance(obj_2, new Point(10, 10));
         OutletInstance outleti_1 = obji_2.getOutletInstances().get(0);
 
-        patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
+        patch.getController().addConnection(inleti_1, outleti_1);
 
         assertThat(patch.getNets().size(), equalTo(1));
-        obj_1.getControllerFromModel().removeInlet(inlet);
+        obj_1.getController().removeInlet(inlet);
         assertThat(patch.getNets().size(), equalTo(0));
     }
 
@@ -314,20 +314,20 @@ public class PatchModelTest {
 
         IAxoObject obj_1 = new AxoObject("obj", "description");
         Inlet inlet = new InletFrac32("in", "");
-        obj_1.getControllerFromModel().addInlet(inlet);
-        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        obj_1.getController().addInlet(inlet);
+        IAxoObjectInstance obji_1 = patch.getController().addObjectInstance(obj_1, new Point(10, 10));
         InletInstance inleti_1 = obji_1.getInletInstances().get(0);
 
         IAxoObject obj_2 = new AxoObject("obj", "description");
         Outlet outlet = new OutletFrac32("out", "");
-        obj_2.getControllerFromModel().addOutlet(outlet);
-        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        obj_2.getController().addOutlet(outlet);
+        IAxoObjectInstance obji_2 = patch.getController().addObjectInstance(obj_2, new Point(10, 10));
         OutletInstance outleti_1 = obji_2.getOutletInstances().get(0);
 
-        patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
+        patch.getController().addConnection(inleti_1, outleti_1);
 
         assertThat(patch.getNets().size(), equalTo(1));
-        obj_2.getControllerFromModel().removeOutlet(outlet);
+        obj_2.getController().removeOutlet(outlet);
         assertThat(patch.getNets().size(), equalTo(0));
     }
 
@@ -340,20 +340,20 @@ public class PatchModelTest {
 
         IAxoObject obj_1 = new AxoObject("obj", "description");
         Inlet inlet = new InletFrac32("in", "");
-        obj_1.getControllerFromModel().addInlet(inlet);
-        IAxoObjectInstance obji_1 = patch.getControllerFromModel().addObjectInstance(obj_1, new Point(10, 10));
+        obj_1.getController().addInlet(inlet);
+        IAxoObjectInstance obji_1 = patch.getController().addObjectInstance(obj_1, new Point(10, 10));
         InletInstance inleti_1 = obji_1.getInletInstances().get(0);
 
         IAxoObject obj_2 = new AxoObject("obj", "description");
         Outlet outlet = new OutletFrac32("out", "");
-        obj_2.getControllerFromModel().addOutlet(outlet);
-        IAxoObjectInstance obji_2 = patch.getControllerFromModel().addObjectInstance(obj_2, new Point(10, 10));
+        obj_2.getController().addOutlet(outlet);
+        IAxoObjectInstance obji_2 = patch.getController().addObjectInstance(obj_2, new Point(10, 10));
         OutletInstance outleti_1 = obji_2.getOutletInstances().get(0);
 
-        patch.getControllerFromModel().AddConnection(inleti_1, outleti_1);
+        patch.getController().addConnection(inleti_1, outleti_1);
 
         assertThat(patch.getNets().size(), equalTo(1));
-        patch.getControllerFromModel().delete(obji_2);
+        patch.getController().delete(obji_2);
         assertThat(patch.getNets().size(), equalTo(0));
     }
 

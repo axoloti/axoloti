@@ -19,7 +19,6 @@ package axoloti.piccolo.components;
 
 import axoloti.abstractui.PatchView;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.PatchViewPiccolo;
@@ -43,11 +42,11 @@ public class PAssignMidiCCComponent extends PatchPNode {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    ParameterInstanceController parameterInstanceController;
+    ParameterInstance parameterInstance;
 
-    public PAssignMidiCCComponent(ParameterInstanceController parameterInstanceController, PatchView patchView) {
+    public PAssignMidiCCComponent(ParameterInstance parameterInstance, PatchView patchView) {
         super(patchView);
-        this.parameterInstanceController = parameterInstanceController;
+        this.parameterInstance = parameterInstance;
         initComponent();
     }
 
@@ -70,7 +69,7 @@ public class PAssignMidiCCComponent extends PatchPNode {
 
     void doPopup(PInputEvent e) {
         JPopupMenu sub1 = new JPopupMenu();
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstanceController, (MidiCCProperty) ParameterInstance.MIDI_CC);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstance, (MidiCCProperty) ParameterInstance.MIDI_CC);
         sub1.add(assignMidiCCMenuItems);
         Point popupLocation = PUtils.getPopupLocation(e);
         sub1.show(((PatchViewPiccolo) patchView).getViewportView().getComponent(), popupLocation.x, popupLocation.y);
@@ -82,7 +81,7 @@ public class PAssignMidiCCComponent extends PatchPNode {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, (int) getWidth(), (int) getHeight());
-        if (parameterInstanceController.getModel().getMidiCC() >= 0) {
+        if (parameterInstance.getMidiCC() >= 0) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, (int) getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);

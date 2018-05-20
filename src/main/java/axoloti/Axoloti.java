@@ -18,10 +18,10 @@
 package axoloti;
 
 import axoloti.objectlibrary.AxoObjects;
+import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.MainFrame;
-import axoloti.target.TargetController;
-import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.target.TargetModel;
 import axoloti.utils.OSDetect;
 import java.awt.EventQueue;
 import java.awt.SplashScreen;
@@ -75,7 +75,7 @@ public class Axoloti {
         handleCommandLine(args);
     }
 
-    static void BuildEnv(String var, String def) {
+    static void buildEnvironment(String var, String def) {
         String ev = System.getProperty(var);
         if (ev == null) {
             ev = System.getenv(var);
@@ -94,7 +94,7 @@ public class Axoloti {
         System.setProperty(var, ev);
     }
 
-    static boolean TestDir(String var) {
+    static boolean getTestDir(String var) {
         String ev = System.getProperty(var);
         File f = new File(ev);
         if (!f.exists()) {
@@ -210,7 +210,7 @@ public class Axoloti {
             }
         }
 
-        BuildEnv(HOME_DIR, defaultHome);
+        buildEnvironment(HOME_DIR, defaultHome);
         File homedir = new File(System.getProperty(HOME_DIR));
         if (!homedir.exists()) {
             homedir.mkdir();
@@ -220,27 +220,27 @@ public class Axoloti {
         if (!buildir.exists()) {
             buildir.mkdir();
         }
-        if (!TestDir(HOME_DIR)) {
+        if (!getTestDir(HOME_DIR)) {
             System.err.println("Home directory is invalid");
         }
         checkFailSafeModeActive(); // do this as as possible after home dir setup
 
-        BuildEnv(RELEASE_DIR, defaultRelease);
-        if (!TestDir(RELEASE_DIR)) {
+        buildEnvironment(RELEASE_DIR, defaultRelease);
+        if (!getTestDir(RELEASE_DIR)) {
             System.err.println("Release directory is invalid");
         }
-        BuildEnv(RUNTIME_DIR, defaultRuntime);
-        if (!TestDir(RUNTIME_DIR)) {
+        buildEnvironment(RUNTIME_DIR, defaultRuntime);
+        if (!getTestDir(RUNTIME_DIR)) {
             System.err.println("Runtime directory is invalid");
         }
 
-        BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
-        if (!TestDir(FIRMWARE_DIR)) {
+        buildEnvironment(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
+        if (!getTestDir(FIRMWARE_DIR)) {
             System.err.println("Firmware directory is invalid");
         }
 
-        BuildEnv(CHIBIOS_DIR, System.getProperty(RELEASE_DIR) + File.separator + "ChibiOS_18.2.0");
-        if (!TestDir(CHIBIOS_DIR)) {
+        buildEnvironment(CHIBIOS_DIR, System.getProperty(RELEASE_DIR) + File.separator + "ChibiOS_18.2.0");
+        if (!getTestDir(CHIBIOS_DIR)) {
             System.err.println("chibios directory is invalid");
         }
 
@@ -249,7 +249,7 @@ public class Axoloti {
             String fwDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
             if (!fwDir.startsWith(System.getProperty(RELEASE_DIR)) && !fwDir.startsWith(System.getProperty(HOME_DIR))) {
                 System.out.println("Using versioned home, will reset firmware");
-                prefs.SetFirmwareDir(System.getProperty(RELEASE_DIR) + File.separator + "firmware");
+                prefs.setFirmwareDir(System.getProperty(RELEASE_DIR) + File.separator + "firmware");
             }
 
             AxolotiLibrary lib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
@@ -258,7 +258,7 @@ public class Axoloti {
                 File verdir = new File(System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator);
                 if (!locdir.getCanonicalPath().equals(verdir.getCanonicalPath())) {
                     System.out.println("Using versioned home, will reset libraries");
-                    prefs.ResetLibraries(true);
+                    prefs.resetLibraries(true);
                 }
             }
         }
@@ -328,14 +328,14 @@ public class Axoloti {
 
         if (cmdLineOnly) {
             try {
-                MainFrame frame = new MainFrame(args, TargetController.getTargetController());
+                MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
                 AxoObjects objs = new AxoObjects();
-                objs.LoadAxoObjects();
+                objs.loadAxoObjects();
                 if (SplashScreen.getSplashScreen() != null) {
                     SplashScreen.getSplashScreen().close();
                 }
                 try {
-                    objs.LoaderThread.join();
+                    objs.loaderThread.join();
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -364,7 +364,7 @@ public class Axoloti {
                 @Override
                 public void run() {
                     try {
-                        MainFrame frame = new MainFrame(args, TargetController.getTargetController());
+                        MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
                         frame.setVisible(true);
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -1,10 +1,11 @@
 package axoloti.piccolo.patch.net;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
+import axoloti.abstractui.IOutletInstanceView;
 import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
@@ -24,21 +25,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.piccolo2d.util.PPaintContext;
 
 public class PNetView extends PatchPNode implements INetView {
 
-    protected final List<IIoletInstanceView> source = new ArrayList<>();
-    protected final List<IIoletInstanceView> dest = new ArrayList<>();
+    protected final List<IOutletInstanceView> source = new ArrayList<>();
+    protected final List<IInletInstanceView> dest = new ArrayList<>();
     protected boolean selected = false;
 
-    NetController controller;
+    Net net;
 
-    public PNetView(NetController controller, PatchViewPiccolo patchView) {
+    public PNetView(Net net, PatchViewPiccolo patchView) {
         super(patchView);
-	this.controller = controller;
+        this.net = net;
         setPickable(false);
         updateSources();
         updateDests();
@@ -52,14 +51,14 @@ public class PNetView extends PatchPNode implements INetView {
     private void updateSources() {
         source.clear();
         // resolve inlet/outlet views
-        for (OutletInstance i : getController().getModel().getSources()) {
+        for (OutletInstance i : getDModel().getSources()) {
             IAxoObjectInstance o = i.getParent();
             IAxoObjectInstanceView ov = patchView.findObjectInstanceView(o);
             if (ov == null) {
                 throw new Error("no corresponding outlet instance view found");
             }
-            for (IIoletInstanceView o2 : ov.getOutletInstanceViews()) {
-                if (o2.getController().getModel() == i) {
+            for (IOutletInstanceView o2 : ov.getOutletInstanceViews()) {
+                if (o2.getDModel() == i) {
                     source.add(o2);
                     break;
                 }
@@ -69,14 +68,14 @@ public class PNetView extends PatchPNode implements INetView {
 
     private void updateDests() {
         dest.clear();
-        for (InletInstance i : getController().getModel().getDestinations()) {
+        for (InletInstance i : getDModel().getDestinations()) {
             IAxoObjectInstance o = i.getParent();
             IAxoObjectInstanceView ov = patchView.findObjectInstanceView(o);
             if (ov == null) {
                 throw new Error("no corresponding inlet instance view found");
             }
-            for (IIoletInstanceView o2 : ov.getInletInstanceViews()) {
-                if (o2.getController().getModel() == i) {
+            for (IInletInstanceView o2 : ov.getInletInstanceViews()) {
+                if (o2.getDModel() == i) {
                     dest.add(o2);
                     break;
                 }
@@ -111,12 +110,12 @@ public class PNetView extends PatchPNode implements INetView {
     final static Stroke strokeBrokenDeselected = new BasicStroke(2.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, dash, 0.f);
     final QuadCurve2D.Float curve = new QuadCurve2D.Float();
 
-    float CtrlPointY(float x1, float y1, float x2, float y2) {
+    float calcCtrlPointY(float x1, float y1, float x2, float y2) {
         return Math.max(y1, y2) + Math.abs(y2 - y1) * 0.1f + Math.abs(x2 - x1) * 0.1f;
     }
 
-    void DrawWire(Graphics2D g2, float x1, float y1, float x2, float y2) {
-        curve.setCurve(x1, y1, (x1 + x2) / 2, CtrlPointY(x1, y1, x2, y2), x2, y2);
+    void drawWire(Graphics2D g2, float x1, float y1, float x2, float y2) {
+        curve.setCurve(x1, y1, (x1 + x2) / 2, calcCtrlPointY(x1, y1, x2, y2), x2, y2);
         g2.draw(curve);
     }
 
@@ -131,7 +130,14 @@ public class PNetView extends PatchPNode implements INetView {
         int max_y = Integer.MIN_VALUE;
         int max_x = Integer.MIN_VALUE;
 
-        for (IIoletInstanceView i : getIoletViews()) {
+        for (IIoletInstanceView i : getInletViews()) {
+            Point p1 = i.getJackLocInCanvas();
+            min_x = Math.min(min_x, p1.x);
+            min_y = Math.min(min_y, p1.y);
+            max_x = Math.max(max_x, p1.x);
+            max_y = Math.max(max_y, p1.y);
+        }
+        for (IIoletInstanceView i : getOutletViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -140,7 +146,7 @@ public class PNetView extends PatchPNode implements INetView {
         }
 
         setBounds(min_x, min_y, Math.max(1, max_x - min_x),
-                (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y);
+                (int) calcCtrlPointY(min_x, min_y, max_x, max_y) - min_y);
         boundsChangedSincePaint = true;
     }
 
@@ -159,7 +165,7 @@ public class PNetView extends PatchPNode implements INetView {
         int y1 = (int) from.getY();
         int y2 = (int) to.getY();
 
-        curve.setCurve(x1, y1, (x1 + x2) / 2, CtrlPointY(x1, y1, x2, y2), x2, y2);
+        curve.setCurve(x1, y1, (x1 + x2) / 2.0, calcCtrlPointY(x1, y1, x2, y2), x2, y2);
     }
 
     @Override
@@ -168,7 +174,7 @@ public class PNetView extends PatchPNode implements INetView {
         float shadowOffset = 0.5f;
         Point p0;
         Color c;
-        boolean isValidNet = getController().getModel().isValidNet();
+        boolean isValidNet = getDModel().isValidNet();
         if (isValidNet) {
             if (selected) {
                 g2.setStroke(strokeValidSelected);
@@ -176,7 +182,7 @@ public class PNetView extends PatchPNode implements INetView {
                 g2.setStroke(strokeValidDeselected);
             }
 
-            c = getController().getModel().getDataType().GetColor();
+            c = getDModel().getDataType().getColor();
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -184,8 +190,8 @@ public class PNetView extends PatchPNode implements INetView {
                 g2.setStroke(strokeBrokenDeselected);
             }
 
-            if (getController().getModel().getDataType() != null) {
-                c = getController().getModel().getDataType().GetColor();
+            if (getDModel().getDataType() != null) {
+                c = getDModel().getDataType().getColor();
             } else {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }
@@ -261,9 +267,13 @@ public class PNetView extends PatchPNode implements INetView {
     }
 
     @Override
-    public List<IIoletInstanceView> getIoletViews() {
-        return Stream.concat(source.stream(), dest.stream())
-            .collect(Collectors.toList());
+    public List<IInletInstanceView> getInletViews() {
+        return dest;
+    }
+
+    @Override
+    public List<IOutletInstanceView> getOutletViews() {
+        return source;
     }
 
     @Override
@@ -280,11 +290,11 @@ public class PNetView extends PatchPNode implements INetView {
     }
 
     @Override
-    public NetController getController() {
-        return controller;
+    public void dispose() {
     }
 
     @Override
-    public void dispose() {
+    public Net getDModel() {
+        return net;
     }
 }

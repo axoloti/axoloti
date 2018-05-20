@@ -1,57 +1,44 @@
 package axoloti.swingui.patch.object;
 
+import axoloti.object.AxoObject;
 import axoloti.patch.object.AxoObjectInstancePatcherObject;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.swingui.components.ButtonComponent;
 import axoloti.swingui.objecteditor.AxoObjectEditor;
 import axoloti.swingui.patch.PatchViewSwing;
 
 class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
-    ButtonComponent BtnEdit;
-    AxoObjectEditor editor;
+    private ButtonComponent buttonEdit;
+    private AxoObjectEditor editor;
 
-    public AxoObjectInstanceViewPatcherObject(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject objectInstance, PatchViewSwing patchView) {
+        super(objectInstance, patchView);
         initComponents();
     }
 
     private void initComponents() {
-        BtnEdit = new ButtonComponent("edit");
-        BtnEdit.setAlignmentX(LEFT_ALIGNMENT);
-        BtnEdit.setAlignmentY(TOP_ALIGNMENT);
-        BtnEdit.addActListener(new ButtonComponent.ActListener() {
+        buttonEdit = new ButtonComponent("edit");
+        buttonEdit.setAlignmentX(LEFT_ALIGNMENT);
+        buttonEdit.setAlignmentY(TOP_ALIGNMENT);
+        buttonEdit.addActListener(new ButtonComponent.ActListener() {
             @Override
-            public void OnPushed() {
-                edit();
+            public void fire() {
+                openEditor();
             }
         });
-        add(BtnEdit);
+        add(buttonEdit);
         resizeToGrid();
     }
 
     @Override
-    public void OpenEditor() {
-        edit();
-    }
-
-    @Override
-    public AxoObjectInstancePatcherObject getModel() {
-        return (AxoObjectInstancePatcherObject) getController().getModel();
-    }
-
-    public void edit() {
+    public void openEditor() {
         if (editor == null) {
-            editor = new AxoObjectEditor(getModel().getController());
+            editor = new AxoObjectEditor((AxoObject) model.getDModel());
         } else {
             editor.updateReferenceXML();
         }
         editor.setVisible(true);
         editor.toFront();
-    }
-
-    public boolean isEditorOpen() {
-        return editor != null && editor.isVisible();
     }
 
     @Override

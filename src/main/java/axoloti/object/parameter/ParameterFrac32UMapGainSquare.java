@@ -18,11 +18,13 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.SquareDB;
 import axoloti.realunits.SquareRatio;
 import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -42,13 +44,17 @@ public class ParameterFrac32UMapGainSquare extends ParameterFrac32UMap {
         super(name, DefaultValue);
     }
 
+    private static final NativeToReal convs[] = {new SquareRatio(1.0), new SquareDB(0.0)};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32UMap InstanceFactory() {
-        ParameterInstanceFrac32UMap p = super.InstanceFactory();
-        NativeToReal convs[] = {new SquareRatio(1.0), new SquareDB(0.0)};
-        p.SetPFunction("parameter_function::pf_signed_clamp_fullrange_squarelaw");
-        p.convs = convs;
-        return p;
+    public List<NativeToReal> getConversions() {
+        return listConvs;
+    }
+
+    @Override
+    public String getPFunction() {
+        return "parameter_function::pf_signed_clamp_fullrange_squarelaw";
     }
 
     @Override

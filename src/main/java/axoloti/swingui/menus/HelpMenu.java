@@ -50,7 +50,7 @@ public class HelpMenu extends JMenu {
         addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                Populate();
+                populate();
             }
 
             @Override
@@ -65,7 +65,7 @@ public class HelpMenu extends JMenu {
         });
     }
 
-    private void Populate() {
+    private void populate() {
         jMenuHelpContents = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
         jMenuUpdates = new javax.swing.JMenuItem();

@@ -1,6 +1,6 @@
 package axoloti.swingui.property.menu;
 
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import axoloti.property.MidiCCProperty;
 import axoloti.property.Property;
 import java.awt.Component;
@@ -20,11 +20,11 @@ public class ViewFactory {
         }
     }
      */
-    public static Component createMenuItemView(AbstractController o, Property property) {
+    public static Component createMenuItemView(IModel model, Property property) {
         if (property instanceof axoloti.property.BooleanProperty) {
-            return new BooleanProperty(o, (axoloti.property.BooleanProperty) property);
+            return new BooleanProperty(model, (axoloti.property.BooleanProperty) property);
         } else if (property instanceof MidiCCProperty) {
-            return new AssignMidiCCMenuItems(o, (MidiCCProperty) property);
+            return new AssignMidiCCMenuItems(model, (MidiCCProperty) property);
         } else {
             return null;
         }

@@ -14,20 +14,17 @@ import axoloti.object.AxoObjectFile;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.AxoObjectPatcherObject;
-import axoloti.objectlibrary.AxoObjects;
 import axoloti.object.IAxoObject;
-import axoloti.object.ObjectController;
 import axoloti.object.inlet.Inlet;
+import axoloti.objectlibrary.AxoObjects;
 import static axoloti.patch.PatchModel.USE_EXECUTION_ORDER;
 import axoloti.patch.net.Net;
-import axoloti.patch.net.NetController;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.AxoObjectInstanceFactory;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.AxoObjectInstancePatcherObject;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
@@ -62,7 +59,7 @@ import qcmds.QCmdProcessor;
 import qcmds.QCmdRecallPreset;
 import qcmds.QCmdUploadFile;
 
-public class PatchController extends AbstractController<PatchModel, IView, ObjectInstanceController> {
+public class PatchController extends AbstractController<PatchModel, IView> {
 
     protected PatchController(PatchModel model) {
         super(model);
@@ -77,33 +74,33 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         for (IAxoObjectInstance unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
         }
-        PromoteOverloading(true);
+        promoteOverloading(true);
     }
 
-    public QCmdProcessor GetQCmdProcessor() {
+    public QCmdProcessor getQCmdProcessor() {
         return QCmdProcessor.getQCmdProcessor();
     }
 
-    public void RecallPreset(int i) {
-        GetQCmdProcessor().AppendToQueue(new QCmdRecallPreset(i));
+    public void recallPreset(int i) {
+        getQCmdProcessor().appendToQueue(new QCmdRecallPreset(i));
     }
 
-    public void ShowPreset(int i) {
+    public void showPreset(int i) {
         // TODO: fix preset logic
         //patchView.ShowPreset(i);
     }
 
-    public void Compile() {
+    public void compile() {
         for (String module : getModel().getModules()) {
-            GetQCmdProcessor().AppendToQueue(new QCmdCompileModule(this,
+            getQCmdProcessor().appendToQueue(new QCmdCompileModule(this,
                     module,
                     getModel().getModuleDir(module)));
         }
-        GetQCmdProcessor().AppendToQueue(new QCmdCompilePatch(this));
+        getQCmdProcessor().appendToQueue(new QCmdCompilePatch(this));
     }
 
-    public void UploadDependentFiles(String sdpath) {
-        ArrayList<SDFileReference> files = getModel().GetDependendSDFiles();
+    public void uploadDependentFiles(String sdpath) {
+        ArrayList<SDFileReference> files = getModel().getDependendSDFiles();
         for (SDFileReference fref : files) {
             File f = fref.localfile;
             if (f == null) {
@@ -128,10 +125,10 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             }
             if (!TargetModel.getTargetModel().getSDCardInfo().exists(targetfn, f.lastModified(), f.length())) {
                 try {
-                    GetQCmdProcessor().AppendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
-                    GetQCmdProcessor().WaitQueueFinished();
-                    GetQCmdProcessor().AppendToQueue(new qcmds.QCmdPing());
-                    GetQCmdProcessor().WaitQueueFinished();
+                    getQCmdProcessor().appendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
+                    getQCmdProcessor().waitQueueFinished();
+                    getQCmdProcessor().appendToQueue(new qcmds.QCmdPing());
+                    getQCmdProcessor().waitQueueFinished();
                     if (!TargetModel.getTargetModel().getSDCardInfo().exists(targetfn, f.lastModified(), f.length())) {
                         if (f.length() > 8 * 1024 * 1024) {
                             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
@@ -139,11 +136,11 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                         }
                         for (int i = 1; i < targetfn.length(); i++) {
                             if (targetfn.charAt(i) == '/') {
-                                GetQCmdProcessor().AppendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
-                                GetQCmdProcessor().WaitQueueFinished();
+                                getQCmdProcessor().appendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
+                                getQCmdProcessor().waitQueueFinished();
                             }
                         }
-                        GetQCmdProcessor().AppendToQueue(new QCmdUploadFile(f, targetfn));
+                        getQCmdProcessor().appendToQueue(new QCmdUploadFile(f, targetfn));
                     } else {
                         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
                     }
@@ -156,7 +153,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         }
     }
 
-    String GenerateCode3() {
+    String generateCode3() {
         Preferences prefs = Preferences.getPreferences();
         /* TODO: fix "controller object"
         controllerObjectInstance = null;
@@ -175,37 +172,35 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             }
         }
          */
-        getModel().CreateIID();
+        getModel().createIID();
         //TODO: (enhancement) use execution order, rather than UI ordering
         if (USE_EXECUTION_ORDER) {
-            getModel().SortByExecution();
+            getModel().sortByExecution();
         } else {
-            getModel().SortByPosition();
+            getModel().sortByPosition();
         }
-        PatchViewCodegen codegen = new PatchViewCodegen(this);
-        String c = codegen.GenerateCode4();
+        PatchViewCodegen codegen = new PatchViewCodegen(model);
+        String c = codegen.generateCode4();
         return c;
     }
 
-    public PatchViewCodegen WriteCode() {
+    public PatchViewCodegen writeCode() {
         String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
-        return WriteCode(buildDir + "/xpatch");
+        return writeCode(buildDir + "/xpatch");
     }
 
-    public PatchViewCodegen WriteCode(String file_basename) {
+    public PatchViewCodegen writeCode(String file_basename) {
 //        String c = GenerateCode3();
-        getModel().CreateIID();
+        getModel().createIID();
         if (USE_EXECUTION_ORDER) {
-            getModel().SortByExecution();
+            getModel().sortByExecution();
         } else {
-            getModel().SortByPosition();
+            getModel().sortByPosition();
         }
-        PatchViewCodegen codegen = new PatchViewCodegen(this);
-        String c = codegen.GenerateCode4();
-        try {
-            FileOutputStream f = new FileOutputStream(file_basename + ".cpp");
+        PatchViewCodegen codegen = new PatchViewCodegen(getModel());
+        String c = codegen.generateCode4();
+        try (FileOutputStream f = new FileOutputStream(file_basename + ".cpp")) {
             f.write(c.getBytes());
-            f.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
         } catch (IOException ex) {
@@ -215,45 +210,45 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return codegen;
     }
 
-    public void UploadToFlash() {
+    public void uploadToFlash() {
         try {
-            WriteCode();
+            PatchController.this.writeCode();
             QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
-            qcmdprocessor.WaitQueueFinished();
-            IConnection conn = CConnection.GetConnection();
+            qcmdprocessor.appendToQueue(new qcmds.QCmdStop());
+            qcmdprocessor.appendToQueue(new qcmds.QCmdCompilePatch(this));
+            qcmdprocessor.waitQueueFinished();
+            IConnection conn = CConnection.getConnection();
             byte[] bb = PatchFileBinary.getPatchFileBinary();
             // TODO: add test if it really fits in the flash partition, issue #409
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdWriteMem(conn.getTargetProfile().getSDRAMAddr(), bb));
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdCopyPatchToFlash());
+            qcmdprocessor.appendToQueue(new qcmds.QCmdWriteMem(conn.getTargetProfile().getSDRAMAddr(), bb));
+            qcmdprocessor.appendToQueue(new qcmds.QCmdCopyPatchToFlash());
         } catch (Exception ex) {
             Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void UploadToSDCard(String sdfilename) {
+    public void uploadToSDCard(String sdfilename) {
         try {
-            WriteCode();
+            PatchController.this.writeCode();
             Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
             QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdStop());
+            qcmdprocessor.appendToQueue(new qcmds.QCmdStop());
             for (String module : getModel().getModules()) {
-                qcmdprocessor.AppendToQueue(new QCmdCompileModule(this,
+                qcmdprocessor.appendToQueue(new QCmdCompileModule(this,
                         module,
                         getModel().getModuleDir(module)
                 ));
             }
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdCompilePatch(this));
+            qcmdprocessor.appendToQueue(new qcmds.QCmdCompilePatch(this));
             // create subdirs...
 
             for (int i = 1; i < sdfilename.length(); i++) {
                 if (sdfilename.charAt(i) == '/') {
-                    qcmdprocessor.AppendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
-                    qcmdprocessor.WaitQueueFinished();
+                    qcmdprocessor.appendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
+                    qcmdprocessor.waitQueueFinished();
                 }
             }
-            qcmdprocessor.WaitQueueFinished();
+            qcmdprocessor.waitQueueFinished();
             Calendar cal = Calendar.getInstance();
             if (true) { // getModel().isDirty()) {
                 // TODO: use time of last modification?
@@ -265,7 +260,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                     }
                 }
             }
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
+            qcmdprocessor.appendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
 
             Serializer serializer = new Persister();
             ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
@@ -276,23 +271,23 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             }
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
             String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
-            qcmdprocessor.AppendToQueue(new qcmds.QCmdUploadFile(bais, sdfnPatch));
+            qcmdprocessor.appendToQueue(new qcmds.QCmdUploadFile(bais, sdfnPatch));
 
             String dir;
-            int i = sdfilename.lastIndexOf("/");
+            int i = sdfilename.lastIndexOf('/');
             if (i > 0) {
                 dir = sdfilename.substring(0, i);
             } else {
                 dir = "";
             }
-            UploadDependentFiles(dir);
+            uploadDependentFiles(dir);
         } catch (Exception ex) {
             Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void UploadToSDCard() {
-        UploadToSDCard("/" + getSDCardPath() + "/patch.bin");
+    public void uploadToSDCard() {
+        PatchController.this.uploadToSDCard("/" + getSDCardPath() + "/patch.bin");
     }
 
     public void setFileNamePath(String FileNamePath) {
@@ -337,15 +332,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             while (getModel().findObjectInstance(n + i) != null) {
                 i++;
             }
-            IAxoObjectInstance objinst;
-            /*
-            if (obj instanceof AxoObjectPatcher) {
-                AxoObjectPatcher objp = (AxoObjectPatcher)obj;
-                objp.createController(null, this)
-
-            }
-            else*/
-            objinst = AxoObjectInstanceFactory.createView((ObjectController)obj.getControllerFromModel(), this, n + i, loc);
+            IAxoObjectInstance objinst = AxoObjectInstanceFactory.createView(obj, getModel(), n + i, loc);
 
             Modulator[] m = obj.getModulators();
             if (m != null) {
@@ -380,7 +367,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         if ((minx < 0) || (miny < 0)) {
             for (IAxoObjectInstance o : getModel().getObjectInstances()) {
                 Point p = o.getLocation();
-                o.getControllerFromModel().changeLocation(p.x - minx, p.y - miny);
+                o.getController().changeLocation(p.x - minx, p.y - miny);
             }
         }
     }
@@ -411,7 +398,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return getModel().presetUpdatePending;
     }
 
-    public void ShowCompileFail() {
+    public void showCompileFail() {
         getModel().setLocked(false);
     }
 
@@ -425,21 +412,9 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
     }
 
     void add_unlinked_objectinstance(IAxoObjectInstance o) {
-        AxoObjectInstanceAbstract linked_object_instance;
-        if (o instanceof AxoObjectInstancePatcher) {
-            AxoObjectPatcher op = new AxoObjectPatcher("patch/patcher", "");
-            op.setDocumentRoot(getDocumentRoot());
-            linked_object_instance = op.CreateInstance(this, o.getInstanceName(), o.getLocation(), ((AxoObjectInstancePatcher) o).getSubPatchModel());
-        } else if (o instanceof AxoObjectInstancePatcherObject) {
-            AxoObjectPatcherObject opo = ((AxoObjectInstancePatcherObject) o).ao;
-            ObjectController opoc = new ObjectController(opo);
-            linked_object_instance = new AxoObjectInstancePatcherObject(opoc, getModel(), o.getInstanceName(), o.getLocation());
-            opoc.addView(linked_object_instance);
-//                linked_object_instance = AxoObjectInstanceFactory.createView(o.createController(null, null), this, o.getInstanceName(), o.getLocation());
-        } else {
-            IAxoObject t = o.resolveType(getModel().GetCurrentWorkingDirectory());
-            linked_object_instance = AxoObjectInstanceFactory.createView((ObjectController)t.getControllerFromModel(), this, o.getInstanceName(), o.getLocation());
-        }
+        IAxoObject t = o.resolveType(getModel().getCurrentWorkingDirectory());
+        AxoObjectInstanceAbstract linked_object_instance
+                = AxoObjectInstanceFactory.createView(t, getModel(), o.getInstanceName(), o.getLocation());
         addUndoableElementToList(PatchModel.PATCH_OBJECTINSTANCES, linked_object_instance);
         linked_object_instance.applyValues(o);
         linked_object_instance.setDocumentRoot(getDocumentRoot());
@@ -619,7 +594,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         }
     }
 
-    @Deprecated // needs to ask PatchView
+    @Deprecated // TODO: needs to ask PatchView
     public Point getViewLocationOnScreen() {
         // fake it for now
         return new Point(100, 100); //patchView.getLocationOnScreen();
@@ -631,13 +606,13 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 IAxoObjectInstance o = i.getParent();
                 assert (o.getInletInstances().contains(i));
                 assert (getModel().getObjectInstances().contains(o));
-                assert (getNetFromIolet(i).getModel() == n);
+                assert (getNetFromIolet(i) == n);
             }
             for (OutletInstance i : n.getSources()) {
                 IAxoObjectInstance o = i.getParent();
                 assert (o.getOutletInstances().contains(i));
                 assert (getModel().getObjectInstances().contains(o));
-                assert (getNetFromIolet(i).getModel() == n);
+                assert (getNetFromIolet(i) == n);
             }
         }
         for (IAxoObjectInstance o : getModel().getObjectInstances()) {
@@ -663,64 +638,62 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         }
     }
 
-    public void ConvertToEmbeddedObj(IAxoObjectInstance obj) {
-        ChangeObjectInstanceType(obj, new AxoObjectPatcherObject());
+    public void convertToEmbeddedObj(IAxoObjectInstance obj) {
+        changeObjectInstanceType(obj, new AxoObjectPatcherObject());
     }
 
-    public void ConvertToPatchPatcher(IAxoObjectInstance obj) {
-        ChangeObjectInstanceType(obj, new AxoObjectPatcher());
+    public void convertToPatchPatcher(IAxoObjectInstance obj) {
+        changeObjectInstanceType(obj, new AxoObjectPatcher());
     }
 
-    public AxoObjectInstanceAbstract ChangeObjectInstanceType(IAxoObjectInstance obj, IAxoObject objType) {
+    public AxoObjectInstanceAbstract changeObjectInstanceType(IAxoObjectInstance obj, IAxoObject objType) {
         try {
             AxoObjectInstanceAbstract newObj;
             if ((objType instanceof AxoObjectPatcher)
-                    && (obj.getType() instanceof AxoObjectFromPatch)) {
+                    && (obj.getDModel() instanceof AxoObjectFromPatch)) {
                 // ConvertToPatchPatcher
                 AxoObjectPatcher po = (AxoObjectPatcher) objType;
-                ObjectController objc = po.createController();
                 Strategy strategy = new AnnotationStrategy();
                 Serializer serializer = new Persister(strategy);
-                AxoObjectFromPatch ofp = (AxoObjectFromPatch) obj.getType();
+                AxoObjectFromPatch ofp = (AxoObjectFromPatch) obj.getDModel();
                 PatchModel pm = serializer.read(PatchModel.class, new File(ofp.getPath()));
-                newObj = new AxoObjectInstancePatcher(objc, getModel(), obj.getInstanceName(), obj.getLocation(), pm);
-                objc.addView(newObj);
+                AxoObjectInstancePatcher newObj1 = new AxoObjectInstancePatcher(po, getModel(), obj.getInstanceName(), obj.getLocation());
+                newObj1.setSubPatchModel(pm);
+                newObj = newObj1;
             } else if (objType instanceof AxoObjectPatcherObject) {
                 // ConvertToEmbeddedObj
                 // clone by serialization/deserialization...
                 ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
                 Strategy strategy = new AnnotationStrategy();
                 Serializer serializer = new Persister(strategy);
-                serializer.write(obj.getType(), os);
+                serializer.write(obj.getDModel(), os);
                 ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
                 AxoObjectPatcherObject of = serializer.read(AxoObjectPatcherObject.class, is);
-                ObjectController opoc = new ObjectController(of);
-                newObj = new AxoObjectInstancePatcherObject(opoc, getModel(), obj.getInstanceName(), obj.getLocation());
-                opoc.addView(newObj);
+                newObj = new AxoObjectInstancePatcherObject(of, getModel(), obj.getInstanceName(), obj.getLocation());
             } else {
-                newObj = AxoObjectInstanceFactory.createView(objType.getControllerFromModel(), this, obj.getInstanceName(), obj.getLocation());
+                newObj = AxoObjectInstanceFactory.createView(objType, getModel(), obj.getInstanceName(), obj.getLocation());
             }
             newObj.applyValues(obj);
 
             addUndoableElementToList(PatchModel.PATCH_OBJECTINSTANCES, newObj);
 
             for (InletInstance i : obj.getInletInstances()) {
-                NetController n = getNetFromIolet(i);
+                Net n = getNetFromIolet(i);
                 if (n != null) {
                     for (InletInstance i2 : newObj.getInletInstances()) {
                         if (i2.getName().equals(i.getName())) {
-                            n.connectInlet(i2);
+                            n.getController().connectInlet(i2);
                             break;
                         }
                     }
                 }
             }
             for (OutletInstance i : obj.getOutletInstances()) {
-                NetController n = getNetFromIolet(i);
+                Net n = getNetFromIolet(i);
                 if (n != null) {
                     for (OutletInstance i2 : newObj.getOutletInstances()) {
                         if (i2.getName().equals(i.getName())) {
-                            n.connectOutlet(i2);
+                            n.getController().connectOutlet(i2);
                             break;
                         }
                     }
@@ -749,19 +722,19 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
 
     // ------------- new objectinstances MVC stuff
 
-    public NetController getNetFromIolet(IoletInstance il) {
+    public Net getNetFromIolet(IoletInstance il) {
         for (Net n : getModel().getNets()) {
             if (il.isSource()) {
                 for (OutletInstance d : n.getSources()) {
                     if (d == il) {
-                        return (NetController)n.getControllerFromModel();
+                        return n;
                     }
                 }
             }
             else {
                 for (InletInstance d : n.getDestinations()) {
                     if (d == il) {
-                        return (NetController)n.getControllerFromModel();
+                        return n;
                     }
                 }
             }
@@ -769,7 +742,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         return null;
     }
 
-    public Net AddConnection(InletInstance il, OutletInstance ol) {
+    public Net addConnection(InletInstance il, OutletInstance ol) {
         if (il.getParent().getParent() != getModel()) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
             return null;
@@ -778,7 +751,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
             return null;
         }
-        NetController n1, n2;
+        Net n1, n2;
         n1 = getNetFromIolet(il);
         n2 = getNetFromIolet(ol);
         if ((n1 == null) && (n2 == null)) {
@@ -790,10 +763,10 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can''t connect: already connected");
             return null;
         } else if ((n1 != null) && (n2 == null)) {
-            if (n1.getModel().getSources().length == 0) {
+            if (n1.getSources().length == 0) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: adding outlet to inlet net");
-                n1.connectOutlet(ol);
-                return n1.getModel();
+                n1.getController().connectOutlet(ol);
+                return n1;
             } else {
                 disconnect(il);
                 Net n = new Net(getModel(), new OutletInstance[]{ol}, new InletInstance[]{il});
@@ -802,21 +775,21 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 return n;
             }
         } else if ((n1 == null) && (n2 != null)) {
-            n2.connectInlet(il);
+            n2.getController().connectInlet(il);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: add additional outlet");
-            return n2.getModel();
+            return n2;
         } else if ((n1 != null) && (n2 != null)) {
             // inlet already has connect, and outlet has another
             // replace
             disconnect(il);
-            n2.connectInlet(il);
+            n2.getController().connectInlet(il);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: replace inlet with existing net");
-            return n2.getModel();
+            return n2;
         }
         return null;
     }
 
-    public Net AddConnection(InletInstance il, InletInstance ol) {
+    public Net addConnection(InletInstance il, InletInstance ol) {
         if (il == ol) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: same inlet");
             return null;
@@ -829,7 +802,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: different patch");
             return null;
         }
-        NetController n1, n2;
+        Net n1, n2;
         n1 = getNetFromIolet(il);
         n2 = getNetFromIolet(ol);
         if ((n1 == null) && (n2 == null)) {
@@ -840,13 +813,13 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         } else if (n1 == n2) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can''t connect: already connected");
         } else if ((n1 != null) && (n2 == null)) {
-            n1.connectInlet(ol);
+            n1.getController().connectInlet(ol);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");
-            return n1.getModel();
+            return n1;
         } else if ((n1 == null) && (n2 != null)) {
-            n2.connectInlet(il);
+            n2.getController().connectInlet(il);
             Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: inlet added");
-            return n2.getModel();
+            return n2;
         } else if ((n1 != null) && (n2 != null)) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can't connect: both inlets included in net");
             return null;
@@ -861,14 +834,14 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
      * @return true if successful
      */
     public boolean disconnect(InletInstance inlet) {
-        NetController n = getNetFromIolet(inlet);
+        Net n = getNetFromIolet(inlet);
         if (n == null) {
             return false;
         }
-        if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
+        if ((n.getDestinations().length + n.getSources().length == 2)) {
             delete(n);
         } else {
-            n.disconnect(inlet);
+            n.getController().disconnect(inlet);
         }
         return true;
     }
@@ -880,36 +853,36 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
      * @return true if successful
      */
     public boolean disconnect(OutletInstance outlet) {
-        NetController n = getNetFromIolet(outlet);
+        Net n = getNetFromIolet(outlet);
         if (n == null) {
             return false;
         }
-        if ((n.getModel().getDestinations().length + n.getModel().getSources().length == 2)) {
+        if ((n.getDestinations().length + n.getSources().length == 2)) {
             delete(n);
         } else {
-            n.disconnect(outlet);
+            n.getController().disconnect(outlet);
         }
         return true;
     }
 
-    public void delete(NetController n) {
-        for (InletInstance io : n.getModel().getDestinations()) {
-            io.getControllerFromModel().changeConnected(false);
+    public void delete(Net n) {
+        for (InletInstance io : n.getDestinations()) {
+            io.getController().changeConnected(false);
         }
-        for (OutletInstance oi : n.getModel().getSources()) {
-            oi.getControllerFromModel().changeConnected(false);
+        for (OutletInstance oi : n.getSources()) {
+            oi.getController().changeConnected(false);
         }
-        removeUndoableElementFromList(PatchModel.PATCH_NETS, n.getModel());
+        removeUndoableElementFromList(PatchModel.PATCH_NETS, n);
     }
 
     @Deprecated // no longer in use?
-    void ExportAxoObj(File f1) {
+    void exportAxoObj(File f1) {
         String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
 
-        getModel().SortByPosition();
+        getModel().sortByPosition();
         // cheating here by creating a new controller...
-        PatchViewCodegen codegen = new PatchViewCodegen(this);
-        AxoObject ao = codegen.GenerateAxoObj(new AxoObject());
+        PatchViewCodegen codegen = new PatchViewCodegen(model);
+        AxoObject ao = codegen.generateAxoObj(new AxoObject());
         ao.setDescription(getModel().getFileNamePath());
         ao.id = fnNoExtension;
 
@@ -924,56 +897,40 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Export obj complete");
     }
 
-    public void SelectNone() {
+    public void selectNone() {
         for (IAxoObjectInstance o : getModel().getObjectInstances()) {
-            o.getControllerFromModel().changeSelected(false);
+            o.getController().changeSelected(false);
         }
     }
 
-    public void SelectAll() {
+    public void selectAll() {
         for (IAxoObjectInstance o : getModel().getObjectInstances()) {
-            o.getControllerFromModel().changeSelected(true);
+            o.getController().changeSelected(true);
         }
     }
 
-    /*
-    void deleteSelectedAxoObjectInstanceViews() {
-        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "deleteSelectedAxoObjInstances()");
-        if (!isLocked()) {
-            ArrayList<ObjectInstanceController> selected = getController().getSelectedObjects();
-            if (!selected.isEmpty()) {
-                getController().addMetaUndo("delete objects");
-                for (ObjectInstanceController o : selected) {
-                    getController().delete(o.getModel());
-                }
-            }
-        } else {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Can't delete: locked!");
-        }
-    }
-     */
-    public List<ObjectInstanceController> getSelectedObjects() {
-        ArrayList<ObjectInstanceController> selected = new ArrayList<>();
+    public List<IAxoObjectInstance> getSelectedObjects() { // TODO: move method to PatchModel
+        ArrayList<IAxoObjectInstance> selected = new ArrayList<>();
         for (IAxoObjectInstance o : getModel().getObjectInstances()) {
             if (o.getSelected()) {
-                selected.add((ObjectInstanceController)o.getControllerFromModel());
+                selected.add(o);
             }
         }
         return selected;
     }
 
-    public boolean PromoteToOverloadedObj(IAxoObjectInstance axoObjectInstance) {
-        if (axoObjectInstance.getType() instanceof AxoObjectFromPatch) {
+    public boolean promoteToOverloadedObj(IAxoObjectInstance axoObjectInstance) {
+        if (axoObjectInstance.getDModel() instanceof AxoObjectFromPatch) {
             return false;
         }
-        if (axoObjectInstance.getType() instanceof AxoObjectPatcher) {
+        if (axoObjectInstance.getDModel() instanceof AxoObjectPatcher) {
             return false;
         }
-        if (axoObjectInstance.getType() instanceof AxoObjectPatcherObject) {
+        if (axoObjectInstance.getDModel() instanceof AxoObjectPatcherObject) {
             return false;
         }
-        String id = axoObjectInstance.getType().getId();
-        List<IAxoObject> candidates = AxoObjects.getAxoObjects().GetAxoObjectFromName(id, axoObjectInstance.getParent().GetCurrentWorkingDirectory());
+        String id = axoObjectInstance.getDModel().getId();
+        List<IAxoObject> candidates = AxoObjects.getAxoObjects().getAxoObjectFromName(id, axoObjectInstance.getParent().getCurrentWorkingDirectory());
         if (candidates == null) {
             return false;
         }
@@ -986,15 +943,15 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
         int[] ranking;
         ranking = new int[candidates.size()];
         for (InletInstance j : axoObjectInstance.getInletInstances()) {
-            NetController n = getNetFromIolet(j);
+            Net n = getNetFromIolet(j);
             if (n == null) {
                 continue;
             }
-            DataType d = n.getModel().getDataType();
+            DataType d = n.getDataType();
             if (d == null) {
                 continue;
             }
-            String name = j.getModel().getName();
+            String name = j.getDModel().getName();
             for (int i = 0; i < candidates.size(); i++) {
                 IAxoObject o = candidates.get(i);
                 Inlet i2 = null;
@@ -1007,9 +964,9 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 if (i2 == null) {
                     continue;
                 }
-                if (i2.getDatatype().equals(d)) {
+                if (i2.getDataType().equals(d)) {
                     ranking[i] += 10;
-                } else if (d.IsConvertableToType(i2.getDatatype())) {
+                } else if (d.isConvertableToType(i2.getDataType())) {
                     ranking[i] += 2;
                 }
             }
@@ -1023,19 +980,19 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
             }
         }
         IAxoObject selected = candidates.get(maxi);
-        int rindex = candidates.indexOf(axoObjectInstance.getType());
+        int rindex = candidates.indexOf(axoObjectInstance.getDModel());
         if (rindex >= 0) {
             if (ranking[rindex] == max) {
-                selected = axoObjectInstance.getType();
+                selected = axoObjectInstance.getDModel();
             }
         }
         if (selected == null) {
             //Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.INFO,"no promotion to null" + this + " to " + selected);
             return false;
         }
-        if (selected != axoObjectInstance.getType()) {
+        if (selected != axoObjectInstance.getDModel()) {
             Logger.getLogger(AxoObjectInstance.class.getName()).log(Level.FINE, "promoting {0} to {1}", new Object[]{axoObjectInstance, selected});
-            ChangeObjectInstanceType(axoObjectInstance, selected);
+            changeObjectInstanceType(axoObjectInstance, selected);
             return true;
         }
         return false;
@@ -1079,7 +1036,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
      * @param initial If true, only objects restored from object name reference
      * (not UUID) will promote to a variant with the same name.
      */
-    public boolean PromoteOverloading(boolean initial) {
+    public boolean promoteOverloading(boolean initial) {
         PatchModel patchModel = getModel();
         patchModel.refreshIndexes();
         Set<String> ProcessedInstances = new HashSet<>();
@@ -1091,7 +1048,7 @@ public class PatchController extends AbstractController<PatchModel, IView, Objec
                 if (!ProcessedInstances.contains(o.getInstanceName())) {
                     ProcessedInstances.add(o.getInstanceName());
                     if (!initial || o.isTypeWasAmbiguous()) {
-                        promotionOccured |= PromoteToOverloadedObj(o);
+                        promotionOccured |= promoteToOverloadedObj(o);
                     }
                     p = true;
                     break;

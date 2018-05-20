@@ -3,19 +3,19 @@ package axoloti.piccolo.patch.object.parameter;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.parameter.ParameterInt32;
 import axoloti.object.parameter.ParameterInt32HRadio;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.piccolo.components.control.PHRadioComponent;
 import java.beans.PropertyChangeEvent;
 
 class PParameterInstanceViewInt32HRadio extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32HRadio(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PParameterInstanceViewInt32HRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public PHRadioComponent CreateControl() {
-        return new PHRadioComponent(0, ((ParameterInt32HRadio) getModel().getModel()).getMaxValue(), axoObjectInstanceView);
+    public PHRadioComponent createControl() {
+        return new PHRadioComponent(0, ((ParameterInt32HRadio) getDModel().getDModel()).getMaxValue(), axoObjectInstanceView);
     }
 
     @Override
@@ -23,7 +23,7 @@ class PParameterInstanceViewInt32HRadio extends PParameterInstanceViewInt32 {
         return (PHRadioComponent) ctrl;
     }
 
-    // TODO wtf?
+    // TODO: piccolo wtf?
     // @Override
     // public void populatePopup(JPopupMenu m) {
     //     super.populatePopup(m);

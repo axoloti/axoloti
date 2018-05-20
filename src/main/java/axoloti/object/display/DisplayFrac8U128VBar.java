@@ -40,7 +40,7 @@ public class DisplayFrac8U128VBar extends Display {
     }
 
     @Override
-    public Int8Ptr getDatatype() {
+    public Int8Ptr getDataType() {
         return Int8Ptr.d;
     }
 

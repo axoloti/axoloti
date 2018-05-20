@@ -1,9 +1,8 @@
 package axoloti.swingui.patch.object.inlet;
 
-import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.INetView;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.preferences.Theme;
 import axoloti.swingui.TransparentCursor;
 import axoloti.swingui.components.SignalMetaDataIcon;
@@ -16,10 +15,10 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPopupMenu;
 
-public class InletInstanceView extends IoletInstanceView<IoletInstanceController> implements IIoletInstanceView {
+public class InletInstanceView extends IoletInstanceView<InletInstance> implements IInletInstanceView {
 
-    public InletInstanceView(IoletInstanceController controller, AxoObjectInstanceViewAbstract axoObj) {
-        super(controller);
+    public InletInstanceView(InletInstance inletInstance, AxoObjectInstanceViewAbstract axoObj) {
+        super(inletInstance);
         this.axoObj = axoObj;
         initComponents();
     }
@@ -31,12 +30,12 @@ public class InletInstanceView extends IoletInstanceView<IoletInstanceController
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         setMaximumSize(new Dimension(32767, 14));
         jack = new JackInputComponent();
-        jack.setForeground(getModel().getModel().getDatatype().GetColor());
+        jack.setForeground(getDModel().getDModel().getDataType().getColor());
         jack.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         add(jack);
-        add(new SignalMetaDataIcon(getModel().getModel().GetSignalMetaData()));
+        add(new SignalMetaDataIcon(getDModel().getDModel().getSignalMetaData()));
         add(Box.createHorizontalStrut(3));
-        if (!((axoObj != null) && axoObj.getModel().getType().getInlets().size() <= 1)) {
+        if (!((axoObj != null) && axoObj.getDModel().getDModel().getInlets().size() <= 1)) {
             add(label);
         }
         add(Box.createHorizontalGlue());
@@ -44,7 +43,7 @@ public class InletInstanceView extends IoletInstanceView<IoletInstanceController
 
     @Override
     protected JPopupMenu getPopup() {
-        return new IoletInstancePopupMenu(getController(), focusEdit);
+        return new IoletInstancePopupMenu(model, focusEdit);
     }
 
     @Override

@@ -17,10 +17,12 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
 import axoloti.realunits.LinDB;
 import axoloti.realunits.LinRatio;
 import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -36,13 +38,17 @@ public class ParameterFrac32UMapGain16 extends ParameterFrac32UMap {
         super(name);
     }
 
+    private static final NativeToReal convs[] = {new LinRatio(16.0), new LinDB(10.0 * Math.log10(16.0))};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32UMap InstanceFactory() {
-        ParameterInstanceFrac32UMap p = super.InstanceFactory();
-        NativeToReal convs[] = {new LinRatio(16.0), new LinDB(10.0 * Math.log10(16.0))};
-        p.SetPFunction("parameter_function::pf_signed_clamp_fullrange");
-        p.convs = convs;
-        return p;
+    public List<NativeToReal> getConversions() {
+        return listConvs;
+    }
+
+    @Override
+    public String getPFunction() {
+        return "parameter_function::pf_signed_clamp_fullrange";
     }
 
     static public final String TypeName = "frac32.u.map.gain16";

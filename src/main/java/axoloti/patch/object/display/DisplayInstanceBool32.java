@@ -17,7 +17,7 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.display.Display;
 
 /**
  *
@@ -25,8 +25,8 @@ import axoloti.object.atom.AtomDefinitionController;
  */
 public class DisplayInstanceBool32<DisplayBool32> extends DisplayInstanceInt32 {
 
-    public DisplayInstanceBool32(AtomDefinitionController controller) {
-        super(controller);
+    public DisplayInstanceBool32(Display display) {
+        super(display);
     }
 
 }

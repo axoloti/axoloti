@@ -18,6 +18,7 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterFrac32;
+import axoloti.patch.object.AxoObjectInstance;
 import axoloti.property.Property;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
@@ -36,26 +37,15 @@ public class ParameterInstanceFrac32UMap<T extends ParameterFrac32> extends Para
         super(v);
     }
 
+    public ParameterInstanceFrac32UMap(T param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
+    }
+
     @Override
     public List<Property> getEditableFields() {
         List<Property> l = super.getEditableFields();
         l.add(MIDI_CC);
         return l;
-    }
-
-    String pfunction;
-
-    public void SetPFunction(String s) {
-        pfunction = s;
-    }
-
-    @Override
-    public String GetPFunction() {
-        if (pfunction == null) {
-            return "parameter_function::pf_unsigned_clamp";
-        } else {
-            return pfunction;
-        }
     }
 
 }

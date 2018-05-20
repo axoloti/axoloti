@@ -20,32 +20,32 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32;
  */
 public class ParameterInstanceViewFactory {
 
-    public static ParameterInstanceView createView(ParameterInstanceController controller) {
-        ParameterInstance model = controller.getModel();
+    public static ParameterInstanceView createView(ParameterInstance model) {
+        ParameterInstanceController controller = model.getController();
         ParameterInstanceView view;
         // order of tests is important!
         if (model instanceof ParameterInstanceBin1Momentary) {
-            view = new ParameterInstanceViewBin1Momentary(controller);
+            view = new ParameterInstanceViewBin1Momentary(model);
         } else if (model instanceof ParameterInstanceBin1) {
-            view = new ParameterInstanceViewBin1(controller);
+            view = new ParameterInstanceViewBin1(model);
         } else if (model instanceof ParameterInstanceFrac32SMapVSlider) {
-            view = new ParameterInstanceViewFrac32S(controller);
+            view = new ParameterInstanceViewFrac32S(model);
         } else if (model instanceof ParameterInstanceFrac32UMapVSlider) {
-            view = new ParameterInstanceViewFrac32U(controller);
+            view = new ParameterInstanceViewFrac32U(model);
         } else if (model instanceof ParameterInstanceFrac32UMap) {
-            view = new ParameterInstanceViewFrac32U(controller);
+            view = new ParameterInstanceViewFrac32U(model);
         } else if (model instanceof ParameterInstanceFrac32SMap) {
-            view = new ParameterInstanceViewFrac32S(controller);
+            view = new ParameterInstanceViewFrac32S(model);
         } else if (model instanceof ParameterInstanceInt32) {
-            view = new ParameterInstanceViewInt32(controller);
+            view = new ParameterInstanceViewInt32(model);
         } else if (model instanceof ParameterInstanceBin12) {
-            view = new ParameterInstanceViewBinN(controller);
+            view = new ParameterInstanceViewBinN(model);
         } else if (model instanceof ParameterInstanceBin16) {
-            view = new ParameterInstanceViewBinN(controller);
+            view = new ParameterInstanceViewBinN(model);
         } else if (model instanceof ParameterInstanceBin32) {
-            view = new ParameterInstanceViewBinN(controller);
+            view = new ParameterInstanceViewBinN(model);
         } else if (model instanceof ParameterInstance4LevelX16) {
-            view = new ParameterInstanceView4LevelX16(controller);
+            view = new ParameterInstanceView4LevelX16(model);
         } else {
             throw new Error("ParameterInstanceViewFactory class not handled: " + model.getClass());
         }

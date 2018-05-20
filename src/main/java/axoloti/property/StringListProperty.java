@@ -24,7 +24,7 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
         return false;
     }
 
-    static String StringArrayToString(List<String> va) {
+    static String convertStringArrayToString(List<String> va) {
         // items quoted, separated by comma
         // quote characters escaped with backslash
         StringBuilder sb = new StringBuilder();
@@ -50,11 +50,11 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
         if (s == null) {
             return "";
         } else {
-            return StringArrayToString(s);
+            return convertStringArrayToString(s);
         }
     }
 
-    static List<String> StringToStringArrayList(String s) {
+    static List<String> convertStringToStringArrayList(String s) {
         // items separated by comma
         // items can be within quotes
         // backlash to escape quote character
@@ -115,7 +115,7 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
     }
 
     @Override
-    public List<String> StringToObj(String v) {
-        return StringToStringArrayList(v);
+    public List<String> convertStringToObj(String v) {
+        return convertStringToStringArrayList(v);
     }
 }

@@ -34,62 +34,62 @@ import axoloti.object.outlet.OutletFrac32Pos;
 import axoloti.object.outlet.OutletInt32;
 import axoloti.object.outlet.OutletInt32Pos;
 import axoloti.object.parameter.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Midi extends gentools {
+class Midi extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "midi/in";
-        WriteAxoObject(catName, Create_ctlin3());
-        WriteAxoObject(catName, Create_ctlin_any());
-        WriteAxoObject(catName, Create_ctlini_any());
-        WriteAxoObject(catName, Create_ctlin3i());
-        WriteAxoObject(catName, Create_ctlin4i());
-        WriteAxoObject(catName, Create_ctlin4ii());
-        WriteAxoObject(catName, Create_keyb());
-        WriteAxoObject(catName, Create_keyb_mod());
-        WriteAxoObject(catName, Create_keyb_touch());
-        WriteAxoObject(catName, Create_keybzone());
-        WriteAxoObject(catName, Create_keybzone_touch());
-        WriteAxoObject(catName, Create_keybzoneLRU());
-        WriteAxoObject(catName, Create_keybnote());
-        WriteAxoObject(catName, Create_bendin());
-        WriteAxoObject(catName, Create_bendin2());
-        WriteAxoObject(catName, Create_bendin_ch());
-        WriteAxoObject(catName, Create_touchin());
-        WriteAxoObject(catName, Create_midiscript());
-        WriteAxoObject(catName, Create_clockin());
-        WriteAxoObject(catName, Create_pgmin());
+        writeAxoObject(catName, Create_ctlin3());
+        writeAxoObject(catName, Create_ctlin_any());
+        writeAxoObject(catName, Create_ctlini_any());
+        writeAxoObject(catName, Create_ctlin3i());
+        writeAxoObject(catName, Create_ctlin4i());
+        writeAxoObject(catName, Create_ctlin4ii());
+        writeAxoObject(catName, Create_keyb());
+        writeAxoObject(catName, Create_keyb_mod());
+        writeAxoObject(catName, Create_keyb_touch());
+        writeAxoObject(catName, Create_keybzone());
+        writeAxoObject(catName, Create_keybzone_touch());
+        writeAxoObject(catName, Create_keybzoneLRU());
+        writeAxoObject(catName, Create_keybnote());
+        writeAxoObject(catName, Create_bendin());
+        writeAxoObject(catName, Create_bendin2());
+        writeAxoObject(catName, Create_bendin_ch());
+        writeAxoObject(catName, Create_touchin());
+        writeAxoObject(catName, Create_midiscript());
+        writeAxoObject(catName, Create_clockin());
+        writeAxoObject(catName, Create_pgmin());
 
         catName = "midi/out";
-        WriteAxoObject(catName, Create_noteout());
-        WriteAxoObject(catName, Create_ctlout());
-        WriteAxoObject(catName, Create_ctloutauto());
-        WriteAxoObject(catName, Create_ctlout_any());
-        WriteAxoObject(catName, Create_bendout());
-        WriteAxoObject(catName, Create_pgmout());
-        WriteAxoObject(catName, Create_clockgen());
-        WriteAxoObject(catName, Create_queuestate());
-        WriteAxoObject(catName, Create_polytouchout());
-        WriteAxoObject(catName, Create_channeltouchout());
+        writeAxoObject(catName, Create_noteout());
+        writeAxoObject(catName, Create_ctlout());
+        writeAxoObject(catName, Create_ctloutauto());
+        writeAxoObject(catName, Create_ctlout_any());
+        writeAxoObject(catName, Create_bendout());
+        writeAxoObject(catName, Create_pgmout());
+        writeAxoObject(catName, Create_clockgen());
+        writeAxoObject(catName, Create_queuestate());
+        writeAxoObject(catName, Create_polytouchout());
+        writeAxoObject(catName, Create_channeltouchout());
 
         catName = "midi/intern";
-        WriteAxoObject(catName, Create_intern_noteout());
-        WriteAxoObject(catName, Create_intern_ctlout());
-        WriteAxoObject(catName, Create_intern_ctloutauto());
-        WriteAxoObject(catName, Create_intern_ctlout_any());
-        WriteAxoObject(catName, Create_intern_bendout());
-        WriteAxoObject(catName, Create_intern_clockgen());
-        WriteAxoObject(catName, Create_intern_polytouchout());
-        WriteAxoObject(catName, Create_intern_channeltouchout());
+        writeAxoObject(catName, Create_intern_noteout());
+        writeAxoObject(catName, Create_intern_ctlout());
+        writeAxoObject(catName, Create_intern_ctloutauto());
+        writeAxoObject(catName, Create_intern_ctlout_any());
+        writeAxoObject(catName, Create_intern_bendout());
+        writeAxoObject(catName, Create_intern_clockgen());
+        writeAxoObject(catName, Create_intern_polytouchout());
+        writeAxoObject(catName, Create_intern_channeltouchout());
 
         catName = "midi/ctrl";
-        WriteAxoObject(catName, Create_mpe());
+        writeAxoObject(catName, Create_mpe());
     }
     /*
      static AxoObject Create_ctlin() {

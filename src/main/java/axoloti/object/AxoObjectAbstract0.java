@@ -103,7 +103,7 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     }
 
     @Override
-    public void OpenEditor() {
+    public void openEditor() {
     }
 
     @Override

@@ -33,7 +33,7 @@ public abstract class Outlet extends Iolet {
         super(name, description);
     }
 
-    public String GetCName() {
-        return "outlet_" + CharEscape.CharEscape(getName());
+    public String getCName() {
+        return "outlet_" + CharEscape.charEscape(getName());
     }
 }

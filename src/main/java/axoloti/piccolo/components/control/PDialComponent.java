@@ -20,6 +20,7 @@ import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.piccolo2d.event.PInputEvent;
@@ -31,11 +32,11 @@ public class PDialComponent extends PCtrlComponentAbstract {
     private double max;
     private double min;
     private double tick;
-    private NativeToReal convs[];
+    private List<NativeToReal> convs;
     private String keybBuffer = "";
     private Robot robot;
 
-    public void setNative(NativeToReal convs[]) {
+    public void setNative(List<NativeToReal> convs) {
         this.convs = convs;
     }
 
@@ -78,7 +79,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
     protected void mouseDragged(PInputEvent e) {
         if (isEnabled()) {
             double v;
-            if ((MousePressedBtn == MouseEvent.BUTTON1)) {
+            if ((mousePressedBtn == MouseEvent.BUTTON1)) {
                 this.robotMoveToCenter();
                 if (Preferences.getPreferences().getMouseDialAngular()) {
                     int radius = (int) Math.min(getSize().width, getSize().height) / 2 - layoutTick;
@@ -92,27 +93,27 @@ public class PDialComponent extends PCtrlComponentAbstract {
                     if (e.isShiftDown() || KeyUtils.isControlOrCommandDown(e)) {
                         t = t * 0.1;
                     }
-                    v = value + t * ((int) Math.round((MousePressedCoordY - PUtils.getYOnScreen(e))));
+                    v = value + t * ((int) Math.round((mousePressedCoordY - PUtils.getYOnScreen(e))));
                 }
                 fireValue(v);
                 e.setHandled(true);
             }
         }
     }
-    int MousePressedCoordX = 0;
-    int MousePressedCoordY = 0;
-    int MousePressedBtn = MouseEvent.NOBUTTON;
+    int mousePressedCoordX = 0;
+    int mousePressedCoordY = 0;
+    int mousePressedBtn = MouseEvent.NOBUTTON;
 
     @Override
     protected void mousePressed(PInputEvent e) {
         if (!e.isPopupTrigger()) {
             if (isEnabled()) {
                 grabFocus();
-                MousePressedCoordX = PUtils.getXOnScreen(e);
-                MousePressedCoordY = PUtils.getYOnScreen(e);
+                mousePressedCoordX = PUtils.getXOnScreen(e);
+                mousePressedCoordY = PUtils.getYOnScreen(e);
 
-                int lastBtn = MousePressedBtn;
-                MousePressedBtn = e.getButton();
+                int lastBtn = mousePressedBtn;
+                mousePressedBtn = e.getButton();
 
                 if (lastBtn != MouseEvent.NOBUTTON) {
                     if (lastBtn == MouseEvent.BUTTON1) {
@@ -121,7 +122,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                     }
                 }
 
-                if (MousePressedBtn == MouseEvent.BUTTON1) {
+                if (mousePressedBtn == MouseEvent.BUTTON1) {
                     e.pushCursor(TransparentCursor.get());
                     fireEventAdjustmentBegin();
                 } else {
@@ -136,7 +137,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
     protected void mouseReleased(PInputEvent e) {
         if (isEnabled() && !e.isPopupTrigger()) {
             e.popCursor();
-            MousePressedBtn = MouseEvent.NOBUTTON;
+            mousePressedBtn = MouseEvent.NOBUTTON;
             fireEventAdjustmentFinished();
             e.setHandled(true);
         }
@@ -196,7 +197,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                     if (convs != null) {
                         for (NativeToReal c : convs) {
                             try {
-                                fireValue(c.FromReal(keybBuffer));
+                                fireValue(c.convertFromReal(keybBuffer));
                                 converted = true;
                                 break;
                             } catch (ParseException ex2) {
@@ -372,7 +373,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
         if (convs != null) {
             String s = "<html>";
             for (NativeToReal c : convs) {
-                s += c.ToReal(new ValueFrac32(value)) + "<br>";
+                s += c.convertToReal(new ValueFrac32(value)) + "<br>";
             }
             setToolTipText(s);
         }
@@ -414,6 +415,6 @@ public class PDialComponent extends PCtrlComponentAbstract {
     }
 
     public void robotMoveToCenter() {
-        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+        robot.mouseMove(mousePressedCoordX, mousePressedCoordY);
     }
 }

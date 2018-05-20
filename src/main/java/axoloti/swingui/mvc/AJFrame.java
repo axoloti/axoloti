@@ -2,7 +2,7 @@ package axoloti.swingui.mvc;
 
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import java.awt.HeadlessException;
 import javax.swing.ImageIcon;
@@ -12,15 +12,15 @@ import javax.swing.JFrame;
  *
  * @author jtaelman
  */
-public abstract class AJFrame<T extends AbstractController> extends JFrame implements DocumentWindow, IView<T> {
+public abstract class AJFrame<T extends IModel> extends JFrame implements DocumentWindow, IView<T> {
 
     final DocumentWindow parent;
 
-    final T controller;
+    final protected T model;
 
-    public AJFrame(T controller, DocumentWindow parent) throws HeadlessException {
+    public AJFrame(T model, DocumentWindow parent) throws HeadlessException {
         super();
-        this.controller = controller;
+        this.model = model;
         this.parent = parent;
         initComponent();
     }
@@ -44,13 +44,13 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
     }
 
     @Override
-    public T getController() {
-        return controller;
+    public T getDModel() {
+        return model;
     }
 
     private void registerDocumentWindow() {
         if (parent == null) {
-            DocumentWindowList.RegisterWindow(this);
+            DocumentWindowList.registerWindow(this);
         } else if (!parent.getChildDocuments().contains(this)) {
             parent.getChildDocuments().add(this);
         }
@@ -58,7 +58,7 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
 
     private void unregisterDocumentWindow() {
         if (parent == null) {
-            DocumentWindowList.UnregisterWindow(this);
+            DocumentWindowList.unregisterWindow(this);
         } else {
             parent.getChildDocuments().remove(this);
         }
@@ -67,7 +67,7 @@ public abstract class AJFrame<T extends AbstractController> extends JFrame imple
     @Override
     public void dispose() {
         super.dispose();
-        getController().removeView(this);
+        model.getController().removeView(this);
         unregisterDocumentWindow();
     }
 

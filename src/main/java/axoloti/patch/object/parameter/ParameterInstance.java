@@ -18,10 +18,8 @@
 package axoloti.patch.object.parameter;
 
 import axoloti.Modulation;
-import axoloti.mvc.AbstractController;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.atom.AtomDefinition;
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.parameter.Parameter;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
@@ -46,7 +44,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "param")
-public abstract class ParameterInstance<T extends Parameter, DT> extends AtomInstance<T> {
+public abstract class ParameterInstance<T extends Parameter, DT> extends AtomInstance<T, ParameterInstanceController> {
 
     @Attribute
     public String name;
@@ -55,15 +53,10 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     @Attribute(required = false)
     private Integer MidiCC = null;
 
-    public T parameter; // TODO: make private, create ParameterInstanceFactory
+    protected T parameter;
 
-    public NativeToReal convs[];
     NativeToReal conversion;
 //    int selectedConv = 0;
-
-    // TODO: create ParameterController class
-    // replace AtomDefinitionController with ParameterController
-    AtomDefinitionController controller;
 
     public ParameterInstance() {
     }
@@ -101,11 +94,11 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         return l;
     }
 
-    public String GetCName() {
-        return parameter.GetCName();
+    public String getCName() {
+        return parameter.getCName();
     }
 
-    public void CopyValueFrom(ParameterInstance p) {
+    public void copyValueFrom(ParameterInstance p) {
         if (p.onParent != null) {
             setOnParent(p.onParent);
         }
@@ -143,7 +136,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 //        return getValue().getRaw();
 //    }
 
-    public String ControlOnParentName() {
+    public String getControlOnParentName() {
         if (getParent().getParameterInstances().size() == 1) {
             return getParent().getInstanceName();
         } else {
@@ -151,13 +144,12 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         }
     }
 
-
-    public String GetPFunction() {
-        return "0";
+    public String getPFunction() {
+        return getDModel().getPFunction();
     }
 
     // review!
-    public String GetUserParameterName() {
+    public String getUserParameterName() {
         if (getParent().getParameterInstances().size() == 1) {
             return getParent().getInstanceName();
         } else {
@@ -169,21 +161,21 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     public abstract DT int32ToVal(int v);
 
-    public String GetCMultiplier() {
+    public String getCMultiplier() {
         return "0";
     }
 
-    public String GetCOffset() {
+    public String getCOffset() {
         return "0";
     }
 
     public String getLegalName() {
-        return CharEscape.CharEscape(getModel().getName());
+        return CharEscape.charEscape(getDModel().getName());
     }
 
     public T createParameterForParent() {
         T pcopy = (T) parameter.getClone();
-        pcopy.setName(ControlOnParentName());
+        pcopy.setName(getControlOnParentName());
         pcopy.noLabel = null;
         pcopy.PropagateToChild = getParent().getLegalName() + "_" + getLegalName();
         return pcopy;
@@ -195,11 +187,12 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     }
 
     @Override
-    public T getModel() {
-        return (T) getController().getModel();
+    public T getDModel() {
+        return parameter;
     }
 
-    public String GenerateCodeInitModulator(String vprefix, String StructAccces) {
+    public String generateCodeInitModulator(String vprefix, String StructAccces) {
+        // TODO: fix modulations
         return "";
     }
 
@@ -207,13 +200,14 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         return null;
     }
 
-    public NativeToReal[] getConvs() {
-        return convs;
+    public List<NativeToReal> getConvs() {
+        return getDModel().getConversions();
     }
 
     public NativeToReal getConversion() {
-        if ((conversion == null) && (convs != null) && (convs.length != 0)) {
-            conversion = convs[0];
+        List<NativeToReal> convs = getConvs();
+        if ((conversion == null) && (convs != null) && (!convs.isEmpty())) {
+            conversion = convs.get(0);
         }
         return conversion;
     }
@@ -224,28 +218,20 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     }
 
     public void cycleConversions() {
-        if ((convs == null) || (convs.length == 0)) {
+        List<NativeToReal> convs = getConvs();
+        if ((convs == null) || (convs.isEmpty())) {
             return;
         }
         if (conversion == null) {
-            setConversion(convs[0]);
+            setConversion(convs.get(0));
         }
         List l = java.util.Arrays.asList(convs);
         int i = l.indexOf(conversion);
         i++;
-        if (i >= convs.length) {
+        if (i >= convs.size()) {
             i = 0;
         }
-        setConversion(convs[i]);
-    }
-
-    @Override
-    public AtomDefinitionController getController() {
-        return controller;
-    }
-
-    public void setController(AtomDefinitionController controller) {
-        this.controller = controller;
+        setConversion(convs.get(i));
     }
 
     /* MVC getters and setters */
@@ -297,7 +283,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     public void updateParamOnParent() {
         if (paramOnParent != null) {
-            paramOnParent.setName(ControlOnParentName());
+            paramOnParent.setName(getControlOnParentName());
             paramOnParent.noLabel = null;
             paramOnParent.PropagateToChild = getParent().getLegalName() + "_" + getLegalName();
         }
@@ -325,12 +311,12 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         if (pm != null) {
             AxoObjectInstancePatcher aoip = pm.getParent();
             if (aoip != null) {
-                AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+                AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getDModel();
                 if (onParent != null && onParent) {
                     paramOnParent.setParent(aop);
-                    aop.getControllerFromModel().addParameter(paramOnParent);
+                    aop.getController().addParameter(paramOnParent);
                 } else {
-                    aop.getControllerFromModel().removeParameter(paramOnParent);
+                    aop.getController().removeParameter(paramOnParent);
                 }
             }
         }
@@ -364,17 +350,17 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     @Override
     public void dispose() {
         super.dispose();
-        getControllerFromModel().changeOnParent(false);
+        getController().changeOnParent(false);
     }
 
     @Override
-    public AbstractController createController() {
+    public ParameterInstanceController createController() {
         return new ParameterInstanceController(this);
     }
 
     @Override
-    public ParameterInstanceController getControllerFromModel() {
-        return (ParameterInstanceController) super.getControllerFromModel();
+    public ParameterInstanceController getController() {
+        return (ParameterInstanceController) super.getController();
     }
 
 }

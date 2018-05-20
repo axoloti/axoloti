@@ -11,10 +11,9 @@ import axoloti.object.parameter.Parameter;
  *
  * @author jtaelman
  */
-public class ObjectController extends AbstractController<IAxoObject, IView, AbstractController> {
+public class ObjectController extends AbstractController<IAxoObject, IView> {
 
-    public ObjectController(IAxoObject model) {
-        // TODO: remove public constructor
+    ObjectController(IAxoObject model) {
         super(model);
     }
 

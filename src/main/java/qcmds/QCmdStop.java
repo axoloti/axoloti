@@ -29,20 +29,20 @@ public class QCmdStop implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "";//Start stopping patch";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "";//Done stopping patch";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitStop();
-        if (connection.WaitSync()) {
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitStop();
+        if (connection.waitSync()) {
             return this;
         } else {
             return new QCmdDisconnect();

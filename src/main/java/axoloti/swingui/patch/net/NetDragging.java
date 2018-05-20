@@ -17,8 +17,10 @@
  */
 package axoloti.swingui.patch.net;
 
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.net.NetController;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.net.Net;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
 import java.awt.Color;
@@ -35,8 +37,8 @@ import javax.swing.SwingUtilities;
  */
 public class NetDragging extends NetView {
 
-    public NetDragging(NetController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public NetDragging(Net net, PatchViewSwing patchView) {
+        super(net, patchView);
     }
 
     Point p0;
@@ -61,14 +63,14 @@ public class NetDragging extends NetView {
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         Color c;
-        if (getController().getModel().isValidNet()) {
+        if (getDModel().isValidNet()) {
             if (selected) {
                 g2.setStroke(strokeValidSelected);
             } else {
                 g2.setStroke(strokeValidDeselected);
             }
 
-            c = getController().getModel().getDataType().GetColor();
+            c = getDModel().getDataType().getColor();
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -76,21 +78,29 @@ public class NetDragging extends NetView {
                 g2.setStroke(strokeBrokenDeselected);
             }
 
-            if (getController().getModel().getDataType() != null) {
-                c = getController().getModel().getDataType().GetColor();
+            if (getDModel().getDataType() != null) {
+                c = getDModel().getDataType().getColor();
             } else {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }
         }
         if (p0 != null) {
-            Point from = SwingUtilities.convertPoint(patchView.Layers, p0, this);
-            for (IIoletInstanceView i : getIoletViews()) {
+            Point from = SwingUtilities.convertPoint(patchView.layers, p0, this);
+            for (IIoletInstanceView i : getInletViews()) {
                 Point p1 = i.getJackLocInCanvas();
-                Point to = SwingUtilities.convertPoint(patchView.Layers, p1, this);
+                Point to = SwingUtilities.convertPoint(patchView.layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
-                DrawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
+                drawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
-                DrawWire(g2, from.x, from.y, to.x, to.y);
+                drawWire(g2, from.x, from.y, to.x, to.y);
+            }
+            for (IIoletInstanceView i : getOutletViews()) {
+                Point p1 = i.getJackLocInCanvas();
+                Point to = SwingUtilities.convertPoint(patchView.layers, p1, this);
+                g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
+                drawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
+                g2.setColor(c);
+                drawWire(g2, from.x, from.y, to.x, to.y);
             }
         }
     }
@@ -109,7 +119,14 @@ public class NetDragging extends NetView {
             max_y = p0.y;
         }
 
-        for (IIoletInstanceView i : getIoletViews()) {
+        for (IInletInstanceView i : getInletViews()) {
+            Point p1 = i.getJackLocInCanvas();
+            min_x = Math.min(min_x, p1.x);
+            min_y = Math.min(min_y, p1.y);
+            max_x = Math.max(max_x, p1.x);
+            max_y = Math.max(max_y, p1.y);
+        }
+        for (IOutletInstanceView i : getOutletViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -120,7 +137,7 @@ public class NetDragging extends NetView {
         int padding = 8;
         setBounds(min_x - padding, min_y - padding,
                 Math.max(1, max_x - min_x + (2 * padding)),
-                (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
+                (int) calcCtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
     }
 
 }

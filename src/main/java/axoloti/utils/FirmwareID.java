@@ -32,11 +32,11 @@ import java.util.zip.CRC32;
 public class FirmwareID {
 
     static public String getFirmwareID() {
+        File f = new File(System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin");
+        if (!f.canRead()) {
+            return "Please compile the firmware first";
+        }
         try {
-            File f = new File(System.getProperty(Axoloti.FIRMWARE_DIR) +"/build/axoloti.bin");
-            if (!f.canRead()) {
-                return "Please compile the firmware first";
-            }
             int tlength = (int) f.length();
             FileInputStream inputStream = new FileInputStream(f);
             byte[] bb = new byte[tlength];

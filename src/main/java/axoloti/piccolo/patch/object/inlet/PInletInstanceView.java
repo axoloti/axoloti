@@ -1,14 +1,13 @@
 package axoloti.piccolo.patch.object.inlet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
+import axoloti.abstractui.IInletInstanceView;
 import axoloti.abstractui.INetView;
 import axoloti.patch.object.inlet.InletInstance;
-import axoloti.patch.object.iolet.IoletInstanceController;
 import axoloti.piccolo.components.PJackInputComponent;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.PSignalMetaDataIcon;
-import axoloti.piccolo.iolet.PIoletAbstract;
+import axoloti.piccolo.patch.object.iolet.PIoletAbstract;
 import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
@@ -18,13 +17,14 @@ import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class PInletInstanceView extends PIoletAbstract implements IIoletInstanceView {
-    IoletInstanceController controller;
+public class PInletInstanceView extends PIoletAbstract implements IInletInstanceView {
+
+    InletInstance inletInstance;
     PLabelComponent label;
 
-    public PInletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    public PInletInstanceView(InletInstance inletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
-        this.controller = controller;
+        this.inletInstance = inletInstance;
         initComponent();
     }
 
@@ -33,14 +33,14 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
         setMaximumSize(new Dimension(32767, 14));
 
         jack = new PJackInputComponent(this);
-        jack.setForeground(getModel().getModel().getDatatype().GetColor());
+        jack.setForeground(getDModel().getDModel().getDataType().getColor());
 
         addChild(jack);
-        addChild(new PSignalMetaDataIcon(getModel().getModel().GetSignalMetaData(), axoObjectInstanceView));
+        addChild(new PSignalMetaDataIcon(getDModel().getDModel().getSignalMetaData(), axoObjectInstanceView));
         addToSwingProxy(Box.createHorizontalStrut(3));
 
-        if (!((axoObjectInstanceView != null) && axoObjectInstanceView.getModel().getType().getInlets().size() <= 1)) {
-            label = new PLabelComponent(getModel().getModel().getName());
+        if (!((axoObjectInstanceView != null) && axoObjectInstanceView.getDModel().getDModel().getInlets().size() <= 1)) {
+            label = new PLabelComponent(getDModel().getDModel().getName());
         } else {
             label = new PLabelComponent("");
         }
@@ -53,15 +53,15 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
     }
 
     @Override
-    public InletInstance getModel() {
-        return (InletInstance) controller.getModel();
+    public InletInstance getDModel() {
+        return inletInstance;
     }
 
     private final PBasicInputEventHandler toolTipEventListener = new PBasicInputEventHandler() {
         @Override
         public void mouseEntered(PInputEvent e) {
             if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(getModel().getModel().getDescription());
+                axoObjectInstanceView.getCanvas().setToolTipText(getDModel().getDModel().getDescription());
             }
         }
 
@@ -87,8 +87,8 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
 
     @Override
     public JPopupMenu getPopup() {
-        return new IoletInstancePopupMenu(getController(),
-                null /* TODO: implement piccolo focusEdit */);
+        return new IoletInstancePopupMenu(getDModel(),
+                null /* TODO: piccolo implement focusEdit */);
     }
 
     @Override
@@ -103,11 +103,6 @@ public class PInletInstanceView extends PIoletAbstract implements IIoletInstance
             getJack().setConnected((Boolean) evt.getNewValue());
             getJack().repaint();
         }
-    }
-
-    @Override
-    public IoletInstanceController getController() {
-        return controller;
     }
 
     @Override

@@ -2,7 +2,7 @@
 package axoloti.swingui.patch;
 
 import axoloti.abstractui.PatchView;
-import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
 import static axoloti.patch.PatchViewType.PICCOLO;
 import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.preferences.Preferences;
@@ -13,11 +13,11 @@ import axoloti.preferences.Preferences;
  */
 public class PatchViewFactory {
 
-    public static PatchView patchViewFactory(PatchController patchController) {
+    public static PatchView patchViewFactory(PatchModel patchModel) {
         if (Preferences.getPreferences().getPatchViewType() == PICCOLO) {
-            return new PatchViewPiccolo(patchController);
+            return new PatchViewPiccolo(patchModel);
         } else {
-            return new PatchViewSwing(patchController);
+            return new PatchViewSwing(patchModel);
         }
     }
 }

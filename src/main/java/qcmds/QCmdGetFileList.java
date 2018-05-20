@@ -28,12 +28,12 @@ public class QCmdGetFileList implements QCmdSerialTask {
     boolean done = true;
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         if (done) {
             return "Finished receiving sdcard file list";
         } else {
@@ -42,12 +42,12 @@ public class QCmdGetFileList implements QCmdSerialTask {
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.ClearReadSync();
-        connection.TransmitGetFileList();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.clearReadSync();
+        connection.transmitGetFileList();
         int timeout = 0;
-        while (!connection.WaitReadSync()) {
+        while (!connection.waitReadSync()) {
             timeout++;
             if (timeout > 20) {
                 done = false;

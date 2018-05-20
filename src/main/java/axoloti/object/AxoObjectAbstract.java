@@ -26,6 +26,7 @@ import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.property.ListProperty;
+import axoloti.utils.StringUtils;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +43,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract extends AbstractModel implements Comparable, Cloneable, IAxoObject {
+public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> implements Comparable, Cloneable, IAxoObject {
 
     @Attribute
     public String id;
@@ -73,14 +74,14 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     private String sPath;
 
     @Commit
-    public void Commit() {
+    void commit1() {
         // called after deserialializtion
         this.sha = null;
         this.upgradeSha = null;
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         // called prior to serialization
         this.sha = null;
         this.upgradeSha = null;
@@ -126,7 +127,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     @Override
     public String getUUID() {
         if (uuid == null) {
-            uuid = GenerateUUID();
+            uuid = generateUUID();
         }
         return uuid;
     }
@@ -167,7 +168,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
         return null;
     }
 
-    public abstract String GenerateUUID();
+    public abstract String generateUUID();
 
     public void setUUID(String uuid) {
         this.uuid = uuid;
@@ -211,11 +212,6 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     public void setDisplays(List<Display> displays) {
     }
 
-    private String StringDenull(String s) {
-        if (s == null) return "";
-        return s;
-    }
-
     @Override
     public String getId() {
         return id;
@@ -231,7 +227,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     @Override
     public String getDescription() {
-        return StringDenull(sDescription);
+        return StringUtils.denullString(sDescription);
     }
 
     public void setDescription(String sDescription) {
@@ -244,7 +240,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     @Override
     public String getLicense() {
-        return StringDenull(sLicense);
+        return StringUtils.denullString(sLicense);
     }
 
     public void setLicense(String sLicense) {
@@ -257,7 +253,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     @Override
     public String getPath() {
-        return StringDenull(sPath);
+        return StringUtils.denullString(sPath);
     }
 
     public final void setPath(String sPath) {
@@ -270,7 +266,7 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
 
     @Override
     public String getAuthor() {
-        return StringDenull(sAuthor);
+        return StringUtils.denullString(sAuthor);
     }
 
     public void setAuthor(String sAuthor) {
@@ -282,14 +278,9 @@ public abstract class AxoObjectAbstract extends AbstractModel implements Compara
     }
 
     @Override
-    public ObjectController createController() {
+    protected ObjectController createController() {
         ObjectController controller = new ObjectController(this);
         return controller;
-    }
-    
-    @Override
-    public ObjectController getControllerFromModel() {
-        return (ObjectController)super.getControllerFromModel();
     }
 
     @Override

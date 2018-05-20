@@ -1,6 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
-import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstance;
 import axoloti.swingui.components.displays.VValueLabelsComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -8,8 +8,8 @@ class DisplayInstanceViewVScale extends DisplayInstanceView {
 
     private VValueLabelsComponent vlabels;
 
-    DisplayInstanceViewVScale(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewVScale(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

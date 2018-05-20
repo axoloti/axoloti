@@ -1,7 +1,6 @@
 package axoloti.patchbank;
 
 import axoloti.connection.CConnection;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.property.ListProperty;
@@ -31,7 +30,7 @@ import qcmds.QCmdUploadFile;
  *
  * @author jtaelman
  */
-public class PatchBankModel extends AbstractModel {
+public class PatchBankModel extends AbstractModel<PatchBankController> {
 
     File file = null;
 
@@ -90,7 +89,7 @@ public class PatchBankModel extends AbstractModel {
         }
     }
 
-    public byte[] GetContents() {
+    public byte[] getContents() {
         ByteBuffer data = ByteBuffer.allocateDirect(128 * 256);
         for (File file : files) {
             String fn = (String) file.getName();
@@ -106,14 +105,12 @@ public class PatchBankModel extends AbstractModel {
         return b;
     }
 
-    public void Save() {
-        try {
-            PrintWriter pw = new PrintWriter(file);
+    public void save() {
+        try (PrintWriter pw = new PrintWriter(file)) {
             for (File file : files) {
                 String fn = toRelative(file);
                 pw.println(fn);
             }
-            pw.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PatchBankModel.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -140,33 +137,32 @@ public class PatchBankModel extends AbstractModel {
 
     public void upload() {
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        if (CConnection.GetConnection().isConnected()) {
-            processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
+        if (CConnection.getConnection().isConnected()) {
+            processor.appendToQueue(new QCmdUploadFile(new ByteArrayInputStream(getContents()), "/index.axb"));
         }
     }
 
-    public void UploadOneFile(File f) {
+    public void uploadOneFile(File f) {
         if (!f.isFile() || !f.canRead()) {
             return;
         }
         // TODO: avoid swingui references
-        PatchFrame pf = PatchViewSwing.OpenPatchInvisible(f);
+        PatchFrame pf = PatchViewSwing.openPatchInvisible(f);
         if (pf != null) {
             boolean isVisible = pf.isVisible();
-            pf.getController().UploadToSDCard();
+            pf.getDModel().getController().uploadToSDCard();
             if (!isVisible) {
-                pf.Close();
+                pf.close();
             }
 
             //FIXME: workaround waitQueueFinished bug
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                ;
             }
 
             try {
-                QCmdProcessor.getQCmdProcessor().WaitQueueFinished();
+                QCmdProcessor.getQCmdProcessor().waitQueueFinished();
             } catch (Exception ex) {
                 Logger.getLogger(PatchBankModel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -176,25 +172,20 @@ public class PatchBankModel extends AbstractModel {
     public void uploadAll() {
         Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Uploading patch bank file");
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        if (CConnection.GetConnection().isConnected()) {
-            processor.AppendToQueue(new QCmdUploadFile(new ByteArrayInputStream(GetContents()), "/index.axb"));
+        if (CConnection.getConnection().isConnected()) {
+            processor.appendToQueue(new QCmdUploadFile(new ByteArrayInputStream(getContents()), "/index.axb"));
         }
 
         for (File f : files) {
             Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
-            UploadOneFile(f);
+            uploadOneFile(f);
         }
         Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Patch bank uploaded");
     }
 
     @Override
-    public AbstractController createController() {
+    public PatchBankController createController() {
         return new PatchBankController(this);
-    }
-
-    @Override
-    public PatchBankController getControllerFromModel() {
-        return (PatchBankController) super.getControllerFromModel();
     }
 
     @Override

@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.Display;
 
 /**
@@ -28,8 +27,8 @@ public abstract class DisplayInstanceInt32<T extends Display> extends DisplayIns
 
     Integer value = 0;
 
-    DisplayInstanceInt32(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceInt32(T display) {
+        super(display);
     }
 
     @Override

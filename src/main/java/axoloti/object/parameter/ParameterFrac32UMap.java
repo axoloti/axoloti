@@ -18,8 +18,11 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
+import axoloti.realunits.NativeToReal;
 import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -46,9 +49,17 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
         super(name, DefaultValue);
     }
 
+    private static final NativeToReal convs[] = {};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32UMap InstanceFactory() {
-        return new ParameterInstanceFrac32UMap();
+    public List<NativeToReal> getConversions() {
+        return listConvs;
+    }
+
+    @Override
+    public String getPFunction() {
+        return "parameter_function::pf_unsigned_clamp";
     }
 
     @Override
@@ -65,7 +76,7 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_frac_uq27";
     }
 }

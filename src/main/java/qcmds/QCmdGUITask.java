@@ -23,5 +23,5 @@ package qcmds;
  */
 public interface QCmdGUITask extends QCmd {
 
-    void DoGUI(QCmdProcessor processor);
+    void performGUIAction(QCmdProcessor processor);
 }

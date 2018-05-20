@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.swingui.components.displays.VUComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -9,8 +8,8 @@ class DisplayInstanceViewFrac32VU extends DisplayInstanceViewFrac32 {
 
     private VUComponent vu;
 
-    DisplayInstanceViewFrac32VU(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewFrac32VU(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

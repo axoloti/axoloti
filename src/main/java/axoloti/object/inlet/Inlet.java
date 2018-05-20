@@ -33,7 +33,7 @@ public abstract class Inlet extends Iolet {
         super(name, description);
     }
 
-    public String GetCName() {
-        return "inlet_" + CharEscape.CharEscape(getName());
+    public String getCName() {
+        return "inlet_" + CharEscape.charEscape(getName());
     }
 }

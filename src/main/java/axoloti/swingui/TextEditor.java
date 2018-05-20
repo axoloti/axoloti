@@ -18,8 +18,7 @@
 package axoloti.swingui;
 
 import axoloti.abstractui.DocumentWindow;
-import axoloti.mvc.AbstractController;
-import axoloti.mvc.IView;
+import axoloti.mvc.IModel;
 import axoloti.property.Property;
 import axoloti.swingui.menus.StandardMenubar;
 import axoloti.swingui.mvc.AJFrame;
@@ -35,7 +34,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  *
  * @author Johannes Taelman
  */
-public class TextEditor extends AJFrame implements IView, DocumentWindow {
+public class TextEditor extends AJFrame<IModel> {
 
     Property stringProperty; // TODO: turn into StringProperty
     RSyntaxTextArea textArea;
@@ -45,8 +44,8 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
      *
      * @param stringProperty initial string
      */
-    public TextEditor(Property stringProperty, AbstractController controller, DocumentWindow parent) {
-        super(controller, parent);
+    public TextEditor(Property stringProperty, IModel model, DocumentWindow parent) {
+        super(model, parent);
         this.stringProperty = stringProperty;
         initComponents();
         initComponents2();
@@ -62,19 +61,19 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
         cp.add(sp);
         textArea.setVisible(true);
         setContentPane(cp);
-        textArea.setText((String) this.stringProperty.get(getController().getModel()));
+        textArea.setText((String) this.stringProperty.get(model));
         setVisible(true);
     }
 
-    public void SetText(String s) {
+    public void setText(String s) {
         textArea.setText(s);
     }
 
-    public String GetText() {
+    String getText() {
         return textArea.getText();
     }
 
-    public void Close() {
+    public void close() {
         dispose();
     }
 
@@ -126,7 +125,7 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 //        System.out.println("txt changed (lost focus)");
-        getController().generic_setModelUndoableProperty(stringProperty, textArea.getText());
+        model.getController().generic_setModelUndoableProperty(stringProperty, textArea.getText());
     }//GEN-LAST:event_formWindowLostFocus
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -135,7 +134,7 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
 
     @Override
     public boolean askClose() {
-        Close();
+        close();
         return false;
     }
 
@@ -152,14 +151,14 @@ public class TextEditor extends AJFrame implements IView, DocumentWindow {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (stringProperty.is(evt)) {
-            SetText((String) stringProperty.get(getController().getModel()));
+            setText((String) stringProperty.get(model));
         }
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        getController().removeView(this);
+        model.getController().removeView(this);
     }
 
 }

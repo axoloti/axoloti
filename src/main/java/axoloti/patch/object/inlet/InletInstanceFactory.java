@@ -1,6 +1,6 @@
 package axoloti.patch.object.inlet;
 
-import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.inlet.Inlet;
 import axoloti.patch.object.AxoObjectInstance;
 
 /**
@@ -9,9 +9,9 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class InletInstanceFactory {
 
-    static public InletInstance createView(AtomDefinitionController controller, AxoObjectInstance axoObj) {
-        InletInstance i = new InletInstance(controller, axoObj);
-        controller.addView(i);
+    static public InletInstance createView(Inlet inlet, AxoObjectInstance axoObj) {
+        InletInstance i = new InletInstance(inlet, axoObj);
+        inlet.getController().addView(i);
         return i;
     }
 }

@@ -44,19 +44,19 @@ public class DropDownComponent extends JComponent {
 
     public interface DDCListener {
 
-        void SelectionChanged();
+        void selectionChanged();
     }
 
-    int SelectedIndex;
-    List<String> items;
+    private int selectedIndex;
+    private List<String> items;
 
     public DropDownComponent(List<String> items) {
-        SelectedIndex = 0;
+        selectedIndex = 0;
+        this.items = items;
         initComponent(items);
     }
 
     private void initComponent(List<String> items) {
-        this.items = items;
         setItems(items);
         addMouseListener(new MouseAdapter() {
             @Override
@@ -107,25 +107,25 @@ public class DropDownComponent extends JComponent {
         g2.fillPolygon(xp, yp, 3);
         setFont(Constants.FONT);
         if (items.size() > 0) {
-            g2.drawString(items.get(SelectedIndex), 4, 12);
+            g2.drawString(items.get(selectedIndex), 4, 12);
         }
     }
 
     public int getSelectedIndex() {
-        return SelectedIndex;
+        return selectedIndex;
     }
 
     public void setSelectedItem(String selection) {
         int index = items.indexOf(selection);
-        if ((SelectedIndex != index) && (index >= 0)) {
-            SelectedIndex = index;
+        if ((selectedIndex != index) && (index >= 0)) {
+            selectedIndex = index;
             //ItemEvent ie = new ItemEvent(this, 0, items.get(SelectedIndex), 0);
             repaint();
         }
     }
 
     public String getSelectedItem() {
-        return items.get(SelectedIndex);
+        return items.get(selectedIndex);
     }
 
     public int getItemCount() {
@@ -149,7 +149,7 @@ public class DropDownComponent extends JComponent {
                     public void actionPerformed(ActionEvent e) {
                         setSelectedItem(e.getActionCommand());
                         for (DDCListener il : ddcListeners) {
-                            il.SelectionChanged();
+                            il.selectionChanged();
                         }
                     }
                 });

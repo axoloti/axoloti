@@ -17,14 +17,13 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceBin1;
 import java.security.MessageDigest;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterBin1 extends ParameterBin<ParameterInstanceBin1> {
+public class ParameterBin1 extends ParameterBin {
 
     public ParameterBin1() {
     }
@@ -39,11 +38,6 @@ public class ParameterBin1 extends ParameterBin<ParameterInstanceBin1> {
         md.update("bool32.t".getBytes());
     }
 
-    @Override
-    public ParameterInstanceBin1 InstanceFactory() {
-        return new ParameterInstanceBin1();
-    }
-
     static public final String TypeName = "bool32.tgl";
 
     @Override
@@ -52,7 +46,7 @@ public class ParameterBin1 extends ParameterBin<ParameterInstanceBin1> {
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_bin_1bit_toggle";
     }
 

@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object;
 
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.swingui.components.LabelComponent;
 import static axoloti.swingui.components.control.ACtrlComponent.PROP_VALUE;
 import axoloti.swingui.components.control.PulseButtonComponent;
@@ -18,14 +17,14 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
 
     private PulseButtonComponent button;
 
-    public AxoObjectInstanceViewHyperlink(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink objectInstance, PatchViewSwing patchView) {
+        super(objectInstance, patchView);
         initComponents();
     }
 
     @Override
-    public AxoObjectInstanceHyperlink getModel() {
-        return (AxoObjectInstanceHyperlink) super.getModel();
+    public AxoObjectInstanceHyperlink getDModel() {
+        return (AxoObjectInstanceHyperlink) super.getDModel();
     }
 
     private void initComponents() {
@@ -37,14 +36,14 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(PROP_VALUE)) {
                     if (evt.getNewValue().equals(1.0)) {
-                        getModel().Launch();
+                        getDModel().launch();
                     }
                 }
             }
         });
         add(button);
         add(Box.createHorizontalStrut(5));
-        instanceLabel = new LabelComponent(getModel().getInstanceName());
+        instanceLabel = new LabelComponent(getDModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
         instanceLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -58,7 +57,7 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
         });
 
         add(instanceLabel);
-        setLocation(getModel().getX(), getModel().getY());
+        setLocation(getDModel().getX(), getDModel().getY());
 
         resizeToGrid();
         setVisible(true);

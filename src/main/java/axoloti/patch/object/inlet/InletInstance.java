@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.inlet;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.inlet.Inlet;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
@@ -30,7 +29,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "dest")
-public class InletInstance<T extends Inlet> extends IoletInstance<T> {
+public class InletInstance extends IoletInstance<Inlet> {
 
     @Attribute(name = "inlet", required = false)
     protected String inletname;
@@ -44,13 +43,8 @@ public class InletInstance<T extends Inlet> extends IoletInstance<T> {
         this.inletname = inletname;
     }
 
-    public InletInstance(AtomDefinitionController inletController, final IAxoObjectInstance axoObj) {
-        super(inletController, axoObj);
-    }
-
-    @Override
-    public T getModel() {
-        return (T) super.getModel();
+    public InletInstance(Inlet inlet, final IAxoObjectInstance axoObj) {
+        super(inlet, axoObj);
     }
 
     @Override
@@ -83,7 +77,7 @@ public class InletInstance<T extends Inlet> extends IoletInstance<T> {
             // it is probably in the objectselector, in which case this is not a problem
             return;
         }
-        pm.getControllerFromModel().disconnect(this);
+        pm.getController().disconnect(this);
     }
 
 }

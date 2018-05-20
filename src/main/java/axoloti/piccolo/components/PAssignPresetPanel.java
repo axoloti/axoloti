@@ -3,6 +3,7 @@ package axoloti.piccolo.components;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.datatypes.ValueInt32;
 import axoloti.patch.PatchModel;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.piccolo.components.control.PCheckboxComponent;
 import axoloti.piccolo.components.control.PCtrlComponentAbstract;
 import axoloti.piccolo.components.control.PCtrlEvent;
@@ -11,7 +12,6 @@ import axoloti.piccolo.patch.PatchPCanvas;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.object.parameter.PParameterInstanceView;
 import axoloti.preferences.Theme;
-import axoloti.patch.object.parameter.preset.Preset;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
@@ -27,7 +27,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
     }
 
     private void initComponent() {
-        int n = parameterInstanceView.getModel().getObjectInstance().getParent().getNPresets();
+        int n = parameterInstanceView.getDModel().getObjectInstance().getParent().getNPresets();
 
         removeInputEventListener(zoomEventHandler);
         removeInputEventListener(selectionEventHandler);
@@ -54,12 +54,12 @@ public class PAssignPresetPanel extends PatchPCanvas {
 
             row.addChild(cb);
             row.addChild(label);
-            PCtrlComponentAbstract ctrl = parameterInstanceView.CreateControl();
+            PCtrlComponentAbstract ctrl = parameterInstanceView.createControl();
             ctrl.setForeground(Theme.getCurrentTheme().Parameter_Default_Foreground);
             ctrl.setPresetCanvas(this);
             ctrls.add(ctrl);
             ctrl.addPCtrlListener(ctrlListener);
-            Preset p = parameterInstanceView.getModel().getPreset(i + 1);
+            Preset p = parameterInstanceView.getDModel().getPreset(i + 1);
             if (p != null) {
                 cb.setValue(1);
                 ctrl.setValue((Double)p.getValue());
@@ -92,12 +92,12 @@ public class PAssignPresetPanel extends PatchPCanvas {
             if (selected) {
                 //parameterInstanceView.AddPreset(i + 1, parameterInstanceView.getModel().getValue());
                 ctrls.get(i).setEnabled(true);
-                ctrls.get(i).setValue((Double) parameterInstanceView.getModel().getPreset(i + 1).getValue()); //
+                ctrls.get(i).setValue((Double) parameterInstanceView.getDModel().getPreset(i + 1).getValue()); //
             } else {
                 ctrls.get(i).setEnabled(false);
-                parameterInstanceView.getController().RemovePreset(i + 1);
+                parameterInstanceView.getDModel().getController().removePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
+            PatchModel patchModel = parameterInstanceView.getDModel().getObjectInstance().getParent();
             patchModel.presetUpdatePending = true;
         }
 
@@ -112,14 +112,14 @@ public class PAssignPresetPanel extends PatchPCanvas {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (ctrls.get(i).isEnabled()) {
-                    if (parameterInstanceView.getModel().getValue() instanceof ValueInt32) {
-                        parameterInstanceView.getController().AddPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
-                    } else if (parameterInstanceView.getModel().getValue() instanceof ValueFrac32) {
-                        parameterInstanceView.getController().AddPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
+                    if (parameterInstanceView.getDModel().getValue() instanceof ValueInt32) {
+                        parameterInstanceView.getDModel().getController().addPreset(i + 1, new ValueInt32((int) ctrls.get(i).getValue()));
+                    } else if (parameterInstanceView.getDModel().getValue() instanceof ValueFrac32) {
+                        parameterInstanceView.getDModel().getController().addPreset(i + 1, new ValueFrac32(ctrls.get(i).getValue()));
+                    }
                 }
             }
-            }
-            parameterInstanceView.getModel().getObjectInstance().getParent().presetUpdatePending = true;
+            parameterInstanceView.getDModel().getObjectInstance().getParent().presetUpdatePending = true;
         }
 
         @Override
@@ -135,7 +135,7 @@ public class PAssignPresetPanel extends PatchPCanvas {
             int i = ctrls.indexOf(e.getSource());
             if (i >= 0) {
                 if (valueBeforeAdjustment != ctrls.get(i).getValue()) {
-                    PatchModel patchModel = parameterInstanceView.getModel().getObjectInstance().getParent();
+                    PatchModel patchModel = parameterInstanceView.getDModel().getObjectInstance().getParent();
                 }
             }
         }

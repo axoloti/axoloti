@@ -18,7 +18,7 @@
 package axoloti.patch.object;
 
 import axoloti.abstractui.PatchView;
-import axoloti.object.ObjectController;
+import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import java.awt.Desktop;
 import java.awt.Point;
@@ -41,11 +41,11 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
     AxoObjectInstanceHyperlink() {
     }
 
-    AxoObjectInstanceHyperlink(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type, patch1, InstanceName1, location);
+    AxoObjectInstanceHyperlink(IAxoObject obj, PatchModel patch1, String InstanceName1, Point location) {
+        super(obj, patch1, InstanceName1, location);
     }
 
-    public void Launch() {
+    public void launch() {
         String link = getInstanceName();
         if (link.startsWith("www.")
                 || link.startsWith("http://")
@@ -62,7 +62,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
             s = s.substring(0, s.lastIndexOf(File.separatorChar));
             File f = new File(s + File.separatorChar + link);
             if (f.canRead()) {
-                PatchView.OpenPatch(f);
+                PatchView.openPatch(f);
             } else {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, "can''t read file {0}", f.getAbsolutePath());
             }

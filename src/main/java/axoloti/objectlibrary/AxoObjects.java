@@ -24,7 +24,6 @@ import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.AxoObjectUnloaded;
 import axoloti.object.IAxoObject;
 import axoloti.preferences.Preferences;
-import axoloti.objectlibrary.AxolotiLibrary;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -56,22 +55,22 @@ public class AxoObjects {
 
     public static void loadAxoObjects() {
         axoObjects = new AxoObjects();
-        axoObjects.LoadAxoObjects();
+        axoObjects.loadAxoObjects1();
     }
 
     public static AxoObjects getAxoObjects() {
         return axoObjects;
     }
 
-    public AxoObjectTreeNode ObjectTree;
-    public ArrayList<IAxoObject> ObjectList;
-    HashMap<String, IAxoObject> ObjectUUIDMap;
+    public AxoObjectTreeNode objectTree;
+    public ArrayList<IAxoObject> objectList;
+    HashMap<String, IAxoObject> objectUUIDMap;
 
-    public IAxoObject GetAxoObjectFromUUID(String n) {
-        return ObjectUUIDMap.get(n);
+    public IAxoObject getAxoObjectFromUUID(String n) {
+        return objectUUIDMap.get(n);
     }
 
-    public List<IAxoObject> GetAxoObjectFromName(String n, String cwd) {
+    public List<IAxoObject> getAxoObjectFromName(String n, String cwd) {
         String bfname = null;
         if (n.startsWith("./") && (cwd != null)) {
             bfname = cwd + "/" + n.substring(2);
@@ -134,7 +133,7 @@ public class AxoObjects {
             }
         }
         // need to clone ObjectList to avoid a ConcurrentModificationException?
-        for (IAxoObject o : (ArrayList<IAxoObject>)ObjectList.clone()) {
+        for (IAxoObject o : (ArrayList<IAxoObject>)objectList.clone()) {
             if (o.getId().equals(n)) {
                 set.add(o);
             }
@@ -164,12 +163,12 @@ public class AxoObjects {
     protected Serializer serializer = new Persister();
 
     public AxoObjects() {
-        ObjectTree = new AxoObjectTreeNode("/");
-        ObjectList = new ArrayList<>();
-        ObjectUUIDMap = new HashMap<>();
+        objectTree = new AxoObjectTreeNode("/");
+        objectList = new ArrayList<>();
+        objectUUIDMap = new HashMap<>();
     }
 
-    public AxoObjectTreeNode LoadAxoObjectsFromFolder(File folder, String prefix) {
+    public AxoObjectTreeNode loadAxoObjectsFromFolder(File folder, String prefix) {
 
         String id = folder.getName();
         // is this objects in a library, if so use the library name
@@ -230,14 +229,14 @@ public class AxoObjects {
         for (final File fileEntry : fileList) {
             if (fileEntry.isDirectory()) {
                 String dirname = fileEntry.getName();
-                AxoObjectTreeNode s = LoadAxoObjectsFromFolder(fileEntry, prefix + "/" + dirname);
-                if (s.Objects.size() > 0 || s.SubNodes.size() > 0) {
-                    t.SubNodes.put(dirname, s);
-                    for (IAxoObject o : t.Objects) {
+                AxoObjectTreeNode s = loadAxoObjectsFromFolder(fileEntry, prefix + "/" + dirname);
+                if (s.objects.size() > 0 || s.subNodes.size() > 0) {
+                    t.subNodes.put(dirname, s);
+                    for (IAxoObject o : t.objects) {
                         int i = o.getId().lastIndexOf('/');
                         if (i > 0) {
                             if (o.getId().substring(i + 1).equals(dirname)) {
-                                s.Objects.add(o);
+                                s.objects.add(o);
                             }
                         }
                     }
@@ -282,19 +281,19 @@ public class AxoObjects {
                                 ShortID = ShortID.substring(i + 1);
                             }
                             a.shortId = ShortID;
-                            AxoObjectTreeNode s = t.SubNodes.get(ShortID);
+                            AxoObjectTreeNode s = t.subNodes.get(ShortID);
                             if (s == null) {
-                                t.Objects.add(a);
+                                t.objects.add(a);
                             } else {
-                                s.Objects.add(a);
+                                s.objects.add(a);
                             }
 
-                            ObjectList.add(a);
+                            objectList.add(a);
 
-                            if ((a.getUUID() != null) && (ObjectUUIDMap.containsKey(a.getUUID()))) {
-                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate UUID! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), ObjectUUIDMap.get(a.getUUID()).getId(), ObjectUUIDMap.get(a.getUUID()).getPath()});
+                            if ((a.getUUID() != null) && (objectUUIDMap.containsKey(a.getUUID()))) {
+                                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Duplicate UUID! {0}\nOriginal name: {1}\nPath: {2}", new Object[]{fileEntry.getAbsolutePath(), objectUUIDMap.get(a.getUUID()).getId(), objectUUIDMap.get(a.getUUID()).getPath()});
                             }
-                            ObjectUUIDMap.put(a.getUUID(), a);
+                            objectUUIDMap.put(a.getUUID(), a);
                         }
                     }
                 } else if (fileEntry.getName().endsWith(".axs")) {
@@ -308,8 +307,8 @@ public class AxoObjects {
                         }
                         AxoObjectUnloaded a = new AxoObjectUnloaded(fullname, fileEntry);
                         a.setPath(fileEntry.getAbsolutePath());
-                        t.Objects.add(a);
-                        ObjectList.add(a);
+                        t.objects.add(a);
+                        objectList.add(a);
                     } catch (Exception ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, fileEntry.getAbsolutePath(), ex);
                     }
@@ -319,14 +318,14 @@ public class AxoObjects {
         return t;
     }
 
-    public void LoadAxoObjects(String path) {
+    public void loadAxoObjects1(String path) {
         File folder = new File(path);
         if (folder.isDirectory()) {
-            AxoObjectTreeNode t = LoadAxoObjectsFromFolder(folder, "");
-            if (t.Objects.size() > 0 || t.SubNodes.size() > 0) {
+            AxoObjectTreeNode t = loadAxoObjectsFromFolder(folder, "");
+            if (t.objects.size() > 0 || t.subNodes.size() > 0) {
                 String dirname = folder.getName();
-                if (!ObjectTree.SubNodes.containsKey(dirname)) {
-                    ObjectTree.SubNodes.put(dirname, t);
+                if (!objectTree.subNodes.containsKey(dirname)) {
+                    objectTree.subNodes.put(dirname, t);
                 } else {
                     // it should be noted, here , we never see this name...
                     // it just needs to be unique, so not to overwirte the map
@@ -337,37 +336,37 @@ public class AxoObjects {
                     } catch (IOException ex) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    if (!ObjectTree.SubNodes.containsKey(pname)) {
-                        ObjectTree.SubNodes.put(pname, t);
+                    if (!objectTree.subNodes.containsKey(pname)) {
+                        objectTree.subNodes.put(pname, t);
                     } else {
                         // hmm, lets use the orig name with number
                         int i = 1;
                         dirname = folder.getName() + "#" + i;
-                        while (ObjectTree.SubNodes.containsKey(dirname)) {
+                        while (objectTree.subNodes.containsKey(dirname)) {
                             i++;
                             dirname = folder.getName() + "#" + i;
                         }
-                        ObjectTree.SubNodes.put(dirname, t);
+                        objectTree.subNodes.put(dirname, t);
                     }
                 }
             }
         }
     }
 
-    public Thread LoaderThread;
+    public Thread loaderThread;
 
-    public void LoadAxoObjects() {
+    public void loadAxoObjects1() {
         Runnable objloader = new Runnable() {
             @Override
             public void run() {
-                ObjectTree = new AxoObjectTreeNode("/");
-                ObjectList = new ArrayList<>();
-                ObjectUUIDMap = new HashMap<>();
+                objectTree = new AxoObjectTreeNode("/");
+                objectList = new ArrayList<>();
+                objectUUIDMap = new HashMap<>();
                 String spath[] = Preferences.getPreferences().getObjectSearchPath();
                 if (spath != null) {
                     for (String path : spath) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
-                        LoadAxoObjects(path);
+                        loadAxoObjects1(path);
                     }
                 } else {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "search path empty!");
@@ -375,11 +374,11 @@ public class AxoObjects {
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
             }
         };
-        LoaderThread = new Thread(objloader);
-        LoaderThread.start();
+        loaderThread = new Thread(objloader);
+        loaderThread.start();
     }
 
-    public static String ConvertToLegalFilename(String s) {
+    public static String convertToLegalFilename(String s) {
         s = s.replaceAll("<", "LT");
         s = s.replaceAll(">", "GT");
         s = s.replaceAll("\\*", "STAR");
@@ -392,14 +391,14 @@ public class AxoObjects {
         return s;
     }
 
-    void PostProcessObject(AxoObjectAbstract o) {
+    void postProcessObject(AxoObjectAbstract o) {
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
             AxoObject oo = (AxoObject) o;
-            if ((oo.getParameters() != null) && (oo.getParameters().size() == 1)) {
+            if (oo.getParameters().size() == 1) {
                 oo.getParameters().get(0).noLabel = true;
             }
-            if ((oo.getDisplays() != null) && (oo.getDisplays().size() == 1)) {
+            if (oo.getDisplays().size() == 1) {
                 oo.getDisplays().get(0).noLabel = true;
             }
             if (oo.depends == null) {
@@ -468,7 +467,7 @@ public class AxoObjects {
                 oo.sMidiCode = null;
             }
         }
-        if (o.getLicense() == null) {
+        if (o.getLicense().isEmpty()) {
             o.setLicense("GPL");
         }
         if (o.getIncludes() == null) {
@@ -479,14 +478,14 @@ public class AxoObjects {
         }
     }
 
-     public void WriteAxoObject(String path, AxoObjectAbstract o) {
+     public void writeAxoObject(String path, AxoObjectAbstract o) {
         File f =new File(path);
 
         AxoObjectFile a = new AxoObjectFile();
         a.objs = new ArrayList<>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
-            PostProcessObject(oa);
+            postProcessObject(oa);
         }
         // arghh, in memory use /midi/in/cc persist as cc !
         String id = o.id;

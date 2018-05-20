@@ -33,7 +33,7 @@ public class InletInt32Bipolar extends InletInt32 {
     }
 
     @Override
-    public SignalMetaData GetSignalMetaData() {
+    public SignalMetaData getSignalMetaData() {
         return SignalMetaData.bipolar;
     }
 

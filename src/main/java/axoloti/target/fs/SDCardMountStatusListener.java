@@ -23,7 +23,7 @@ package axoloti.target.fs;
  */
 public interface SDCardMountStatusListener {
 
-    void ShowSDCardMounted();
+    void showSDCardMounted();
 
-    void ShowSDCardUnmounted();
+    void showSDCardUnmounted();
 }

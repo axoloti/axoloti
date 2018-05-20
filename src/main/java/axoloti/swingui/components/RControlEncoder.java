@@ -40,9 +40,9 @@ import javax.swing.JComponent;
  */
 public abstract class RControlEncoder extends JComponent {
 
-    int MousePressedCoordX = 0;
-    int MousePressedCoordY = 0;
-    int MousePressedBtn = 0;
+    private int mousePressedCoordX = 0;
+    private int mousePressedCoordY = 0;
+    private int mousePressedBtn = 0;
     Robot robot;
 
     public RControlEncoder() {
@@ -65,9 +65,9 @@ public abstract class RControlEncoder extends JComponent {
             @Override
             public void mousePressed(MouseEvent e) {
                 grabFocus();
-                MousePressedCoordX = e.getXOnScreen();
-                MousePressedCoordY = e.getYOnScreen();
-                MousePressedBtn = e.getButton();
+                mousePressedCoordX = e.getXOnScreen();
+                mousePressedCoordY = e.getYOnScreen();
+                mousePressedBtn = e.getButton();
             }
 
             @Override
@@ -78,17 +78,17 @@ public abstract class RControlEncoder extends JComponent {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if ((MousePressedBtn == MouseEvent.BUTTON1)) {
+                if ((mousePressedBtn == MouseEvent.BUTTON1)) {
                     int v;
-                    v = (MousePressedCoordY - e.getYOnScreen());
+                    v = (mousePressedCoordY - e.getYOnScreen());
                     if (Math.abs(v) > 2) {
                         if (robot != null) {
                             getRootPane().setCursor(TransparentCursor.get());
-                            robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+                            robot.mouseMove(mousePressedCoordX, mousePressedCoordY);
                         } else {
-                            MousePressedCoordY = e.getYOnScreen();
+                            mousePressedCoordY = e.getYOnScreen();
                         }
-                        DoRotation1(v / 2);
+                        fireRotation1(v / 2);
                     }
                 }
             }
@@ -99,15 +99,15 @@ public abstract class RControlEncoder extends JComponent {
     }
     double angle = 0;
 
-    private void DoRotation1(int ticks) {
+    private void fireRotation1(int ticks) {
         if (ticks != 0) {
             angle += Math.PI * ticks / 40.0;
             repaint();
-            DoRotation(ticks);
+            fireRotation(ticks);
         }
     }
 
-    public abstract void DoRotation(int ticks);
+    protected abstract void fireRotation(int ticks);
 
     @Override
     public void paint(Graphics g) {

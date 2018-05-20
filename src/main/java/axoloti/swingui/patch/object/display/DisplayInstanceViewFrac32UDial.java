@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.swingui.components.displays.DispComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -9,8 +8,8 @@ class DisplayInstanceViewFrac32UDial extends DisplayInstanceViewFrac32 {
 
     private DispComponent dial;
 
-    DisplayInstanceViewFrac32UDial(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewFrac32UDial(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

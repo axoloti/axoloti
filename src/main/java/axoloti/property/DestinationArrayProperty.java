@@ -30,7 +30,7 @@ public class DestinationArrayProperty extends PropertyReadWrite<InletInstance[]>
     }
 
     @Override
-    public InletInstance[] StringToObj(String v) {
+    public InletInstance[] convertStringToObj(String v) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

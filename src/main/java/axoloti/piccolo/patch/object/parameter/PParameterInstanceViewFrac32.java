@@ -4,7 +4,6 @@ import axoloti.Modulation;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
 import axoloti.patch.object.parameter.preset.PresetDouble;
 import java.awt.event.ActionEvent;
@@ -16,35 +15,34 @@ import javax.swing.JPopupMenu;
 
 abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 
-    PParameterInstanceViewFrac32(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    PParameterInstanceViewFrac32(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
         initComponent();
     }
 
     private void initComponent() {
-        // TODO : does not belong in view, cfr ParameterInstanceView32
-        if (getModel().getModulators() != null) {
-            List<Modulation> modulators = getModel().getModulators();
+        // TODO: piccolo: does not belong in view, cfr ParameterInstanceView32
+        if (getDModel().getModulators() != null) {
+            List<Modulation> modulators = getDModel().getModulators();
             for (Modulation m : modulators) {
                 System.out.println("mod amount " + m.getValue());
-                m.PostConstructor(getModel());
+                m.postConstructor(getDModel());
             }
         }
 
     }
 
     @Override
-    public ParameterInstanceFrac32 getModel() {
-        return (ParameterInstanceFrac32) super.getModel();
+    public ParameterInstanceFrac32 getDModel() {
+        return (ParameterInstanceFrac32) super.getDModel();
     }
 
     @Override
-    void UpdateUnit() {
-        super.UpdateUnit();
-        if (getModel().getConversion() != null) {
-            valuelbl.setText(
-                getModel().getConversion().ToReal(new ValueFrac32(
-                                                      getModel().getValue())));
+    void updateUnit() {
+        super.updateUnit();
+        if (getDModel().getConversion() != null) {
+            valuelbl.setText(getDModel().getConversion().convertToReal(new ValueFrac32(
+                    getDModel().getValue())));
             invalidate();
         }
     }
@@ -56,8 +54,8 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
         m_default.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getController().addMetaUndo("Reset to default");
-                getController().applyDefaultValue();
+                getParameterInstanceController().addMetaUndo("Reset to default");
+                getParameterInstanceController().applyDefaultValue();
             }
         });
         m.add(m_default);
@@ -65,15 +63,15 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 
     @Override
     public boolean handleAdjustment() {
-        // TODO: fix preset logic
-        PresetDouble p = getModel().getPreset(presetEditActive);
+        // TODO: piccolo fix preset logic
+        PresetDouble p = getDModel().getPreset(presetEditActive);
         if (p != null) {
             p.setValue(getControlComponent().getValue());
         }
-        if (getModel().getValue() != getControlComponent().getValue()) {
-            if (getController() != null) {
+        if (getDModel().getValue() != getControlComponent().getValue()) {
+            if (getParameterInstanceController() != null) {
                 Double d = getControlComponent().getValue();
-                getController().changeValue(d);
+                getParameterInstanceController().changeValue(d);
             }
         } else {
             return false;
@@ -82,7 +80,7 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
     }
 
     public void updateModulation(int index, double amount) {
-        getModel().updateModulation(index, amount);
+        getDModel().updateModulation(index, amount);
     }
 
     @Override
@@ -91,9 +89,9 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
         if (ParameterInstance.VALUE.is(evt)) {
             Double v = (Double) evt.getNewValue();
             ctrl.setValue(v);
-            UpdateUnit();
+            updateUnit();
         } else if (ParameterInstance.CONVERSION.is(evt)) {
-            UpdateUnit();
+            updateUnit();
         }
     }
 }

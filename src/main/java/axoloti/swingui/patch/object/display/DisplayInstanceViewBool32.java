@@ -1,7 +1,6 @@
 package axoloti.swingui.patch.object.display;
 
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.swingui.components.displays.LedstripComponent;
 import java.beans.PropertyChangeEvent;
 
@@ -9,8 +8,8 @@ class DisplayInstanceViewBool32 extends DisplayInstanceViewInt32 {
 
     private LedstripComponent readout;
 
-    DisplayInstanceViewBool32(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewBool32(DisplayInstance displayInstance) {
+        super(displayInstance);
         initComponents();
     }
 

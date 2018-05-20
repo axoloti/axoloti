@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayNoteLabel;
 import axoloti.realunits.NativeToReal;
 import axoloti.realunits.PitchToNote;
@@ -30,8 +29,8 @@ public class DisplayInstanceNoteLabel extends DisplayInstanceFrac32<DisplayNoteL
 
     private final NativeToReal conv = new PitchToNote();
 
-    DisplayInstanceNoteLabel(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceNoteLabel(DisplayNoteLabel display) {
+        super(display);
     }
 
     public NativeToReal getConv() {

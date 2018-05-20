@@ -17,8 +17,6 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceBin32;
-
 /**
  *
  * @author Johannes Taelman
@@ -32,11 +30,6 @@ public class ParameterBin32 extends ParameterBin {
         super(name);
     }
 
-    @Override
-    public ParameterInstanceBin32 InstanceFactory() {
-        return new ParameterInstanceBin32();
-    }
-
     static public final String TypeName = "bin32";
 
     @Override
@@ -45,7 +38,7 @@ public class ParameterBin32 extends ParameterBin {
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_bin_16bits";
     }
 

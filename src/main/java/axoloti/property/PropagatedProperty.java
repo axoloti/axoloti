@@ -21,7 +21,7 @@ public class PropagatedProperty<T extends Object> extends Property<T> {
     @Override
     public T get(IModel obj) {
         return (T) parentProperty.get(
-                ((IView) obj).getController().getModel()
+                ((IView) obj).getDModel()
         );
     }
 
@@ -56,8 +56,8 @@ public class PropagatedProperty<T extends Object> extends Property<T> {
     }
 
     @Override
-    public T StringToObj(String v) {
-        return (T) parentProperty.StringToObj(v);
+    public T convertStringToObj(String v) {
+        return (T) parentProperty.convertStringToObj(v);
     }
 
 }

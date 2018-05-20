@@ -1,6 +1,6 @@
 package axoloti.patch.object.outlet;
 
-import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.outlet.Outlet;
 import axoloti.patch.object.AxoObjectInstance;
 
 /**
@@ -9,9 +9,9 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class OutletInstanceFactory {
 
-    static public OutletInstance createView(AtomDefinitionController controller, AxoObjectInstance axoObj) {
-        OutletInstance i = new OutletInstance(controller, axoObj);
-        controller.addView(i);
+    static public OutletInstance createView(Outlet outlet, AxoObjectInstance axoObj) {
+        OutletInstance i = new OutletInstance(outlet, axoObj);
+        outlet.getController().addView(i);
         return i;
     }
 }

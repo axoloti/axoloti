@@ -42,10 +42,10 @@ public class PatchSelectionEventHandler extends PSelectionEventHandler {
             canvas.getScrollPane().setKeyActionsDisabled(!getSelection().isEmpty());
         }
 
-        parent.getController().SelectNone();
+        parent.getDModel().getController().selectNone();
         for (Object o : getSelection()) {
             PAxoObjectInstanceViewAbstract pn = (PAxoObjectInstanceViewAbstract) o;
-            pn.getController().changeSelected(true);
+            pn.getDModel().getController().changeSelected(true);
         }
     }
 
@@ -110,7 +110,7 @@ public class PatchSelectionEventHandler extends PSelectionEventHandler {
         if (isDragging) {
             isDragging = false;
             parent.updateSize();
-            parent.getController().fixNegativeObjectCoordinates();
+            parent.getDModel().getController().fixNegativeObjectCoordinates();
         }
     }
 

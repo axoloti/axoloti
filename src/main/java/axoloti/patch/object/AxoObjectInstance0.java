@@ -1,6 +1,6 @@
 package axoloti.patch.object;
 
-import axoloti.object.ObjectController;
+import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
@@ -24,8 +24,8 @@ abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
         super();
     }
 
-    public AxoObjectInstance0(ObjectController typeController, PatchModel patchModel, String InstanceName1, Point location) {
-        super(typeController, patchModel, InstanceName1, location);
+    public AxoObjectInstance0(IAxoObject obj, PatchModel patchModel, String InstanceName1, Point location) {
+        super(obj, patchModel, InstanceName1, location);
     }
 
     @Override

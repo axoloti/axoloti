@@ -37,6 +37,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  *
@@ -48,11 +49,11 @@ public class DialComponent extends ACtrlComponent {
     private double max;
     private double min;
     private double tick;
-    private NativeToReal convs[];
+    private List<NativeToReal> convs;
     private String keybBuffer = "";
     private Robot robot;
 
-    public void setNative(NativeToReal convs[]) {
+    public void setNative(List<NativeToReal> convs) {
         this.convs = convs;
     }
 
@@ -83,7 +84,7 @@ public class DialComponent extends ACtrlComponent {
             }
         });
 
-        SetupTransferHandler();
+        setupTransferHandler();
     }
     final int layoutTick = 3;
 
@@ -91,7 +92,7 @@ public class DialComponent extends ACtrlComponent {
     protected void mouseDragged(MouseEvent e) {
         if (isEnabled()) {
             double v;
-            if ((MousePressedBtn == MouseEvent.BUTTON1)) {
+            if ((mousePressedBtn == MouseEvent.BUTTON1)) {
                 if (Preferences.getPreferences().getMouseDialAngular()) {
                     int y = e.getY();
                     int x = e.getX();
@@ -110,9 +111,9 @@ public class DialComponent extends ACtrlComponent {
                     if (e.isShiftDown()) {
                         t = t * 0.1;
                     }
-                    v = value + t * ((int) Math.round((MousePressedCoordY - e.getYOnScreen())));
+                    v = value + t * ((int) Math.round((mousePressedCoordY - e.getYOnScreen())));
                     if (robot == null) {
-                        MousePressedCoordY = e.getYOnScreen();
+                        mousePressedCoordY = e.getYOnScreen();
                     }
                 }
                 fireValue(v);
@@ -120,9 +121,10 @@ public class DialComponent extends ACtrlComponent {
             }
         }
     }
-    int MousePressedCoordX = 0;
-    int MousePressedCoordY = 0;
-    int MousePressedBtn = MouseEvent.NOBUTTON;
+
+    private int mousePressedCoordX = 0;
+    private int mousePressedCoordY = 0;
+    private int mousePressedBtn = MouseEvent.NOBUTTON;
 
     @Override
     protected void mousePressed(MouseEvent e) {
@@ -130,11 +132,11 @@ public class DialComponent extends ACtrlComponent {
             if (isEnabled()) {
                 robot = createRobot();
                 grabFocus();
-                MousePressedCoordX = e.getXOnScreen();
-                MousePressedCoordY = e.getYOnScreen();
+                mousePressedCoordX = e.getXOnScreen();
+                mousePressedCoordY = e.getYOnScreen();
 
-                int lastBtn = MousePressedBtn;
-                MousePressedBtn = e.getButton();
+                int lastBtn = mousePressedBtn;
+                mousePressedBtn = e.getButton();
 
                 if (lastBtn != MouseEvent.NOBUTTON) {
                     if (lastBtn == MouseEvent.BUTTON1) {
@@ -143,7 +145,7 @@ public class DialComponent extends ACtrlComponent {
                     }
                 }
 
-                if (MousePressedBtn == MouseEvent.BUTTON1) {
+                if (mousePressedBtn == MouseEvent.BUTTON1) {
                     if (!Preferences.getPreferences().getMouseDoNotRecenterWhenAdjustingControls()) {
                         getRootPane().setCursor(TransparentCursor.get());
                     }
@@ -160,7 +162,7 @@ public class DialComponent extends ACtrlComponent {
     protected void mouseReleased(MouseEvent e) {
         if (isEnabled() && !e.isPopupTrigger()) {
             getRootPane().setCursor(Cursor.getDefaultCursor());
-            MousePressedBtn = MouseEvent.NOBUTTON;
+            mousePressedBtn = MouseEvent.NOBUTTON;
             fireEventAdjustmentFinished();
             e.consume();
         }
@@ -221,7 +223,7 @@ public class DialComponent extends ACtrlComponent {
                     if (convs != null) {
                         for (NativeToReal c : convs) {
                             try {
-                                fireValue(c.FromReal(keybBuffer));
+                                fireValue(c.convertFromReal(keybBuffer));
                                 converted = true;
                                 break;
                             } catch (ParseException ex2) {
@@ -396,7 +398,7 @@ public class DialComponent extends ACtrlComponent {
         if (convs != null) {
             String s = "<html>";
             for (NativeToReal c : convs) {
-                s += c.ToReal(new ValueFrac32(value)) + "<br>";
+                s += c.convertToReal(new ValueFrac32(value)) + "<br>";
             }
             this.setToolTipText(s);
         }
@@ -441,7 +443,7 @@ public class DialComponent extends ACtrlComponent {
     public void robotMoveToCenter() {
         //getRootPane().setCursor(MainFrame.transparentCursor);
         if (robot != null) {
-            robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+            robot.mouseMove(mousePressedCoordX, mousePressedCoordY);
         }
     }
 }

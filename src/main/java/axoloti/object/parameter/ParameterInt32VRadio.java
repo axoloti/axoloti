@@ -18,7 +18,6 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueInt32;
-import axoloti.patch.object.parameter.ParameterInstanceInt32VRadio;
 import axoloti.property.Property;
 import java.security.MessageDigest;
 import java.util.List;
@@ -28,7 +27,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32VRadio extends ParameterInt32<ParameterInstanceInt32VRadio> {
+public class ParameterInt32VRadio extends ParameterInt32 {
 
     @Element
     public ValueInt32 MaxValue;
@@ -40,12 +39,6 @@ public class ParameterInt32VRadio extends ParameterInt32<ParameterInstanceInt32V
     public ParameterInt32VRadio(String name, int MinValue, int MaxValue) {
         super(name);
         this.MaxValue = new ValueInt32(MaxValue);
-    }
-
-    @Override
-    public ParameterInstanceInt32VRadio InstanceFactory() {
-        ParameterInstanceInt32VRadio b = new ParameterInstanceInt32VRadio();
-        return b;
     }
 
     @Override
@@ -69,7 +62,7 @@ public class ParameterInt32VRadio extends ParameterInt32<ParameterInstanceInt32V
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_int";
     }
 

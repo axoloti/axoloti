@@ -32,22 +32,22 @@ public class AxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFacto
     }
 
     @Override
-    public IAxoObjectInstanceView createView(ObjectInstanceController controller, PatchView patchView) {
-        IAxoObjectInstance model = controller.getModel();
+    public IAxoObjectInstanceView createView(IAxoObjectInstance model, PatchView patchView) {
+        ObjectInstanceController controller = model.getController();
         AxoObjectInstanceViewAbstract view = null;
         PatchViewSwing patchViewSwing = (PatchViewSwing) patchView;
         if (model instanceof AxoObjectInstanceComment) {
-            view = new AxoObjectInstanceViewComment(controller, patchViewSwing);
+            view = new AxoObjectInstanceViewComment((AxoObjectInstanceComment) model, patchViewSwing);
         } else if (model instanceof AxoObjectInstanceHyperlink) {
-            view = new AxoObjectInstanceViewHyperlink(controller, patchViewSwing);
+            view = new AxoObjectInstanceViewHyperlink((AxoObjectInstanceHyperlink) model, patchViewSwing);
         } else if (model instanceof AxoObjectInstanceZombie) {
-            view = new AxoObjectInstanceViewZombie(controller, patchViewSwing);
+            view = new AxoObjectInstanceViewZombie((AxoObjectInstanceZombie) model, patchViewSwing);
         } else if (model instanceof AxoObjectInstancePatcherObject) {
-            view = new AxoObjectInstanceViewPatcherObject(controller, patchViewSwing);
+            view = new AxoObjectInstanceViewPatcherObject((AxoObjectInstancePatcherObject) model, patchViewSwing);
         } else if (model instanceof AxoObjectInstancePatcher) {
-            view = new AxoObjectInstanceViewPatcher(controller, patchViewSwing);
+            view = new AxoObjectInstanceViewPatcher((AxoObjectInstancePatcher) model, patchViewSwing);
         } else if (model instanceof AxoObjectInstance) {
-            view = new AxoObjectInstanceView(controller, patchViewSwing);
+            view = new AxoObjectInstanceView(model, patchViewSwing);
         } else {
             throw new Error("unknown object type");
         }

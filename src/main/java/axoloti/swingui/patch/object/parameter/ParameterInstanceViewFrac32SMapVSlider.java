@@ -1,7 +1,7 @@
 package axoloti.swingui.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
 import axoloti.preferences.Theme;
 import axoloti.patch.object.parameter.preset.Preset;
@@ -9,35 +9,35 @@ import axoloti.swingui.components.control.VSliderComponent;
 
 class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32S {
 
-    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
     }
 
     @Override
-    public ParameterInstanceFrac32SMapVSlider getModel() {
-        return (ParameterInstanceFrac32SMapVSlider) super.getModel();
+    public ParameterInstanceFrac32SMapVSlider getDModel() {
+        return (ParameterInstanceFrac32SMapVSlider) super.getDModel();
     }
 
     /*
      *  Preset logic
      */
     @Override
-    public void ShowPreset(int i) {
+    public void showPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            Preset p = getModel().getPreset(presetEditActive);
+            Preset p = getDModel().getPreset(presetEditActive);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue((Double)p.getValue());
             } else {
                 setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue());
+                ctrl.setValue(getDModel().getValue());
             }
         } else {
             setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue());
+            ctrl.setValue(getDModel().getValue());
         }
-        if ((getModel().getPresets() != null) && (!getModel().getPresets().isEmpty())) {
+        if ((getDModel().getPresets() != null) && (!getDModel().getPresets().isEmpty())) {
 //            lblPreset.setVisible(true);
         } else {
 //            lblPreset.setVisible(false);
@@ -45,8 +45,8 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
     }
 
     @Override
-    public VSliderComponent CreateControl() {
-        return new VSliderComponent(0.0, getModel().getMin(), getModel().getMax(), getModel().getTick());
+    public VSliderComponent createControl() {
+        return new VSliderComponent(0.0, getDModel().getMin(), getDModel().getMax(), getDModel().getTick());
     }
 
     @Override

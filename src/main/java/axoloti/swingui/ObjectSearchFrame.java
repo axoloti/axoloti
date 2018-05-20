@@ -19,14 +19,12 @@ package axoloti.swingui;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.object.IAxoObject;
-import axoloti.object.ObjectController;
 import axoloti.objectlibrary.AxoObjectTreeNode;
 import axoloti.objectlibrary.AxoObjects;
-import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
 import axoloti.patch.object.AxoObjectInstanceFactory;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
 import axoloti.utils.Constants;
@@ -71,7 +69,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     DefaultMutableTreeNode root;
     DefaultTreeModel tm;
     public IAxoObject type;
-    protected final PatchController patchController;
+    protected final PatchModel patchModel;
     public IAxoObjectInstance target_object;
     private AxoObjectTreeNode objectTree;
 
@@ -80,7 +78,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
      *
      * @param p parent
      */
-    public ObjectSearchFrame(PatchController patchController) {
+    public ObjectSearchFrame(PatchModel patchModel) {
         super();
         initComponents();
 
@@ -110,10 +108,10 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
         jButtonAccept.setEnabled(false);
 
-        this.patchController = patchController;
+        this.patchModel = patchModel;
         DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
-        this.objectTree = AxoObjects.getAxoObjects().ObjectTree;
-        this.root = PopulateJTree(AxoObjects.getAxoObjects().ObjectTree, root1);
+        this.objectTree = AxoObjects.getAxoObjects().objectTree;
+        this.root = populateJTree(AxoObjects.getAxoObjects().objectTree, root1);
         tm = new DefaultTreeModel(this.root);
         jTree1.setModel(tm);
         jTree1.addTreeSelectionListener(new TreeSelectionListener() {
@@ -133,7 +131,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 }
                 Object nodeInfo = node.getUserObject();
                 if (nodeInfo instanceof IAxoObject) {
-                    SetPreview((IAxoObject) nodeInfo);
+                    setPreview((IAxoObject) nodeInfo);
                     if (!jTextFieldObjName.hasFocus()) {
                         jTextFieldObjName.setText(((IAxoObject) nodeInfo).getId());
                     }
@@ -147,14 +145,14 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                     DefaultMutableTreeNode node = (DefaultMutableTreeNode) jTree1.getLastSelectedPathComponent();
                     if (node != null) {
                         if (node.isLeaf()) {
-                            Accept();
+                            accept();
                             e.consume();
                         } else {
                             jTree1.expandPath(jTree1.getLeadSelectionPath());
                         }
                     }
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    Cancel();
+                    cancel();
                     e.consume();
                 }
             }
@@ -165,7 +163,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    Accept();
+                    accept();
                 }
             }
 
@@ -175,9 +173,9 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             public void valueChanged(ListSelectionEvent e) {
                 Object o = ObjectSearchFrame.this.jList1.getSelectedValue();
                 if (o instanceof IAxoObject) {
-                    SetPreview((IAxoObject) o);
+                    setPreview((IAxoObject) o);
                     if (!jTree1.hasFocus()) {
-                        ExpandJTreeToEl((IAxoObject) o);
+                        expandJTreeToEl((IAxoObject) o);
                     }
                     if (!jTextFieldObjName.hasFocus()) {
                         jTextFieldObjName.setText(((IAxoObject) o).getId());
@@ -192,11 +190,11 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Accept();
+                    accept();
                     e.consume();
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     type = null;
-                    Cancel();
+                    cancel();
                     e.consume();
                 }
             }
@@ -207,7 +205,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if ((e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)) {
-                    Accept();
+                    accept();
                 }
             }
 
@@ -226,18 +224,18 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    Accept();
+                    accept();
                     e.consume();
                 } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                     type = null;
-                    Cancel();
+                    cancel();
                     e.consume();
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                Search(jTextFieldObjName.getText());
+                search(jTextFieldObjName.getText());
             }
         });
     }
@@ -265,7 +263,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             }
         }
 
-        Point patchFrameOnScreen = patchController.getViewLocationOnScreen();
+        Point patchFrameOnScreen = new Point(100, 100); // FIXME
 
         if (patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
             patchLoc.x = (int) (allScreenBounds.getWidth() + allScreenBounds.getX() - patchFrameOnScreen.getX() - getWidth());
@@ -277,15 +275,15 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         return patchLoc;
     }
 
-    public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
-        Launch(patchLoc, o, searchString, true);
+    public void launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
+        launch(patchLoc, o, searchString, true);
     }
 
-    public void Launch(Point patchLoc, IAxoObjectInstanceView o, String searchString, boolean setVisible) {
-        if (this.objectTree != AxoObjects.getAxoObjects().ObjectTree) {
+    public void launch(Point patchLoc, IAxoObjectInstanceView o, String searchString, boolean setVisible) {
+        if (this.objectTree != AxoObjects.getAxoObjects().objectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
-            this.objectTree = AxoObjects.getAxoObjects().ObjectTree;
-            this.root = PopulateJTree(AxoObjects.getAxoObjects().ObjectTree, root1);
+            this.objectTree = AxoObjects.getAxoObjects().objectTree;
+            this.root = populateJTree(AxoObjects.getAxoObjects().objectTree, root1);
             tm = new DefaultTreeModel(this.root);
             jTree1.setModel(tm);
         }
@@ -295,25 +293,25 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
-        Point ps = patchController.getViewLocationOnScreen();
+        Point ps = new Point(100, 100);// TODO: show ObjectSearchFrame at corresponding location
         Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
         setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
         if (o != null) {
-            target_object = o.getModel();
+            target_object = o.getDModel();
         } else {
             target_object = null;
         }
         if (o != null) {
-            IAxoObject oa = o.getModel().getType();
+            IAxoObject oa = o.getDModel().getDModel();
             if (oa != null) {
-                Search(oa.getId());
-                SetPreview(oa);
-                ExpandJTreeToEl(oa);
+                search(oa.getId());
+                setPreview(oa);
+                expandJTreeToEl(oa);
             }
-            jTextFieldObjName.setText(o.getModel().getType().getId());
+            jTextFieldObjName.setText(o.getDModel().getDModel().getId());
         } else if (searchString != null) {
-            Search(searchString);
+            search(searchString);
             jTextFieldObjName.setText(searchString);
         }
         jTextFieldObjName.grabFocus();
@@ -324,7 +322,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
     }
 
-    public void SetPreview(IAxoObject o) {
+    public void setPreview(IAxoObject o) {
         if (o == null) {
             previewObj = null;
             type = null;
@@ -340,29 +338,18 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         if (o != previewObj) {
             previewObj = o;
             type = o;
-            ExpandJTreeToEl(o);
+            expandJTreeToEl(o);
             jList1.setSelectedValue(o, true);
             if (jList1.getSelectedValue() != o) {
             }
-            ObjectController oc = (ObjectController)o.getControllerFromModel();
-            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(oc, null, "dummy", new Point(5, 5));
-            /*
-            ObjectInstanceController c;
-
-            if (objectInstance instanceof AxoObjectInstancePatcher) {
-                c = new ObjectInstancePatcherController((AxoObjectInstancePatcher) objectInstance);
-            } else {
-                c = new ObjectInstanceController(objectInstance);
-            }
-            objectInstance.setControllerFromModel(c);
-            */
-            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.getInstance().createView((ObjectInstanceController)objectInstance.getControllerFromModel(), null);
+            AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(o, null, "dummy", new Point(5, 5));
+            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.getInstance().createView(objectInstance, null);
             jPanel1.removeAll();
             jPanel1.add((AxoObjectInstanceViewAbstract) objectInstanceView);
             objectInstanceView.resizeToGrid();
             jPanel1.repaint();  //reqd, as removed object may be smaller than new object
 
-            IAxoObject t = objectInstanceView.getModel().getType();
+            IAxoObject t = objectInstanceView.getDModel().getDModel();
             if (t != null) {
                 String description = t.getDescription() == null || t.getDescription().isEmpty() ? o.getDescription() : t.getDescription();
                 String path = t.getPath() == null ? o.getPath() : t.getPath();
@@ -384,19 +371,19 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
     }
 
-    static DefaultMutableTreeNode PopulateJTree(AxoObjectTreeNode anode, DefaultMutableTreeNode root) {
-        for (String n : anode.SubNodes.keySet()) {
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode(anode.SubNodes.get(n));
-            root.add(PopulateJTree(anode.SubNodes.get(n), node));
+    static DefaultMutableTreeNode populateJTree(AxoObjectTreeNode anode, DefaultMutableTreeNode root) {
+        for (String n : anode.subNodes.keySet()) {
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(anode.subNodes.get(n));
+            root.add(populateJTree(anode.subNodes.get(n), node));
         }
-        for (IAxoObject n : anode.Objects) {
+        for (IAxoObject n : anode.objects) {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(n);
             root.add(node);
         }
         return root;
     }
 
-    protected void ExpandJTreeToEl(IAxoObject s) {
+    protected void expandJTreeToEl(IAxoObject s) {
         Enumeration e = root.depthFirstEnumeration();
         DefaultMutableTreeNode n = null;
         while (e.hasMoreElements()) {
@@ -417,10 +404,10 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
     }
 
-    public void Search(String s) {
+    public void search(String s) {
         ArrayList<IAxoObject> listData = new ArrayList<>();
         if ((s == null) || s.isEmpty()) {
-            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().objectList) {
                 listData.add(o);
             }
             jList1.setListData(listData.toArray());
@@ -428,26 +415,26 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
 //            jList1.revalidate();
         } else {
             // exact match first
-            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().objectList) {
                 if (o.getId().equals(s)) {
                     listData.add(o);
                 }
             }
-            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().objectList) {
                 if (o.getId().startsWith(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }
                 }
             }
-            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().objectList) {
                 if (o.getId().contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
                     }
                 }
             }
-            for (IAxoObject o : AxoObjects.getAxoObjects().ObjectList) {
+            for (IAxoObject o : AxoObjects.getAxoObjects().objectList) {
                 if (o.getDescription() != null && o.getDescription().contains(s)) {
                     if (!listData.contains(o)) {
                         listData.add(o);
@@ -459,13 +446,13 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
                 type = listData.get(0);
                 jList1.setSelectedIndex(0);
                 jList1.ensureIndexIsVisible(0);
-                ExpandJTreeToEl(listData.get(0));
-                SetPreview(type);
+                expandJTreeToEl(listData.get(0));
+                setPreview(type);
             } else {
-                List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(s, patchController.getModel().GetCurrentWorkingDirectory());
+                List<IAxoObject> objs = AxoObjects.getAxoObjects().getAxoObjectFromName(s, patchModel.getCurrentWorkingDirectory());
                 if ((objs != null) && (objs.size() > 0)) {
                     jList1.setListData(objs.toArray());
-                    SetPreview(objs.get(0));
+                    setPreview(objs.get(0));
                 }
             }
         }
@@ -473,18 +460,18 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
 
     boolean accepted = false;
 
-    public void Cancel() {
+    public void cancel() {
         accepted = false;
         MainFrame.mainframe.setGrabFocusOnSevereErrors(true);
         setVisible(false);
     }
 
-    public void Accept() {
+    public void accept() {
         MainFrame.mainframe.setGrabFocusOnSevereErrors(true);
         setVisible(false);
         IAxoObject x = type;
         if (x == null) {
-            List<IAxoObject> objs = AxoObjects.getAxoObjects().GetAxoObjectFromName(jTextFieldObjName.getText(), patchController.getModel().GetCurrentWorkingDirectory());
+            List<IAxoObject> objs = AxoObjects.getAxoObjects().getAxoObjectFromName(jTextFieldObjName.getText(), patchModel.getCurrentWorkingDirectory());
             if ((objs != null) && (!objs.isEmpty())) {
                 x = objs.get(0);
                 jTextFieldObjName.setText("");
@@ -492,11 +479,11 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
         if (x != null) {
             if (target_object == null) {
-                patchController.addMetaUndo("add object");
-                patchController.addObjectInstance(x, new Point(patchLocX, patchLocY));
+                patchModel.getController().addMetaUndo("add object");
+                patchModel.getController().addObjectInstance(x, new Point(patchLocX, patchLocY));
             } else {
-                patchController.addMetaUndo("change object type");
-                AxoObjectInstanceAbstract oi = patchController.ChangeObjectInstanceType(target_object, x);
+                patchModel.getController().addMetaUndo("change object type");
+                AxoObjectInstanceAbstract oi = patchModel.getController().changeObjectInstanceType(target_object, x);
             }
         }
         setVisible(false);
@@ -681,22 +668,22 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         getRootPane().setCursor(Cursor.getDefaultCursor());
         if ((evt.getOppositeWindow() == null)
                 || !(evt.getOppositeWindow() instanceof axoloti.swingui.patch.PatchFrame)) {
-            Cancel();
+            cancel();
         } else {
             if (accepted) {
-                Accept();
+                accept();
             } else {
-                Cancel();
+                cancel();
             }
         }
     }//GEN-LAST:event_formWindowLostFocus
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        Cancel();
+        cancel();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAcceptActionPerformed
-        Accept();
+        accept();
     }//GEN-LAST:event_jButtonAcceptActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -719,7 +706,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    class StringIcon implements Icon {
+    static class StringIcon implements Icon {
 
         final String str;
         final int w, h;

@@ -3,24 +3,24 @@ package axoloti.piccolo.patch.object.display;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
 import axoloti.patch.object.display.DisplayInstance;
-import axoloti.patch.object.display.DisplayInstanceController;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.patch.PatchPNode;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
 
 abstract class PDisplayInstanceView extends PatchPNode implements IDisplayInstanceView {
-    DisplayInstanceController controller;
+    final protected DisplayInstance displayInstance;
     PLabelComponent label;
 
-    PDisplayInstanceView(DisplayInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceView(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
-        this.controller = controller;
+        this.displayInstance = displayInstance;
         initComponents();
     }
 
-    DisplayInstance getModel() {
-        return getController().getModel();
+    @Override
+    public DisplayInstance getDModel() {
+        return displayInstance;
     }
 
     private void initComponents() {
@@ -28,11 +28,6 @@ abstract class PDisplayInstanceView extends PatchPNode implements IDisplayInstan
         setPickable(false);
         label = new PLabelComponent("");
         addChild(label);
-    }
-
-    @Override
-    public DisplayInstanceController getController() {
-        return controller;
     }
 
     @Override

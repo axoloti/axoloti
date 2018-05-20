@@ -3,7 +3,6 @@ package axoloti.swingui.patch.object.attribute;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
-import axoloti.patch.object.attribute.AttributeInstanceController;
 import axoloti.patch.object.attribute.AttributeInstanceInt32;
 import axoloti.patch.object.attribute.AttributeInstanceObjRef;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
@@ -18,23 +17,22 @@ import axoloti.swingui.patch.object.AxoObjectInstanceView;
  */
 public class AttributeInstanceViewFactory {
 
-    public static AttributeInstanceView createView(AttributeInstanceController controller, IAxoObjectInstanceView obj) {
-        AttributeInstance model = controller.getModel();
+    public static AttributeInstanceView createView(AttributeInstance model, IAxoObjectInstanceView obj) {
         AttributeInstanceView view;
         if (model instanceof AttributeInstanceComboBox) {
-            view = new AttributeInstanceViewComboBox(controller, (AxoObjectInstanceView) obj);
+            view = new AttributeInstanceViewComboBox((AttributeInstanceComboBox) model, (AxoObjectInstanceView) obj);
         } else if (model instanceof AttributeInstanceInt32) {
-            view = new AttributeInstanceViewInt32(controller, obj);
+            view = new AttributeInstanceViewInt32(model, obj);
         } else if (model instanceof AttributeInstanceObjRef) {
-            view = new AttributeInstanceViewObjRef(controller, obj);
+            view = new AttributeInstanceViewObjRef(model, obj);
         } else if (model instanceof AttributeInstanceSDFile) {
-            view = new AttributeInstanceViewSDFile(controller, obj);
+            view = new AttributeInstanceViewSDFile(model, obj);
         } else if (model instanceof AttributeInstanceSpinner) {
-            view = new AttributeInstanceViewSpinner(controller, obj);
+            view = new AttributeInstanceViewSpinner(model, obj);
         } else if (model instanceof AttributeInstanceTablename) {
-            view = new AttributeInstanceViewTablename(controller, obj);
+            view = new AttributeInstanceViewTablename(model, obj);
         } else if (model instanceof AttributeInstanceTextEditor) {
-            view = new AttributeInstanceViewTextEditor(controller, obj);
+            view = new AttributeInstanceViewTextEditor(model, obj);
         } else {
             view = null;
             throw new Error("unkonwn attribute type");
@@ -45,7 +43,7 @@ public class AttributeInstanceViewFactory {
          return new AttributeInstanceWavefile((AttributeInstanceWavefile)model, obj);
          }
          */
-        controller.addView(view);
+        model.getController().addView(view);
         return view;
     }
 }

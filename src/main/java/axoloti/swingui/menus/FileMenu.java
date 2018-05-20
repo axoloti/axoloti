@@ -20,6 +20,7 @@ package axoloti.swingui.menus;
 import axoloti.FileUtils;
 import axoloti.abstractui.PatchView;
 import axoloti.objectlibrary.AxoObjects;
+import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.MainFrame;
@@ -27,7 +28,6 @@ import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
 import axoloti.swingui.preferences.PreferencesFrame;
-import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.utils.KeyUtils;
 import generatedobjects.GeneratedObjects;
 import java.awt.event.KeyEvent;
@@ -229,7 +229,7 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuRegenerateObjectsActionPerformed(java.awt.event.ActionEvent evt) {
-        GeneratedObjects.WriteAxoObjects();
+        GeneratedObjects.writeAxoObjects();
         jMenuReloadObjectsActionPerformed(evt);
     }
 
@@ -238,18 +238,18 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuOpenURLActionPerformed(java.awt.event.ActionEvent evt) {
-        OpenURL();
+        openURL();
     }
 
-    public void OpenURL() {
+    public void openURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
         if (url == null) {
             return;
         }
         try {
             InputStream input = new URL(url).openStream();
-            String name = url.substring(url.lastIndexOf("/") + 1, url.length());
-            PatchViewSwing.OpenPatch(name, input);
+            String name = url.substring(url.lastIndexOf('/') + 1, url.length());
+            PatchViewSwing.openPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(FileMenu.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});
         } catch (IOException ex) {
@@ -258,11 +258,11 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {
-        FileUtils.Open((JFrame) SwingUtilities.getWindowAncestor(this));
+        FileUtils.open((JFrame) SwingUtilities.getWindowAncestor(this));
     }
 
     private void jMenuNewPatchActionPerformed(java.awt.event.ActionEvent evt) {
-        NewPatch();
+        createNewPatch();
     }
 
     private void jMenuSyncActionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,17 +273,17 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {
-        PatchBank.OpenPatchBankEditor(null);
+        PatchBank.openPatchBankEditor(null);
     }
 
-    public void NewPatch() {
+    public void createNewPatch() {
         PatchModel patchModel = new PatchModel();
-        PatchFrame pf = PatchView.OpenPatchModel(patchModel, "untitled");
+        PatchFrame pf = PatchView.openPatchModel(patchModel, "untitled");
         pf.setVisible(true);
     }
 
     private void jMenuQuitActionPerformed(java.awt.event.ActionEvent evt) {
-        MainFrame.mainframe.Quit();
+        MainFrame.mainframe.quit();
     }
 
     @Override

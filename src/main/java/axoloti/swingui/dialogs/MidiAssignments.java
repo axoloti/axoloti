@@ -38,7 +38,7 @@ public class MidiAssignments extends javax.swing.JDialog {
 
     public MidiAssignments(java.awt.Frame parent, boolean modal, IParameterInstanceView parameterInstanceView) {
         super(parent, modal);
-        this.patch = parameterInstanceView.getModel().getObjectInstance().getParent();
+        this.patch = parameterInstanceView.getDModel().getObjectInstance().getParent();
         initComponents();
         initComponents2(parameterInstanceView);
     }
@@ -60,11 +60,11 @@ public class MidiAssignments extends javax.swing.JDialog {
                 }
             }
         }
-        result = parameterInstanceView.getModel().getMidiCC();
+        result = parameterInstanceView.getDModel().getMidiCC();
         for (int i = 0; i < 128; i++) {
             String name = "";
-            if (i < MidiCCToName.length) {
-                name = MidiCCToName[i];
+            if (i < midiCCToName.length) {
+                name = midiCCToName[i];
             }
             model.addRow(new Object[]{i, name, CCObj[i], CCParam[i]});
         }
@@ -200,7 +200,7 @@ public class MidiAssignments extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    static String[] MidiCCToName = {
+    private static String[] midiCCToName = {
         "Bank Select",
         "Modulation",
         "Breath Controller",

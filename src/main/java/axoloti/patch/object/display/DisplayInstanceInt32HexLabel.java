@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayInt32HexLabel;
 
 /**
@@ -26,8 +25,8 @@ import axoloti.object.display.DisplayInt32HexLabel;
  */
 public class DisplayInstanceInt32HexLabel extends DisplayInstanceInt32<DisplayInt32HexLabel> {
 
-    DisplayInstanceInt32HexLabel(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceInt32HexLabel(DisplayInt32HexLabel display) {
+        super(display);
     }
 
 }

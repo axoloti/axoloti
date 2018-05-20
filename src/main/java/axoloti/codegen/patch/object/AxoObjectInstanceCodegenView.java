@@ -1,19 +1,17 @@
 package axoloti.codegen.patch.object;
 
+import axoloti.codegen.CodeGeneration;
 import axoloti.codegen.patch.object.display.DisplayInstanceView;
 import axoloti.codegen.patch.object.display.DisplayInstanceViewFactory;
 import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
 import axoloti.codegen.patch.object.parameter.ParameterInstanceViewFactory;
 import axoloti.datatypes.Frac32buffer;
-import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.codegen.CodeGeneration;
 import java.beans.PropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,23 +22,22 @@ import java.util.List;
  */
 class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
 
-    final ObjectInstanceController controller;
-    List<ParameterInstanceView> parameterInstances;
-    List<DisplayInstanceView> displayInstances;
+    final private IAxoObjectInstance objectInstance;
+    private List<ParameterInstanceView> parameterInstances;
+    private List<DisplayInstanceView> displayInstances;
 
-    AxoObjectInstanceCodegenView(ObjectInstanceController controller) {
-        this.controller = controller;
-        IAxoObjectInstance model = controller.getModel();
+    AxoObjectInstanceCodegenView(IAxoObjectInstance objectInstance) {
+        this.objectInstance = objectInstance;
 
         parameterInstances = new LinkedList<>();
-        for (ParameterInstance p : model.getParameterInstances()) {
-            ParameterInstanceView pv = ParameterInstanceViewFactory.createView(p.getControllerFromModel());
+        for (ParameterInstance p : objectInstance.getParameterInstances()) {
+            ParameterInstanceView pv = ParameterInstanceViewFactory.createView(p);
             parameterInstances.add(pv);
         }
 
         displayInstances = new LinkedList<>();
-        for (DisplayInstance d : model.getDisplayInstances()) {
-            DisplayInstanceView dv = DisplayInstanceViewFactory.createView(d.getControllerFromModel());
+        for (DisplayInstance d : objectInstance.getDisplayInstances()) {
+            DisplayInstanceView dv = DisplayInstanceViewFactory.createView(d);
             displayInstances.add(dv);
         }
 
@@ -50,14 +47,10 @@ class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
     public void modelPropertyChange(PropertyChangeEvent evt) {
     }
 
-    @Override
-    public ObjectInstanceController getController() {
-        return controller;
-    }
 
     @Override
-    public AxoObjectInstance getModel() {
-        return (AxoObjectInstance)controller.getModel();
+    public IAxoObjectInstance getDModel() {
+        return objectInstance;
     }
 
     @Override
@@ -71,7 +64,7 @@ class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
     }
 
     @Override
-    public String GenerateUICode(int count[]) {
+    public String generateUICode(int count[]) {
         /*
         // generate static initializer for ui_object_t
 
@@ -85,14 +78,14 @@ typedef struct ui_object {
 	struct ui_object *objects;
 } ui_object_t;
          */
-        int nparams = getModel().getParameterInstances().size();
+        int nparams = getDModel().getParameterInstances().size();
         int ndisplays = displayInstances.size();
         if (nparams + ndisplays == 0) {
             return "";
         }
         count[0]++;
         StringBuilder s = new StringBuilder(
-            "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getModel().getInstanceName(), CodeGeneration.param_name_length)
+            "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getDModel().getInstanceName(), CodeGeneration.param_name_length)
             + ", nparams : " + nparams);
         if (nparams > 0) {
             s.append(", params : &params[" + parameterInstances.get(0).getIndex() + "]");
@@ -116,7 +109,7 @@ typedef struct ui_object {
     }
 
     @Override
-    public String GenerateInitCodePlusPlus(String classname, boolean enableOnParent) {
+    public String generateInitCodePlusPlus(String classname, boolean enableOnParent) {
         StringBuilder c = new StringBuilder();
 //        if (hasStruct())
 //            c = new StringBuilder("  void " + GenerateInitFunctionName() + "(" + GenerateStructName() + " * x ) {\n");
@@ -124,14 +117,14 @@ typedef struct ui_object {
 //        if (!classname.equals("one"))
 //        c.append("parent = _parent;\n");
         for (ParameterInstanceView p : parameterInstances) {
-            if (p.getModel().getModel().PropagateToChild != null) {
-                c.append("// on Parent: propagate " + p.getModel().getName() + " " + enableOnParent + " " + getModel().getLegalName() + "" + p.getModel().getModel().PropagateToChild + "\n");
+            if (p.getDModel().getDModel().PropagateToChild != null) {
+                c.append("// on Parent: propagate " + p.getDModel().getName() + " " + enableOnParent + " " + getDModel().getLegalName() + "" + p.getDModel().getDModel().PropagateToChild + "\n");
                 c.append(p.PExName("parent->") + ".pfunction = PropagateToSub;\n");
                 c.append(p.PExName("parent->") + ".d.frac.finalvalue = (int32_t)(&(parent->instance"
-                         + getModel().getLegalName() + "_i.params[instance" + getModel().getLegalName() + "::PARAM_INDEX_"
-                         + p.getModel().getModel().PropagateToChild + "]));\n");
+                         + getDModel().getLegalName() + "_i.params[instance" + getDModel().getLegalName() + "::PARAM_INDEX_"
+                         + p.getDModel().getDModel().PropagateToChild + "]));\n");
             }
-            c.append(p.getModel().GenerateCodeInitModulator("parent->", ""));
+            c.append(p.getDModel().generateCodeInitModulator("parent->", ""));
             //           if ((p.getOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);
@@ -141,24 +134,24 @@ typedef struct ui_object {
             //         }
         }
         for (DisplayInstanceView p : displayInstances) {
-            c.append(p.GenerateCodeInit(""));
+            c.append(p.generateCodeInit(""));
         }
-        if (getModel().getType().getInitCode() != null) {
-            String s = getModel().getType().getInitCode();
-            for (AttributeInstance p : getModel().getAttributeInstances()) {
-                s = s.replace(p.GetCName(), p.CValue());
+        if (getDModel().getDModel().getInitCode() != null) {
+            String s = getDModel().getDModel().getInitCode();
+            for (AttributeInstance p : getDModel().getAttributeInstances()) {
+                s = s.replace(p.getCName(), p.CValue());
             }
             c.append(s + "\n");
         }
         StringBuilder d = new StringBuilder("  public: void Init(" + classname + " * parent");
         if (!displayInstances.isEmpty()) {
             for (DisplayInstanceView p : displayInstances) {
-                if (p.getModel().getModel().getLength() > 0) {
+                if (p.getDModel().getDModel().getLength() > 0) {
                     d.append(",\n");
-                    if (p.getModel().getModel().getDatatype().isPointer()) {
-                        d.append(p.getModel().getModel().getDatatype().CType() + " " + p.GetCName());
+                    if (p.getDModel().getDModel().getDataType().isPointer()) {
+                        d.append(p.getDModel().getDModel().getDataType().CType() + " " + p.getCName());
                     } else {
-                        d.append(p.getModel().getModel().getDatatype().CType() + " & " + p.GetCName());
+                        d.append(p.getDModel().getDModel().getDataType().CType() + " & " + p.getCName());
                     }
                 }
             }
@@ -168,12 +161,12 @@ typedef struct ui_object {
     }
 
     @Override
-    public String GenerateDisposeCodePlusPlus(String classname) {
+    public String generateDisposeCodePlusPlus(String classname) {
         String c = "";
-        if (getModel().getType().getDisposeCode() != null) {
-            String s = getModel().getType().getDisposeCode();
-            for (AttributeInstance p : getModel().getAttributeInstances()) {
-                s = s.replaceAll(p.GetCName(), p.CValue());
+        if (getDModel().getDModel().getDisposeCode() != null) {
+            String s = getDModel().getDModel().getDisposeCode();
+            for (AttributeInstance p : getDModel().getAttributeInstances()) {
+                s = s.replaceAll(p.getCName(), p.CValue());
             }
             c += s + "\n";
         }
@@ -181,15 +174,15 @@ typedef struct ui_object {
         return c;
     }
 
-    public String GenerateKRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
-        String s = getModel().getType().getKRateCode();
+    public String generateKRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
+        String s = getDModel().getDModel().getKRateCode();
         if (s != null) {
-            for (AttributeInstance p : getModel().getAttributeInstances()) {
-                s = s.replaceAll(p.GetCName(), p.CValue());
+            for (AttributeInstance p : getDModel().getAttributeInstances()) {
+                s = s.replaceAll(p.getCName(), p.CValue());
             }
-            s = s.replace("attr_name", getModel().getCInstanceName());
-            s = s.replace("attr_legal_name", getModel().getLegalName());
-            for (ParameterInstance p : getModel().getParameterInstances()) {
+            s = s.replace("attr_name", getDModel().getCInstanceName());
+            s = s.replace("attr_legal_name", getDModel().getLegalName());
+            for (ParameterInstance p : getDModel().getParameterInstances()) {
                 Boolean op = p.getOnParent();
                 if (op!=null && op == true) {
 //                    s = s.replace("%" + p.name + "%", OnParentAccess + p.variableName(vprefix, enableOnParent));
@@ -197,7 +190,7 @@ typedef struct ui_object {
 //                    s = s.replace("%" + p.name + "%", p.variableName(vprefix, enableOnParent));
                 }
             }
-            for (DisplayInstance p : getModel().getDisplayInstances()) {
+            for (DisplayInstance p : getDModel().getDisplayInstances()) {
 //                s = s.replace("%" + p.name + "%", p.valueName(vprefix));
             }
             return s + "\n";
@@ -205,113 +198,113 @@ typedef struct ui_object {
         return "";
     }
 
-    public String GenerateSRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
-        if (getModel().getType().getSRateCode() != null) {
+    public String generateSRateCodePlusPlus(String vprefix, boolean enableOnParent, String OnParentAccess) {
+        if (getDModel().getDModel().getSRateCode() != null) {
             String s = "int buffer_index;\n"
                     + "for(buffer_index=0;buffer_index<BUFSIZE;buffer_index++) {\n"
-                    + getModel().getType().getSRateCode()
+                    + getDModel().getDModel().getSRateCode()
                     + "\n}\n";
 
-            for (AttributeInstance p : getModel().getAttributeInstances()) {
-                s = s.replaceAll(p.GetCName(), p.CValue());
+            for (AttributeInstance p : getDModel().getAttributeInstances()) {
+                s = s.replaceAll(p.getCName(), p.CValue());
             }
-            for (InletInstance i : getModel().getInletInstances()) {
+            for (InletInstance i : getDModel().getInletInstances()) {
                 if (i.getDataType() instanceof Frac32buffer) {
-                    s = s.replaceAll(i.getModel().GetCName(), i.getModel().GetCName() + "[buffer_index]");
+                    s = s.replaceAll(i.getDModel().getCName(), i.getDModel().getCName() + "[buffer_index]");
                 }
             }
-            for (OutletInstance i : getModel().getOutletInstances()) {
+            for (OutletInstance i : getDModel().getOutletInstances()) {
                 if (i.getDataType() instanceof Frac32buffer) {
-                    s = s.replaceAll(i.getModel().GetCName(), i.getModel().GetCName() + "[buffer_index]");
+                    s = s.replaceAll(i.getDModel().getCName(), i.getDModel().getCName() + "[buffer_index]");
                 }
             }
 
-            s = s.replace("attr_name", getModel().getCInstanceName());
-            s = s.replace("attr_legal_name", getModel().getLegalName());
+            s = s.replace("attr_name", getDModel().getCInstanceName());
+            s = s.replace("attr_legal_name", getDModel().getLegalName());
 
             return s;
         }
         return "";
     }
 
-    public String GenerateDoFunctionPlusPlus(String ClassName, String OnParentAccess, Boolean enableOnParent) {
+    public String generateDoFunctionPlusPlus(String ClassName, String OnParentAccess, Boolean enableOnParent) {
         StringBuilder s = new StringBuilder("  public: void dsp (" + ClassName + " * parent");
         boolean comma = true;
-        for (InletInstance i : getModel().getInletInstances()) {
+        for (InletInstance i : getDModel().getInletInstances()) {
             if (comma) {
                 s.append(",\n");
             }
-            s.append("const " + i.getDataType().CType() + " " + i.getModel().GetCName());
+            s.append("const " + i.getDataType().CType() + " " + i.getDModel().getCName());
             comma = true;
         }
-        for (OutletInstance i : getModel().getOutletInstances()) {
+        for (OutletInstance i : getDModel().getOutletInstances()) {
             if (comma) {
                 s.append(",\n");
             }
-            s.append(i.getDataType().CType() + " & " + i.getModel().GetCName());
+            s.append(i.getDataType().CType() + " & " + i.getDModel().getCName());
             comma = true;
         }
-        for (ParameterInstance i : getModel().getParameterInstances()) {
-            if (i.getModel().PropagateToChild == null) {
+        for (ParameterInstance i : getDModel().getParameterInstances()) {
+            if (i.getDModel().PropagateToChild == null) {
                 if (comma) {
                     s.append(",\n");
                 }
-                s.append(i.getModel().CType() + " " + i.GetCName());
+                s.append(i.getDModel().CType() + " " + i.getCName());
                 comma = true;
             }
         }
         for (DisplayInstanceView i : displayInstances) {
-            if (i.getModel().getModel().getLength() > 0) {
+            if (i.getDModel().getDModel().getLength() > 0) {
                 if (comma) {
                     s.append(",\n");
                 }
-                if (i.getModel().getModel().getDatatype().isPointer()) {
-                    s.append(i.getModel().getModel().getDatatype().CType() + " " + i.GetCName());
+                if (i.getDModel().getDModel().getDataType().isPointer()) {
+                    s.append(i.getDModel().getDModel().getDataType().CType() + " " + i.getCName());
                 } else {
-                    s.append(i.getModel().getModel().getDatatype().CType() + " & " + i.GetCName());
+                    s.append(i.getDModel().getDModel().getDataType().CType() + " & " + i.getCName());
                 }
                 comma = true;
             }
         }
         s.append("  ){\n");
-        s.append(GenerateKRateCodePlusPlus("", enableOnParent, OnParentAccess));
-        s.append(GenerateSRateCodePlusPlus("", enableOnParent, OnParentAccess));
+        s.append(generateKRateCodePlusPlus("", enableOnParent, OnParentAccess));
+        s.append(generateSRateCodePlusPlus("", enableOnParent, OnParentAccess));
         s.append("}\n");
         return s.toString();
     }
 
     public final static String MidiHandlerFunctionHeader = "void MidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n";
 
-    public String GenerateInstanceDataDeclaration2() {
+    public String generateInstanceDataDeclaration2() {
         String c = "";
-        if (getModel().getType().getLocalData() != null) {
-            c = getModel().getType().getLocalData()
-                .replaceAll("attr_parent", getModel().getCInstanceName()) + "\n";
+        if (getDModel().getDModel().getLocalData() != null) {
+            c = getDModel().getDModel().getLocalData()
+                .replaceAll("attr_parent", getDModel().getCInstanceName()) + "\n";
         }
         return c;
     }
 
-    public String GenerateInstanceCodePlusPlus(String classname, boolean enableOnParent) {
-        String c = GenerateInstanceDataDeclaration2();
-        for (AttributeInstance p : getModel().getAttributeInstances()) {
+    public String generateInstanceCodePlusPlus(String classname, boolean enableOnParent) {
+        String c = generateInstanceDataDeclaration2();
+        for (AttributeInstance p : getDModel().getAttributeInstances()) {
             if (p.CValue() != null) {
-                c = c.replaceAll(p.GetCName(), p.CValue());
+                c = c.replaceAll(p.getCName(), p.CValue());
             }
         }
         return c;
     }
 
     @Override
-    public String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
+    public String generateClass(String ClassName, String OnParentAccess, Boolean enableOnParent) {
         StringBuilder s = new StringBuilder();
-        s.append("class " + getModel().getCInstanceName() + "{\n");
+        s.append("class " + getDModel().getCInstanceName() + "{\n");
         s.append("  public: // v1\n");
-        s.append(GenerateInstanceCodePlusPlus(ClassName, enableOnParent));
-        s.append(GenerateInitCodePlusPlus(ClassName, enableOnParent));
-        s.append(GenerateDisposeCodePlusPlus(ClassName));
-        s.append(GenerateDoFunctionPlusPlus(ClassName, OnParentAccess, enableOnParent));
+        s.append(generateInstanceCodePlusPlus(ClassName, enableOnParent));
+        s.append(generateInitCodePlusPlus(ClassName, enableOnParent));
+        s.append(generateDisposeCodePlusPlus(ClassName));
+        s.append(generateDoFunctionPlusPlus(ClassName, OnParentAccess, enableOnParent));
         {
-            String d3 = GenerateCodeMidiHandler("");
+            String d3 = generateCodeMidiHandler("");
             if (!d3.isEmpty()) {
                 s.append("void MidiInHandler(" + ClassName + "*parent, midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2) {\n");
                 s.append(d3);
@@ -322,19 +315,19 @@ typedef struct ui_object {
         return s.toString();
     }
 
-    public String GenerateCodeMidiHandler(String vprefix) {
+    public String generateCodeMidiHandler(String vprefix) {
         String s = "";
-        if (getModel().getType().getMidiCode() != null) {
-            s += getModel().getType().getMidiCode();
+        if (getDModel().getDModel().getMidiCode() != null) {
+            s += getDModel().getDModel().getMidiCode();
         }
         for (ParameterInstanceView i : parameterInstances) {
-            s += i.GenerateCodeMidiHandler("");
+            s += i.generateCodeMidiHandler("");
         }
-        for (AttributeInstance p : getModel().getAttributeInstances()) {
-            s = s.replaceAll(p.GetCName(), p.CValue());
+        for (AttributeInstance p : getDModel().getAttributeInstances()) {
+            s = s.replaceAll(p.getCName(), p.CValue());
         }
-        s = s.replace("attr_name", getModel().getCInstanceName());
-        s = s.replace("attr_legal_name", getModel().getLegalName());
+        s = s.replace("attr_name", getDModel().getCInstanceName());
+        s = s.replace("attr_legal_name", getDModel().getLegalName());
 
         if (s.length() > 0) {
             return "{\n" + s + "}\n";
@@ -344,13 +337,13 @@ typedef struct ui_object {
     }
 
     @Override
-    public String GenerateCallMidiHandler() {
-        if ((getModel().getType().getMidiCode() != null) && (!getModel().getType().getMidiCode().isEmpty())) {
-            return getModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
+    public String generateCallMidiHandler() {
+        if ((getDModel().getDModel().getMidiCode() != null) && (!getDModel().getDModel().getMidiCode().isEmpty())) {
+            return getDModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
         }
         for (ParameterInstanceView pi : parameterInstances) {
-            if (!pi.GenerateCodeMidiHandler("").isEmpty()) {
-                return getModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
+            if (!pi.generateCodeMidiHandler("").isEmpty()) {
+                return getDModel().getCInstanceName() + "_i.MidiInHandler(this, dev, port, status, data1, data2);\n";
             }
         }
         return "";

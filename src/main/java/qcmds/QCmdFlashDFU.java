@@ -29,12 +29,12 @@ import java.util.logging.Logger;
 public class QCmdFlashDFU extends QCmdShellTask {
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start flashing firmware with DFU";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         if (success) {
             return "Done flashing firmware with DFU.";
         } else {
@@ -43,19 +43,19 @@ public class QCmdFlashDFU extends QCmdShellTask {
     }
 
     @Override
-    public File GetWorkingDir() {
+    public File getWorkingDir() {
         return new File(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
     }
 
 
     @Override
-    String GetExec() {
+    String getExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return RuntimeDir() + "/platform_win/upload_fw_dfu.bat";
+            return getRuntimeDir() + "/platform_win/upload_fw_dfu.bat";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh "+ RuntimeDir() + "/platform_osx/upload_fw_dfu.sh";
+            return "/bin/sh "+ getRuntimeDir() + "/platform_osx/upload_fw_dfu.sh";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh "+ RuntimeDir() + "/platform_linux/upload_fw_dfu.sh";
+            return "/bin/sh "+ getRuntimeDir() + "/platform_linux/upload_fw_dfu.sh";
         } else {
             Logger.getLogger(QCmdFlashDFU.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;

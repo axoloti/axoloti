@@ -45,7 +45,7 @@ public class SDFileReference {
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         if (localFilename == null) {
             if (localfile != null) {
                 localFilename = localfile.getName();
@@ -55,7 +55,7 @@ public class SDFileReference {
         }
     }
 
-    public void Resolve(Path p) {
+    public void resolve(Path p) {
         if (localfile != null) {
             return;
         }

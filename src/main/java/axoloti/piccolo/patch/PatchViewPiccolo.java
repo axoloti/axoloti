@@ -8,10 +8,9 @@ import axoloti.abstractui.PatchView;
 import axoloti.abstractui.PatchView.Direction;
 import axoloti.abstractui.PatchViewportView;
 import axoloti.objectlibrary.AxoObjects;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
-import axoloti.patch.net.NetController;
-import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.net.Net;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.piccolo.PObjectSearchFrame;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.components.PFocusable;
@@ -61,8 +60,8 @@ public class PatchViewPiccolo extends PatchView {
 
     private PatchPCanvas canvas;
 
-    public PatchViewPiccolo(PatchController patchController) {
-        super(patchController);
+    public PatchViewPiccolo(PatchModel patchModel) {
+        super(patchModel);
     }
 
     private PCtrlComponentAbstract focusedCtrl;
@@ -84,13 +83,13 @@ public class PatchViewPiccolo extends PatchView {
             if (e.isLeftMouseButton()) {
                 if (e.getPickedNode() instanceof PCamera) {
                     if (e.getClickCount() == 2) {
-                        ShowClassSelector(e, null, null);
+                        PatchViewPiccolo.this.showClassSelector(e, null, null);
                     } else if ((osf != null) && osf.isVisible()) {
-                        osf.Accept();
+                        osf.accept();
                     }
                 }
             } else if ((osf != null) && osf.isVisible()) {
-                osf.Cancel();
+                osf.cancel();
             }
             e.setHandled(true);
         }
@@ -122,58 +121,58 @@ public class PatchViewPiccolo extends PatchView {
                     || ((e.getKeyCode() == KeyEvent.VK_N) && !KeyUtils.isControlOrCommandDown(e))
                     || ((e.getKeyCode() == KeyEvent.VK_1) && KeyUtils.isControlOrCommandDown(e))) {
                 e.setHandled(true);
-                ShowClassSelector(e, null, null);
+                PatchViewPiccolo.this.showClassSelector(e, null, null);
             } else if (((e.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(e))
                     || ((e.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(e))) {
                 Point patchPosition = PUtils.asPoint(e.getInputManager().getCurrentCanvasPosition());
                 getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
-                getController().addObjectInstance(
-                        AxoObjects.getAxoObjects().GetAxoObjectFromName(patchComment, null).get(0), patchPosition);
+                getDModel().getController().addObjectInstance(
+                        AxoObjects.getAxoObjects().getAxoObjectFromName(patchComment, null).get(0), patchPosition);
                 e.setHandled(true);
             } else if ((e.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(e)) {
                 e.setHandled(true);
-                ShowClassSelector(e, null, patchInlet);
+                PatchViewPiccolo.this.showClassSelector(e, null, patchInlet);
             } else if ((e.getKeyCode() == KeyEvent.VK_O) && !KeyUtils.isControlOrCommandDown(e)) {
                 e.setHandled(true);
-                ShowClassSelector(e, null, patchOutlet);
+                PatchViewPiccolo.this.showClassSelector(e, null, patchOutlet);
             } else if ((e.getKeyCode() == KeyEvent.VK_D) && !KeyUtils.isControlOrCommandDown(e)) {
                 e.setHandled(true);
-                ShowClassSelector(e, null, patchDisplay);
+                PatchViewPiccolo.this.showClassSelector(e, null, patchDisplay);
             } else if ((e.getKeyCode() == KeyEvent.VK_M) && !KeyUtils.isControlOrCommandDown(e)) {
                 e.setHandled(true);
                 if (e.isShiftDown()) {
-                    ShowClassSelector(e, null, patchMidiKey);
+                    PatchViewPiccolo.this.showClassSelector(e, null, patchMidiKey);
                 } else {
-                    ShowClassSelector(e, null, patchMidi);
+                    PatchViewPiccolo.this.showClassSelector(e, null, patchMidi);
                 }
             } else if ((e.getKeyCode() == KeyEvent.VK_A) && !KeyUtils.isControlOrCommandDown(e)) {
                 e.setHandled(true);
                 if (e.isShiftDown()) {
-                    ShowClassSelector(e, null, patchAudioOut);
+                    PatchViewPiccolo.this.showClassSelector(e, null, patchAudioOut);
                 } else {
-                    ShowClassSelector(e, null, patchAudio);
+                    PatchViewPiccolo.this.showClassSelector(e, null, patchAudio);
                 }
             } else if ((e.getKeyCode() == KeyEvent.VK_DELETE) || (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                List<ObjectInstanceController> selected = getController().getSelectedObjects();
+                List<IAxoObjectInstance> selected = getDModel().getController().getSelectedObjects();
                 if (!selected.isEmpty()) {
-                    getController().addMetaUndo("delete objects");
-                    for (ObjectInstanceController o : selected) {
-                        getController().delete(o.getModel());
+                    getDModel().getController().addMetaUndo("delete objects");
+                    for (IAxoObjectInstance o : selected) {
+                        getDModel().getController().delete(o);
                     }
                 }
 
                 e.setHandled(true);
             } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                MoveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
+                moveSelectedAxoObjInstances(Direction.UP, xsteps, ysteps);
                 e.setHandled(true);
             } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                MoveSelectedAxoObjInstances(Direction.DOWN, xsteps, ysteps);
+                moveSelectedAxoObjInstances(Direction.DOWN, xsteps, ysteps);
                 e.setHandled(true);
             } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                MoveSelectedAxoObjInstances(Direction.RIGHT, xsteps, ysteps);
+                moveSelectedAxoObjInstances(Direction.RIGHT, xsteps, ysteps);
                 e.setHandled(true);
             } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                MoveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
+                moveSelectedAxoObjInstances(Direction.LEFT, xsteps, ysteps);
                 e.setHandled(true);
             }
         }
@@ -291,10 +290,10 @@ public class PatchViewPiccolo extends PatchView {
     }
 
     @Override
-    public void PostConstructor() {
+    public void postConstructor() {
         //modelChanged(false);
-        getController().PromoteOverloading(true);
-        ShowPreset(0);
+        getDModel().getController().promoteOverloading(true);
+        showPreset(0);
     }
 
     @Override
@@ -422,7 +421,10 @@ public class PatchViewPiccolo extends PatchView {
     public void removeAllNetViews() {
         for (INetView netView : netViews) {
             getCanvas().getLayer().removeChild((PatchPNode) netView);
-            for (IIoletInstanceView iiv : netView.getIoletViews()) {
+            for (IIoletInstanceView iiv : netView.getInletViews()) {
+                iiv.repaint();
+            }
+            for (IIoletInstanceView iiv : netView.getOutletViews()) {
                 iiv.repaint();
             }
         }
@@ -447,21 +449,21 @@ public class PatchViewPiccolo extends PatchView {
         return (PatchPCanvas) getViewportView();
     }
 
-    public void ShowClassSelector(PInputEvent e, IAxoObjectInstanceView o, String searchString) {
+    public void showClassSelector(PInputEvent e, IAxoObjectInstanceView o, String searchString) {
         try {
             Point2D p = e.getPosition();
             Point2D q = e.getCanvasPosition();
-            ShowClassSelector(PUtils.asPoint(e.getPosition()), PUtils.asPoint(e.getCanvasPosition()), o, searchString);
+            showClassSelector(PUtils.asPoint(e.getPosition()), PUtils.asPoint(e.getCanvasPosition()), o, searchString);
         } catch (RuntimeException ex) {
             // if this is from a keyboard event
             Point canvasPosition = PUtils.asPoint(e.getInputManager().getCurrentCanvasPosition());
             Point patchPosition = (Point) canvasPosition.clone();
             getCanvas().getCamera().getViewTransform().inverseTransform(patchPosition, patchPosition);
-            ShowClassSelector(patchPosition, canvasPosition, o, searchString);
+            showClassSelector(patchPosition, canvasPosition, o, searchString);
         }
     }
 
-    public void ShowClassSelector(Point patchPosition, Point canvasPosition, IAxoObjectInstanceView o, String searchString) {
+    public void showClassSelector(Point patchPosition, Point canvasPosition, IAxoObjectInstanceView o, String searchString) {
         if (isLocked()) {
             return;
         }
@@ -470,11 +472,11 @@ public class PatchViewPiccolo extends PatchView {
         }
 
         if (osf == null) {
-            osf = new PObjectSearchFrame(getController(), this);
+            osf = new PObjectSearchFrame(getDModel(), this);
         }
 
-        osf.Launch(patchPosition, o, searchString);
-        Point ps = getController().getViewLocationOnScreen();
+        osf.launch(patchPosition, o, searchString);
+        Point ps = getDModel().getController().getViewLocationOnScreen();
         Point patchLocClipped = osf.clipToStayWithinScreen(canvasPosition);
         osf.setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
         osf.setVisible(true);
@@ -483,7 +485,7 @@ public class PatchViewPiccolo extends PatchView {
     @Override
     public void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
         getCanvas().getCamera().getViewTransform().inverseTransform(pos, pos);
-        getController().paste(v,
+        getDModel().getController().paste(v,
                 pos,
                 restoreConnectionsToExternalOutlets);
     }
@@ -536,8 +538,8 @@ public class PatchViewPiccolo extends PatchView {
     }
 
     @Override
-    public INetView createNetView(NetController controller, PatchView patchView) {
-        return new PNetView(controller, (PatchViewPiccolo) patchView);
+    public INetView createNetView(Net net, PatchView patchView) {
+        return new PNetView(net, (PatchViewPiccolo) patchView);
     }
 
     @Override

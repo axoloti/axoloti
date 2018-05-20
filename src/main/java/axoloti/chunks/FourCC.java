@@ -8,7 +8,7 @@ public class FourCC implements Comparable<FourCC> {
 
     private final int x;
 
-    public static String Format(int v) {
+    public static String format(int v) {
         return String.format("fourcc [%c%c%c%c](0x%08x)",
                 (char) (v & 0xFF),
                 (char) ((v >> 8) & 0xff),

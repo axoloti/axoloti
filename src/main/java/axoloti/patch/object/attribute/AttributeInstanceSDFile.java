@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeSDFile;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.target.fs.SDFileReference;
@@ -42,8 +41,8 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
         super();
     }
 
-    AttributeInstanceSDFile(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceSDFile(AxoAttributeSDFile attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public ArrayList<SDFileReference> GetDependendSDFiles() {
+    public ArrayList<SDFileReference> getDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<>();
         File f = getFile();
         if (f != null && f.exists()) {
@@ -118,7 +117,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         if (fileName == null) {
             fileName = "";
         }

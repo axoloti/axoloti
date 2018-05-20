@@ -2,13 +2,12 @@ package axoloti.object.atom;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
-import axoloti.object.ObjectController;
 
 /**
  *
  * @author jtaelman
  */
-public class AtomDefinitionController extends AbstractController<AtomDefinition, IView, ObjectController> {
+public class AtomDefinitionController extends AbstractController<AtomDefinition, IView> {
 
     AtomDefinitionController(AtomDefinition model) {
         super(model);

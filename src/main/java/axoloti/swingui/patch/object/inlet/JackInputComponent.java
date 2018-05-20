@@ -51,7 +51,7 @@ class JackInputComponent extends JComponent {
         setAlignmentX(RIGHT_ALIGNMENT);
     }
 
-    private final Stroke stroke = new BasicStroke(1.5f);
+    private final static Stroke stroke = new BasicStroke(1.5f);
 
     @Override
     public void paintComponent(Graphics g) {

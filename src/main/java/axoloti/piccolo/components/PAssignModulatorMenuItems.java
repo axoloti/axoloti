@@ -42,7 +42,7 @@ public class PAssignModulatorMenuItems {
 
         hsls.clear();
 
-        for (Modulator m : parameterInstanceView.getModel().getObjectInstance().getParent().getPatchModulators()) {
+        for (Modulator m : parameterInstanceView.getDModel().getObjectInstance().getParent().getPatchModulators()) {
             JPanel p = new JPanel();
             p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
             String modlabel;
@@ -53,8 +53,8 @@ public class PAssignModulatorMenuItems {
             }
             p.add(new JLabel(modlabel + " "));
             HSliderComponent hsl = new HSliderComponent();
-            if (parameterInstanceView.getModel().getModulators() != null) {
-                List<Modulation> modulators = parameterInstanceView.getModel().getModulators();
+            if (parameterInstanceView.getDModel().getModulators() != null) {
+                List<Modulation> modulators = parameterInstanceView.getDModel().getModulators();
                 for (Modulation n : modulators) {
                     if (m.Modulations.contains(n)) {
                         System.out.println("modulation restored " + n.getValue());
@@ -92,7 +92,7 @@ public class PAssignModulatorMenuItems {
             p.add(hsl);
             parent.add(p);
         }
-        if (parameterInstanceView.getModel().getObjectInstance().getParent().getPatchModulators().isEmpty()) {
+        if (parameterInstanceView.getDModel().getObjectInstance().getParent().getPatchModulators().isEmpty()) {
             JMenuItem d = new JMenuItem("no modulation sources in patch");
             d.setEnabled(false);
             parent.add(d);

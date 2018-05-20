@@ -1,6 +1,6 @@
 package axoloti.swingui.property.menu;
 
-import axoloti.mvc.AbstractController;
+import axoloti.mvc.IModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBoxMenuItem;
@@ -11,10 +11,10 @@ import javax.swing.JCheckBoxMenuItem;
  */
 public class BooleanProperty extends JCheckBoxMenuItem {
 
-    public BooleanProperty(AbstractController o, axoloti.property.BooleanProperty property) {
+    public BooleanProperty(IModel model, axoloti.property.BooleanProperty property) {
         super(property.getFriendlyName());
         axoloti.property.BooleanProperty p = (axoloti.property.BooleanProperty) property;
-        Boolean v = p.get(o.getModel());
+        Boolean v = p.get(model);
         if (v == null) {
             v = false;
         }
@@ -23,11 +23,11 @@ public class BooleanProperty extends JCheckBoxMenuItem {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (isSelected()) {
-                    o.addMetaUndo("set " + property.getFriendlyName());
+                    model.getController().addMetaUndo("set " + property.getFriendlyName());
                 } else {
-                    o.addMetaUndo("clear " + property.getFriendlyName());
+                    model.getController().addMetaUndo("clear " + property.getFriendlyName());
                 }
-                o.generic_setModelUndoableProperty(property, isSelected());
+                model.getController().generic_setModelUndoableProperty(property, isSelected());
             }
         });
     }

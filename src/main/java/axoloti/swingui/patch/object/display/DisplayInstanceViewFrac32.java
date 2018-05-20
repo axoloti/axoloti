@@ -1,16 +1,16 @@
 package axoloti.swingui.patch.object.display;
 
-import axoloti.patch.object.display.DisplayInstanceController;
+import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.display.DisplayInstanceFrac32;
 
 abstract class DisplayInstanceViewFrac32 extends DisplayInstanceView1 {
 
-    DisplayInstanceViewFrac32(DisplayInstanceController controller) {
-        super(controller);
+    DisplayInstanceViewFrac32(DisplayInstance displayInstance) {
+        super(displayInstance);
     }
 
     @Override
-    DisplayInstanceFrac32 getModel() {
-        return (DisplayInstanceFrac32) super.getModel();
+    public DisplayInstanceFrac32 getDModel() {
+        return (DisplayInstanceFrac32) super.getDModel();
     }
 }

@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayFrac4ByteVBar;
 
 /**
@@ -26,8 +25,8 @@ import axoloti.object.display.DisplayFrac4ByteVBar;
  */
 public class DisplayInstanceFrac4ByteVBar extends DisplayInstanceFrac32<DisplayFrac4ByteVBar> {
 
-    DisplayInstanceFrac4ByteVBar(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceFrac4ByteVBar(DisplayFrac4ByteVBar display) {
+        super(display);
     }
 
 }

@@ -23,7 +23,7 @@ package axoloti.utils;
  */
 public class CharEscape {
 
-    static public String CharEscape(String s) {
+    static public String charEscape(String s) {
         s = s.replaceAll("_", "__");
         s = s.replaceAll(" ", "_space_");
         s = s.replaceAll("\\*", "_star_");

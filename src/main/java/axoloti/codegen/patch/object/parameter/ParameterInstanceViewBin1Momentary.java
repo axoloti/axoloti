@@ -1,6 +1,6 @@
 package axoloti.codegen.patch.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.ParameterInstance;
 
 /**
  *
@@ -8,8 +8,8 @@ import axoloti.patch.object.parameter.ParameterInstanceController;
  */
 public class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewBin {
 
-    ParameterInstanceViewBin1Momentary(ParameterInstanceController controller) {
-        super(controller);
+    ParameterInstanceViewBin1Momentary(ParameterInstance parameterInstance) {
+        super(parameterInstance);
     }
 
     /*

@@ -1,7 +1,8 @@
 package axoloti.piccolo.patch.object;
 
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.object.ObjectInstanceController;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.abstractui.IOutletInstanceView;
+import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.components.PLabelComponent;
@@ -29,8 +30,8 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     private String tooltipText = "<html>" + "Unresolved object!";
 
-    public PAxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewPiccolo p) {
-        super(controller, p);
+    public PAxoObjectInstanceViewZombie(IAxoObjectInstance objectInstance, PatchViewPiccolo p) {
+        super(objectInstance, p);
         initComponents();
     }
 
@@ -70,7 +71,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
         setPaint(Theme.getCurrentTheme().Object_Zombie_Background);
 
-        instanceLabel = new PLabelComponent(getModel().getInstanceName());
+        instanceLabel = new PLabelComponent(getDModel().getInstanceName());
         instanceLabel.setAlignmentX(LEFT_ALIGNMENT);
 
         instanceLabel.addInputEventListener(new PBasicInputEventHandler() {
@@ -91,7 +92,7 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
             @Override
             public void mousePressed(PInputEvent e) {
                 if (e.isPopupTrigger() && !overPickableChild(e)) {
-                    ShowPopup(e);
+                    showPopup(e);
                 }
             }
 
@@ -120,19 +121,19 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
 
     private void showReplaceClassSelector(PInputEvent e) {
         if (e.isLeftMouseButton() && e.getClickCount() == 2) {
-            ((PatchViewPiccolo) getPatchView()).ShowClassSelector(PAxoObjectInstanceViewZombie.this.getLocation(),
+            ((PatchViewPiccolo) getPatchView()).showClassSelector(PAxoObjectInstanceViewZombie.this.getLocation(),
                     null, PAxoObjectInstanceViewZombie.this, null);
         }
     }
 
     @Override
-    JPopupMenu CreatePopupMenu() {
-        JPopupMenu popup = super.CreatePopupMenu();
+    JPopupMenu createPopupMenu() {
+        JPopupMenu popup = super.createPopupMenu();
         JMenuItem popm_substitute = new JMenuItem("replace");
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                ((PatchViewPiccolo) getPatchView()).ShowClassSelector(PAxoObjectInstanceViewZombie.this.getLocation(), null, PAxoObjectInstanceViewZombie.this, null);
+                ((PatchViewPiccolo) getPatchView()).showClassSelector(PAxoObjectInstanceViewZombie.this.getLocation(), null, PAxoObjectInstanceViewZombie.this, null);
             }
         });
         popup.add(popm_substitute);
@@ -155,17 +156,17 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public List<IIoletInstanceView> getInletInstanceViews() {
-        return null; //inletInstanceViews;
+    public List<IInletInstanceView> getInletInstanceViews() {
+        return null; // TODO: piccolo zombie inletInstanceViews;
     }
 
     @Override
-    public List<IIoletInstanceView> getOutletInstanceViews() {
-        return null; //outletInstanceViews;
+    public List<IOutletInstanceView> getOutletInstanceViews() {
+        return null; // TODO: piccolo zombie outletInstanceViews;
     }
 
-    private Map<InletInstance, IIoletInstanceView> inletInstanceViews = new HashMap<>();
-    private Map<OutletInstance, IIoletInstanceView> outletInstanceViews = new HashMap<>();
+    private Map<InletInstance, IInletInstanceView> inletInstanceViews = new HashMap<>();
+    private Map<OutletInstance, IOutletInstanceView> outletInstanceViews = new HashMap<>();
 
     private void finishLayout() {
         p_ioletViews.addChild(p_inletViews);
@@ -185,12 +186,12 @@ public class PAxoObjectInstanceViewZombie extends PAxoObjectInstanceViewAbstract
     }
 
     @Override
-    public IIoletInstanceView getInletInstanceView(InletInstance inletInstance) {
+    public IInletInstanceView getInletInstanceView(InletInstance inletInstance) {
         return inletInstanceViews.get(inletInstance);
     }
 
     @Override
-    public IIoletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
+    public IOutletInstanceView getOutletInstanceView(OutletInstance outletInstance) {
         return outletInstanceViews.get(outletInstance);
     }
 }

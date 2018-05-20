@@ -18,7 +18,6 @@
 package axoloti.swingui.objecteditor;
 
 import axoloti.object.AxoObject;
-import axoloti.object.ObjectController;
 import axoloti.object.parameter.Parameter;
 import axoloti.object.parameter.ParameterTypes;
 
@@ -28,8 +27,8 @@ import axoloti.object.parameter.ParameterTypes;
  */
 class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
 
-    public ParamDefinitionsEditorPanel(ObjectController controller, AxoObjectEditor editor) {
-        super(controller, AxoObject.OBJ_PARAMETERS, ParameterTypes.getTypes(), editor);
+    public ParamDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+        super(obj, AxoObject.OBJ_PARAMETERS, ParameterTypes.getTypes(), editor);
     }
 
     @Override

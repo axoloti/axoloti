@@ -58,7 +58,7 @@ public class Modulation {
         this.value = new ValueFrac32(value);
     }
 
-    public void PostConstructor(ParameterInstanceFrac32 p) {
+    public void postConstructor(ParameterInstanceFrac32 p) {
         System.out.println("Modulation postconstructor");
         destination = p;
         source = p.getObjectInstance().getParent().findObjectInstance(sourceName);

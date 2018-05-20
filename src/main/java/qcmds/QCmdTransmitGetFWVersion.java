@@ -26,20 +26,20 @@ import axoloti.connection.IConnection;
 public class QCmdTransmitGetFWVersion implements QCmdSerialTask {
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitGetFWVersion();
-        connection.WaitSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitGetFWVersion();
+        connection.waitSync();
         return this;
     }
 }

@@ -2,7 +2,6 @@ package axoloti.swingui.target;
 
 import axoloti.connection.IConnection;
 import axoloti.target.PollHandler;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,8 +22,8 @@ public class Memory extends TJFrame implements ActionListener {
     /**
      * Creates new form Memory
      */
-    public Memory(TargetController controller) {
-        super(controller);
+    public Memory(TargetModel targetModel) {
+        super(targetModel);
         initComponents();
         initComponents2();
     }
@@ -165,10 +164,10 @@ public class Memory extends TJFrame implements ActionListener {
     void readmem() {
         jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
         int length = 256;
-        IConnection conn = getController().getModel().getConnection();
-        conn.AppendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
+        IConnection conn = getDModel().getConnection();
+        conn.appendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
             @Override
-            public void Done(ByteBuffer mem) {
+            public void done(ByteBuffer mem) {
                 String s = "";
                 if (mem != null) {
                     for (int i = 0; i < (length / 16); i++) {
@@ -188,7 +187,7 @@ public class Memory extends TJFrame implements ActionListener {
                             }
                             ascii += c;
                         }
-                        s += String.format("%08x : %08x %08x %08x %08x  %s\n", addr + (i * 16), v1, v2, v3, v4, ascii);
+                        s += String.format("%08x : %08x %08x %08x %08x  %s%n", addr + (i * 16), v1, v2, v3, v4, ascii);
                     }
                 }
                 jTextAreaMemoryContent.setText(s);

@@ -1,7 +1,6 @@
 package axoloti.swingui.target;
 
 import axoloti.target.PollHandler;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.target.midimonitor.MidiMessage;
 import axoloti.target.midimonitor.MidiMonitorData;
@@ -21,8 +20,8 @@ public class MidiMonitor extends TJFrame {
     /**
      * Creates new form Memory
      */
-    public MidiMonitor(TargetController controller) {
-        super(controller);
+    public MidiMonitor(TargetModel targetModel) {
+        super(targetModel);
         initComponents();
         initComponents2();
     }
@@ -246,7 +245,7 @@ public class MidiMonitor extends TJFrame {
     }
 
     MidiMonitorData getMidiMonitorData() {
-        return getController().getModel().getMidiMonitor();
+        return getDModel().getMidiMonitor();
     }
 
     void setPolling(boolean b) {
@@ -258,7 +257,7 @@ public class MidiMonitor extends TJFrame {
     }
 
     void refresh() {
-        MidiMonitorData.refresh(getController().getModel().getConnection());
+        MidiMonitorData.refresh(getDModel().getConnection());
     }
 
     @Override

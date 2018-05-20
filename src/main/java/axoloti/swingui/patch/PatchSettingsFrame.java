@@ -34,20 +34,23 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author Johannes Taelman
  */
-public class PatchSettingsFrame extends AJFrame<PatchController> {
+public class PatchSettingsFrame extends AJFrame<PatchModel> {
+
+    private final PatchController patchController;
 
     /**
      * Creates new form PatchSettingsFrame
      *
      */
-    public PatchSettingsFrame(DocumentWindow parentDocumentWindow, PatchController patchController) {
-        super(patchController, parentDocumentWindow);
+    public PatchSettingsFrame(DocumentWindow parentDocumentWindow, PatchModel patchModel) {
+        super(patchModel, parentDocumentWindow);
+        patchController = patchModel.getController();
         initComponents();
         initComponents2();
     }
 
     private void initComponents2() {
-        setJMenuBar(new StandardMenubar(getController().getDocumentRoot()));
+        setJMenuBar(new StandardMenubar(patchController.getDocumentRoot()));
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMinimum(1);
         ((SpinnerNumberModel) jSpinnerMidiChannel.getModel()).setMaximum(16);
         ((SpinnerNumberModel) jSpinnerNumPresets.getModel()).setMinimum(0);
@@ -316,36 +319,36 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     private void jSpinnerMidiChannelStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerMidiChannelStateChanged
         SpinnerModel nModel = jSpinnerMidiChannel.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().addMetaUndo("change midi channel");
-            getController().generic_setModelUndoableProperty(PatchModel.PATCH_MIDICHANNEL,((SpinnerNumberModel) nModel).getNumber().intValue());
+            patchController.addMetaUndo("change midi channel");
+            patchController.generic_setModelUndoableProperty(PatchModel.PATCH_MIDICHANNEL, ((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerMidiChannelStateChanged
 
     private void jComboBoxModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxModeActionPerformed
         switch (jComboBoxMode.getSelectedIndex()) {
             case 0:
-                getController().addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
-                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE,SubPatchMode.no);
+                patchController.addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
+                patchController.generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.no);
                 break;
             case 1:
-                getController().addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
-                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.normal);
+                patchController.addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
+                patchController.generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.normal);
                 break;
             case 2:
-                getController().addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
-                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.normalBypass);
+                patchController.addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
+                patchController.generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.normalBypass);
                 break;
             case 3:
-                getController().addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
-                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polyphonic);
+                patchController.addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
+                patchController.generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polyphonic);
                 break;
             case 4:
-                getController().addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
-                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polychannel);
+                patchController.addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
+                patchController.generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polychannel);
                 break;
             case 5:
-                getController().addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
-                getController().generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polyexpression);
+                patchController.addMetaUndo("change subpatch mode"); // TODO: add FocusEdit
+                patchController.generic_setModelUndoableProperty(PatchModel.PATCH_SUBPATCHMODE, SubPatchMode.polyexpression);
                 break;
             default:
                 Logger.getLogger(PatchSettingsFrame.class.getName()).severe("undefined subpatchmode");
@@ -355,50 +358,51 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     private void jSpinnerNumPresetsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerNumPresetsStateChanged
         SpinnerModel nModel = jSpinnerNumPresets.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().addMetaUndo("change # presets"); // TODO: add FocusEdit
-            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NPRESETS,((SpinnerNumberModel) nModel).getNumber().intValue());
+
+            patchController.addMetaUndo("change # presets"); // TODO: add FocusEdit
+            patchController.generic_setModelUndoableProperty(PatchModel.PATCH_NPRESETS, ((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerNumPresetsStateChanged
 
     private void jSpinnerPresetEntriesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerPresetEntriesStateChanged
         SpinnerModel nModel = jSpinnerPresetEntries.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().addMetaUndo("change # entries per preset "); // TODO: add FocusEdit
-            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NPRESETENTRIES,((SpinnerNumberModel) nModel).getNumber().intValue());
+            patchController.addMetaUndo("change # entries per preset "); // TODO: add FocusEdit
+            patchController.generic_setModelUndoableProperty(PatchModel.PATCH_NPRESETENTRIES, ((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerPresetEntriesStateChanged
 
     private void jSpinnerModulationSourcesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerModulationSourcesStateChanged
         SpinnerModel nModel = jSpinnerModulationSources.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().addMetaUndo("change # modulation sources"); // TODO: add FocusEdit
-            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NMODULATIONSOURCES,((SpinnerNumberModel) nModel).getNumber().intValue());
+            patchController.addMetaUndo("change # modulation sources"); // TODO: add FocusEdit
+            patchController.generic_setModelUndoableProperty(PatchModel.PATCH_NMODULATIONSOURCES, ((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerModulationSourcesStateChanged
 
     private void jSpinnerModulationTargetsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerModulationTargetsStateChanged
         SpinnerModel nModel = jSpinnerModulationTargets.getModel();
         if (nModel instanceof SpinnerNumberModel) {
-            getController().addMetaUndo("change # modulation targets per sources"); // TODO: add FocusEdit
-            getController().generic_setModelUndoableProperty(PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE,((SpinnerNumberModel) nModel).getNumber().intValue());
+            patchController.addMetaUndo("change # modulation targets per sources"); // TODO: add FocusEdit
+            patchController.generic_setModelUndoableProperty(PatchModel.PATCH_NMODULATIONTARGETSPERSOURCE, ((SpinnerNumberModel) nModel).getNumber().intValue());
         }
     }//GEN-LAST:event_jSpinnerModulationTargetsStateChanged
 
     private void jCheckBoxHasChannelAttribActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxHasChannelAttribActionPerformed
-        getController().addMetaUndo("change midiselector"); // TODO: add FocusEdit
-        getController().generic_setModelUndoableProperty(PatchModel.PATCH_MIDISELECTOR,(Boolean)jCheckBoxHasChannelAttrib.isSelected());
+        patchController.addMetaUndo("change midiselector"); // TODO: add FocusEdit
+        patchController.generic_setModelUndoableProperty(PatchModel.PATCH_MIDISELECTOR, (Boolean) jCheckBoxHasChannelAttrib.isSelected());
     }//GEN-LAST:event_jCheckBoxHasChannelAttribActionPerformed
 
     private void jComboBoxLicenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxLicenseActionPerformed
         if (jComboBoxLicense.getSelectedItem() != null) {
-            getController().addMetaUndo("change license"); // TODO: add FocusEdit
-            getController().generic_setModelUndoableProperty(PatchModel.PATCH_LICENSE,jComboBoxLicense.getSelectedItem().toString());
+            patchController.addMetaUndo("change license"); // TODO: add FocusEdit
+            patchController.generic_setModelUndoableProperty(PatchModel.PATCH_LICENSE, jComboBoxLicense.getSelectedItem().toString());
         }
     }//GEN-LAST:event_jComboBoxLicenseActionPerformed
 
     private void jTextFieldAuthorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAuthorFocusLost
-        getController().addMetaUndo("change author"); // TODO: add FocusEdit
-        getController().generic_setModelUndoableProperty(PatchModel.PATCH_AUTHOR,jTextFieldAuthor.getText());
+        patchController.addMetaUndo("change author"); // TODO: add FocusEdit
+        patchController.generic_setModelUndoableProperty(PatchModel.PATCH_AUTHOR, jTextFieldAuthor.getText());
     }//GEN-LAST:event_jTextFieldAuthorFocusLost
 
     private void jCheckBoxSaturateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSaturateActionPerformed
@@ -406,8 +410,8 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     }//GEN-LAST:event_jCheckBoxSaturateActionPerformed
 
     private void jTextFieldAttributionsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAttributionsFocusLost
-        getController().addMetaUndo("change attributions"); // TODO: add FocusEdit
-        getController().generic_setModelUndoableProperty(PatchModel.PATCH_ATTRIBUTIONS,jTextFieldAttributions.getText());
+        patchController.addMetaUndo("change attributions"); // TODO: add FocusEdit
+        patchController.generic_setModelUndoableProperty(PatchModel.PATCH_ATTRIBUTIONS, jTextFieldAttributions.getText());
     }//GEN-LAST:event_jTextFieldAttributionsFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -447,10 +451,6 @@ public class PatchSettingsFrame extends AJFrame<PatchController> {
     @Override
     public ArrayList<DocumentWindow> getChildDocuments() {
         return null;
-    }
-
-    PatchModel getModel() {
-        return getController().getModel();
     }
 
     @Override

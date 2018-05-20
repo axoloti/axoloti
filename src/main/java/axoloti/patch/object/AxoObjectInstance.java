@@ -18,13 +18,12 @@
 package axoloti.patch.object;
 
 import axoloti.Synonyms;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.IAxoObject;
-import axoloti.object.ObjectController;
-import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.inlet.InletBool32;
 import axoloti.object.inlet.InletFrac32;
@@ -35,6 +34,7 @@ import axoloti.object.outlet.OutletBool32;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.Parameter;
 import axoloti.patch.PatchModel;
 import static axoloti.patch.object.AxoObjectInstanceAbstract.OBJ_PARAMETER_INSTANCES;
 import axoloti.patch.object.attribute.AttributeInstance;
@@ -150,13 +150,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     }
 
-    @Override
-    public ObjectInstanceController getControllerFromModel() {
-        return (ObjectInstanceController) super.getControllerFromModel();
-    }
-
-    public AxoObjectInstance(ObjectController controller, PatchModel patchModel, String InstanceName1, Point location) {
-        super(controller, patchModel, InstanceName1, location);
+    public AxoObjectInstance(IAxoObject obj, PatchModel patchModel, String InstanceName1, Point location) {
+        super(obj, patchModel, InstanceName1, location);
 
         switch (typeName) {
             case "patch/outlet a":
@@ -193,16 +188,16 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
         AxoObjectInstancePatcher aoip = getContainer();
         if (aoip != null) {
-            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getDModel();
             if (parentInlet != null) {
                 parentInlet.setParent(aop);
                 parentInlet.setName(InstanceName1);
-                aop.getControllerFromModel().addInlet(parentInlet);
+                aop.getController().addInlet(parentInlet);
             }
             if (parentOutlet != null) {
                 parentOutlet.setParent(aop);
                 parentOutlet.setName(InstanceName1);
-                aop.getControllerFromModel().addOutlet(parentOutlet);
+                aop.getController().addOutlet(parentOutlet);
             }
         }
     }
@@ -226,13 +221,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             return null;
         }
         for (InletInstance o : inletInstances) {
-            if (n.equals(o.GetLabel())) {
+            if (n.equals(o.getLabel())) {
                 return o;
             }
         }
         for (InletInstance o : inletInstances) {
             String s = Synonyms.instance().inlet(n);
-            if (o.GetLabel().equals(s)) {
+            if (o.getLabel().equals(s)) {
                 return o;
             }
         }
@@ -245,13 +240,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             return null;
         }
         for (OutletInstance o : outletInstances) {
-            if (n.equals(o.GetLabel())) {
+            if (n.equals(o.getLabel())) {
                 return o;
             }
         }
         for (OutletInstance o : outletInstances) {
             String s = Synonyms.instance().outlet(n);
-            if (o.GetLabel().equals(s)) {
+            if (o.getLabel().equals(s)) {
                 return o;
             }
         }
@@ -263,7 +258,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             return null;
         }
         for (ParameterInstance o : parameterInstances) {
-            if (n.equals(o.getModel().getName())) {
+            if (n.equals(o.getDModel().getName())) {
                 return o;
             }
         }
@@ -296,27 +291,27 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public boolean providesModulationSource() {
-        IAxoObject atype = getType();
+        IAxoObject atype = getDModel();
         if (atype == null) {
             return false;
         } else {
             //return atype.providesModulationSource();
-            return false; // FIXME
+            return false; // TODO: fix modulations
         }
     }
 
     @Override
-    public IAxoObject getType() {
-        return (IAxoObject) super.getType();
+    public IAxoObject getDModel() {
+        return (IAxoObject) super.getDModel();
     }
 
     @Override
     public List<SDFileReference> getFileDepends() {
-        List<SDFileReference> files = getType().getFileDepends();
+        List<SDFileReference> files = getDModel().getFileDepends();
         if (files == null) {
             files = new ArrayList<>();
         } else {
-            String p1 = getType().getPath();
+            String p1 = getDModel().getPath();
             if (p1 == null) {
                 // embedded object, reference path is of the patch
                 p1 = getParent().getFileNamePath();
@@ -327,12 +322,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             File f1 = new File(p1);
             java.nio.file.Path p = f1.toPath().getParent();
             for (SDFileReference f : files) {
-                f.Resolve(p);
+                f.resolve(p);
             }
         }
         if (attributeInstances != null) {
             for (AttributeInstance a : attributeInstances) {
-                ArrayList<SDFileReference> f2 = a.GetDependendSDFiles();
+                ArrayList<SDFileReference> f2 = a.getDependendSDFiles();
                 if (f2 != null) {
                     files.addAll(f2);
                 }
@@ -342,8 +337,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     @Persist
-    public void Persist() {
-        IAxoObject o = getType();
+    public void persist() {
+        IAxoObject o = getDModel();
         if (o != null) {
             if (o.getUUID() != null && !o.getUUID().isEmpty()) {
                 typeUUID = o.getUUID();
@@ -377,12 +372,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
         AxoObjectInstancePatcher aoip = getContainer();
         if (aoip != null) {
-            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getDModel();
             if (parentInlet != null) {
-                aop.getControllerFromModel().removeInlet(parentInlet);
+                aop.getController().removeInlet(parentInlet);
             }
             if (parentOutlet != null) {
-                aop.getControllerFromModel().removeOutlet(parentOutlet);
+                aop.getController().removeOutlet(parentOutlet);
             }
         }
     }
@@ -395,7 +390,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 // find matching parameter in source
                 for (ParameterInstance p2 : sourceObject2.parameterInstances) {
                     if (p.getName().equals(p2.getName())) {
-                        p.CopyValueFrom(p2);
+                        p.copyValueFrom(p2);
                         break;
                     }
                 }
@@ -404,7 +399,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
                 // find matching parameter in source
                 for (AttributeInstance a2 : sourceObject2.attributeInstances) {
                     if (a.getName().equals(a2.getName())) {
-                        a.CopyValueFrom(a2);
+                        a.copyValueFrom(a2);
                         break;
                     }
                 }
@@ -500,16 +495,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         firePropertyChange(OBJ_DISPLAY_INSTANCES, oldval, displayInstances);
     }
 
-    ArrayView<OutletInstance> outletInstanceSync = new ArrayView<OutletInstance>() {
+    ArrayView<OutletInstance, Outlet> outletInstanceSync = new ArrayView<OutletInstance, Outlet>() {
         @Override
         protected void updateUI(List<OutletInstance> views) {
-            getControllerFromModel().changeOutletInstances(views);
+            getController().changeOutletInstances(views);
         }
 
         @Override
-        protected OutletInstance viewFactory(AbstractController ctrl) {
-            AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-            return OutletInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+        protected OutletInstance viewFactory(Outlet outlet) {
+            return OutletInstanceFactory.createView(outlet, AxoObjectInstance.this);
         }
 
         @Override
@@ -518,16 +512,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     };
 
-    ArrayView<InletInstance> inletInstanceSync = new ArrayView<InletInstance>() {
+    ArrayView<InletInstance, Inlet> inletInstanceSync = new ArrayView<InletInstance, Inlet>() {
         @Override
         protected void updateUI(List<InletInstance> views) {
-            getControllerFromModel().changeInletInstances(views);
+            getController().changeInletInstances(views);
         }
 
         @Override
-        protected InletInstance viewFactory(AbstractController ctrl) {
-            AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-            return InletInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+        protected InletInstance viewFactory(Inlet inlet) {
+            return InletInstanceFactory.createView(inlet, AxoObjectInstance.this);
         }
 
         @Override
@@ -536,16 +529,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     };
 
-    ArrayView<DisplayInstance> displayInstanceSync = new ArrayView<DisplayInstance>() {
+    ArrayView<DisplayInstance, Display> displayInstanceSync = new ArrayView<DisplayInstance, Display>() {
         @Override
         protected void updateUI(List<DisplayInstance> views) {
-            getControllerFromModel().changeDisplayInstances(views);
+            getController().changeDisplayInstances(views);
         }
 
         @Override
-        protected DisplayInstance viewFactory(AbstractController ctrl) {
-            AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-            return DisplayInstanceFactory.createView(ctrl1);
+        protected DisplayInstance viewFactory(Display display) {
+            return DisplayInstanceFactory.createView(display);
         }
 
         @Override
@@ -554,16 +546,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     };
 
-    ArrayView<ParameterInstance> parameterInstanceSync = new ArrayView<ParameterInstance>() {
+    ArrayView<ParameterInstance, Parameter> parameterInstanceSync = new ArrayView<ParameterInstance, Parameter>() {
         @Override
         protected void updateUI(List<ParameterInstance> views) {
-            getControllerFromModel().changeParameterInstances(views);
+            getController().changeParameterInstances(views);
         }
 
         @Override
-        protected ParameterInstance viewFactory(AbstractController ctrl) {
-            AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-            return ParameterInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+        protected ParameterInstance viewFactory(Parameter parameter) {
+            return ParameterInstanceFactory.createView(parameter, AxoObjectInstance.this);
         }
 
         @Override
@@ -572,16 +563,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     };
 
-    ArrayView<AttributeInstance> attributeInstanceSync = new ArrayView<AttributeInstance>() {
+    ArrayView<AttributeInstance, AxoAttribute> attributeInstanceSync = new ArrayView<AttributeInstance, AxoAttribute>() {
         @Override
         protected void updateUI(List<AttributeInstance> views) {
-            getControllerFromModel().changeAttributeInstances(views);
+            getController().changeAttributeInstances(views);
         }
 
         @Override
-        protected AttributeInstance viewFactory(AbstractController ctrl) {
-            AtomDefinitionController ctrl1 = (AtomDefinitionController) ctrl;
-            return AttributeInstanceFactory.createView(ctrl1, AxoObjectInstance.this);
+        protected AttributeInstance viewFactory(AxoAttribute attribute) {
+            return AttributeInstanceFactory.createView(attribute, AxoObjectInstance.this);
         }
 
         @Override
@@ -599,15 +589,15 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (AxoObject.OBJ_ATTRIBUTES.is(evt)) {
-            attributeInstanceSync.Sync(attributeInstances, (List) evt.getNewValue());
+            attributeInstanceSync.sync(attributeInstances, (List) evt.getNewValue());
         } else if (AxoObject.OBJ_PARAMETERS.is(evt)) {
-            parameterInstanceSync.Sync(parameterInstances, (List) evt.getNewValue());
+            parameterInstanceSync.sync(parameterInstances, (List) evt.getNewValue());
         } else if (AxoObject.OBJ_DISPLAYS.is(evt)) {
-            displayInstanceSync.Sync(displayInstances, (List) evt.getNewValue());
+            displayInstanceSync.sync(displayInstances, (List) evt.getNewValue());
         } else if (AxoObject.OBJ_INLETS.is(evt)) {
-            inletInstanceSync.Sync(inletInstances, (List) evt.getNewValue());
+            inletInstanceSync.sync(inletInstances, (List) evt.getNewValue());
         } else if (AxoObject.OBJ_OUTLETS.is(evt)) {
-            outletInstanceSync.Sync(outletInstances, (List) evt.getNewValue());
+            outletInstanceSync.sync(outletInstances, (List) evt.getNewValue());
         } else {
             for (PropagatedProperty p : propagateProperties) {
                 if (p.is(evt)) {

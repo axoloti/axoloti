@@ -7,7 +7,7 @@ import axoloti.mvc.IView;
  *
  * @author jtaelman
  */
-public class TextController extends AbstractController<TextModel, IView, AbstractController> {
+public class TextController extends AbstractController<TextModel, IView> {
 
     public TextController(TextModel model) {
         super(model);

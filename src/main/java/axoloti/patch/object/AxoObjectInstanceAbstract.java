@@ -17,15 +17,14 @@
  */
 package axoloti.patch.object;
 
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectUnloaded;
 import axoloti.object.AxoObjectZombie;
-import axoloti.objectlibrary.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.ObjectController;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
@@ -51,7 +50,7 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root(name = "obj_abstr")
-public abstract class AxoObjectInstanceAbstract extends AbstractModel implements IAxoObjectInstance, IView<ObjectController> {
+public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInstanceController> implements IAxoObjectInstance, IView<IAxoObject> {
 
     @Attribute(name = "type")
     String typeName;
@@ -74,17 +73,14 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     IAxoObject type;
     boolean typeWasAmbiguous = false;
 
-    ObjectController controller;
-
     public AxoObjectInstanceAbstract() {
         patchModel = null;
         type = null;
     }
 
-    public AxoObjectInstanceAbstract(ObjectController typeController, PatchModel patchModel, String InstanceName1, Point location) {
+    public AxoObjectInstanceAbstract(IAxoObject obj, PatchModel patchModel, String InstanceName1, Point location) {
         super();
-        this.type = typeController.getModel();
-        this.controller = typeController;
+        this.type = obj;
         typeName = type.getId();
         if (type.isCreatedFromRelativePath() && (patchModel != null)) {
             String pPath = patchModel.getFileNamePath();
@@ -111,7 +107,8 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
                 rPath = new StringBuilder(rPath.substring(0, rPath.length() - 1));
             }
             for (int j = i; j < oPathA.length; j++) {
-                rPath.append("/" + oPathA[j]);
+                rPath.append("/");
+                rPath.append(oPathA[j]);
             }
 
             typeName = rPath.toString();
@@ -126,7 +123,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     }
 
     @Override
-    public IAxoObject getType() {
+    public IAxoObject getDModel() {
         return type;
     }
 
@@ -136,14 +133,14 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
             return type;
         }
         if (typeUUID != null) {
-            type = AxoObjects.getAxoObjects().GetAxoObjectFromUUID(typeUUID);
+            type = AxoObjects.getAxoObjects().getAxoObjectFromUUID(typeUUID);
             if (type != null) {
                 System.out.println("restored from UUID:" + type.getId());
                 typeName = type.getId();
             }
         }
         if (type == null) {
-            List<IAxoObject> types = AxoObjects.getAxoObjects().GetAxoObjectFromName(typeName, directory);
+            List<IAxoObject> types = AxoObjects.getAxoObjects().getAxoObjectFromName(typeName, directory);
             if (types == null) {
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
                 return new AxoObjectZombie(typeName, "");
@@ -154,7 +151,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
                 type = types.get(0);
                 if (type instanceof AxoObjectUnloaded) {
                     AxoObjectUnloaded aou = (AxoObjectUnloaded) type;
-                    type = aou.Load();
+                    type = aou.load();
                 }
                 return type;
             }
@@ -197,11 +194,11 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
      }
      }
      */
-    public String GenerateInstanceDataDeclaration2() {
+    public String generateInstanceDataDeclaration2() {
         return "";
     }
 
-    public String GenerateCodeMidiHandler(String vprefix) {
+    public String generateCodeMidiHandler(String vprefix) {
         return "";
     }
 
@@ -231,7 +228,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
 
     @Override
     public String getLegalName() {
-        return CharEscape.CharEscape(InstanceName);
+        return CharEscape.charEscape(InstanceName);
     }
 
     @Override
@@ -263,17 +260,14 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
         return patchModel;
     }
 
-    public void Close() {
-    }
-
-    @Override
-    public ObjectController getController() {
-        return controller;
+    private ObjectController getObjectController() {
+        return getDModel().getController();
     }
 
     public void applyValues(IAxoObjectInstance unlinked_object_instance) {
     }
 
+    @Override
     public String getTypeName() {
         if (type != null) {
             return type.getId();
@@ -400,18 +394,14 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel implements
     abstract public OutletInstance findOutletInstance(String n);
 
     @Override
-    protected AbstractController createController() {
+    protected ObjectInstanceController createController() {
         return new ObjectInstanceController(this);
-    }
-
-    @Override
-    public ObjectInstanceController getControllerFromModel() {
-        return (ObjectInstanceController) super.getControllerFromModel();
     }
 
     @Override
     public void setParent(PatchModel patchModel) {
         this.patchModel = patchModel;
     }
+
 
 }

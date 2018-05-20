@@ -48,7 +48,7 @@ public class ButtonComponent extends JComponent {
 
     public interface ActListener {
 
-        void OnPushed();
+        void fire();
     }
     ArrayList<ActListener> actListeners = new ArrayList<>();
 
@@ -56,10 +56,10 @@ public class ButtonComponent extends JComponent {
         actListeners.add(al);
     }
 
-    void DoPushed() {
+    void fire() {
         if (isEnabled()) {
             for (ActListener al : actListeners) {
-                al.OnPushed();
+                al.fire();
             }
         }
     }
@@ -104,7 +104,7 @@ public class ButtonComponent extends JComponent {
             @Override
             public void mouseClicked(MouseEvent e) {
                 grabFocus();
-                DoPushed();
+                fire();
             }
 
             @Override

@@ -13,7 +13,7 @@ public class OutletZombie extends Outlet {
     }
 
     @Override
-    public DataType getDatatype() {
+    public DataType getDataType() {
         return new axoloti.datatypes.DTZombie();
     }
 

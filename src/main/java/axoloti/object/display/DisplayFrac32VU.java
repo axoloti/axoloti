@@ -40,7 +40,7 @@ public class DisplayFrac32VU extends Display {
     }
 
     @Override
-    public Int32 getDatatype() {
+    public Int32 getDataType() {
         return Int32.d;
     }
 
@@ -52,7 +52,7 @@ public class DisplayFrac32VU extends Display {
     }
 
     @Override
-    public String GetCMetaType() {
+    public String getCMetaType() {
         return "display_meta_type_vu";
     }
 }

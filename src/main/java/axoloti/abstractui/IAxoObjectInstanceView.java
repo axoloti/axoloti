@@ -3,7 +3,6 @@ package axoloti.abstractui;
 import axoloti.mvc.IView;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import java.awt.Dimension;
@@ -11,13 +10,11 @@ import java.awt.Point;
 import java.util.List;
 import javax.swing.JComponent;
 
-public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> {
+public interface IAxoObjectInstanceView extends IView<IAxoObjectInstance> {
 
-    IAxoObjectInstance getModel();
+    void lock();
 
-    void Lock();
-
-    void Unlock();
+    void unlock();
 
     boolean isLocked();
 
@@ -25,13 +22,13 @@ public interface IAxoObjectInstanceView extends IView<ObjectInstanceController> 
 
     PatchModel getPatchModel();
 
-    IIoletInstanceView getInletInstanceView(InletInstance inletInstance);
+    IInletInstanceView getInletInstanceView(InletInstance inletInstance);
 
-    IIoletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
+    IOutletInstanceView getOutletInstanceView(OutletInstance ouletInstance);
 
-    List<IIoletInstanceView> getInletInstanceViews();
+    List<IInletInstanceView> getInletInstanceViews();
 
-    List<IIoletInstanceView> getOutletInstanceViews();
+    List<IOutletInstanceView> getOutletInstanceViews();
 
     List<IParameterInstanceView> getParameterInstanceViews();
 

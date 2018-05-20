@@ -35,7 +35,7 @@ public class AxoObjectZombie extends AxoObject {
     }
 
     @Override
-    public String GenerateUUID() {
+    public String generateUUID() {
         return "zombie";
     }
 

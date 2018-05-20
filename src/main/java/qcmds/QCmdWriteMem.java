@@ -34,20 +34,20 @@ public class QCmdWriteMem implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
     }
 
     final int MaxBlockSize = 32768;
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
         int offset = 0;
         int remaining = buffer.length;
         do {
@@ -63,7 +63,7 @@ public class QCmdWriteMem implements QCmdSerialTask {
             for (int i = 0; i < l; i++) {
                 part[i] = buffer[offset + i];
             }
-            connection.UploadFragment(part, addr + offset);
+            connection.uploadFragment(part, addr + offset);
             offset += l;
             remaining -= l;
         } while (remaining > 0);

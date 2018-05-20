@@ -40,7 +40,7 @@ public class DisplayFrac4UByteVBarDB extends Display {
     }
 
     @Override
-    public Int32 getDatatype() {
+    public Int32 getDataType() {
         return Int32.d;
     }
 

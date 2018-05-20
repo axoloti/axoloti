@@ -27,14 +27,14 @@ import axoloti.live.patch.parameter.ParameterInstanceLiveView;
 public class QCmdGuiDialTx implements QCmdGUITask {
 
     @Override
-    public void DoGUI(QCmdProcessor processor) {
+    public void performGUIAction(QCmdProcessor processor) {
         if (processor.isQueueEmpty()) {
             PatchViewLive patchController = processor.getPatchController();
             if (patchController != null) {
                 for (ParameterInstanceLiveView p : patchController.getParameterInstances()) {
                     if (p.getNeedsTransmit()) {
                         if (processor.hasQueueSpaceLeft()) {
-                            processor.AppendToQueue(new QCmdSerialDialTX(p.TXData()));
+                            processor.appendToQueue(new QCmdSerialDialTX(p.TXData()));
                             //processor.println("tx dial " + p.getName());
                         } else {
                             break;
@@ -63,12 +63,12 @@ public class QCmdGuiDialTx implements QCmdGUITask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
     }
 }

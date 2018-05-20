@@ -17,15 +17,17 @@
  */
 package axoloti.object.parameter;
 
-import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 import axoloti.realunits.LinearTimeExp;
 import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap {
+public final class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap {
 
     public ParameterFrac32SMapKLineTimeExp2() {
         super();
@@ -35,13 +37,18 @@ public class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap {
         super(name);
     }
 
+    private static final NativeToReal convs[] = {new LinearTimeExp()};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
     @Override
-    public ParameterInstanceFrac32SMap InstanceFactory() {
-        ParameterInstanceFrac32SMap p = super.InstanceFactory();
-        p.SetPFunction("parameter_function::pf_kexpltime");
-        NativeToReal convs[] = {new LinearTimeExp()};
-        p.convs = convs;
-        return p;
+    public List<NativeToReal> getConversions() {
+        return listConvs;
+    }
+
+
+    @Override
+    public String getPFunction() {
+        return "parameter_function::pf_kexpltime";
     }
 
     static public final String TypeName = "frac32.s.map.klineartime.exp2";

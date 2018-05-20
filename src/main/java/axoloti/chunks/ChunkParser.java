@@ -15,7 +15,7 @@ public class ChunkParser {
 
     public ChunkParser(ByteBuffer bb) {
         FourCC hfourcc = new FourCC(bb.getInt());
-        System.out.println("parser1 " + FourCC.Format(hfourcc.getInt()));
+        System.out.println("parser1 " + FourCC.format(hfourcc.getInt()));
         int hlength = bb.getInt();
 //        int remaininglength = hlength;
         while (bb.remaining() > 0) {
@@ -25,7 +25,7 @@ public class ChunkParser {
         }
     }
 
-    public ChunkData GetOne(FourCC fourcc) {
+    public ChunkData getOne(FourCC fourcc) {
         for (ChunkData d : list) {
             if (d.fourcc.getInt() == fourcc.getInt()) {
                 return d;
@@ -34,7 +34,7 @@ public class ChunkParser {
         return null;
     }
 
-    public ChunkData[] GetAll(FourCC fourcc) {
+    public ChunkData[] getAll(FourCC fourcc) {
         int n = 0;
         for (ChunkData d : list) {
             if (d.fourcc.getInt() == fourcc.getInt()) {

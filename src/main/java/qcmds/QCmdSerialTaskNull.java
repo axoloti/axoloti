@@ -26,17 +26,17 @@ import axoloti.connection.IConnection;
 public class QCmdSerialTaskNull implements QCmdSerialTask {
 
     @Override
-    public QCmd Do(IConnection connection) {
+    public QCmd performAction(IConnection connection) {
         return this;
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start QCmdSerialTaskNull";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done QCmdSerialTaskNull";
     }
 }

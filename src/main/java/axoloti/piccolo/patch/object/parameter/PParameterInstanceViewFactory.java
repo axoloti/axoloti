@@ -19,37 +19,37 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32HRadio;
 import axoloti.patch.object.parameter.ParameterInstanceInt32VRadio;
 
 public class PParameterInstanceViewFactory {
-    public static PParameterInstanceView createView(ParameterInstanceController controller, IAxoObjectInstanceView obj) {
-        ParameterInstance model = controller.getModel();
+    public static PParameterInstanceView createView(ParameterInstance model, IAxoObjectInstanceView obj) {
+        ParameterInstanceController controller = model.getController();
         PParameterInstanceView view;
         if (model instanceof ParameterInstance4LevelX16) {
-            view = new PParameterInstanceView4LevelX16(controller, obj);
+            view = new PParameterInstanceView4LevelX16(model, obj);
         } else if (model instanceof ParameterInstanceBin1) {
-            view = new PParameterInstanceViewBin1(controller, obj);
+            view = new PParameterInstanceViewBin1(model, obj);
         } else if (model instanceof ParameterInstanceBin12) {
-            view = new PParameterInstanceViewBin12(controller, obj);
+            view = new PParameterInstanceViewBin12(model, obj);
         } else if (model instanceof ParameterInstanceBin16) {
-            view = new PParameterInstanceViewBin16(controller, obj);
+            view = new PParameterInstanceViewBin16(model, obj);
         } else if (model instanceof ParameterInstanceBin1Momentary) {
-            view = new PParameterInstanceViewBin1Momentary(controller, obj);
+            view = new PParameterInstanceViewBin1Momentary(model, obj);
         } else if (model instanceof ParameterInstanceBin32) {
-            view = new PParameterInstanceViewBin32(controller, obj);
+            view = new PParameterInstanceViewBin32(model, obj);
         } else if (model instanceof ParameterInstanceFrac32SMap) {
-            view = new PParameterInstanceViewFrac32SMap(controller, obj);
+            view = new PParameterInstanceViewFrac32SMap(model, obj);
         } else if (model instanceof ParameterInstanceFrac32SMapVSlider) {
-            view = new PParameterInstanceViewFrac32SMapVSlider(controller, obj);
+            view = new PParameterInstanceViewFrac32SMapVSlider(model, obj);
         } else if (model instanceof ParameterInstanceFrac32UMap) {
-            view = new PParameterInstanceViewFrac32UMap(controller, obj);
+            view = new PParameterInstanceViewFrac32UMap(model, obj);
         } else if (model instanceof ParameterInstanceFrac32UMapVSlider) {
-            view = new PParameterInstanceViewFrac32UMapVSlider(controller, obj);
+            view = new PParameterInstanceViewFrac32UMapVSlider(model, obj);
         } else if (model instanceof ParameterInstanceInt32Box) {
-            view = new PParameterInstanceViewInt32Box(controller, obj);
+            view = new PParameterInstanceViewInt32Box(model, obj);
         } else if (model instanceof ParameterInstanceInt32BoxSmall) {
-            view = new PParameterInstanceViewInt32BoxSmall(controller, obj);
+            view = new PParameterInstanceViewInt32BoxSmall(model, obj);
         } else if (model instanceof ParameterInstanceInt32HRadio) {
-            view = new PParameterInstanceViewInt32HRadio(controller, obj);
+            view = new PParameterInstanceViewInt32HRadio(model, obj);
         } else if (model instanceof ParameterInstanceInt32VRadio) {
-            view = new PParameterInstanceViewInt32VRadio(controller, obj);
+            view = new PParameterInstanceViewInt32VRadio(model, obj);
         } else {
             view = null;
             throw new Error("unknown parameter type");

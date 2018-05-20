@@ -1,7 +1,7 @@
 package axoloti.piccolo.patch.net;
 
 import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.net.NetController;
+import axoloti.patch.net.Net;
 import axoloti.piccolo.PUtils;
 import static axoloti.piccolo.PUtils.asPoint;
 import axoloti.piccolo.patch.PatchViewPiccolo;
@@ -14,13 +14,13 @@ import org.piccolo2d.util.PPaintContext;
 
 public class PNetDragging extends PNetView {
 
-    public PNetDragging(NetController controller, PatchViewPiccolo patchView) {
-        super(controller, patchView);
+    public PNetDragging(Net net, PatchViewPiccolo patchView) {
+        super(net, patchView);
     }
 
     Point p0;
 
-    public void SetDragPoint(Point p0) {
+    public void setDragPoint(Point p0) {
         this.p0 = p0;
 
         updateBounds();
@@ -31,14 +31,14 @@ public class PNetDragging extends PNetView {
         Graphics2D g2 = paintContext.getGraphics();
         float shadowOffset = 0.5f;
         Color c;
-        if (controller.getModel().isValidNet()) {
+        if (getDModel().isValidNet()) {
             if (selected) {
                 g2.setStroke(strokeValidSelected);
             } else {
                 g2.setStroke(strokeValidDeselected);
             }
 
-            c = controller.getModel().getDataType().GetColor();
+            c = getDModel().getDataType().getColor();
         } else {
             if (selected) {
                 g2.setStroke(strokeBrokenSelected);
@@ -46,8 +46,8 @@ public class PNetDragging extends PNetView {
                 g2.setStroke(strokeBrokenDeselected);
             }
 
-            if (controller.getModel().getDataType() != null) {
-                c = controller.getModel().getDataType().GetColor();
+            if (getDModel().getDataType() != null) {
+                c = getDModel().getDataType().getColor();
             } else {
                 c = Theme.getCurrentTheme().Cable_Shadow;
             }
@@ -55,7 +55,11 @@ public class PNetDragging extends PNetView {
         if (p0 != null) {
             if (boundsChangedSincePaint) {
                 Point2D from = asPoint(globalToLocal(p0));
-                for (IIoletInstanceView i : getIoletViews()) {
+                for (IIoletInstanceView i : getInletViews()) {
+                    Point2D to = asPoint(globalToLocal(i.getJackLocInCanvas()));
+                    setCurveShape(getIoletCurve(i), from, to);
+                }
+                for (IIoletInstanceView i : getOutletViews()) {
                     Point2D to = asPoint(globalToLocal(i.getJackLocInCanvas()));
                     setCurveShape(getIoletCurve(i), from, to);
                 }
@@ -63,7 +67,11 @@ public class PNetDragging extends PNetView {
             }
 
             PUtils.setRenderQualityToHigh(g2);
-            for (IIoletInstanceView i : getIoletViews()) {
+            for (IIoletInstanceView i : getInletViews()) {
+                g2.setColor(c);
+                g2.draw(ioletCurves.get(i));
+            }
+            for (IIoletInstanceView i : getOutletViews()) {
                 g2.setColor(c);
                 g2.draw(ioletCurves.get(i));
             }
@@ -85,7 +93,14 @@ public class PNetDragging extends PNetView {
             max_y = p0.y;
         }
 
-        for (IIoletInstanceView i : getIoletViews()) {
+        for (IIoletInstanceView i : getInletViews()) {
+            Point p1 = i.getJackLocInCanvas();
+            min_x = Math.min(min_x, p1.x);
+            min_y = Math.min(min_y, p1.y);
+            max_x = Math.max(max_x, p1.x);
+            max_y = Math.max(max_y, p1.y);
+        }
+        for (IIoletInstanceView i : getOutletViews()) {
             Point p1 = i.getJackLocInCanvas();
             min_x = Math.min(min_x, p1.x);
             min_y = Math.min(min_y, p1.y);
@@ -95,7 +110,7 @@ public class PNetDragging extends PNetView {
 
         int padding = 5;
         setBounds(min_x - padding, min_y - padding, Math.max(1, max_x - min_x + (2 * padding)),
-                (int) CtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
+                (int) calcCtrlPointY(min_x, min_y, max_x, max_y) - min_y + (2 * padding));
         boundsChangedSincePaint = true;
 
     }

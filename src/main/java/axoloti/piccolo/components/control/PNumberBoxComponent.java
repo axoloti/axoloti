@@ -19,6 +19,7 @@ import java.awt.Robot;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.piccolo2d.event.PInputEvent;
@@ -30,7 +31,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
     private double max;
     private double min;
     private double tick;
-    private NativeToReal convs[];
+    private List<NativeToReal> convs;
     private String keybBuffer = "";
 
     private boolean hiliteUp = false;
@@ -42,7 +43,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
     int rmargin = 5;
     int htick = 3;
 
-    public void setNative(NativeToReal convs[]) {
+    public void setNative(List<NativeToReal> convs) {
         this.convs = convs;
     }
 
@@ -82,7 +83,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
     protected void mouseDragged(PInputEvent e) {
         if (isEnabled() && dragging) {
             double v;
-            if ((MousePressedBtn == MouseEvent.BUTTON1)) {
+            if ((mousePressedBtn == MouseEvent.BUTTON1)) {
                 double t = tick;
                 t = t * 0.1;
                 if (e.isShiftDown()) {
@@ -91,7 +92,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
                 if (KeyUtils.isControlOrCommandDown(e)) {
                     t = t * 0.1;
                 }
-                v = value + t * (MousePressedCoordY - PUtils.getYOnScreen(e));
+                v = value + t * (mousePressedCoordY - PUtils.getYOnScreen(e));
                 if (robot == null) {
                     try {
                         robot = new Robot(MouseInfo.getPointerInfo().getDevice());
@@ -110,9 +111,9 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
             }
         }
     }
-    int MousePressedCoordX = 0;
-    int MousePressedCoordY = 0;
-    int MousePressedBtn = 0;
+    int mousePressedCoordX = 0;
+    int mousePressedCoordY = 0;
+    int mousePressedBtn = 0;
 
     @Override
     protected void mousePressed(PInputEvent e) {
@@ -135,9 +136,9 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
                 }
             } else {
                 dragging = true;
-                MousePressedCoordX = PUtils.getXOnScreen(e);
-                MousePressedCoordY = PUtils.getYOnScreen(e);
-                MousePressedBtn = e.getButton();
+                mousePressedCoordX = PUtils.getXOnScreen(e);
+                mousePressedCoordY = PUtils.getYOnScreen(e);
+                mousePressedBtn = e.getButton();
                 e.pushCursor(TransparentCursor.get());
                 fireEventAdjustmentBegin();
             }
@@ -345,7 +346,7 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
         if (convs != null) {
             String s = "<html>";
             for (NativeToReal c : convs) {
-                s += c.ToReal(new ValueFrac32(value)) + "<br>";
+                s += c.convertToReal(new ValueFrac32(value)) + "<br>";
             }
             setToolTipText(s);
         }
@@ -407,6 +408,6 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
 
     @Override
     public void robotMoveToCenter(PInputEvent e) {
-        robot.mouseMove(MousePressedCoordX, MousePressedCoordY);
+        robot.mouseMove(mousePressedCoordX, mousePressedCoordY);
     }
 }

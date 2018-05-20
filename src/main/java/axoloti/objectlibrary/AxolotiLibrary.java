@@ -39,8 +39,8 @@ public class AxolotiLibrary {
     @Element(required = false)
     private String ContributorPrefix;
 
-    public static String FACTORY_ID = "factory";
-    public static String USER_LIBRARY_ID = "community";
+    public static final String FACTORY_ID = "factory";
+    public static final String USER_LIBRARY_ID = "community";
 
     public AxolotiLibrary() {
         Id = "";

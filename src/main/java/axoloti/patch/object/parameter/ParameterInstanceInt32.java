@@ -84,8 +84,8 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     }
 
     @Override
-    public void CopyValueFrom(ParameterInstance p) {
-        super.CopyValueFrom(p);
+    public void copyValueFrom(ParameterInstance p) {
+        super.copyValueFrom(p);
         if (p instanceof ParameterInstanceInt32) {
             ParameterInstanceInt32 p1 = (ParameterInstanceInt32) p;
             setValue(p1.getValue());
@@ -110,11 +110,11 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     }
 
     public Integer getMinValue() {
-        return getModel().getMinValue();
+        return getDModel().getMinValue();
     }
 
     public Integer getMaxValue() {
-        return getModel().getMaxValue();
+        return getDModel().getMaxValue();
     }
 
     @Override

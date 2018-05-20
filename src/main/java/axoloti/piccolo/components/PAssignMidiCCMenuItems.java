@@ -52,7 +52,7 @@ public class PAssignMidiCCMenuItems {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
-        int cc = parameterInstanceView.getModel().getMidiCC();
+        int cc = parameterInstanceView.getDModel().getMidiCC();
         parent.add(p);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 8; j++) {

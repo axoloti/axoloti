@@ -17,7 +17,7 @@
  */
 package axoloti.patch.object;
 
-import axoloti.object.ObjectController;
+import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import axoloti.property.Property;
 import axoloti.property.StringPropertyNull;
@@ -47,8 +47,8 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
         }
     }
 
-    AxoObjectInstanceComment(ObjectController type, PatchModel patch1, String InstanceName1, Point location) {
-        super(type, patch1, InstanceName1, location);
+    AxoObjectInstanceComment(IAxoObject obj, PatchModel patch1, String InstanceName1, Point location) {
+        super(obj, patch1, InstanceName1, location);
         if (InstanceName != null) {
             commentText = InstanceName;
             InstanceName = getGeneratedInstanceName();
@@ -61,7 +61,7 @@ public class AxoObjectInstanceComment extends AxoObjectInstance0 {
         return instanceName;
     }
 
-    public boolean IsLocked() {
+    public boolean isLocked() {
         return false;
     }
 

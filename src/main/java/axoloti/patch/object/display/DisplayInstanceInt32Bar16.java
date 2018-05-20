@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayInt32Bar16;
 
 /**
@@ -26,8 +25,8 @@ import axoloti.object.display.DisplayInt32Bar16;
  */
 public class DisplayInstanceInt32Bar16 extends DisplayInstanceInt32<DisplayInt32Bar16> {
 
-    DisplayInstanceInt32Bar16(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceInt32Bar16(DisplayInt32Bar16 display) {
+        super(display);
     }
 
 }

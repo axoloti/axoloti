@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeObjRef;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.utils.CharEscape;
@@ -38,8 +37,8 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     AttributeInstanceObjRef() {
     }
 
-    AttributeInstanceObjRef(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceObjRef(AxoAttributeObjRef attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
@@ -67,9 +66,9 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
         String ao[] = o.split("/");
         String o3 = "";
         for (int i = 1; i < ao.length; i++) {
-            o3 = o3 + ".instance" + CharEscape.CharEscape(ao[i]) + "_i";
+            o3 = o3 + ".instance" + CharEscape.charEscape(ao[i]) + "_i";
         }
-        o2 = o2 + "instance" + CharEscape.CharEscape(ao[0]) + "_i" + o3;
+        o2 = o2 + "instance" + CharEscape.charEscape(ao[0]) + "_i" + o3;
         return o2;
     }
 
@@ -88,7 +87,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         if (objName == null) {
             objName = "";
         }

@@ -30,21 +30,21 @@ import java.util.ArrayList;
  *
  * @author Johannes Taelman
  */
-public class Spat extends gentools {
+class Spat extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "spat";
         {
             ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_pan());
             c.add(Create_pantilde());
-            WriteAxoObject(catName, c);
+            writeAxoObject(catName, c);
         }
         {
             ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_panm());
             c.add(Create_panmtilde());
-            WriteAxoObject(catName, c);
+            writeAxoObject(catName, c);
         }
     }
 

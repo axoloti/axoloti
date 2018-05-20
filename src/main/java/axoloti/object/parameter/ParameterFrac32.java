@@ -18,7 +18,6 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.patch.object.parameter.ParameterInstanceFrac32;
 import axoloti.property.DoubleProperty;
 import axoloti.property.Property;
 import java.util.List;
@@ -28,7 +27,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public abstract class ParameterFrac32<T extends ParameterInstanceFrac32> extends Parameter<T> {
+public abstract class ParameterFrac32 extends Parameter {
 
     @Element(required = false)
     public ValueFrac32 DefaultValue = new ValueFrac32(0);

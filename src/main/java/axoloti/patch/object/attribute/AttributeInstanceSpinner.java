@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeSpinner;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.property.IntegerProperty;
@@ -30,8 +29,8 @@ import java.beans.PropertyChangeEvent;
  */
 public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeSpinner> {
 
-    Integer MinValue;
-    Integer MaxValue;
+    Integer minValue;
+    Integer maxValue;
 
     public static final Property MINVALUE = new IntegerProperty("MinValue", AttributeInstanceSpinner.class, "Minimum");
     public static final Property MAXVALUE = new IntegerProperty("MaxValue", AttributeInstanceSpinner.class, "Maximum");
@@ -41,9 +40,9 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
         super();
     }
 
-    public AttributeInstanceSpinner(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
-        value = ((AxoAttributeSpinner) controller.getModel()).getDefaultValue();
+    public AttributeInstanceSpinner(AxoAttributeSpinner attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
+        value = attribute.getDefaultValue();
     }
 
     @Override
@@ -62,22 +61,22 @@ public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeS
     }
 
     public Integer getMinValue() {
-        return MinValue;
+        return minValue;
     }
 
     public void setMinValue(Integer MinValue) {
-        Integer prevVal = this.MinValue;
-        this.MinValue = MinValue;
+        Integer prevVal = this.minValue;
+        this.minValue = MinValue;
         firePropertyChange(MINVALUE, prevVal, MinValue);
     }
 
     public Integer getMaxValue() {
-        return MaxValue;
+        return maxValue;
     }
 
     public void setMaxValue(Integer MaxValue) {
-        Integer prevVal = this.MaxValue;
-        this.MaxValue = MaxValue;
+        Integer prevVal = this.maxValue;
+        this.maxValue = MaxValue;
         firePropertyChange(MAXVALUE, prevVal, MaxValue);
     }
 

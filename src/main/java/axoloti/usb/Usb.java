@@ -51,12 +51,13 @@ public class Usb {
         }
     }
 
-    public static String DeviceToPath(Device device) {
+    public static String deviceToPath(Device device) {
         ByteBuffer path = ByteBuffer.allocateDirect(10);
         int n = LibUsb.getPortNumbers(device, path);
         StringBuilder paths = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            paths.append(":" + path.get(i));
+            paths.append(":");
+            paths.append(path.get(i));
         }
         return paths.toString();
     }
@@ -109,7 +110,7 @@ public class Usb {
                             Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, serial #{0}", LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber()));
                             LibUsb.close(handle);
                         }
-                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: {0}", DeviceToPath(device));
+                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: {0}", deviceToPath(device));
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);

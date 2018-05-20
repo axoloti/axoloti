@@ -32,22 +32,22 @@ public class QCmdRecallPreset implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return null;
 //        return "Start recalling preset";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return null;
 //        return "Done recalling preset";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
-        connection.TransmitRecallPreset(presetNo);
-        if (connection.WaitSync()) {
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
+        connection.transmitRecallPreset(presetNo);
+        if (connection.waitSync()) {
             return this;
         } else {
             return new QCmdDisconnect();

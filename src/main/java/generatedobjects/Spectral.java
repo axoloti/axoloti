@@ -31,19 +31,19 @@ import axoloti.object.parameter.ParameterFrac32UMap;
  *
  * @author Johannes Taelman
  */
-public class Spectral extends gentools {
+class Spectral extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "spectral";
-        WriteAxoObject(catName, CreateRFFT128B());
-//        WriteAxoObject(dirname, CreateRFFT256());
-//        WriteAxoObject(catName, CreateAnalyzer24());
-//        WriteAxoObject(catName, CreateAnalyzer24DB());
-        WriteAxoObject(catName, CreateAnalyzer24DB2());
-//        WriteAxoObject(unstable + "/" + catName, CreateVocoder());
+        writeAxoObject(catName, createRFFT128B());
+//        WriteAxoObject(dirname, createRFFT256());
+//        WriteAxoObject(catName, createAnalyzer24());
+//        WriteAxoObject(catName, createAnalyzer24DB());
+        writeAxoObject(catName, createAnalyzer24DB2());
+//        WriteAxoObject(unstable + "/" + catName, createVocoder());
     }
 
-    static AxoObject CreateRFFT128() {
+    static AxoObject createRFFT128() {
         AxoObject o = new AxoObject("rfft 128", "spectral analyzer display using 128 input points fft");
         int n = 128;
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -117,7 +117,7 @@ public class Spectral extends gentools {
         return o;
     }
 
-    static AxoObject CreateRFFT128B() {
+    static AxoObject createRFFT128B() {
         AxoObject o = new AxoObject("rfft 128", "spectral analyzer display using 128 input points fft");
         int n = 128;
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -191,7 +191,7 @@ public class Spectral extends gentools {
         return o;
     }
 
-    static AxoObject CreateRFFT256() {
+    static AxoObject createRFFT256() {
         AxoObject o = new AxoObject("rfft 256", "spectral analyzer display using 128 input points fft");
         int n = 256;
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -263,7 +263,7 @@ public class Spectral extends gentools {
         return o;
     }
 
-    static AxoObject CreateAnalyzer24() {
+    static AxoObject createAnalyzer24() {
         int channels = 20;
         AxoObject o = new AxoObject("analyzer24DB", "spectral analyzer made out of 2nd order bandpass filters, linear scale");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -302,7 +302,7 @@ public class Spectral extends gentools {
         return o;
     }
 
-    static AxoObject CreateAnalyzer24DB() {
+    static AxoObject createAnalyzer24DB() {
         int channels = 20;
         AxoObject o = new AxoObject("analyzer24db", "spectral analyzer made out of 2nd order bandpass filters, decibel scale");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -341,7 +341,7 @@ public class Spectral extends gentools {
         return o;
     }
 
-    static AxoObject CreateAnalyzer24DB2() {
+    static AxoObject createAnalyzer24DB2() {
         int channels = 20;
         AxoObject o = new AxoObject("analyzer 24", "spectral analyzer made out of two 2nd order bandpass filters per band, decibel scale (vertical), steeper filters");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -391,7 +391,7 @@ public class Spectral extends gentools {
         return o;
     }
 
-    static AxoObject CreateVocoder() {
+    static AxoObject createVocoder() {
         AxoObject o = new AxoObject("vocoder 24", "channel vocoder v1");
         o.inlets.add(new InletFrac32Buffer("car", "carrier"));
         o.inlets.add(new InletFrac32Buffer("mod", "modulator"));

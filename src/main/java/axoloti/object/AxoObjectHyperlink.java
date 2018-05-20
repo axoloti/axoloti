@@ -32,7 +32,7 @@ public class AxoObjectHyperlink extends AxoObjectAbstract0 {
     }
 
     @Override
-    public String GenerateUUID() {
+    public String generateUUID() {
         return null;
     }
 

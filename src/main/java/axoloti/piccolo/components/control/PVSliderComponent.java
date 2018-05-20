@@ -172,7 +172,7 @@ public class PVSliderComponent extends PCtrlComponentAbstract {
 
     final int margin = 2;
 
-    int ValToPos(double v) {
+    int valToPos(double v) {
         return (int) (margin + ((max - v) * (height - 2 * margin)) / (max - min));
     }
 
@@ -189,8 +189,8 @@ public class PVSliderComponent extends PCtrlComponentAbstract {
                 g2.setStroke(strokeThin);
             }
             g2.drawRect(0, 0, (int) getWidth(), height);
-            int p = ValToPos(value);
-            int p1 = ValToPos(0);
+            int p = valToPos(value);
+            int p1 = valToPos(0);
             //        g2.drawLine(1, p, 1, p1);
             //        g2.drawLine(width -1, p, width -1, p1);
             if (p1 - p > 0) {

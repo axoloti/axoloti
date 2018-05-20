@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.Display;
 
 /**
@@ -28,8 +27,8 @@ public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayIn
 
     Double value = 0.0;
 
-    DisplayInstanceFrac32(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceFrac32(T display) {
+        super(display);
     }
 
     @Override

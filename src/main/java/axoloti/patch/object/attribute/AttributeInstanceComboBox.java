@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.patch.object.AxoObjectInstance;
 import java.beans.PropertyChangeEvent;
@@ -35,16 +34,16 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     AttributeInstanceComboBox() {
     }
 
-    AttributeInstanceComboBox(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceComboBox(AxoAttributeComboBox attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
     public String CValue() {
-        if (getModel().getCEntries().isEmpty()) {
+        if (getDModel().getCEntries().isEmpty()) {
             return "";
         }
-        String s = getModel().getCEntries().get(getSelectedIndex());
+        String s = getDModel().getCEntries().get(getSelectedIndex());
         if (s != null) {
             return s;
         } else {
@@ -63,12 +62,12 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
     @Override
     protected void setValueString(String selection) {
         String oldvalue = this.selection;
-        if (getModel().getMenuEntries().isEmpty()) {
+        if (getDModel().getMenuEntries().isEmpty()) {
             // no menu entries present
             this.selection = null;
         } else {
             int selectedIndex = getIndex(selection);
-            selection = getModel().getMenuEntries().get(selectedIndex);
+            selection = getDModel().getMenuEntries().get(selectedIndex);
             this.selection = selection;
         }
         firePropertyChange(
@@ -81,8 +80,8 @@ public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttrib
         if (selection == null) {
             return 0;
         }
-        for (int i = 0; i < getModel().getMenuEntries().size(); i++) {
-            if (selection.equals(getModel().getMenuEntries().get(i))) {
+        for (int i = 0; i < getDModel().getMenuEntries().size(); i++) {
+            if (selection.equals(getDModel().getMenuEntries().get(i))) {
                 selectedIndex = i;
                 break;
             }

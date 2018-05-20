@@ -27,7 +27,7 @@ public class UndoableEditGroup implements UndoableEdit {
 
     @Override
     public void undo() throws CannotUndoException {
-        MvcDiagnostics.log(String.format("undo %08X %s\n", hashCode(), getPresentationName()));
+        MvcDiagnostics.log(String.format("undo %08X %s%n", hashCode(), getPresentationName()));
         for (int j = elements.size() - 1; j >= 0; j--) {
             UndoablePropertyChange el = elements.get(j);
             el.undo();
@@ -44,7 +44,7 @@ public class UndoableEditGroup implements UndoableEdit {
 
     @Override
     public void redo() throws CannotRedoException {
-        MvcDiagnostics.log(String.format("redo %08X %s\n", hashCode(), getPresentationName()));
+        MvcDiagnostics.log(String.format("redo %08X %s%n", hashCode(), getPresentationName()));
         for (UndoablePropertyChange el : elements) {
             el.redo();
         }
@@ -76,7 +76,7 @@ public class UndoableEditGroup implements UndoableEdit {
             return true;
         }
         UndoablePropertyChange lastEdit = elements.get(elements.size() - 1);
-        if ((lastEdit.getController() == anAbsEdit.getController())
+        if ((lastEdit.getModel() == anAbsEdit.getModel())
                 && (lastEdit.getProperty() == anAbsEdit.getProperty())) {
             lastEdit.new_value = anAbsEdit.getNewValue();
             if ((lastEdit.new_value != null) && (lastEdit.new_value.equals(lastEdit.old_value))) {

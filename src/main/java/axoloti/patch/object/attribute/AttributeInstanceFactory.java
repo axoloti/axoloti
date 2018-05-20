@@ -1,7 +1,7 @@
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinition;
 import axoloti.object.atom.AtomDefinitionController;
+import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeInt32;
 import axoloti.object.attribute.AxoAttributeObjRef;
@@ -17,23 +17,23 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class AttributeInstanceFactory {
 
-    public static AttributeInstance createView(AtomDefinitionController controller, AxoObjectInstance obj) {
-        AtomDefinition model = controller.getModel();
+    public static AttributeInstance createView(AxoAttribute model, AxoObjectInstance obj) {
+        AtomDefinitionController controller = model.getController();
         AttributeInstance view;
         if (model instanceof AxoAttributeComboBox) {
-            view = new AttributeInstanceComboBox(controller, obj);
+            view = new AttributeInstanceComboBox((AxoAttributeComboBox) model, obj);
         } else if (model instanceof AxoAttributeInt32) {
-            view = new AttributeInstanceInt32(controller, obj);
+            view = new AttributeInstanceInt32((AxoAttributeInt32) model, obj);
         } else if (model instanceof AxoAttributeObjRef) {
-            view = new AttributeInstanceObjRef(controller, obj);
+            view = new AttributeInstanceObjRef((AxoAttributeObjRef) model, obj);
         } else if (model instanceof AxoAttributeSDFile) {
-            view = new AttributeInstanceSDFile(controller, obj);
+            view = new AttributeInstanceSDFile((AxoAttributeSDFile) model, obj);
         } else if (model instanceof AxoAttributeSpinner) {
-            view = new AttributeInstanceSpinner(controller, obj);
+            view = new AttributeInstanceSpinner((AxoAttributeSpinner) model, obj);
         } else if (model instanceof AxoAttributeTablename) {
-            view = new AttributeInstanceTablename(controller, obj);
+            view = new AttributeInstanceTablename((AxoAttributeTablename) model, obj);
         } else if (model instanceof AxoAttributeTextEditor) {
-            view = new AttributeInstanceTextEditor(controller, obj);
+            view = new AttributeInstanceTextEditor((AxoAttributeTextEditor) model, obj);
         } else {
             view = null;
         }

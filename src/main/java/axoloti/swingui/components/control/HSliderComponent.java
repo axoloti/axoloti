@@ -49,7 +49,7 @@ public class HSliderComponent extends ACtrlComponent {
         setPreferredSize(d);
         setMaximumSize(d);
         setSize(d);
-        SetupTransferHandler();
+        setupTransferHandler();
     }
 
     @Override

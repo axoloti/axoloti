@@ -1,14 +1,14 @@
 package axoloti.piccolo.patch.object.inlet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
-import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.abstractui.IInletInstanceView;
+import axoloti.patch.object.inlet.InletInstance;
 
 public class PInletInstanceViewFactory {
 
-    public static IIoletInstanceView createView(IoletInstanceController controller, IAxoObjectInstanceView obj) {
-        IIoletInstanceView view = new PInletInstanceView(controller, obj);
-        controller.addView(view);
+    public static IInletInstanceView createView(InletInstance inletInstance, IAxoObjectInstanceView obj) {
+        IInletInstanceView view = new PInletInstanceView(inletInstance, obj);
+        inletInstance.getController().addView(view);
         return view;
     }
 }

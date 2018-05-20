@@ -32,7 +32,7 @@ public class IntegerProperty extends PropertyReadWrite<Integer> {
     }
 
     @Override
-    public Integer StringToObj(String v) {
+    public Integer convertStringToObj(String v) {
         if (allowNull() && ((v == null) || v.isEmpty())) {
             return null;
         }

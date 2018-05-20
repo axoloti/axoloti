@@ -60,7 +60,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
         jControllerEnabled.setSelected(prefs.isControllerEnabled());
         jTextFieldController.setText(prefs.getControllerObject());
         jTextFieldController.setEnabled(prefs.isControllerEnabled());
-        PopulateLibrary();
+        populateLibrary();
 
         //double click to edit library
         jLibraryTable.addMouseListener(new MouseAdapter() {
@@ -119,7 +119,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
         setVisible(true);
     }
 
-    void Apply() {
+    void apply() {
         Preferences prefs = Preferences.getPreferences();
         prefs.setPollInterval(Integer.parseInt(jTextFieldPollInterval.getText()));
         prefs.setMouseDialAngular(jComboBox1.getSelectedItem().equals("Angular"));
@@ -129,7 +129,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
         prefs.setMouseWheelPan(mouseWheelComboBox.getSelectedItem().equals("Pan"));
     }
 
-    final void PopulateLibrary() {
+    final void populateLibrary() {
         DefaultTableModel model = (DefaultTableModel) jLibraryTable.getModel();
         model.setRowCount(0);
         while (model.getRowCount() > 0) {
@@ -497,8 +497,8 @@ public class PreferencesFrame extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        Apply();
-        Preferences.getPreferences().SavePrefs();
+        apply();
+        Preferences.getPreferences().savePrefs();
         setVisible(false);
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -513,7 +513,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
             String dir;
             try {
                 dir = chooser.getSelectedFile().getCanonicalPath();
-                Preferences.getPreferences().SetFirmwareDir(dir);
+                Preferences.getPreferences().setFirmwareDir(dir);
                 txtFirmwareDir.setText(dir);
             } catch (IOException ex) {
                 Logger.getLogger(PreferencesFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -529,7 +529,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
             String dir;
             try {
                 dir = chooser.getSelectedFile().getCanonicalPath();
-                Preferences.getPreferences().SetRuntimeDir(dir);
+                Preferences.getPreferences().setRuntimeDir(dir);
                 txtRuntimeDir.setText(dir);
             } catch (IOException ex) {
                 Logger.getLogger(PreferencesFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -575,7 +575,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
         }
         newlib.clone(lib);
         Preferences.getPreferences().updateLibrary(lib.getId(), newlib);
-        PopulateLibrary();
+        populateLibrary();
     }//GEN-LAST:event_jAddLibBtnActionPerformed
 
     private void jDelLibBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDelLibBtnActionPerformed
@@ -586,7 +586,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
             Preferences.getPreferences().removeLibrary(id);
         }
 
-        PopulateLibrary();
+        populateLibrary();
     }//GEN-LAST:event_jDelLibBtnActionPerformed
 
     private void jResetLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetLibActionPerformed
@@ -598,8 +598,8 @@ public class PreferencesFrame extends javax.swing.JDialog {
         }
         boolean delete = (res == JOptionPane.OK_OPTION);
 
-        Preferences.getPreferences().ResetLibraries(delete);
-        PopulateLibrary();
+        Preferences.getPreferences().resetLibraries(delete);
+        populateLibrary();
     }//GEN-LAST:event_jResetLibActionPerformed
 
     private void jEditLibActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jEditLibActionPerformed
@@ -649,7 +649,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
                     updlib.clone(lib);
                 }
                 Preferences.getPreferences().updateLibrary(lib.getId(), updlib);
-                PopulateLibrary();
+                populateLibrary();
             }
         }
     }

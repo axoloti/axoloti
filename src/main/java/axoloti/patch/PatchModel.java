@@ -23,9 +23,10 @@ import axoloti.Modulator;
 import axoloti.Version;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectPatcher;
-import axoloti.objectlibrary.AxoObjects;
 import axoloti.object.IAxoObject;
 import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.objectlibrary.AxoObjects;
+import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.patch.net.Net;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceComment;
@@ -47,7 +48,7 @@ import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
 import axoloti.target.fs.SDFileReference;
-import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.utils.StringUtils;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ import org.simpleframework.xml.strategy.Strategy;
  * @author Johannes Taelman
  */
 @Root
-public class PatchModel extends AbstractModel {
+public class PatchModel extends AbstractModel<PatchController> {
 
     //TODO: (enhancement) use execution order, rather than UI ordering
     static final boolean USE_EXECUTION_ORDER = false;
@@ -130,11 +131,6 @@ public class PatchModel extends AbstractModel {
     @Override
     public AxoObjectInstancePatcher getParent() {
         return container;
-    }
-
-    @Override
-    public PatchController getControllerFromModel() {
-        return (PatchController)super.getControllerFromModel();
     }
 
     @Commit
@@ -210,7 +206,7 @@ public class PatchModel extends AbstractModel {
     }
 
     @Validate
-    public void Validate() {
+    public void validate() {
         // called after deserialializtion, stops validation
         if (appVersion != null
                 && !appVersion.equals(Version.AXOLOTI_SHORT_VERSION)) {
@@ -240,12 +236,12 @@ public class PatchModel extends AbstractModel {
     }
 
     @Complete
-    public void Complete() {
+    public void complete() {
         // called after deserialializtion
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         // called prior to serialization
         appVersion = Version.AXOLOTI_SHORT_VERSION;
     }
@@ -292,7 +288,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public boolean save(File f) {
-        SortByPosition();
+        sortByPosition();
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
@@ -333,7 +329,7 @@ public class PatchModel extends AbstractModel {
          */
     }
 
-    void SortByPosition() {
+    void sortByPosition() {
         ArrayList<IAxoObjectInstance> clone = new ArrayList<>();
         clone.addAll(objectinstances);
         Collections.sort(clone);
@@ -341,7 +337,7 @@ public class PatchModel extends AbstractModel {
         refreshIndexes();
     }
 
-    void SortParentsByExecution(IAxoObjectInstance o, LinkedList<IAxoObjectInstance> result) {
+    void sortParentsByExecution(IAxoObjectInstance o, LinkedList<IAxoObjectInstance> result) {
         /*
         LinkedList<AxoObjectInstanceAbstract> before = new LinkedList<AxoObjectInstanceAbstract>(result);
         LinkedList<AxoObjectInstanceAbstract> parents = new LinkedList<AxoObjectInstanceAbstract>();
@@ -375,7 +371,7 @@ public class PatchModel extends AbstractModel {
         */
     }
 
-    void SortByExecution() {
+    void sortByExecution() {
         /*
         LinkedList<AxoObjectInstanceAbstract> endpoints = new LinkedList<AxoObjectInstanceAbstract>();
         LinkedList<AxoObjectInstanceAbstract> result = new LinkedList<AxoObjectInstanceAbstract>();
@@ -409,7 +405,7 @@ public class PatchModel extends AbstractModel {
         */
     }
 
-    public Modulator GetModulatorOfModulation(Modulation modulation) {
+    public Modulator getModulatorOfModulation(Modulation modulation) {
         if (Modulators == null) {
             return null;
         }
@@ -421,7 +417,7 @@ public class PatchModel extends AbstractModel {
         return null;
     }
 
-    public int GetModulatorIndexOfModulation(Modulation modulation) {
+    public int getModulatorIndexOfModulation(Modulation modulation) {
         if (Modulators == null) {
             return -1;
         }
@@ -434,11 +430,11 @@ public class PatchModel extends AbstractModel {
         return -1;
     }
 
-    List<IAxoObject> GetUsedAxoObjects() {
+    List<IAxoObject> getUsedAxoObjects() {
         ArrayList<IAxoObject> aos = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
-            if (!aos.contains(o.getType())) {
-                aos.add(o.getType());
+            if (!aos.contains(o.getDModel())) {
+                aos.add(o.getDModel());
             }
         }
         return aos;
@@ -447,13 +443,13 @@ public class PatchModel extends AbstractModel {
     public HashSet<String> getIncludes() {
         HashSet<String> includes = new HashSet<>();
         if (controllerObjectInstance != null) {
-            Set<String> i = controllerObjectInstance.getType().getIncludes();
+            Set<String> i = controllerObjectInstance.getDModel().getIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
         }
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getType().getIncludes();
+            Set<String> i = o.getDModel().getIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
@@ -464,7 +460,7 @@ public class PatchModel extends AbstractModel {
     public HashSet<String> getDepends() {
         HashSet<String> depends = new HashSet<>();
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getType().getDepends();
+            Set<String> i = o.getDModel().getDepends();
             if (i != null) {
                 depends.addAll(i);
             }
@@ -475,7 +471,7 @@ public class PatchModel extends AbstractModel {
     public HashSet<String> getModules() {
         HashSet<String> modules = new HashSet<>();
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getType().getModules();
+            Set<String> i = o.getDModel().getModules();
             if (i != null) {
                 modules.addAll(i);
             }
@@ -495,11 +491,11 @@ public class PatchModel extends AbstractModel {
 
     int IID = -1; // iid identifies the patch
 
-    public int GetIID() {
+    public int getIID() {
         return IID;
     }
 
-    void CreateIID() {
+    void createIID() {
         java.util.Random r = new java.util.Random();
         IID = r.nextInt();
     }
@@ -552,13 +548,13 @@ public class PatchModel extends AbstractModel {
      }
      }
      */
-    public void ClearCurrentPreset() {
+    public void clearCurrentPreset() {
     }
 
-    public void CopyCurrentToInit() {
+    public void copyCurrentToInit() {
     }
 
-    public void DifferenceToPreset() {
+    public void differenceToPreset() {
         /*
          for(AxoObjectInstance o:objectinstances){
          for(ParameterInstance param:o.parameterInstances){
@@ -624,7 +620,7 @@ public class PatchModel extends AbstractModel {
      */
     //final int NPRESETS = 8;
     //final int NPRESET_ENTRIES = 32;
-    public int[] DistillPreset(int i) {
+    public int[] distillPreset(int i) {
         int[] pdata;
         pdata = new int[getNPresetEntries() * 2];
         for (int j = 0; j < getNPresetEntries(); j++) {
@@ -636,8 +632,8 @@ public class PatchModel extends AbstractModel {
                 ParameterInstance p7 = (ParameterInstance) param;
                 Preset p = p7.getPreset(i);
                 if (p != null) {
-                    pdata[index * 2] = 0; //p7.getIndex(); // FIXME!
-                    pdata[index * 2 + 1] = 0;// FIXME p.value.getRaw();
+                    pdata[index * 2] = 0; //p7.getIndex(); // TODO: preset implementation
+                    pdata[index * 2 + 1] = 0;// TODO: preset implementation //p.value.getRaw();
                     index++;
                     if (index == getNPresetEntries()) {
                         Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", getNPresetEntries());
@@ -708,7 +704,7 @@ public class PatchModel extends AbstractModel {
         }*/
     }
 
-    public String GetCurrentWorkingDirectory() {
+    public String getCurrentWorkingDirectory() {
         if (FileNamePath == null) {
             return null;
         }
@@ -746,7 +742,7 @@ public class PatchModel extends AbstractModel {
         firePropertyChange(PATCH_HELP_PATCH, null, helpPatch);
     }
 
-    public ArrayList<SDFileReference> GetDependendSDFiles() {
+    public ArrayList<SDFileReference> getDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
             List<SDFileReference> f2 = o.getFileDepends();
@@ -817,11 +813,6 @@ public class PatchModel extends AbstractModel {
     AxoAttributeComboBox attrPoly = new AxoAttributeComboBox("poly",
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
-
-    private String StringDenull(String s){
-        if (s == null) return "";
-        return s;
-    }
 
     // ------------- new MVC methods
 
@@ -931,7 +922,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public String getAuthor() {
-        return StringDenull(getSettings().Author);
+        return StringUtils.denullString(getSettings().Author);
     }
 
     public void setAuthor(String Author) {
@@ -942,7 +933,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public String getLicense() {
-        return StringDenull(getSettings().License);
+        return StringUtils.denullString(getSettings().License);
     }
 
     public void setLicense(String License) {
@@ -953,7 +944,7 @@ public class PatchModel extends AbstractModel {
     }
 
     public String getAttributions() {
-        return StringDenull(getSettings().Attributions);
+        return StringUtils.denullString(getSettings().Attributions);
     }
 
     public void setAttributions(String Attributions) {
@@ -971,13 +962,13 @@ public class PatchModel extends AbstractModel {
         settings.subpatchmode = mode;
         AxoObjectInstancePatcher aoip = getParent();
         if (aoip != null) {
-            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getDModel();
             if (mode == SubPatchMode.polyphonic
                     || mode == SubPatchMode.polychannel
                     || mode == SubPatchMode.polyexpression) {
-                aop.getControllerFromModel().addAttribute(attrPoly);
+                aop.getController().addAttribute(attrPoly);
             } else {
-                aop.getControllerFromModel().removeAttribute(attrPoly);
+                aop.getController().removeAttribute(attrPoly);
             }
         }
         firePropertyChange(
@@ -1066,15 +1057,15 @@ public class PatchModel extends AbstractModel {
         settings.HasMidiChannelSelector = b;
         AxoObjectInstancePatcher aoip = getParent();
         if (aoip != null) {
-            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getController().getModel();
+            AxoObjectPatcher aop = (AxoObjectPatcher) aoip.getDModel();
             if (b) {
-                aop.getControllerFromModel().addAttribute(attrMidiChannel);
-                aop.getControllerFromModel().addAttribute(attrMidiPort);
-                aop.getControllerFromModel().addAttribute(attrMidiDevice);
+                aop.getController().addAttribute(attrMidiChannel);
+                aop.getController().addAttribute(attrMidiPort);
+                aop.getController().addAttribute(attrMidiDevice);
             } else {
-                aop.getControllerFromModel().removeAttribute(attrMidiChannel);
-                aop.getControllerFromModel().removeAttribute(attrMidiPort);
-                aop.getControllerFromModel().removeAttribute(attrMidiDevice);
+                aop.getController().removeAttribute(attrMidiChannel);
+                aop.getController().removeAttribute(attrMidiPort);
+                aop.getController().removeAttribute(attrMidiDevice);
             }
         }
         firePropertyChange(

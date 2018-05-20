@@ -1,7 +1,7 @@
 package axoloti.swingui.patch.object.attribute;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.attribute.AttributeInstanceController;
+import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceSpinner;
 import axoloti.swingui.components.control.ACtrlComponent;
 import axoloti.swingui.components.control.NumberBoxComponent;
@@ -10,51 +10,51 @@ import java.beans.PropertyChangeListener;
 
 class AttributeInstanceViewSpinner extends AttributeInstanceViewInt {
 
-    NumberBoxComponent spinner;
+    private NumberBoxComponent spinner;
 
-    AttributeInstanceViewSpinner(AttributeInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    AttributeInstanceViewSpinner(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(attribute, axoObjectInstanceView);
         initComponents();
     }
 
     @Override
-    public AttributeInstanceSpinner getModel() {
-        return (AttributeInstanceSpinner) super.getModel();
+    public AttributeInstanceSpinner getDModel() {
+        return (AttributeInstanceSpinner) super.getDModel();
     }
 
     private void initComponents() {
-        Integer ival = getModel().getValueInteger();
+        Integer ival = getDModel().getValueInteger();
         int value = ival;
 
-        if (value < getModel().getModel().getMinValue()) {
-            getModel().setValue(getModel().getModel().getMinValue());
+        if (value < getDModel().getDModel().getMinValue()) {
+            getDModel().setValue(getDModel().getDModel().getMinValue());
         }
-        if (value > getModel().getModel().getMaxValue()) {
-            getModel().setValue(getModel().getModel().getMaxValue());
+        if (value > getDModel().getDModel().getMaxValue()) {
+            getDModel().setValue(getDModel().getDModel().getMaxValue());
         }
-        spinner = new NumberBoxComponent(value, getModel().getModel().getMinValue(), getModel().getModel().getMaxValue(), 1.0);
+        spinner = new NumberBoxComponent(value, getDModel().getDModel().getMinValue(), getDModel().getDModel().getMaxValue(), 1.0);
         add(spinner);
         spinner.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
-                    getController().addMetaUndo("edit attribute " + getModel().getName(), focusEdit);
+                    model.getController().addMetaUndo("edit attribute " + getDModel().getName(), focusEdit);
                 } else if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
-                    getController().changeValue((Integer) (int) spinner.getValue());
+                    model.getController().changeValue((Integer) (int) spinner.getValue());
                 }
             }
         });
     }
 
     @Override
-    public void Lock() {
+    public void lock() {
         if (spinner != null) {
             spinner.setEnabled(false);
         }
     }
 
     @Override
-    public void UnLock() {
+    public void unlock() {
         if (spinner != null) {
             spinner.setEnabled(true);
         }

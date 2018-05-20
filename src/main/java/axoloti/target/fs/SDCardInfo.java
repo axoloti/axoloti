@@ -37,7 +37,7 @@ public class SDCardInfo {
     public SDCardInfo() {
     }
 
-    public void SetInfo(int clusters, int clustersize, int sectorsize) {
+    public void setInfo(int clusters, int clustersize, int sectorsize) {
         this.clusters = clusters;
         this.clustersize = clustersize;
         this.sectorsize = sectorsize;
@@ -61,7 +61,7 @@ public class SDCardInfo {
         return sectorsize;
     }
 
-    public void AddFile(String fname, int size, int timestamp) {
+    public void addFile(String fname, int size, int timestamp) {
         int DY = 1980 + ((timestamp & 0x0FE00) >> 9);
         int DM = ((timestamp & 0x01E0) >> 5);
         int DD = (timestamp & 0x001F);
@@ -70,10 +70,10 @@ public class SDCardInfo {
         int TS = (timestamp & 0x001F0000) >> 15;
         Calendar date = Calendar.getInstance();
         date.set(DY, DM - 1, DD, TH, TM, TS);
-        AddFile(fname, size, date);
+        addFile(fname, size, date);
     }
 
-    public void AddFile(String fname, int size, Calendar date) {
+    public void addFile(String fname, int size, Calendar date) {
         if (fname.lastIndexOf(0) > 0) {
             fname = fname.substring(0, fname.lastIndexOf(0));
         }
@@ -97,7 +97,7 @@ public class SDCardInfo {
         files.add(sdf);
     }
 
-    public void Delete(String fname) {
+    public void removeFile(String fname) {
         SDFileInfo f1 = null;
         for (SDFileInfo f : files) {
             if (f.filename.equalsIgnoreCase(fname)

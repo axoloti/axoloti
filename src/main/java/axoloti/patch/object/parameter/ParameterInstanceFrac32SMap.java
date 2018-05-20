@@ -17,14 +17,15 @@
  */
 package axoloti.patch.object.parameter;
 
-import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.patch.object.AxoObjectInstance;
 import org.simpleframework.xml.Attribute;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<ParameterFrac32UMap> {
+public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<ParameterFrac32SMap> {
 
     public ParameterInstanceFrac32SMap() {
         super();
@@ -32,6 +33,10 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
 
     public ParameterInstanceFrac32SMap(@Attribute(name = "value") double v) {
         super(v);
+    }
+
+    public ParameterInstanceFrac32SMap(ParameterFrac32SMap param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
     @Override
@@ -50,16 +55,7 @@ public class ParameterInstanceFrac32SMap extends ParameterInstanceFrac32UMap<Par
     }
 
     @Override
-    public String GetPFunction() {
-        if (pfunction == null) {
-            return "parameter_function::pf_signed_clamp";
-        } else {
-            return pfunction;
-        }
-    }
-
-    @Override
-    public String GetCOffset() {
+    public String getCOffset() {
         return "0";
     }
 

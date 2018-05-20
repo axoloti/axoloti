@@ -1,6 +1,6 @@
 package axoloti.swingui.patch.object;
 
-import axoloti.patch.object.ObjectInstanceController;
+import axoloti.patch.object.AxoObjectInstanceZombie;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchViewSwing;
 import java.awt.event.ActionEvent;
@@ -10,8 +10,8 @@ import javax.swing.JPopupMenu;
 
 class AxoObjectInstanceViewZombie extends AxoObjectInstanceView {
 
-    public AxoObjectInstanceViewZombie(ObjectInstanceController controller, PatchViewSwing patchView) {
-        super(controller, patchView);
+    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie objectInstance, PatchViewSwing patchView) {
+        super(objectInstance, patchView);
         initComponents3();
     }
 
@@ -25,13 +25,13 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceView {
     }
 
     @Override
-    JPopupMenu CreatePopupMenu() {
+    JPopupMenu createPopupMenu() {
         JPopupMenu popup = new JPopupMenu();
         JMenuItem popm_substitute = new JMenuItem("replace");
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getPatchView().ShowClassSelector(AxoObjectInstanceViewZombie.this.getLocation(), AxoObjectInstanceViewZombie.this, null);
+                getPatchView().showClassSelector(AxoObjectInstanceViewZombie.this.getLocation(), AxoObjectInstanceViewZombie.this, null);
             }
         });
         popup.add(popm_substitute);

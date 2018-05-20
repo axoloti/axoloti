@@ -44,18 +44,18 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
     }
 
     @Override
-    public String GetStartMessage() {
+    public String getStartMessage() {
         return "Start uploading firmware";
     }
 
     @Override
-    public String GetDoneMessage() {
+    public String getDoneMessage() {
         return "Done uploading firmware";
     }
 
     @Override
-    public QCmd Do(IConnection connection) {
-        connection.ClearSync();
+    public QCmd performAction(IConnection connection) {
+        connection.clearSync();
         try {
             if (f == null) {
                 String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
@@ -96,7 +96,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
             header[13] = (byte) (zcrcv >> 8);
             header[14] = (byte) (zcrcv >> 16);
             header[15] = (byte) (zcrcv >> 24);
-            connection.UploadFragment(header, connection.getTargetProfile().getSDRAMAddr() + offset);
+            connection.uploadFragment(header, connection.getTargetProfile().getSDRAMAddr() + offset);
             offset += header.length;
             int MaxBlockSize = 32768;
             do {
@@ -113,7 +113,7 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
                 if (nRead != l) {
                     Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
                 }
-                connection.UploadFragment(buffer, connection.getTargetProfile().getSDRAMAddr() + offset);
+                connection.uploadFragment(buffer, connection.getTargetProfile().getSDRAMAddr() + offset);
                 offset += nRead;
             } while (tlength > 0);
             inputStream.close();

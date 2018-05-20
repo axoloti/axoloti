@@ -18,7 +18,6 @@
 package axoloti.object.parameter;
 
 import axoloti.datatypes.ValueInt32;
-import axoloti.patch.object.parameter.ParameterInstanceInt32Box;
 import axoloti.property.Property;
 import java.security.MessageDigest;
 import java.util.List;
@@ -28,7 +27,7 @@ import org.simpleframework.xml.Element;
  *
  * @author Johannes Taelman
  */
-public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box> {
+public class ParameterInt32Box extends ParameterInt32 {
 
     @Element
     public ValueInt32 MinValue;
@@ -46,12 +45,6 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
         super(name);
         this.MinValue = new ValueInt32(MinValue);
         this.MaxValue = new ValueInt32(MaxValue);
-    }
-
-    @Override
-    public ParameterInstanceInt32Box InstanceFactory() {
-        ParameterInstanceInt32Box b = new ParameterInstanceInt32Box();
-        return b;
     }
 
     @Override
@@ -76,7 +69,7 @@ public class ParameterInt32Box extends ParameterInt32<ParameterInstanceInt32Box>
     }
 
     @Override
-    public String GetCType() {
+    public String getCType() {
         return "param_type_int";
     }
 

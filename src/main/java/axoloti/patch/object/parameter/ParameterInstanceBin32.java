@@ -17,14 +17,21 @@
  */
 package axoloti.patch.object.parameter;
 
+import axoloti.object.parameter.ParameterBin;
+import axoloti.patch.object.AxoObjectInstance;
+
 /**
  *
  * @author Johannes Taelman
  */
-public class ParameterInstanceBin32 extends ParameterInstanceInt32 {
+public class ParameterInstanceBin32 extends ParameterInstanceBin {
 
     public ParameterInstanceBin32() {
         super();
+    }
+
+    public ParameterInstanceBin32(ParameterBin param, AxoObjectInstance axoObj1) {
+        super(param, axoObj1);
     }
 
 }

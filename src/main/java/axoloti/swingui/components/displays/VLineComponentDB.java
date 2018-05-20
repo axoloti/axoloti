@@ -53,7 +53,7 @@ public class VLineComponentDB extends ADispComponent {
 
     final int margin = 0;
 
-    int ValToPos(double v) {
+    int valToPos(double v) {
         double dB = -1000;
         if (v != 0) {
             dB = 20 * Math.log10(Math.abs(v) / 64.0);
@@ -77,8 +77,8 @@ public class VLineComponentDB extends ADispComponent {
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2.setPaint(Theme.getCurrentTheme().Component_Secondary);
         g2.fillRect(0, 0, getWidth(), height);
-        int p = ValToPos(value);
-        int p1 = ValToPos(0);
+        int p = valToPos(value);
+        int p1 = valToPos(0);
         g2.setPaint(Theme.getCurrentTheme().Component_Mid);
         g2.drawLine(0, p, 0, p1);
     }

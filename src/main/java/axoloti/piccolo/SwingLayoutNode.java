@@ -93,7 +93,7 @@ public class SwingLayoutNode extends PNode {
         return proxyComponent;
     }
 
-    public class ProxyComponent extends JComponent {
+    public static class ProxyComponent extends JComponent {
         private final SwingLayoutNode node;
 
         public ProxyComponent(final SwingLayoutNode node) {

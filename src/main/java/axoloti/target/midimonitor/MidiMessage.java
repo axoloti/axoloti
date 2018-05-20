@@ -148,13 +148,13 @@ public class MidiMessage {
             case CIN_A_KEYPRESSURE:
                 return String.format("KeyPres note=%3d pres=%3d", b1 & 0xFF, b2 & 0xFF);
             case CIN_B_CONTROLCHANGE:
-                return String.format("CtrlChng  cc=%3d val =%3d (%s)", b1 & 0xFF, b2 & 0xFF, MidiControllerNames.GetNameFromCC(b1));
+                return String.format("CtrlChng  cc=%3d val =%3d (%s)", b1 & 0xFF, b2 & 0xFF, MidiControllerNames.getNameFromCC(b1));
             case CIN_C_PROGRAMCHANGE:
                 return "PgmChng pgm=" + (b1 & 0xFF);
             case CIN_D_CHANNELPRESSURE:
                 return "ChanPres val=" + (b1 & 0xFF);
             case CIN_E_PITCHBEND:
-                return "Bend val=" + (b1 & 0xFF); // FIXME
+                return "Bend val=" + (b1 & 0xFF); // TODO: show 14bit bend value
             case CIN_F_SINGLE_BYTE:
                 return midiRTNames[((0xFF & b0) - 0xF0)];
         }
@@ -195,7 +195,7 @@ public class MidiMessage {
                 return "null";
             } else {
                 if (((b0 & 0xF0) >> 4) == 0x0B) {
-                    return MidiControllerNames.GetNameFromCC(b1) + ", " + midiData[((b0 & 0xF0) >> 4) - 8][2];
+                    return MidiControllerNames.getNameFromCC(b1) + ", " + midiData[((b0 & 0xF0) >> 4) - 8][2];
                 } else {
                     return midiData[((b0 & 0xF0) >> 4) - 8][2];
                 }

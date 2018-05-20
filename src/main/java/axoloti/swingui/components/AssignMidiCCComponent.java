@@ -18,7 +18,6 @@
 package axoloti.swingui.components;
 
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.preferences.Theme;
 import axoloti.property.MidiCCProperty;
 import axoloti.swingui.property.menu.AssignMidiCCMenuItems;
@@ -40,10 +39,10 @@ public class AssignMidiCCComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    private final ParameterInstanceController parameterInstanceController;
+    private final ParameterInstance parameterInstance;
 
-    public AssignMidiCCComponent(ParameterInstanceController parameterInstanceController) {
-        this.parameterInstanceController = parameterInstanceController;
+    public AssignMidiCCComponent(ParameterInstance parameterInstance) {
+        this.parameterInstance = parameterInstance;
         initComponents();
     }
 
@@ -66,7 +65,7 @@ public class AssignMidiCCComponent extends JComponent {
 
     void doPopup() {
         JPopupMenu sub1 = new JPopupMenu();
-        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstanceController, (MidiCCProperty) ParameterInstance.MIDI_CC);
+        AssignMidiCCMenuItems assignMidiCCMenuItems = new AssignMidiCCMenuItems(parameterInstance, (MidiCCProperty) ParameterInstance.MIDI_CC);
         sub1.add(assignMidiCCMenuItems);
         sub1.show(this, 0, getHeight() - 1);
     }
@@ -80,7 +79,7 @@ public class AssignMidiCCComponent extends JComponent {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, getWidth(), getHeight());
-        if (parameterInstanceController.getModel().getMidiCC() >= 0) {
+        if (parameterInstance.getMidiCC() >= 0) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);

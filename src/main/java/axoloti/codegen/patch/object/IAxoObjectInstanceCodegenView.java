@@ -10,19 +10,17 @@ import java.util.List;
  *
  * @author jtaelman
  */
-public interface IAxoObjectInstanceCodegenView extends IView {
+public interface IAxoObjectInstanceCodegenView extends IView<IAxoObjectInstance> {
 
-    String GenerateUICode(int count[]);
+    String generateUICode(int count[]);
 
-    String GenerateInitCodePlusPlus(String vprefix, boolean enableOnParent);
+    String generateInitCodePlusPlus(String vprefix, boolean enableOnParent);
 
-    String GenerateDisposeCodePlusPlus(String vprefix);
+    String generateDisposeCodePlusPlus(String vprefix);
 
-    String GenerateClass(String ClassName, String OnParentAccess, Boolean enableOnParent);
+    String generateClass(String ClassName, String OnParentAccess, Boolean enableOnParent);
 
-    String GenerateCallMidiHandler();
-
-    IAxoObjectInstance getModel();
+    String generateCallMidiHandler();
 
     List<ParameterInstanceView> getParameterInstanceViews();
 

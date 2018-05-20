@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.attribute;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.patch.object.AxoObjectInstance;
 
@@ -31,8 +30,8 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
         super();
     }
 
-    AttributeInstanceString(AtomDefinitionController controller, AxoObjectInstance axoObj1) {
-        super(controller, axoObj1);
+    AttributeInstanceString(T attribute, AxoObjectInstance axoObj1) {
+        super(attribute, axoObj1);
     }
 
     @Override
@@ -46,7 +45,7 @@ public abstract class AttributeInstanceString<T extends AxoAttribute> extends At
     }
 
     @Override
-    public void CopyValueFrom(AttributeInstance a) {
+    public void copyValueFrom(AttributeInstance a) {
         if (a instanceof AttributeInstanceString) {
             AttributeInstanceString a1 = (AttributeInstanceString) a;
             setValue(a1.getValue());

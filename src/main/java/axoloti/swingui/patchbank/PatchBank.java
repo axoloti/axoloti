@@ -17,13 +17,12 @@
  */
 package axoloti.swingui.patchbank;
 
-import axoloti.connection.ConnectionStatusListener;
 import static axoloti.FileUtils.axpFileFilter;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.connection.CConnection;
+import axoloti.connection.ConnectionStatusListener;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.patchbank.PatchBankController;
 import axoloti.patchbank.PatchBankModel;
 import axoloti.preferences.Preferences;
 import axoloti.swingui.menus.StandardMenubar;
@@ -53,19 +52,19 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author jtaelman
  */
-public class PatchBank extends AJFrame<PatchBankController> implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener {
+public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStatusListener, SDCardMountStatusListener {
 
     /**
      * Creates new form PatchBank
      */
-    public PatchBank(PatchBankController controller) {
-        super(controller, null);
+    public PatchBank(PatchBankModel patchBankModel) {
+        super(patchBankModel, null);
         initComponents();
         initComponents2();
     }
 
     private void initComponents2() {
-        StandardMenubar menuBar = new StandardMenubar(getController().getDocumentRoot());
+        StandardMenubar menuBar = new StandardMenubar(model.getController().getDocumentRoot());
         JMenuItem jMenuItemSave = new JMenuItem("Save");
         jMenuItemSave.addActionListener(new ActionListener() {
             @Override
@@ -85,7 +84,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         menuBar.fileMenu.add(jMenuItemSaveAs);
         setJMenuBar(menuBar);
 
-        CConnection.GetConnection().addConnectionStatusListener(this);
+        CConnection.getConnection().addConnectionStatusListener(this);
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Index", "File", "on sdcard"};
 
@@ -114,7 +113,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
 
             @Override
             public int getRowCount() {
-                return getModel().getFiles().size();
+                return getDModel().getFiles().size();
             }
 
             @Override
@@ -128,10 +127,10 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                         if (svalue != null && !svalue.isEmpty()) {
                             File f = new File(svalue);
                             if (f.exists() && f.isFile() && f.canRead()) {
-                                ArrayList<File> files = new ArrayList<>(getModel().getFiles());
+                                ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
                                 files.set(rowIndex, f);
-                                getController().addMetaUndo("Change");
-                                getController().changePatchBankFiles(files);
+                                model.getController().addMetaUndo("Change");
+                                model.getController().changePatchBankFiles(files);
                             }
                         }
                         break;
@@ -149,16 +148,16 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                         returnValue = Integer.toString(rowIndex);
                         break;
                     case 1: {
-                        File f = getModel().getFiles().get(rowIndex);
+                        File f = getDModel().getFiles().get(rowIndex);
                         if (f != null) {
-                            returnValue = getController().getModel().toRelative(f);
+                            returnValue = getDModel().toRelative(f);
                         } else {
                             returnValue = "";
                         }
                         break;
                     }
                     case 2: {
-                        File f = getModel().getFiles().get(rowIndex);
+                        File f = getDModel().getFiles().get(rowIndex);
                         if (f != null) {
                             boolean en = f.exists();
                             String fn = f.getName();
@@ -212,8 +211,8 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             jButtonRemove.setEnabled(false);
         } else {
             jButtonUp.setEnabled(row > 0);
-            jButtonDown.setEnabled(row < getModel().getFiles().size() - 1);
-            File f = getModel().getFiles().get(row);
+            jButtonDown.setEnabled(row < getDModel().getFiles().size() - 1);
+            File f = getDModel().getFiles().get(row);
             boolean en = (f != null) && (f.exists());
             jButtonOpen.setEnabled(en);
             jButtonUpload.setEnabled(en);
@@ -221,11 +220,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         }
     }
 
-    PatchBankModel getModel() {
-        return getController().getModel();
-    }
-
-    void SaveAs() {
+    void saveAs() {
         final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         FileFilter axb = new FileFilter() {
@@ -245,7 +240,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             }
         };
         fc.addChoosableFileFilter(axb);
-        File f = getModel().getFile();
+        File f = getDModel().getFile();
         if ((f == null) || (!f.exists())) {
             f = new File(Preferences.getPreferences().getCurrentFileDirectory());
         }
@@ -301,27 +296,27 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                         return;
                 }
             }
-            getModel().setFile(fileToBeSaved);
-            getModel().Save();
-            getController().getDocumentRoot().markSaved();
+            getDModel().setFile(fileToBeSaved);
+            getDModel().save();
+            model.getController().getDocumentRoot().markSaved();
             Preferences.getPreferences().setCurrentFileDirectory(fileToBeSaved.getPath());
         }
     }
 
-    public void Close() {
-        DocumentWindowList.UnregisterWindow(this);
-        CConnection.GetConnection().removeConnectionStatusListener(this);
+    public void close() {
+        DocumentWindowList.unregisterWindow(this);
+        CConnection.getConnection().removeConnectionStatusListener(this);
         dispose();
     }
 
     @Override
     public boolean askClose() {
-        if (getController().getDocumentRoot().getDirty()) {
+        if (model.getController().getDocumentRoot().getDirty()) {
             Object[] options = {"Save",
                 "Don't save",
                 "Cancel"};
             String filename = "untitled";
-            File f = getController().getModel().getFile();
+            File f = model.getFile();
             if (f != null) {
                 filename = f.getName();
             }
@@ -335,11 +330,11 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                     options[2]);
             switch (n) {
                 case JOptionPane.YES_OPTION:
-                    SaveAs();
-                    Close();
+                    saveAs();
+                    close();
                     return false;
                 case JOptionPane.NO_OPTION:
-                    Close();
+                    close();
                     return false;
                 case JOptionPane.CANCEL_OPTION:
                     return true;
@@ -347,7 +342,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
                     return false;
             }
         } else {
-            Close();
+            close();
             return false;
         }
     }
@@ -536,24 +531,24 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonUploadBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadBankActionPerformed
-        getController().getModel().upload();
+        getDModel().upload();
     }//GEN-LAST:event_jButtonUploadBankActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {
         if (getFile() == null) {
-            SaveAs();
+            saveAs();
         } else {
             if (!getFile().canWrite()) {
-                SaveAs();
+                saveAs();
             } else {
-                getModel().Save();
-                getController().getDocumentRoot().markSaved();
+                getDModel().save();
+                model.getController().getDocumentRoot().markSaved();
             }
         }
     }
 
     private void jMenuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
-        SaveAs();
+        saveAs();
     }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -565,11 +560,11 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         if (row < 1) {
             return;
         }
-        ArrayList<File> files = new ArrayList<>(getModel().getFiles());
+        ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
         File o = files.remove(row);
         files.add(row - 1, o);
-        getController().addMetaUndo("Move up");
-        getController().changePatchBankFiles(files);
+        model.getController().addMetaUndo("Move up");
+        model.getController().changePatchBankFiles(files);
         jTable1.setRowSelectionInterval(row - 1, row - 1);
     }//GEN-LAST:event_jButtonUpActionPerformed
 
@@ -578,14 +573,14 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         if (row < 0) {
             return;
         }
-        ArrayList<File> files = new ArrayList<>(getModel().getFiles());
+        ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
         if (row > (files.size() - 1)) {
             return;
         }
         File o = files.remove(row);
         files.add(row + 1, o);
-        getController().addMetaUndo("Move down");
-        getController().changePatchBankFiles(files);
+        model.getController().addMetaUndo("Move down");
+        model.getController().changePatchBankFiles(files);
         jTable1.setRowSelectionInterval(row + 1, row + 1);
     }//GEN-LAST:event_jButtonDownActionPerformed
 
@@ -594,10 +589,10 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         if (row < 0) {
             return;
         }
-        ArrayList<File> files = new ArrayList<>(getModel().getFiles());
+        ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
         files.remove(row);
-        getController().addMetaUndo("Remove");
-        getController().changePatchBankFiles(files);
+        model.getController().addMetaUndo("Remove");
+        model.getController().changePatchBankFiles(files);
     }//GEN-LAST:event_jButtonRemoveActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
@@ -606,30 +601,30 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         fc.addChoosableFileFilter(axpFileFilter);
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            ArrayList<File> files = new ArrayList<>(getModel().getFiles());
+            ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
             files.add(fc.getSelectedFile());
-            getController().addMetaUndo("Add");
-            getController().changePatchBankFiles(files);
+            model.getController().addMetaUndo("Add");
+            model.getController().changePatchBankFiles(files);
         }
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
         int row = jTable1.getSelectedRow();
         if (row >= 0) {
-            File f = getModel().getFiles().get(jTable1.getSelectedRow());
+            File f = getDModel().getFiles().get(jTable1.getSelectedRow());
             if (f.isFile() && f.canRead()) {
-                PatchViewSwing.OpenPatch(f);
+                PatchViewSwing.openPatch(f);
             }
         }
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-        File f = getModel().getFiles().get(jTable1.getSelectedRow());
-        getController().getModel().UploadOneFile(f);
+        File f = getDModel().getFiles().get(jTable1.getSelectedRow());
+        model.uploadOneFile(f);
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
-        getController().getModel().uploadAll();
+        model.uploadAll();
     }//GEN-LAST:event_jUploadAllActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -648,25 +643,25 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
     private javax.swing.JButton jUploadAll;
     // End of variables declaration//GEN-END:variables
 
-    public void ShowConnect1(boolean status) {
+    public void showConnect1(boolean status) {
         jButtonUploadBank.setEnabled(status);
         jButtonUpload.setEnabled(status);
         jUploadAll.setEnabled(status);
     }
 
     @Override
-    public void ShowConnect() {
-        ShowConnect1(true);
+    public void showConnect() {
+        showConnect1(true);
     }
 
     @Override
-    public void ShowDisconnect() {
-        ShowConnect1(false);
+    public void showDisconnect() {
+        showConnect1(false);
     }
 
     @Override
     public File getFile() {
-        return getController().getModel().getFile();
+        return getDModel().getFile();
     }
 
     @Override
@@ -675,13 +670,13 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
     }
 
     @Override
-    public void ShowSDCardMounted() {
-        ShowConnect1(true);
+    public void showSDCardMounted() {
+        showConnect1(true);
     }
 
     @Override
-    public void ShowSDCardUnmounted() {
-        ShowConnect1(false);
+    public void showSDCardUnmounted() {
+        showConnect1(false);
     }
 
     @Override
@@ -696,7 +691,7 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         }
     }
 
-    public static void OpenPatchBankEditor(InputStream inputStream, String filename) {
+    public static void openPatchBankEditor(InputStream inputStream, String filename) {
         try {
             PatchBankModel b;
             if (inputStream == null) {
@@ -706,10 +701,9 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
             }
             AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
             b.setDocumentRoot(documentRoot);
-            PatchBankController c = b.getControllerFromModel();
-            PatchBank bv = new PatchBank(c);
+            PatchBank bv = new PatchBank(b);
             documentRoot.getUndoManager().discardAllEdits();
-            c.addView(bv);
+            b.getController().addView(bv);
             bv.setVisible(true);
             bv.toFront();
         } catch (IOException ex) {
@@ -717,14 +711,14 @@ public class PatchBank extends AJFrame<PatchBankController> implements DocumentW
         }
     }
 
-    public static void OpenPatchBankEditor(File f) {
+    public static void openPatchBankEditor(File f) {
         try {
             PatchBankModel b;
             if (f == null) {
-                OpenPatchBankEditor(null, "Untitled.axb");
+                openPatchBankEditor(null, "Untitled.axb");
             } else {
                 FileInputStream fstream = new FileInputStream(f);
-                OpenPatchBankEditor(fstream, f.getAbsolutePath());
+                openPatchBankEditor(fstream, f.getAbsolutePath());
             }
         } catch (IOException ex) {
             Logger.getLogger(PatchBank.class.getName()).log(Level.SEVERE, null, ex);

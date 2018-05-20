@@ -2,8 +2,8 @@ package axoloti.piccolo.patch.object.parameter;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
+import axoloti.patch.object.parameter.preset.PresetDouble;
 import axoloti.piccolo.components.PAssignMidiCCComponent;
 import axoloti.piccolo.components.PAssignMidiCCMenuItems;
 import axoloti.piccolo.components.PAssignModulatorComponent;
@@ -12,7 +12,6 @@ import axoloti.piccolo.components.PAssignPresetComponent;
 import axoloti.piccolo.components.control.PDialComponent;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.preferences.Theme;
-import axoloti.patch.object.parameter.preset.PresetDouble;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeEvent;
 import javax.swing.BoxLayout;
@@ -25,8 +24,8 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     PAssignModulatorComponent modulationAssign;
     PAssignPresetComponent presetAssign;
 
-    public PParameterInstanceViewFrac32UMap(ParameterInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
-        super(controller, axoObjectInstanceView);
+    public PParameterInstanceViewFrac32UMap(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+        super(parameterInstance, axoObjectInstanceView);
         initComponent();
     }
 
@@ -35,13 +34,13 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
         PatchPNode btns = new PatchPNode(getPatchView());
         btns.setLayout(new BoxLayout(btns.getProxyComponent(), BoxLayout.PAGE_AXIS));
 
-        midiAssign = new PAssignMidiCCComponent(getController(), getPatchView());
+        midiAssign = new PAssignMidiCCComponent(getDModel(), getPatchView());
         btns.addChild(midiAssign);
 
-        // FIXME: reintroduce modulator button
+        // TODO: piccolo reintroduce modulator button
         // modulationAssign = new PAssignModulatorComponent(this);
         // btns.addChild(modulationAssign);
-        presetAssign = new PAssignPresetComponent(getController(), getPatchView());
+        presetAssign = new PAssignPresetComponent(getDModel(), getPatchView());
         btns.addChild(presetAssign);
         addChild(btns);
 
@@ -50,18 +49,18 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     }
 
     @Override
-    public ParameterInstanceFrac32UMap getModel() {
-        return (ParameterInstanceFrac32UMap) super.getModel();
+    public ParameterInstanceFrac32UMap getDModel() {
+        return (ParameterInstanceFrac32UMap) super.getDModel();
     }
 
     @Override
-    public PDialComponent CreateControl() {
+    public PDialComponent createControl() {
         PDialComponent d = new PDialComponent(
                 0.0,
-                getModel().getMin(),
-                getModel().getMax(),
-                getModel().getTick(), axoObjectInstanceView);
-        d.setNative(getModel().getConvs());
+                getDModel().getMin(),
+                getDModel().getMax(),
+                getDModel().getTick(), axoObjectInstanceView);
+        d.setNative(getDModel().getConvs());
         return d;
     }
 
@@ -69,20 +68,20 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
      *  Preset logic
      */
     @Override
-    public void ShowPreset(int i) {
+    public void showPreset(int i) {
         this.presetEditActive = i;
         if (i > 0) {
-            PresetDouble p = getModel().getPreset(presetEditActive);
+            PresetDouble p = getDModel().getPreset(presetEditActive);
             if (p != null) {
                 setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 ctrl.setValue(p.getValue());
             } else {
                 setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getModel().getValue());
+                ctrl.setValue(getDModel().getValue());
             }
         } else {
             setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getModel().getValue());
+            ctrl.setValue(getDModel().getValue());
         }
     }
 
@@ -104,7 +103,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
 
     @Override
     public void updateModulation(int index, double amount) {
-        getModel().updateModulation(index, amount);
+        getDModel().updateModulation(index, amount);
     }
 
     @Override
@@ -112,7 +111,7 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
         super.paint(paintContext);
         Graphics2D g2 = paintContext.getGraphics();
 
-        // TODO onParent support
+        // TODO: piccolo onParent support
         // if (parameterInstance.getOnParent()) {
         //     ctrl.setForeground(Theme.getCurrentTheme().Parameter_On_Parent_Highlight);
         // } else {

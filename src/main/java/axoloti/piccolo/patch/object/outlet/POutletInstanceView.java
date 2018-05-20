@@ -1,14 +1,13 @@
 package axoloti.piccolo.patch.object.outlet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
-import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.abstractui.IOutletInstanceView;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.components.PJackOutputComponent;
 import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.components.PSignalMetaDataIcon;
-import axoloti.piccolo.iolet.PIoletAbstract;
+import axoloti.piccolo.patch.object.iolet.PIoletAbstract;
 import axoloti.swingui.patch.object.iolet.IoletInstancePopupMenu;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
@@ -18,14 +17,14 @@ import javax.swing.JPopupMenu;
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;
 
-public class POutletInstanceView extends PIoletAbstract implements IIoletInstanceView {
+public class POutletInstanceView extends PIoletAbstract implements IOutletInstanceView {
 
-    IoletInstanceController controller;
+    OutletInstance outletInstance;
     PLabelComponent label;
 
-    public POutletInstanceView(IoletInstanceController controller, IAxoObjectInstanceView axoObjectInstanceView) {
+    public POutletInstanceView(OutletInstance outletInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView);
-	this.controller = controller;
+        this.outletInstance = outletInstance;
         initComponent();
     }
 
@@ -34,8 +33,8 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
         setMaximumSize(new Dimension(32767, 14));
 
         addToSwingProxy(Box.createHorizontalGlue());
-        if (axoObjectInstanceView.getModel().getType().getOutlets().size() > 1) {
-            label = new PLabelComponent(getModel().getModel().getName());
+        if (axoObjectInstanceView.getDModel().getDModel().getOutlets().size() > 1) {
+            label = new PLabelComponent(getDModel().getDModel().getName());
         } else {
             label = new PLabelComponent("");
         }
@@ -43,11 +42,11 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
         addChild(label);
         addToSwingProxy(Box.createHorizontalStrut(2));
 
-        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(getModel().getModel().GetSignalMetaData(), axoObjectInstanceView);
+        PSignalMetaDataIcon foo = new PSignalMetaDataIcon(getDModel().getDModel().getSignalMetaData(), axoObjectInstanceView);
         addChild(foo);
 
         jack = new PJackOutputComponent(this);
-        ((PJackOutputComponent) jack).setForeground(getModel().getModel().getDatatype().GetColor());
+        ((PJackOutputComponent) jack).setForeground(getDModel().getDModel().getDataType().getColor());
         addChild(jack);
 
         addInputEventListener(getInputEventHandler());
@@ -58,7 +57,7 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
         @Override
         public void mouseEntered(PInputEvent e) {
             if (e.getInputManager().getMouseFocus() == null) {
-                axoObjectInstanceView.getCanvas().setToolTipText(getModel().getModel().getDescription());
+                axoObjectInstanceView.getCanvas().setToolTipText(getDModel().getDModel().getDescription());
             }
         }
 
@@ -71,8 +70,8 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
     };
 
     @Override
-    public OutletInstance getModel() {
-	return (OutletInstance) controller.getModel();
+    public OutletInstance getDModel() {
+        return outletInstance;
     }
 
     @Override
@@ -89,8 +88,8 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
 
     @Override
     public JPopupMenu getPopup() {
-        return new IoletInstancePopupMenu(getController(),
-                null /* TODO: implement piccolo focusEdit */);
+        return new IoletInstancePopupMenu(getDModel(),
+                null /* TODO: piccolo implement  focusEdit */);
     }
 
     @Override
@@ -104,11 +103,6 @@ public class POutletInstanceView extends PIoletAbstract implements IIoletInstanc
             getJack().setConnected((Boolean) evt.getNewValue());
             getJack().repaint();
         }
-    }
-
-    @Override
-    public IoletInstanceController getController() {
-        return controller;
     }
 
     @Override

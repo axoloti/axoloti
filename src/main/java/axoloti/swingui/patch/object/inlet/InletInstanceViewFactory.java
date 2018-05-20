@@ -2,7 +2,7 @@
 package axoloti.swingui.patch.object.inlet;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.patch.object.iolet.IoletInstanceController;
+import axoloti.patch.object.inlet.InletInstance;
 import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
 
 /**
@@ -11,9 +11,9 @@ import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
  */
 public class InletInstanceViewFactory {
 
-    public static InletInstanceView createView(IoletInstanceController controller, IAxoObjectInstanceView obj) {
-        InletInstanceView view = new InletInstanceView(controller, (AxoObjectInstanceViewAbstract) obj);
-        controller.addView(view);
+    public static InletInstanceView createView(InletInstance inletInstance, IAxoObjectInstanceView obj) {
+        InletInstanceView view = new InletInstanceView(inletInstance, (AxoObjectInstanceViewAbstract) obj);
+        inletInstance.getController().addView(view);
         return view;
     }
 }

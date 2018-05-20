@@ -18,7 +18,7 @@
 
 package axoloti.connection;
 
-import axoloti.target.TargetController;
+import axoloti.target.TargetModel;
 
 /**
  *
@@ -29,9 +29,9 @@ import axoloti.target.TargetController;
 public class CConnection {
     static private USBBulkConnection_v2 conn = null;
 
-    public static IConnection GetConnection() {
+    public static IConnection getConnection() {
         if (conn == null) {
-            conn = new USBBulkConnection_v2(TargetController.getTargetController());
+            conn = new USBBulkConnection_v2(TargetModel.getTargetModel());
         }
         return conn;
     }

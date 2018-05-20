@@ -17,7 +17,6 @@
  */
 package axoloti.patch.object.display;
 
-import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.display.DisplayFrac32SDial;
 
 /**
@@ -26,8 +25,8 @@ import axoloti.object.display.DisplayFrac32SDial;
  */
 public class DisplayInstanceFrac32SDial extends DisplayInstanceFrac32<DisplayFrac32SDial> {
 
-    DisplayInstanceFrac32SDial(AtomDefinitionController controller) {
-        super(controller);
+    DisplayInstanceFrac32SDial(DisplayFrac32SDial display) {
+        super(display);
     }
 
 }

@@ -20,8 +20,8 @@ package axoloti.swingui.objecteditor;
 
 import axoloti.object.AxoObject;
 import axoloti.objectlibrary.AxoObjects;
-import axoloti.preferences.Preferences;
 import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.preferences.Preferences;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,23 +54,23 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         }
         populateFields();
         jObjectName.getDocument().addDocumentListener(new DocumentListener() {
-            void Update() {
+            void update() {
                 modifiedData();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                Update();
+                update();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                Update();
+                update();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                Update();
+                update();
             }
         });
         ((AbstractDocument) jObjectName.getDocument()).setDocumentFilter(new DocumentFilter() {
@@ -276,7 +276,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         }
         obj.id = jObjectName.getText();
         obj.setPath(jFileTxt.getText());
-        obj.setUUID(obj.GenerateUUID());
+        obj.setUUID(obj.generateUUID());
         File f = new File(obj.getPath());
         if (!f.exists()) {
             File dir = f.getParentFile();
@@ -284,8 +284,8 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
                 dir.mkdirs();
             }
         }
-        AxoObjects.getAxoObjects().WriteAxoObject(obj.getPath(), obj);
-        AxoObjects.loadAxoObjects();
+        AxoObjects.getAxoObjects().writeAxoObject(obj.getPath(), obj);
+        AxoObjects.getAxoObjects();
 
         setVisible(false);
         dispose();
@@ -360,7 +360,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
         modifiedData();
     }
 
-    String GetDestinationPath() {
+    String getDestinationPath() {
         if (jLibrary.getSelectedIndex() >= 0) {
             AxolotiLibrary lib = Preferences.getPreferences().getLibrary((String) jLibrary.getSelectedObjects()[0]);
             StringBuilder file = new StringBuilder();
@@ -380,7 +380,7 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
                 objid = objname.substring(ididx + 1);
                 objpath = objname.substring(0, ididx);
             }
-            objid = AxoObjects.ConvertToLegalFilename(objid);
+            objid = AxoObjects.convertToLegalFilename(objid);
             objpath = objpath.replace('/', File.separatorChar);
 
 
@@ -391,6 +391,6 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
     }
 
     private void modifiedData() {
-        jFileTxt.setText(GetDestinationPath());
+        jFileTxt.setText(getDestinationPath());
     }
 }

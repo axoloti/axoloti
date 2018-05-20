@@ -17,7 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.objectlibrary.AxoObjects;
 import axoloti.abstractui.PatchView;
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.mvc.AbstractDocumentRoot;
@@ -26,6 +25,7 @@ import axoloti.object.display.Display;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
+import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.swingui.patch.PatchFrame;
@@ -55,23 +55,23 @@ public class AxoObjectFromPatch extends AxoObject {
             patchModel = serializer.read(PatchModel.class, f);
             patchModel.setFileNamePath(f.getPath());
             patchModel.setDocumentRoot(new AbstractDocumentRoot());
-            patchController = patchModel.getControllerFromModel();
+            patchController = patchModel.getController();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }
-        shortId = f.getName().substring(0, f.getName().lastIndexOf("."));
+        shortId = f.getName().substring(0, f.getName().lastIndexOf('.'));
         setPath(f.getAbsolutePath());
-        UpdateObject();
+        updateObject();
 
         // TODO: review, perhaps source of multiple entries of eg. fx/flanger in objectselector
-        AxoObjects.getAxoObjects().ObjectList.add(this);
+        AxoObjects.getAxoObjects().objectList.add(this);
         // strip file extension
     }
 
-    final public void UpdateObject() {
-        PatchController controller = patchModel.getControllerFromModel();
-        PatchViewCodegen codegen = new PatchViewCodegen(controller);
-        AxoObject o = codegen.GenerateAxoObj(new AxoObject());
+    final public void updateObject() {
+        PatchController controller = patchModel.getController();
+        PatchViewCodegen codegen = new PatchViewCodegen(patchModel);
+        AxoObject o = codegen.generateAxoObj(new AxoObject());
         attributes = o.getAttributes();
         depends = o.depends;
         displays = o.getDisplays();
@@ -110,9 +110,9 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     @Override
-    public void OpenEditor() {
+    public void openEditor() {
         if (pf == null) {
-            pf = new PatchFrame(patchController, QCmdProcessor.getQCmdProcessor());
+            pf = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
         }
         pf.setVisible(true);
         pf.toFront();

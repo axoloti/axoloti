@@ -5,7 +5,6 @@ import axoloti.connection.FirmwareUpgrade_1_0_12;
 import axoloti.connection.IConnection;
 import axoloti.mvc.IView;
 import axoloti.preferences.Preferences;
-import axoloti.target.TargetController;
 import axoloti.target.TargetModel;
 import axoloti.usb.Usb;
 import java.beans.PropertyChangeEvent;
@@ -25,9 +24,9 @@ import qcmds.QCmdUploadPatch;
  *
  * @author jtaelman
  */
-public class TargetMenu extends JMenu implements IView<TargetController> {
+public class TargetMenu extends JMenu implements IView<TargetModel> {
 
-    final TargetController controller;
+    final TargetModel targetModel;
 
     private JMenuItem jMenuItemSelectCom;
     private JMenuItem jMenuItemEnterDFU;
@@ -53,9 +52,9 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     private JMenuItem jMenuItemRemote;
     private JMenuItem jMenuItemMemoryViewer;
 
-    public TargetMenu(TargetController controller) {
+    public TargetMenu(TargetModel targetModel) {
         super("Board");
-        this.controller = controller;
+        this.targetModel = targetModel;
         initComponents();
     }
 
@@ -260,35 +259,35 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     }
 
     private void jMenuItemFDisconnectActionPerformed(java.awt.event.ActionEvent evt) {
-        getController().getModel().getConnection().disconnect();
+        getDModel().getConnection().disconnect();
     }
 
     private void jMenuItemFConnectActionPerformed(java.awt.event.ActionEvent evt) {
-        getController().getModel().getConnection().connect(null);
+        getDModel().getConnection().connect(null);
     }
 
     private void jMenuItemSelectComActionPerformed(java.awt.event.ActionEvent evt) {
-        getController().getModel().getConnection().SelectPort();
+        getDModel().getConnection().selectPort();
     }
 
     private void jMenuItemPanicActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().Panic();
+        QCmdProcessor.getQCmdProcessor().panic();
     }
 
     private void jMenuItemPingActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdPing());
+        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdPing());
     }
 
     private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {
-        getController().getModel().updateLinkFirmwareID();
+        getDModel().updateLinkFirmwareID();
     }
 
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {
         if (Usb.isDFUDeviceAvailable()) {
-            getController().getModel().updateLinkFirmwareID();
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdStop());
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdDisconnect());
-            QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdFlashDFU());
+            getDModel().updateLinkFirmwareID();
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdStop());
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdDisconnect());
+            QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdFlashDFU());
         } else {
             Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and then connect the micro-USB port to your computer while holding button S1. The LEDs will stay off when in DFU mode.");
         }
@@ -297,15 +296,15 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-        getController().getModel().flashUsingSDRam(fname, pname);
+        getDModel().flashUsingSDRam(fname, pname);
     }
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new qcmds.QCmdCompileFirmware());
+        QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdCompileFirmware());
     }
 
     private void jMenuItemEnterDFUActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdBringToDFUMode());
+        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdBringToDFUMode());
     }
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,30 +314,30 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
         if (!curFirmwareDir.equals(sysFirmwareDir)) {
             // if we are using the factory firmware, then we must switch back the firmware dir
             // as this is where we pick up axoloti.elf from when building a patch
-            Preferences.getPreferences().SetFirmwareDir(sysFirmwareDir);
-            Preferences.getPreferences().SavePrefs();
+            Preferences.getPreferences().setFirmwareDir(sysFirmwareDir);
+            Preferences.getPreferences().savePrefs();
         }
 
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-        getController().getModel().flashUsingSDRam(fname, pname);
+        getDModel().flashUsingSDRam(fname, pname);
     }
 
     private void jMenuItemFlashDowngradeActionPerformed(java.awt.event.ActionEvent evt) {
         String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/old_firmware/firmware-1.0.12/axoloti.bin";
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
-        getController().getModel().flashUsingSDRam(fname, pname);
+        getDModel().flashUsingSDRam(fname, pname);
     }
 
     private void jMenuItemFlashUpgrade_v1_v2_ActionPerformed(java.awt.event.ActionEvent evt) {
-        FirmwareUpgrade_1_0_12 firmwareUpgrade = new FirmwareUpgrade_1_0_12(IConnection.OpenDeviceHandle(null));
+        FirmwareUpgrade_1_0_12 firmwareUpgrade = new FirmwareUpgrade_1_0_12(IConnection.openDeviceHandle(null));
     }
 
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {
         String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter";
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStop());
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdUploadPatch(fname));
-        QCmdProcessor.getQCmdProcessor().AppendToQueue(new QCmdStartMounter());
+        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStop());
+        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdUploadPatch(fname));
+        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStartMounter());
         Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
     }
 
@@ -366,13 +365,13 @@ public class TargetMenu extends JMenu implements IView<TargetController> {
     }
 
     @Override
-    public TargetController getController() {
-        return controller;
+    public TargetModel getDModel() {
+        return targetModel;
     }
 
     @Override
     public void dispose() {
-        getController().removeView(this);
+        targetModel.getController().removeView(this);
     }
 
 }
