@@ -188,16 +188,16 @@ public final class MainFrame extends TJFrame implements ActionListener {
                         }
                         if (lr.getLevel() == Level.SEVERE) {
                             doAutoScroll = true;
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getLength(),
                                     txt + "\n", styleSevere);
                             if (bGrabFocusOnSevereErrors) {
                                 MainFrame.this.toFront();
                             }
                         } else if (lr.getLevel() == Level.WARNING) {
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getLength(),
                                     txt + "\n", styleWarning);
                         } else {
-                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getEndPosition().getOffset(),
+                            jTextPaneLog.getDocument().insertString(jTextPaneLog.getDocument().getLength(),
                                     txt + "\n", styleInfo);
                         }
                     } catch (BadLocationException ex) {
