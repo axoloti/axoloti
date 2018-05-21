@@ -40,8 +40,6 @@ class DisplayInstanceView128B extends DisplayInstanceView {
         for (int i = 0; i < n; i++) {
             idst[i] = dst[i];
         }
-        DisplayInstance m = model;
-        m.getController();
         model.getController().setValue(idst);
     }
 

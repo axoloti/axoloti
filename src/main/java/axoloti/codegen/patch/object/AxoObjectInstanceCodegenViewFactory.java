@@ -5,7 +5,6 @@ import axoloti.patch.object.AxoObjectInstanceComment;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
 import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.IAxoObjectInstance;
-import axoloti.patch.object.ObjectInstanceController;
 
 /**
  *
@@ -14,10 +13,9 @@ import axoloti.patch.object.ObjectInstanceController;
 public class AxoObjectInstanceCodegenViewFactory {
 
     public static IAxoObjectInstanceCodegenView createView(IAxoObjectInstance model) {
-        ObjectInstanceController controller = model.getController();
         IAxoObjectInstanceCodegenView view;
         if (model instanceof AxoObjectInstancePatcher) {
-            view = new AxoObjectInstancePatcherCodegenView(model);
+            view = new AxoObjectInstancePatcherCodegenView((AxoObjectInstancePatcher) model);
         } else if (model instanceof AxoObjectInstance) {
             view = new AxoObjectInstanceCodegenView(model);
         } else if (model instanceof AxoObjectInstanceComment) {
@@ -27,7 +25,7 @@ public class AxoObjectInstanceCodegenViewFactory {
         } else {
             return null;
         }
-        controller.addView(view);
+        model.getController().addView(view);
         return view;
     }
 }

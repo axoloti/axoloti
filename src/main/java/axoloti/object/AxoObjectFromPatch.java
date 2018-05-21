@@ -69,7 +69,6 @@ public class AxoObjectFromPatch extends AxoObject {
     }
 
     final public void updateObject() {
-        PatchController controller = patchModel.getController();
         PatchViewCodegen codegen = new PatchViewCodegen(patchModel);
         AxoObject o = codegen.generateAxoObj(new AxoObject());
         attributes = o.getAttributes();

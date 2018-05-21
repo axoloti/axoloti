@@ -180,7 +180,8 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        if (getPatchModel() == null) {
+        if (patchView == null) {
+            // we're in the ObjectSectorFrame
             return;
         }
         Point locInPatch = localToPatchLocation(me.getPoint(), me.getComponent());

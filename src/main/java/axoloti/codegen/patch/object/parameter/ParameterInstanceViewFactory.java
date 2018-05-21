@@ -7,7 +7,6 @@ import axoloti.patch.object.parameter.ParameterInstanceBin12;
 import axoloti.patch.object.parameter.ParameterInstanceBin16;
 import axoloti.patch.object.parameter.ParameterInstanceBin1Momentary;
 import axoloti.patch.object.parameter.ParameterInstanceBin32;
-import axoloti.patch.object.parameter.ParameterInstanceController;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32SMap;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
@@ -21,7 +20,6 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32;
 public class ParameterInstanceViewFactory {
 
     public static ParameterInstanceView createView(ParameterInstance model) {
-        ParameterInstanceController controller = model.getController();
         ParameterInstanceView view;
         // order of tests is important!
         if (model instanceof ParameterInstanceBin1Momentary) {
@@ -49,7 +47,7 @@ public class ParameterInstanceViewFactory {
         } else {
             throw new Error("ParameterInstanceViewFactory class not handled: " + model.getClass());
         }
-        controller.addView(view);
+        model.getController().addView(view);
         return view;
     }
 }

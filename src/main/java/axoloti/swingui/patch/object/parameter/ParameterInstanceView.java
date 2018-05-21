@@ -68,7 +68,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
         label.setText(getDModel().getDModel().getName());
         lbls.add(label);
 
-        if (getDModel().getConvs() != null) {
+        if (!getDModel().getConvs().isEmpty()) {
             lbls.add(valuelbl);
             Dimension d = new Dimension(50, 10);
             valuelbl.setMinimumSize(d);

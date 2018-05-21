@@ -225,8 +225,13 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         if (conversion == null) {
             setConversion(convs.get(0));
         }
-        List l = java.util.Arrays.asList(convs);
-        int i = l.indexOf(conversion);
+        int i = -1;
+        for (int j = 0; j < convs.size(); j++) {
+            if (convs.get(j) == conversion) {
+                i = j;
+                break;
+            }
+        }
         i++;
         if (i >= convs.size()) {
             i = 0;

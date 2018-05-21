@@ -6,6 +6,7 @@ import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
 import axoloti.patch.object.parameter.preset.PresetDouble;
+import axoloti.realunits.NativeToReal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -39,9 +40,11 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     @Override
     void updateUnit() {
         super.updateUnit();
-        if (getDModel().getConversion() != null) {
-            valuelbl.setText(getDModel().getConversion().convertToReal(new ValueFrac32(
-                    getDModel().getValue())));
+        NativeToReal conv = getDModel().getConversion();
+        if (conv != null) {
+            String n = conv.convertToReal(new ValueFrac32(
+                    getDModel().getValue()));
+            valuelbl.setText(n);
         }
     }
 

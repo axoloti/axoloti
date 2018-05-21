@@ -5,7 +5,6 @@ import axoloti.object.AxoObjectPatcher;
 import axoloti.patch.PatchModel;
 import axoloti.patch.SubPatchMode;
 import axoloti.patch.object.AxoObjectInstancePatcher;
-import axoloti.patch.object.IAxoObjectInstance;
 
 /**
  *
@@ -13,11 +12,10 @@ import axoloti.patch.object.IAxoObjectInstance;
  */
 public class AxoObjectInstancePatcherCodegenView extends AxoObjectInstanceCodegenView {
 
-    AxoObjectInstancePatcherCodegenView(IAxoObjectInstance objectInstance) {
+    AxoObjectInstancePatcherCodegenView(AxoObjectInstancePatcher objectInstance) {
         super(objectInstance);
-        AxoObjectInstancePatcher model = (AxoObjectInstancePatcher) objectInstance;
-        AxoObjectPatcher ao = (AxoObjectPatcher) model.getDModel();
-        PatchModel pm = model.getSubPatchModel();
+        AxoObjectPatcher ao = (AxoObjectPatcher) objectInstance.getDModel();
+        PatchModel pm = objectInstance.getSubPatchModel();
         PatchViewCodegen pvcg = new PatchViewCodegen(pm);
 
         // from GenerateAxoObjNormal
