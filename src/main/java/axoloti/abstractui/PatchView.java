@@ -433,7 +433,6 @@ public abstract class PatchView extends View<PatchModel> {
         @Override
         protected INetView viewFactory(Net net) {
             INetView view = createNetView(net, PatchView.this);
-            net.getController().addView(view); // TODO: move to createNetView
             add(view);
             view.repaint();
             return view;

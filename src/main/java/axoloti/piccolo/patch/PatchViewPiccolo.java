@@ -539,7 +539,9 @@ public class PatchViewPiccolo extends PatchView {
 
     @Override
     public INetView createNetView(Net net, PatchView patchView) {
-        return new PNetView(net, (PatchViewPiccolo) patchView);
+        INetView nv = new PNetView(net, (PatchViewPiccolo) patchView);
+        net.getController().addView(nv);
+        return nv;
     }
 
     @Override

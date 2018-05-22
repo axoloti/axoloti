@@ -177,7 +177,7 @@ public class PatchViewSwing extends PatchView {
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
-                    // TODO: add metaUndo
+                    model.getController().addMetaUndo("add comment");
                     model.getController().addObjectInstance(AxoObjects.getAxoObjects().getAxoObjectFromName(patchComment, null).get(0), layers.getMousePosition());
                     ke.consume();
                 } else if ((ke.getKeyCode() == KeyEvent.VK_I) && !KeyUtils.isControlOrCommandDown(ke)) {
@@ -536,6 +536,8 @@ public class PatchViewSwing extends PatchView {
 
     @Override
     public INetView createNetView(Net net, PatchView patchView) {
-        return new NetView(net, (PatchViewSwing) patchView);
+        INetView nv = new NetView(net, (PatchViewSwing) patchView);
+        net.getController().addView(nv);
+        return nv;
     }
 }
