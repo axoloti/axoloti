@@ -152,10 +152,15 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
     }
 
     protected void addUndoableElementToList(ListProperty property, Object newItem) {
-        if (newItem instanceof IModel) {
-            IModel m = (IModel) newItem;
-            if (m.getParent() != model) {
-                System.out.println("error: model parent is wrong!");
+        boolean WarnIfParentIsNotArrayContainer = false;
+        if (WarnIfParentIsNotArrayContainer) {
+            // actually this is not aa valid assumption for Net source/dest,
+            // whose parents are ObjectInstances...
+            if (newItem instanceof IModel) {
+                IModel m = (IModel) newItem;
+                if (m.getParent() != model) {
+                    System.out.println("error: model parent is wrong, should be " + model.toString() + " ???");
+                }
             }
         }
         List old = (List) getModelProperty(property);

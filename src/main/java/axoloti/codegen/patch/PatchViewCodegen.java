@@ -33,7 +33,6 @@ import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -516,7 +515,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             }
             Net n = getDModel().getController().getNetFromIolet(i);
             if ((n != null) && (n.isValidNet())) {
-                OutletInstance firstSource = java.util.Collections.min(Arrays.asList(n.getSources()));
+                OutletInstance firstSource = java.util.Collections.min(n.getSources());
                 if (i.getDataType().equals(n.getDataType())) {
                     if (n.needsLatch()
                             && (getDModel().objectinstances.indexOf(firstSource.getParent()) >= getDModel().objectinstances.indexOf(o))) {

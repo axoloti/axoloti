@@ -54,7 +54,7 @@ public class IoletInstancePopupMenu extends JPopupMenu {
             add(itemDisconnect);
             return;
         }
-        if (net.getDestinations().length + net.getSources().length > 1) {
+        if (net.getDestinations().size() + net.getSources().size() > 1) {
             add(itemDisconnect);
             itemDisconnect.addActionListener(new ActionListener() {
                 @Override
@@ -70,7 +70,7 @@ public class IoletInstancePopupMenu extends JPopupMenu {
                 }
             });
         }
-        if (net.getDestinations().length + net.getSources().length > 2) {
+        if (net.getDestinations().size() + net.getSources().size() > 2) {
             add(itemDisconnect);
             JMenuItem itemDelete = new JMenuItem("Delete net");
             itemDelete.addActionListener(new ActionListener() {

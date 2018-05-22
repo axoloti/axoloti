@@ -24,13 +24,12 @@ import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.preferences.Theme;
-import axoloti.property.DestinationArrayProperty;
+import axoloti.property.ListProperty;
 import axoloti.property.Property;
-import axoloti.property.SourceArrayProperty;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
-import static java.util.Arrays.asList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,81 +43,46 @@ import org.simpleframework.xml.Root;
 @Root(name = "net")
 public class Net extends AbstractModel<NetController> {
 
-    private OutletInstance[] sources;
-    private InletInstance[] dests;
+    @ElementList(inline = true, required = false)
+    List<OutletInstance> source = new ArrayList<>();
+    @ElementList(inline = true, required = false)
+    List<InletInstance> dest = new ArrayList<>();
+
     boolean selected = false;
     
     PatchModel parent;
 
-    public Net(
-            @ElementList(name = "source", inline = true, required = false) List<OutletInstance> source,
-            @ElementList(name = "dest", inline = true, required = false) List<InletInstance> dest
-    ) {
-        if (source == null) {
-            this.sources = new OutletInstance[]{};
-        } else {
-            this.sources = source.toArray(new OutletInstance[]{});
-        }
-        if (dest == null) {
-            this.dests = new InletInstance[]{};
-        } else {
-            this.dests = dest.toArray(new InletInstance[]{});
-        }
+    public Net() {
+    }
 
+    /*
         for (OutletInstance o : sources) {
             o.setConnected(true);
         }
         for (InletInstance i : dests) {
             i.setConnected(true);
         }
-    }
-
-    @ElementList(name = "source", inline = true, required = false)
-    public List<OutletInstance> getSourceList() {
-        if (sources == null) {
-            return null;
-        }
-        if (sources.length == 0) {
-            return null;
-        }
-        return asList(sources);
-    }
-
-    @ElementList(name = "dest", inline = true, required = false)
-    public List<InletInstance> getDestList() {
-        if (dests == null) {
-            return null;
-        }
-        if (dests.length == 0) {
-            return null;
-        }
-        return asList(dests);
-    }
-
-    public Net() {
-        this.sources = new OutletInstance[]{};
-        this.dests = new InletInstance[]{};
-    }
+     */
 
     public Net(PatchModel parent, OutletInstance[] sources, InletInstance[] dests) {
         this.parent = parent;
         setDocumentRoot(parent.getDocumentRoot());
-        this.sources = sources;
-        this.dests = dests;
+        this.source = Arrays.asList(sources);
+        this.dest = Arrays.asList(dests);
     }
 
     public void validate() {
-        if (sources == null) {
+        if (source == null) {
             throw new Error("source is null, empty array required");
         }
-        if (dests == null) {
+        if (dest == null) {
             throw new Error("dest is null, empty array required");
         }
-        if (dests.length + sources.length < 2) {
+        if (dest.size() + source.size() < 2) {
             throw new Error("less than 2 iolets connected, should not exist");
         }
-        for (int j = 0; j < dests.length; j++) {
-            InletInstance i = dests[j];
+        for (int j = 0; j < dest.size(); j++) {
+            InletInstance i = dest.get(j);
             IAxoObjectInstance o = i.getParent();
             if (o == null) continue;
             if (!o.getInletInstances().contains(i)) {
@@ -127,11 +91,11 @@ public class Net extends AbstractModel<NetController> {
                 if (i2 == null) {
                     throw new Error("detached net");
                 }
-                dests[j] = i2;
+                dest.set(j, i2);
             }
         }
-        for (int j = 0; j < sources.length; j++) {
-            OutletInstance i = sources[j];
+        for (int j = 0; j < source.size(); j++) {
+            OutletInstance i = source.get(j);
             IAxoObjectInstance o = i.getParent();
             if (o == null) continue;
             if (!o.getOutletInstances().contains(i)) {
@@ -140,25 +104,25 @@ public class Net extends AbstractModel<NetController> {
                 if (i2 == null) {
                     throw new Error("detached net");
                 }
-                sources[j] = i2;
+                source.set(j, i2);
             }
         }
     }
 
     public boolean isValidNet() {
-        if (sources == null) {
+        if (source == null) {
             return false;
         }
-        if (sources.length != 1) {
+        if (source.size() != 1) {
             return false;
         }
-        if (dests == null) {
+        if (dest == null) {
             return false;
         }
-        if (dests.length == 0) {
+        if (dest.isEmpty()) {
             return false;
         }
-        for (InletInstance s : dests) {
+        for (InletInstance s : dest) {
             if (!getDataType().isConvertableToType(s.getDataType())) {
                 return false;
             }
@@ -175,16 +139,16 @@ public class Net extends AbstractModel<NetController> {
     }
 
     public DataType getDataType() {
-        if (sources == null) {
+        if (source == null) {
             return null;
         }
-        if (sources.length == 0) {
+        if (source.isEmpty()) {
             return null;
         }
-        if (sources.length == 1) {
-            return sources[0].getDataType();
+        if (source.size() == 1) {
+            return source.get(0).getDataType();
         }
-        OutletInstance first_outlet = java.util.Collections.min(Arrays.asList(sources));
+        OutletInstance first_outlet = java.util.Collections.min(source); // TODO: verify
         DataType t = first_outlet.getDataType();
         return t;
     }
@@ -223,13 +187,12 @@ public class Net extends AbstractModel<NetController> {
     }
 
     public boolean isFirstOutlet(OutletInstance oi) {
-        if (getSources().length == 1) {
+        if (getSources().size() == 1) {
             return true;
         }
         for (IAxoObjectInstance o : getParent().getObjectInstances()) {
             for (OutletInstance i : o.getOutletInstances()) {
-                List<OutletInstance> outletlist = Arrays.asList(getSources());
-                if (outletlist.contains(i)) {
+                if (getSources().contains(i)) {
                     // o is first objectinstance connected to this net
                     return oi == i;
                 }
@@ -239,37 +202,35 @@ public class Net extends AbstractModel<NetController> {
         return false;
     }
 
-    // TODO: migrate NET_SOURCES to ListProperty
-    public final static Property NET_SOURCES = new SourceArrayProperty("Sources", Net.class);
-    // TODO: migrate NET_DESTINATIONS to ListProperty
-    public final static Property NET_DESTINATIONS = new DestinationArrayProperty("Destinations", Net.class);
+    public final static ListProperty NET_SOURCES = new ListProperty("Sources", Net.class);
+    public final static ListProperty NET_DESTINATIONS = new ListProperty("Destinations", Net.class);
 
-    public OutletInstance[] getSources() {
-        return sources;
+    public List<OutletInstance> getSources() {
+        return Collections.unmodifiableList(source);
     }
 
-    public void setSources(OutletInstance[] sources) {
-        OutletInstance[] old_value = this.sources;
-        this.sources = sources;
+    public void setSources(List<OutletInstance> source) {
+        List<OutletInstance> prev_value = this.source;
+        this.source = source;
         validate();
 
         firePropertyChange(
                 NET_SOURCES,
-                old_value, sources);
+                prev_value, source);
     }
 
-    public InletInstance[] getDestinations() {
-        return dests;
+    public List<InletInstance> getDestinations() {
+        return Collections.unmodifiableList(dest);
     }
 
-    public void setDestinations(InletInstance[] dests) {
-        InletInstance[] old_value = this.dests;
+    public void setDestinations(List<InletInstance> dest) {
+        List<InletInstance> old_value = this.dest;
 
-        this.dests = dests;
+        this.dest = dest;
         validate();
         firePropertyChange(
                 NET_DESTINATIONS,
-                old_value, dests);
+                old_value, dest);
     }
 
     @Override

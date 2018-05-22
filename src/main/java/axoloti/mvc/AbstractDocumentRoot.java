@@ -5,6 +5,7 @@ import axoloti.property.ObjectProperty;
 import axoloti.property.ObjectROProperty;
 import axoloti.property.Property;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -31,7 +32,7 @@ public class AbstractDocumentRoot extends AbstractModel<DocumentRootController> 
         return this;
     }
 
-    private ArrayList<UndoableEditListener> undoListeners = new ArrayList<>();
+    private final List<UndoableEditListener> undoListeners = new LinkedList<>();
 
     public void addUndoListener(UndoableEditListener uel) {
         undoListeners.add(uel);

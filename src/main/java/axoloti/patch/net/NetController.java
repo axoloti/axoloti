@@ -7,9 +7,6 @@ import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,8 +59,8 @@ public class NetController extends AbstractController<Net, INetView> {
                 dest2.add(r);
                 r.getController().changeConnected(true);
             }
-            model.setSources(source2.toArray(new OutletInstance[]{}));
-            model.setDestinations(dest2.toArray(new InletInstance[]{}));
+            model.setSources(source2);
+            model.setDestinations(dest2);
         }
     }
 
@@ -74,10 +71,7 @@ public class NetController extends AbstractController<Net, INetView> {
      */
     public void connectInlet(InletInstance inlet) {
         inlet.getController().changeConnected(true);
-
-        ArrayList<InletInstance> n = new ArrayList<>(Arrays.asList(getModel().getDestinations()));
-        n.add(inlet);
-        setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
+        addUndoableElementToList(Net.NET_DESTINATIONS, inlet);
     }
 
     /**
@@ -87,10 +81,7 @@ public class NetController extends AbstractController<Net, INetView> {
      */
     public void connectOutlet(OutletInstance outlet) {
         outlet.getController().changeConnected(true);
-
-        ArrayList<OutletInstance> n = new ArrayList<>(Arrays.asList(getModel().getSources()));
-        n.add(outlet);
-        setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
+        addUndoableElementToList(Net.NET_SOURCES, outlet);
     }
 
     /**
@@ -101,12 +92,7 @@ public class NetController extends AbstractController<Net, INetView> {
      */
     public void disconnect(OutletInstance outlet) {
         outlet.getController().changeConnected(false);
-
-        List<OutletInstance> n = new LinkedList<>(Arrays.asList(getModel().getSources()));
-        n.remove(outlet);
-        setModelUndoableProperty(Net.NET_SOURCES, n.toArray(new OutletInstance[]{}));
-        // TODO: migrate NET_SOURCES to ListProperty, so this reduces to:
-        // removeUndoableElementFromList(Net.NET_SOURCES, outlet);
+        removeUndoableElementFromList(Net.NET_SOURCES, outlet);
     }
 
     /**
@@ -116,13 +102,7 @@ public class NetController extends AbstractController<Net, INetView> {
      */
     public void disconnect(InletInstance inlet) {
         inlet.getController().changeConnected(false);
-
-        List<InletInstance> n = new LinkedList<>(Arrays.asList(getModel().getDestinations()));
-        n.remove(inlet);
-        setModelUndoableProperty(Net.NET_DESTINATIONS, n.toArray(new InletInstance[]{}));
-        // TODO: migrate NET_DESTINATIONS to ListProperty, so this reduces to:
-        // removeUndoableElementFromList(Net.NET_DESTINATIONS, outlet);
+        removeUndoableElementFromList(Net.NET_DESTINATIONS, inlet);
     }
-
 
 }

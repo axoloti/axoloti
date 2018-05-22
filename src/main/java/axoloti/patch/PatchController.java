@@ -542,7 +542,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                         }
                     }
                 }
-                n.setSources(source2.toArray(new OutletInstance[]{}));
+                n.setSources(source2);
 
                 ArrayList<InletInstance> dest2 = new ArrayList<>();
                 for (InletInstance o : n.getDestinations()) {
@@ -556,9 +556,9 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                         }
                     }
                 }
-                n.setDestinations(dest2.toArray(new InletInstance[]{}));
+                n.setDestinations(dest2);
 
-                if (n.getSources().length + n.getDestinations().length > 1) {
+                if (n.getSources().size() + n.getDestinations().size() > 1) {
                     if ((connectedInlet == null) && (connectedOutlet == null)) {
                         /*
                     n.patchModel = this;
@@ -763,7 +763,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
             Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "can''t connect: already connected");
             return null;
         } else if ((n1 != null) && (n2 == null)) {
-            if (n1.getSources().length == 0) {
+            if (n1.getSources().isEmpty()) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.FINE, "connect: adding outlet to inlet net");
                 n1.getController().connectOutlet(ol);
                 return n1;
@@ -838,7 +838,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         if (n == null) {
             return false;
         }
-        if ((n.getDestinations().length + n.getSources().length == 2)) {
+        if ((n.getDestinations().size() + n.getSources().size() == 2)) {
             delete(n);
         } else {
             n.getController().disconnect(inlet);
@@ -857,7 +857,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         if (n == null) {
             return false;
         }
-        if ((n.getDestinations().length + n.getSources().length == 2)) {
+        if ((n.getDestinations().size() + n.getSources().size() == 2)) {
             delete(n);
         } else {
             n.getController().disconnect(outlet);
