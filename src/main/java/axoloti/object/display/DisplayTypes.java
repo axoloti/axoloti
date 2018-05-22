@@ -17,13 +17,17 @@
  */
 package axoloti.object.display;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author jtaelman
  */
 public class DisplayTypes {
 
-    final static Display types[] = {
+    private final static Display types[] = {
         new DisplayBool32(),
         new DisplayFrac32SChart(),
         new DisplayFrac32SDial(),
@@ -44,7 +48,7 @@ public class DisplayTypes {
         new DisplayVScale()
     };
 
-    static public Display[] getTypes() {
-        return types;
+    static public List<Display> getTypes() {
+        return Collections.unmodifiableList(Arrays.asList(types));
     }
 }

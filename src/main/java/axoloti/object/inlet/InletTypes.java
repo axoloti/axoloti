@@ -17,13 +17,17 @@
  */
 package axoloti.object.inlet;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author jtaelman
  */
 public class InletTypes {
 
-    final static Inlet types[] = {
+    private final static Inlet types[] = {
         new InletBool32(),
         new InletBool32Rising(),
         new InletBool32RisingFalling(),
@@ -39,8 +43,8 @@ public class InletTypes {
         new InletCharPtr32()
     };
 
-    static public Inlet[] getTypes() {
-        return types;
+    static public List<Inlet> getTypes() {
+        return Collections.unmodifiableList(Arrays.asList(types));
     }
 
 }

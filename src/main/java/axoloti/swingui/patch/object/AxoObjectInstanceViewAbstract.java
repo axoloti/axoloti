@@ -309,10 +309,13 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
     }
 
     void handleInstanceNameEditorAction() {
+        if (textFieldInstanceName == null) {
+            throw new Error("textFieldInstanceName is null");
+        }
         String s = textFieldInstanceName.getText();
         model.getController().addMetaUndo("edit object name");
         model.getController().changeInstanceName(s);
-        if (textFieldInstanceName != null && textFieldInstanceName.getParent() != null) {
+        if (textFieldInstanceName.getParent() != null) {
             textFieldInstanceName.getParent().remove(textFieldInstanceName);
         }
     }

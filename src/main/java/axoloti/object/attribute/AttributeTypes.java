@@ -17,13 +17,17 @@
  */
 package axoloti.object.attribute;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author jtaelman
  */
 public class AttributeTypes {
 
-    final static AxoAttribute types[] = {
+    private final static AxoAttribute types[] = {
         new AxoAttributeComboBox(),
         new AxoAttributeObjRef(),
         new AxoAttributeSpinner(),
@@ -32,8 +36,8 @@ public class AttributeTypes {
         new AxoAttributeTextEditor()
     };
 
-    static public AxoAttribute[] getTypes() {
-        return types;
+    final public static List<AxoAttribute> getTypes() {
+        return Collections.unmodifiableList(Arrays.asList(types));
     }
 
 }

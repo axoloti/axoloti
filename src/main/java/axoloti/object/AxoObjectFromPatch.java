@@ -62,7 +62,10 @@ public class AxoObjectFromPatch extends AxoObject {
         shortId = f.getName().substring(0, f.getName().lastIndexOf('.'));
         setPath(f.getAbsolutePath());
         updateObject();
+        init1();
+    }
 
+    private void init1() {
         // TODO: review, perhaps source of multiple entries of eg. fx/flanger in objectselector
         AxoObjects.getAxoObjects().objectList.add(this);
         // strip file extension

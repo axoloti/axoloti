@@ -17,13 +17,17 @@
  */
 package axoloti.object.outlet;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  * @author jtaelman
  */
 public class OutletTypes {
 
-    final static Outlet types[] = {
+    private final static Outlet types[] = {
         new OutletBool32(),
         new OutletBool32Pulse(),
         new OutletCharPtr32(),
@@ -38,8 +42,8 @@ public class OutletTypes {
         new OutletInt32Pos()
     };
 
-    static public Outlet[] getTypes() {
-        return types;
+    static public List<Outlet> getTypes() {
+        return Collections.unmodifiableList(Arrays.asList(types));
     }
 
 }

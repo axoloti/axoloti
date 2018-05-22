@@ -50,17 +50,17 @@ import javax.swing.table.AbstractTableModel;
  */
 abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<AxoObject> {
 
-    private final T[] AtomDefinitionsList;
+    private List<T> atomDefinitionsList;
     private AtomDefinition o;
     private final ListProperty prop;
     private final AxoObject obj;
     private final AxoObjectEditor editor;
     private JPanel parentPanel;
 
-    public AtomDefinitionsEditor(AxoObject obj, ListProperty atomfield, T[] atomDefinitionsList, AxoObjectEditor editor) {
+    public AtomDefinitionsEditor(AxoObject obj, ListProperty atomfield, List<T> atomDefinitionsList, AxoObjectEditor editor) {
         this.obj = obj;
         this.prop = atomfield;
-        this.AtomDefinitionsList = atomDefinitionsList;
+        this.atomDefinitionsList = atomDefinitionsList;
         this.editor = editor;
     }
 
@@ -176,7 +176,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                T o2 = (T) AtomDefinitionsList[0].getClass().newInstance();
+                T o2 = (T) atomDefinitionsList.get(0).getClass().newInstance();
                 int i = 0;
                 while (true) {
                     i++;
@@ -368,7 +368,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
             }
 
         });
-        JComboBox jComboBoxAtomDefinitionsList = new JComboBox(AtomDefinitionsList);
+        JComboBox jComboBoxAtomDefinitionsList = new JComboBox(atomDefinitionsList.toArray());
         jTable1.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(jComboBoxAtomDefinitionsList));
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override

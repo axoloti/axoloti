@@ -65,13 +65,16 @@ class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
     @Override
     void handleInstanceNameEditorAction() {
+        if (textFieldInstanceName == null) {
+            throw new Error("textFieldInstanceName is null");
+        }
         String s = textFieldInstanceName.getText();
         String prev = (String) model.getController().getModelProperty(AxoObjectInstanceComment.COMMENT);
         if (!s.equals(prev)) {
             model.getController().addMetaUndo("edit comment");
             model.getController().changeComment(s);
         }
-        if (textFieldInstanceName != null && textFieldInstanceName.getParent() != null) {
+        if (textFieldInstanceName.getParent() != null) {
             textFieldInstanceName.getParent().remove(textFieldInstanceName);
         }
     }
