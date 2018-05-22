@@ -13,7 +13,6 @@ import javax.swing.BoxLayout;
 
 public abstract class AttributeInstanceView extends ViewPanel<AttributeInstance> implements IAttributeInstanceView {
 
-    // TODO: add metaUndo to attributeInstanceViews
     IAxoObjectInstanceView axoObjectInstanceView;
 
     LabelComponent label;

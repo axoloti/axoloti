@@ -64,7 +64,7 @@ class AttributeInstanceViewSDFile extends AttributeInstanceViewString {
         textFieldFileName.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                model.getController().changeValue(textFieldFileName.getText());
+                model.getController().addMetaUndo("edit attribute " + getDModel().getName(), focusEdit);
             }
 
             @Override
