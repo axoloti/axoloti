@@ -411,26 +411,34 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         return null;
     }
 
-    void add_unlinked_objectinstance(IAxoObjectInstance o) {
+    AxoObjectInstanceAbstract add_unlinked_objectinstance(IAxoObjectInstance o) {
         IAxoObject t = o.resolveType(getModel().getCurrentWorkingDirectory());
         AxoObjectInstanceAbstract linked_object_instance
                 = AxoObjectInstanceFactory.createView(t, getModel(), o.getInstanceName(), o.getLocation());
         addUndoableElementToList(PatchModel.PATCH_OBJECTINSTANCES, linked_object_instance);
         linked_object_instance.applyValues(o);
         linked_object_instance.setDocumentRoot(getDocumentRoot());
+        return linked_object_instance;
     }
 
-    public void paste(String v, Point pos, boolean restoreConnectionsToExternalOutlets) {
-        if (v.isEmpty()) {
+    /**
+     * Paste XML string containing patch into patch.
+     *
+     * @param string :
+     * @param pos : position in patch
+     * @param restoreConnectionsToExternalOutlets : Only false is implemented!
+     */
+    public void paste(String string, Point pos, boolean restoreConnectionsToExternalOutlets) {
+        if (string.isEmpty()) {
             return;
         }
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
         try {
-            PatchModel p = serializer.read(PatchModel.class, v);
+            PatchModel p = serializer.read(PatchModel.class, string);
             Map<String, String> dict = new HashMap<>();
-            ArrayList<IAxoObjectInstance> obj2 = new ArrayList<>(p.objectinstances);
-            /*
+            /* // TODO: fix modulations
+             ArrayList<IAxoObjectInstance> obj2 = new ArrayList<>(p.objectinstances);
              for (AxoObjectInstanceAbstract o : obj2) {
              o.patchModel = getModel();
              AxoObjectAbstract obj = o.resolveType();
@@ -458,6 +466,9 @@ public class PatchController extends AbstractController<PatchModel, IView> {
              }
              }
              */
+
+            selectNone();
+
             int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
             for (IAxoObjectInstance o : p.objectinstances) {
                 String original_name = o.getInstanceName();
@@ -481,11 +492,10 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                             new_name = bs + n++;
                         }
                     } else {
-                        while (getModel().findObjectInstance(new_name) != null) {
-                            new_name = new_name + "_";
-                        }
-                        while (dict.containsKey(new_name)) {
-                            new_name = new_name + "_";
+                        int numeralSuffix = 1;
+                        while ((getModel().findObjectInstance(new_name) != null) || (dict.containsKey(new_name))) {
+                            new_name = original_name + "_" + numeralSuffix;
+                            numeralSuffix++;
                         }
                     }
                     if (!new_name.equals(original_name)) {
@@ -512,10 +522,10 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                     newposy += Constants.Y_GRID;
                 }
                 o.setLocation(new Point(newposx, newposy));
-                add_unlinked_objectinstance(o);
+                AxoObjectInstanceAbstract oLinked = add_unlinked_objectinstance(o);
+                oLinked.getController().changeSelected(true);
             }
 
-            // TODO: review pasting nets!
             for (Net n : p.nets) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
@@ -526,11 +536,10 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                     if ((objname != null) && (outletname != null)) {
                         String on2 = dict.get(objname);
                         if (on2 != null) {
-//                                o.name = on2 + " " + r[1];
                             OutletInstance i = new OutletInstance(on2, outletname);
-                            //i.outletname = outletname;
                             source2.add(i);
                         } else if (restoreConnectionsToExternalOutlets) {
+                            /* Review when implementing restoreConnectionsToExternalOutlets: */
                             // this is untested and probably faulty.
                             IAxoObjectInstance obj = getModel().findObjectInstance(objname);
                             if ((obj != null) && (connectedOutlet == null)) {
@@ -560,31 +569,32 @@ public class PatchController extends AbstractController<PatchModel, IView> {
 
                 if (n.getSources().size() + n.getDestinations().size() > 1) {
                     if ((connectedInlet == null) && (connectedOutlet == null)) {
-                        /*
-                    n.patchModel = this;
-                    nets.add(n);
-                    } else if (connectedInlet != null) {
-                    for (InletInstance o : n.dest) {
-                    InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
-                    if ((o2 != null) && (o2 != connectedInlet)) {
-                    AddConnection(connectedInlet, o2);
+                        Net n2 = new Net(getModel(), n.getSources().toArray(new OutletInstance[0]), n.getDestinations().toArray(new InletInstance[0]));
+                        addUndoableElementToList(PatchModel.PATCH_NETS, n2);
                     }
-                    }
-                    for (OutletInstance o : n.source) {
-                    OutletInstance o2 = getOutletByReference(o.getObjname(), o.getOutletname());
-                    if (o2 != null) {
-                    AddConnection(connectedInlet, o2);
-                    }
-                    }
-                    } else if (connectedOutlet != null) {
-                    for (InletInstance o : n.dest) {
-                    InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
-                    if (o2 != null) {
-                    AddConnection(o2, connectedOutlet);
-                    }
-                    }*/
+//                    /* Review when implementing restoreConnectionsToExternalOutlets: */
+//                    else if (connectedInlet != null) {
+//                        for (InletInstance o : n.getDestinations()) {
+//                            InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+//                            if ((o2 != null) && (o2 != connectedInlet)) {
+//                                addConnection(connectedInlet, o2);
+//                            }
+//                        }
+//                        for (OutletInstance o : n.getSources()) {
+//                            OutletInstance o2 = getOutletByReference(o.getObjname(), o.getOutletname());
+//                            if (o2 != null) {
+//                                addConnection(connectedInlet, o2);
+//                            }
+//                        }
+//                    } else if (connectedOutlet != null) {
+//                        for (InletInstance o : n.getDestinations()) {
+//                            InletInstance o2 = getInletByReference(o.getObjname(), o.getInletname());
+//                            if (o2 != null) {
+//                                addConnection(o2, connectedOutlet);
+//                            }
+//                        }
 //                        netControllers.add(n);
-                    }
+//                    }
                 }
             }
         } catch (javax.xml.stream.XMLStreamException ex) {

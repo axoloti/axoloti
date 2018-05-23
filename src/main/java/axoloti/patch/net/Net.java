@@ -212,8 +212,6 @@ public class Net extends AbstractModel<NetController> {
     public void setSources(List<OutletInstance> source) {
         List<OutletInstance> prev_value = this.source;
         this.source = source;
-        validate();
-
         firePropertyChange(
                 NET_SOURCES,
                 prev_value, source);
@@ -225,9 +223,7 @@ public class Net extends AbstractModel<NetController> {
 
     public void setDestinations(List<InletInstance> dest) {
         List<InletInstance> old_value = this.dest;
-
         this.dest = dest;
-        validate();
         firePropertyChange(
                 NET_DESTINATIONS,
                 old_value, dest);
