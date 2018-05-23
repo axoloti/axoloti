@@ -468,7 +468,7 @@ public abstract class PatchView extends View<PatchModel> {
         }
     }
 
-    public DropTarget dt = new DropTarget() {
+    protected final DropTarget dt = new DropTarget() {
 
         @Override
         public synchronized void dragOver(DropTargetDragEvent dtde) {

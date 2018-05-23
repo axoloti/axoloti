@@ -32,8 +32,8 @@ public class AxoObjectInstanceFactory {
             obj = new AxoObjectPatcher();
             obji = new AxoObjectInstancePatcher(obj, patchModel, instanceName, location);
         } else if (obj instanceof AxoObjectPatcherObject) {
-            obj = new AxoObjectPatcherObject();
-            obji = new AxoObjectInstancePatcherObject(obj, patchModel, instanceName, location);
+            AxoObjectPatcherObject objp = new AxoObjectPatcherObject();
+            obji = new AxoObjectInstancePatcherObject(objp, patchModel, instanceName, location);
         } else if (obj instanceof AxoObjectZombie) {
             obji = new AxoObjectInstanceZombie(obj, patchModel, instanceName, location);
         } else if (obj instanceof AxoObject) {

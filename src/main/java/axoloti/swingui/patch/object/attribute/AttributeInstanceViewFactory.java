@@ -1,6 +1,5 @@
 package axoloti.swingui.patch.object.attribute;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceInt32;
@@ -17,10 +16,10 @@ import axoloti.swingui.patch.object.AxoObjectInstanceView;
  */
 public class AttributeInstanceViewFactory {
 
-    public static AttributeInstanceView createView(AttributeInstance model, IAxoObjectInstanceView obj) {
+    public static AttributeInstanceView createView(AttributeInstance model, AxoObjectInstanceView obj) {
         AttributeInstanceView view;
         if (model instanceof AttributeInstanceComboBox) {
-            view = new AttributeInstanceViewComboBox((AttributeInstanceComboBox) model, (AxoObjectInstanceView) obj);
+            view = new AttributeInstanceViewComboBox((AttributeInstanceComboBox) model, obj);
         } else if (model instanceof AttributeInstanceInt32) {
             view = new AttributeInstanceViewInt32(model, obj);
         } else if (model instanceof AttributeInstanceObjRef) {

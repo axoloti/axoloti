@@ -3,6 +3,7 @@ package axoloti.connection;
 import axoloti.chunks.ChunkParser;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.View;
+import static axoloti.swingui.dialogs.USBPortSelectionDlg.convertErrorToString;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.targetprofile.axoloti_core;
@@ -19,7 +20,6 @@ import org.usb4java.DeviceList;
 import org.usb4java.LibUsb;
 import org.usb4java.LibUsbException;
 import qcmds.QCmdSerialTask;
-import static axoloti.swingui.dialogs.USBPortSelectionDlg.convertErrorToString;
 
 /**
  *
@@ -146,7 +146,7 @@ public abstract class IConnection extends View<TargetModel> {
         return null;
     }
 
-    private ArrayList<ConnectionStatusListener> csls = new ArrayList<>();
+    private final ArrayList<ConnectionStatusListener> csls = new ArrayList<>();
 
     public void addConnectionStatusListener(ConnectionStatusListener csl) {
         if (isConnected()) {
@@ -176,7 +176,7 @@ public abstract class IConnection extends View<TargetModel> {
         getDModel().setConnection(this);
     }
 
-    private ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<>();
+    private final ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<>();
 
     public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
         if (getSDCardPresent()) {

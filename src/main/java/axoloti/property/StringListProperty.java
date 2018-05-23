@@ -34,11 +34,10 @@ public class StringListProperty extends PropertyReadWrite<List<String>> {
                 sb.append(", ");
             }
 
-            sb.append(
-                "\""
-                + s1.replaceAll("\\\\", "\\\\\\")
-                .replaceAll("\"", "\\\\\"")
-                + "\"");
+            sb.append("\"");
+            sb.append(s1.replaceAll("\\\\", "\\\\\\")
+                    .replaceAll("\"", "\\\\\""));
+            sb.append("\"");
             first = false;
         }
         return sb.toString();

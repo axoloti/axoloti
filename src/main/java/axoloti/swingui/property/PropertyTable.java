@@ -97,7 +97,7 @@ public class PropertyTable extends JTable implements IView {
         for (int i = 0; i < properties.size(); i++) {
             Property p = properties.get(i);
             if (p.is(evt)) {
-                ((AbstractTableModel) getDModel()).fireTableCellUpdated(i, 1);
+                ((AbstractTableModel) getModel()).fireTableCellUpdated(i, 1);
                 break;
             }
         }

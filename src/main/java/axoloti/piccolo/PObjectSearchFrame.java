@@ -88,13 +88,13 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
                 String license = t.getLicense() == null ? o.getLicense() : t.getLicense();
                 StringBuilder txt = new StringBuilder(description);
                 if ((path != null) && (!path.isEmpty())) {
-                    txt.append("\n<p>\nPath: " + path);
+                    txt.append("\n<p>\nPath: ").append(path);
                 }
                 if ((author != null) && (!author.isEmpty())) {
-                    txt.append("\n<p>\nAuthor: " + author);
+                    txt.append("\n<p>\nAuthor: ").append(author);
                 }
                 if ((license != null) && (!license.isEmpty())) {
-                    txt.append("\n<p>\nLicense: " + license);
+                    txt.append("\n<p>\nLicense: ").append(license);
                 }
                 getTextPane().setText(txt.toString());
             }

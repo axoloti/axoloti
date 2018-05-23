@@ -11,7 +11,7 @@ public class ChunkParser {
 
     // this parser assumes max one chunk of a certain FourCC
 //    private Map<FourCC, ChunkData> map = new HashMap<>();
-    private ArrayList<ChunkData> list = new ArrayList<>();
+    private final ArrayList<ChunkData> list = new ArrayList<>();
 
     public ChunkParser(ByteBuffer bb) {
         FourCC hfourcc = new FourCC(bb.getInt());
