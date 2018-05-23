@@ -61,7 +61,7 @@ public class AxoObjectFile {
             if (i > 0) {
                 String v = vS.substring(0, i);
                 try {
-                    return Integer.valueOf(v);
+                    return Integer.parseInt(v);
                 } catch (NumberFormatException e) {
                 }
             }
@@ -77,7 +77,7 @@ public class AxoObjectFile {
                 if (j > 0) {
                     String v = vS.substring(i + 1, j);
                     try {
-                        return Integer.valueOf(v);
+                        return Integer.parseInt(v);
                     } catch (NumberFormatException e) {
 
                     }
@@ -95,7 +95,7 @@ public class AxoObjectFile {
                 if (j > 0) {
                     String v = vS.substring(j + 1);
                     try {
-                        return Integer.valueOf(v);
+                        return Integer.parseInt(v);
                     } catch (NumberFormatException e) {
 
                     }

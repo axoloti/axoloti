@@ -191,6 +191,8 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
+            default:
+                break;
         }
     }
 
@@ -237,6 +239,9 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
                         break;
                     case 3:
                         g2.setColor(Theme.getCurrentTheme().Component_Primary);
+                        break;
+                    default:
+                        // impossible
                         break;
                 }
                 g2.fillRect(i * bsize + inset, inset, bsize - inset - 1, bsize - inset);

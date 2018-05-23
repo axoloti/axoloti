@@ -36,9 +36,8 @@ public class FirmwareID {
         if (!f.canRead()) {
             return "Please compile the firmware first";
         }
-        try {
-            int tlength = (int) f.length();
-            FileInputStream inputStream = new FileInputStream(f);
+        int tlength = (int) f.length();
+        try (FileInputStream inputStream = new FileInputStream(f)) {
             byte[] bb = new byte[tlength];
             int nRead = inputStream.read(bb, 0, tlength);
             if (nRead != tlength) {

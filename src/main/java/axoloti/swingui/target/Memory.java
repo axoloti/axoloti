@@ -168,7 +168,7 @@ public class Memory extends TJFrame implements ActionListener {
         conn.appendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
             @Override
             public void done(ByteBuffer mem) {
-                String s = "";
+                StringBuilder sb = new StringBuilder();
                 if (mem != null) {
                     for (int i = 0; i < (length / 16); i++) {
                         ByteBuffer bc = mem.duplicate();
@@ -176,7 +176,7 @@ public class Memory extends TJFrame implements ActionListener {
                         int v2 = mem.getInt();
                         int v3 = mem.getInt();
                         int v4 = mem.getInt();
-                        String ascii = "";
+                        char[] ascii = new char[16];
                         for (int j = 0; j < 16; j++) {
                             char c = (char) bc.get();
                             if (c < 32) {
@@ -185,12 +185,12 @@ public class Memory extends TJFrame implements ActionListener {
                             if (c > 128) {
                                 c = '.';
                             }
-                            ascii += c;
+                            ascii[j] = c;
                         }
-                        s += String.format("%08x : %08x %08x %08x %08x  %s%n", addr + (i * 16), v1, v2, v3, v4, ascii);
+                        sb.append(String.format("%08x : %08x %08x %08x %08x  %s%n", addr + (i * 16), v1, v2, v3, v4, String.valueOf(ascii)));
                     }
                 }
-                jTextAreaMemoryContent.setText(s);
+                jTextAreaMemoryContent.setText(sb.toString());
             }
         }));
     }

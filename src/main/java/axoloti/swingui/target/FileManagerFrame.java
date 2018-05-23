@@ -75,7 +75,7 @@ public class FileManagerFrame extends TJFrame {
         jLabelSDInfo.setText("");
 
         jFileTable.setModel(new AbstractTableModel() {
-            private String[] columnNames = {"Name", "Type", "Size", "Date"};
+            private final String[] columnNames = {"Name", "Type", "Size", "Date"};
 
             @Override
             public int getColumnCount() {
@@ -149,6 +149,8 @@ public class FileManagerFrame extends TJFrame {
                         }
                     }
                     break;
+                    default:
+                        break;
                 }
 
                 return returnValue;

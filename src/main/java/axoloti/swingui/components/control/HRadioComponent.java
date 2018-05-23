@@ -165,6 +165,9 @@ public class HRadioComponent extends ACtrlComponent {
                     fireEventAdjustmentFinished();
                 }
                 ke.consume();
+                break;
+            default:
+                break;
         }
     }
 

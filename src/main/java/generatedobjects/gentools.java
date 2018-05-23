@@ -379,8 +379,7 @@ class GenTools {
             }
 
             boolean identical = false;
-            try {
-                InputStream is1 = new FileInputStream(f);
+            try (InputStream is1 = new FileInputStream(f)) {
                 byte[] bo = os.toByteArray();
                 InputStream is2 = new ByteArrayInputStream(bo);
                 while (true) {
@@ -469,8 +468,7 @@ class GenTools {
             }
 
             boolean identical = false;
-            try {
-                InputStream is1 = new FileInputStream(f);
+            try (InputStream is1 = new FileInputStream(f)) {
                 byte[] bo = os.toByteArray();
                 InputStream is2 = new ByteArrayInputStream(bo);
                 while (true) {

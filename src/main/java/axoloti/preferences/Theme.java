@@ -266,8 +266,7 @@ public class Theme {
             Preferences.getPreferences().savePrefs();
             File f = fc.getSelectedFile();
             if (axtFileFilter.accept(f)) {
-                try {
-                    FileInputStream inputStream = new FileInputStream(f);
+                try (FileInputStream inputStream = new FileInputStream(f)) {
                     currentTheme = Theme.SERIALIZER.read(Theme.class, inputStream);
                     Preferences.getPreferences().setThemePath(f.getAbsolutePath());
                 } catch (Exception ex) {
@@ -300,8 +299,7 @@ public class Theme {
             if (themePath == null) {
                 loadDefaultTheme();
             } else {
-                try {
-                    FileInputStream inputStream = new FileInputStream(new File(themePath));
+                try (FileInputStream inputStream = new FileInputStream(new File(themePath))) {
                     currentTheme = Theme.SERIALIZER.read(Theme.class, inputStream);
                 } catch (Exception ex) {
                     loadDefaultTheme();

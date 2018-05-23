@@ -330,7 +330,7 @@ public class Axoloti {
             try {
                 MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
                 AxoObjects objs = new AxoObjects();
-                objs.loadAxoObjects();
+                AxoObjects.loadAxoObjects();
                 if (SplashScreen.getSplashScreen() != null) {
                     SplashScreen.getSplashScreen().close();
                 }

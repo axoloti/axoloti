@@ -26,7 +26,7 @@ public class ResizableUndecoratedFrame extends javax.swing.JFrame {
         cursors.put(12, Cursor.SE_RESIZE_CURSOR);
     }
 
-    private Insets dragInsets = new Insets(5, 5, 5, 5);
+    private final Insets dragInsets = new Insets(5, 5, 5, 5);
 
     private int direction;
     protected static final int NORTH = 1;

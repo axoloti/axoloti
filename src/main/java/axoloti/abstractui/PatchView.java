@@ -282,8 +282,9 @@ public abstract class PatchView extends View<PatchModel> {
             PatchFrame pf = openPatchModel(patchModel, f.getAbsolutePath());
             return pf;
         } catch (java.lang.reflect.InvocationTargetException ite) {
-            if (ite.getTargetException() instanceof PatchModel.PatchVersionException) {
-                PatchModel.PatchVersionException pve = (PatchModel.PatchVersionException) ite.getTargetException();
+            Throwable targetException = ite.getTargetException();
+            if (targetException instanceof PatchModel.PatchVersionException) {
+                PatchModel.PatchVersionException pve = (PatchModel.PatchVersionException) targetException;
                 Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
                         new Object[]{f.getAbsoluteFile(), pve.getMessage()});
             } else {

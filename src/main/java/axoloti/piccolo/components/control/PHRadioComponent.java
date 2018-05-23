@@ -139,6 +139,9 @@ public class PHRadioComponent extends PCtrlComponentAbstract {
                     fireEventAdjustmentFinished();
                 }
                 ke.setHandled(true);
+                break;
+            default:
+                break;
         }
     }
 

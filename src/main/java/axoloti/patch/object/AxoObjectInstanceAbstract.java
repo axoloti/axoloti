@@ -23,7 +23,6 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectUnloaded;
 import axoloti.object.AxoObjectZombie;
 import axoloti.object.IAxoObject;
-import axoloti.object.ObjectController;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
@@ -258,10 +257,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
     @Override
     public PatchModel getParent() {
         return patchModel;
-    }
-
-    private ObjectController getObjectController() {
-        return getDModel().getController();
     }
 
     public void applyValues(IAxoObjectInstance unlinked_object_instance) {

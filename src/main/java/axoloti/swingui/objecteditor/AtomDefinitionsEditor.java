@@ -358,6 +358,8 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                     case 2:
                         returnValue = list.get(rowIndex).getDescription();
                         break;
+                    default:
+                        break;
                 }
                 return returnValue;
             }
@@ -436,8 +438,6 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                         assert (false);
                         break;
                     case 1:
-                        //Field f = getController().get(rowIndex).fields.get(rowIndex);
-                        Class c = property.getType();
                         String svalue = (String) value;
                         Object newValue = property.convertStringToObj(svalue);
                         int table1row = jTable1.getSelectedRow();
@@ -451,6 +451,8 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                             }
                         });
                         o.getController().generic_setModelUndoableProperty(property, newValue);
+                        break;
+                    default:
                         break;
                 }
             }

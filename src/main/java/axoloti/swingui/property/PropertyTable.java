@@ -85,7 +85,9 @@ public class PropertyTable extends JTable implements IView {
                     case 1:
                         model.getController().generic_setModelUndoableProperty(properties.get(rowIndex),
                                 aValue);
+                        break;
                     default:
+                        break;
                 }
             }
 

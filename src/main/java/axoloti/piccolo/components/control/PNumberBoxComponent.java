@@ -344,11 +344,13 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
         this.value = value;
 
         if (convs != null) {
-            String s = "<html>";
+            StringBuilder sb = new StringBuilder();
+            sb.append("<html>");
             for (NativeToReal c : convs) {
-                s += c.convertToReal(new ValueFrac32(value)) + "<br>";
+                sb.append(c.convertToReal(new ValueFrac32(value)));
+                sb.append("<br>");
             }
-            setToolTipText(s);
+            this.setToolTipText(sb.toString());
         }
 
         repaint();

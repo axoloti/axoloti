@@ -182,6 +182,8 @@ public class PCheckboxComponent extends PCtrlComponentAbstract {
                 fireEventAdjustmentFinished();
                 ke.setHandled(true);
                 break;
+            default:
+                break;
         }
     }
 

@@ -56,15 +56,13 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
     @Override
     public QCmd performAction(IConnection connection) {
         connection.clearSync();
-        try {
-            if (f == null) {
-                String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
-                f = new File(buildDir+"/axoloti.bin");
-            }
-            Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file path: {0}", f.getAbsolutePath());
-            int tlength = (int) f.length();
-            FileInputStream inputStream = new FileInputStream(f);
-
+        if (f == null) {
+            String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
+            f = new File(buildDir + "/axoloti.bin");
+        }
+        Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file path: {0}", f.getAbsolutePath());
+        int tlength = (int) f.length();
+        try (FileInputStream inputStream = new FileInputStream(f)) {
             int offset = 0;
             byte[] header = new byte[16];
             header[0] = 'f';
@@ -84,8 +82,6 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
             if (nRead != tlength) {
                 Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
             }
-            inputStream.close();
-            inputStream = new FileInputStream(f);
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.INFO, "firmware file size: {0}", tlength);
 //            bb.order(ByteOrder.LITTLE_ENDIAN);
             CRC32 zcrc = new CRC32();
@@ -97,32 +93,42 @@ public class QCmdUploadFWSDRam implements QCmdSerialTask {
             header[14] = (byte) (zcrcv >> 16);
             header[15] = (byte) (zcrcv >> 24);
             connection.uploadFragment(header, connection.getTargetProfile().getSDRAMAddr() + offset);
-            offset += header.length;
-            int MaxBlockSize = 32768;
-            do {
-                int l;
-                if (tlength > MaxBlockSize) {
-                    l = MaxBlockSize;
-                    tlength -= MaxBlockSize;
-                } else {
-                    l = tlength;
-                    tlength = 0;
-                }
-                byte[] buffer = new byte[l];
-                nRead = inputStream.read(buffer, 0, l);
-                if (nRead != l) {
-                    Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
-                }
-                connection.uploadFragment(buffer, connection.getTargetProfile().getSDRAMAddr() + offset);
-                offset += nRead;
-            } while (tlength > 0);
             inputStream.close();
-            return this;
+
+            try (FileInputStream inputStream2 = new FileInputStream(f)) {
+                offset += header.length;
+                int MaxBlockSize = 32768;
+                do {
+                    int l;
+                    if (tlength > MaxBlockSize) {
+                        l = MaxBlockSize;
+                        tlength -= MaxBlockSize;
+                    } else {
+                        l = tlength;
+                        tlength = 0;
+                    }
+                    byte[] buffer = new byte[l];
+                    nRead = inputStream2.read(buffer, 0, l);
+                    if (nRead != l) {
+                        Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
+                    }
+                    connection.uploadFragment(buffer, connection.getTargetProfile().getSDRAMAddr() + offset);
+                    offset += nRead;
+                } while (tlength > 0);
+                inputStream2.close();
+                return this;
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
+            } catch (IOException ex) {
+                Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "IOException", ex);
+            }
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
             Logger.getLogger(QCmdUploadFWSDRam.class.getName()).log(Level.SEVERE, "IOException", ex);
         }
+
         return new QCmdDisconnect();
     }
 

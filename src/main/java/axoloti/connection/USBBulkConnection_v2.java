@@ -570,7 +570,7 @@ public class USBBulkConnection_v2 extends IConnection {
 
     static class Sync {
         boolean ready = true;
-        ByteBuffer memReadBuffer;
+        ByteBuffer memReadBuffer = null;
     }
 
     final Sync sync;

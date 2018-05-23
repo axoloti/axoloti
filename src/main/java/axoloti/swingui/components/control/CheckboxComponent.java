@@ -186,6 +186,8 @@ public class CheckboxComponent extends ACtrlComponent {
                 fireEventAdjustmentFinished();
                 ke.consume();
                 break;
+            default:
+                break;
         }
     }
 

@@ -62,7 +62,7 @@ public class AxolotiRemoteControl extends TJFrame {
     private JPanel jPanel3;
     private JPanel jPanel4;
     private JPanel jPanel5;
-    private List<JButton> buttons = new LinkedList<>();
+    private final List<JButton> buttons = new LinkedList<>();
     private PollHandler poller;
 
     /**

@@ -29,7 +29,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Robot;
 import java.awt.Stroke;
@@ -377,12 +376,13 @@ public class NumberBoxComponent extends ACtrlComponent {
         this.value = value;
 
         if (convs != null) {
-            Point p = getParent().getLocationOnScreen();
-            String s = "<html>";
+            StringBuilder sb = new StringBuilder();
+            sb.append("<html>");
             for (NativeToReal c : convs) {
-                s += c.convertToReal(new ValueFrac32(value)) + "<br>";
+                sb.append(c.convertToReal(new ValueFrac32(value)));
+                sb.append("<br>");
             }
-            this.setToolTipText(s);
+            this.setToolTipText(sb.toString());
         }
         repaint();
     }

@@ -38,7 +38,7 @@ public class Int32Property extends PropertyReadWrite<ValueInt32> {
         if (allowNull() && ((v == null) || v.isEmpty())) {
             return null;
         }
-        return new ValueInt32(Integer.valueOf(v));
+        return new ValueInt32(Integer.parseInt(v));
     }
 
 }

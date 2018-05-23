@@ -247,8 +247,9 @@ public class AxoObjects {
                     try {
                          o = serializer.read(AxoObjectFile.class, fileEntry);
                     } catch (java.lang.reflect.InvocationTargetException ite) {
-                        if(ite.getTargetException() instanceof AxoObjectFile.ObjectVersionException) {
-                            AxoObjectFile.ObjectVersionException ove = (AxoObjectFile.ObjectVersionException) ite.getTargetException();
+                        Throwable targetException = ite.getTargetException();
+                        if (targetException instanceof AxoObjectFile.ObjectVersionException) {
+                            AxoObjectFile.ObjectVersionException ove = (AxoObjectFile.ObjectVersionException) targetException;
                             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "Object produced with newer version of Axoloti {0} {1}",
                                                                             new Object[]{fileEntry.getAbsoluteFile(), ove.getMessage()});
                         } else {
@@ -499,8 +500,7 @@ public class AxoObjects {
             }
 
             boolean identical = false;
-            try {
-                InputStream is1 = new FileInputStream(f);
+            try (InputStream is1 = new FileInputStream(f)) {
                 byte[] bo = os.toByteArray();
                 InputStream is2 = new ByteArrayInputStream(bo);
                 while (true) {

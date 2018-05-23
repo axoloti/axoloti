@@ -233,15 +233,13 @@ public class FirmwareUpgrade_1_0_12 {
 
     public void uploadFWSDRam(File firmwareFile) {
         clearSync();
-        try {
-            if (firmwareFile == null) {
-                String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
-                firmwareFile = new File(buildDir + "/axoloti.bin");
-            }
-            Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware file path: {0}", firmwareFile.getAbsolutePath());
-            int tlength = (int) firmwareFile.length();
-            FileInputStream inputStream = new FileInputStream(firmwareFile);
-
+        if (firmwareFile == null) {
+            String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
+            firmwareFile = new File(buildDir + "/axoloti.bin");
+        }
+        Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware file path: {0}", firmwareFile.getAbsolutePath());
+        int tlength = (int) firmwareFile.length();
+        try (FileInputStream inputStream = new FileInputStream(firmwareFile)) {
             int offset = 0;
             byte[] header = new byte[16];
             header[0] = 'f';
@@ -262,43 +260,50 @@ public class FirmwareUpgrade_1_0_12 {
                 Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
             }
             inputStream.close();
-            inputStream = new FileInputStream(firmwareFile);
-            Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware file size: {0}", tlength);
+
+            try (FileInputStream inputStream2 = new FileInputStream(firmwareFile)) {
+                Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware file size: {0}", tlength);
 //            bb.order(ByteOrder.LITTLE_ENDIAN);
-            CRC32 zcrc = new CRC32();
-            zcrc.update(bb);
-            int zcrcv = (int) zcrc.getValue();
-            Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware crc: 0x{0}", Integer.toHexString(zcrcv).toUpperCase());
-            header[12] = (byte) (zcrcv);
-            header[13] = (byte) (zcrcv >> 8);
-            header[14] = (byte) (zcrcv >> 16);
-            header[15] = (byte) (zcrcv >> 24);
-            uploadFragment(header, getSDRAMAddr() + offset);
-            offset += header.length;
-            int MaxBlockSize = 32768;
-            do {
-                int l;
-                if (tlength > MaxBlockSize) {
-                    l = MaxBlockSize;
-                    tlength -= MaxBlockSize;
-                } else {
-                    l = tlength;
-                    tlength = 0;
-                }
-                byte[] buffer = new byte[l];
-                nRead = inputStream.read(buffer, 0, l);
-                if (nRead != l) {
-                    Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
-                }
-                uploadFragment(buffer, getSDRAMAddr() + offset);
-                offset += nRead;
-            } while (tlength > 0);
-            inputStream.close();
+                CRC32 zcrc = new CRC32();
+                zcrc.update(bb);
+                int zcrcv = (int) zcrc.getValue();
+                Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware crc: 0x{0}", Integer.toHexString(zcrcv).toUpperCase());
+                header[12] = (byte) (zcrcv);
+                header[13] = (byte) (zcrcv >> 8);
+                header[14] = (byte) (zcrcv >> 16);
+                header[15] = (byte) (zcrcv >> 24);
+                uploadFragment(header, getSDRAMAddr() + offset);
+                offset += header.length;
+                int MaxBlockSize = 32768;
+                do {
+                    int l;
+                    if (tlength > MaxBlockSize) {
+                        l = MaxBlockSize;
+                        tlength -= MaxBlockSize;
+                    } else {
+                        l = tlength;
+                        tlength = 0;
+                    }
+                    byte[] buffer = new byte[l];
+                    nRead = inputStream2.read(buffer, 0, l);
+                    if (nRead != l) {
+                        Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
+                    }
+                    uploadFragment(buffer, getSDRAMAddr() + offset);
+                    offset += nRead;
+                } while (tlength > 0);
+                inputStream2.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
+            } catch (IOException ex) {
+                Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "IOException", ex);
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
         } catch (IOException ex) {
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "IOException", ex);
         }
+
     }
 
     void uploadFirmwareFlasher(File f) throws FileNotFoundException, IOException {
@@ -438,6 +443,9 @@ public class FirmwareUpgrade_1_0_12 {
                 break;
             case 3:
                 packetData[dataIndex >> 2] += (c << 24);
+                break;
+            default:
+                /* impossible */
                 break;
         }
 //            System.out.println("s " + dataIndex + "  v=" + Integer.toHexString(packetData[dataIndex>>2]) + " c=");
@@ -772,6 +780,9 @@ public class FirmwareUpgrade_1_0_12 {
                             readsync.notifyAll();
                         }
                         goIdleState();
+                        break;
+                    default:
+                        break;
                 }
                 dataIndex++;
                 break;
@@ -818,6 +829,8 @@ public class FirmwareUpgrade_1_0_12 {
                                 fwversion[0], fwversion[1], fwversion[2], fwversion[3], sFwcrc, patchentrypoint));
                         //MainFrame.mainframe.setFirmwareID(sFwcrc);
                         goIdleState();
+                        break;
+                    default:
                         break;
                 }
                 dataIndex++;

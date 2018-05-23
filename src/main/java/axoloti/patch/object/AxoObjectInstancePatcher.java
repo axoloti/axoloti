@@ -29,7 +29,7 @@ import org.simpleframework.xml.Element;
 public class AxoObjectInstancePatcher extends AxoObjectInstance {
 
     @Element(name = "subpatch")
-    PatchModel subPatchModel;
+    PatchModel subPatchModel = null;
 
     public AxoObjectInstancePatcher() {
     }
