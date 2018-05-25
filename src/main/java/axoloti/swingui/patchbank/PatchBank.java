@@ -38,6 +38,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -72,7 +74,7 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                 jMenuItemSaveActionPerformed(evt);
             }
         });
-        menuBar.fileMenu.add(jMenuItemSave);
+        menuBar.addMenuItemToFileMenu(jMenuItemSave);
 
         JMenuItem jMenuItemSaveAs = new JMenuItem("Save as...");
         jMenuItemSaveAs.addActionListener(new ActionListener() {
@@ -81,7 +83,7 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                 jMenuItemSaveAsActionPerformed(evt);
             }
         });
-        menuBar.fileMenu.add(jMenuItemSaveAs);
+        menuBar.addMenuItemToFileMenu(jMenuItemSaveAs);
         setJMenuBar(menuBar);
 
         CConnection.getConnection().addConnectionStatusListener(this);
@@ -248,15 +250,15 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         fc.setFileFilter(axb);
         int returnVal = fc.showSaveDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            String filterext = PatchBankModel.fileExtension;
+            String filterext = PatchBankModel.FILE_EXTENSION;
             if (fc.getFileFilter() == axb) {
-                filterext = PatchBankModel.fileExtension;
+                filterext = PatchBankModel.FILE_EXTENSION;
             }
 
             File fileToBeSaved = fc.getSelectedFile();
-            String ext = PatchBankModel.fileExtension;
+            String ext = PatchBankModel.FILE_EXTENSION;
             String fname = fileToBeSaved.getAbsolutePath();
-            if (!ext.equalsIgnoreCase(PatchBankModel.fileExtension)) {
+            if (!ext.equalsIgnoreCase(PatchBankModel.FILE_EXTENSION)) {
                 fileToBeSaved = new File(fc.getSelectedFile() + filterext);
             } else if (!ext.equals(filterext)) {
                 Object[] options = {"Yes",
@@ -665,8 +667,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
     }
 
     @Override
-    public ArrayList<DocumentWindow> getChildDocuments() {
-        return null;
+    public List<DocumentWindow> getChildDocuments() {
+        return Collections.emptyList();
     }
 
     @Override

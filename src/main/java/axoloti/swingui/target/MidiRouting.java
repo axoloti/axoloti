@@ -5,6 +5,7 @@ import axoloti.target.midirouting.MidiInputRoutingTable;
 import axoloti.target.midirouting.MidiOutputRoutingTable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,8 +24,8 @@ import qcmds.QCmdProcessor;
  */
 public class MidiRouting extends TJFrame {
 
-    private MidiInputRoutingTable[] inputRoutingTables;
-    private MidiOutputRoutingTable[] outputRoutingTables;
+    private List<MidiInputRoutingTable> inputRoutingTables;
+    private List<MidiOutputRoutingTable> outputRoutingTables;
 
     private JButton buttonRefresh;
     private JButton buttonWriteSettings;
@@ -362,10 +363,10 @@ public class MidiRouting extends TJFrame {
         if (TargetModel.CONNECTION.is(evt)) {
             showConnect1(evt.getNewValue() != null);
         } else if (TargetModel.MRTS_INPUT.is(evt)) {
-            this.inputRoutingTables = (MidiInputRoutingTable[]) evt.getNewValue();
+            this.inputRoutingTables = (List<MidiInputRoutingTable>) evt.getNewValue();
             refreshInputs();
         } else if (TargetModel.MRTS_OUTPUT.is(evt)) {
-            this.outputRoutingTables = (MidiOutputRoutingTable[]) evt.getNewValue();
+            this.outputRoutingTables = (List<MidiOutputRoutingTable>) evt.getNewValue();
             refreshOutputs();
         }
     }

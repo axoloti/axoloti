@@ -12,7 +12,7 @@ class PAttributeInstanceViewComboBox extends PAttributeInstanceViewString {
 
     PDropDownComponent comboBox;
 
-    public PAttributeInstanceViewComboBox(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewComboBox(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

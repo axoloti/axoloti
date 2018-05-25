@@ -27,7 +27,7 @@ import axoloti.object.inlet.InletTypes;
  */
 class InletDefinitionsEditorPanel extends AtomDefinitionsEditor<Inlet> {
 
-    public InletDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+    InletDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
         super(obj, AxoObject.OBJ_INLETS, InletTypes.getTypes(), editor);
     }
 

@@ -27,7 +27,7 @@ import axoloti.object.parameter.ParameterTypes;
  */
 class ParamDefinitionsEditorPanel extends AtomDefinitionsEditor<Parameter> {
 
-    public ParamDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+    ParamDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
         super(obj, AxoObject.OBJ_PARAMETERS, ParameterTypes.getTypes(), editor);
     }
 

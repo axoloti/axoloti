@@ -133,7 +133,7 @@ public class AxoObjects {
             }
         }
         // need to clone ObjectList to avoid a ConcurrentModificationException?
-        for (IAxoObject o : (ArrayList<IAxoObject>)objectList.clone()) {
+        for (IAxoObject o : (List<IAxoObject>) objectList.clone()) {
             if (o.getId().equals(n)) {
                 set.add(o);
             }
@@ -160,7 +160,7 @@ public class AxoObjects {
             return set;
         }
     }
-    protected Serializer serializer = new Persister();
+    private final Serializer serializer = new Persister();
 
     public AxoObjects() {
         objectTree = new AxoObjectTreeNode("/");

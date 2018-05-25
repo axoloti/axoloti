@@ -17,6 +17,9 @@ import java.awt.Point;
  */
 public class AxoObjectInstanceFactory {
 
+    private AxoObjectInstanceFactory() {
+    }
+
     static public AxoObjectInstanceAbstract createView(IAxoObject obj, PatchModel patchModel, String instanceName, Point location) {
 
         AxoObjectInstanceAbstract obji;

@@ -6,7 +6,7 @@ import axoloti.piccolo.components.control.PPulseButtonComponent;
 
 class PParameterInstanceViewBin1Momentary extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin1Momentary(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewBin1Momentary(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

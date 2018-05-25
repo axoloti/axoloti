@@ -38,6 +38,7 @@ import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -103,11 +104,11 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
         return getDModel().getDModel();
     }
 
-    List<IInletInstanceView> inletInstanceViews;
-    List<IOutletInstanceView> outletInstanceViews;
-    List<IAttributeInstanceView> attributeInstanceViews;
-    List<IParameterInstanceView> parameterInstanceViews;
-    List<IDisplayInstanceView> displayInstanceViews;
+    private List<IInletInstanceView> inletInstanceViews = Collections.emptyList();
+    private List<IOutletInstanceView> outletInstanceViews = Collections.emptyList();
+    private List<IAttributeInstanceView> attributeInstanceViews = Collections.emptyList();
+    private List<IParameterInstanceView> parameterInstanceViews = Collections.emptyList();
+    private List<IDisplayInstanceView> displayInstanceViews = Collections.emptyList();
 
     private void initComponents2() {
         setLayout(new BoxLayout(getProxyComponent(), BoxLayout.PAGE_AXIS));
@@ -488,16 +489,16 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
 
     @Override
     public List<IInletInstanceView> getInletInstanceViews() {
-        return inletInstanceViews;
+        return Collections.unmodifiableList(inletInstanceViews);
     }
 
     @Override
     public List<IOutletInstanceView> getOutletInstanceViews() {
-        return outletInstanceViews;
+        return Collections.unmodifiableList(outletInstanceViews);
     }
 
     @Override
     public List<IParameterInstanceView> getParameterInstanceViews() {
-        return parameterInstanceViews;
+        return Collections.unmodifiableList(parameterInstanceViews);
     }
 }

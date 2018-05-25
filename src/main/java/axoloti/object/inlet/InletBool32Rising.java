@@ -38,11 +38,11 @@ public class InletBool32Rising extends InletBool32 {
         return SignalMetaData.rising;
     }
 
-    static public final String TypeName = "bool32.rising";
+    static public final String TYPE_NAME = "bool32.rising";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

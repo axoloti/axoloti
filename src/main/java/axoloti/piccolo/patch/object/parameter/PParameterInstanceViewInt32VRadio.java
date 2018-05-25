@@ -12,7 +12,7 @@ import javax.swing.JPopupMenu;
 
 class PParameterInstanceViewInt32VRadio extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32VRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewInt32VRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

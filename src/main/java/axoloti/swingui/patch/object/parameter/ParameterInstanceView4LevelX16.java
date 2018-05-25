@@ -8,8 +8,9 @@ import axoloti.swingui.components.control.Checkbox4StatesComponent;
 
 class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
 
-    public ParameterInstanceView4LevelX16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceView4LevelX16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
     }
 
     @Override
@@ -20,7 +21,7 @@ class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
     @Override
     public boolean handleAdjustment() {
         PresetInt p = null; // getDModel().getPreset(presetEditActive); // TODO: fix preset editing logic
-        if (p != null) {
+        if (p != null) { // TODO: fix preset editing logic
             p.setValue((int) getControlComponent().getValue());
         } else if (getDModel().getValue() != (int) getControlComponent().getValue()) {
             int v = (int) getControlComponent().getValue();
@@ -36,9 +37,11 @@ class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
         return new Checkbox4StatesComponent(0, 16);
     }
 
+    private final Checkbox4StatesComponent ctrl = createControl();
+
     @Override
     public Checkbox4StatesComponent getControlComponent() {
-        return (Checkbox4StatesComponent) ctrl;
+        return ctrl;
     }
 
     @Override

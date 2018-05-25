@@ -9,9 +9,9 @@ import java.nio.ByteOrder;
  */
 public class ChunkData {
 
-    public FourCC fourcc;
-    public int length;
-    public ByteBuffer data;
+    private final FourCC fourcc;
+    private final int length;
+    private final ByteBuffer data;
 
     public ChunkData(ByteBuffer bb) {
         fourcc = new FourCC(bb.getInt());
@@ -20,6 +20,17 @@ public class ChunkData {
         bb.get(b, 0, length);
         data = ByteBuffer.wrap(b);
         data.order(ByteOrder.LITTLE_ENDIAN);
+        data.rewind();
+    }
+
+    public FourCC getFourCC() {
+        return fourcc;
+    }
+
+    public ByteBuffer getData() {
+        ByteBuffer d2 = data.asReadOnlyBuffer();
+        d2.order(ByteOrder.LITTLE_ENDIAN);
+        return d2;
     }
 
     public void dumpHead() {

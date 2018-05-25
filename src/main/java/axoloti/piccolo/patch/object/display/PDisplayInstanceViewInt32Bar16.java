@@ -9,9 +9,9 @@ import java.beans.PropertyChangeEvent;
 class PDisplayInstanceViewInt32Bar16 extends PDisplayInstanceViewInt32 {
 
     private PLedstripComponent readout;
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewInt32Bar16(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewInt32Bar16(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

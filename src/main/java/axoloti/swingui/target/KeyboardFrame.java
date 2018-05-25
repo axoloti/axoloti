@@ -36,9 +36,9 @@ public class KeyboardFrame extends TJFrame {
     /**
      * Creates new form PianoFrame
      */
-    PianoComponent piano;
+    private final PianoComponent piano;
 
-    DialComponent pbenddial;
+    private final DialComponent pbenddial;
 
     int getCable() {
         return ((SpinnerNumberModel) jSpinnerCable.getModel()).getNumber().intValue() - 1;

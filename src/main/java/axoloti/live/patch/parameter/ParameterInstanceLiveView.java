@@ -10,8 +10,8 @@ import java.beans.PropertyChangeEvent;
  */
 public class ParameterInstanceLiveView extends View<ParameterInstance> {
 
-    protected boolean needsTransmit = false;
-    protected final int index;
+    private boolean needsTransmit = false;
+    private final int index;
 
     public ParameterInstanceLiveView(ParameterInstance parameterInstance, int index) {
         super(parameterInstance);

@@ -45,7 +45,7 @@ public abstract class IoletInstance<T extends Iolet> extends AtomInstance<T, Iol
 
     protected IAxoObjectInstance axoObj;
 
-    boolean connected = false;
+    private boolean connected = false;
 
     public final static Property CONNECTED = new BooleanProperty("Connected", IoletInstance.class);
 

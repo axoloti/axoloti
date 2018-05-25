@@ -52,9 +52,7 @@ public class AxoObjectInstanceHyperlink extends AxoObjectInstance0 {
                 || link.startsWith("https://")) {
             try {
                 Desktop.getDesktop().browse(new URI(link));
-            } catch (IOException ex) {
-                Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (URISyntaxException ex) {
+            } catch (IOException | URISyntaxException ex) {
                 Logger.getLogger(AxoObjectInstanceHyperlink.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (link.endsWith(".axp") || link.endsWith(".axh") || link.endsWith(".axs")) {

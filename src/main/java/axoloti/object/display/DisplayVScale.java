@@ -49,11 +49,11 @@ public class DisplayVScale extends Display {
         return Int32.d;
     }
 
-    static public final String TypeName = "vscale";
+    static public final String TYPE_NAME = "vscale";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

@@ -19,6 +19,10 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32HRadio;
 import axoloti.patch.object.parameter.ParameterInstanceInt32VRadio;
 
 public class PParameterInstanceViewFactory {
+
+    private PParameterInstanceViewFactory() {
+    }
+
     public static PParameterInstanceView createView(ParameterInstance model, IAxoObjectInstanceView obj) {
         ParameterInstanceController controller = model.getController();
         PParameterInstanceView view;

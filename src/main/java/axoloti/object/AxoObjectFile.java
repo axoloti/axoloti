@@ -34,7 +34,7 @@ import org.simpleframework.xml.core.Validate;
 public class AxoObjectFile {
 
     @Attribute(required = false)
-    String appVersion;
+    private String appVersion;
 
     @ElementListUnion({
         @ElementList(entry = "obj.normal", type = AxoObject.class, inline = true, required = false),

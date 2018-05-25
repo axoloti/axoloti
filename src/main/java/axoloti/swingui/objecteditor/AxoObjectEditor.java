@@ -35,7 +35,8 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -53,7 +54,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public final class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject> {
+public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject> {
 
     private final AxoObject obj;
     private RSyntaxTextArea jTextAreaLocalData;
@@ -195,7 +196,7 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
         initComponents2();
     }
 
-    void initComponents2() {
+    private void initComponents2() {
         if (OSDetect.getOS() == OSDetect.OS.MAC) {
             jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.TOP);
         }
@@ -954,8 +955,8 @@ public final class AxoObjectEditor extends JFrame implements DocumentWindow, IVi
     }
 
     @Override
-    public ArrayList<DocumentWindow> getChildDocuments() {
-        return null;
+    public List<DocumentWindow> getChildDocuments() {
+        return Collections.emptyList();
     }
 
     @Override

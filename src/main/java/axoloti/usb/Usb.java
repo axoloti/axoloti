@@ -36,10 +36,10 @@ public class Usb {
     static final public short PID_AXOLOTI = (short) 0x0442;
     static final public short PID_AXOLOTI_SDCARD = (short) 0x0443;
 
-    public Usb() {
+    private Usb() {
     }
 
-    static Context context;
+    private static Context context = null;
 
     public static void initialize() {
         if (context == null) {

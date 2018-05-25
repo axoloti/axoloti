@@ -6,7 +6,7 @@ import axoloti.piccolo.components.control.PCheckbox4StatesComponent;
 
 class PParameterInstanceView4LevelX16 extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceView4LevelX16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceView4LevelX16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

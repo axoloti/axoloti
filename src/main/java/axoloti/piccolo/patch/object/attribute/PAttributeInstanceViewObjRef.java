@@ -16,7 +16,7 @@ class PAttributeInstanceViewObjRef extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFObjName;
 
-    public PAttributeInstanceViewObjRef(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewObjRef(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

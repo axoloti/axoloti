@@ -2,9 +2,7 @@ package axoloti.abstractui;
 
 import axoloti.datatypes.DataType;
 import axoloti.mvc.AbstractDocumentRoot;
-import axoloti.mvc.IModel;
 import axoloti.mvc.View;
-import axoloti.mvc.array.ArrayView;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
@@ -29,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,17 +43,17 @@ import qcmds.QCmdProcessor;
 public abstract class PatchView extends View<PatchModel> {
 
     // shortcut patch names
-    public final static String patchComment = "patch/comment";
-    public final static String patchInlet = "patch/inlet";
-    public final static String patchOutlet = "patch/outlet";
-    public final static String patchAudio = "audio/";
-    public final static String patchAudioOut = "audio/out stereo";
-    public final static String patchMidi = "midi";
-    public final static String patchMidiKey = "midi/in/keyb";
-    public final static String patchDisplay = "disp/";
+    protected final static String patchComment = "patch/comment";
+    protected final static String patchInlet = "patch/inlet";
+    protected final static String patchOutlet = "patch/outlet";
+    protected final static String patchAudio = "audio/";
+    protected final static String patchAudioOut = "audio/out stereo";
+    protected final static String patchMidi = "midi";
+    protected final static String patchMidiKey = "midi/in/keyb";
+    protected final static String patchDisplay = "disp/";
 
-    public List<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
-    public List<INetView> netViews = new ArrayList<>();
+    protected List<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
+    protected List<INetView> netViews = new ArrayList<>();
 
     public PatchView(PatchModel patchModel) {
         super(patchModel);
@@ -63,7 +62,7 @@ public abstract class PatchView extends View<PatchModel> {
     abstract public void postConstructor();
 
     public List<IAxoObjectInstanceView> getObjectInstanceViews() {
-        return objectInstanceViews;
+        return Collections.unmodifiableList(objectInstanceViews);
     }
 
     public abstract PatchViewportView getViewportView();
@@ -115,26 +114,17 @@ public abstract class PatchView extends View<PatchModel> {
         getPatchController().setLocked(false);
     }
 
-    public abstract void add(IAxoObjectInstanceView v);
-
-    public abstract void remove(IAxoObjectInstanceView v);
-
-    public abstract void remove(INetView view);
-
-    public abstract void removeAllObjectViews();
-
-    public abstract void removeAllNetViews();
-
-    public abstract void add(INetView v);
-
     public PatchModel getSelectedObjects() {
         PatchModel p = new PatchModel();
+        List<IAxoObjectInstance> objs = new ArrayList<>();
         for (IAxoObjectInstanceView o : getObjectInstanceViews()) {
             if (o.getDModel().getSelected()) {
-                p.objectinstances.add(o.getDModel());
+                objs.add(o.getDModel());
             }
         }
-        p.nets = new ArrayList<>();
+        p.setObjectinstances(objs);
+
+        List<Net> nets = new ArrayList<>();
         for (INetView n : netViews) {
             int sel = 0;
             for (IIoletInstanceView i : n.getInletViews()) {
@@ -148,17 +138,18 @@ public abstract class PatchView extends View<PatchModel> {
                 }
             }
             if (sel > 0) {
-                p.nets.add(n.getDModel());
+                nets.add(n.getDModel());
             }
         }
+        p.setNets(nets);
         return p;
     }
 
-    public enum Direction {
+    protected enum Direction {
         UP, LEFT, DOWN, RIGHT
     }
 
-    public void moveSelectedAxoObjInstances(Direction dir, int xsteps, int ysteps) {
+    protected void moveSelectedAxoObjInstances(Direction dir, int xsteps, int ysteps) {
         if (!isLocked()) {
             int xgrid = 1;
             int ygrid = 1;
@@ -378,10 +369,6 @@ public abstract class PatchView extends View<PatchModel> {
         return null;
     }
 
-    public List<INetView> getNetViews() {
-        return netViews;
-    }
-
     public boolean isLocked() {
         return getPatchController().isLocked();
     }
@@ -398,58 +385,6 @@ public abstract class PatchView extends View<PatchModel> {
          */
     }
 
-    HashMap<IModel, IAxoObjectInstanceView> view_cache = new HashMap<>();
-
-    abstract public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory();
-
-    ArrayView<IAxoObjectInstanceView, IAxoObjectInstance> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView, IAxoObjectInstance>() {
-        @Override
-        protected IAxoObjectInstanceView viewFactory(IAxoObjectInstance model) {
-            IAxoObjectInstance model1 = (IAxoObjectInstance) model;
-            IAxoObjectInstanceView view = view_cache.get(model1);
-            if (view == null) {
-                view = getAxoObjectInstanceViewFactory().createView(model1, PatchView.this);
-            }
-            add(view);
-            return view;
-        }
-
-        @Override
-        protected void updateUI(List<IAxoObjectInstanceView> views) {
-            updateSize();
-        }
-
-        @Override
-        protected void removeView(IAxoObjectInstanceView view) {
-            view.dispose();
-            remove(view);
-            view_cache.put(view.getDModel(), view);
-        }
-
-    };
-
-    abstract public INetView createNetView(Net net, PatchView patchView);
-
-    ArrayView<INetView, Net> netViewSync = new ArrayView<INetView, Net>() {
-        @Override
-        protected INetView viewFactory(Net net) {
-            INetView view = createNetView(net, PatchView.this);
-            add(view);
-            view.repaint();
-            return view;
-        }
-
-        @Override
-        protected void updateUI(List<INetView> views) {
-        }
-
-        @Override
-        protected void removeView(INetView view) {
-            remove(view);
-        }
-
-    };
-
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (PatchModel.PATCH_LOCKED.is(evt)) {
@@ -462,10 +397,6 @@ public abstract class PatchView extends View<PatchModel> {
                     o.lock();
                 }
             }
-        } else if (PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
-            objectInstanceViews = objectInstanceViewSync.sync(objectInstanceViews, model.getObjectInstances());
-        } else if (PatchModel.PATCH_NETS.is(evt)) {
-            netViews = netViewSync.sync(netViews, model.getNets());
         }
     }
 

@@ -9,6 +9,9 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class OutletInstanceFactory {
 
+    private OutletInstanceFactory() {
+    }
+
     static public OutletInstance createView(Outlet outlet, AxoObjectInstance axoObj) {
         OutletInstance i = new OutletInstance(outlet, axoObj);
         outlet.getController().addView(i);

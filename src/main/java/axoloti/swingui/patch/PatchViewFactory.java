@@ -13,6 +13,9 @@ import axoloti.preferences.Preferences;
  */
 public class PatchViewFactory {
 
+    private PatchViewFactory() {
+    }
+
     public static PatchView patchViewFactory(PatchModel patchModel) {
         if (Preferences.getPreferences().getPatchViewType() == PICCOLO) {
             return new PatchViewPiccolo(patchModel);

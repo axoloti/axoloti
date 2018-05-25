@@ -56,7 +56,7 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
         super.modelPropertyChange(evt);
         if (ParameterInstance.VALUE.is(evt)) {
             int v = (Integer) evt.getNewValue();
-            ctrl.setValue(v);
+            getControlComponent().setValue(v);
         } else if (ParameterInt32.VALUE_MIN.is(evt)) {
 //            ctrl.
         }

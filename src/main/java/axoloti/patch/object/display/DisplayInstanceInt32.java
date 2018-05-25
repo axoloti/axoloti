@@ -25,7 +25,7 @@ import axoloti.object.display.Display;
  */
 public abstract class DisplayInstanceInt32<T extends Display> extends DisplayInstance1<T> {
 
-    Integer value = 0;
+    private Integer value = 0;
 
     DisplayInstanceInt32(T display) {
         super(display);

@@ -27,27 +27,41 @@ import java.nio.ByteBuffer;
  */
 public class QCmdMemRead implements QCmdSerialTask {
 
-    final int addr;
-    final int length;
-    ByteBuffer result = null;
-    MemReadHandler doneHandler;
+    private final int addr;
+    private final int length;
+    private ByteBuffer result = null;
+    private MemReadHandler doneHandler;
 
-    static class Sync {
+    private static class Sync {
 
         boolean ready = false;
     }
-    final Sync sync = new Sync();
+    private final Sync sync = new Sync();
 
     public QCmdMemRead(int addr, int length) {
-        this.addr = addr;
-        this.length = length;
-        this.doneHandler = null;
+        this(addr, length, null);
     }
 
     public QCmdMemRead(int addr, int length, MemReadHandler doneHandler) {
         this.addr = addr;
         this.length = length;
         this.doneHandler = doneHandler;
+        // TODO: validate memory regions
+        /*
+        if ((addr >= 0x00000000) && (addr + length < 0x00100000)) {
+            return;
+        }
+        if ((addr >= 0x20000000) && (addr + length < 0x20100000)) {
+            return;
+        }
+        if ((addr >= 0x08000000) && (addr + length < 0x08100000)) {
+            return;
+        }
+        if ((addr >= 0x1FFF0000) && (addr + length < 0x1FFFFFFF)) {
+            return;
+        }
+        throw new Error("memory read out of range " + String.format("%08X", addr));
+         */
     }
 
     @Override

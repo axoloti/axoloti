@@ -54,7 +54,7 @@ class JackInputComponent extends JComponent {
     private final static Stroke stroke = new BasicStroke(1.5f);
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

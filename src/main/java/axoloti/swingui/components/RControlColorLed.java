@@ -30,7 +30,7 @@ import javax.swing.JComponent;
  */
 public class RControlColorLed extends JComponent {
 
-    Color color = Theme.getCurrentTheme().Component_Secondary;
+    private Color color = Theme.getCurrentTheme().Component_Secondary;
 
     public void setColor(Color color) {
         if (this.color != color) {

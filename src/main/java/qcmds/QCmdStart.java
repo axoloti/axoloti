@@ -28,11 +28,11 @@ import java.util.logging.Logger;
  */
 public class QCmdStart implements QCmdSerialTask {
 
-    final PatchViewLive patchViewLive;
-    final Integer patchIndex;
-    final String patchName;
+    private final PatchViewLive patchViewLive;
+    private final Integer patchIndex;
+    private final String patchName;
 
-    static int patch_start_timeout = 10000; //msec
+    private static int patch_start_timeout = 10000; //msec
 
     public QCmdStart() {
         patchIndex = null;

@@ -12,6 +12,9 @@ import axoloti.patch.object.display.DisplayInstanceInt32;
  */
 public class DisplayInstanceViewFactory {
 
+    private DisplayInstanceViewFactory() {
+    }
+
     public static DisplayInstanceView createView(DisplayInstance model) {
         DisplayInstanceView view;
         if (model instanceof DisplayInstanceFrac32) {

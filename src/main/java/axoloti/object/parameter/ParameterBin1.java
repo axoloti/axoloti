@@ -38,11 +38,11 @@ public class ParameterBin1 extends ParameterBin {
         md.update("bool32.t".getBytes());
     }
 
-    static public final String TypeName = "bool32.tgl";
+    static public final String TYPE_NAME = "bool32.tgl";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

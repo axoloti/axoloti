@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Johannes Taelman
  */
-public final class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap {
+public class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap {
 
     public ParameterFrac32SMapKLineTimeExp2() {
         super();
@@ -51,10 +51,10 @@ public final class ParameterFrac32SMapKLineTimeExp2 extends ParameterFrac32SMap 
         return "parameter_function::pf_kexpltime";
     }
 
-    static public final String TypeName = "frac32.s.map.klineartime.exp2";
+    static public final String TYPE_NAME = "frac32.s.map.klineartime.exp2";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

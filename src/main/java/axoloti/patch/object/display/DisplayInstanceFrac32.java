@@ -25,7 +25,7 @@ import axoloti.object.display.Display;
  */
 public abstract class DisplayInstanceFrac32<T extends Display> extends DisplayInstance1<T> {
 
-    Double value = 0.0;
+    private Double value = 0.0;
 
     DisplayInstanceFrac32(T display) {
         super(display);

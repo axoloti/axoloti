@@ -1,7 +1,6 @@
 package axoloti.target.midirouting;
 
 import axoloti.connection.CConnection;
-import axoloti.target.CompletionHandler;
 import axoloti.connection.IConnection;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
@@ -9,6 +8,7 @@ import axoloti.mvc.IModel;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
+import axoloti.target.CompletionHandler;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -28,16 +28,19 @@ import qcmds.QCmdWriteMem;
  */
 public class MidiOutputRoutingTable extends AbstractModel {
 
-    String portname;
-    int vports[]; // bitfield per port
-    int addr;
+    private String portname;
+    private int vports[]; // bitfield per port
+    private final int addr;
+
+    public MidiOutputRoutingTable(int address) {
+        addr = address;
+    }
 
     private int getTableAddr() {
         return addr + 8;
     }
 
-    public void retrieve(IConnection conn, int addr, CompletionHandler completionHandler) {
-        this.addr = addr;
+    public void retrieve(IConnection conn, CompletionHandler completionHandler) {
         conn.appendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
             @Override
             public void done(ByteBuffer mem1) {

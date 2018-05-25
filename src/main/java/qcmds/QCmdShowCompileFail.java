@@ -25,7 +25,7 @@ import axoloti.patch.PatchController;
  */
 public class QCmdShowCompileFail implements QCmdGUITask {
 
-    PatchController patchController;
+    private final PatchController patchController;
 
     public QCmdShowCompileFail(PatchController patchController) {
         this.patchController = patchController;

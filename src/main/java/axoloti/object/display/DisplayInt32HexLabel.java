@@ -44,11 +44,11 @@ public class DisplayInt32HexLabel extends Display {
         return Int32.d;
     }
 
-    static public final String TypeName = "int32.hexlabel";
+    static public final String TYPE_NAME = "int32.hexlabel";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

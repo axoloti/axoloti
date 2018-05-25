@@ -81,9 +81,9 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
         return locked;
     }
 
-    static class BoxLayoutGrid extends BoxLayout {
+    private static class BoxLayoutGrid extends BoxLayout {
 
-        public BoxLayoutGrid(Container target, int axis) {
+        BoxLayoutGrid(Container target, int axis) {
             super(target, axis);
         }
 
@@ -210,49 +210,35 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
     public void mouseMoved(MouseEvent me) {
     }
 
-    private void moveToDraggedLayer(AxoObjectInstanceViewAbstract o) {
-        if (getPatchView().objectLayerPanel.isAncestorOf(o)) {
-            getPatchView().objectLayerPanel.remove(o);
-            getPatchView().draggedObjectLayerPanel.add(o);
-        }
-    }
-
     private LinkedList<AxoObjectInstanceViewAbstract> draggingObjects = null;
 
     protected void handleMousePressed(MouseEvent me) {
-        getPatchView().requestFocus();
-        if (getPatchView() != null) {
-            if (me.isPopupTrigger()) {
-                JPopupMenu p = createPopupMenu();
-                p.show(titlebar, 0, titlebar.getHeight());
-                me.consume();
-            } else if (!patchView.isLocked()) {
-                draggingObjects = new LinkedList<>();
-                dragAnchor = localToPatchLocation(me.getPoint(), me.getComponent());
-                moveToDraggedLayer(this);
-                draggingObjects.add(this);
-                dragLocation = getLocation();
-                model.getController().addMetaUndo("move");
-                if (getDModel().getSelected()) {
-                    for (IAxoObjectInstanceView o : getPatchView().getObjectInstanceViews()) {
-                        if (o.getDModel().getSelected()) {
-                            AxoObjectInstanceViewAbstract oa = (AxoObjectInstanceViewAbstract) o;
-                            moveToDraggedLayer(oa);
-                            draggingObjects.add(oa);
-                            oa.dragLocation = oa.getLocation();
-                        }
+        if (patchView == null) {
+            return;
+        }
+        patchView.requestFocus();
+        if (me.isPopupTrigger()) {
+            JPopupMenu p = createPopupMenu();
+            p.show(titlebar, 0, titlebar.getHeight());
+            me.consume();
+        } else if (!patchView.isLocked()) {
+            draggingObjects = new LinkedList<>();
+            dragAnchor = localToPatchLocation(me.getPoint(), me.getComponent());
+            getPatchView().moveToDraggedLayer(this);
+            draggingObjects.add(this);
+            dragLocation = getLocation();
+            model.getController().addMetaUndo("move");
+            if (getDModel().getSelected()) {
+                for (IAxoObjectInstanceView o : getPatchView().getObjectInstanceViews()) {
+                    if (o.getDModel().getSelected()) {
+                        AxoObjectInstanceViewAbstract oa = (AxoObjectInstanceViewAbstract) o;
+                        getPatchView().moveToDraggedLayer(oa);
+                        draggingObjects.add(oa);
+                        oa.dragLocation = oa.getLocation();
                     }
                 }
-                me.consume();
             }
-        }
-    }
-
-    private void moveToObjectLayer(AxoObjectInstanceViewAbstract o, int z) {
-        if (getPatchView().draggedObjectLayerPanel.isAncestorOf(o)) {
-            getPatchView().draggedObjectLayerPanel.remove(o);
-            getPatchView().objectLayerPanel.add(o);
-            getPatchView().objectLayerPanel.setComponentZOrder(o, z);
+            me.consume();
         }
     }
 
@@ -267,7 +253,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
         if (draggingObjects != null) {
             if (getPatchModel() != null) {
                 for (AxoObjectInstanceViewAbstract o : draggingObjects) {
-                    moveToObjectLayer(o, 0);
+                    getPatchView().moveToObjectLayer(o, 0);
                     if (getPatchView().objectLayerPanel.getComponentZOrder(o) > maxZIndex) {
                         maxZIndex = getPatchView().objectLayerPanel.getComponentZOrder(o);
                     }

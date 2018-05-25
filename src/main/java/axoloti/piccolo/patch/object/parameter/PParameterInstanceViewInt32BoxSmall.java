@@ -6,7 +6,7 @@ import axoloti.piccolo.components.control.PNumberBoxComponent;
 
 class PParameterInstanceViewInt32BoxSmall extends PParameterInstanceViewInt32Box {
 
-    public PParameterInstanceViewInt32BoxSmall(ParameterInstance parameterInstance,
+    PParameterInstanceViewInt32BoxSmall(ParameterInstance parameterInstance,
             IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }

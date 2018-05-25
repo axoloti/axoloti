@@ -526,7 +526,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 oLinked.getController().changeSelected(true);
             }
 
-            for (Net n : p.nets) {
+            for (Net n : p.getNets()) {
                 InletInstance connectedInlet = null;
                 OutletInstance connectedOutlet = null;
                 ArrayList<OutletInstance> source2 = new ArrayList<>();
@@ -602,12 +602,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         } catch (Exception ex) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Deprecated // TODO: needs to ask PatchView
-    public Point getViewLocationOnScreen() {
-        // fake it for now
-        return new Point(100, 100); //patchView.getLocationOnScreen();
     }
 
     public void checkCoherency() {

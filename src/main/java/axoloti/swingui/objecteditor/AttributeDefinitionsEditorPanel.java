@@ -27,7 +27,7 @@ import axoloti.object.attribute.AxoAttribute;
  */
 class AttributeDefinitionsEditorPanel extends AtomDefinitionsEditor<AxoAttribute> {
 
-    public AttributeDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+    AttributeDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
         super(obj, AxoObject.OBJ_ATTRIBUTES, AttributeTypes.getTypes(), editor);
     }
 

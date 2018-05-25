@@ -17,7 +17,7 @@ class AxoObjectInstanceViewHyperlink extends AxoObjectInstanceViewAbstract {
 
     private PulseButtonComponent button;
 
-    public AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink objectInstance, PatchViewSwing patchView) {
+    AxoObjectInstanceViewHyperlink(AxoObjectInstanceHyperlink objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
         initComponents();
     }

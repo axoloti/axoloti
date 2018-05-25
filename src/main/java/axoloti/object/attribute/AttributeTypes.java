@@ -27,6 +27,9 @@ import java.util.List;
  */
 public class AttributeTypes {
 
+    private AttributeTypes() {
+    }
+
     private final static AxoAttribute types[] = {
         new AxoAttributeComboBox(),
         new AxoAttributeObjRef(),

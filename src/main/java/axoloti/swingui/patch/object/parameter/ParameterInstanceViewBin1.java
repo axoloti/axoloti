@@ -6,8 +6,10 @@ import axoloti.swingui.components.control.CheckboxComponent;
 
 class ParameterInstanceViewBin1 extends ParameterInstanceViewBin {
 
-    public ParameterInstanceViewBin1(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewBin1(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
+
     }
 
     @Override
@@ -19,9 +21,11 @@ class ParameterInstanceViewBin1 extends ParameterInstanceViewBin {
     public void showPreset(int i) {
     }
 
+    private final CheckboxComponent ctrl = createControl();
+
     @Override
     public CheckboxComponent getControlComponent() {
-        return (CheckboxComponent) ctrl;
+        return ctrl;
     }
 
 }

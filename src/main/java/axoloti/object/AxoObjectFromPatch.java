@@ -17,7 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.abstractui.PatchView;
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.attribute.AxoAttribute;
@@ -26,7 +25,6 @@ import axoloti.object.inlet.Inlet;
 import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.objectlibrary.AxoObjects;
-import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.swingui.patch.PatchFrame;
 import java.io.File;
@@ -42,11 +40,9 @@ import qcmds.QCmdProcessor;
  */
 public class AxoObjectFromPatch extends AxoObject {
 
-    PatchModel patchModel;
-    PatchView patchView;
-    PatchController patchController;
-    PatchFrame pf;
-    File f;
+    private PatchModel patchModel;
+    private PatchFrame pf; // TODO: avoid reference to GUI in non-gui code
+    private final File f;
 
     public AxoObjectFromPatch(File f) {
         this.f = f;
@@ -55,7 +51,6 @@ public class AxoObjectFromPatch extends AxoObject {
             patchModel = serializer.read(PatchModel.class, f);
             patchModel.setFileNamePath(f.getPath());
             patchModel.setDocumentRoot(new AbstractDocumentRoot());
-            patchController = patchModel.getController();
         } catch (Exception ex) {
             Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
         }

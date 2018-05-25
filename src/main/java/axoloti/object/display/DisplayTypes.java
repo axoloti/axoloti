@@ -27,6 +27,9 @@ import java.util.List;
  */
 public class DisplayTypes {
 
+    private DisplayTypes() {
+    }
+
     private final static Display types[] = {
         new DisplayBool32(),
         new DisplayFrac32SChart(),

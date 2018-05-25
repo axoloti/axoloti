@@ -22,7 +22,7 @@ class PAttributeInstanceViewSDFile extends PAttributeInstanceViewString {
     PTextFieldComponent TFFileName;
     PButtonComponent buttonChooseFile;
 
-    public PAttributeInstanceViewSDFile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewSDFile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

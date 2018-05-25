@@ -16,6 +16,9 @@ import axoloti.swingui.patch.object.AxoObjectInstanceView;
  */
 public class AttributeInstanceViewFactory {
 
+    private AttributeInstanceViewFactory() {
+    }
+
     public static AttributeInstanceView createView(AttributeInstance model, AxoObjectInstanceView obj) {
         AttributeInstanceView view;
         if (model instanceof AttributeInstanceComboBox) {

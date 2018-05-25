@@ -26,6 +26,9 @@ import java.awt.Font;
  */
 public class Constants {
 
+    private Constants() {
+    }
+
     public static final Font FONT = Font.decode("Lucida Sans Regular 9");
 
     public static final int X_GRID = 14;

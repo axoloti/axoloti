@@ -8,9 +8,9 @@ import java.beans.PropertyChangeEvent;
 class PDisplayInstanceViewFrac32VBar extends PDisplayInstanceViewFrac32 {
 
     private PVBarComponent vbar;
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac32VBar(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewFrac32VBar(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

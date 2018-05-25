@@ -20,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,13 +33,11 @@ import qcmds.QCmdUploadFile;
  */
 public class PatchBankModel extends AbstractModel<PatchBankController> {
 
-    File file = null;
+    private File file = null;
 
-    public final static String fileExtension = ".axb";
+    public final static String FILE_EXTENSION = ".axb";
 
-    Boolean dirty = false;
-
-    List<File> files = new ArrayList<>();
+    private List<File> files = new ArrayList<>();
 
     public final static Property FILE = new ObjectProperty("File", File.class, PatchBankModel.class);
     public final static Property FILES = new ListProperty("Files", PatchBankModel.class);
@@ -127,7 +126,7 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
     }
 
     public List<File> getFiles() {
-        return files;
+        return Collections.unmodifiableList(files);
     }
 
     public void setFiles(List<File> files) {

@@ -62,7 +62,7 @@ public class WindowMenu extends JMenu {
         removeAll();
     }
 
-    static class WindowMenuItemActionListener implements ActionListener {
+    private static class WindowMenuItemActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -75,19 +75,19 @@ public class WindowMenu extends JMenu {
 
         final private DocumentWindow documentWindow;
 
-        public WindowMenuItem(DocumentWindow documentWindow, String itemname) {
+        WindowMenuItem(DocumentWindow documentWindow, String itemname) {
             super(itemname);
             this.documentWindow = documentWindow;
             WindowMenuItem.this.addActionListener(wmiAL);
         }
 
-        public WindowMenuItem(DocumentWindow documentWindow) {
+        WindowMenuItem(DocumentWindow documentWindow) {
             super(documentWindow.getTitle());
             this.documentWindow = documentWindow;
             WindowMenuItem.this.addActionListener(wmiAL);
         }
 
-        public DocumentWindow getDocumentWindow() {
+        DocumentWindow getDocumentWindow() {
             return documentWindow;
         }
     }

@@ -9,6 +9,9 @@ import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
  */
 public class OutletInstanceViewFactory {
 
+    private OutletInstanceViewFactory() {
+    }
+
     public static OutletInstanceView createView(OutletInstance outletInstance, AxoObjectInstanceViewAbstract obj) {
         OutletInstanceView view = new OutletInstanceView(outletInstance, obj);
         outletInstance.getController().addView(view);

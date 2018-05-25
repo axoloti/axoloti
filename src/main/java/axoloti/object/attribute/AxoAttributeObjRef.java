@@ -30,11 +30,11 @@ public class AxoAttributeObjRef extends AxoAttribute {
         super(name);
     }
 
-    static public final String TypeName = "objref";
+    static public final String TYPE_NAME = "objref";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

@@ -1,8 +1,5 @@
 package axoloti.swingui.patch.object;
 
-import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceViewFactory;
-import axoloti.abstractui.PatchView;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceComment;
 import axoloti.patch.object.AxoObjectInstanceHyperlink;
@@ -17,25 +14,14 @@ import axoloti.swingui.patch.PatchViewSwing;
  *
  * @author jtaelman
  */
-public class AxoObjectInstanceViewFactory implements IAxoObjectInstanceViewFactory {
+public class AxoObjectInstanceViewFactory {
 
-    protected AxoObjectInstanceViewFactory() {
+    private AxoObjectInstanceViewFactory() {
     }
 
-    private static AxoObjectInstanceViewFactory instance;
-
-    public static AxoObjectInstanceViewFactory getInstance() {
-        if(instance == null) {
-            instance = new AxoObjectInstanceViewFactory();
-        }
-        return instance;
-    }
-
-    @Override
-    public IAxoObjectInstanceView createView(IAxoObjectInstance model, PatchView patchView) {
+    public static AxoObjectInstanceViewAbstract createView(IAxoObjectInstance model, PatchViewSwing patchViewSwing) {
         ObjectInstanceController controller = model.getController();
         AxoObjectInstanceViewAbstract view = null;
-        PatchViewSwing patchViewSwing = (PatchViewSwing) patchView;
         if (model instanceof AxoObjectInstanceComment) {
             view = new AxoObjectInstanceViewComment((AxoObjectInstanceComment) model, patchViewSwing);
         } else if (model instanceof AxoObjectInstanceHyperlink) {

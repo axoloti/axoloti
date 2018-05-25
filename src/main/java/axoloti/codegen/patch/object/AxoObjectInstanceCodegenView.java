@@ -13,6 +13,7 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,9 +23,9 @@ import java.util.List;
  */
 class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
 
-    final private IAxoObjectInstance objectInstance;
-    private List<ParameterInstanceView> parameterInstances;
-    private List<DisplayInstanceView> displayInstances;
+    private final IAxoObjectInstance objectInstance;
+    private final List<ParameterInstanceView> parameterInstances;
+    private final List<DisplayInstanceView> displayInstances;
 
     AxoObjectInstanceCodegenView(IAxoObjectInstance objectInstance) {
         this.objectInstance = objectInstance;
@@ -55,12 +56,12 @@ class AxoObjectInstanceCodegenView implements IAxoObjectInstanceCodegenView {
 
     @Override
     public List<ParameterInstanceView> getParameterInstanceViews() {
-        return parameterInstances;
+        return Collections.unmodifiableList(parameterInstances);
     }
 
     @Override
     public List<DisplayInstanceView> getDisplayInstanceViews() {
-        return displayInstances;
+        return Collections.unmodifiableList(displayInstances);
     }
 
     @Override
@@ -85,7 +86,7 @@ typedef struct ui_object {
         }
         count[0]++;
         StringBuilder s = new StringBuilder(
-            "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getDModel().getInstanceName(), CodeGeneration.param_name_length)
+            "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getDModel().getInstanceName(), CodeGeneration.PARAM_NAME_LENGTH)
             + ", nparams : " + nparams);
         if (nparams > 0) {
             s.append(", params : &params[" + parameterInstances.get(0).getIndex() + "]");

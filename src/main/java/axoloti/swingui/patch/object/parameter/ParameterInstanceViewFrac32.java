@@ -89,7 +89,7 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
         super.modelPropertyChange(evt);
         if (ParameterInstance.VALUE.is(evt)) {
             Double v = (Double) evt.getNewValue();
-            ctrl.setValue(v);
+            getControlComponent().setValue(v);
             updateUnit();
         } else if (ParameterInstance.CONVERSION.is(evt)) {
             updateUnit();

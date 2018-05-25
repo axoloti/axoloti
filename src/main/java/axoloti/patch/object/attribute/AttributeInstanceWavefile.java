@@ -40,7 +40,7 @@ import org.simpleframework.xml.Attribute;
 public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWavefile> {
 
     @Attribute
-    String waveFilename;
+    private String waveFilename;
 
     AttributeInstanceWavefile(AxoAttributeWavefile attribute, AxoObjectInstance axoObj1) {
         super(attribute, axoObj1);

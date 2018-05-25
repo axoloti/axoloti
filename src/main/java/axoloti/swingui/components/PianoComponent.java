@@ -32,18 +32,17 @@ import javax.swing.event.MouseInputAdapter;
  */
 public abstract class PianoComponent extends JComponent {
 
-    final int height = 31;
-    final int blackKeyHeight = height / 2;
-    final int width = 900;
-    final int quarterKeyWidth = 3;
-    final int KeyWidth = quarterKeyWidth * 2;
+    private static final int KEY_HEIGHT = 31;
+    private static final int BLACK_KEY_HEIGHT = KEY_HEIGHT / 2;
+    private static final int QUARTER_KEY_WIDTH = 3;
+    private static final int KEY_WIDTH = QUARTER_KEY_WIDTH * 2;
 
-    final int keyx[] = {0, 3, 4, 7, 8, 12, 15, 16, 19, 20, 23, 24};
-    final int keyy[] = {0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0};
+    private static final int KEY_X[] = {0, 3, 4, 7, 8, 12, 15, 16, 19, 20, 23, 24};
+    private static final int KEY_Y[] = {0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0};
 
-    boolean selection[] = new boolean[128];
+    private final boolean selection[] = new boolean[128];
 
-    int mouseDownNote;
+    private int mouseDownNote;
 
     public PianoComponent() {
         super();
@@ -107,15 +106,15 @@ public abstract class PianoComponent extends JComponent {
     }
 
     private int keyToX(int i) {
-        return (28 * (i / 12) + keyx[i % 12]) * quarterKeyWidth;
+        return (28 * (i / 12) + KEY_X[i % 12]) * QUARTER_KEY_WIDTH;
     }
 
     private int keyToY(int i) {
-        return keyy[i % 12];
+        return KEY_Y[i % 12];
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         // white keys first
@@ -126,23 +125,23 @@ public abstract class PianoComponent extends JComponent {
                 if (selection[i]) {
                     // selected
                     g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
-                    g2.fillRect(x, 0, 2 * KeyWidth, height);
+                    g2.fillRect(x, 0, 2 * KEY_WIDTH, KEY_HEIGHT);
                     if (isEnabled()) {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
-                    g2.drawRect(x, 0, 2 * KeyWidth, height);
+                    g2.drawRect(x, 0, 2 * KEY_WIDTH, KEY_HEIGHT);
                 } else {
                     // not selected
                     g2.setColor(Theme.getCurrentTheme().Keyboard_Light);
-                    g2.fillRect(x, 0, 2 * KeyWidth, height);
+                    g2.fillRect(x, 0, 2 * KEY_WIDTH, KEY_HEIGHT);
                     if (isEnabled()) {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
-                    g2.drawRect(x, 0, 2 * KeyWidth, height);
+                    g2.drawRect(x, 0, 2 * KEY_WIDTH, KEY_HEIGHT);
                 }
             }
         }
@@ -153,21 +152,21 @@ public abstract class PianoComponent extends JComponent {
             if (y == 1) {
                 if (selection[i]) {
                     g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
-                    g2.fillRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
+                    g2.fillRect(x - 1, 0, KEY_WIDTH + 2, BLACK_KEY_HEIGHT);
                     if (isEnabled()) {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
-                    g2.drawRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
+                    g2.drawRect(x - 1, 0, KEY_WIDTH + 2, BLACK_KEY_HEIGHT);
                 } else {
                     if (isEnabled()) {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Dark);
                     } else {
                         g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
                     }
-                    g2.fillRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
-                    g2.drawRect(x - 1, 0, KeyWidth + 2, blackKeyHeight);
+                    g2.fillRect(x - 1, 0, KEY_WIDTH + 2, BLACK_KEY_HEIGHT);
+                    g2.drawRect(x - 1, 0, KEY_WIDTH + 2, BLACK_KEY_HEIGHT);
                 }
             }
         }
@@ -175,7 +174,7 @@ public abstract class PianoComponent extends JComponent {
             if (i % 12 == 0) {
                 int x = keyToX(i);
                 g2.setFont(Constants.FONT);
-                g2.drawString("" + ((i / 12) - 1), x + 2, height - 2);
+                g2.drawString("" + ((i / 12) - 1), x + 2, KEY_HEIGHT - 2);
             }
         }
         for (int i = 0; i < 128; i++) {
@@ -192,7 +191,7 @@ public abstract class PianoComponent extends JComponent {
         }
         int x = keyToX(64);
         g2.setColor(Theme.getCurrentTheme().Keyboard_Mid);
-        g2.fillOval(x + 2, height - (KeyWidth + 2), KeyWidth, KeyWidth);
+        g2.fillOval(x + 2, KEY_HEIGHT - (KEY_WIDTH + 2), KEY_WIDTH, KEY_WIDTH);
         g2.dispose();
     }
 
@@ -200,18 +199,18 @@ public abstract class PianoComponent extends JComponent {
         if (!isEnabled()) {
             return -1;
         }
-        int o = 12 * (x / (28 * quarterKeyWidth));
+        int o = 12 * (x / (28 * QUARTER_KEY_WIDTH));
         int oe = o + 12;
         if (oe > 128) {
             oe = 128;
         }
-        if (y < blackKeyHeight) {
+        if (y < BLACK_KEY_HEIGHT) {
             // test black keys first
             for (int i = o; i < oe; i++) {
                 int iy = keyToY(i);
                 if (iy != 0) {
                     int ix = keyToX(i);
-                    if ((x >= ix - 1) && (x <= ix + KeyWidth + 1)) {
+                    if ((x >= ix - 1) && (x <= ix + KEY_WIDTH + 1)) {
                         return i;
                     }
                 }
@@ -222,7 +221,7 @@ public abstract class PianoComponent extends JComponent {
             // white key test
             if (iy == 0) {
                 int ix = keyToX(i);
-                if ((x >= ix) && (x <= ix + KeyWidth * 2)) {
+                if ((x >= ix) && (x <= ix + KEY_WIDTH * 2)) {
                     return i;
                 }
             }

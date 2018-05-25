@@ -8,7 +8,7 @@ import java.beans.PropertyChangeEvent;
 
 class PDisplayInstanceViewNoteLabel extends PDisplayInstanceViewFrac32 {
 
-    public PDisplayInstanceViewNoteLabel(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewNoteLabel(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
         initComponents();
     }

@@ -8,9 +8,9 @@ import java.beans.PropertyChangeEvent;
 class PDisplayInstanceViewFrac32SDial extends PDisplayInstanceViewFrac32 {
 
     private PDispComponent dial;
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac32SDial(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewFrac32SDial(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
         this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

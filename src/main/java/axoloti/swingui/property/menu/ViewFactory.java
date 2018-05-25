@@ -22,7 +22,7 @@ public class ViewFactory {
      */
     public static Component createMenuItemView(IModel model, Property property) {
         if (property instanceof axoloti.property.BooleanProperty) {
-            return new BooleanProperty(model, (axoloti.property.BooleanProperty) property);
+            return new BooleanPropertyView(model, (axoloti.property.BooleanProperty) property);
         } else if (property instanceof MidiCCProperty) {
             return new AssignMidiCCMenuItems(model, (MidiCCProperty) property);
         } else {

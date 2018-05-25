@@ -38,10 +38,10 @@ public class OutletFrac32Bipolar extends OutletFrac32 {
         return SignalMetaData.bipolar;
     }
 
-    static public final String TypeName = "frac32.bipolar";
+    static public final String TYPE_NAME = "frac32.bipolar";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

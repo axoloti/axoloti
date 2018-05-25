@@ -43,7 +43,7 @@ public abstract class RControlEncoder extends JComponent {
     private int mousePressedCoordX = 0;
     private int mousePressedCoordY = 0;
     private int mousePressedBtn = 0;
-    Robot robot;
+    private Robot robot;
 
     public RControlEncoder() {
         try {
@@ -97,7 +97,7 @@ public abstract class RControlEncoder extends JComponent {
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
     }
-    double angle = 0;
+    private double angle = 0;
 
     private void fireRotation1(int ticks) {
         if (ticks != 0) {

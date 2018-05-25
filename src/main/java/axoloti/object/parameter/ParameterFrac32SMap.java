@@ -33,10 +33,10 @@ public class ParameterFrac32SMap extends ParameterFrac32 {
 
     @Deprecated
     @Element(required = false)
-    ValueFrac32 MinValue;
+    private ValueFrac32 MinValue;
     @Deprecated
     @Element(required = false)
-    ValueFrac32 MaxValue;
+    private ValueFrac32 MaxValue;
 
     public ParameterFrac32SMap() {
     }
@@ -56,11 +56,11 @@ public class ParameterFrac32SMap extends ParameterFrac32 {
         return "parameter_function::pf_signed_clamp";
     }
 
-    static public final String TypeName = "frac32.s.map";
+    static public final String TYPE_NAME = "frac32.s.map";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

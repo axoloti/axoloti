@@ -25,7 +25,7 @@ import axoloti.connection.IConnection;
  */
 public class QCmdGetFileList implements QCmdSerialTask {
 
-    boolean done = true;
+    private boolean done = true;
 
     @Override
     public String getStartMessage() {

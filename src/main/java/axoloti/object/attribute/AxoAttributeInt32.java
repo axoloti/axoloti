@@ -79,11 +79,11 @@ public class AxoAttributeInt32 extends AxoAttribute {
         firePropertyChange(ATOM_DEFAULTVALUE, oldValue, DefaultValue);
     }
 
-    static public final String TypeName = "int";
+    static public final String TYPE_NAME = "int";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

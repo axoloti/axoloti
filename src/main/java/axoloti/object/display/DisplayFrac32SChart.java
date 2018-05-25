@@ -43,11 +43,11 @@ public class DisplayFrac32SChart extends Display {
     public Int32 getDataType() {
         return Int32.d;
     }
-    static public final String TypeName = "frac32.s.chart";
+    static public final String TYPE_NAME = "frac32.s.chart";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

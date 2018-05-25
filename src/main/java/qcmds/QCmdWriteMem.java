@@ -25,8 +25,8 @@ import axoloti.connection.IConnection;
  */
 public class QCmdWriteMem implements QCmdSerialTask {
 
-    byte[] buffer;
-    int addr;
+    private final byte[] buffer;
+    private final int addr;
 
     public QCmdWriteMem(int addr, byte[] buffer) {
         this.addr = addr;
@@ -43,7 +43,7 @@ public class QCmdWriteMem implements QCmdSerialTask {
         return null;
     }
 
-    final int MaxBlockSize = 32768;
+    private final static int MAXBLOCKSIZE = 32768;
 
     @Override
     public QCmd performAction(IConnection connection) {
@@ -52,9 +52,9 @@ public class QCmdWriteMem implements QCmdSerialTask {
         int remaining = buffer.length;
         do {
             int l;
-            if (remaining > MaxBlockSize) {
-                l = MaxBlockSize;
-                remaining -= MaxBlockSize;
+            if (remaining > MAXBLOCKSIZE) {
+                l = MAXBLOCKSIZE;
+                remaining -= MAXBLOCKSIZE;
             } else {
                 l = remaining;
                 remaining = 0;

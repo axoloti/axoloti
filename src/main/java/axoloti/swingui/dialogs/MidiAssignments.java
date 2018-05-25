@@ -48,7 +48,7 @@ public class MidiAssignments extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         String CCObj[] = new String[128];
         String CCParam[] = new String[128];
-        for (IAxoObjectInstance obj : patch.objectinstances) {
+        for (IAxoObjectInstance obj : patch.getObjectInstances()) {
             Collection<ParameterInstance> params = obj.getParameterInstances();
             if (params != null) {
                 for (ParameterInstance param1 : params) {
@@ -200,7 +200,7 @@ public class MidiAssignments extends javax.swing.JDialog {
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    private static String[] midiCCToName = {
+    private final static String[] midiCCToName = {
         "Bank Select",
         "Modulation",
         "Breath Controller",

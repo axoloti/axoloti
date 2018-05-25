@@ -44,11 +44,11 @@ public class DisplayFrac32VBarDB extends Display {
         return Int32.d;
     }
 
-    static public final String TypeName = "frac32.vbar.db";
+    static public final String TYPE_NAME = "frac32.vbar.db";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

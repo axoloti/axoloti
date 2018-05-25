@@ -5,7 +5,7 @@ import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TextModel extends AbstractModel {
 
-    String text = "";
+    private String text = "";
 
     public static final StringProperty TEXT = new StringProperty("Text", TextModel.class);
 
@@ -24,9 +24,7 @@ public class TextModel extends AbstractModel {
 
     @Override
     public List<Property> getProperties() {
-        List<Property> list = new ArrayList<>();
-        list.add(TEXT);
-        return list;
+        return Collections.singletonList(TEXT);
     }
 
     public String getText() {

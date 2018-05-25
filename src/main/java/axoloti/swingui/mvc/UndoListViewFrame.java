@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.undo.UndoableEdit;
@@ -174,8 +175,8 @@ public class UndoListViewFrame extends AJFrame<AbstractDocumentRoot> {
     }
 
     @Override
-    public ArrayList<DocumentWindow> getChildDocuments() {
-        return null;
+    public List<DocumentWindow> getChildDocuments() {
+        return Collections.emptyList();
     }
 
     void updateList(List<UndoableEdit> list) {

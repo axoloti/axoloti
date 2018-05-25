@@ -16,7 +16,7 @@ class PAttributeInstanceViewTablename extends PAttributeInstanceViewString {
 
     PTextFieldComponent TFtableName;
 
-    public PAttributeInstanceViewTablename(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewTablename(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

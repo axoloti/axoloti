@@ -20,11 +20,11 @@ import java.util.List;
  */
 abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
 
-    public AxoObjectInstance0() {
+    protected AxoObjectInstance0() {
         super();
     }
 
-    public AxoObjectInstance0(IAxoObject obj, PatchModel patchModel, String InstanceName1, Point location) {
+    protected AxoObjectInstance0(IAxoObject obj, PatchModel patchModel, String InstanceName1, Point location) {
         super(obj, patchModel, InstanceName1, location);
     }
 

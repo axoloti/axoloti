@@ -33,13 +33,13 @@ import javax.swing.JRadioButton;
  */
 public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
 
-    final MidiCCProperty property;
-    final IModel model;
+    final private MidiCCProperty property;
+    final private IModel imodel;
 
     public AssignMidiCCMenuItems(IModel model, MidiCCProperty property) {
         super();
         this.property = property;
-        this.model = model;
+        this.imodel = model;
         initComponents();
     }
 
@@ -66,7 +66,7 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(16, 0));
         ButtonGroup group = new ButtonGroup();
-        Integer cc = property.get(model);
+        Integer cc = property.get(imodel);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 8; j++) {
                 int k = i + j * 16;
@@ -99,12 +99,12 @@ public class AssignMidiCCMenuItems extends JMenu implements ActionListener {
         String s = e.getActionCommand();
         if (s.startsWith("CC")) {
             Integer i = Integer.parseInt(s.substring(2));
-            model.getController().addMetaUndo("change MIDI CC mapping");
-            model.getController().generic_setModelUndoableProperty(property, i);
+            imodel.getController().addMetaUndo("change MIDI CC mapping");
+            imodel.getController().generic_setModelUndoableProperty(property, i);
         } else if (s.equals("none")) {
             Integer v = -1;
-            model.getController().addMetaUndo("remove MIDI CC mapping");
-            model.getController().generic_setModelUndoableProperty(property, v);
+            imodel.getController().addMetaUndo("remove MIDI CC mapping");
+            imodel.getController().generic_setModelUndoableProperty(property, v);
         }
     }
 }

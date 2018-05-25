@@ -3,7 +3,6 @@ package axoloti.mvc;
 import axoloti.property.Property;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.List;
 
 /**
  *
@@ -14,10 +13,7 @@ public abstract class AbstractModel<C extends AbstractController> implements IMo
     private C controllerOfModel = null;
     private AbstractDocumentRoot documentRoot;
 
-    protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-
-    @Override
-    public abstract List<Property> getProperties();
+    private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     @Override
     final public void addPropertyChangeListener(PropertyChangeListener listener) {

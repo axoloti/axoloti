@@ -9,7 +9,7 @@ import java.beans.PropertyChangeEvent;
 
 class PParameterInstanceViewInt32Box extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32Box(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewInt32Box(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

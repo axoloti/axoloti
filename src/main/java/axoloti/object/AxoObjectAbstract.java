@@ -49,11 +49,11 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
     public String id;
 
     @Attribute(required = false)
-    String uuid;
+    private String uuid;
 
     @Deprecated
     @Attribute(required = false)
-    String sha;
+    private String sha;
 
     @Deprecated
     @ElementListUnion({
@@ -61,7 +61,7 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
     HashSet<String> upgradeSha;
 
     @Element(name = "sDescription", required = false)
-    String sDescription;
+    private String sDescription;
 
     public String shortId;
 
@@ -106,7 +106,7 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
 
     @Override
     public int compareTo(Object t) {
-        String tn = ((AxoObject) t).id;
+        String tn = ((AxoObjectAbstract) t).id;
         if (id.startsWith(tn)) {
             return 1;
         }

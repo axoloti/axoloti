@@ -44,7 +44,7 @@ import org.piccolo2d.event.PInputEventFilter;
  *
  * @since 2.0
  */
-public final class PatchMouseWheelZoomEventHandler extends PBasicInputEventHandler {
+public class PatchMouseWheelZoomEventHandler extends PBasicInputEventHandler {
 
     /**
      * Default scale factor, <code>0.1d</code>.

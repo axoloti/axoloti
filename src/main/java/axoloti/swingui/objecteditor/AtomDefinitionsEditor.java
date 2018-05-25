@@ -57,7 +57,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
     private final AxoObjectEditor editor;
     private JPanel parentPanel;
 
-    public AtomDefinitionsEditor(AxoObject obj, ListProperty atomfield, List<T> atomDefinitionsList, AxoObjectEditor editor) {
+    AtomDefinitionsEditor(AxoObject obj, ListProperty atomfield, List<T> atomDefinitionsList, AxoObjectEditor editor) {
         this.obj = obj;
         this.prop = atomfield;
         this.atomDefinitionsList = atomDefinitionsList;
@@ -140,7 +140,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         }
     };
 
-    private ActionListener actionListenerRemove = new ActionListener() {
+    private final ActionListener actionListenerRemove = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             int row = jTable1.getSelectedRow();
@@ -171,7 +171,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         }
     };
 
-    private ActionListener actionListenerAdd = new ActionListener() {
+    private final ActionListener actionListenerAdd = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -337,7 +337,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
             T getAtomDefinition(int rowIndex) {
                 List<T> list = (List<T>) getObjectController().getModelProperty(prop);
                 if (rowIndex < list.size()) {
-                    return (T) list.get(rowIndex);
+                    return list.get(rowIndex);
                 } else {
                     return null;
                 }
@@ -393,7 +393,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         });
 
         jTable2.setModel(new AbstractTableModel() {
-            private String[] columnNames = {"Property", "Value"};
+            private final String[] columnNames = {"Property", "Value"};
 
             @Override
             public int getColumnCount() {
@@ -502,7 +502,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         List<T> list = (List<T>) getObjectController().getModelProperty(prop);
         int row = jTable1.getSelectedRow();
         if (row != -1 && (row < list.size())) {
-            o = (AtomDefinition) list.get(row);
+            o = list.get(row);
             properties = o.getEditableFields();
         } else {
             properties = null;
@@ -529,11 +529,11 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
     private JButton jButtonAdd;
     private JPanel jPanel1;
 
-    class IView1 implements IView<AtomDefinition> {
+    private class IView1 implements IView<AtomDefinition> {
 
         final AtomDefinition c;
 
-        public IView1(AtomDefinition c) {
+        IView1(AtomDefinition c) {
             this.c = c;
         }
 

@@ -44,11 +44,11 @@ public class DisplayFrac8U128VBar extends Display {
         return Int8Ptr.d;
     }
 
-    static public final String TypeName = "uint8array128.vbar";
+    static public final String TYPE_NAME = "uint8array128.vbar";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     final int n = 128;

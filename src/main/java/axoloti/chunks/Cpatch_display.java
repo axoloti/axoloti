@@ -1,5 +1,7 @@
 package axoloti.chunks;
 
+import java.nio.ByteBuffer;
+
 /**
  *
  * @author jtaelman
@@ -10,7 +12,8 @@ public class Cpatch_display {
     public final int pDisplayVector;
 
     public Cpatch_display(ChunkData d) {
-        nDisplayVector = d.data.getInt();
-        pDisplayVector = d.data.getInt();
+        ByteBuffer data = d.getData();
+        nDisplayVector = data.getInt();
+        pDisplayVector = data.getInt();
     }
 }

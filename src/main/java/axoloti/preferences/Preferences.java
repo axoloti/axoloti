@@ -26,7 +26,9 @@ import axoloti.patch.PatchViewType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
@@ -157,8 +159,8 @@ public class Preferences {
         isDirty = false;
     }
 
-    public ArrayList<AxolotiLibrary> getLibraries() {
-        return libraries;
+    public List<AxolotiLibrary> getLibraries() {
+        return Collections.unmodifiableList(libraries);
     }
 
     public AxolotiLibrary getLibrary(String id) {
@@ -358,8 +360,8 @@ public class Preferences {
         return ExpertMode;
     }
 
-    public ArrayList<String> getRecentFiles() {
-        return recentFiles;
+    public List<String> getRecentFiles() {
+        return Collections.unmodifiableList(recentFiles);
     }
 
     public void addRecentFile(String filename) {

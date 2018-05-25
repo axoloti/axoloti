@@ -26,6 +26,9 @@ import axoloti.patch.object.display.DisplayInstanceVScale;
 
 public class PDisplayInstanceViewFactory {
 
+    private PDisplayInstanceViewFactory() {
+    }
+
     public static IDisplayInstanceView createView(DisplayInstance model, IAxoObjectInstanceView obj) {
         DisplayInstanceController controller = model.getController();
         PDisplayInstanceView view;

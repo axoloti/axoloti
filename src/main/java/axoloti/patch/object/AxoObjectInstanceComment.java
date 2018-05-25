@@ -33,7 +33,7 @@ import org.simpleframework.xml.Root;
 @Root(name = "comment")
 public class AxoObjectInstanceComment extends AxoObjectInstance0 {
 
-    static int nextInstanceNumber = 0;
+    private static int nextInstanceNumber = 0;
 
     @Attribute(name = "text", required = false)
     private String commentText;

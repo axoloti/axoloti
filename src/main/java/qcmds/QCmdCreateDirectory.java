@@ -73,9 +73,7 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
                     TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                 }
             });
-        } catch (InterruptedException ex) {
-            Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
+        } catch (InterruptedException | InvocationTargetException ex) {
             Logger.getLogger(QCmdCreateDirectory.class.getName()).log(Level.SEVERE, null, ex);
         }
         return this;

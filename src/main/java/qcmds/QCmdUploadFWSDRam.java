@@ -33,10 +33,10 @@ import java.util.zip.CRC32;
  */
 public class QCmdUploadFWSDRam implements QCmdSerialTask {
 
-    File f;
+    private File f;
 
     public QCmdUploadFWSDRam() {
-        f = null;
+        this(null);
     }
 
     public QCmdUploadFWSDRam(File f) {

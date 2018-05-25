@@ -148,11 +148,6 @@ public abstract class ACtrlComponent extends JComponent {
             }
 
             @Override
-            public boolean importData(TransferHandler.TransferSupport support) {
-                return super.importData(support);
-            }
-
-            @Override
             public boolean importData(JComponent comp, Transferable t) {
                 if (isEnabled()) {
                     try {

@@ -301,11 +301,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     @Override
-    public IAxoObject getDModel() {
-        return (IAxoObject) super.getDModel();
-    }
-
-    @Override
     public List<SDFileReference> getFileDepends() {
         List<SDFileReference> files = getDModel().getFileDepends();
         if (files == null) {

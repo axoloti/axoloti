@@ -27,6 +27,9 @@ import java.util.List;
  */
 public class InletTypes {
 
+    private InletTypes() {
+    }
+
     private final static Inlet types[] = {
         new InletBool32(),
         new InletBool32Rising(),

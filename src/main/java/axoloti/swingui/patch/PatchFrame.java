@@ -85,16 +85,16 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     /**
      * Creates new form PatchFrame
      */
-    final PatchModel patchModel;
-    final PatchController patchController;
-    final PatchView patchView;
+    private final PatchModel patchModel;
+    private final PatchController patchController;
+    private final PatchView patchView;
 
-    PatchSettingsFrame patchSettingsEditor;
+    private PatchSettingsFrame patchSettingsEditor;
 
     private PresetPanel presetPanel;
     private VisibleCablePanel visibleCablePanel;
 
-    UndoUI undoUi;
+    private UndoUI undoUi;
 
     private JScrollPane jScrollPane1;
 

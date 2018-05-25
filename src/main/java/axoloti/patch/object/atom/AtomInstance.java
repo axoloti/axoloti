@@ -37,7 +37,7 @@ import java.util.List;
  */
 public abstract class AtomInstance<T extends AtomDefinition, C extends AbstractController> extends AbstractModel<C> implements IView<T> {
 
-    IAxoObjectInstance parent;
+    private IAxoObjectInstance parent;
 
     public static final PropagatedProperty NAME = new PropagatedProperty(AtomDefinition.NAME, AtomInstance.class);
     public static final PropagatedProperty DESCRIPTION = new PropagatedProperty(AtomDefinition.DESCRIPTION, AtomInstance.class);

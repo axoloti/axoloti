@@ -32,10 +32,10 @@ public class ParameterFrac32SMapVSlider extends ParameterFrac32 {
 
     @Deprecated
     @Element(required = false)
-    ValueFrac32 MinValue;
+    private ValueFrac32 MinValue;
     @Deprecated
     @Element(required = false)
-    ValueFrac32 MaxValue;
+    private ValueFrac32 MaxValue;
 
     public ParameterFrac32SMapVSlider() {
         MinValue = new ValueFrac32(0);
@@ -56,10 +56,10 @@ public class ParameterFrac32SMapVSlider extends ParameterFrac32 {
         return listConvs;
     }
 
-    static public final String TypeName = "frac32.s.mapvsl";
+    static public final String TYPE_NAME = "frac32.s.mapvsl";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

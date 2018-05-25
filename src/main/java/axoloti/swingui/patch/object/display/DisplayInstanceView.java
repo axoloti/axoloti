@@ -9,7 +9,7 @@ import javax.swing.BoxLayout;
 
 public abstract class DisplayInstanceView extends ViewPanel<DisplayInstance> implements IDisplayInstanceView {
 
-    LabelComponent label;
+    private LabelComponent label;
 
     DisplayInstanceView(DisplayInstance displayInstance) {
         super(displayInstance);

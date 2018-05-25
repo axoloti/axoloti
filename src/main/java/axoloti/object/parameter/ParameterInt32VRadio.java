@@ -47,11 +47,11 @@ public class ParameterInt32VRadio extends ParameterInt32 {
         md.update(("int32.vradio" + MaxValue).getBytes());
     }
 
-    static public final String TypeName = "int32.vradio";
+    static public final String TYPE_NAME = "int32.vradio";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

@@ -53,11 +53,11 @@ public class ParameterInt32Box extends ParameterInt32 {
         md.update("int32.dial".getBytes());
     }
 
-    static public final String TypeName = "int32";
+    static public final String TYPE_NAME = "int32";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

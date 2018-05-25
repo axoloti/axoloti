@@ -29,7 +29,7 @@ import org.simpleframework.xml.Attribute;
 public class AttributeInstanceComboBox extends AttributeInstanceString<AxoAttributeComboBox> {
 
     @Attribute(name = "selection", required = false)
-    String selection;
+    private String selection;
 
     AttributeInstanceComboBox() {
     }

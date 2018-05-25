@@ -11,7 +11,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
 
     private PatchFrame pf;
 
-    public AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher objectInstance, PatchViewSwing patchView) {
+    AxoObjectInstanceViewPatcher(AxoObjectInstancePatcher objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
         initComponents();
     }

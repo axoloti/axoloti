@@ -39,10 +39,10 @@ public class InletFrac32 extends Inlet {
         return Frac32.d;
     }
 
-    static public final String TypeName = "frac32";
+    static public final String TYPE_NAME = "frac32";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

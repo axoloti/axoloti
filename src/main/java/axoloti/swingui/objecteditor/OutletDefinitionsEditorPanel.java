@@ -27,7 +27,7 @@ import axoloti.object.outlet.OutletTypes;
  */
 class OutletDefinitionsEditorPanel extends AtomDefinitionsEditor<Outlet> {
 
-    public OutletDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+    OutletDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
         super(obj, AxoObject.OBJ_OUTLETS, OutletTypes.getTypes(), editor);
     }
 

@@ -6,8 +6,9 @@ import axoloti.swingui.components.control.PulseButtonComponent;
 
 class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewBin {
 
-    public ParameterInstanceViewBin1Momentary(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewBin1Momentary(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
     }
 
     @Override
@@ -15,8 +16,10 @@ class ParameterInstanceViewBin1Momentary extends ParameterInstanceViewBin {
         return new PulseButtonComponent();
     }
 
+    private final PulseButtonComponent ctrl = createControl();
+
     @Override
     public PulseButtonComponent getControlComponent() {
-        return (PulseButtonComponent) ctrl;
+        return ctrl;
     }
 }

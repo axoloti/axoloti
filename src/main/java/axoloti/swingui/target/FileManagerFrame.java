@@ -440,11 +440,11 @@ public class FileManagerFrame extends TJFrame {
         updateButtons();
     }//GEN-LAST:event_jButtonCreateDirActionPerformed
 
-    static class ByteBufferBackedInputStream extends InputStream {
+    private static class ByteBufferBackedInputStream extends InputStream {
 
-        ByteBuffer buf;
+        private final ByteBuffer buf;
 
-        public ByteBufferBackedInputStream(ByteBuffer buf) {
+        ByteBufferBackedInputStream(ByteBuffer buf) {
             this.buf = buf;
         }
 

@@ -57,7 +57,7 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
         super.modelPropertyChange(evt);
         if (ParameterInstanceBin.VALUE.is(evt)) {
             Integer v = (Integer)evt.getNewValue();
-            ctrl.setValue(v);
+            getControlComponent().setValue(v);
         }
     }
 }

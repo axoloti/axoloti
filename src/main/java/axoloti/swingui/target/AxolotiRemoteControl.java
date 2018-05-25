@@ -87,19 +87,19 @@ public class AxolotiRemoteControl extends TJFrame {
         jPanel2 = new JPanel();
         jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.Y_AXIS));
         JButton btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_TOPLEFT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_TOPLEFT));
         jPanel2.add(btn);
         buttons.add(btn);
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_TOPLEFT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_TOPLEFT));
         jPanel2.add(btn);
         buttons.add(btn);
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_BOTTOMLEFT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_BOTTOMLEFT));
         jPanel2.add(btn);
         buttons.add(btn);
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_BOTTOMLEFT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_BOTTOMLEFT));
         jPanel2.add(btn);
         buttons.add(btn);
         jPanel3 = new JPanel();
@@ -119,19 +119,19 @@ public class AxolotiRemoteControl extends TJFrame {
         jPanel4 = new JPanel();
         jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.Y_AXIS));
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_TOPRIGHT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_TOPRIGHT));
         jPanel4.add(btn);
         buttons.add(btn);
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_TOPRIGHT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_TOPRIGHT));
         jPanel4.add(btn);
         buttons.add(btn);
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_BOTTOMRIGHT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_BOTTOMRIGHT));
         jPanel4.add(btn);
         buttons.add(btn);
         btn = new JButton("");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_BOTTOMRIGHT));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_BOTTOMRIGHT));
         jPanel4.add(btn);
         buttons.add(btn);
         jPanel5 = new JPanel();
@@ -234,27 +234,27 @@ public class AxolotiRemoteControl extends TJFrame {
         JPanel jPanelX2 = new JPanel();
         jPanelX2.setLayout(new BoxLayout(jPanelX2, BoxLayout.X_AXIS));
         btn = new JButton("↑");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_MAIN));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_UP, VirtualInputEvent.QUADRANT_MAIN));
         buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("↓");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_MAIN));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_DOWN, VirtualInputEvent.QUADRANT_MAIN));
         buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("F");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_F, VirtualInputEvent.QUADRANT_MAIN));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_F, VirtualInputEvent.QUADRANT_MAIN));
         buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("⇧");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_S, VirtualInputEvent.QUADRANT_MAIN));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_S, VirtualInputEvent.QUADRANT_MAIN));
         buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("✗");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_X, VirtualInputEvent.QUADRANT_MAIN));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_X, VirtualInputEvent.QUADRANT_MAIN));
         buttons.add(btn);
         jPanelX2.add(btn);
         btn = new JButton("✓");
-        btn.addMouseListener(new MouseListerTxer((byte) VirtualInputEvent.BTN_E, VirtualInputEvent.QUADRANT_MAIN));
+        btn.addMouseListener(new MouseListerTxer(VirtualInputEvent.BTN_E, VirtualInputEvent.QUADRANT_MAIN));
         buttons.add(btn);
         jPanelX2.add(btn);
         jPanelY.add(jPanelX2);
@@ -334,12 +334,12 @@ public class AxolotiRemoteControl extends TJFrame {
         }
     }
 
-    static class MouseListerTxer implements MouseListener {
+    private static class MouseListerTxer implements MouseListener {
 
         final byte button;
         final byte quadrant;
 
-        public MouseListerTxer(byte button, byte quadrant) {
+        MouseListerTxer(byte button, byte quadrant) {
             this.button = button;
             this.quadrant = quadrant;
         }
@@ -382,9 +382,9 @@ public class AxolotiRemoteControl extends TJFrame {
         public void mouseExited(MouseEvent e) {
         }
     }
-    RControlEncoder[] encoders = new RControlEncoder[4];
-    RControlColorLed[] leds = new RControlColorLed[4];
-    RControlButtonWithLed[] buttonsWithLeds = new RControlButtonWithLed[16];
+    private final RControlEncoder[] encoders = new RControlEncoder[4];
+    private final RControlColorLed[] leds = new RControlColorLed[4];
+    private final RControlButtonWithLed[] buttonsWithLeds = new RControlButtonWithLed[16];
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -411,11 +411,11 @@ public class AxolotiRemoteControl extends TJFrame {
     public void refreshFB() {
         QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
         ChunkData framebuffer = CConnection.getConnection().getFWChunks().getOne(FourCCs.FW_LCD_FRAMEBUFFER);
-        framebuffer.data.rewind();
-        int width = framebuffer.data.getInt();
-        int height = framebuffer.data.getInt();
-        int pixeltype = framebuffer.data.getInt();
-        int addr = framebuffer.data.getInt();
+        ByteBuffer data = framebuffer.getData();
+        int width = data.getInt();
+        int height = data.getInt();
+        int pixeltype = data.getInt();
+        int addr = data.getInt();
         processor.appendToQueue(new QCmdMemRead(addr, 128 * 64 / 8, new IConnection.MemReadHandler() {
             @Override
             public void done(ByteBuffer mem) {
@@ -428,9 +428,9 @@ public class AxolotiRemoteControl extends TJFrame {
     // End of variables declaration//GEN-END:variables
     private final BufferedImage bImage = new BufferedImage(128, 64, BufferedImage.TYPE_BYTE_BINARY);
     private final BufferedImage bImageScaled = new BufferedImage(256, 128, BufferedImage.TYPE_BYTE_BINARY);
-    private final Graphics2D g2d = (Graphics2D) bImageScaled.createGraphics();
+    private final Graphics2D g2d = bImageScaled.createGraphics();
 
-    boolean dirty = false;
+    private boolean dirty = false;
 
     public void updateFB(final ByteBuffer lcdRcvBuffer) {
         byte[] pixels = ((DataBufferByte) bImage.getRaster().getDataBuffer()).getData();

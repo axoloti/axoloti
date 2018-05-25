@@ -66,11 +66,11 @@ import javax.swing.tree.TreePath;
  */
 public class ObjectSearchFrame extends ResizableUndecoratedFrame {
 
-    DefaultMutableTreeNode root;
-    DefaultTreeModel tm;
-    public IAxoObject type;
-    protected final PatchModel patchModel;
-    public IAxoObjectInstance target_object;
+    private DefaultMutableTreeNode root;
+    private DefaultTreeModel tm;
+    protected IAxoObject type;
+    private final PatchModel patchModel;
+    private IAxoObjectInstance target_object;
     private AxoObjectTreeNode objectTree;
 
     /**
@@ -343,9 +343,9 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             if (jList1.getSelectedValue() != o) {
             }
             AxoObjectInstanceAbstract objectInstance = AxoObjectInstanceFactory.createView(o, null, "dummy", new Point(5, 5));
-            IAxoObjectInstanceView objectInstanceView = AxoObjectInstanceViewFactory.getInstance().createView(objectInstance, null);
+            AxoObjectInstanceViewAbstract objectInstanceView = AxoObjectInstanceViewFactory.createView(objectInstance, null);
             jPanel1.removeAll();
-            jPanel1.add((AxoObjectInstanceViewAbstract) objectInstanceView);
+            jPanel1.add(objectInstanceView);
             objectInstanceView.resizeToGrid();
             jPanel1.repaint();  //reqd, as removed object may be smaller than new object
 
@@ -706,16 +706,16 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    static class StringIcon implements Icon {
+    private static class StringIcon implements Icon {
 
         final String str;
         final int w, h;
 
-        public StringIcon(String str) {
+        StringIcon(String str) {
             this(str, 20, 20);
         }
 
-        public StringIcon(String str, int w, int h) {
+        StringIcon(String str, int w, int h) {
             this.str = str;
             this.w = w;
             this.h = h;

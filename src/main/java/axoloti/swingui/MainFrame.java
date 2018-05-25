@@ -84,7 +84,7 @@ import qcmds.QCmdProcessor;
  *
  * @author Johannes Taelman
  */
-public final class MainFrame extends TJFrame implements ActionListener {
+public class MainFrame extends TJFrame implements ActionListener {
 
     public static MainFrame mainframe;
 
@@ -220,7 +220,6 @@ public final class MainFrame extends TJFrame implements ActionListener {
 
         Logger.getLogger("").addHandler(logHandler);
         Logger.getLogger("").setLevel(Level.INFO);
-        doLayout();
 
         themeEditor = new ThemeEditor();
         themeEditor.setTitle("Theme Editor");
@@ -364,6 +363,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
     }
 
     private void init() {
+        doLayout();
         model.getController().addView(this);
     }
 
@@ -752,7 +752,7 @@ public final class MainFrame extends TJFrame implements ActionListener {
         }
         try {
             InputStream input = new URL(url).openStream();
-            String name = url.substring(url.lastIndexOf("/") + 1, url.length());
+            String name = url.substring(url.lastIndexOf('/') + 1, url.length());
             PatchViewSwing.openPatch(name, input);
         } catch (MalformedURLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Invalid URL {0}\n{1}", new Object[]{url, ex});

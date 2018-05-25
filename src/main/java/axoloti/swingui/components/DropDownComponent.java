@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
@@ -136,7 +136,7 @@ public class DropDownComponent extends JComponent {
         return items.get(i);
     }
 
-    ArrayList<DDCListener> ddcListeners = new ArrayList<>();
+    private final List<DDCListener> ddcListeners = new LinkedList<>();
 
     void doPopup() {
         if (isEnabled()) {

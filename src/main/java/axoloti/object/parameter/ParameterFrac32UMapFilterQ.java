@@ -45,10 +45,10 @@ public class ParameterFrac32UMapFilterQ extends ParameterFrac32UMap {
         return listConvs;
     }
 
-    static public final String TypeName = "frac32.u.map.filterq";
+    static public final String TYPE_NAME = "frac32.u.map.filterq";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

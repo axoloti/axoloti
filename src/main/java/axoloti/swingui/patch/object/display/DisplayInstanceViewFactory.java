@@ -29,6 +29,9 @@ import axoloti.patch.object.display.DisplayInstanceVScale;
  */
 public class DisplayInstanceViewFactory {
 
+    private DisplayInstanceViewFactory() {
+    }
+
     public static IDisplayInstanceView createView(DisplayInstance model, IAxoObjectInstanceView obj) {
         DisplayInstanceView view;
         if (model instanceof DisplayInstanceBool32) {

@@ -5,6 +5,7 @@ import axoloti.swingui.mvc.UndoUI;
 import axoloti.target.TargetModel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -12,7 +13,7 @@ import javax.swing.JMenuBar;
  */
 public class StandardMenubar extends JMenuBar {
 
-    public FileMenu fileMenu;
+    private final FileMenu fileMenu;
 
     public StandardMenubar(AbstractDocumentRoot documentRoot) {
         fileMenu = new axoloti.swingui.menus.FileMenu("File");
@@ -40,5 +41,9 @@ public class StandardMenubar extends JMenuBar {
         JMenu helpMenu1 = new axoloti.swingui.menus.HelpMenu();
         helpMenu1.setText("Help");
         add(helpMenu1);
+    }
+
+    public void addMenuItemToFileMenu(JMenuItem menuItem) {
+        fileMenu.add(menuItem);
     }
 }

@@ -6,7 +6,8 @@ import axoloti.swingui.mvc.AJFrame;
 import axoloti.target.TargetModel;
 import java.awt.HeadlessException;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 public abstract class TJFrame extends AJFrame<TargetModel> {
 
-    public StandardMenubar menuBar;
+    private StandardMenubar menuBar;
 
     public TJFrame(TargetModel targetModel) throws HeadlessException {
         super(targetModel, null);
@@ -37,8 +38,8 @@ public abstract class TJFrame extends AJFrame<TargetModel> {
     }
 
     @Override
-    public ArrayList<DocumentWindow> getChildDocuments() {
-        return null;
+    public List<DocumentWindow> getChildDocuments() {
+        return Collections.emptyList();
     }
 
 }

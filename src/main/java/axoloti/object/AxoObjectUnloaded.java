@@ -27,7 +27,7 @@ import org.simpleframework.xml.Root;
 @Root
 public class AxoObjectUnloaded extends AxoObjectAbstract0 {
 
-    File f;
+    private File f;
 
     public AxoObjectUnloaded() {
         super();
@@ -38,7 +38,7 @@ public class AxoObjectUnloaded extends AxoObjectAbstract0 {
         this.f = f;
     }
 
-    AxoObjectFromPatch loadedObject;
+    private AxoObjectFromPatch loadedObject;
 
     public AxoObjectFromPatch load() {
         if (loadedObject == null) {

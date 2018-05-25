@@ -30,7 +30,7 @@ public abstract class Iolet extends AtomDefinition implements Cloneable {
 
     @Deprecated
     @Attribute(required = false)
-    Boolean SumBuffer;
+    private Boolean SumBuffer;
 
     public Iolet() {
     }

@@ -49,7 +49,7 @@ public abstract class DisplayInstanceView extends View<DisplayInstance> {
 
     public String generateDisplayMetaInitializer() {
         String c = "{ display_type: " + getDModel().getDModel().getCMetaType() + ", name: "
-                + CodeGeneration.CPPCharArrayStaticInitializer(getDModel().getDModel().getName(), CodeGeneration.param_name_length)
+                + CodeGeneration.CPPCharArrayStaticInitializer(getDModel().getDModel().getName(), CodeGeneration.PARAM_NAME_LENGTH)
                 + ", displaydata: &displayVector[" + offset + "]},\n";
         return c;
     }

@@ -8,9 +8,9 @@ import java.beans.PropertyChangeEvent;
 class PDisplayInstanceViewFrac4ByteVBar extends PDisplayInstanceViewFrac32 {
 
     private PVLineComponent vbar[];
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac4ByteVBar(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewFrac4ByteVBar(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

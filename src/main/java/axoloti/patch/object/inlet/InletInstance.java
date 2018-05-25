@@ -32,7 +32,7 @@ import org.simpleframework.xml.Root;
 public class InletInstance extends IoletInstance<Inlet> {
 
     @Attribute(name = "inlet", required = false)
-    protected String inletname;
+    private String inletname;
 
     public InletInstance() {
         super();

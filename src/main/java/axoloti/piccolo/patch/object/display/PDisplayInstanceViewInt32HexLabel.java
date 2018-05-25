@@ -10,7 +10,7 @@ class PDisplayInstanceViewInt32HexLabel extends PDisplayInstanceViewInt32 {
 
     private PLabelComponent readout;
 
-    public PDisplayInstanceViewInt32HexLabel(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewInt32HexLabel(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
         initComponents();
     }

@@ -25,6 +25,7 @@ import static axoloti.usb.Usb.PID_AXOLOTI_SDCARD;
 import static axoloti.usb.Usb.PID_STM_DFU;
 import static axoloti.usb.Usb.VID_AXOLOTI;
 import static axoloti.usb.Usb.VID_STM;
+import static axoloti.usb.Usb.deviceToPath;
 import axoloti.utils.OSDetect;
 import static axoloti.utils.OSDetect.getOS;
 import java.beans.PropertyChangeEvent;
@@ -40,7 +41,6 @@ import org.usb4java.DeviceHandle;
 import org.usb4java.DeviceList;
 import org.usb4java.LibUsb;
 import org.usb4java.LibUsbException;
-import static axoloti.usb.Usb.deviceToPath;
 
 /**
  *
@@ -108,7 +108,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
 
                 TableModel model = (TableModel) e.getSource();
                 String name = (String) model.getValueAt(row, column);
-                String cpuid = (String) ((DefaultTableModel) jTable1.getModel()).getValueAt(row, 3);
+                String cpuid = (String) jTable1.getModel().getValueAt(row, 3);
                 Preferences prefs = Preferences.getPreferences();
                 prefs.setBoardName(cpuid, name);
                 prefs.savePrefs();

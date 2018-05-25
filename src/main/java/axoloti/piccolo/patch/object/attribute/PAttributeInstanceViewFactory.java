@@ -13,6 +13,9 @@ import axoloti.patch.object.attribute.AttributeInstanceTextEditor;
 
 public class PAttributeInstanceViewFactory {
 
+    private PAttributeInstanceViewFactory() {
+    }
+
     public static PAttributeInstanceView createView(AttributeInstance model, IAxoObjectInstanceView obj) {
         AttributeInstanceController controller = model.getController();
         PAttributeInstanceView view;

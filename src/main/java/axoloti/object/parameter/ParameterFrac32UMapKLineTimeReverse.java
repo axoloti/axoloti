@@ -45,10 +45,10 @@ public class ParameterFrac32UMapKLineTimeReverse extends ParameterFrac32UMap {
         return listConvs;
     }
 
-    static public final String TypeName = "frac32.u.map.klineartime.reverse";
+    static public final String TYPE_NAME = "frac32.u.map.klineartime.reverse";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

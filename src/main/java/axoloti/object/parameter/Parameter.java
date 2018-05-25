@@ -23,7 +23,6 @@ import axoloti.property.BooleanProperty;
 import axoloti.property.Property;
 import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
-import generatedobjects.GeneratedObjects;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
@@ -84,7 +83,7 @@ public abstract class Parameter extends AtomDefinition implements Cloneable {
             serializer.write(this, os);
             p = serializer.read(getClass(), new ByteArrayInputStream(os.toByteArray()));
         } catch (Exception ex) {
-            Logger.getLogger(GeneratedObjects.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Parameter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return p;
     }

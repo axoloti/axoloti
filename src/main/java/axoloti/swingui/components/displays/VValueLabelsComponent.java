@@ -34,8 +34,8 @@ public class VValueLabelsComponent extends JComponent {
     private final double min;
     private final double tick;
 
-    int height = 128;
-    int width = 25;
+    private final static int height = 128;
+    private final static int width = 25;
 
     public VValueLabelsComponent(double min, double max, double tick) {
         this.max = max;
@@ -51,14 +51,14 @@ public class VValueLabelsComponent extends JComponent {
         setMinimumSize(d);
     }
 
-    final int margin = 0;
+    private final static int margin = 0;
 
     int valToPos(double v) {
         return (int) (margin + ((max - v) * (height - 2 * margin)) / (max - min));
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

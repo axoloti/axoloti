@@ -39,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.Box;
@@ -61,11 +62,6 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
     public AxoObjectInstanceView(IAxoObjectInstance objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
         initComponents();
-    }
-
-    @Override
-    public IAxoObjectInstance getDModel() {
-        return (AxoObjectInstance) super.getDModel();
     }
 
     public IAxoObject getType() {
@@ -99,11 +95,11 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
         initComponents2();
     }
 
-    List<IInletInstanceView> inletInstanceViews;
-    List<IOutletInstanceView> outletInstanceViews;
-    List<IAttributeInstanceView> attributeInstanceViews;
-    List<IParameterInstanceView> parameterInstanceViews;
-    List<IDisplayInstanceView> displayInstanceViews;
+    List<IInletInstanceView> inletInstanceViews = Collections.emptyList();
+    List<IOutletInstanceView> outletInstanceViews = Collections.emptyList();
+    List<IAttributeInstanceView> attributeInstanceViews = Collections.emptyList();
+    List<IParameterInstanceView> parameterInstanceViews = Collections.emptyList();
+    List<IDisplayInstanceView> displayInstanceViews = Collections.emptyList();
 
     void updateTooltext() {
         StringBuilder tooltiptxt = new StringBuilder("<html>");
@@ -470,17 +466,17 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
 
     @Override
     public List<IInletInstanceView> getInletInstanceViews() {
-        return inletInstanceViews;
+        return Collections.unmodifiableList(inletInstanceViews);
     }
 
     @Override
     public List<IOutletInstanceView> getOutletInstanceViews() {
-        return outletInstanceViews;
+        return Collections.unmodifiableList(outletInstanceViews);
     }
 
     @Override
     public List<IParameterInstanceView> getParameterInstanceViews() {
-        return parameterInstanceViews;
+        return Collections.unmodifiableList(parameterInstanceViews);
     }
 
 }

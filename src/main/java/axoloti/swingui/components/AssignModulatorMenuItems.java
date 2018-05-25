@@ -42,7 +42,7 @@ import javax.swing.JPanel;
  */
 public class AssignModulatorMenuItems {
 
-    double valueBeforeAdjustment;
+    private double valueBeforeAdjustment;
 
     public AssignModulatorMenuItems(final ParameterInstance parameterInstance, JComponent parent) {
         final ArrayList<HSliderComponent> hsls = new ArrayList<>();

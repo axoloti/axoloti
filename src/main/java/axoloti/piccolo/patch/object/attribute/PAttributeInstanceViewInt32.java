@@ -14,7 +14,7 @@ class PAttributeInstanceViewInt32 extends PAttributeInstanceViewInt {
     PVSliderComponent slider;
     PLabelComponent vlabel;
 
-    public PAttributeInstanceViewInt32(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewInt32(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

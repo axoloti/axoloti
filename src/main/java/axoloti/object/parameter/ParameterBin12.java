@@ -30,11 +30,11 @@ public class ParameterBin12 extends ParameterBin {
         super(name);
     }
 
-    static public final String TypeName = "bin12";
+    static public final String TYPE_NAME = "bin12";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

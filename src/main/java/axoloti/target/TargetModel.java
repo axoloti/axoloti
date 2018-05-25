@@ -3,11 +3,11 @@ package axoloti.target;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
 import axoloti.connection.IConnection;
-import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
+import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
@@ -20,6 +20,8 @@ import axoloti.utils.FirmwareID;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,30 +51,29 @@ public class TargetModel extends AbstractModel {
         updateLinkFirmwareID();
     }
 
-    IConnection connection;
+    private IConnection connection;
 
 //    QCmdProcessor qCmdProcessor = QCmdProcessor.getQCmdProcessor();
 
-    String linkFirmwareID;
-    MidiInputRoutingTable[] inputRoutingTables;
-    MidiOutputRoutingTable[] outputRoutingTables;
-    boolean sDCardMounted;
-    TargetRTInfo RTInfo;
-    SDCardInfo sdcardInfo = new SDCardInfo();
-    MidiMonitorData midiMonitor;
-    String patchName;
-    int patchIndex;
+    private String linkFirmwareID;
+    private List<MidiInputRoutingTable> inputRoutingTables = Collections.emptyList();
+    private List<MidiOutputRoutingTable> outputRoutingTables = Collections.emptyList();
+    private boolean sDCardMounted;
+    private TargetRTInfo RTInfo;
+    private SDCardInfo sdcardInfo = new SDCardInfo();
+    private MidiMonitorData midiMonitor;
+    private String patchName;
+    private int patchIndex;
     public boolean warnedAboutFWCRCMismatch = false;
 
     void readInputMapFromTarget() {
         ChunkData chunk_input = connection.getFWChunks().getOne(FourCCs.FW_MIDI_INPUT_ROUTING);
-        chunk_input.data.rewind();
-        int n_input_interfaces = chunk_input.data.remaining() / 4;
-        MidiInputRoutingTable[] cirs = new MidiInputRoutingTable[n_input_interfaces];
-        int ir_addrs[] = new int[n_input_interfaces];
+        ByteBuffer data = chunk_input.getData();
+        int n_input_interfaces = data.remaining() / 4;
+        List<MidiInputRoutingTable> cirs = new ArrayList<>(n_input_interfaces);
         for (int i = 0; i < n_input_interfaces; i++) {
-            cirs[i] = new MidiInputRoutingTable();
-            ir_addrs[i] = chunk_input.data.getInt();
+            int addr = data.getInt();
+            cirs.add(new MidiInputRoutingTable(addr));
         }
         CompletionHandler ch = new CompletionHandler() {
             int i = 0;
@@ -81,8 +82,8 @@ public class TargetModel extends AbstractModel {
             public void done() {
                 System.out.println("ch " + i);
                 if (i < n_input_interfaces) {
+                    cirs.get(i).retrieve(connection, this);
                     i++;
-                    cirs[i - 1].retrieve(connection, ir_addrs[i - 1], this);
                 } else {
                     System.out.println("ch done " + i);
                     setInputRoutingTable(cirs);
@@ -95,13 +96,12 @@ public class TargetModel extends AbstractModel {
 
     void readOutputMapFromTarget() {
         ChunkData chunk_output = connection.getFWChunks().getOne(FourCCs.FW_MIDI_OUTPUT_ROUTING);
-        chunk_output.data.rewind();
-        int n_output_interfaces = chunk_output.data.remaining() / 4;
-        MidiOutputRoutingTable[] cors = new MidiOutputRoutingTable[n_output_interfaces];
-        int or_addrs[] = new int[n_output_interfaces];
+        ByteBuffer data = chunk_output.getData();
+        int n_output_interfaces = data.remaining() / 4;
+        List<MidiOutputRoutingTable> cors = new ArrayList<>(n_output_interfaces);
         for (int i = 0; i < n_output_interfaces; i++) {
-            cors[i] = new MidiOutputRoutingTable();
-            or_addrs[i] = chunk_output.data.getInt();
+            int addr = data.getInt();
+            cors.add(new MidiOutputRoutingTable(addr));
         }
         CompletionHandler ch = new CompletionHandler() {
             int i = 0;
@@ -110,8 +110,8 @@ public class TargetModel extends AbstractModel {
             public void done() {
                 System.out.println("ch " + i);
                 if (i < n_output_interfaces) {
+                    cors.get(i).retrieve(connection, this);
                     i++;
-                    cors[i - 1].retrieve(connection, or_addrs[i - 1], this);
                 } else {
                     System.out.println("ch done " + i);
                     setOutputRoutingTable(cors);
@@ -139,8 +139,8 @@ public class TargetModel extends AbstractModel {
 
     public final static Property CONNECTION = new ObjectProperty("Connection", IConnection.class, TargetModel.class);
     public final static Property FIRMWARE_LINK_ID = new StringProperty("FirmwareLinkID", TargetModel.class);
-    public final static Property MRTS_INPUT = new ObjectProperty("InputRoutingTable", MidiInputRoutingTable[].class, TargetModel.class);
-    public final static Property MRTS_OUTPUT = new ObjectProperty("OutputRoutingTable", MidiOutputRoutingTable[].class, TargetModel.class);
+    public final static Property MRTS_INPUT = new ListProperty("InputRoutingTable", TargetModel.class);
+    public final static Property MRTS_OUTPUT = new ListProperty("OutputRoutingTable", TargetModel.class);
     public final static Property HAS_SDCARD = new BooleanProperty("SDCardMounted", TargetModel.class);
     public final static Property RTINFO = new ObjectProperty("RTInfo", TargetRTInfo.class, TargetModel.class);
     public final static Property PATCHINDEX = new IntegerProperty("PatchIndex", TargetModel.class);
@@ -162,21 +162,21 @@ public class TargetModel extends AbstractModel {
         return l;
     }
 
-    public MidiInputRoutingTable[] getInputRoutingTable() {
-        return inputRoutingTables;
+    public List<MidiInputRoutingTable> getInputRoutingTable() {
+        return Collections.unmodifiableList(inputRoutingTables);
     }
 
-    public void setInputRoutingTable(MidiInputRoutingTable[] routingTable) {
+    public void setInputRoutingTable(List<MidiInputRoutingTable> routingTable) {
         this.inputRoutingTables = routingTable;
         firePropertyChange(MRTS_INPUT,
                 null, routingTable);
     }
 
-    public MidiOutputRoutingTable[] getOutputRoutingTable() {
-        return outputRoutingTables;
+    public List<MidiOutputRoutingTable> getOutputRoutingTable() {
+        return Collections.unmodifiableList(outputRoutingTables);
     }
 
-    public void setOutputRoutingTable(MidiOutputRoutingTable[] routingTable) {
+    public void setOutputRoutingTable(List<MidiOutputRoutingTable> routingTable) {
         this.outputRoutingTables = routingTable;
         firePropertyChange(MRTS_OUTPUT,
                 null, routingTable);
@@ -292,8 +292,8 @@ public class TargetModel extends AbstractModel {
             setPatchName("???");
             return;
         }
-        chunk_output.data.rewind();
-        int addr = chunk_output.data.getInt();
+        ByteBuffer data = chunk_output.getData();
+        int addr = data.getInt();
         connection.appendToQueue(new QCmdMemRead(addr, 32, new IConnection.MemReadHandler() {
             @Override
             public void done(ByteBuffer mem) {
@@ -323,10 +323,10 @@ public class TargetModel extends AbstractModel {
         firePropertyChange(PATCHNAME, null, patchName);
     }
 
-    ArrayList<PollHandler> pollers = new ArrayList<>();
+    private final List<PollHandler> pollers = new LinkedList<>();
 
     public List<PollHandler> getPollers() {
-        return pollers;
+        return Collections.unmodifiableList(pollers);
     }
 
     public void addPoller(PollHandler poller) {
@@ -338,7 +338,7 @@ public class TargetModel extends AbstractModel {
     }
 
     @Override
-    protected AbstractController createController() {
+    protected TargetController createController() {
         return new TargetController(this);
     }
 

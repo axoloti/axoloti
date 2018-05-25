@@ -12,8 +12,8 @@ import javax.swing.event.ChangeListener;
 @Deprecated // we shall not use Swing controls in a patch
 class AttributeInstanceViewInt32 extends AttributeInstanceViewInt {
 
-    JSlider slider;
-    JLabel vlabel;
+    private JSlider slider;
+    private JLabel vlabel;
 
     AttributeInstanceViewInt32(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);

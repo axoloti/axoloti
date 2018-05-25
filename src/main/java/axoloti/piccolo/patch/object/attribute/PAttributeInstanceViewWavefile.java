@@ -14,7 +14,7 @@ class PAttributeInstanceViewWavefile extends PAttributeInstanceView {
 
     PTextFieldComponent TFwaveFilename;
 
-    public PAttributeInstanceViewWavefile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewWavefile(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

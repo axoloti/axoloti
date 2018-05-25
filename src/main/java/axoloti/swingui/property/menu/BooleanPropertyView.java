@@ -1,6 +1,7 @@
 package axoloti.swingui.property.menu;
 
 import axoloti.mvc.IModel;
+import axoloti.property.BooleanProperty;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JCheckBoxMenuItem;
@@ -9,11 +10,11 @@ import javax.swing.JCheckBoxMenuItem;
  *
  * @author jtaelman
  */
-public class BooleanProperty extends JCheckBoxMenuItem {
+public class BooleanPropertyView extends JCheckBoxMenuItem {
 
-    public BooleanProperty(IModel model, axoloti.property.BooleanProperty property) {
+    public BooleanPropertyView(IModel model, BooleanProperty property) {
         super(property.getFriendlyName());
-        axoloti.property.BooleanProperty p = (axoloti.property.BooleanProperty) property;
+        BooleanProperty p = property;
         Boolean v = p.get(model);
         if (v == null) {
             v = false;

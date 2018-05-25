@@ -12,7 +12,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
     private DropDownComponent comboBox;
 
-    public AttributeInstanceViewComboBox(AttributeInstanceComboBox attribute, AxoObjectInstanceView axoObjectView) {
+    AttributeInstanceViewComboBox(AttributeInstanceComboBox attribute, AxoObjectInstanceView axoObjectView) {
         super(attribute, axoObjectView);
         initComponents();
     }
@@ -52,7 +52,7 @@ class AttributeInstanceViewComboBox extends AttributeInstanceViewString {
 
     @Override
     public void setString(String s) {
-        AttributeInstanceComboBox aic = (AttributeInstanceComboBox) getDModel();
+        AttributeInstanceComboBox aic = getDModel();
         int index = aic.getIndex(s);
         if (aic.getDModel().getMenuEntries().size() > 0) {
             comboBox.setSelectedItem(aic.getDModel().getMenuEntries().get(index));

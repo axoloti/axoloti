@@ -33,9 +33,9 @@ import org.simpleframework.xml.Attribute;
 public abstract class DisplayInstance<T extends Display> extends AtomInstance<T, DisplayInstanceController> {
 
     @Attribute
-    String name;
+    private String name;
     @Attribute(required = false)
-    Boolean onParent;
+    private Boolean onParent;
 
     T display;
 

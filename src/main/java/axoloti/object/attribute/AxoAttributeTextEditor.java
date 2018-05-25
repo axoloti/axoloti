@@ -30,10 +30,10 @@ public class AxoAttributeTextEditor extends AxoAttribute {
         super(name);
     }
 
-    static public final String TypeName = "text";
+    static public final String TYPE_NAME = "text";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

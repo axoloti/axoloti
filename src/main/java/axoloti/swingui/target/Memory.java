@@ -17,7 +17,7 @@ import qcmds.QCmdMemRead;
  */
 public class Memory extends TJFrame implements ActionListener {
 
-    PollHandler poller;
+    private PollHandler poller;
 
     /**
      * Creates new form Memory
@@ -195,7 +195,7 @@ public class Memory extends TJFrame implements ActionListener {
         }));
     }
 
-    int addr = 0;
+    private int addr = 0;
 
     void setAddr(int addr) {
         if (this.addr == addr) {

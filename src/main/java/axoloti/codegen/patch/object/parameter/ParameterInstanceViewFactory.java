@@ -19,6 +19,9 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32;
  */
 public class ParameterInstanceViewFactory {
 
+    private ParameterInstanceViewFactory() {
+    }
+
     public static ParameterInstanceView createView(ParameterInstance model) {
         ParameterInstanceView view;
         // order of tests is important!

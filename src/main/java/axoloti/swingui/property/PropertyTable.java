@@ -29,7 +29,7 @@ public class PropertyTable extends JTable implements IView {
 
     private void initComponents() {
         setModel(new AbstractTableModel() {
-            private String[] columnNames = {"Property", "Value"};
+            private final String[] columnNames = {"Property", "Value"};
 
             @Override
             public String getColumnName(int column) {

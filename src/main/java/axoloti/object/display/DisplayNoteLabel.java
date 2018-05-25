@@ -44,11 +44,11 @@ public class DisplayNoteLabel extends Display {
         return Frac32.d;
     }
 
-    static public final String TypeName = "note.label";
+    static public final String TYPE_NAME = "note.label";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

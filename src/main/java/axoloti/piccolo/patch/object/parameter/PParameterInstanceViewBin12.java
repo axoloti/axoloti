@@ -9,7 +9,7 @@ import javax.swing.JPopupMenu;
 
 class PParameterInstanceViewBin12 extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin12(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewBin12(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

@@ -51,10 +51,10 @@ public class ParameterFrac32UMapGain16 extends ParameterFrac32UMap {
         return "parameter_function::pf_signed_clamp_fullrange";
     }
 
-    static public final String TypeName = "frac32.u.map.gain16";
+    static public final String TYPE_NAME = "frac32.u.map.gain16";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

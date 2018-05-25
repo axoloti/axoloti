@@ -33,10 +33,10 @@ import java.awt.geom.Rectangle2D;
  */
 public class HSliderComponent extends ACtrlComponent {
 
-    double value = 0;
-    double max = 128;
-    double min = -128;
-    int px;
+    private double value = 0;
+    private double max = 128;
+    private double min = -128;
+    private int px;
 
     public HSliderComponent() {
         super();
@@ -82,7 +82,7 @@ public class HSliderComponent extends ACtrlComponent {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

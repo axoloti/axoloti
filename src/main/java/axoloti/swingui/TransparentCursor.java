@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
  */
 public class TransparentCursor {
 
+    private TransparentCursor() {
+    }
+
     private static Cursor transparentCursor;
 
     public static Cursor get() {

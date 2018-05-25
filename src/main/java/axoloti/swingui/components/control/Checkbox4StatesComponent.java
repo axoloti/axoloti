@@ -209,7 +209,7 @@ public class Checkbox4StatesComponent extends ACtrlComponent {
     private static final Stroke strokeThick = new BasicStroke(2);
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

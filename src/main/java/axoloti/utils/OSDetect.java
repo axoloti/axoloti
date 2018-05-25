@@ -21,7 +21,10 @@ package axoloti.utils;
  *
  * @author Johannes Taelman
  */
-public final class OSDetect {
+public class OSDetect {
+
+    private OSDetect() {
+    }
 
     public enum OS {
 

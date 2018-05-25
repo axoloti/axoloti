@@ -28,11 +28,11 @@ public class QCmdMemRead1Word implements QCmdSerialTask {
     private final int addr;
     private int result = 0;
 
-    static class Sync {
+    private static class Sync {
 
         boolean ready = false;
     }
-    final Sync sync = new Sync();
+    private final Sync sync = new Sync();
 
     public QCmdMemRead1Word(int addr) {
         this.addr = addr;

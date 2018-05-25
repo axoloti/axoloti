@@ -6,6 +6,9 @@ package axoloti.chunks;
  */
 public class FourCCs {
 
+    private FourCCs() {
+    }
+
     static public final FourCC PATCH_META = new FourCC('P', 'T', 'C', 'H');
     static public final FourCC PATCH_PRESET = new FourCC('P', 'R', 'S', 'T');
     static public final FourCC PATCH_DISPLAY_META = new FourCC('D', 'I', 'S', 'M');

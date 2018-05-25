@@ -31,7 +31,7 @@ public class FourCC implements Comparable<FourCC> {
 
     @Override
     public int compareTo(FourCC o) {
-        return Integer.compare(o.x, x);
+        return Integer.compare(o.getInt(), x);
     }
 
 }

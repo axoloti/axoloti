@@ -34,7 +34,6 @@ import javax.swing.event.MouseInputAdapter;
 public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance> implements ActionListener, IParameterInstanceView {
 
     LabelComponent valuelbl = new LabelComponent("123456789");
-    ACtrlComponent ctrl;
     LabelComponent label = new LabelComponent("");
 
     AssignMidiCCComponent midiAssign;
@@ -44,7 +43,6 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
     ParameterInstanceView(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance);
         this.axoObjectInstanceView = axoObjectInstanceView;
-        initComponents();
     }
 
     protected void scrollTo() {
@@ -58,7 +56,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
         pv.scrollTo(this);
     }
 
-    private void initComponents() {
+    final void initCtrlComponent(ACtrlComponent ctrl) {
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
@@ -84,12 +82,11 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
             updateUnit();
         }
 
-        ctrl = createControl();
+        //ACtrlComponent ctrl = getControlComponent();
+        add(ctrl);
+        ctrl.addMouseListener(popupMouseListener);
 
-        add(getControlComponent());
-        getControlComponent().addMouseListener(popupMouseListener);
-
-        getControlComponent().addPropertyChangeListener(new PropertyChangeListener() {
+        ctrl.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE_ADJ_BEGIN)) {
@@ -106,7 +103,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
             @Override
             protected void focus() {
                 scrollTo();
-                ctrl.requestFocusInWindow();
+                getControlComponent().requestFocusInWindow();
             }
         };
     }

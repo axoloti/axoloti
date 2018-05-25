@@ -39,11 +39,11 @@ public class InletInt32 extends Inlet {
         return Int32.d;
     }
 
-    static public final String TypeName = "int32";
+    static public final String TYPE_NAME = "int32";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

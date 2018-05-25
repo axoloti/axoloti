@@ -35,7 +35,7 @@ import org.simpleframework.xml.core.Persist;
 public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttributeSDFile> {
 
     @Attribute(name = "file")
-    String fileName = "";
+    private String fileName = "";
 
     AttributeInstanceSDFile() {
         super();

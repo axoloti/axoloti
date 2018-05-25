@@ -31,9 +31,9 @@ import java.util.logging.Logger;
  */
 public class QCmdCompileModule extends QCmdShellTask {
 
-    PatchController patchController;
-    String module;
-    String moduleDir;
+    private final PatchController patchController;
+    private final String module;
+    private final String moduleDir;
 
     public QCmdCompileModule(PatchController patchController, String module, String moduleDir) {
         this.patchController = patchController;
@@ -48,7 +48,7 @@ public class QCmdCompileModule extends QCmdShellTask {
 
     @Override
     public String getDoneMessage() {
-        if (success) {
+        if (success()) {
             return "Done compiling module " + module;
          } else {
             return "Compiling module failed ( "+ module + " ) ";

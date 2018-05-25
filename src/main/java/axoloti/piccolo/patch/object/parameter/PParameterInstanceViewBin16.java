@@ -6,7 +6,7 @@ import axoloti.piccolo.components.control.PCheckboxComponent;
 
 class PParameterInstanceViewBin16 extends PParameterInstanceViewBin {
 
-    public PParameterInstanceViewBin16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewBin16(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

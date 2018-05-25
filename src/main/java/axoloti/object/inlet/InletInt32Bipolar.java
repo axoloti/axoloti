@@ -37,11 +37,11 @@ public class InletInt32Bipolar extends InletInt32 {
         return SignalMetaData.bipolar;
     }
 
-    static public final String TypeName = "int32.bipolar";
+    static public final String TYPE_NAME = "int32.bipolar";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

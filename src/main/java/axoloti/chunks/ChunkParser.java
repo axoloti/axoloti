@@ -27,7 +27,7 @@ public class ChunkParser {
 
     public ChunkData getOne(FourCC fourcc) {
         for (ChunkData d : list) {
-            if (d.fourcc.getInt() == fourcc.getInt()) {
+            if (d.getFourCC().getInt() == fourcc.getInt()) {
                 return d;
             }
         }
@@ -37,14 +37,14 @@ public class ChunkParser {
     public ChunkData[] getAll(FourCC fourcc) {
         int n = 0;
         for (ChunkData d : list) {
-            if (d.fourcc.getInt() == fourcc.getInt()) {
+            if (d.getFourCC().getInt() == fourcc.getInt()) {
                 n++;
             }
         }
         ChunkData[] r = new ChunkData[n];
         n = 0;
         for (ChunkData d : list) {
-            if (d.fourcc.getInt() == fourcc.getInt()) {
+            if (d.getFourCC().getInt() == fourcc.getInt()) {
                 r[n] = d;
                 n++;
             }

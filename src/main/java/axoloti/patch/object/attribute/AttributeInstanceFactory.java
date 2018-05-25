@@ -17,6 +17,9 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class AttributeInstanceFactory {
 
+    private AttributeInstanceFactory() {
+    }
+
     public static AttributeInstance createView(AxoAttribute model, AxoObjectInstance obj) {
         AtomDefinitionController controller = model.getController();
         AttributeInstance view;

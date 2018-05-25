@@ -28,6 +28,9 @@ import axoloti.object.display.DisplayVScale;
  */
 public class DisplayInstanceFactory {
 
+    private DisplayInstanceFactory() {
+    }
+
     public static DisplayInstance createView(Display model) {
         AtomDefinitionController controller = model.getController();
         DisplayInstance view;

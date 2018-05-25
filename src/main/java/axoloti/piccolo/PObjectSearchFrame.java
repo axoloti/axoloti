@@ -16,7 +16,7 @@ import java.awt.Point;
 public class PObjectSearchFrame extends ObjectSearchFrame {
 
     private double scale = 1.0;
-    private PatchViewPiccolo patchView;
+    private final PatchViewPiccolo patchView;
 
     public PObjectSearchFrame(PatchModel patchModel, PatchViewPiccolo patchView) {
         super(patchModel);
@@ -49,7 +49,7 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
 
 
             PAxoObjectInstanceViewAbstract objectInstanceView
-                    = (PAxoObjectInstanceViewAbstract) PAxoObjectInstanceViewFactory.getInstance().createView(
+                    = PAxoObjectInstanceViewFactory.createView(
                             objectInstance,
                             patchView);
 

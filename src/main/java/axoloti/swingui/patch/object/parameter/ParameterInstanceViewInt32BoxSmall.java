@@ -6,7 +6,7 @@ import axoloti.swingui.components.control.NumberBoxComponent;
 
 class ParameterInstanceViewInt32BoxSmall extends ParameterInstanceViewInt32Box {
 
-    public ParameterInstanceViewInt32BoxSmall(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewInt32BoxSmall(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

@@ -2,7 +2,6 @@ package axoloti.codegen.patch;
 
 import axoloti.Modulation;
 import axoloti.Modulator;
-import axoloti.abstractui.INetView;
 import axoloti.codegen.CodeGeneration;
 import axoloti.codegen.patch.object.AxoObjectInstanceCodegenViewFactory;
 import axoloti.codegen.patch.object.IAxoObjectInstanceCodegenView;
@@ -33,6 +32,7 @@ import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -45,15 +45,16 @@ import java.util.logging.Logger;
  */
 public class PatchViewCodegen extends View<PatchModel> {
 
-    List<IAxoObjectInstanceCodegenView> objectInstanceViews;
-    List<INetView> netViews;
-
-    final public List<ParameterInstanceView> parameterInstances;
-    final public List<DisplayInstanceView> displayInstances;
-    final int displayDataLength;
+    private final List<IAxoObjectInstanceCodegenView> objectInstanceViews;
+    private final List<ParameterInstanceView> parameterInstances;
+    private final List<DisplayInstanceView> displayInstances;
+    private final int displayDataLength;
 
     public PatchViewCodegen(PatchModel patchModel) {
         super(patchModel);
+
+        // needed...
+        patchModel.getController();
 
         // TODO: report/fail zombies
         objectInstanceViews = new ArrayList<>(
@@ -129,7 +130,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         c.append("};\n");
         c.append("    Parameter_name_t param_names[nparams] = {\n");
         for (ParameterInstanceView param : parameterInstances) {
-            c.append("{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getDModel().getUserParameterName(), CodeGeneration.param_name_length) + "},\n");
+            c.append("{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(param.getDModel().getUserParameterName(), CodeGeneration.PARAM_NAME_LENGTH) + "},\n");
         }
         c.append("};\n");
         c.append("    int32_t displayVector[" + displayDataLength + "];\n");
@@ -194,7 +195,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         }
         c.append("/* net latches */\n");
         for (Net n : model.getNets()) {
-            NetController nc = (NetController) n.getController();
+            NetController nc = n.getController();
             // check if net has multiple sources
             if ((n.CType() != null) && n.needsLatch()) {
                 c.append("    " + n.CType() + " " + n.getCName() + "Latch" + ";\n");
@@ -428,9 +429,9 @@ public class PatchViewCodegen extends View<PatchModel> {
     public String generateDisposeCodePlusPlusSub(String className) {
         // reverse order
         StringBuilder c = new StringBuilder();
-        int l = getDModel().objectinstances.size();
+        int l = getDModel().getObjectInstances().size();
         for (int i = l - 1; i >= 0; i--) {
-            IAxoObjectInstance o = getDModel().objectinstances.get(i);
+            IAxoObjectInstance o = getDModel().getObjectInstances().get(i);
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
                 c.append("   " + o.getCInstanceName() + "_i.Dispose();\n");
@@ -518,13 +519,13 @@ public class PatchViewCodegen extends View<PatchModel> {
                 OutletInstance firstSource = java.util.Collections.min(n.getSources());
                 if (i.getDataType().equals(n.getDataType())) {
                     if (n.needsLatch()
-                            && (getDModel().objectinstances.indexOf(firstSource.getParent()) >= getDModel().objectinstances.indexOf(o))) {
-                        c.append(n.getCName() + "Latch");
+                            && (getDModel().getObjectInstances().indexOf(firstSource.getParent()) >= getDModel().getObjectInstances().indexOf(o.getDModel()))) {
+                        c.append(n.getCName()).append("Latch");
                     } else {
                         c.append(n.getCName());
                     }
                 } else if (n.needsLatch()
-                        && (getDModel().objectinstances.indexOf(firstSource) >= getDModel().objectinstances.indexOf(o))) {
+                        && (getDModel().getObjectInstances().indexOf(firstSource.getParent()) >= getDModel().getObjectInstances().indexOf(o.getDModel()))) {
                     c.append(n.getDataType().generateConversionToType(i.getDataType(), n.getCName() + "Latch"));
                 } else {
                     c.append(n.getDataType().generateConversionToType(i.getDataType(), n.getCName()));
@@ -841,7 +842,7 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     public AxoObject generateAxoObjNormal(AxoObject template) {
         AxoObject ao = template;
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f")) {
                 Inlet i = new InletFrac32(o.getInstanceName(), o.getInstanceName());
@@ -927,7 +928,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         ao.sDisposeCode = generateDisposeCodePlusPlusSub("attr_parent");
 
         StringBuilder sKRateCode = new StringBuilder("int i; /*...*/\n");
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
                 sKRateCode.append("   " + o.getCInstanceName() + "_i._inlet = inlet_" + o.getLegalName() + ";\n");
@@ -938,7 +939,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             }
         }
         sKRateCode.append(generateDSPCodePlusPlusSub("attr_parent", true));
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i") || typeName.equals("patch/outlet b")) {
                 sKRateCode.append("   outlet_" + o.getLegalName() + " = " + o.getCInstanceName() + "_i._outlet;\n");
@@ -1053,7 +1054,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "}\n";
         StringBuilder sKRateCode = new StringBuilder();
 
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/outlet f") || typeName.equals("patch/outlet i")
                     || typeName.equals("patch/outlet b") || typeName.equals("patch/outlet string")) {
@@ -1068,7 +1069,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         }
         sKRateCode.append("int vi; for(vi=0;vi<attr_poly;vi++) {");
 
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("inlet") || typeName.equals("inlet_i") || typeName.equals("inlet_b") || typeName.equals("inlet_")
                     || typeName.equals("patch/inlet f") || typeName.equals("patch/inlet i") || typeName.equals("patch/inlet b")) {
@@ -1080,7 +1081,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             }
         }
         sKRateCode.append("getVoices()[vi].dsp();\n");
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("outlet") || typeName.equals("patch/outlet f")
                     || typeName.equals("patch/outlet i")
@@ -1392,7 +1393,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
 
-        for (IAxoObjectInstance o : getDModel().objectinstances) {
+        for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f")) {
                 ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
@@ -1470,11 +1471,11 @@ public class PatchViewCodegen extends View<PatchModel> {
     }
 
     public List<ParameterInstanceView> getParameterInstances() {
-        return parameterInstances;
+        return Collections.unmodifiableList(parameterInstances);
     }
 
     public List<DisplayInstanceView> getDisplayInstances() {
-        return displayInstances;
+        return Collections.unmodifiableList(displayInstances);
     }
 
     @Override

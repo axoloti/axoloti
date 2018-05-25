@@ -8,9 +8,9 @@ import java.beans.PropertyChangeEvent;
 class PDisplayInstanceViewFrac32UChart extends PDisplayInstanceViewFrac32 {
 
     private PScopeComponent scope;
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac32UChart(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewFrac32UChart(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

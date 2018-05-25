@@ -23,7 +23,10 @@ package axoloti.utils;
  */
 public class MidiControllerNames {
 
-    static String[] ccnames = {
+    private MidiControllerNames() {
+    }
+
+    private final static String[] ccnames = {
         "Bank select", // 0
         "Modulation",
         "Breath controller",

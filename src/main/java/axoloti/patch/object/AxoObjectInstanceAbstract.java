@@ -61,11 +61,11 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
     @Attribute(name = "name", required = false)
     String InstanceName;
     @Attribute
-    int x;
+    private int x;
     @Attribute
-    int y;
+    private int y;
 
-    Boolean selected = false;
+    private Boolean selected = false;
 
     private PatchModel patchModel;
 

@@ -9,10 +9,10 @@ import java.nio.ByteBuffer;
  */
 public class MidiMessage {
 
-    public final byte b0;
-    public final byte b1;
-    public final byte b2;
-    public final byte ph;
+    private final byte b0;
+    private final byte b1;
+    private final byte b2;
+    private final byte ph;
 
     public MidiMessage() {
         ph = 0;
@@ -28,7 +28,23 @@ public class MidiMessage {
         b2 = bb.get();
     }
 
-    String midiData[][] = {
+    public byte getB0() {
+        return b0;
+    }
+
+    public byte getB1() {
+        return b1;
+    }
+
+    public byte getB2() {
+        return b2;
+    }
+
+    public byte getPh() {
+        return ph;
+    }
+
+    private static final String midiData[][] = {
         {"Note Off", "note", "velocity"},
         {"Note On", "note", "velocity"},
         {"Key Pressure", "note", "pressure"},
@@ -38,7 +54,7 @@ public class MidiMessage {
         {"Pitch Bend", "lsb", "msb"}
     };
 
-    String midiRTNames[] = {
+    private static final String midiRTNames[] = {
         "System Exclusive",
         "MIDI Time Code Quarter Frame",
         "Song Position Pointer",
@@ -130,7 +146,6 @@ public class MidiMessage {
             case CIN_1_RESERVED:
                 return "Reserved";
             case CIN_2_2BYTE_SYSTEM_COMMON:
-                return midiRTNames[((0xFF & b0) - 0xF0)];
             case CIN_3_3BYTE_SYSTEM_COMMON:
                 return midiRTNames[((0xFF & b0) - 0xF0)];
             case CIN_4_SYSEX_START_OR_CONTINUE:

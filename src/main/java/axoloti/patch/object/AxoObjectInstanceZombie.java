@@ -29,9 +29,7 @@ import axoloti.patch.object.display.DisplayInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.property.Property;
 import java.awt.Point;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Root;
@@ -108,16 +106,6 @@ public class AxoObjectInstanceZombie extends AxoObjectInstance {
     @Override
     public List<DisplayInstance> getDisplayInstances() {
         return new ArrayList<>();
-    }
-
-    @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
-        super.modelPropertyChange(evt);
-    }
-
-    @Override
-    public List<Property> getProperties() {
-        return super.getProperties();
     }
 
     @Override

@@ -45,7 +45,7 @@ public class QCmdProcessor implements Runnable {
     private final PeriodicDialTransmitter dialTransmitter;
     private final Thread dialTransmitterThread;
 
-    class PeriodicPinger implements Runnable {
+    private class PeriodicPinger implements Runnable {
 
         @Override
         public void run() {
@@ -66,7 +66,7 @@ public class QCmdProcessor implements Runnable {
         }
     }
 
-    class PeriodicDialTransmitter implements Runnable {
+    private class PeriodicDialTransmitter implements Runnable {
 
         @Override
         public void run() {
@@ -127,7 +127,7 @@ public class QCmdProcessor implements Runnable {
                 if (QCmdGUITask.class.isInstance(cmd)) {
                     ((QCmdGUITask) cmd).performGUIAction(QCmdProcessor.this);
                 }
-                String m = ((QCmd) cmd).getDoneMessage();
+                String m = cmd.getDoneMessage();
                 if (m != null) {
                     MainFrame.mainframe.setProgressMessage(m);
                 }
@@ -170,7 +170,7 @@ public class QCmdProcessor implements Runnable {
         }
     }
 
-    QCmd currentcmd = null;
+    private QCmd currentcmd = null;
 
     @Override
     public void run() {

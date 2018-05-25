@@ -3,14 +3,15 @@ package axoloti.swingui.patch.object.parameter;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32SMapVSlider;
-import axoloti.preferences.Theme;
 import axoloti.patch.object.parameter.preset.Preset;
+import axoloti.preferences.Theme;
 import axoloti.swingui.components.control.VSliderComponent;
 
 class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32S {
 
-    public ParameterInstanceViewFrac32SMapVSlider(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewFrac32SMapVSlider(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
     }
 
     @Override
@@ -49,8 +50,10 @@ class ParameterInstanceViewFrac32SMapVSlider extends ParameterInstanceViewFrac32
         return new VSliderComponent(0.0, getDModel().getMin(), getDModel().getMax(), getDModel().getTick());
     }
 
+    private final VSliderComponent ctrl = createControl();
+
     @Override
     public VSliderComponent getControlComponent() {
-        return (VSliderComponent) ctrl;
+        return ctrl;
     }
 }

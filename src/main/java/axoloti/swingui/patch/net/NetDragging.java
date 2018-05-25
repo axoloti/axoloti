@@ -41,20 +41,21 @@ public class NetDragging extends NetView {
         super(net, patchView);
     }
 
-    Point p0;
+    private Point p0;
 
     public void setDragPoint(Point p0) {
         this.p0 = p0;
-        if (patchView != null) {
+        PatchViewSwing pv = getPatchView();
+        if (pv != null) {
             Rectangle r = new Rectangle(p0.x, p0.y, 1, 1);
-            patchView.scrollTo(r);
+            pv.scrollTo(r);
         }
         updateBounds();
         repaint();
     }
 
     @Override
-    protected void paint1(Graphics g) {
+    void paint1(Graphics g) {
         float shadowOffset = 0.5f;
 
         Graphics2D g2 = (Graphics2D) g;
@@ -64,7 +65,7 @@ public class NetDragging extends NetView {
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         Color c;
         if (getDModel().isValidNet()) {
-            if (selected) {
+            if (getSelected()) {
                 g2.setStroke(strokeValidSelected);
             } else {
                 g2.setStroke(strokeValidDeselected);
@@ -72,7 +73,7 @@ public class NetDragging extends NetView {
 
             c = getDModel().getDataType().getColor();
         } else {
-            if (selected) {
+            if (getSelected()) {
                 g2.setStroke(strokeBrokenSelected);
             } else {
                 g2.setStroke(strokeBrokenDeselected);
@@ -85,10 +86,10 @@ public class NetDragging extends NetView {
             }
         }
         if (p0 != null) {
-            Point from = SwingUtilities.convertPoint(patchView.layers, p0, this);
+            Point from = SwingUtilities.convertPoint(getPatchView().layers, p0, this);
             for (IIoletInstanceView i : getInletViews()) {
                 Point p1 = i.getJackLocInCanvas();
-                Point to = SwingUtilities.convertPoint(patchView.layers, p1, this);
+                Point to = SwingUtilities.convertPoint(getPatchView().layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 drawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);
@@ -96,7 +97,7 @@ public class NetDragging extends NetView {
             }
             for (IIoletInstanceView i : getOutletViews()) {
                 Point p1 = i.getJackLocInCanvas();
-                Point to = SwingUtilities.convertPoint(patchView.layers, p1, this);
+                Point to = SwingUtilities.convertPoint(getPatchView().layers, p1, this);
                 g2.setColor(Theme.getCurrentTheme().Cable_Shadow);
                 drawWire(g2, from.x + shadowOffset, from.y + shadowOffset, to.x + shadowOffset, to.y + shadowOffset);
                 g2.setColor(c);

@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class QCmdCompilePatch extends QCmdShellTask {
 
-    PatchController patchController;
+    private final PatchController patchController;
 
     public QCmdCompilePatch(PatchController patchController) {
         this.patchController = patchController;
@@ -44,7 +44,7 @@ public class QCmdCompilePatch extends QCmdShellTask {
 
     @Override
     public String getDoneMessage() {
-        if (success) {
+        if (success()) {
             return "Done compiling patch";
         } else {
             return "Compiling patch failed ( " + patchController.getFileNamePath() + " ) ";

@@ -9,8 +9,9 @@ import java.beans.PropertyChangeEvent;
 
 class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32HRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewInt32HRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
     }
 
     @Override
@@ -18,9 +19,11 @@ class ParameterInstanceViewInt32HRadio extends ParameterInstanceViewInt32 {
         return new HRadioComponent(0, ((ParameterInt32HRadio) getDModel().getDModel()).getMaxValue());
     }
 
+    private final HRadioComponent ctrl = createControl();
+
     @Override
     public HRadioComponent getControlComponent() {
-        return (HRadioComponent) ctrl;
+        return ctrl;
     }
 
     @Override

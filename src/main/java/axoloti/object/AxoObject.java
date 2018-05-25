@@ -143,103 +143,103 @@ public class AxoObject extends AxoObjectAbstract {
     public ArrayList<String> ModulationSources;
     @Path("inlets")
     @ElementListUnion({
-        @ElementList(entry = InletBool32.TypeName, type = InletBool32.class, inline = true, required = false),
-        @ElementList(entry = InletBool32Rising.TypeName, type = InletBool32Rising.class, inline = true, required = false),
-        @ElementList(entry = InletBool32RisingFalling.TypeName, type = InletBool32RisingFalling.class, inline = true, required = false),
-        @ElementList(entry = InletFrac32.TypeName, type = InletFrac32.class, inline = true, required = false),
-        @ElementList(entry = InletFrac32Pos.TypeName, type = InletFrac32Pos.class, inline = true, required = false),
-        @ElementList(entry = InletFrac32Bipolar.TypeName, type = InletFrac32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = InletCharPtr32.TypeName, type = InletCharPtr32.class, inline = true, required = false),
-        @ElementList(entry = InletInt32.TypeName, type = InletInt32.class, inline = true, required = false),
-        @ElementList(entry = InletInt32Pos.TypeName, type = InletInt32Pos.class, inline = true, required = false),
-        @ElementList(entry = InletInt32Bipolar.TypeName, type = InletInt32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = InletFrac32Buffer.TypeName, type = InletFrac32Buffer.class, inline = true, required = false),
-        @ElementList(entry = InletFrac32BufferPos.TypeName, type = InletFrac32BufferPos.class, inline = true, required = false),
-        @ElementList(entry = InletFrac32BufferBipolar.TypeName, type = InletFrac32BufferBipolar.class, inline = true, required = false)
+        @ElementList(entry = InletBool32.TYPE_NAME, type = InletBool32.class, inline = true, required = false),
+        @ElementList(entry = InletBool32Rising.TYPE_NAME, type = InletBool32Rising.class, inline = true, required = false),
+        @ElementList(entry = InletBool32RisingFalling.TYPE_NAME, type = InletBool32RisingFalling.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32.TYPE_NAME, type = InletFrac32.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32Pos.TYPE_NAME, type = InletFrac32Pos.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32Bipolar.TYPE_NAME, type = InletFrac32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = InletCharPtr32.TYPE_NAME, type = InletCharPtr32.class, inline = true, required = false),
+        @ElementList(entry = InletInt32.TYPE_NAME, type = InletInt32.class, inline = true, required = false),
+        @ElementList(entry = InletInt32Pos.TYPE_NAME, type = InletInt32Pos.class, inline = true, required = false),
+        @ElementList(entry = InletInt32Bipolar.TYPE_NAME, type = InletInt32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32Buffer.TYPE_NAME, type = InletFrac32Buffer.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32BufferPos.TYPE_NAME, type = InletFrac32BufferPos.class, inline = true, required = false),
+        @ElementList(entry = InletFrac32BufferBipolar.TYPE_NAME, type = InletFrac32BufferBipolar.class, inline = true, required = false)
     })
     public List<Inlet> inlets = new ArrayList<>();
     @Path("outlets")
     @ElementListUnion({
-        @ElementList(entry = OutletBool32.TypeName, type = OutletBool32.class, inline = true, required = false),
-        @ElementList(entry = OutletBool32Pulse.TypeName, type = OutletBool32Pulse.class, inline = true, required = false),
-        @ElementList(entry = OutletFrac32.TypeName, type = OutletFrac32.class, inline = true, required = false),
-        @ElementList(entry = OutletFrac32Pos.TypeName, type = OutletFrac32Pos.class, inline = true, required = false),
-        @ElementList(entry = OutletFrac32Bipolar.TypeName, type = OutletFrac32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = OutletCharPtr32.TypeName, type = OutletCharPtr32.class, inline = true, required = false),
-        @ElementList(entry = OutletInt32.TypeName, type = OutletInt32.class, inline = true, required = false),
-        @ElementList(entry = OutletInt32Pos.TypeName, type = OutletInt32Pos.class, inline = true, required = false),
-        @ElementList(entry = OutletInt32Bipolar.TypeName, type = OutletInt32Bipolar.class, inline = true, required = false),
-        @ElementList(entry = OutletFrac32Buffer.TypeName, type = OutletFrac32Buffer.class, inline = true, required = false),
-        @ElementList(entry = OutletFrac32BufferPos.TypeName, type = OutletFrac32BufferPos.class, inline = true, required = false),
-        @ElementList(entry = OutletFrac32BufferBipolar.TypeName, type = OutletFrac32BufferBipolar.class, inline = true, required = false)
+        @ElementList(entry = OutletBool32.TYPE_NAME, type = OutletBool32.class, inline = true, required = false),
+        @ElementList(entry = OutletBool32Pulse.TYPE_NAME, type = OutletBool32Pulse.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32.TYPE_NAME, type = OutletFrac32.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32Pos.TYPE_NAME, type = OutletFrac32Pos.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32Bipolar.TYPE_NAME, type = OutletFrac32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = OutletCharPtr32.TYPE_NAME, type = OutletCharPtr32.class, inline = true, required = false),
+        @ElementList(entry = OutletInt32.TYPE_NAME, type = OutletInt32.class, inline = true, required = false),
+        @ElementList(entry = OutletInt32Pos.TYPE_NAME, type = OutletInt32Pos.class, inline = true, required = false),
+        @ElementList(entry = OutletInt32Bipolar.TYPE_NAME, type = OutletInt32Bipolar.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32Buffer.TYPE_NAME, type = OutletFrac32Buffer.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32BufferPos.TYPE_NAME, type = OutletFrac32BufferPos.class, inline = true, required = false),
+        @ElementList(entry = OutletFrac32BufferBipolar.TYPE_NAME, type = OutletFrac32BufferBipolar.class, inline = true, required = false)
     })
     public List<Outlet> outlets = new ArrayList<>();
     @Path("displays")
     @ElementListUnion({
-        @ElementList(entry = DisplayBool32.TypeName, type = DisplayBool32.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32SChart.TypeName, type = DisplayFrac32SChart.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32UChart.TypeName, type = DisplayFrac32UChart.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32SDial.TypeName, type = DisplayFrac32SDial.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32UDial.TypeName, type = DisplayFrac32UDial.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32VU.TypeName, type = DisplayFrac32VU.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32VBar.TypeName, type = DisplayFrac32VBar.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac32VBarDB.TypeName, type = DisplayFrac32VBarDB.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac4ByteVBar.TypeName, type = DisplayFrac4ByteVBar.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac4UByteVBar.TypeName, type = DisplayFrac4UByteVBar.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac4UByteVBarDB.TypeName, type = DisplayFrac4UByteVBarDB.class, inline = true, required = false),
-        @ElementList(entry = DisplayInt32Label.TypeName, type = DisplayInt32Label.class, inline = true, required = false),
-        @ElementList(entry = DisplayInt32HexLabel.TypeName, type = DisplayInt32HexLabel.class, inline = true, required = false),
-        @ElementList(entry = DisplayInt32Bar16.TypeName, type = DisplayInt32Bar16.class, inline = true, required = false),
-        @ElementList(entry = DisplayInt32Bar32.TypeName, type = DisplayInt32Bar32.class, inline = true, required = false),
-        @ElementList(entry = DisplayVScale.TypeName, type = DisplayVScale.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac8S128VBar.TypeName, type = DisplayFrac8S128VBar.class, inline = true, required = false),
-        @ElementList(entry = DisplayFrac8U128VBar.TypeName, type = DisplayFrac8U128VBar.class, inline = true, required = false),
-        @ElementList(entry = DisplayNoteLabel.TypeName, type = DisplayNoteLabel.class, inline = true, required = false)
+        @ElementList(entry = DisplayBool32.TYPE_NAME, type = DisplayBool32.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32SChart.TYPE_NAME, type = DisplayFrac32SChart.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32UChart.TYPE_NAME, type = DisplayFrac32UChart.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32SDial.TYPE_NAME, type = DisplayFrac32SDial.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32UDial.TYPE_NAME, type = DisplayFrac32UDial.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32VU.TYPE_NAME, type = DisplayFrac32VU.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32VBar.TYPE_NAME, type = DisplayFrac32VBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac32VBarDB.TYPE_NAME, type = DisplayFrac32VBarDB.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac4ByteVBar.TYPE_NAME, type = DisplayFrac4ByteVBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac4UByteVBar.TYPE_NAME, type = DisplayFrac4UByteVBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac4UByteVBarDB.TYPE_NAME, type = DisplayFrac4UByteVBarDB.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32Label.TYPE_NAME, type = DisplayInt32Label.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32HexLabel.TYPE_NAME, type = DisplayInt32HexLabel.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32Bar16.TYPE_NAME, type = DisplayInt32Bar16.class, inline = true, required = false),
+        @ElementList(entry = DisplayInt32Bar32.TYPE_NAME, type = DisplayInt32Bar32.class, inline = true, required = false),
+        @ElementList(entry = DisplayVScale.TYPE_NAME, type = DisplayVScale.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac8S128VBar.TYPE_NAME, type = DisplayFrac8S128VBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayFrac8U128VBar.TYPE_NAME, type = DisplayFrac8U128VBar.class, inline = true, required = false),
+        @ElementList(entry = DisplayNoteLabel.TYPE_NAME, type = DisplayNoteLabel.class, inline = true, required = false)
     })
     public List<Display> displays = new ArrayList<>(); // readouts
     @Path("params")
     @ElementListUnion({
-        @ElementList(entry = ParameterFrac32UMap.TypeName, type = ParameterFrac32UMap.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapFreq.TypeName, type = ParameterFrac32UMapFreq.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapKDecayTime.TypeName, type = ParameterFrac32UMapKDecayTime.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapKDecayTimeReverse.TypeName, type = ParameterFrac32UMapKDecayTimeReverse.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapKLineTimeReverse.TypeName, type = ParameterFrac32UMapKLineTimeReverse.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapGain.TypeName, type = ParameterFrac32UMapGain.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapGain16.TypeName, type = ParameterFrac32UMapGain16.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapGainSquare.TypeName, type = ParameterFrac32UMapGainSquare.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapRatio.TypeName, type = ParameterFrac32UMapRatio.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapFilterQ.TypeName, type = ParameterFrac32UMapFilterQ.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMap.TypeName, type = ParameterFrac32SMap.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapPitch.TypeName, type = ParameterFrac32SMapPitch.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapKDTimeExp.TypeName, type = ParameterFrac32SMapKDTimeExp.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapKPitch.TypeName, type = ParameterFrac32SMapKPitch.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapLFOPitch.TypeName, type = ParameterFrac32SMapLFOPitch.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapKLineTimeExp.TypeName, type = ParameterFrac32SMapKLineTimeExp.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapKLineTimeExp2.TypeName, type = ParameterFrac32SMapKLineTimeExp2.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32UMapVSlider.TypeName, type = ParameterFrac32UMapVSlider.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapVSlider.TypeName, type = ParameterFrac32SMapVSlider.class, inline = true, required = false),
-        @ElementList(entry = ParameterFrac32SMapRatio.TypeName, type = ParameterFrac32SMapRatio.class, inline = true, required = false),
-        @ElementList(entry = ParameterInt32Box.TypeName, type = ParameterInt32Box.class, inline = true, required = false),
-        @ElementList(entry = ParameterInt32BoxSmall.TypeName, type = ParameterInt32BoxSmall.class, inline = true, required = false),
-        @ElementList(entry = ParameterInt32HRadio.TypeName, type = ParameterInt32HRadio.class, inline = true, required = false),
-        @ElementList(entry = ParameterInt32VRadio.TypeName, type = ParameterInt32VRadio.class, inline = true, required = false),
-        @ElementList(entry = Parameter4LevelX16.TypeName, type = Parameter4LevelX16.class, inline = true, required = false),
-        @ElementList(entry = ParameterBin12.TypeName, type = ParameterBin12.class, inline = true, required = false),
-        @ElementList(entry = ParameterBin16.TypeName, type = ParameterBin16.class, inline = true, required = false),
-        @ElementList(entry = ParameterBin32.TypeName, type = ParameterBin32.class, inline = true, required = false),
-        @ElementList(entry = ParameterBin1.TypeName, type = ParameterBin1.class, inline = true, required = false),
-        @ElementList(entry = ParameterBin1Momentary.TypeName, type = ParameterBin1Momentary.class, inline = true, required = false)
+        @ElementList(entry = ParameterFrac32UMap.TYPE_NAME, type = ParameterFrac32UMap.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapFreq.TYPE_NAME, type = ParameterFrac32UMapFreq.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapKDecayTime.TYPE_NAME, type = ParameterFrac32UMapKDecayTime.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapKDecayTimeReverse.TYPE_NAME, type = ParameterFrac32UMapKDecayTimeReverse.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapKLineTimeReverse.TYPE_NAME, type = ParameterFrac32UMapKLineTimeReverse.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapGain.TYPE_NAME, type = ParameterFrac32UMapGain.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapGain16.TYPE_NAME, type = ParameterFrac32UMapGain16.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapGainSquare.TYPE_NAME, type = ParameterFrac32UMapGainSquare.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapRatio.TYPE_NAME, type = ParameterFrac32UMapRatio.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapFilterQ.TYPE_NAME, type = ParameterFrac32UMapFilterQ.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMap.TYPE_NAME, type = ParameterFrac32SMap.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapPitch.TYPE_NAME, type = ParameterFrac32SMapPitch.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKDTimeExp.TYPE_NAME, type = ParameterFrac32SMapKDTimeExp.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKPitch.TYPE_NAME, type = ParameterFrac32SMapKPitch.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapLFOPitch.TYPE_NAME, type = ParameterFrac32SMapLFOPitch.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKLineTimeExp.TYPE_NAME, type = ParameterFrac32SMapKLineTimeExp.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapKLineTimeExp2.TYPE_NAME, type = ParameterFrac32SMapKLineTimeExp2.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32UMapVSlider.TYPE_NAME, type = ParameterFrac32UMapVSlider.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapVSlider.TYPE_NAME, type = ParameterFrac32SMapVSlider.class, inline = true, required = false),
+        @ElementList(entry = ParameterFrac32SMapRatio.TYPE_NAME, type = ParameterFrac32SMapRatio.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32Box.TYPE_NAME, type = ParameterInt32Box.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32BoxSmall.TYPE_NAME, type = ParameterInt32BoxSmall.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32HRadio.TYPE_NAME, type = ParameterInt32HRadio.class, inline = true, required = false),
+        @ElementList(entry = ParameterInt32VRadio.TYPE_NAME, type = ParameterInt32VRadio.class, inline = true, required = false),
+        @ElementList(entry = Parameter4LevelX16.TYPE_NAME, type = Parameter4LevelX16.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin12.TYPE_NAME, type = ParameterBin12.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin16.TYPE_NAME, type = ParameterBin16.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin32.TYPE_NAME, type = ParameterBin32.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin1.TYPE_NAME, type = ParameterBin1.class, inline = true, required = false),
+        @ElementList(entry = ParameterBin1Momentary.TYPE_NAME, type = ParameterBin1Momentary.class, inline = true, required = false)
     })
     public List<Parameter> params  = new ArrayList<>(); // variables
     @Path("attribs")
     @ElementListUnion({
-        @ElementList(entry = AxoAttributeObjRef.TypeName, type = AxoAttributeObjRef.class, inline = true, required = false),
-        @ElementList(entry = AxoAttributeTablename.TypeName, type = AxoAttributeTablename.class, inline = true, required = false),
-        @ElementList(entry = AxoAttributeComboBox.TypeName, type = AxoAttributeComboBox.class, inline = true, required = false),
-        @ElementList(entry = AxoAttributeInt32.TypeName, type = AxoAttributeInt32.class, inline = true, required = false),
-        @ElementList(entry = AxoAttributeSpinner.TypeName, type = AxoAttributeSpinner.class, inline = true, required = false),
-        @ElementList(entry = AxoAttributeSDFile.TypeName, type = AxoAttributeSDFile.class, inline = true, required = false),
-        @ElementList(entry = AxoAttributeTextEditor.TypeName, type = AxoAttributeTextEditor.class, inline = true, required = false)})
+        @ElementList(entry = AxoAttributeObjRef.TYPE_NAME, type = AxoAttributeObjRef.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeTablename.TYPE_NAME, type = AxoAttributeTablename.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeComboBox.TYPE_NAME, type = AxoAttributeComboBox.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeInt32.TYPE_NAME, type = AxoAttributeInt32.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeSpinner.TYPE_NAME, type = AxoAttributeSpinner.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeSDFile.TYPE_NAME, type = AxoAttributeSDFile.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeTextEditor.TYPE_NAME, type = AxoAttributeTextEditor.class, inline = true, required = false)})
     public List<AxoAttribute> attributes = new ArrayList<>(); // literal constants
     @ElementList(name = "file-depends", entry = "file-depend", type = SDFileReference.class, required = false)
     public ArrayList<SDFileReference> filedepends;
@@ -313,7 +313,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     // TODO: remove (AxoObjectEditor) reference from model to swingui
-    AxoObjectEditor editor;
+    private AxoObjectEditor editor;
 
     @Override
     public void openEditor() {
@@ -801,8 +801,11 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public ArrayList<SDFileReference> getFileDepends() {
-        return filedepends;
+    public List<SDFileReference> getFileDepends() {
+        if (filedepends == null) {
+            return null;
+        }
+        return Collections.unmodifiableList(filedepends);
     }
 
 }

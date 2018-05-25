@@ -12,7 +12,7 @@ class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
 
     PButtonComponent bEdit;
 
-    public PAttributeInstanceViewTextEditor(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewTextEditor(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

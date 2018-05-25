@@ -9,9 +9,9 @@ import java.beans.PropertyChangeEvent;
 class PDisplayInstanceViewFrac8U128VBar extends PDisplayInstanceView {
 
     private PVGraphComponent vgraph;
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac8U128VBar(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewFrac8U128VBar(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

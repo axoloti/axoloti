@@ -33,8 +33,8 @@ public class VBarComponentDB extends ADispComponent {
     private double max;
     private double min;
 
-    int height = 128;
-    int width = 8;
+    private final static int height = 128;
+    private final static int width = 8;
 
     public VBarComponentDB(double value, double min, double max) {
         this.max = max;
@@ -49,9 +49,8 @@ public class VBarComponentDB extends ADispComponent {
         setMaximumSize(d);
         setMinimumSize(d);
     }
-    int px;
 
-    final int margin = 2;
+    private final static int margin = 2;
 
     int valToPos(double v) {
         double dB = -1000;
@@ -68,7 +67,7 @@ public class VBarComponentDB extends ADispComponent {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

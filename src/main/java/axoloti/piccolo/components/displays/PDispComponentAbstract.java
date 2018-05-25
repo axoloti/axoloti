@@ -5,7 +5,7 @@ import axoloti.piccolo.patch.PatchPNode;
 
 abstract class PDispComponentAbstract extends PatchPNode {
 
-    public PDispComponentAbstract(IAxoObjectInstanceView axoObjectInstanceView) {
+    protected PDispComponentAbstract(IAxoObjectInstanceView axoObjectInstanceView) {
         super(axoObjectInstanceView.getPatchView());
     }
 

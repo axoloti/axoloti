@@ -10,6 +10,9 @@ import org.usb4java.LibUsbException;
  */
 public class LibUSBContext {
 
+    private LibUSBContext() {
+    }
+
     private static Context context;
 
     public static Context getContext() {

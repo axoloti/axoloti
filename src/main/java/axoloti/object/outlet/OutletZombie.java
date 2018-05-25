@@ -17,11 +17,11 @@ public class OutletZombie extends Outlet {
         return new axoloti.datatypes.DTZombie();
     }
 
-    static public final String TypeName = "zombie";
+    static public final String TYPE_NAME = "zombie";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

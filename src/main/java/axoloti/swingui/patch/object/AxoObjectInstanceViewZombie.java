@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 class AxoObjectInstanceViewZombie extends AxoObjectInstanceView {
 
-    public AxoObjectInstanceViewZombie(AxoObjectInstanceZombie objectInstance, PatchViewSwing patchView) {
+    AxoObjectInstanceViewZombie(AxoObjectInstanceZombie objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
         initComponents3();
     }

@@ -9,6 +9,9 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class InletInstanceFactory {
 
+    private InletInstanceFactory() {
+    }
+
     static public InletInstance createView(Inlet inlet, AxoObjectInstance axoObj) {
         InletInstance i = new InletInstance(inlet, axoObj);
         inlet.getController().addView(i);

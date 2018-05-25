@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class MidiMonitor extends TJFrame {
 
-    PollHandler poller;
+    private PollHandler poller;
 
     /**
      * Creates new form Memory
@@ -65,7 +65,7 @@ public class MidiMonitor extends TJFrame {
                 }
                 int index = (mmd.readIndex - row) & (mmd.msgs.length - 1);
                 MidiMessage msg = mmd.msgs[index];
-                if (msg.ph == 0 && msg.b0 == 0) {
+                if (msg.getPh() == 0 && msg.getB0() == 0) {
                     return ""; // uninitialized
                 }
                 switch (column) {
@@ -75,7 +75,7 @@ public class MidiMonitor extends TJFrame {
                         if (msg.getCin() == 0xF) {
                             return "";
                         }
-                        if ((msg.ph & 0x08) == 0x08) {
+                        if ((msg.getPh() & 0x08) == 0x08) {
                             return String.format("%2d", msg.getChannelNumber() + 1);
                         } else {
                             return "";
@@ -85,11 +85,11 @@ public class MidiMonitor extends TJFrame {
                             case 0:
                                 return "";
                             case 1:
-                                return String.format("%02X", msg.b0);
+                                return String.format("%02X", msg.getB0());
                             case 2:
-                                return String.format("%02X %02X", msg.b0, msg.b1);
+                                return String.format("%02X %02X", msg.getB0(), msg.getB1());
                             case 3:
-                                return String.format("%02X %02X %02X", msg.b0, msg.b1, msg.b2);
+                                return String.format("%02X %02X %02X", msg.getB0(), msg.getB1(), msg.getB2());
                         }
                         return "???";
                     case 3:

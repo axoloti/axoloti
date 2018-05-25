@@ -45,10 +45,10 @@ public class ParameterFrac32UMapKDecayTime extends ParameterFrac32UMap {
         return listConvs;
     }
 
-    static public final String TypeName = "frac32.u.map.kdecaytime";
+    static public final String TYPE_NAME = "frac32.u.map.kdecaytime";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

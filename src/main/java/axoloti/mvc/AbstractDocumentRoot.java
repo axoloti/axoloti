@@ -20,7 +20,7 @@ public class AbstractDocumentRoot extends AbstractModel<DocumentRootController> 
     private final UndoManager1 undoManager = new UndoManager1(this);
     private UndoableEdit lastUndoableEditEventWhenSaved = null;
 
-    boolean dirty;
+    private boolean dirty;
     private UndoableEdit editToBeUndone;
 
     public UndoManager1 getUndoManager() {

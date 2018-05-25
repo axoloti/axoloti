@@ -9,7 +9,7 @@ import java.beans.PropertyChangeEvent;
 
 class PParameterInstanceViewInt32HRadio extends PParameterInstanceViewInt32 {
 
-    public PParameterInstanceViewInt32HRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewInt32HRadio(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

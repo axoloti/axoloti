@@ -10,7 +10,7 @@ class PDisplayInstanceViewInt32Label extends PDisplayInstanceViewInt32 {
 
     private PLabelComponent readout;
 
-    public PDisplayInstanceViewInt32Label(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PDisplayInstanceViewInt32Label(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
         initComponents();
     }

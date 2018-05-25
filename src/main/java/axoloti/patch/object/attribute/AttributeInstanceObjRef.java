@@ -32,7 +32,7 @@ import org.simpleframework.xml.core.Persist;
 public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttributeObjRef> {
 
     @Attribute(name = "obj")
-    String objName = "";
+    private String objName = "";
 
     AttributeInstanceObjRef() {
     }

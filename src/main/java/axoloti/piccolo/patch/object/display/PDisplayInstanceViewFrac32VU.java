@@ -6,9 +6,10 @@ import axoloti.piccolo.components.displays.PVUComponent;
 import java.beans.PropertyChangeEvent;
 
 class PDisplayInstanceViewFrac32VU extends PDisplayInstanceViewFrac32 {
-    private IAxoObjectInstanceView axoObjectInstanceView;
 
-    public PDisplayInstanceViewFrac32VU(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    private final IAxoObjectInstanceView axoObjectInstanceView;
+
+    PDisplayInstanceViewFrac32VU(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

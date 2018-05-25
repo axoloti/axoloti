@@ -18,8 +18,7 @@ import javax.swing.JPopupMenu;
 public class InletInstanceView extends IoletInstanceView<InletInstance> implements IInletInstanceView {
 
     public InletInstanceView(InletInstance inletInstance, AxoObjectInstanceViewAbstract axoObj) {
-        super(inletInstance);
-        this.axoObj = axoObj;
+        super(inletInstance, axoObj);
         initComponents();
     }
 

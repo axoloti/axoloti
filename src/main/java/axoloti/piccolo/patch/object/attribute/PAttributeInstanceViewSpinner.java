@@ -13,7 +13,7 @@ class PAttributeInstanceViewSpinner extends PAttributeInstanceViewInt {
 
     PNumberBoxComponent spinner;
 
-    public PAttributeInstanceViewSpinner(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
+    PAttributeInstanceViewSpinner(AttributeInstance attribute, IAxoObjectInstanceView axoObjectInstanceView) {
         super(attribute, axoObjectInstanceView);
         initComponents();
     }

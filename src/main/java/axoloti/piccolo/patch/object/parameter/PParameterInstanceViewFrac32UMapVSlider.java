@@ -8,7 +8,7 @@ import axoloti.preferences.Theme;
 
 class PParameterInstanceViewFrac32UMapVSlider extends PParameterInstanceViewFrac32U {
 
-    public PParameterInstanceViewFrac32UMapVSlider(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    PParameterInstanceViewFrac32UMapVSlider(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
     }
 

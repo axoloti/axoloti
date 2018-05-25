@@ -12,6 +12,9 @@ import axoloti.patch.object.IAxoObjectInstance;
  */
 public class AxoObjectInstanceCodegenViewFactory {
 
+    private AxoObjectInstanceCodegenViewFactory() {
+    }
+
     public static IAxoObjectInstanceCodegenView createView(IAxoObjectInstance model) {
         IAxoObjectInstanceCodegenView view;
         if (model instanceof AxoObjectInstancePatcher) {

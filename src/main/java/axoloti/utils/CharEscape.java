@@ -23,6 +23,9 @@ package axoloti.utils;
  */
 public class CharEscape {
 
+    private CharEscape() {
+    }
+
     static public String charEscape(String s) {
         s = s.replaceAll("_", "__");
         s = s.replaceAll(" ", "_space_");

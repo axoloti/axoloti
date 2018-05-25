@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Johannes Taelman
  */
-public final class ParameterFrac32SMapRatio extends ParameterFrac32SMap {
+public class ParameterFrac32SMapRatio extends ParameterFrac32SMap {
 
     public ParameterFrac32SMapRatio() {
         super();
@@ -45,10 +45,10 @@ public final class ParameterFrac32SMapRatio extends ParameterFrac32SMap {
         return listConvs;
     }
 
-    static public final String TypeName = "frac32.s.map.ratio";
+    static public final String TYPE_NAME = "frac32.s.map.ratio";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

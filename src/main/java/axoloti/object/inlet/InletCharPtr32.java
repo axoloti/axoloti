@@ -38,11 +38,11 @@ public class InletCharPtr32 extends Inlet {
         return CharPtr32.d;
     }
 
-    static public final String TypeName = "charptr32";
+    static public final String TYPE_NAME = "charptr32";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

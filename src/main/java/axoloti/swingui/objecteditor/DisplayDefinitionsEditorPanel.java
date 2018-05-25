@@ -27,7 +27,7 @@ import axoloti.object.display.DisplayTypes;
  */
 class DisplayDefinitionsEditorPanel extends AtomDefinitionsEditor<Display> {
 
-    public DisplayDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
+    DisplayDefinitionsEditorPanel(AxoObject obj, AxoObjectEditor editor) {
         super(obj, AxoObject.OBJ_DISPLAYS, DisplayTypes.getTypes(), editor);
     }
 

@@ -31,7 +31,7 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
     public TextEditor editor; // TODO: remove reference to swingui...
 
     @Element(data = true, required = false)
-    String sText;
+    private String sText;
 
     AttributeInstanceTextEditor() {
         super();

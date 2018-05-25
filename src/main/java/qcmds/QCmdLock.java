@@ -25,7 +25,7 @@ import axoloti.live.patch.PatchViewLive;
  */
 public class QCmdLock implements QCmdGUITask {
 
-    PatchViewLive patchViewLive;
+    private final PatchViewLive patchViewLive;
 
     public QCmdLock(PatchViewLive patchViewLive) {
         this.patchViewLive = patchViewLive;

@@ -38,10 +38,10 @@ public class OutletBool32Pulse extends OutletBool32 {
         return SignalMetaData.pulse;
     }
 
-    static public final String TypeName = "bool32.pulse";
+    static public final String TYPE_NAME = "bool32.pulse";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

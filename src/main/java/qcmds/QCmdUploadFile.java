@@ -37,11 +37,11 @@ import javax.swing.SwingUtilities;
 public class QCmdUploadFile implements QCmdSerialTask {
 
     InputStream inputStream;
-    final String filename;
-    final Calendar cal;
-    File file;
-    long size;
-    long tsEpoch;
+    private final String filename;
+    private final Calendar cal;
+    private File file;
+    private long size;
+    private long tsEpoch;
     boolean success = false;
 
     public QCmdUploadFile(InputStream inputStream, String filename) {
@@ -145,9 +145,7 @@ public class QCmdUploadFile implements QCmdSerialTask {
                         TargetModel.getTargetModel().setSDCardInfo(sdcardinfo);
                     }
                 });
-            } catch (InterruptedException ex) {
-                Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InvocationTargetException ex) {
+            } catch (InterruptedException | InvocationTargetException ex) {
                 Logger.getLogger(QCmdUploadFile.class.getName()).log(Level.SEVERE, null, ex);
             }
             success = true;

@@ -21,6 +21,7 @@ import java.awt.Stroke;
 import java.awt.geom.QuadCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -29,10 +30,10 @@ public class NetView extends JComponent implements INetView {
 
     protected List<IOutletInstanceView> source = new ArrayList<>();
     protected List<IInletInstanceView> dest = new ArrayList<>();
-    protected boolean selected = false;
+    private boolean selected = false;
 
-    Net net;
-    PatchViewSwing patchView;
+    private final Net net;
+    private final PatchViewSwing patchView;
 
     public NetView(Net net, PatchViewSwing patchView) {
         this.patchView = patchView;
@@ -106,6 +107,10 @@ public class NetView extends JComponent implements INetView {
     @Override
     public boolean getSelected() {
         return selected;
+    }
+
+    PatchViewSwing getPatchView() {
+        return patchView;
     }
 
     final static float[] dash = {2.f, 4.f};
@@ -241,12 +246,12 @@ public class NetView extends JComponent implements INetView {
 
     @Override
     public List<IInletInstanceView> getInletViews() {
-        return dest;
+        return Collections.unmodifiableList(dest);
     }
 
     @Override
     public List<IOutletInstanceView> getOutletViews() {
-        return source;
+        return Collections.unmodifiableList(source);
     }
 
     @Override

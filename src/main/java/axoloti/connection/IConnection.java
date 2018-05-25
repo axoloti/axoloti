@@ -81,8 +81,8 @@ public abstract class IConnection extends View<TargetModel> {
     abstract public ChunkParser getFWChunks();
     abstract public String getFWID();
 
-    private final static short bulkVID = (short) 0x16C0;
-    private final static short bulkPID = (short) 0x0442;
+    private final static short BULK_VID = (short) 0x16C0;
+    private final static short BULK_PID = (short) 0x0442;
 
     public static DeviceHandle openDeviceHandle(String _cpuid) {
         // Read the USB device list
@@ -100,7 +100,7 @@ public abstract class IConnection extends View<TargetModel> {
                 if (result != LibUsb.SUCCESS) {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
-                if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
+                if (descriptor.idVendor() == BULK_VID && descriptor.idProduct() == BULK_PID) {
                     Logger.getLogger(IConnection.class.getName()).log(Level.INFO, "USB device found");
                     DeviceHandle h = new DeviceHandle();
                     result = LibUsb.open(d, h);
@@ -126,7 +126,7 @@ public abstract class IConnection extends View<TargetModel> {
                 if (result != LibUsb.SUCCESS) {
                     throw new LibUsbException("Unable to read device descriptor", result);
                 }
-                if (descriptor.idVendor() == bulkVID && descriptor.idProduct() == bulkPID) {
+                if (descriptor.idVendor() == BULK_VID && descriptor.idProduct() == BULK_PID) {
                     Logger.getLogger(IConnection.class.getName()).log(Level.INFO, "USB device found");
                     DeviceHandle h = new DeviceHandle();
                     result = LibUsb.open(d, h);

@@ -39,10 +39,10 @@ public class OutletFrac32Buffer extends Outlet {
         return Frac32buffer.d;
     }
 
-    static public final String TypeName = "frac32buffer";
+    static public final String TYPE_NAME = "frac32buffer";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

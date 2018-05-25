@@ -31,6 +31,9 @@ import java.util.zip.CRC32;
  */
 public class FirmwareID {
 
+    private FirmwareID() {
+    }
+
     static public String getFirmwareID() {
         File f = new File(System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin");
         if (!f.canRead()) {

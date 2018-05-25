@@ -33,8 +33,8 @@ public class VLineComponent extends ADispComponent {
     private double max;
     private double min;
 
-    int height = 128;
-    int width = 1;
+    private final static int height = 128;
+    private final static int width = 1;
 
     public VLineComponent(double value, double min, double max) {
         this.max = max;
@@ -49,16 +49,15 @@ public class VLineComponent extends ADispComponent {
         setMaximumSize(d);
         setMinimumSize(d);
     }
-    int px;
 
-    final int margin = 0;
+    private final static int margin = 0;
 
     int valToPos(double v) {
         return (int) (margin + ((max - v) * (height - 2 * margin)) / (max - min));
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

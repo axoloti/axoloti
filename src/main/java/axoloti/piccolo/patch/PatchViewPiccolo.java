@@ -1,12 +1,12 @@
 package axoloti.piccolo.patch;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.IIoletInstanceView;
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
-import axoloti.abstractui.PatchView.Direction;
 import axoloti.abstractui.PatchViewportView;
+import axoloti.mvc.IModel;
+import axoloti.mvc.array.ArrayView;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
@@ -38,6 +38,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Level;
@@ -389,8 +390,7 @@ public class PatchViewPiccolo extends PatchView {
         }
     }
 
-    @Override
-    public void add(IAxoObjectInstanceView v) {
+    private void add(IAxoObjectInstanceView v) {
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().addChild(node);
         v.resizeToGrid();
@@ -398,27 +398,23 @@ public class PatchViewPiccolo extends PatchView {
         addFocusables(node.getChildrenIterator());
     }
 
-    @Override
-    public void remove(IAxoObjectInstanceView v) {
+    private void remove(IAxoObjectInstanceView v) {
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().removeChild(node);
         removeFocusables(node.getChildrenIterator());
     }
 
-    @Override
-    public void remove(INetView view) {
+    private void remove(INetView view) {
         getCanvas().getLayer().removeChild((PatchPNode) view);
     }
 
-    @Override
-    public void removeAllObjectViews() {
+    private void removeAllObjectViews() {
         for (IAxoObjectInstanceView objectView : objectInstanceViews) {
             getCanvas().getLayer().removeChild((PatchPNode) objectView);
         }
     }
 
-    @Override
-    public void removeAllNetViews() {
+    private void removeAllNetViews() {
         for (INetView netView : netViews) {
             getCanvas().getLayer().removeChild((PatchPNode) netView);
             for (IIoletInstanceView iiv : netView.getInletViews()) {
@@ -430,8 +426,7 @@ public class PatchViewPiccolo extends PatchView {
         }
     }
 
-    @Override
-    public void add(INetView v) {
+    private void add(INetView v) {
         PatchPNode node = (PatchPNode) v;
         getCanvas().getLayer().addChild(node);
         if (cordsInBackground) {
@@ -476,7 +471,7 @@ public class PatchViewPiccolo extends PatchView {
         }
 
         osf.launch(patchPosition, o, searchString);
-        Point ps = getDModel().getController().getViewLocationOnScreen();
+        Point ps = new Point(100, 100); // TODO: piccolo: show patch selector at object position
         Point patchLocClipped = osf.clipToStayWithinScreen(canvasPosition);
         osf.setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
         osf.setVisible(true);
@@ -516,10 +511,63 @@ public class PatchViewPiccolo extends PatchView {
         focusables.get((focusable.getFocusableIndex() + 1) % focusables.size()).grabFocus();
     }
 
+    HashMap<IModel, IAxoObjectInstanceView> view_cache = new HashMap<>();
+
+    ArrayView<IAxoObjectInstanceView, IAxoObjectInstance> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView, IAxoObjectInstance>() {
+        @Override
+        protected IAxoObjectInstanceView viewFactory(IAxoObjectInstance model) {
+            IAxoObjectInstance model1 = (IAxoObjectInstance) model;
+            IAxoObjectInstanceView view = view_cache.get(model1);
+            if (view == null) {
+                view = PAxoObjectInstanceViewFactory.createView(model1, PatchViewPiccolo.this);
+            }
+            add(view);
+            return view;
+        }
+
+        @Override
+        protected void updateUI(List<IAxoObjectInstanceView> views) {
+            updateSize();
+        }
+
+        @Override
+        protected void removeView(IAxoObjectInstanceView view) {
+            view.dispose();
+            remove(view);
+            view_cache.put(view.getDModel(), view);
+        }
+
+    };
+
+    ArrayView<INetView, Net> netViewSync = new ArrayView<INetView, Net>() {
+        @Override
+        protected INetView viewFactory(Net net) {
+            INetView view = new PNetView(net, PatchViewPiccolo.this);
+            net.getController().addView(view);
+            add(view);
+            view.repaint();
+            return view;
+        }
+
+        @Override
+        protected void updateUI(List<INetView> views) {
+        }
+
+        @Override
+        protected void removeView(INetView view) {
+            remove(view);
+        }
+
+    };
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (PatchModel.PATCH_LOCKED.is(evt)) {
+        if (PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
+            objectInstanceViews = objectInstanceViewSync.sync(objectInstanceViews, model.getObjectInstances());
+        } else if (PatchModel.PATCH_NETS.is(evt)) {
+            netViews = netViewSync.sync(netViews, model.getNets());
+        } else if (PatchModel.PATCH_LOCKED.is(evt)) {
             if ((Boolean)evt.getNewValue() == false) {
                 canvas.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
@@ -530,18 +578,6 @@ public class PatchViewPiccolo extends PatchView {
 
     @Override
     public void dispose() {
-    }
-
-    @Override
-    public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory() {
-        return PAxoObjectInstanceViewFactory.getInstance();
-    }
-
-    @Override
-    public INetView createNetView(Net net, PatchView patchView) {
-        INetView nv = new PNetView(net, (PatchViewPiccolo) patchView);
-        net.getController().addView(nv);
-        return nv;
     }
 
     @Override

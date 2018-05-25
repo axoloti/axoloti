@@ -39,10 +39,10 @@ public class InletBool32 extends Inlet {
         return Bool32.d;
     }
 
-    static public final String TypeName = "bool32";
+    static public final String TYPE_NAME = "bool32";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

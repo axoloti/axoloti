@@ -1,6 +1,8 @@
 package axoloti.mvc;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
@@ -78,8 +80,8 @@ public class UndoableEditGroup implements UndoableEdit {
         UndoablePropertyChange lastEdit = elements.get(elements.size() - 1);
         if ((lastEdit.getModel() == anAbsEdit.getModel())
                 && (lastEdit.getProperty() == anAbsEdit.getProperty())) {
-            lastEdit.new_value = anAbsEdit.getNewValue();
-            if ((lastEdit.new_value != null) && (lastEdit.new_value.equals(lastEdit.old_value))) {
+            lastEdit.setNewValue(anAbsEdit.getNewValue());
+            if ((lastEdit.getNewValue() != null) && (lastEdit.getNewValue().equals(lastEdit.getOldValue()))) {
                 elements.remove(lastEdit);
             }
             return true;
@@ -120,8 +122,8 @@ public class UndoableEditGroup implements UndoableEdit {
         return "Redo " + actionName;
     }
 
-    public ArrayList<UndoablePropertyChange> getElements() {
-        return elements;
+    public List<UndoablePropertyChange> getElements() {
+        return Collections.unmodifiableList(elements);
     }
 
 }

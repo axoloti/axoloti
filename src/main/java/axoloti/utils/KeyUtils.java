@@ -8,6 +8,9 @@ import org.piccolo2d.event.PInputEvent;
 
 public class KeyUtils {
 
+    private KeyUtils() {
+    }
+
     public static boolean isControlOrCommand(int code) {
         return code == KeyEvent.VK_CONTROL || code == KeyEvent.VK_META;
     }

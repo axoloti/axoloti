@@ -22,8 +22,9 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     AssignModulatorComponent modulationAssign;
     AssignPresetComponent presetAssign;
 
-    public ParameterInstanceViewFrac32UMap(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewFrac32UMap(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
         initComponent();
     }
 
@@ -100,9 +101,11 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
         m.add(m2);
     }
 
+    private final DialComponent ctrl = createControl();
+
     @Override
     public DialComponent getControlComponent() {
-        return (DialComponent) ctrl;
+        return ctrl;
     }
 
     @Override
@@ -114,7 +117,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
 

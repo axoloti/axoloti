@@ -21,6 +21,7 @@ import axoloti.property.Property;
 import axoloti.property.StringListProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.ElementList;
 
@@ -48,7 +49,7 @@ public class AxoAttributeComboBox extends AxoAttribute {
     }
 
     public List<String> getMenuEntries() {
-        return MenuEntries;
+        return Collections.unmodifiableList(MenuEntries);
     }
 
     public void setMenuEntries(List<String> MenuEntries) {
@@ -58,7 +59,7 @@ public class AxoAttributeComboBox extends AxoAttribute {
     }
 
     public List<String> getCEntries() {
-        return CEntries;
+        return Collections.unmodifiableList(CEntries);
     }
 
     public void setCEntries(List<String> CEntries) {
@@ -67,11 +68,11 @@ public class AxoAttributeComboBox extends AxoAttribute {
         firePropertyChange(ATOM_CENTRIES, oldVal, CEntries);
     }
 
-    static public final String TypeName = "combo";
+    static public final String TYPE_NAME = "combo";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

@@ -18,10 +18,11 @@
 package axoloti.swingui.patch;
 
 import axoloti.abstractui.IAxoObjectInstanceView;
-import axoloti.abstractui.IAxoObjectInstanceViewFactory;
 import axoloti.abstractui.INetView;
 import axoloti.abstractui.PatchView;
 import axoloti.abstractui.PatchViewportView;
+import axoloti.mvc.IModel;
+import axoloti.mvc.array.ArrayView;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
@@ -50,6 +51,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,7 +73,7 @@ import org.simpleframework.xml.core.Persister;
 @Root(name = "patch-1.0")
 public class PatchViewSwing extends PatchView {
 
-    static class JPanelAbsoluteLayout extends JPanel {
+    private static class JPanelAbsoluteLayout extends JPanel {
 
         JPanelAbsoluteLayout() {
             super(null);
@@ -88,13 +90,13 @@ public class PatchViewSwing extends PatchView {
     public PatchLayeredPane layers = new PatchLayeredPane();
 
     public JPanel objectLayerPanel = new JPanelAbsoluteLayout();
-    public JPanel draggedObjectLayerPanel = new JPanelAbsoluteLayout();
-    public JPanel netLayerPanel = new JPanelAbsoluteLayout();
+    private JPanel draggedObjectLayerPanel = new JPanelAbsoluteLayout();
+    private JPanel netLayerPanel = new JPanelAbsoluteLayout();
     public JPanel selectionRectLayerPanel = new JPanelAbsoluteLayout();
 
-    SelectionRectangle selectionrectangle = new SelectionRectangle();
-    Point selectionRectStart;
-    Point panOrigin;
+    private SelectionRectangle selectionrectangle = new SelectionRectangle();
+    private Point selectionRectStart;
+    private Point panOrigin;
 
     public PatchViewSwing(PatchModel patchModel) {
         super(patchModel);
@@ -113,10 +115,10 @@ public class PatchViewSwing extends PatchView {
             c.setOpaque(false);
         }
 
-        layers.add(objectLayerPanel, new Integer(1));
-        layers.add(netLayerPanel, new Integer(2));
-        layers.add(draggedObjectLayerPanel, new Integer(3));
-        layers.add(selectionRectLayerPanel, new Integer(4));
+        layers.add(objectLayerPanel, Integer.valueOf(1));
+        layers.add(netLayerPanel, Integer.valueOf(2));
+        layers.add(draggedObjectLayerPanel, Integer.valueOf(3));
+        layers.add(selectionRectLayerPanel, Integer.valueOf(4));
 
         netLayerPanel.setName("netLayerPanel");
         selectionRectLayerPanel.setName("selectionRectLayerPanel");
@@ -330,7 +332,7 @@ public class PatchViewSwing extends PatchView {
         getViewportView().getComponent().scrollRectToVisible(rect);
     }
 
-    TransferHandler TH = new TransferHandler() {
+    private TransferHandler TH = new TransferHandler() {
         @Override
         public int getSourceActions(JComponent c) {
             return COPY_OR_MOVE;
@@ -360,10 +362,6 @@ public class PatchViewSwing extends PatchView {
             }
         }
 
-        @Override
-        public boolean importData(TransferHandler.TransferSupport support) {
-            return super.importData(support);
-        }
 
         @Override
         public boolean importData(JComponent comp, Transferable t) {
@@ -454,10 +452,29 @@ public class PatchViewSwing extends PatchView {
         }
     }
 
+    public void moveToDraggedLayer(AxoObjectInstanceViewAbstract o) {
+        if (objectLayerPanel.isAncestorOf(o)) {
+            objectLayerPanel.remove(o);
+            draggedObjectLayerPanel.add(o);
+        }
+    }
+
+    public void moveToObjectLayer(AxoObjectInstanceViewAbstract o, int zOrder) {
+        if (draggedObjectLayerPanel.isAncestorOf(o)) {
+            draggedObjectLayerPanel.remove(o);
+            objectLayerPanel.add(o);
+            objectLayerPanel.setComponentZOrder(o, zOrder);
+        }
+    }
+
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
-        if (PatchModel.PATCH_LOCKED.is(evt)) {
+        if (PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
+            objectInstanceViews = objectInstanceViewSync.sync(objectInstanceViews, model.getObjectInstances());
+        } else if (PatchModel.PATCH_NETS.is(evt)) {
+            netViews = netViewSync.sync(netViews, model.getNets());
+        } else if (PatchModel.PATCH_LOCKED.is(evt)) {
             if ((Boolean)evt.getNewValue() == false) {
                 layers.setBackground(Theme.getCurrentTheme().Patch_Unlocked_Background);
             } else {
@@ -482,62 +499,65 @@ public class PatchViewSwing extends PatchView {
     }
 
     @Override
-    public void remove(IAxoObjectInstanceView v) {
-        objectLayerPanel.remove((AxoObjectInstanceViewAbstract) v);
-        objectLayerPanel.repaint(((AxoObjectInstanceViewAbstract) v).getBounds());
-    }
-
-    @Override
-    public void remove(INetView view) {
-        netLayerPanel.remove((NetView) view);
-        netLayerPanel.repaint(((NetView) view).getBounds());
-    }
-
-    @Override
-    public void add(IAxoObjectInstanceView v) {
-        if (objectLayerPanel != null) {
-            objectLayerPanel.add((AxoObjectInstanceViewAbstract) v);
-            v.resizeToGrid();
-            updateSize();
-            v.repaint();
-        }
-    }
-
-    @Override
-    public void removeAllObjectViews() {
-        if (objectLayerPanel != null) {
-            objectLayerPanel.removeAll();
-        }
-    }
-
-    @Override
-    public void removeAllNetViews() {
-        if (netLayerPanel != null) {
-            netLayerPanel.removeAll();
-        }
-    }
-
-    @Override
-    public void add(INetView view) {
-        if (netLayerPanel != null) {
-            netLayerPanel.add((NetView) view);
-        }
-    }
-
-    @Override
     public void dispose() {
         super.dispose();
     }
 
-    @Override
-    public IAxoObjectInstanceViewFactory getAxoObjectInstanceViewFactory() {
-        return AxoObjectInstanceViewFactory.getInstance();
-    }
+    private final HashMap<IModel, AxoObjectInstanceViewAbstract> view_cache = new HashMap<>();
 
-    @Override
-    public INetView createNetView(Net net, PatchView patchView) {
-        INetView nv = new NetView(net, (PatchViewSwing) patchView);
-        net.getController().addView(nv);
-        return nv;
-    }
+    ArrayView<IAxoObjectInstanceView, IAxoObjectInstance> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView, IAxoObjectInstance>() {
+        @Override
+        protected IAxoObjectInstanceView viewFactory(IAxoObjectInstance model) {
+            AxoObjectInstanceViewAbstract view = view_cache.get(model);
+            if (view == null) {
+                view = AxoObjectInstanceViewFactory.createView(model, PatchViewSwing.this);
+            }
+            if (objectLayerPanel != null) {
+                objectLayerPanel.add(view);
+                view.resizeToGrid();
+                updateSize();
+                view.repaint();
+            }
+            return view;
+        }
+
+        @Override
+        protected void updateUI(List<IAxoObjectInstanceView> views) {
+            updateSize();
+        }
+
+        @Override
+        protected void removeView(IAxoObjectInstanceView view) {
+            view.dispose();
+            objectLayerPanel.remove((AxoObjectInstanceViewAbstract) view);
+            objectLayerPanel.repaint(((AxoObjectInstanceViewAbstract) view).getBounds());
+            view_cache.put(view.getDModel(), (AxoObjectInstanceViewAbstract) view);
+        }
+
+    };
+
+    ArrayView<INetView, Net> netViewSync = new ArrayView<INetView, Net>() {
+        @Override
+        protected INetView viewFactory(Net net) {
+            NetView view = new NetView(net, PatchViewSwing.this);
+            net.getController().addView(view);
+            if (netLayerPanel != null) {
+                netLayerPanel.add(view);
+            }
+            view.repaint();
+            return view;
+        }
+
+        @Override
+        protected void updateUI(List<INetView> views) {
+        }
+
+        @Override
+        protected void removeView(INetView view) {
+            netLayerPanel.remove((NetView) view);
+            netLayerPanel.repaint(((NetView) view).getBounds());
+        }
+
+    };
+
 }

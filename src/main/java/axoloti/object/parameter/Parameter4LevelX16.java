@@ -48,10 +48,10 @@ public class Parameter4LevelX16 extends Parameter {
         return 0;
     }
 
-    static public final String TypeName = "int2x16";
+    static public final String TYPE_NAME = "int2x16";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

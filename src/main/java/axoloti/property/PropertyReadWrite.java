@@ -31,6 +31,9 @@ public abstract class PropertyReadWrite<T extends Object> extends Property<T> {
 
     @Override
     public T get(IModel o) {
+        if (o == null) {
+            throw new Error("getter from null model?");
+        }
         try {
             Object r = getter.invoke(o);
             return (T) r;

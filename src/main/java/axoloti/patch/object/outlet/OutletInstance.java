@@ -33,7 +33,7 @@ import org.simpleframework.xml.Root;
 public class OutletInstance extends IoletInstance<Outlet> {
 
     @Attribute(name = "outlet", required = false)
-    String outletname;
+    private String outletname;
 
     public OutletInstance() {
         super();

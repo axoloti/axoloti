@@ -34,14 +34,14 @@ import java.util.logging.Logger;
 public abstract class QCmdShellTask implements QCmd {
 
     abstract String getExec();
-    boolean success;
+    private boolean success;
 
-    static class StreamHandlerThread implements Runnable {
+    private static class StreamHandlerThread implements Runnable {
 
-        InputStream in;
-        QCmdProcessor shellProcessor;
+        private final InputStream in;
+        private final QCmdProcessor shellProcessor;
 
-        public StreamHandlerThread(QCmdProcessor shellProcessor, InputStream in) {
+        StreamHandlerThread(QCmdProcessor shellProcessor, InputStream in) {
             this.in = in;
             this.shellProcessor = shellProcessor;
         }
@@ -126,9 +126,7 @@ public abstract class QCmdShellTask implements QCmd {
                 success = false;
                 return err();
             }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (InterruptedException | IOException ex) {
             Logger.getLogger(QCmdCompilePatch.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

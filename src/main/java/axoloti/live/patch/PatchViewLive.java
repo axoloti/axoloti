@@ -21,6 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +69,7 @@ public class PatchViewLive extends View<PatchModel> {
         // TODO: auto-recompile: add views to trigger recompilation on changing attributes, nets, and object changes
     }
 
-    boolean auto_recompile = false;
+    private boolean auto_recompile = false;
 
     void enableAutoRecompile() {
         auto_recompile = true;
@@ -76,14 +77,14 @@ public class PatchViewLive extends View<PatchModel> {
 
     public void distributeDataToDisplays(ByteBuffer dispData) {
         dispData.rewind();
-        for (DisplayInstanceView d : pvcg.displayInstances) {
+        for (DisplayInstanceView d : pvcg.getDisplayInstances()) {
             d.processByteBuffer(dispData);
         }
     }
 
-    ReschedulableTimer timerTask;
+    private ReschedulableTimer timerTask;
 
-    Runnable runnable = new Runnable() {
+    private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
             try {
@@ -136,7 +137,7 @@ public class PatchViewLive extends View<PatchModel> {
     }
 
     public List<ParameterInstanceLiveView> getParameterInstances() {
-        return parameterInstanceViews;
+        return Collections.unmodifiableList(parameterInstanceViews);
     }
 
     static public void goLive(PatchModel patchModel) {

@@ -28,14 +28,15 @@ import javax.swing.SwingUtilities;
 
 public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPanel<T> {
 
-    protected AxoObjectInstanceViewAbstract axoObj;
+    protected final AxoObjectInstanceViewAbstract axoObj;
     protected LabelComponent label = new LabelComponent("");
     protected JComponent jack;
 
     private boolean saved_connected_state;
 
-    public IoletInstanceView(T iolet) {
+    public IoletInstanceView(T iolet, AxoObjectInstanceViewAbstract axoObj) {
         super(iolet);
+        this.axoObj = axoObj;
         initComponents();
     }
 
@@ -71,11 +72,8 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
                     dragNetController.addView(dragnet);
                     //                }
                     dragnet.setVisible(true);
-                    if (getPatchView() != null) {
-                        getPatchView().selectionRectLayerPanel.add(dragnet);
-                    }
+                    getPatchView().selectionRectLayerPanel.add(dragnet);
                     e.consume();
-                    //            }
                 }
             }
 
@@ -118,18 +116,18 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
                                 pc.addMetaUndo("connect", focusEdit);
                                 pc.addConnection(
                                         (InletInstance) getDModel(),
-                                        (InletInstance) ((InletInstanceView) dragtarget).getDModel());
+                                        ((InletInstanceView) dragtarget).getDModel());
                             } else if (dragtarget instanceof OutletInstanceView) {
                                 pc.addMetaUndo("connect", focusEdit);
                                 pc.addConnection(
                                         (InletInstance) getDModel(),
-                                        (OutletInstance) ((OutletInstanceView) dragtarget).getDModel());
+                                        ((OutletInstanceView) dragtarget).getDModel());
                             }
                         } else if (IoletInstanceView.this instanceof OutletInstanceView) {
                             if (dragtarget instanceof InletInstanceView) {
                                 pc.addMetaUndo("connect", focusEdit);
-                                pc.addConnection((InletInstance) ((InletInstanceView) dragtarget).getDModel(),
-                                        (OutletInstance) ((OutletInstanceView) IoletInstanceView.this).getDModel());
+                                pc.addConnection(((InletInstanceView) dragtarget).getDModel(),
+                                        ((OutletInstanceView) IoletInstanceView.this).getDModel());
                             }
                         }
                         pc.promoteOverloading(false);

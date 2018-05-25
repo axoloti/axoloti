@@ -47,11 +47,11 @@ public class ParameterInt32HRadio extends ParameterInt32 {
         md.update(("int32.hradio" + MaxValue).getBytes());
     }
 
-    static public final String TypeName = "int32.hradio";
+    static public final String TYPE_NAME = "int32.hradio";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

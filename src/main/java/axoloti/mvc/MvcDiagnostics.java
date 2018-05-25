@@ -6,6 +6,9 @@ package axoloti.mvc;
  */
 class MvcDiagnostics {
 
+    private MvcDiagnostics() {
+    }
+
     static void log(String s) {
         //System.out.print(s);
     }

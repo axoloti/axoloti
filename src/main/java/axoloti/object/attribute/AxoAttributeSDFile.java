@@ -30,10 +30,10 @@ public class AxoAttributeSDFile extends AxoAttribute {
         super(name);
     }
 
-    static public final String TypeName = "file";
+    static public final String TYPE_NAME = "file";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

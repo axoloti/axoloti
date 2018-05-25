@@ -160,10 +160,7 @@ public class USBBulkConnection_v2 extends IConnection {
 
                         LibUsb.close(handle);
                         handle = null;
-                        cpuId0 = 0;
-                        cpuId1 = 0;
-                        cpuId2 = 0;
-                    }
+        }
     }
 
     @Override
@@ -284,7 +281,7 @@ public class USBBulkConnection_v2 extends IConnection {
             qcmdp.appendToQueue(q);
             ByteBuffer otpInfo = q.getResult();
 
-            q = new QCmdMemRead(targetProfile.getOTPAddr() + 32, 256);
+            q = new QCmdMemRead(targetProfile.getOTPAddr() + 32, HWSignature.KEY_LENGTH);
             qcmdp.appendToQueue(q);
             ByteBuffer signature = q.getResult();
             boolean signaturevalid = false;
@@ -376,7 +373,7 @@ public class USBBulkConnection_v2 extends IConnection {
         }
     }
 
-    ChunkParser fw_chunks;
+    private ChunkParser fw_chunks;
 
     @Override
     public ChunkParser getFWChunks() {
@@ -404,7 +401,7 @@ public class USBBulkConnection_v2 extends IConnection {
         ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
         buffer.put(data);
         IntBuffer transfered = IntBuffer.allocate(1);
-        int result = LibUsb.bulkTransfer(handle, (byte) OUT_ENDPOINT, buffer, transfered, 1000);
+        int result = LibUsb.bulkTransfer(handle, OUT_ENDPOINT, buffer, transfered, 1000);
         if (result != LibUsb.SUCCESS) {
             if (result == LibUsb.ERROR_NO_DEVICE) {
                 disconnect();
@@ -568,13 +565,13 @@ public class USBBulkConnection_v2 extends IConnection {
     public void dispose() {
     }
 
-    static class Sync {
+    private static class Sync {
         boolean ready = true;
         ByteBuffer memReadBuffer = null;
     }
 
-    final Sync sync;
-    final Sync readsync;
+    private final Sync sync;
+    private final Sync readsync;
 
     @Override
     public void clearSync() {
@@ -921,7 +918,7 @@ public class USBBulkConnection_v2 extends IConnection {
         waitReadSync();
         readsync.ready = false;
         memReadHandler = null;
-        System.out.println(String.format("tx memrd addr=0x%08X le=%d",addr,length));
+        //System.out.println(String.format("tx memrd addr=0x%08X le=%d", addr, length));
         byte[] data = new byte[12];
         data[0] = 'A';
         data[1] = 'x';
@@ -982,7 +979,7 @@ public class USBBulkConnection_v2 extends IConnection {
         waitReadSync();
     }
 
-    class Receiver implements Runnable {
+    private class Receiver implements Runnable {
 
         final static int MAX_RX_SIZE = 4096;
         // larger than 4096 will give "WARN Event TRB for slot 1 ep 4 with no TDs queued" in linux kernel log
@@ -995,7 +992,7 @@ public class USBBulkConnection_v2 extends IConnection {
                 recvbuffer.order(ByteOrder.LITTLE_ENDIAN);
                 IntBuffer transfered = IntBuffer.allocate(1);
                 recvbuffer.rewind();
-                int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
+                int result = LibUsb.bulkTransfer(handle, IN_ENDPOINT, recvbuffer, transfered, 1000);
                 switch (result) {
                     case LibUsb.SUCCESS:
                         int sz = transfered.get(0);
@@ -1084,7 +1081,7 @@ public class USBBulkConnection_v2 extends IConnection {
         }
     }
 
-    class Transmitter implements Runnable {
+    private class Transmitter implements Runnable {
 
         @Override
         public void run() {
@@ -1127,10 +1124,7 @@ public class USBBulkConnection_v2 extends IConnection {
         return isSDCardPresent;
     }
 
-    int cpuId0 = 0;
-    int cpuId1 = 0;
-    int cpuId2 = 0;
-    int fwcrc = -1;
+    private int fwcrc = -1;
 
     void acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
         synchronized (sync) {
@@ -1245,7 +1239,7 @@ public class USBBulkConnection_v2 extends IConnection {
 
     }
 
-    enum ReceiverState {
+    private enum ReceiverState {
 
         header,
         ackPckt, // general acknowledge
@@ -1334,9 +1328,9 @@ public class USBBulkConnection_v2 extends IConnection {
     void goIdleState() {
         state = ReceiverState.header;
     }
-    ByteBuffer dispData;
+    private ByteBuffer dispData;
 
-    int LCDPacketRow = 0;
+    private int LCDPacketRow = 0;
 
     final int tx_hdr_acknowledge = 0x416F7841;  // "AxoA"
     final int tx_hdr_fwid = 0x566f7841;         // "AxoV"
@@ -1625,8 +1619,8 @@ public class USBBulkConnection_v2 extends IConnection {
         }
     }
 
-    int disp_addr;
-    int disp_length;
+    private int disp_addr;
+    private int disp_length;
 
     @Deprecated
     @Override

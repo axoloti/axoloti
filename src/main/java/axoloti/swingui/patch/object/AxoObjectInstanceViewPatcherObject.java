@@ -11,7 +11,7 @@ class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     private ButtonComponent buttonEdit;
     private AxoObjectEditor editor;
 
-    public AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject objectInstance, PatchViewSwing patchView) {
+    AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
         initComponents();
     }

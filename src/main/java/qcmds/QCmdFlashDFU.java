@@ -35,7 +35,7 @@ public class QCmdFlashDFU extends QCmdShellTask {
 
     @Override
     public String getDoneMessage() {
-        if (success) {
+        if (success()) {
             return "Done flashing firmware with DFU.";
         } else {
             return "Flashing firmware failed!";

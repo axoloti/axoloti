@@ -44,11 +44,11 @@ public class DisplayFrac4ByteVBar extends Display {
         return Int32.d;
     }
 
-    static public final String TypeName = "frac4byte.vbar";
+    static public final String TYPE_NAME = "frac4byte.vbar";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
 }

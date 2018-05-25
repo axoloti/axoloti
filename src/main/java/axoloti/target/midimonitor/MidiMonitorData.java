@@ -33,12 +33,11 @@ public class MidiMonitorData {
     public static void refresh(IConnection conn) {
         int length = 256;
         ChunkData chunk_midibuff = conn.getFWChunks().getOne(FourCCs.FW_MIDI_INPUT_BUFFER);
-        chunk_midibuff.data.rewind();
-        int addr = chunk_midibuff.data.getInt();
+        ByteBuffer data = chunk_midibuff.getData();
+        int addr = data.getInt();
         conn.appendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
             @Override
             public void done(ByteBuffer mem) {
-                String s = "";
                 if (mem != null) {
                     int readIndex = mem.getInt();
                     int writeIndex = mem.getInt();

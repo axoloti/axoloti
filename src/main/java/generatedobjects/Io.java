@@ -107,7 +107,7 @@ class Io extends GenTools {
         return o;
     }
 
-    static String[] gpioPinsM = {
+    private final static String[] gpioPinsM = {
         "PA0",
         "PA1",
         "PA2",
@@ -130,7 +130,7 @@ class Io extends GenTools {
         "PC5"
     };
 
-    static String[] gpioPinsC = {
+    private final static String[] gpioPinsC = {
         "GPIOA,0",
         "GPIOA,1",
         "GPIOA,2",

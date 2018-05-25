@@ -31,10 +31,10 @@ public class AxoAttributeWavefile extends AxoAttribute {
     public AxoAttributeWavefile() {
     }
 
-    static public final String TypeName = "unused!";
+    static public final String TYPE_NAME = "unused!";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

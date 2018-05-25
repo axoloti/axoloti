@@ -11,7 +11,7 @@ import axoloti.preferences.Theme;
 
 public class VisibleCablePanel extends javax.swing.JPanel {
 
-    PatchView p;
+    private final PatchView p;
 
     public VisibleCablePanel(PatchView p) {
         this.p = p;

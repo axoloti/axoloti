@@ -7,7 +7,7 @@ import java.beans.PropertyChangeEvent;
 
 public class PDisplayInstanceViewVScale extends PDisplayInstanceView {
     private PVValueLabelsComponent vlabels;
-    private IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
 
     public PDisplayInstanceViewVScale(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {

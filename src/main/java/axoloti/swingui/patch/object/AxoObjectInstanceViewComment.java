@@ -18,7 +18,7 @@ import javax.swing.BoxLayout;
 
 class AxoObjectInstanceViewComment extends AxoObjectInstanceViewAbstract {
 
-    public AxoObjectInstanceViewComment(AxoObjectInstanceComment objectInstance, PatchViewSwing patchView) {
+    AxoObjectInstanceViewComment(AxoObjectInstanceComment objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
         initComponents();
     }

@@ -8,6 +8,9 @@ import axoloti.patch.object.AxoObjectInstance;
  */
 public class ParameterInstanceFactory {
 
+    private ParameterInstanceFactory() {
+    }
+
     public static ParameterInstance createView(Parameter parameter, AxoObjectInstance obj) {
         ParameterInstance view = null;
         if (parameter instanceof Parameter4LevelX16) {
@@ -41,8 +44,6 @@ public class ParameterInstanceFactory {
         } else {
             throw new Error("unhandled paramter model " + parameter.getClass());
         }
-        view.name = parameter.getName();
-        view.parameter = parameter;
         view.getController().applyDefaultValue();
         parameter.getController().addView(view);
         return view;

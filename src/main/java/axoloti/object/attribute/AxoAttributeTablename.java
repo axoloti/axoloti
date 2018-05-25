@@ -30,10 +30,10 @@ public class AxoAttributeTablename extends AxoAttribute {
         super(name);
     }
 
-    static public final String TypeName = "table";
+    static public final String TYPE_NAME = "table";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

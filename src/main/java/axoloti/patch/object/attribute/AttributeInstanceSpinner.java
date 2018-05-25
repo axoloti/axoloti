@@ -29,8 +29,8 @@ import java.beans.PropertyChangeEvent;
  */
 public class AttributeInstanceSpinner extends AttributeInstanceInt<AxoAttributeSpinner> {
 
-    Integer minValue;
-    Integer maxValue;
+    private Integer minValue;
+    private Integer maxValue;
 
     public static final Property MINVALUE = new IntegerProperty("MinValue", AttributeInstanceSpinner.class, "Minimum");
     public static final Property MAXVALUE = new IntegerProperty("MaxValue", AttributeInstanceSpinner.class, "Maximum");

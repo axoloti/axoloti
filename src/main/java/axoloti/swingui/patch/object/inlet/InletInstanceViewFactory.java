@@ -10,6 +10,9 @@ import axoloti.swingui.patch.object.AxoObjectInstanceViewAbstract;
  */
 public class InletInstanceViewFactory {
 
+    private InletInstanceViewFactory() {
+    }
+
     public static InletInstanceView createView(InletInstance inletInstance, AxoObjectInstanceViewAbstract obj) {
         InletInstanceView view = new InletInstanceView(inletInstance, obj);
         inletInstance.getController().addView(view);

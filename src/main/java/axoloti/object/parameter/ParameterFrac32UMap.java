@@ -33,10 +33,10 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
 
     @Deprecated
     @Element(required = false)
-    ValueFrac32 MinValue;
+    private ValueFrac32 MinValue;
     @Deprecated
     @Element(required = false)
-    ValueFrac32 MaxValue;
+    private ValueFrac32 MaxValue;
 
     public ParameterFrac32UMap() {
     }
@@ -68,11 +68,11 @@ public class ParameterFrac32UMap extends ParameterFrac32 {
         md.update("frac32.u.map".getBytes());
     }
 
-    static public final String TypeName = "frac32.u.map";
+    static public final String TYPE_NAME = "frac32.u.map";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

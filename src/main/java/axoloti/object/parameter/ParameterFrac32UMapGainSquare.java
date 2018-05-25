@@ -63,10 +63,10 @@ public class ParameterFrac32UMapGainSquare extends ParameterFrac32UMap {
         md.update("square".getBytes());
     }
 
-    static public final String TypeName = "frac32.u.map.squaregain";
+    static public final String TYPE_NAME = "frac32.u.map.squaregain";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

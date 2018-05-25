@@ -44,11 +44,11 @@ public class DisplayFrac32SDial extends Display {
         return Int32.d;
     }
 
-    static public final String TypeName = "frac32.s.dial";
+    static public final String TYPE_NAME = "frac32.s.dial";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

@@ -49,7 +49,7 @@ public class VUComponent extends ADispComponent {
         setSize(dim);
     }
 
-    double decay = 0.5;
+    private final static double decay = 0.5;
 
     @Override
     public void setValue(double value) {
@@ -77,20 +77,20 @@ public class VUComponent extends ADispComponent {
         return h - i;
     }
 
-    static Color CDarkGreen = Theme.getCurrentTheme().VU_Dark_Green;
-    static Color CDarkYellow = Theme.getCurrentTheme().VU_Dark_Yellow;
-    static Color CDarkRed = Theme.getCurrentTheme().VU_Dark_Red;
+    private final static Color CDarkGreen = Theme.getCurrentTheme().VU_Dark_Green;
+    private final static Color CDarkYellow = Theme.getCurrentTheme().VU_Dark_Yellow;
+    private final static Color CDarkRed = Theme.getCurrentTheme().VU_Dark_Red;
 
-    static Color CBrightGreen = Theme.getCurrentTheme().VU_Bright_Green;
-    static Color CBrightYellow = Theme.getCurrentTheme().VU_Bright_Yellow;
-    static Color CBrightRed = Theme.getCurrentTheme().VU_Bright_Red;
+    private final static Color CBrightGreen = Theme.getCurrentTheme().VU_Bright_Green;
+    private final static Color CBrightYellow = Theme.getCurrentTheme().VU_Bright_Yellow;
+    private final static Color CBrightRed = Theme.getCurrentTheme().VU_Bright_Red;
 
-    static int segmentsRed = 2;
-    static int segmentsYellow = 3;
-    static int segmentsGreen = h - 5;
+    private final static int segmentsRed = 2;
+    private final static int segmentsYellow = 3;
+    private final static int segmentsGreen = h - 5;
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,

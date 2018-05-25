@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Johannes Taelman
  */
-public final class ParameterFrac32SMapPitch extends ParameterFrac32SMap {
+public class ParameterFrac32SMapPitch extends ParameterFrac32SMap {
 
     public ParameterFrac32SMapPitch() {
         super();
@@ -47,10 +47,10 @@ public final class ParameterFrac32SMapPitch extends ParameterFrac32SMap {
         return listConvs;
     }
 
-    static public final String TypeName = "frac32.s.map.pitch";
+    static public final String TYPE_NAME = "frac32.s.map.pitch";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

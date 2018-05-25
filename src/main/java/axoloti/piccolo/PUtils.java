@@ -13,6 +13,9 @@ import org.piccolo2d.event.PInputEvent;
 
 public class PUtils {
 
+    private PUtils() {
+    }
+
     public static Point asPoint(Point2D p) {
         return new Point((int) Math.round(p.getX()), (int) Math.round(p.getY()));
     }

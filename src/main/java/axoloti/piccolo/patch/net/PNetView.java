@@ -22,6 +22,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -268,12 +269,12 @@ public class PNetView extends PatchPNode implements INetView {
 
     @Override
     public List<IInletInstanceView> getInletViews() {
-        return dest;
+        return Collections.unmodifiableList(dest);
     }
 
     @Override
     public List<IOutletInstanceView> getOutletViews() {
-        return source;
+        return Collections.unmodifiableList(source);
     }
 
     @Override

@@ -29,7 +29,7 @@ import org.simpleframework.xml.core.Persist;
 public class AttributeInstanceTablename extends AttributeInstanceString<AxoAttributeTablename> {
 
     @Attribute(name = "table")
-    String tableName = "";
+    private String tableName = "";
 
     AttributeInstanceTablename() {
         super();

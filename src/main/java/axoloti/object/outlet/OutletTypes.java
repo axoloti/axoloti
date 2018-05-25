@@ -27,6 +27,9 @@ import java.util.List;
  */
 public class OutletTypes {
 
+    private OutletTypes() {
+    }
+
     private final static Outlet types[] = {
         new OutletBool32(),
         new OutletBool32Pulse(),

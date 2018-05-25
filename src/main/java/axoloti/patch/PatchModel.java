@@ -86,7 +86,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     @Attribute(required = false)
     String appVersion;
-    public @ElementListUnion({
+    @ElementListUnion({
         @ElementList(entry = "obj", type = AxoObjectInstance.class, inline = true, required = false),
         @ElementList(entry = "patcher", type = AxoObjectInstancePatcher.class, inline = true, required = false),
         @ElementList(entry = "patchobj", type = AxoObjectInstancePatcherObject.class, inline = true, required = false),
@@ -760,11 +760,11 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public List<IAxoObjectInstance> getObjectInstances() {
-        return objectinstances;
+        return Collections.unmodifiableList(objectinstances);
     }
 
-    public ArrayList<Modulator> getPatchModulators() {
-        return Modulators;
+    public List<Modulator> getPatchModulators() {
+        return Collections.unmodifiableList(Modulators);
     }
 
     public void addModulator(Modulator m) {

@@ -11,10 +11,10 @@ import javax.swing.undo.UndoableEdit;
  */
 public class UndoablePropertyChange implements UndoableEdit {
 
-    Object new_value;
-    Object old_value;
-    IModel model;
-    Property property;
+    private Object new_value;
+    private Object old_value;
+    private IModel model;
+    private final Property property;
 
     public UndoablePropertyChange(IModel model, Property property, Object old_value, Object new_value) {
         this.new_value = new_value;
@@ -38,6 +38,10 @@ public class UndoablePropertyChange implements UndoableEdit {
 
     public Object getNewValue() {
         return new_value;
+    }
+
+    public void setNewValue(Object new_value) {
+        this.new_value = new_value;
     }
 
     @Override

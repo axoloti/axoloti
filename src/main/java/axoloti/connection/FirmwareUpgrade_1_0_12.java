@@ -60,24 +60,24 @@ public class FirmwareUpgrade_1_0_12 {
             return;
         }
         this.handle = handle;
+        init();
+    }
 
-        try //devicePath = Usb.DeviceToPath(device);
-        {
-
+    private void init() {
+        try {
             int result = LibUsb.claimInterface(handle, interfaceNumber);
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to claim interface", result);
             }
 
             goIdleState();
-            //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
             receiverThread = new Thread(new Receiver());
             receiverThread.setName("Receiver");
             receiverThread.start();
             transmitterThread = new Thread(new Transmitter());
             transmitterThread.setName("Transmitter");
             transmitterThread.start();
-        } catch (Exception ex) {
+        } catch (LibUsbException ex) {
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -90,7 +90,7 @@ public class FirmwareUpgrade_1_0_12 {
         ByteBuffer buffer = ByteBuffer.allocateDirect(data.length);
         buffer.put(data);
         IntBuffer transfered = IntBuffer.allocate(1);
-        int result = LibUsb.bulkTransfer(handle, (byte) OUT_ENDPOINT, buffer, transfered, 1000);
+        int result = LibUsb.bulkTransfer(handle, OUT_ENDPOINT, buffer, transfered, 1000);
         if (result != LibUsb.SUCCESS) {
             if (result == LibUsb.ERROR_NO_DEVICE) {
                 Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "Device disconnected");
@@ -116,11 +116,11 @@ public class FirmwareUpgrade_1_0_12 {
         // stripped
     }
 
-    static class Sync {
+    private static class Sync {
         boolean Acked = false;
     }
-    final Sync sync;
-    final Sync readsync;
+    private final Sync sync;
+    private final Sync readsync;
 
     public void clearSync() {
         synchronized (sync) {
@@ -203,14 +203,14 @@ public class FirmwareUpgrade_1_0_12 {
         Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "block uploaded @ 0x{0} length {1}", new Object[]{Integer.toHexString(offset).toUpperCase(), Integer.toString(buffer.length)});
     }
 
-    class Receiver implements Runnable {
+    private class Receiver implements Runnable {
 
         @Override
         public void run() {
             ByteBuffer recvbuffer = ByteBuffer.allocateDirect(32768);
             IntBuffer transfered = IntBuffer.allocate(1);
             while (!disconnectRequested) {
-                int result = LibUsb.bulkTransfer(handle, (byte) IN_ENDPOINT, recvbuffer, transfered, 1000);
+                int result = LibUsb.bulkTransfer(handle, IN_ENDPOINT, recvbuffer, transfered, 1000);
                 if (result != LibUsb.SUCCESS) {
                     //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receive: " + result);
                 }
@@ -331,7 +331,7 @@ public class FirmwareUpgrade_1_0_12 {
         }
     }
 
-    class Transmitter implements Runnable {
+    private class Transmitter implements Runnable {
 
         @Override
         public void run() {
@@ -375,10 +375,7 @@ public class FirmwareUpgrade_1_0_12 {
         }
     }
 
-    int cpuId0 = 0;
-    int cpuId1 = 0;
-    int cpuId2 = 0;
-    int fwcrc = -1;
+    private int fwcrc = -1;
 
     void acknowledge(final int DSPLoad, final int PatchID, final int Voltages, final int patchIndex, final int sdcardPresent) {
         synchronized (sync) {
@@ -387,7 +384,7 @@ public class FirmwareUpgrade_1_0_12 {
         }
     }
 
-    enum ReceiverState {
+    private enum ReceiverState {
 
         header,
         ackPckt, // general acknowledge
@@ -474,9 +471,9 @@ public class FirmwareUpgrade_1_0_12 {
         headerstate = 0;
         state = ReceiverState.header;
     }
-    ByteBuffer dispData;
+    private ByteBuffer dispData;
 
-    int LCDPacketRow = 0;
+    private int LCDPacketRow = 0;
 
     void processByte(byte cc) {
 //            Logger.getLogger(SerialConnection.class.getName()).log(Level.SEVERE,"AxoP c="+(char)c+"="+Integer.toHexString(c)+" s="+Integer.toHexString(state));

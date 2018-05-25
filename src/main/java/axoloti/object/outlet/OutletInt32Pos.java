@@ -38,10 +38,10 @@ public class OutletInt32Pos extends OutletInt32 {
         return SignalMetaData.positive;
     }
 
-    static public final String TypeName = "int32.positive";
+    static public final String TYPE_NAME = "int32.positive";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

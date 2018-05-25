@@ -25,8 +25,8 @@ import axoloti.connection.IConnection;
  */
 public class QCmdGetFileContents implements QCmdSerialTask {
 
-    final String filename;
-    IConnection.MemReadHandler doneHandler;
+    private final String filename;
+    private final IConnection.MemReadHandler doneHandler;
 
     public QCmdGetFileContents(String filename, IConnection.MemReadHandler doneHandler) {
         this.filename = filename;

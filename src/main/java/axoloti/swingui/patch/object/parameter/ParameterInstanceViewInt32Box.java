@@ -9,8 +9,9 @@ import java.beans.PropertyChangeEvent;
 
 class ParameterInstanceViewInt32Box extends ParameterInstanceViewInt32 {
 
-    public ParameterInstanceViewInt32Box(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    ParameterInstanceViewInt32Box(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
+        initCtrlComponent(ctrl);
     }
 
     @Override
@@ -24,9 +25,11 @@ class ParameterInstanceViewInt32Box extends ParameterInstanceViewInt32 {
         return n;
     }
 
+    private final NumberBoxComponent ctrl = createControl();
+
     @Override
     public NumberBoxComponent getControlComponent() {
-        return (NumberBoxComponent) ctrl;
+        return ctrl;
     }
 
     @Override

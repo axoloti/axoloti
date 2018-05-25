@@ -23,8 +23,11 @@ package axoloti.codegen;
  */
 public class CodeGeneration {
 
-    // param_name_length equals MAX_PARAMETER_NAME_LENGTH in firmware/parameters.h
-    static final public int param_name_length = 8;
+    private CodeGeneration() {
+    }
+
+    // PARAM_NAME_LENGTH equals MAX_PARAMETER_NAME_LENGTH in firmware/parameters.h
+    static final public int PARAM_NAME_LENGTH = 8;
 
     // to generate a static initializer for a char array in c++
     // CPPCharArrayStaticInitializer("static",5)
@@ -35,7 +38,9 @@ public class CodeGeneration {
         int i;
         int ni = (n.length() > length ? length : n.length());
         for (i = 0; i < ni; i++) {
-            s.append("'" + n.charAt(i) + "',");
+            s.append("'");
+            s.append(n.charAt(i));
+            s.append("',");
         }
         while (i < length) {
             s.append(" 0 ,");

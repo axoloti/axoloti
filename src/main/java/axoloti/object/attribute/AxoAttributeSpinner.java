@@ -29,11 +29,11 @@ import org.simpleframework.xml.Attribute;
 public class AxoAttributeSpinner extends AxoAttribute {
 
     @Attribute
-    Integer MinValue = 0;
+    private Integer MinValue = 0;
     @Attribute
-    Integer MaxValue = 1;
+    private Integer MaxValue = 1;
     @Attribute
-    Integer DefaultValue = 0;
+    private Integer DefaultValue = 0;
 
     public AxoAttributeSpinner() {
         MinValue = 0;
@@ -52,11 +52,11 @@ public class AxoAttributeSpinner extends AxoAttribute {
     public static final Property ATOM_MAXVALUE = new IntegerProperty("MaxValue", AxoAttributeSpinner.class, "Maximum");
     public static final Property ATOM_DEFAULTVALUE = new IntegerProperty("DefaultValue", AxoAttributeSpinner.class, "Default");
 
-    public static final String TypeName = "spinner";
+    public static final String TYPE_NAME = "spinner";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

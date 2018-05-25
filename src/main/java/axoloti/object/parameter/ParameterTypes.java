@@ -28,6 +28,9 @@ import java.util.List;
  */
 public class ParameterTypes {
 
+    private ParameterTypes() {
+    }
+
     private final static Parameter types[] = {
         new ParameterFrac32SMap(),
         new Parameter4LevelX16(),

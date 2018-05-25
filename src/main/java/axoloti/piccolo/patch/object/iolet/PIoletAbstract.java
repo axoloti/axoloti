@@ -9,7 +9,6 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.piccolo.PUtils;
-import axoloti.piccolo.components.PLabelComponent;
 import axoloti.piccolo.patch.PatchPNode;
 import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.piccolo.patch.net.PNetDragging;
@@ -30,7 +29,6 @@ import org.piccolo2d.event.PInputEventFilter;
 
 public abstract class PIoletAbstract extends PatchPNode {
     public IAxoObjectInstanceView axoObjectInstanceView;
-    public PLabelComponent lbl;
     public PatchPNode jack;
 
 // TODO: piccolo implement cfr. axoloti.swingui.patch.object.iolet.IoletInstanceView
@@ -71,7 +69,7 @@ public abstract class PIoletAbstract extends PatchPNode {
 
     public abstract IoletInstance getDModel();
 
-    private PBasicInputEventHandler inputEventListener = new PBasicInputEventHandler() {
+    private final PBasicInputEventHandler inputEventListener = new PBasicInputEventHandler() {
 
         @Override
         public void mousePressed(PInputEvent e) {

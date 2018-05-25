@@ -17,6 +17,7 @@
  */
 package axoloti.abstractui;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,10 @@ import java.util.List;
  */
 public class DocumentWindowList {
 
-    static List<DocumentWindow> list = new LinkedList<DocumentWindow>();
+    private DocumentWindowList() {
+    }
+
+    private final static List<DocumentWindow> list = new LinkedList<DocumentWindow>();
 
     static public void registerWindow(DocumentWindow w) {
         if (!list.contains(w)) {
@@ -39,7 +43,7 @@ public class DocumentWindowList {
     }
 
     static public List<DocumentWindow> getList() {
-        return list;
+        return Collections.unmodifiableList(list);
     }
 
     static public boolean askCloseAll() {

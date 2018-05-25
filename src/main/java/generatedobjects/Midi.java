@@ -726,7 +726,7 @@ class Midi extends GenTools {
         return o;
     }
 
-    static String cdev[] = {"MIDI_DEVICE_DIN, 1",
+    private final static String cdev[] = {"MIDI_DEVICE_DIN, 1",
         "MIDI_DEVICE_USB_HOST, 1",
         "MIDI_DEVICE_USB_HOST, 2",
         "MIDI_DEVICE_USB_HOST, 3",
@@ -734,7 +734,7 @@ class Midi extends GenTools {
         "MIDI_DEVICE_INTERNAL, 1",
         "MIDI_DEVICE_INTERNAL, 2",
         "MIDI_DEVICE_USB_DEVICE, 1"};
-    static String udev[] = {
+    private final static String udev[] = {
         "din",
         "usb host port 1",
         "usb host port 2",

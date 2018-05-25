@@ -44,11 +44,11 @@ public class DisplayInt32Bar32 extends Display {
         return Int32.d;
     }
 
-    static public final String TypeName = "int32.bar32";
+    static public final String TYPE_NAME = "int32.bar32";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 
     @Override

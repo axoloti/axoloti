@@ -18,8 +18,7 @@ import javax.swing.JPopupMenu;
 public class OutletInstanceView extends IoletInstanceView<OutletInstance> implements IOutletInstanceView {
 
     public OutletInstanceView(OutletInstance outletInstance, AxoObjectInstanceViewAbstract axoObj) {
-        super(outletInstance);
-        this.axoObj = axoObj;
+        super(outletInstance, axoObj);
         initComponents();
     }
 

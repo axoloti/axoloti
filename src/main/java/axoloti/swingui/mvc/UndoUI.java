@@ -17,15 +17,15 @@ import javax.swing.undo.UndoManager;
  */
 public class UndoUI implements UndoableEditListener {
 
-    UndoManager undoManager;
+    private final UndoManager undoManager;
 
     public UndoUI(UndoManager undoManager) {
         this.undoManager = undoManager;
     }
 
-    class UndoAction extends AbstractAction {
+    private class UndoAction extends AbstractAction {
 
-        public UndoAction() {
+        UndoAction() {
             super("Undo");
             UndoAction.this.setEnabled(false);
         }
@@ -48,9 +48,9 @@ public class UndoUI implements UndoableEditListener {
         }
     }
 
-    class RedoAction extends AbstractAction {
+    private class RedoAction extends AbstractAction {
 
-        public RedoAction() {
+        RedoAction() {
             super("Redo");
             RedoAction.this.setEnabled(false);
         }
@@ -73,8 +73,8 @@ public class UndoUI implements UndoableEditListener {
         }
     }
 
-    UndoAction undoAction = new UndoAction();
-    RedoAction redoAction = new RedoAction();
+    private final UndoAction undoAction = new UndoAction();
+    private final RedoAction redoAction = new RedoAction();
 
     public JMenuItem createMenuItemUndo() {
         JMenuItem menuUndo = new JMenuItem(undoAction);

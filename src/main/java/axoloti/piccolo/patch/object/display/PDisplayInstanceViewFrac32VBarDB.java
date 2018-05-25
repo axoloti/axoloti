@@ -7,8 +7,9 @@ import java.beans.PropertyChangeEvent;
 
 class PDisplayInstanceViewFrac32VBarDB extends PDisplayInstanceViewFrac32 {
 
-    private IAxoObjectInstanceView axoObjectInstanceView;
-    public PDisplayInstanceViewFrac32VBarDB(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
+    private final IAxoObjectInstanceView axoObjectInstanceView;
+
+    PDisplayInstanceViewFrac32VBarDB(DisplayInstance displayInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(displayInstance, axoObjectInstanceView);
 	this.axoObjectInstanceView = axoObjectInstanceView;
         initComponents();

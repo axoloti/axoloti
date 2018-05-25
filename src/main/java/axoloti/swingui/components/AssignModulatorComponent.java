@@ -68,7 +68,7 @@ public class AssignModulatorComponent extends JComponent {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (parameterInstance.getModulators() != null) {
             Graphics2D g2 = (Graphics2D) g;

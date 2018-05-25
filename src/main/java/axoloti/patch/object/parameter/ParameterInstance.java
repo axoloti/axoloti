@@ -47,7 +47,7 @@ import org.simpleframework.xml.Root;
 public abstract class ParameterInstance<T extends Parameter, DT> extends AtomInstance<T, ParameterInstanceController> {
 
     @Attribute
-    public String name;
+    private String name;
     @Attribute(required = false)
     private Boolean onParent = false;
     @Attribute(required = false)

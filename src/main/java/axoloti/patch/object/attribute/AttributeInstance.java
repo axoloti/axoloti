@@ -23,11 +23,11 @@ import axoloti.patch.object.atom.AtomInstance;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.target.fs.SDFileReference;
+import static axoloti.utils.CharEscape.charEscape;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
-import static axoloti.utils.CharEscape.charEscape;
 
 /**
  *
@@ -36,7 +36,7 @@ import static axoloti.utils.CharEscape.charEscape;
 public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInstance<T, AttributeInstanceController> {
 
     @Attribute
-    String attributeName;
+    private String attributeName;
 
     private final T attribute;
 
