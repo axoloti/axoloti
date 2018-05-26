@@ -12,14 +12,14 @@ public class PresetInt extends Preset<Integer> {
 
     @Element(name = "i", required = false)
     public ValueInt32 getValuexy() {
-        return new ValueInt32(v);
+        return new ValueInt32(getValue());
     }
 
     public PresetInt() {
     }
 
     public PresetInt(@Element(name = "i") ValueInt32 x) {
-        v = x.getInt();
+        super(x.getInt());
     }
 
     public PresetInt(int index, Integer value) {

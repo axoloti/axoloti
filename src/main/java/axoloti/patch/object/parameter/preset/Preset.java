@@ -26,7 +26,7 @@ import org.simpleframework.xml.Attribute;
 public abstract class Preset<DT> {
 
     @Attribute
-    public int index;
+    private int index;
 /*
     @ElementUnion({
         @Element(name = "i", type = ValueInt32.class),
@@ -35,9 +35,13 @@ public abstract class Preset<DT> {
     public Value value;
 */
 
-    public DT v;
+    private DT v;
 
     public Preset() {
+    }
+
+    public Preset(DT v) {
+        this.v = v;
     }
 
     public Preset(int index, DT value) {
@@ -45,11 +49,11 @@ public abstract class Preset<DT> {
         this.v = value;
     }
 
-    public void setValue(DT value){
-        this.v = value;
-    }
-
     public DT getValue() {
         return v;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

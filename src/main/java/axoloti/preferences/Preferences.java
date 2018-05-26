@@ -23,9 +23,11 @@ import axoloti.objectlibrary.AxoFileLibrary;
 import axoloti.objectlibrary.AxoGitLibrary;
 import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.patch.PatchViewType;
+import axoloti.utils.ListUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -160,7 +162,7 @@ public class Preferences {
     }
 
     public List<AxolotiLibrary> getLibraries() {
-        return Collections.unmodifiableList(libraries);
+        return ListUtils.export(libraries);
     }
 
     public AxolotiLibrary getLibrary(String id) {
@@ -175,8 +177,12 @@ public class Preferences {
         return null;
     }
 
-    public String[] getObjectSearchPath() {
-        return ObjectPath;
+    public List<String> getObjectSearchPath() {
+        if (ObjectPath == null) {
+            return Collections.emptyList();
+        } else {
+            return Collections.unmodifiableList(Arrays.asList(ObjectPath));
+        }
     }
 
     public void updateLibrary(String id, AxolotiLibrary newlib) {
@@ -361,7 +367,7 @@ public class Preferences {
     }
 
     public List<String> getRecentFiles() {
-        return Collections.unmodifiableList(recentFiles);
+        return ListUtils.export(recentFiles);
     }
 
     public void addRecentFile(String filename) {

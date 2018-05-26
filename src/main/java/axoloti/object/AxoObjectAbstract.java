@@ -27,9 +27,9 @@ import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.property.ListProperty;
 import axoloti.utils.StringUtils;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -133,22 +133,22 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
     }
 
     @Override
-    public HashSet<String> getIncludes() {
-        return null;
+    public List<String> getIncludes() {
+        return Collections.emptyList();
     }
 
     @Override
-    public void setIncludes(HashSet<String> includes) {
+    public void setIncludes(List<String> includes) {
     }
 
     @Override
-    public Set<String> getDepends() {
-        return null;
+    public List<String> getDepends() {
+        return Collections.emptyList();
     }
 
     @Override
-    public Set<String> getModules() {
-        return null;
+    public List<String> getModules() {
+        return Collections.emptyList();
     }
 
     @Override

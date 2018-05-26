@@ -27,7 +27,7 @@ import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletFrac32BufferBipolar;
 import axoloti.object.parameter.ParameterFrac32UMap;
 import static generatedobjects.GenTools.writeAxoObject;
-import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  *
@@ -340,7 +340,7 @@ class Distortion extends GenTools {
         AxoObject o = new AxoObject("rectifier full", "full-wave rectifier distortion, bandlimited");
         o.inlets.add(new InletFrac32Buffer("in", "audio input"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
-        o.includes = new HashSet<>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData
                 = "  static const int blepvoices = 8;\n"
@@ -396,7 +396,7 @@ class Distortion extends GenTools {
         AxoObject o = new AxoObject("rectifier", "half-wave rectifier distortion, bandlimited");
         o.inlets.add(new InletFrac32Buffer("in", "audio input"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
-        o.includes = new HashSet<>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData
                 = "  static const int blepvoices = 8;\n"
@@ -480,7 +480,7 @@ class Distortion extends GenTools {
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
         o.outlets.add(new OutletFrac32BufferBipolar("test1", "audio output"));
         o.outlets.add(new OutletFrac32BufferBipolar("test2", "audio output"));
-        o.includes = new HashSet<>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData
                 = "  static const int blepvoices = 8;\n"

@@ -27,6 +27,7 @@ import axoloti.patch.object.AxoObjectInstancePatcher;
 import axoloti.patch.object.atom.AtomInstance;
 import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.property.BooleanProperty;
+import axoloti.property.ListProperty;
 import axoloti.property.MidiCCProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.PropagatedProperty;
@@ -35,6 +36,7 @@ import axoloti.realunits.NativeToReal;
 import axoloti.utils.CharEscape;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -70,21 +72,23 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     public final static Property ON_PARENT = new BooleanProperty("OnParent", ParameterInstance.class, "Parameter on parent");
     public final static Property MIDI_CC = new MidiCCProperty("MidiCC", ParameterInstance.class, "Midi Continuous controller");
-    public final static Property PRESETS = new ObjectProperty("Presets", Object.class, ParameterInstance.class);
+    public final static Property PRESETS = new ListProperty("Presets", ParameterInstance.class);
     public final static Property VALUE = new ObjectProperty("Value", Object.class, ParameterInstance.class);
     public final static Property CONVERSION = new ObjectProperty("Conversion", NativeToReal.class, ParameterInstance.class);
     public final static PropagatedProperty NOLABEL = new PropagatedProperty(Parameter.NOLABEL, ParameterInstance.class);
 
-//    public static final String ELEMENT_PARAM_VALUE = "Value";
-//    public static final String ELEMENT_PARAM_PRESETS = "Presets";
-//    public static final String ELEMENT_PARAM_PARAM_ON_PARENT = "ParamOnParent";
+    private final static Property[] PROPERTIES = {
+        ON_PARENT,
+        MIDI_CC,
+        PRESETS,
+        VALUE,
+        NOLABEL
+    };
+
     @Override
     public List<Property> getProperties() {
         List<Property> l = super.getProperties();
-        l.add(ON_PARENT);
-        l.add(MIDI_CC);
-        l.add(VALUE);
-        l.add(NOLABEL);
+        l.addAll(Arrays.asList(PROPERTIES));
         return l;
     }
 
@@ -111,9 +115,8 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         if (getPresets() == null) {
             return null;
         }
-        for (Object o : getPresets()) {
-            Preset p = (Preset) o;
-            if (p.index == i) {
+        for (Preset p : getPresets()) {
+            if (p.getIndex() == i) {
                 return p;
             }
         }
@@ -122,9 +125,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
 
     public abstract DT getValue();
 
-    public void setValue(Object value) {
-//        firePropertyChange(ELEMENT_PARAM_VALUE, null, value);
-    }
+    public abstract void setValue(Object value);
 
 //    public void SetValueRaw(int v) {
 //        // FIXME, different types possible
@@ -331,16 +332,9 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
                 oldValue, onParent);
     }
 
-    public abstract ArrayList getPresets();
+    public abstract List<Preset> getPresets();
 
-    public abstract void setPresets(Object o);
-    /*
-     public void setPresets(ArrayList<Preset> presets) {
-     ArrayList<Preset> prevValue = getPresets();
-     this.presets = presets;
-     firePropertyChange(ParameterInstance.ELEMENT_PARAM_PRESETS, prevValue, this.presets);
-     }
-     */
+    public abstract void setPresets(List<Preset> o);
 
     public String getName() {
         return name;

@@ -10,6 +10,7 @@ import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.property.Property;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,27 +41,27 @@ abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
 
     @Override
     public final List<InletInstance> getInletInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public final List<OutletInstance> getOutletInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public final List<ParameterInstance> getParameterInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public final List<AttributeInstance> getAttributeInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public final List<DisplayInstance> getDisplayInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override

@@ -86,7 +86,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
     }
 
     public void showPreset(int i) {
-        // TODO: fix preset logic
+        // TODO: fix preset editing logic
         //patchView.ShowPreset(i);
     }
 
@@ -388,14 +388,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
             FileNameNoExt = FileNameNoExt.substring(0, FileNameNoExt.length() - 4);
         }
         return FileNameNoExt;
-    }
-
-    public void setPresetUpdatePending(boolean updatePending) {
-        getModel().presetUpdatePending = updatePending;
-    }
-
-    public boolean isPresetUpdatePending() {
-        return getModel().presetUpdatePending;
     }
 
     public void showCompileFail() {

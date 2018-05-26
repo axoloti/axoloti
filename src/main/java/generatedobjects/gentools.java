@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
@@ -128,7 +128,7 @@ class GenTools {
                 oo.displays.get(0).noLabel = true;
             }
             if (oo.depends == null) {
-                oo.depends = new HashSet<>();
+                oo.depends = new LinkedList<>();
             }
             String c = oo.sSRateCode + oo.sKRateCode + oo.sInitCode + oo.sLocalData;
             if (c.contains("f_open")) {

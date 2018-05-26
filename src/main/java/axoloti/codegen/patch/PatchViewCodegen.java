@@ -29,13 +29,13 @@ import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,7 +92,7 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     public String generateIncludes() {
         StringBuilder inc = new StringBuilder();
-        Set<String> includes = getDModel().getIncludes();
+        List<String> includes = getDModel().getIncludes();
         for (String s : includes) {
             if (s.startsWith("\"")) {
                 inc.append("#include " + s + "\n");
@@ -105,7 +105,7 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     public String generateModules() {
         StringBuilder inc = new StringBuilder();
-        Set<String> modules = getDModel().getModules();
+        List<String> modules = getDModel().getModules();
         for (String s : modules) {
             inc.append("#include \"" + s + "_wrapper.h\"\n");
         }
@@ -236,29 +236,59 @@ public class PatchViewCodegen extends View<PatchModel> {
         int s = parameterInstances.size();
         StringBuilder c = new StringBuilder(
             "   static int32_t * GetInitParams(void){\n"
-            + "      static const int32_t p[" + s + "]= {\n");
-        for (int i = 0; i < s; i++) {
-            c.append("      " + 0); //FIXME ParameterInstances.get(i).GetValueRaw();
-            if (i != s - 1) {
-                c.append(",\n");
-            } else {
+                + "      static const int32_t p[" + s + "]= {\n");
+        ParameterInstanceView lastParam = parameterInstances.get(s - 1);
+        for (ParameterInstanceView param : parameterInstances) {
+            c.append("      ");
+            c.append(param.getDModel().valToInt32(param.getDModel().getValue()));
+            if (param == lastParam) {
                 c.append("\n");
+            } else {
+                c.append(",\n");
             }
         }
-        c.append("      };\n"
-                 + "      return (int32_t *)&p[0];\n"
-                 + "   }");
+        c.append("      };\n");
+        c.append("      return (int32_t *)&p[0];\n");
+        c.append("   }\n");
         return c.toString();
     }
 
+    public int[] distillPreset(int i) {
+        int[] pdata;
+        pdata = new int[getDModel().getNPresetEntries() * 2];
+        for (int j = 0; j < getDModel().getNPresetEntries(); j++) {
+            pdata[j * 2] = -1;
+        }
+        int index = 0;
+        for (ParameterInstanceView param : parameterInstances) {
+            Preset p = param.getDModel().getPreset(i);
+            if (p != null) {
+                pdata[index * 2] = param.getIndex();
+                pdata[index * 2 + 1] = param.getDModel().valToInt32(p.getValue());
+                index++;
+                if (index == getDModel().getNPresetEntries()) {
+                    Logger.getLogger(PatchViewCodegen.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", getDModel().getNPresetEntries());
+                    return pdata;
+                }
+            }
+        }
+        boolean debug = false;
+        if (debug) {
+            System.out.format("preset #%d data : (index, value)%n", i);
+            for (int j = 0; j < pdata.length / 2; j++) {
+                System.out.format("  %d : 0x%08X%n", pdata[j * 2], pdata[j * 2 + 1]);
+            }
+        }
+        return pdata;
+    }
 
     public String generatePresetCode3(String ClassName) {
-        StringBuilder c = new StringBuilder("   static const int32_t * GetPresets(void){\n");
-        c.append("      static const int32_t p[NPRESETS][NPRESET_ENTRIES][2] = {\n");
+        StringBuilder c = new StringBuilder();
+        c.append("      int32_t presets[NPRESETS][NPRESET_ENTRIES][2] = {\n");
         for (int i = 0; i < getDModel().getNPresets(); i++) {
 //            c.append("// preset " + i + "\n");
 //            c.append("pp = (int*)(&Presets[" + i + "]);\n");
-            int[] dp = getDModel().distillPreset(i + 1);
+            int[] dp = distillPreset(i + 1);
             c.append("         {\n");
             for (int j = 0; j < getDModel().getNPresetEntries(); j++) {
                 c.append("           {" + dp[j * 2] + "," + dp[j * 2 + 1] + "}");
@@ -275,8 +305,10 @@ public class PatchViewCodegen extends View<PatchModel> {
             }
         }
         c.append("      };\n");
-        c.append("   return &p[0][0][0];\n");
-        c.append("   };\n");
+
+        c.append("const int32_t * GetPresets(void){\n");
+        c.append("  return (int32_t *)&presets[0][0][0];\n");
+        c.append("}\n\n");
 
         c.append("void ApplyPreset(int index){\n"
                  + "   if (!index) {\n"
@@ -730,20 +762,17 @@ public class PatchViewCodegen extends View<PatchModel> {
                  + "			header : CHUNK_HEADER(patch_preset),\n"
                  + "			npresets : " + getDModel().getNPresets() + ",\n"
                  + "			npreset_entries : " + getDModel().getNPresetEntries() + ",\n"
-                 + "			pPresets : 0\n"
-                 + "		},\n"
-                 + "		patch_parameter : {\n"
-                 + "			header : CHUNK_HEADER(patch_parameter),\n"
-                 + "			nparams : " + parameterInstances.size() + ",\n"
-                 + "			pParams : &root.params[0],\n"
-                 + "			pParam_names : root.param_names\n"
-                 + "		},\n"
-                 + "		patch_ui_objects : {\n"
-                 + "			header : CHUNK_HEADER(patch_ui_objects),\n"
-                 + "                     nobjects : root.n_ui_objects,\n"
-                 + "			pObjects : root.ui_objects,\n"
-                 + "		},\n"
-                 + "		patch_initpreset : {\n"
+                + "			pPresets : &root.presets[0][0][0],\n"
+                + "		},\n" + "		patch_parameter : {\n"
+                + "			header : CHUNK_HEADER(patch_parameter),\n"
+                + "			nparams : " + parameterInstances.size() + ",\n"
+                + "			pParams : &root.params[0],\n"
+                + "			pParam_names : root.param_names\n" + "		},\n"
+                + "		patch_ui_objects : {\n"
+                + "			header : CHUNK_HEADER(patch_ui_objects),\n"
+                + "                     nobjects : root.n_ui_objects,\n"
+                + "			pObjects : root.ui_objects,\n"
+                + "		},\n"                 + "		patch_initpreset : {\n"
                  + "			header : CHUNK_HEADER(patch_initpreset),\n"
                  + "		},\n"
                  + "		patch_display : {\n"
@@ -773,7 +802,7 @@ public class PatchViewCodegen extends View<PatchModel> {
     public String generateCode4() {
         StringBuilder c = new StringBuilder();
 
-        Set<String> moduleSet = getDModel().getModules();
+        List<String> moduleSet = getDModel().getModules();
         if (moduleSet != null) {
             StringBuilder modules = new StringBuilder();
             StringBuilder moduleDirs = new StringBuilder();

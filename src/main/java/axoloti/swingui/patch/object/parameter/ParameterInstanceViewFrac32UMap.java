@@ -39,7 +39,7 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 // FIXME: reintroduce modulator button
 //        modulationAssign = new AssignModulatorComponent(this);
 //        btns.add(modulationAssign);
-        presetAssign = new AssignPresetComponent(getDModel());
+        presetAssign = new AssignPresetComponent(this);
         btns.add(presetAssign);
         add(btns);
 

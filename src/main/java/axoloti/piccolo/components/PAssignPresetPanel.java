@@ -97,8 +97,6 @@ public class PAssignPresetPanel extends PatchPCanvas {
                 ctrls.get(i).setEnabled(false);
                 parameterInstanceView.getDModel().getController().removePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getDModel().getObjectInstance().getParent();
-            patchModel.presetUpdatePending = true;
         }
 
     };
@@ -119,7 +117,6 @@ public class PAssignPresetPanel extends PatchPCanvas {
                     }
                 }
             }
-            parameterInstanceView.getDModel().getObjectInstance().getParent().presetUpdatePending = true;
         }
 
         @Override

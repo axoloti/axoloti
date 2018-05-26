@@ -11,15 +11,14 @@ public class PresetDouble extends Preset<Double> {
 
     @Element(name = "f", required = true)
     public ValueFrac32 getValuex() {
-        return new ValueFrac32(v);
+        return new ValueFrac32(getValue());
     }
 
     public PresetDouble() {
     }
 
-
     public PresetDouble(@Element(name = "f") ValueFrac32 x) {
-        v = x.getDouble();
+        super(x.getDouble());
     }
 
     public PresetDouble(int index, Double value) {

@@ -22,11 +22,15 @@ import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.parameter.ParameterFrac32;
 import axoloti.patch.object.AxoObjectInstance;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.patch.object.parameter.preset.PresetDouble;
+import axoloti.utils.ListUtils;
 import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
+import org.simpleframework.xml.Path;
 
 /**
  *
@@ -41,10 +45,11 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     @ElementList(required = false)
     ArrayList<Modulation> modulators;
 
+    @Path("presets")
     @ElementListUnion({
-        @ElementList(entry = "Preset", type = PresetDouble.class, inline = false, required = false)
+        @ElementList(entry = "preset", type = PresetDouble.class, inline = true, required = false)
     })
-    ArrayList<PresetDouble> presets;
+    List<Preset> presets = new ArrayList<>();
 
     Double value = 0.0;
 
@@ -84,18 +89,14 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     }
 
     @Override
-    public ArrayList<PresetDouble> getPresets() {
-        if (presets != null) {
-            return presets;
-        } else {
-            return new ArrayList<>();
-        }
+    public List<Preset> getPresets() {
+        return ListUtils.export(presets);
     }
 
     @Override
-    public void setPresets(Object presets) {
-        ArrayList<PresetDouble> prevValue = getPresets();
-        this.presets = (ArrayList<PresetDouble>) presets;
+    public void setPresets(List<Preset> presets) {
+        List<Preset> prevValue = getPresets();
+        this.presets = presets;
         firePropertyChange(PRESETS, prevValue, this.presets);
     }
 

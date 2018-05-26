@@ -30,7 +30,7 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import java.awt.Point;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.Root;
 
@@ -95,17 +95,17 @@ public class AxoObjectInstanceZombie extends AxoObjectInstance {
 //    }
     @Override
     public List<ParameterInstance> getParameterInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<AttributeInstance> getAttributeInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<DisplayInstance> getDisplayInstances() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override

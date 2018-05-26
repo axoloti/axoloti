@@ -111,13 +111,13 @@ import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
 import axoloti.swingui.objecteditor.AxoObjectEditor;
 import axoloti.target.fs.SDFileReference;
+import axoloti.utils.ListUtils;
 import axoloti.utils.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -242,14 +242,14 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeTextEditor.TYPE_NAME, type = AxoAttributeTextEditor.class, inline = true, required = false)})
     public List<AxoAttribute> attributes = new ArrayList<>(); // literal constants
     @ElementList(name = "file-depends", entry = "file-depend", type = SDFileReference.class, required = false)
-    public ArrayList<SDFileReference> filedepends;
+    public List<SDFileReference> filedepends;
     @ElementList(name = "includes", entry = "include", type = String.class, required = false)
-    public HashSet<String> includes;
+    public List<String> includes;
     @ElementList(name = "depends", entry = "depend", type = String.class, required = false)
-    public HashSet<String> depends;
+    public List<String> depends;
 
     @ElementList(name = "modules", entry = "modules", type = String.class, required = false)
-    public HashSet<String> modules;
+    public List<String> modules;
 
     @Element(name = "code.declaration", required = false, data = true)
     public String sLocalData = "";
@@ -431,11 +431,11 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public HashSet<String> getIncludes() {
+    public List<String> getIncludes() {
         if ((includes == null) || includes.isEmpty()) {
             return null;
         } else if (getPath() != null) {
-            HashSet<String> r = new HashSet<>();
+            List<String> r = new LinkedList<>();
             for (String s : includes) {
                 if (s.startsWith("./")) {
                     String strippedPath = getPath().substring(0, getPath().lastIndexOf(File.separatorChar));
@@ -455,27 +455,27 @@ public class AxoObject extends AxoObjectAbstract {
                     r.add(s);
                 }
             }
-            return r;
+            return Collections.unmodifiableList(r);
         } else if (includes.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         } else {
-            return includes;
+            return ListUtils.export(includes);
         }
     }
 
     @Override
-    public void setIncludes(HashSet<String> includes) {
-        this.includes = includes;
+    public void setIncludes(List<String> includes) {
+        this.includes = ListUtils.export(includes);
     }
 
     @Override
-    public Set<String> getDepends() {
-        return depends;
+    public List<String> getDepends() {
+        return ListUtils.export(depends);
     }
 
     @Override
-    public Set<String> getModules() {
-        return modules;
+    public List<String> getModules() {
+        return ListUtils.export(modules);
     }
 
     @Override
@@ -646,10 +646,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Inlet> getInlets() {
-        if (inlets == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
-        return Collections.unmodifiableList(inlets);
+        return ListUtils.export(inlets);
     }
 
     @Override
@@ -661,10 +658,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Outlet> getOutlets() {
-        if (outlets == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
-        return Collections.unmodifiableList(outlets);
+        return ListUtils.export(outlets);
     }
 
     @Override
@@ -676,10 +670,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Parameter> getParameters() {
-        if (params == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
-        return Collections.unmodifiableList(params);
+        return ListUtils.export(params);
     }
 
     @Override
@@ -691,10 +682,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<AxoAttribute> getAttributes() {
-        if (attributes == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
-        return Collections.unmodifiableList(attributes);
+        return ListUtils.export(attributes);
     }
 
     @Override
@@ -706,10 +694,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<Display> getDisplays() {
-        if (displays == null) {
-            return Collections.unmodifiableList(new ArrayList<>());
-        }
-        return Collections.unmodifiableList(displays);
+        return ListUtils.export(displays);
     }
 
     @Override
@@ -802,10 +787,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public List<SDFileReference> getFileDepends() {
-        if (filedepends == null) {
-            return null;
-        }
-        return Collections.unmodifiableList(filedepends);
+        return ListUtils.export(filedepends);
     }
 
 }

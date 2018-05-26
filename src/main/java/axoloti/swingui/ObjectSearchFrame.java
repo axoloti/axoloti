@@ -263,7 +263,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             }
         }
 
-        Point patchFrameOnScreen = new Point(100, 100); // FIXME
+        Point patchFrameOnScreen = new Point(100, 100); // TODO: show ObjectSearchFrame at corresponding location
 
         if (patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
             patchLoc.x = (int) (allScreenBounds.getWidth() + allScreenBounds.getX() - patchFrameOnScreen.getX() - getWidth());

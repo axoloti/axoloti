@@ -29,9 +29,9 @@ public class QCmdGuiDialTx implements QCmdGUITask {
     @Override
     public void performGUIAction(QCmdProcessor processor) {
         if (processor.isQueueEmpty()) {
-            PatchViewLive patchController = processor.getPatchController();
-            if (patchController != null) {
-                for (ParameterInstanceLiveView p : patchController.getParameterInstances()) {
+            PatchViewLive patchViewLive = processor.getPatchController();
+            if (patchViewLive != null) {
+                for (ParameterInstanceLiveView p : patchViewLive.getParameterInstances()) {
                     if (p.getNeedsTransmit()) {
                         if (processor.hasQueueSpaceLeft()) {
                             processor.appendToQueue(new QCmdSerialDialTX(p.TXData()));
@@ -41,23 +41,11 @@ public class QCmdGuiDialTx implements QCmdGUITask {
                         }
                     }
                 }
-                /* TODO: fix preset logic : live preset updating
-                if (patchController.isPresetUpdatePending() && processor.hasQueueSpaceLeft()) {
-                    byte pb[] = new byte[patchModel.getSettings().GetNPresets() * patchModel.getSettings().GetNPresetEntries() * 8];
-                    int p = 0;
-                    for (int i = 0; i < patchModel.getSettings().GetNPresets(); i++) {
-                        int pi[] = patchModel.DistillPreset(i + 1);
-                        for (int j = 0; j < patchModel.getSettings().GetNPresetEntries() * 2; j++) {
-                            pb[p++] = (byte) (pi[j]);
-                            pb[p++] = (byte) (pi[j] >> 8);
-                            pb[p++] = (byte) (pi[j] >> 16);
-                            pb[p++] = (byte) (pi[j] >> 24);
-                        }
-                    }
-                    processor.AppendToQueue(new QCmdUpdatePreset(pb));
-                    patchController.setPresetUpdatePending(false);
+                if (patchViewLive.getNeedsPresetUpdate() && processor.hasQueueSpaceLeft()) {
+                    byte[] pb = patchViewLive.getUpdatedPresetTable();
+                    patchViewLive.clearNeedsPresetUpdate();
+                    processor.appendToQueue(new QCmdUpdatePreset(pb));
                 }
-                */
             }
         }
     }

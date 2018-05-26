@@ -64,10 +64,10 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
     @Override
     public boolean handleAdjustment() {
-        // TODO: fix preset logic
+        // TODO: fix preset editing logic
         PresetDouble p = getDModel().getPreset(presetEditActive);
-        if (p != null) {
-            p.setValue(getControlComponent().getValue());
+        if (p != null) { // TODO: fix preset editing logic
+            //p.setValue(getControlComponent().getValue());
         }
         if (getDModel().getValue() != getControlComponent().getValue()) {
             if (getDModel().getController() != null) {

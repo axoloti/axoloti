@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -363,7 +363,7 @@ public class AxoObjects {
                 objectTree = new AxoObjectTreeNode("/");
                 objectList = new ArrayList<>();
                 objectUUIDMap = new HashMap<>();
-                String spath[] = Preferences.getPreferences().getObjectSearchPath();
+                List<String> spath = Preferences.getPreferences().getObjectSearchPath();
                 if (spath != null) {
                     for (String path : spath) {
                         Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
@@ -403,7 +403,7 @@ public class AxoObjects {
                 oo.getDisplays().get(0).noLabel = true;
             }
             if (oo.depends == null) {
-                oo.depends = new HashSet<>();
+                oo.depends = new LinkedList<>();
             }
             String c = oo.sSRateCode + oo.sKRateCode + oo.sInitCode + oo.sLocalData;
             if (c.contains("f_open")) {

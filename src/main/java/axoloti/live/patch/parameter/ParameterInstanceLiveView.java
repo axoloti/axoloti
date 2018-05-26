@@ -1,5 +1,6 @@
 package axoloti.live.patch.parameter;
 
+import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.View;
 import axoloti.patch.object.parameter.ParameterInstance;
 import java.beans.PropertyChangeEvent;
@@ -12,10 +13,12 @@ public class ParameterInstanceLiveView extends View<ParameterInstance> {
 
     private boolean needsTransmit = false;
     private final int index;
+    private final PatchViewLive patchViewLive;
 
-    public ParameterInstanceLiveView(ParameterInstance parameterInstance, int index) {
+    public ParameterInstanceLiveView(PatchViewLive patchViewLive, ParameterInstance parameterInstance, int index) {
         super(parameterInstance);
         this.index = index;
+        this.patchViewLive = patchViewLive;
     }
 
     public byte[] TXData() {
@@ -56,6 +59,8 @@ public class ParameterInstanceLiveView extends View<ParameterInstance> {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         if (ParameterInstance.VALUE.is(evt)) {
             needsTransmit = true;
+        } else if (ParameterInstance.PRESETS.is(evt)) {
+            patchViewLive.setNeedsPresetUpdate();
         }
     }
 

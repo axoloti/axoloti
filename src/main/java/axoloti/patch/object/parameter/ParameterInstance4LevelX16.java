@@ -21,10 +21,12 @@ import axoloti.object.parameter.Parameter4LevelX16;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.patch.object.parameter.preset.PresetInt;
-import java.util.ArrayList;
+import axoloti.utils.ListUtils;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
+import org.simpleframework.xml.Path;
 
 /**
  *
@@ -35,10 +37,11 @@ public class ParameterInstance4LevelX16 extends ParameterInstance<Parameter4Leve
     @Attribute(name = "value", required = false)
     Integer value = 0;
 
+    @Path("presets")
     @ElementListUnion({
-        @ElementList(entry = "Preset", type = PresetInt.class, inline = false, required = false)
+        @ElementList(entry = "preset", type = PresetInt.class, inline = true, required = false)
     })
-    ArrayList<PresetInt> presets;
+    List<Preset> presets;
 
     public ParameterInstance4LevelX16() {
     }
@@ -77,18 +80,14 @@ public class ParameterInstance4LevelX16 extends ParameterInstance<Parameter4Leve
     }
 
     @Override
-    public ArrayList<PresetInt> getPresets() {
-        if (presets != null) {
-            return presets;
-        } else {
-            return new ArrayList<>();
-        }
+    public List<Preset> getPresets() {
+        return ListUtils.export(presets);
     }
 
     @Override
-    public void setPresets(Object presets) {
-        ArrayList<PresetInt> prevValue = getPresets();
-        this.presets = (ArrayList<PresetInt>) presets;
+    public void setPresets(List<Preset> presets) {
+        List<Preset> prevValue = getPresets();
+        this.presets = presets;
         firePropertyChange(ParameterInstance.PRESETS, prevValue, this.presets);
     }
 }

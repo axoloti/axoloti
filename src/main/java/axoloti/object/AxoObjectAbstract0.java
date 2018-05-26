@@ -9,6 +9,7 @@ import axoloti.property.Property;
 import axoloti.target.fs.SDFileReference;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,27 +35,27 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
 
     @Override
     public List<Inlet> getInlets() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<Outlet> getOutlets() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<AxoAttribute> getAttributes() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<Parameter> getParameters() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<Display> getDisplays() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
@@ -107,7 +108,7 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     }
 
     @Override
-    public ArrayList<SDFileReference> getFileDepends() {
-        return new ArrayList<>();
+    public List<SDFileReference> getFileDepends() {
+        return Collections.emptyList();
     }
 }

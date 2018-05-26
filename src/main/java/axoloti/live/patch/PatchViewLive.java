@@ -43,22 +43,22 @@ import qcmds.QCmdUploadPatch;
  */
 public class PatchViewLive extends View<PatchModel> {
 
-    final PatchViewCodegen pvcg;
+    final PatchViewCodegen patchViewCodegen;
     final List<ParameterInstanceLiveView> parameterInstanceViews;
 
-    public PatchViewLive(PatchModel patchModel, PatchViewCodegen pvcg) {
+    public PatchViewLive(PatchModel patchModel, PatchViewCodegen patchViewCodegen) {
         super(patchModel);
-        this.pvcg = pvcg;
-        parameterInstanceViews = new ArrayList<>(pvcg.getParameterInstances().size());
-        for (ParameterInstanceView v : pvcg.getParameterInstances()) {
-            ParameterInstanceLiveView v1 = new ParameterInstanceLiveView(v.getDModel(), v.getIndex());
-            v.getDModel().getController().addView(v1);
-            parameterInstanceViews.add(v1);
-        }
+        this.patchViewCodegen = patchViewCodegen;
+        parameterInstanceViews = new ArrayList<>(patchViewCodegen.getParameterInstances().size());
         init(patchModel);
     }
 
     private void init(PatchModel patchModel) {
+        for (ParameterInstanceView v : patchViewCodegen.getParameterInstances()) {
+            ParameterInstanceLiveView v1 = new ParameterInstanceLiveView(this, v.getDModel(), v.getIndex());
+            v.getDModel().getController().addView(v1);
+            parameterInstanceViews.add(v1);
+        }
         patchModel.getController().addView(this);
         // only after view is added...
         // but disabled for now... testing invited!
@@ -69,6 +69,36 @@ public class PatchViewLive extends View<PatchModel> {
         // TODO: auto-recompile: add views to trigger recompilation on changing attributes, nets, and object changes
     }
 
+    private boolean needsPresetUpdate = false;
+
+    public boolean getNeedsPresetUpdate() {
+        return needsPresetUpdate;
+    }
+
+    public void setNeedsPresetUpdate() {
+        needsPresetUpdate = true;
+    }
+
+    public void clearNeedsPresetUpdate() {
+        needsPresetUpdate = false;
+    }
+
+    public byte[] getUpdatedPresetTable() {
+        PatchModel patchModel = getDModel();
+        byte pb[] = new byte[patchModel.getNPresets() * patchModel.getNPresetEntries() * 8];
+        int p = 0;
+        for (int i = 0; i < patchModel.getNPresets(); i++) {
+            int pi[] = patchViewCodegen.distillPreset(i + 1);
+            for (int j = 0; j < patchModel.getNPresetEntries() * 2; j++) {
+                pb[p++] = (byte) (pi[j]);
+                pb[p++] = (byte) (pi[j] >> 8);
+                pb[p++] = (byte) (pi[j] >> 16);
+                pb[p++] = (byte) (pi[j] >> 24);
+            }
+        }
+        return pb;
+    }
+
     private boolean auto_recompile = false;
 
     void enableAutoRecompile() {
@@ -77,7 +107,7 @@ public class PatchViewLive extends View<PatchModel> {
 
     public void distributeDataToDisplays(ByteBuffer dispData) {
         dispData.rewind();
-        for (DisplayInstanceView d : pvcg.getDisplayInstances()) {
+        for (DisplayInstanceView d : patchViewCodegen.getDisplayInstances()) {
             d.processByteBuffer(dispData);
         }
     }

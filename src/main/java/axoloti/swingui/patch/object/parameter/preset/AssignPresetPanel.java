@@ -112,8 +112,6 @@ public class AssignPresetPanel extends JPanel {
                         getFocusEdit());
                 parameterInstanceView.getDModel().getController().removePreset(i + 1);
             }
-            PatchModel patchModel = parameterInstanceView.getDModel().getObjectInstance().getParent();
-            patchModel.presetUpdatePending = true;
         }
 
     };
@@ -143,7 +141,6 @@ public class AssignPresetPanel extends JPanel {
                 int i = ctrls.indexOf(evt.getSource());
                 if (i >= 0) {
                     if (ctrls.get(i).isEnabled()) {
-                        // FIXME
                         if (parameterInstanceView.getDModel().getValue() instanceof Integer) {
                             parameterInstanceView.getDModel().getController().addPreset(i + 1, (int) ctrls.get(i).getValue());
                         } else if (parameterInstanceView.getDModel().getValue() instanceof Double) {
@@ -151,7 +148,6 @@ public class AssignPresetPanel extends JPanel {
                         }
                     }
                 }
-                parameterInstanceView.getDModel().getObjectInstance().getParent().presetUpdatePending = true;
             }
         }
     };

@@ -32,7 +32,7 @@ import axoloti.object.parameter.ParameterFrac32UMap;
 import axoloti.object.parameter.ParameterFrac32UMapFilterQ;
 import axoloti.object.parameter.ParameterInt32Box;
 import static generatedobjects.GenTools.writeAxoObject;
-import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  *
@@ -445,7 +445,7 @@ class Filter extends GenTools {
         o.params.add(new ParameterInt32Box("highmid", -9, 9));
         o.params.add(new ParameterInt32Box("high", -9, 9));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
-        o.includes = new HashSet<>();
+        o.includes = new LinkedList<>();
         o.includes.add("./eq5coefs.h");
         o.sLocalData = "q63_t biquadStateBand1Q31[4 * 2];\n"
                 + "q63_t biquadStateBand2Q31[4 * 2];\n"
@@ -499,7 +499,7 @@ class Filter extends GenTools {
         o.params.add(new ParameterInt32Box("highmid", -9, 9));
         o.params.add(new ParameterInt32Box("high", -9, 9));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
-        o.includes = new HashSet<>();
+        o.includes = new LinkedList<>();
         o.includes.add("./eq5coefs.h");
         o.sLocalData = "q31_t biquadStateBand2Q31[4 * 2];\n"
                 + "q31_t biquadStateBand3Q31[4 * 2];\n"

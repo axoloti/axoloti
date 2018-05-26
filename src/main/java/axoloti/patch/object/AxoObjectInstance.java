@@ -72,11 +72,11 @@ import axoloti.property.PropagatedProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.target.fs.SDFileReference;
+import axoloti.utils.ListUtils;
 import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
@@ -417,10 +417,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<InletInstance> getInletInstances() {
-        if (inletInstances == null) {
-            return new ArrayList<>();
-        }
-        return Collections.unmodifiableList(inletInstances);
+        return ListUtils.export(inletInstances);
     }
 
     @Override
@@ -432,10 +429,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<OutletInstance> getOutletInstances() {
-        if (outletInstances == null) {
-            return new ArrayList<>();
-        }
-        return Collections.unmodifiableList(outletInstances);
+        return ListUtils.export(outletInstances);
     }
 
     @Override
@@ -447,10 +441,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<ParameterInstance> getParameterInstances() {
-        if (parameterInstances == null) {
-            return new ArrayList<>();
-        }
-        return Collections.unmodifiableList(parameterInstances);
+        return ListUtils.export(parameterInstances);
     }
 
     @Override
@@ -462,10 +453,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<AttributeInstance> getAttributeInstances() {
-        if (attributeInstances == null) {
-            return new ArrayList<>();
-        }
-        return Collections.unmodifiableList(attributeInstances);
+        return ListUtils.export(attributeInstances);
     }
 
     @Override
@@ -477,10 +465,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<DisplayInstance> getDisplayInstances() {
-        if (displayInstances == null) {
-            return new ArrayList<>();
-        }
-        return Collections.unmodifiableList(displayInstances);
+        return ListUtils.export(displayInstances);
     }
 
     @Override

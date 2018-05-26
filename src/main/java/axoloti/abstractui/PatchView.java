@@ -52,8 +52,8 @@ public abstract class PatchView extends View<PatchModel> {
     protected final static String patchMidiKey = "midi/in/keyb";
     protected final static String patchDisplay = "disp/";
 
-    protected List<IAxoObjectInstanceView> objectInstanceViews = new ArrayList<>();
-    protected List<INetView> netViews = new ArrayList<>();
+    protected List<IAxoObjectInstanceView> objectInstanceViews = Collections.emptyList();
+    protected List<INetView> netViews = Collections.emptyList();
 
     public PatchView(PatchModel patchModel) {
         super(patchModel);
@@ -374,7 +374,7 @@ public abstract class PatchView extends View<PatchModel> {
     }
 
     public void showPreset(int i) {
-        // TODO: fix preset logic
+        // TODO: fix preset editing logic
         /*
          ArrayList<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
          for (IAxoObjectInstanceView o : objectInstanceViewsClone) {

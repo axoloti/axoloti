@@ -17,9 +17,9 @@
  */
 package axoloti.swingui.patch.object.parameter.preset;
 
-import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Theme;
 import axoloti.swingui.components.control.HSliderComponent;
+import axoloti.swingui.patch.object.parameter.ParameterInstanceView;
 import axoloti.utils.Constants;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -39,10 +39,10 @@ public class AssignPresetComponent extends JComponent {
 
     private static final Dimension dim = new Dimension(16, 12);
 
-    final ParameterInstance parameterInstance;
+    final ParameterInstanceView parameterInstanceView;
 
-    public AssignPresetComponent(ParameterInstance parameterInstance) {
-        this.parameterInstance = parameterInstance;
+    public AssignPresetComponent(ParameterInstanceView parameterInstanceView) {
+        this.parameterInstanceView = parameterInstanceView;
         initComponents();
     }
 
@@ -56,8 +56,7 @@ public class AssignPresetComponent extends JComponent {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JPopupMenu pm = new JPopupMenu();
-                // FIXME
-                //AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.parameterInstanceView, pm);
+                AssignPresetMenuItems m = new AssignPresetMenuItems(AssignPresetComponent.this.parameterInstanceView, pm);
                 pm.show(AssignPresetComponent.this, 0, getHeight());
 
                 e.consume();
@@ -77,7 +76,7 @@ public class AssignPresetComponent extends JComponent {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, getWidth(), getHeight());
-        if ((parameterInstance.getPresets() != null) && (!parameterInstance.getPresets().isEmpty())) {
+        if ((parameterInstanceView.getDModel().getPresets() != null) && (!parameterInstanceView.getDModel().getPresets().isEmpty())) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);

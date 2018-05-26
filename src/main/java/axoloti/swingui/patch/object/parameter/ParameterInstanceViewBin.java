@@ -39,8 +39,8 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
     @Override
     public boolean handleAdjustment() {
         PresetInt p = getDModel().getPreset(presetEditActive);
-        if (p != null) {
-            p.setValue((int) getControlComponent().getValue());
+        if (p != null) { // TODO: fix preset editing logic
+            //p.setValue((int) getControlComponent().getValue());
         } else if (getDModel().getValue() != (int) getControlComponent().getValue()) {
             if (getDModel().getController() != null) {
                 Integer vi32 = (int)getControlComponent().getValue();

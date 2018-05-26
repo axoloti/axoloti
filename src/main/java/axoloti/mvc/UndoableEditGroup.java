@@ -1,7 +1,7 @@
 package axoloti.mvc;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -14,13 +14,13 @@ import javax.swing.undo.UndoableEdit;
 public class UndoableEditGroup implements UndoableEdit {
 
     final String actionName;
-    final ArrayList<UndoablePropertyChange> elements;
+    final List<UndoablePropertyChange> elements;
     final FocusEdit focusEdit;
 
     public UndoableEditGroup(String actionName, FocusEdit focusEdit) {
         this.actionName = actionName;
         this.focusEdit = focusEdit;
-        elements = new ArrayList<>();
+        elements = new LinkedList<>();
     }
 
     public UndoableEditGroup(String actionName) {

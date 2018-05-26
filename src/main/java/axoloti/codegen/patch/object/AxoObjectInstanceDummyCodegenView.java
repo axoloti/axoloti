@@ -5,7 +5,7 @@ import axoloti.codegen.patch.object.display.DisplayInstanceView;
 import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
 import axoloti.patch.object.IAxoObjectInstance;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,12 +62,12 @@ class AxoObjectInstanceDummyCodegenView implements IAxoObjectInstanceCodegenView
 
     @Override
     public List<ParameterInstanceView> getParameterInstanceViews() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Override
     public List<DisplayInstanceView> getDisplayInstanceViews() {
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
 }

@@ -9,9 +9,7 @@ import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.target.fs.SDFileReference;
 import java.io.File;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -50,13 +48,13 @@ public interface IAxoObject extends IModel {
     @Override
     ObjectController getController();
 
-    Set<String> getIncludes();
+    List<String> getIncludes();
 
-    void setIncludes(HashSet<String> includes);
+    void setIncludes(List<String> includes);
 
-    Set<String> getDepends();
+    List<String> getDepends();
 
-    Set<String> getModules();
+    List<String> getModules();
 
     Modulator[] getModulators();
 

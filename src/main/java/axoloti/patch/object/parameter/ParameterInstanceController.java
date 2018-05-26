@@ -4,6 +4,9 @@ import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
 import axoloti.patch.object.parameter.preset.Preset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -16,20 +19,19 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
     }
 
     public Preset addPreset(int index, Object value) {
-        if (getModel().getPresets() == null) {
-            ArrayList<Preset> new_presets = new ArrayList<>();
-            Preset p = getModel().presetFactory(index, value);
-            new_presets.add(p);
-            setModelUndoableProperty(ParameterInstance.PRESETS, new_presets);
-            return p;
-        }
         Preset p = getModel().getPreset(index);
-        ArrayList<Preset> new_presets = (ArrayList<Preset>) getModel().getPresets().clone();
+        List<Preset> new_presets = new ArrayList<>(getModel().getPresets());
         if (p != null) {
             new_presets.remove(p);
         }
         Preset pnew = getModel().presetFactory(index, value);
         new_presets.add(pnew);
+        Collections.sort(new_presets, new Comparator<Preset>() {
+            @Override
+            public int compare(Preset o1, Preset o2) {
+                return Integer.compare(o1.getIndex(), o2.getIndex());
+            }
+        });
         setModelUndoableProperty(ParameterInstance.PRESETS, new_presets);
         return pnew;
     }
@@ -37,9 +39,9 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
     public void removePreset(int index) {
         Preset p = getModel().getPreset(index);
         if (p != null) {
-            ArrayList<Preset> presets = (ArrayList<Preset>) getModel().getPresets().clone();
-            presets.remove(p);
-            setModelUndoableProperty(ParameterInstance.PRESETS, presets);
+            List<Preset> new_presets = new ArrayList<>(getModel().getPresets());
+            new_presets.remove(p);
+            setModelUndoableProperty(ParameterInstance.PRESETS, new_presets);
         }
     }
 

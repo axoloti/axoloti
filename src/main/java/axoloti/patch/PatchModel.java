@@ -37,8 +37,6 @@ import axoloti.patch.object.AxoObjectInstanceZombie;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
-import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.preferences.Preferences;
 import axoloti.property.BooleanProperty;
 import axoloti.property.IntegerProperty;
@@ -52,11 +50,10 @@ import axoloti.utils.StringUtils;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Attribute;
@@ -78,7 +75,7 @@ import org.simpleframework.xml.strategy.Strategy;
  *
  * @author Johannes Taelman
  */
-@Root
+@Root(name = "patch")
 public class PatchModel extends AbstractModel<PatchController> {
 
     //TODO: (enhancement) use execution order, rather than UI ordering
@@ -440,43 +437,43 @@ public class PatchModel extends AbstractModel<PatchController> {
         return aos;
     }
 
-    public HashSet<String> getIncludes() {
-        HashSet<String> includes = new HashSet<>();
+    public List<String> getIncludes() {
+        List<String> includes = new LinkedList<>();
         if (controllerObjectInstance != null) {
-            Set<String> i = controllerObjectInstance.getDModel().getIncludes();
+            List<String> i = controllerObjectInstance.getDModel().getIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
         }
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getDModel().getIncludes();
+            List<String> i = o.getDModel().getIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
         }
-        return includes;
+        return Collections.unmodifiableList(includes);
     }
 
-    public HashSet<String> getDepends() {
-        HashSet<String> depends = new HashSet<>();
+    public List<String> getDepends() {
+        List<String> depends = new LinkedList<>();
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getDModel().getDepends();
+            List<String> i = o.getDModel().getDepends();
             if (i != null) {
                 depends.addAll(i);
             }
         }
-        return depends;
+        return Collections.unmodifiableList(depends);
     }
 
-    public HashSet<String> getModules() {
-        HashSet<String> modules = new HashSet<>();
+    public List<String> getModules() {
+        List<String> modules = new LinkedList<>();
         for (IAxoObjectInstance o : objectinstances) {
-            Set<String> i = o.getDModel().getModules();
+            List<String> i = o.getDModel().getModules();
             if (i != null) {
                 modules.addAll(i);
             }
         }
-        return modules;
+        return Collections.unmodifiableList(modules);
     }
 
     public String getModuleDir(String module) {
@@ -618,38 +615,6 @@ public class PatchModel extends AbstractModel<PatchController> {
      }
      }
      */
-    //final int NPRESETS = 8;
-    //final int NPRESET_ENTRIES = 32;
-    public int[] distillPreset(int i) {
-        int[] pdata;
-        pdata = new int[getNPresetEntries() * 2];
-        for (int j = 0; j < getNPresetEntries(); j++) {
-            pdata[j * 2] = -1;
-        }
-        int index = 0;
-        for (IAxoObjectInstance o : objectinstances) {
-            for (ParameterInstance param : o.getParameterInstances()) {
-                ParameterInstance p7 = (ParameterInstance) param;
-                Preset p = p7.getPreset(i);
-                if (p != null) {
-                    pdata[index * 2] = 0; //p7.getIndex(); // TODO: preset implementation
-                    pdata[index * 2 + 1] = 0;// TODO: preset implementation //p.value.getRaw();
-                    index++;
-                    if (index == getNPresetEntries()) {
-                        Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "more than {0}entries in preset, skipping...", getNPresetEntries());
-                        return pdata;
-                    }
-                }
-            }
-        }
-        /*
-         System.out.format("preset data : %d\n",i);
-         for(int j=0;j<pdata.length/2;j++){
-         System.out.format("  %d : %d\n",pdata[j*2],pdata[j*2+1] );
-         }
-         */
-        return pdata;
-    }
 
 /*
     public void transferObjectConnections(AxoObjectInstanceZombie oldObject, AxoObjectInstance newObject) {
@@ -835,28 +800,29 @@ public class PatchModel extends AbstractModel<PatchController> {
     public final static StringProperty PATCH_HELP_PATCH = new StringProperty("HelpPatch", PatchModel.class);
     public final static Property PATCH_WINDOWPOS = new ObjectProperty("WindowPos", Rectangle.class, PatchModel.class);
 
+    private final static Property[] PROPERTIES = {
+        PATCH_LOCKED,
+        PATCH_FILENAME,
+        PATCH_DSPLOAD,
+        PATCH_OBJECTINSTANCES,
+        PATCH_NETS,
+        PATCH_AUTHOR,
+        PATCH_LICENSE,
+        PATCH_ATTRIBUTIONS,
+        PATCH_SUBPATCHMODE,
+        PATCH_NPRESETENTRIES,
+        PATCH_NPRESETS,
+        PATCH_NMODULATIONSOURCES,
+        PATCH_NMODULATIONTARGETSPERSOURCE,
+        PATCH_MIDICHANNEL,
+        PATCH_MIDISELECTOR,
+        PATCH_WINDOWPOS,
+        PATCH_NOTES,
+        PATCH_HELP_PATCH,};
+
     @Override
     public List<Property> getProperties() {
-        List<Property> l = new ArrayList<>();
-        l.add(PATCH_LOCKED);
-        l.add(PATCH_FILENAME);
-        l.add(PATCH_DSPLOAD);
-        l.add(PATCH_OBJECTINSTANCES);
-        l.add(PATCH_NETS);
-        l.add(PATCH_AUTHOR);
-        l.add(PATCH_LICENSE);
-        l.add(PATCH_ATTRIBUTIONS);
-        l.add(PATCH_SUBPATCHMODE);
-        l.add(PATCH_NPRESETENTRIES);
-        l.add(PATCH_NPRESETS);
-        l.add(PATCH_NMODULATIONSOURCES);
-        l.add(PATCH_NMODULATIONTARGETSPERSOURCE);
-        l.add(PATCH_MIDICHANNEL);
-        l.add(PATCH_MIDISELECTOR);
-        l.add(PATCH_WINDOWPOS);
-        l.add(PATCH_NOTES);
-        l.add(PATCH_HELP_PATCH);
-        return Collections.unmodifiableList(l);
+        return Collections.unmodifiableList(Arrays.asList(PROPERTIES));
     }
 
     public String getFileNamePath() {

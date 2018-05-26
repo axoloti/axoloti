@@ -32,7 +32,7 @@ public class MidiMonitor extends TJFrame {
         //jTextAreaMemoryContent.setEditable(false);
 
         jMidiMonitorTable.setModel(new AbstractTableModel() {
-            private final String[] columnNames = {"Port", "Channel", "Data (hex)", "Event"};//, "Test Info"};
+            private final String[] columnNames = {"Port", "Channel", "Data (hex)", "Event"};
 
             @Override
             public int getRowCount() {

@@ -169,7 +169,7 @@ public class MidiMessage {
             case CIN_D_CHANNELPRESSURE:
                 return "ChanPres val=" + (b1 & 0xFF);
             case CIN_E_PITCHBEND:
-                return "Bend val=" + ((b1 & 0xFF) + ((b2 & 0xFF) << 7) - (1 << 13));
+                return String.format("Bend     val= %5d", ((b1 & 0xFF) + ((b2 & 0xFF) << 7) - (1 << 13)));
             case CIN_F_SINGLE_BYTE:
                 return midiRTNames[((0xFF & b0) - 0xF0)];
         }
