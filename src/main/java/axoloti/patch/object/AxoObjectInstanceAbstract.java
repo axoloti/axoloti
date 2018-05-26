@@ -34,9 +34,11 @@ import axoloti.property.BooleanProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.PropagatedProperty;
 import axoloti.property.Property;
+import axoloti.property.StringProperty;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.CharEscape;
 import java.awt.Point;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -280,6 +282,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
     }
 
     /* MVC clean methods*/
+    public static final Property OBJ_INSTANCENAME = new StringProperty("InstanceName", AxoObjectInstanceAbstract.class);
     public static final Property OBJ_LOCATION = new ObjectProperty("Location", Point.class, AxoObjectInstance.class);
     public static final Property OBJ_SELECTED = new BooleanProperty("Selected", AxoObjectInstance.class);
     public static final Property OBJ_PARAMETER_INSTANCES = new ObjectProperty("ParameterInstances", List.class, AxoObjectInstanceAbstract.class);
@@ -291,16 +294,21 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
     public static final PropagatedProperty OBJ_INST_LICENSE = new PropagatedProperty(AxoObject.OBJ_LICENSE, DisplayInstance.class);
     public static final PropagatedProperty OBJ_INST_DESCRIPTION = new PropagatedProperty(AxoObject.OBJ_DESCRIPTION, DisplayInstance.class);
 
+    private static final Property[] PROPERTIES = {
+        OBJ_INSTANCENAME,
+        OBJ_LOCATION,
+        OBJ_SELECTED,
+        OBJ_PARAMETER_INSTANCES,
+        OBJ_ATTRIBUTE_INSTANCES,
+        OBJ_INLET_INSTANCES,
+        OBJ_OUTLET_INSTANCES,
+        OBJ_DISPLAY_INSTANCES
+    };
+
     @Override
     public List<Property> getProperties() {
         List<Property> l = new LinkedList<>();
-        l.add(OBJ_LOCATION);
-        l.add(OBJ_SELECTED);
-        l.add(OBJ_PARAMETER_INSTANCES);
-        l.add(OBJ_ATTRIBUTE_INSTANCES);
-        l.add(OBJ_INLET_INSTANCES);
-        l.add(OBJ_OUTLET_INSTANCES);
-        l.add(OBJ_DISPLAY_INSTANCES);
+        l.addAll(Arrays.asList(PROPERTIES));
         return l;
     }
 

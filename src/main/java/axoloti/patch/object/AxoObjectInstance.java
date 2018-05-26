@@ -69,8 +69,6 @@ import axoloti.patch.object.parameter.ParameterInstanceInt32BoxSmall;
 import axoloti.patch.object.parameter.ParameterInstanceInt32HRadio;
 import axoloti.patch.object.parameter.ParameterInstanceInt32VRadio;
 import axoloti.property.PropagatedProperty;
-import axoloti.property.Property;
-import axoloti.property.StringProperty;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.ListUtils;
 import java.awt.Point;
@@ -404,17 +402,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     }
 
     /* MVC clean code below here */
-    public static final Property OBJ_INSTANCENAME = new StringProperty("InstanceName", AxoObjectInstance.class);
-//    public static final Property OBJ_PARAMETER_INSTANCES = new ObjectProperty("ParameterInstances", new ArrayList<ParameterInstance>().getClass(), AxoObjectInstance.class);
-//    public static final Property OBJ_COMMENT = new StringPropertyNull("CommentText", AxoObjectInstance.class);
-
-    @Override
-    public List<Property> getProperties() {
-        List<Property> l = super.getProperties();
-        l.add(OBJ_INSTANCENAME);
-        return l;
-    }
-
     @Override
     public List<InletInstance> getInletInstances() {
         return ListUtils.export(inletInstances);
