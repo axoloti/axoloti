@@ -50,6 +50,10 @@ public class UndoManager1 extends UndoManager {
     @Override
     public synchronized void undo() throws CannotUndoException {
         MvcDiagnostics.log("<<<< undo\n");
+        if (!canUndo()) {
+            MvcDiagnostics.log(">>>> undo\n");
+            return;
+        }
         undoing = true;
         super.undo();
         undoing = false;
@@ -60,6 +64,10 @@ public class UndoManager1 extends UndoManager {
     @Override
     public synchronized void redo() throws CannotRedoException {
         MvcDiagnostics.log("<<<< redo\n");
+        if (!canRedo()) {
+            MvcDiagnostics.log(">>>> redo\n");
+            return;
+        }
         redoing = true;
         super.redo();
         redoing = false;

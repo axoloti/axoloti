@@ -1,5 +1,6 @@
 package axoloti.swingui.patch.object;
 
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
 import axoloti.abstractui.IInletInstanceView;
@@ -23,6 +24,7 @@ import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.components.PopupIcon;
+import axoloti.swingui.objecteditor.ObjectEditorFactory;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patch.object.attribute.AttributeInstanceView;
 import axoloti.swingui.patch.object.attribute.AttributeInstanceViewFactory;
@@ -445,7 +447,12 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
     }
 
     public void openEditor() {
-        getType().openEditor();
+        IAbstractEditor editor = getType().getEditor();
+        if (editor == null) {
+            editor = ObjectEditorFactory.createObjectEditor(getType());
+            getType().setEditor(editor);
+        }
+        editor.toFront();
     }
 
     @Override

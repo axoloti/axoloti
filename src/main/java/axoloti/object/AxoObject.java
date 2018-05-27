@@ -109,7 +109,6 @@ import axoloti.property.BooleanProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
-import axoloti.swingui.objecteditor.AxoObjectEditor;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.ListUtils;
 import axoloti.utils.StringUtils;
@@ -312,24 +311,6 @@ public class AxoObject extends AxoObjectAbstract {
         }
     }
 
-    // TODO: remove (AxoObjectEditor) reference from model to swingui
-    private AxoObjectEditor editor;
-
-    @Override
-    public void openEditor() {
-        if (editor == null) {
-            editor = new AxoObjectEditor(this);
-        }
-        editor.setVisible(true);
-        editor.toFront();
-    }
-
-    public void closeEditor() {
-        if (editor == null) {
-            return;
-        }
-        editor.setVisible(false);
-    }
 
     /*
     @Override
@@ -589,9 +570,6 @@ public class AxoObject extends AxoObjectAbstract {
         */
     }
 
-    public AxoObjectEditor getEditor() {
-        return editor;
-    }
 
     /* MVC code */
 

@@ -18,6 +18,7 @@
 package axoloti.object;
 
 import axoloti.Modulator;
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.object.attribute.AxoAttribute;
@@ -172,6 +173,18 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
 
     public void setUUID(String uuid) {
         this.uuid = uuid;
+    }
+
+    private IAbstractEditor editor;
+
+    @Override
+    public IAbstractEditor getEditor() {
+        return editor;
+    }
+
+    @Override
+    public void setEditor(IAbstractEditor editor) {
+        this.editor = editor;
     }
 
 

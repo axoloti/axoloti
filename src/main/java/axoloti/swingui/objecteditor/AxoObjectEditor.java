@@ -19,6 +19,7 @@ package axoloti.swingui.objecteditor;
 
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
 import axoloti.object.IAxoObject;
@@ -54,7 +55,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject> {
+public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>, IAbstractEditor {
 
     private final AxoObject obj;
     private RSyntaxTextArea jTextAreaLocalData;
@@ -378,6 +379,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<Axo
 
         jTextDesc.requestFocus();
         obj.getController().addView(this);
+        setVisible(true);
     }
 
     boolean isEmbeddedObj() {
@@ -466,10 +468,13 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<Axo
         }
     }
 
+    @Override
     public void close() {
+        if (getDModel().getEditor() == this) {
+            getDModel().setEditor(null);
+        }
         DocumentWindowList.unregisterWindow(this);
         dispose();
-        getDModel().closeEditor();
     }
 
     void switchToTab(JPanel panel) {

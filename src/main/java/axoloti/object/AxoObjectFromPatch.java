@@ -26,13 +26,11 @@ import axoloti.object.outlet.Outlet;
 import axoloti.object.parameter.Parameter;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
-import axoloti.swingui.patch.PatchFrame;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import qcmds.QCmdProcessor;
 
 /**
  *
@@ -41,7 +39,6 @@ import qcmds.QCmdProcessor;
 public class AxoObjectFromPatch extends AxoObject {
 
     private PatchModel patchModel;
-    private PatchFrame pf; // TODO: avoid reference to GUI in non-gui code
     private final File f;
 
     public AxoObjectFromPatch(File f) {
@@ -104,15 +101,6 @@ public class AxoObjectFromPatch extends AxoObject {
         sMidiCode = o.sMidiCode;
         sSRateCode = o.sSRateCode;
         helpPatch = o.helpPatch;
-    }
-
-    @Override
-    public void openEditor() {
-        if (pf == null) {
-            pf = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
-        }
-        pf.setVisible(true);
-        pf.toFront();
     }
 
     public PatchModel getPatchModel() {

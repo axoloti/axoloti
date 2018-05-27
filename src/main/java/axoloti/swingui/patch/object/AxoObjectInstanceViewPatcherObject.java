@@ -37,7 +37,6 @@ class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
         } else {
             editor.updateReferenceXML();
         }
-        editor.setVisible(true);
         editor.toFront();
     }
 

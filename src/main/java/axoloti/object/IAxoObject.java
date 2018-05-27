@@ -1,6 +1,7 @@
 package axoloti.object;
 
 import axoloti.Modulator;
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.mvc.IModel;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.display.Display;
@@ -74,7 +75,9 @@ public interface IAxoObject extends IModel {
 
     Boolean getRotatedParams();
 
-    void openEditor();
+    IAbstractEditor getEditor();
+
+    void setEditor(IAbstractEditor editor);
 
     List<SDFileReference> getFileDepends();
 }

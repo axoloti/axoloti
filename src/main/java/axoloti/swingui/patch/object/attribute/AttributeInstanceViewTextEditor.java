@@ -23,12 +23,13 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
     }
 
     void showEditor() {
-        if (getDModel().editor == null) {
+        if (getDModel().getEditor() == null) {
             DocumentWindow dw = (DocumentWindow) SwingUtilities.getWindowAncestor(this);
-            getDModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getDModel(), dw);
-            getDModel().editor.setTitle(getDModel().getParent().getInstanceName() + "/" + getDModel().getDModel().getName());
+            TextEditor textEditor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getDModel(), dw);
+            textEditor.setTitle(getDModel().getParent().getInstanceName() + "/" + getDModel().getDModel().getName());
+            getDModel().setEditor(textEditor);
         }
-        getDModel().editor.toFront();
+        getDModel().getEditor().toFront();
     }
 
     private void initComponents() {
@@ -59,9 +60,11 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
     @Override
     public void setString(String sText) {
         getDModel().setValue(sText);
+        /*
         if (getDModel().editor != null) {
             getDModel().editor.setText(sText);
         }
+         */
     }
 
     @Override

@@ -21,7 +21,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         return (AxoObjectInstancePatcher) super.getDModel();
     }
 
-    public void initSubpatchFrame() {
+    private void initSubpatchFrame() {
         if (pf == null) {
             PatchModel subpatch = getDModel().getSubPatchModel();
             pf = new PatchFrame(subpatch, QCmdProcessor.getQCmdProcessor());
@@ -29,7 +29,8 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         }
     }
 
-    public void edit() {
+    @Override
+    public void openEditor() {
         initSubpatchFrame();
         pf.setState(java.awt.Frame.NORMAL);
         pf.setVisible(true);
@@ -43,7 +44,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
         BtnEdit.addActListener(new ButtonComponent.ActListener() {
             @Override
             public void fire() {
-                edit();
+                openEditor();
             }
         });
         add(BtnEdit);

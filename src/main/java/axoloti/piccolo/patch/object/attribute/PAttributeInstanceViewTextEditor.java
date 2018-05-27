@@ -23,16 +23,13 @@ class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
     }
 
     void showEditor() {
-        if (getDModel().editor == null) {
+        if (getDModel().getEditor() == null) {
             DocumentWindow dw = (DocumentWindow) SwingUtilities.getWindowAncestor(this.getProxyComponent());
-            getDModel().editor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getDModel(), dw);
-            getDModel().editor.setTitle(getDModel().getParent().getInstanceName() + "/" + getDModel().getDModel().getName());
+            TextEditor textEditor = new TextEditor(AttributeInstanceTextEditor.ATTR_VALUE, getDModel(), dw);
+            textEditor.setTitle(getDModel().getParent().getInstanceName() + "/" + getDModel().getDModel().getName());
+            getDModel().setEditor(textEditor);
         }
-        getDModel().editor.toFront();
-
-        // TODO: piccolo verify this
-        getDModel().editor.setState(java.awt.Frame.NORMAL);
-        getDModel().editor.setVisible(true);
+        getDModel().getEditor().toFront();
     }
 
     private void initComponents() {
@@ -63,9 +60,10 @@ class PAttributeInstanceViewTextEditor extends PAttributeInstanceViewString {
     @Override
     public void setString(String sText) {
         getDModel().setValue(sText);
+        /*
         if (getDModel().editor != null) {
             getDModel().editor.setText(sText);
-        }
+        }*/
     }
 
     @Override

@@ -104,10 +104,6 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
     }
 
     @Override
-    public void openEditor() {
-    }
-
-    @Override
     public List<SDFileReference> getFileDepends() {
         return Collections.emptyList();
     }

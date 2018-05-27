@@ -1,5 +1,6 @@
 package axoloti.piccolo.patch.object;
 
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.abstractui.IAttributeInstanceView;
 import axoloti.abstractui.IDisplayInstanceView;
 import axoloti.abstractui.IInletInstanceView;
@@ -29,6 +30,7 @@ import axoloti.piccolo.patch.object.outlet.POutletInstanceViewFactory;
 import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFactory;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
+import axoloti.swingui.objecteditor.ObjectEditorFactory;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patch.object.attribute.AttributeInstanceView;
 import axoloti.swingui.patch.object.inlet.InletInstanceView;
@@ -464,7 +466,12 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
     }
 
     public void openEditor() {
-        getType().openEditor();
+        IAbstractEditor editor = getType().getEditor();
+        if (editor == null) {
+            editor = ObjectEditorFactory.createObjectEditor(getType());
+            getType().setEditor(editor);
+        }
+        editor.toFront();
     }
 
     @Override

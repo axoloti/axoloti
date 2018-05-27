@@ -20,6 +20,7 @@ package axoloti.swingui.patch;
 import axoloti.FileUtils;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.abstractui.PatchView;
 import axoloti.connection.CConnection;
 import axoloti.connection.ConnectionStatusListener;
@@ -80,7 +81,7 @@ import qcmds.QCmdUploadPatch;
  *
  * @author Johannes Taelman
  */
-public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, IView {
+public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, ConnectionStatusListener, SDCardMountStatusListener, IView, IAbstractEditor {
 
     /**
      * Creates new form PatchFrame

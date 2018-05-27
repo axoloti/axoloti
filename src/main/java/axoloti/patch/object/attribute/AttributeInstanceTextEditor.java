@@ -17,9 +17,9 @@
  */
 package axoloti.patch.object.attribute;
 
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.object.attribute.AxoAttributeTextEditor;
 import axoloti.patch.object.AxoObjectInstance;
-import axoloti.swingui.TextEditor;
 import org.simpleframework.xml.Element;
 
 /**
@@ -28,7 +28,7 @@ import org.simpleframework.xml.Element;
  */
 public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttributeTextEditor> {
 
-    public TextEditor editor; // TODO: remove reference to swingui...
+    private IAbstractEditor editor;
 
     @Element(data = true, required = false)
     private String sText;
@@ -71,6 +71,14 @@ public class AttributeInstanceTextEditor extends AttributeInstanceString<AxoAttr
             editor.close();
         }
         editor = null;
+    }
+
+    public IAbstractEditor getEditor() {
+        return editor;
+    }
+
+    public void setEditor(IAbstractEditor editor) {
+        this.editor = editor;
     }
 
 }

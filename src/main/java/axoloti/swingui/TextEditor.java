@@ -18,11 +18,14 @@
 package axoloti.swingui;
 
 import axoloti.abstractui.DocumentWindow;
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.mvc.IModel;
 import axoloti.property.Property;
 import axoloti.swingui.menus.StandardMenubar;
 import axoloti.swingui.mvc.AJFrame;
 import java.awt.BorderLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  *
  * @author Johannes Taelman
  */
-public class TextEditor extends AJFrame<IModel> {
+public class TextEditor extends AJFrame<IModel> implements IAbstractEditor {
 
     Property stringProperty; // TODO: turn into StringProperty
     RSyntaxTextArea textArea;
@@ -62,6 +65,14 @@ public class TextEditor extends AJFrame<IModel> {
         textArea.setVisible(true);
         setContentPane(cp);
         textArea.setText((String) this.stringProperty.get(model));
+        textArea.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if ((e.getKeyChar() == '\n') && (e.isControlDown() || e.isMetaDown())) {
+                    updateModel();
+                }
+            }
+        });
         setVisible(true);
     }
 
@@ -73,8 +84,13 @@ public class TextEditor extends AJFrame<IModel> {
         return textArea.getText();
     }
 
+    @Override
     public void close() {
         dispose();
+    }
+
+    private void updateModel() {
+        model.getController().generic_setModelUndoableProperty(stringProperty, textArea.getText());
     }
 
     /**
@@ -125,7 +141,7 @@ public class TextEditor extends AJFrame<IModel> {
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
 //        System.out.println("txt changed (lost focus)");
-        model.getController().generic_setModelUndoableProperty(stringProperty, textArea.getText());
+        updateModel();
     }//GEN-LAST:event_formWindowLostFocus
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
