@@ -237,7 +237,10 @@ public class PatchViewCodegen extends View<PatchModel> {
         StringBuilder c = new StringBuilder(
             "   static int32_t * GetInitParams(void){\n"
                 + "      static const int32_t p[" + s + "]= {\n");
-        ParameterInstanceView lastParam = parameterInstances.get(s - 1);
+        ParameterInstanceView lastParam = null;
+        if (s > 0) {
+            lastParam = parameterInstances.get(s - 1);
+        }
         for (ParameterInstanceView param : parameterInstances) {
             c.append("      ");
             c.append(param.getDModel().valToInt32(param.getDModel().getValue()));
