@@ -6,6 +6,8 @@ import axoloti.mvc.UndoableEditGroup;
 import axoloti.mvc.UndoablePropertyChange;
 import axoloti.swingui.menus.StandardMenubar;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -64,10 +66,10 @@ public class UndoListViewFrame extends AJFrame<AbstractDocumentRoot> {
                 }
                 switch (columnIndex) {
                     case 0:
-                        if (e instanceof UndoablePropertyChange) {
-                            return " - " + e.getPresentationName();
-                        } else {
+                        if (e instanceof UndoableEditGroup) {
                             return e.getPresentationName();
+                        } else {
+                            return " - " + e.getPresentationName();
                         }
                     case 1:
                         return String.format("%08X", e.hashCode());
@@ -100,8 +102,24 @@ public class UndoListViewFrame extends AJFrame<AbstractDocumentRoot> {
                 }
             }
         });
-    }
 
+        jTable1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                if (mouseEvent.getClickCount() == 2) {
+                    int rowIndex = jTable1.getSelectedRow();
+                    if (rowIndex == -1) {
+                        return;
+                    }
+                    UndoableEdit e = undoList.get(rowIndex);
+                    if (e instanceof UndoableEditGroup) {
+                        UndoableEditGroup ueg = (UndoableEditGroup) e;
+                        ueg.grabFocus();
+                    }
+                }
+            }
+        });
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

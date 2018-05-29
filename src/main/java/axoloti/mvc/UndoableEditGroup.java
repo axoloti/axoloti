@@ -14,7 +14,7 @@ import javax.swing.undo.UndoableEdit;
 public class UndoableEditGroup implements UndoableEdit {
 
     final String actionName;
-    final List<UndoablePropertyChange> elements;
+    final List<UndoableEdit> elements;
     final FocusEdit focusEdit;
 
     public UndoableEditGroup(String actionName, FocusEdit focusEdit) {
@@ -31,7 +31,7 @@ public class UndoableEditGroup implements UndoableEdit {
     public void undo() throws CannotUndoException {
         MvcDiagnostics.log(String.format("undo %08X %s%n", hashCode(), getPresentationName()));
         for (int j = elements.size() - 1; j >= 0; j--) {
-            UndoablePropertyChange el = elements.get(j);
+            UndoableEdit el = elements.get(j);
             el.undo();
         }
         if (focusEdit != null) {
@@ -47,7 +47,7 @@ public class UndoableEditGroup implements UndoableEdit {
     @Override
     public void redo() throws CannotRedoException {
         MvcDiagnostics.log(String.format("redo %08X %s%n", hashCode(), getPresentationName()));
-        for (UndoablePropertyChange el : elements) {
+        for (UndoableEdit el : elements) {
             el.redo();
         }
         if (focusEdit != null) {
@@ -62,31 +62,42 @@ public class UndoableEditGroup implements UndoableEdit {
 
     @Override
     public void die() {
-        for (UndoablePropertyChange el : elements) {
+        for (UndoableEdit el : elements) {
             el.die();
         }
     }
 
     @Override
     public boolean addEdit(UndoableEdit anEdit) {
-        if (!(anEdit instanceof UndoablePropertyChange)) {
+
+        if (anEdit instanceof UndoableEditGroup) {
             return false;
         }
-        UndoablePropertyChange anAbsEdit = (UndoablePropertyChange) anEdit;
+
         if (elements.isEmpty()) {
-            elements.add(anAbsEdit);
+            elements.add(anEdit);
             return true;
         }
-        UndoablePropertyChange lastEdit = elements.get(elements.size() - 1);
-        if ((lastEdit.getModel() == anAbsEdit.getModel())
-                && (lastEdit.getProperty() == anAbsEdit.getProperty())) {
-            lastEdit.setNewValue(anAbsEdit.getNewValue());
-            if ((lastEdit.getNewValue() != null) && (lastEdit.getNewValue().equals(lastEdit.getOldValue()))) {
-                elements.remove(lastEdit);
+
+        UndoableEdit lastEdit = elements.get(elements.size() - 1);
+
+        if ((lastEdit instanceof UndoablePropertyChange) && (anEdit instanceof UndoablePropertyChange)) {
+            UndoablePropertyChange lastEditPC = (UndoablePropertyChange) lastEdit;
+            UndoablePropertyChange anEditPC = (UndoablePropertyChange) anEdit;
+            if ((lastEditPC.getModel() == anEditPC.getModel())
+                    && (lastEditPC.getProperty() == anEditPC.getProperty())) {
+                lastEditPC.setNewValue(anEditPC.getNewValue());
+                if ((lastEditPC.getNewValue() != null) && (lastEditPC.getNewValue().equals(lastEditPC.getOldValue()))) {
+                    elements.remove(lastEdit);
+                }
+                return true;
+            } else {
+                elements.add(anEdit);
+                return true;
             }
-            return true;
+
         } else {
-            elements.add(anAbsEdit);
+            elements.add(anEdit);
             return true;
         }
     }
@@ -122,8 +133,18 @@ public class UndoableEditGroup implements UndoableEdit {
         return "Redo " + actionName;
     }
 
-    public List<UndoablePropertyChange> getElements() {
+    public List<UndoableEdit> getElements() {
         return Collections.unmodifiableList(elements);
+    }
+
+    public boolean canGrabFocus() {
+        return (focusEdit != null);
+    }
+
+    public void grabFocus() {
+        if (focusEdit != null) {
+            focusEdit.focus();
+        }
     }
 
 }
