@@ -79,6 +79,24 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
 
     private List<IView> atomViews = new ArrayList<>();
 
+    private class FocusEditTableRow extends FocusEdit {
+
+        private final int row;
+
+        public FocusEditTableRow(int row) {
+            this.row = row;
+        }
+
+        @Override
+        protected void focus() {
+            editor.switchToTab(parentPanel);
+            if ((row >= 0) && jTable1.getRowCount() > row) {
+                jTable1.setRowSelectionInterval(row, row);
+            }
+        }
+
+    };
+
     private ActionListener actionListenerMoveUp = new ActionListener() {
 
         @Override
@@ -87,15 +105,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
             if (row < 1) {
                 return;
             }
-            FocusEdit focusEdit = new FocusEdit() {
-
-                @Override
-                protected void focus() {
-                    editor.switchToTab(parentPanel);
-                    jTable1.setRowSelectionInterval(row, row);
-                }
-
-            };
+            FocusEditTableRow focusEdit = new FocusEditTableRow(row);
             getObjectController().addMetaUndo("move " + getAtomTypeName(), focusEdit);
 
             ArrayList<T> n = new ArrayList<>((List<T>) getObjectController().getModelProperty(prop));
@@ -113,15 +123,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         public void actionPerformed(ActionEvent e) {
             int row = jTable1.getSelectedRow();
 
-            FocusEdit focusEdit = new FocusEdit() {
-
-                @Override
-                protected void focus() {
-                    editor.switchToTab(parentPanel);
-                    jTable1.setRowSelectionInterval(row, row);
-                }
-
-            };
+            FocusEditTableRow focusEdit = new FocusEditTableRow(row);
 
             getObjectController().addMetaUndo("move " + getAtomTypeName(), focusEdit);
 
@@ -149,15 +151,8 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
             }
             if (jTable1.getRowCount() >= row) {
 
-                FocusEdit focusEdit = new FocusEdit() {
+                FocusEditTableRow focusEdit = new FocusEditTableRow(row);
 
-                    @Override
-                    protected void focus() {
-                        editor.switchToTab(parentPanel);
-                        jTable1.setRowSelectionInterval(row, row);
-                    }
-
-                };
                 getObjectController().addMetaUndo("remove " + getAtomTypeName(), focusEdit);
                 ArrayList<T> n = new ArrayList<>((List<T>) getObjectController().getModelProperty(prop));
                 n.remove(row);
@@ -192,16 +187,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                 }
                 o2.setName(getDefaultName() + i);
                 o2.setParent(obj);
-                FocusEdit focusEdit = new FocusEdit() {
-
-                    @Override
-                    protected void focus() {
-                        editor.switchToTab(parentPanel);
-                        int row = jTable1.getRowCount() - 1;
-                        jTable1.setRowSelectionInterval(row, row);
-                    }
-
-                };
+                FocusEditTableRow focusEdit = new FocusEditTableRow(jTable1.getRowCount() - 1);
                 getObjectController().addMetaUndo("add " + getAtomTypeName(), focusEdit);
                 getObjectController().generic_addUndoableElementToList(prop, o2);
                 updateTable2();
@@ -288,15 +274,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                 if (atomDefinitionController == null) {
                     return;
                 }
-                FocusEdit focusEdit = new FocusEdit() {
-
-                    @Override
-                    protected void focus() {
-                        editor.switchToTab(parentPanel);
-                        jTable1.setRowSelectionInterval(rowIndex, rowIndex);
-                    }
-
-                };
+                FocusEditTableRow focusEdit = new FocusEditTableRow(rowIndex);
                 switch (columnIndex) {
                     case 0: {
                         assert (value instanceof String);
@@ -447,8 +425,14 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                             @Override
                             protected void focus() {
                                 editor.switchToTab(parentPanel);
-                                jTable1.setRowSelectionInterval(table1row, table1row);
-                                jTable2.setRowSelectionInterval(rowIndex, rowIndex);
+                                if ((table1row >= 0)
+                                        && (table1row < jTable1.getRowCount())) {
+                                    jTable1.setRowSelectionInterval(table1row, table1row);
+                                }
+                                if ((rowIndex >= 0)
+                                        && (rowIndex < jTable2.getRowCount())) {
+                                    jTable2.setRowSelectionInterval(rowIndex, rowIndex);
+                                }
                             }
                         });
                         o.getController().generic_setModelUndoableProperty(property, newValue);

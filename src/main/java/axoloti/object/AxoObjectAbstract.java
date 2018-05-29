@@ -134,6 +134,11 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
     }
 
     @Override
+    public List<String> getProcessedIncludes() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<String> getIncludes() {
         return Collections.emptyList();
     }

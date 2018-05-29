@@ -28,4 +28,20 @@ public class ListUtils<T> {
         }
     }
 
+    /**
+     * Converts a List object, into a unmodifiable List. When the list is null
+     * or empty, null is returned.
+     *
+     * @param <T> type of list elements
+     * @param list java.util.List<T> or null
+     * @return unmodifiable java.util.List<T>
+     */
+    public static <T> List<T> emptyToNull(List<? extends T> list) {
+        if ((list == null) || list.isEmpty()) {
+            return null;
+        } else {
+            return Collections.unmodifiableList(list);
+        }
+    }
+
 }

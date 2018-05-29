@@ -440,13 +440,13 @@ public class PatchModel extends AbstractModel<PatchController> {
     public List<String> getIncludes() {
         List<String> includes = new LinkedList<>();
         if (controllerObjectInstance != null) {
-            List<String> i = controllerObjectInstance.getDModel().getIncludes();
+            List<String> i = controllerObjectInstance.getDModel().getProcessedIncludes();
             if (i != null) {
                 includes.addAll(i);
             }
         }
         for (IAxoObjectInstance o : objectinstances) {
-            List<String> i = o.getDModel().getIncludes();
+            List<String> i = o.getDModel().getProcessedIncludes();
             if (i != null) {
                 includes.addAll(i);
             }

@@ -106,6 +106,7 @@ import axoloti.object.parameter.ParameterInt32HRadio;
 import axoloti.object.parameter.ParameterInt32VRadio;
 import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
 import axoloti.property.BooleanProperty;
+import axoloti.property.ListProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
@@ -114,6 +115,7 @@ import axoloti.utils.ListUtils;
 import axoloti.utils.StringUtils;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -240,14 +242,21 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeSDFile.TYPE_NAME, type = AxoAttributeSDFile.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeTextEditor.TYPE_NAME, type = AxoAttributeTextEditor.class, inline = true, required = false)})
     public List<AxoAttribute> attributes = new ArrayList<>(); // literal constants
-    @ElementList(name = "file-depends", entry = "file-depend", type = SDFileReference.class, required = false)
+
+    @Path("file-depends")
+    @ElementList(entry = "file-depend", type = String.class, inline = true, required = false)
     public List<SDFileReference> filedepends;
-    @ElementList(name = "includes", entry = "include", type = String.class, required = false)
+
+    @Path("includes")
+    @ElementList(entry = "include", type = String.class, inline = true, required = false)
     public List<String> includes;
-    @ElementList(name = "depends", entry = "depend", type = String.class, required = false)
+
+    @Path("depends")
+    @ElementList(entry = "depend", type = String.class, inline = true, required = false)
     public List<String> depends;
 
-    @ElementList(name = "modules", entry = "modules", type = String.class, required = false)
+    @Path("modules")
+    @ElementList(entry = "module", type = String.class, inline = true, required = false)
     public List<String> modules;
 
     @Element(name = "code.declaration", required = false, data = true)
@@ -310,7 +319,6 @@ public class AxoObject extends AxoObjectAbstract {
             o.setParent(this);
         }
     }
-
 
     /*
     @Override
@@ -412,7 +420,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
-    public List<String> getIncludes() {
+    public List<String> getProcessedIncludes() {
         if ((includes == null) || includes.isEmpty()) {
             return null;
         } else if (getPath() != null) {
@@ -445,8 +453,14 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     @Override
+    public List<String> getIncludes() {
+        return ListUtils.export(includes);
+    }
+
+    @Override
     public void setIncludes(List<String> includes) {
-        this.includes = ListUtils.export(includes);
+        this.includes = includes;
+        firePropertyChange(OBJ_INCLUDES, null, includes);
     }
 
     @Override
@@ -454,9 +468,19 @@ public class AxoObject extends AxoObjectAbstract {
         return ListUtils.export(depends);
     }
 
+    public void setDepends(List<String> depends) {
+        this.depends = depends;
+        firePropertyChange(OBJ_DEPENDS, null, depends);
+    }
+
     @Override
     public List<String> getModules() {
         return ListUtils.export(modules);
+    }
+
+    public void setModules(List<String> modules) {
+        this.modules = modules;
+        firePropertyChange(OBJ_MODULES, null, modules);
     }
 
     @Override
@@ -588,26 +612,33 @@ public class AxoObject extends AxoObjectAbstract {
     public static final Property OBJ_SRATE_CODE = new StringPropertyNull("SRateCode", AxoObject.class);
     public static final Property OBJ_MIDI_CODE = new StringPropertyNull("MidiCode", AxoObject.class);
 
+    public static final ListProperty OBJ_INCLUDES = new ListProperty("Includes", AxoObject.class);
+    public static final ListProperty OBJ_DEPENDS = new ListProperty("Depends", AxoObject.class);
+    public static final ListProperty OBJ_MODULES = new ListProperty("Modules", AxoObject.class);
+
+    private static final Property[] PROPERTIES = {
+        OBJ_ID,
+        OBJ_DESCRIPTION,
+        OBJ_LICENSE,
+        OBJ_PATH,
+        OBJ_AUTHOR,
+        OBJ_HELPPATCH,
+        OBJ_INLETS,
+        OBJ_OUTLETS,
+        OBJ_ATTRIBUTES,
+        OBJ_PARAMETERS,
+        OBJ_DISPLAYS,
+        OBJ_INIT_CODE,
+        OBJ_DISPOSE_CODE,
+        OBJ_LOCAL_DATA,
+        OBJ_KRATE_CODE,
+        OBJ_SRATE_CODE,
+        OBJ_MIDI_CODE
+    };
+
     @Override
     public List<Property> getProperties() {
-        List<Property> l =  new ArrayList<>();
-        l.add(OBJ_ID);
-        l.add(OBJ_DESCRIPTION);
-        l.add(OBJ_LICENSE);
-        l.add(OBJ_PATH);
-        l.add(OBJ_AUTHOR);
-        l.add(OBJ_HELPPATCH);
-        l.add(OBJ_INLETS);
-        l.add(OBJ_OUTLETS);
-        l.add(OBJ_ATTRIBUTES);
-        l.add(OBJ_PARAMETERS);
-        l.add(OBJ_DISPLAYS);
-        l.add(OBJ_INIT_CODE);
-        l.add(OBJ_DISPOSE_CODE);
-        l.add(OBJ_LOCAL_DATA);
-        l.add(OBJ_KRATE_CODE);
-        l.add(OBJ_SRATE_CODE);
-        l.add(OBJ_MIDI_CODE);
+        List<Property> l = new ArrayList<>(Arrays.asList(PROPERTIES));
         return l;
     }
 

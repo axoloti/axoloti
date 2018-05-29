@@ -49,6 +49,13 @@ public interface IAxoObject extends IModel {
     @Override
     ObjectController getController();
 
+    /**
+     * Resolve the includes.
+     *
+     * @return an unmodifiable list of resolved includes.
+     */
+    List<String> getProcessedIncludes();
+
     List<String> getIncludes();
 
     void setIncludes(List<String> includes);
