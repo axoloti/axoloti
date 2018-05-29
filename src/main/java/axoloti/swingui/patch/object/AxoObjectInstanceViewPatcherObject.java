@@ -1,15 +1,15 @@
 package axoloti.swingui.patch.object;
 
-import axoloti.object.AxoObject;
+import axoloti.abstractui.IAbstractEditor;
 import axoloti.patch.object.AxoObjectInstancePatcherObject;
 import axoloti.swingui.components.ButtonComponent;
-import axoloti.swingui.objecteditor.AxoObjectEditor;
+import axoloti.swingui.objecteditor.ObjectEditorFactory;
 import axoloti.swingui.patch.PatchViewSwing;
 
 class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
 
     private ButtonComponent buttonEdit;
-    private AxoObjectEditor editor;
+    private IAbstractEditor editor;
 
     AxoObjectInstanceViewPatcherObject(AxoObjectInstancePatcherObject objectInstance, PatchViewSwing patchView) {
         super(objectInstance, patchView);
@@ -33,9 +33,7 @@ class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     @Override
     public void openEditor() {
         if (editor == null) {
-            editor = new AxoObjectEditor((AxoObject) model.getDModel());
-        } else {
-            editor.updateReferenceXML();
+            editor = ObjectEditorFactory.createObjectEditor(model.getDModel());
         }
         editor.toFront();
     }

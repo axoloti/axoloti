@@ -61,7 +61,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>, IAbstractEditor {
+class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>, IAbstractEditor {
 
     private final AxoObject obj;
     private RSyntaxTextArea jTextAreaLocalData;
@@ -125,11 +125,11 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<Axo
         if (s == null) {
             return "";
         }
-        s = s.trim();
-        if (s.isEmpty()) {
+        String s2 = s.trim();
+        if (s2.isEmpty()) {
             return "";
         }
-        return s;
+        return s2;
     }
 
     private String origXML; // TODO: Review: used?
@@ -172,20 +172,26 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<Axo
             @Override
             protected void focus() {
 
+                // raise the window
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(component);
                 if (topFrame == null) {
                     return;
                 }
                 topFrame.toFront();
 
+                // switch to tab
                 Component panel = component;
-                while ((panel != null) && (!(panel.getParent() instanceof JTabbedPane))) {
-                    panel = panel.getParent();
-                }
-                if (panel != null) {
-                    switchToTab((JPanel) panel);
+                while (panel != null) {
+                    Component parent = panel.getParent();
+                    if (parent instanceof JTabbedPane) {
+                        // supposedly a JPanel...
+                        switchToTab(panel);
+                        break;
+                    }
+                    panel = parent;
                 }
 
+                // request focus...
                 component.requestFocusInWindow();
             }
         };
@@ -199,7 +205,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<Axo
     private ParamDefinitionsEditorPanel params;
     private DisplayDefinitionsEditorPanel disps;
 
-    public AxoObjectEditor(AxoObject obj) {
+    AxoObjectEditor(AxoObject obj) {
         this.obj = obj;
         initComponents();
         initComponents2();
@@ -458,7 +464,7 @@ public class AxoObjectEditor extends JFrame implements DocumentWindow, IView<Axo
         dispose();
     }
 
-    void switchToTab(JPanel panel) {
+    void switchToTab(Component panel) {
         jTabbedPane1.setSelectedComponent(panel);
     }
 
