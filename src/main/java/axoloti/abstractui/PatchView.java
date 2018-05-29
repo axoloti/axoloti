@@ -173,7 +173,7 @@ public abstract class PatchView extends View<PatchModel> {
                     xgrid = xsteps;
                     break;
             }
-            List<IAxoObjectInstance> selection = getPatchController().getSelectedObjects();
+            List<IAxoObjectInstance> selection = getDModel().getSelectedObjects();
             if (!selection.isEmpty()) {
                 for (IAxoObjectInstance o : selection) {
                     Point p = o.getLocation();
