@@ -330,7 +330,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         ArrayList<IAxoObjectInstance> clone = new ArrayList<>();
         clone.addAll(objectinstances);
         Collections.sort(clone);
-        setObjectinstances(clone);
+        setObjectInstances(clone);
         refreshIndexes();
     }
 
@@ -790,7 +790,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     public final static Property PATCH_LOCKED = new BooleanProperty("Locked", PatchModel.class);
     public final static Property PATCH_FILENAME = new StringPropertyNull("FileNamePath", PatchModel.class);
     public final static Property PATCH_DSPLOAD = new IntegerProperty("DspLoad", PatchModel.class);
-    public final static ListProperty PATCH_OBJECTINSTANCES = new ListProperty("Objectinstances", PatchModel.class);
+    public final static ListProperty PATCH_OBJECTINSTANCES = new ListProperty("ObjectInstances", PatchModel.class);
     public final static ListProperty PATCH_NETS = new ListProperty("Nets", PatchModel.class);
     public final static Property PATCH_AUTHOR = new StringPropertyNull("Author", PatchModel.class);
     public final static Property PATCH_LICENSE = new StringPropertyNull("License", PatchModel.class);
@@ -873,7 +873,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         return Collections.unmodifiableList(objectinstances);
     }
 
-    public void setObjectinstances(List<IAxoObjectInstance> objectinstances) {
+    public void setObjectInstances(List<IAxoObjectInstance> objectinstances) {
         List<IAxoObjectInstance> old_value = this.objectinstances;
         this.objectinstances = objectinstances;
         firePropertyChange(

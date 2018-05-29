@@ -122,7 +122,7 @@ public abstract class PatchView extends View<PatchModel> {
                 objs.add(o.getDModel());
             }
         }
-        p.setObjectinstances(objs);
+        p.setObjectInstances(objs);
 
         List<Net> nets = new ArrayList<>();
         for (INetView n : netViews) {
