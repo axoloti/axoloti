@@ -427,7 +427,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         return -1;
     }
 
-    List<IAxoObject> getUsedAxoObjects() {
+    private List<IAxoObject> getUsedAxoObjects() {
         ArrayList<IAxoObject> aos = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
             if (!aos.contains(o.getDModel())) {
@@ -724,8 +724,14 @@ public class PatchModel extends AbstractModel<PatchController> {
         return new File(buildDir + "/xpatch.bin");
     }
 
-    public List<IAxoObjectInstance> getObjectInstances() {
-        return Collections.unmodifiableList(objectinstances);
+    public List<IAxoObjectInstance> getSelectedObjects() {
+        ArrayList<IAxoObjectInstance> selected = new ArrayList<>();
+        for (IAxoObjectInstance o : getObjectInstances()) {
+            if (o.getSelected()) {
+                selected.add(o);
+            }
+        }
+        return selected;
     }
 
     public List<Modulator> getPatchModulators() {
@@ -863,7 +869,7 @@ public class PatchModel extends AbstractModel<PatchController> {
                 oldvalue, dspLoad);
     }
 
-    public List<IAxoObjectInstance> getObjectinstances() {
+    public List<IAxoObjectInstance> getObjectInstances() {
         return Collections.unmodifiableList(objectinstances);
     }
 

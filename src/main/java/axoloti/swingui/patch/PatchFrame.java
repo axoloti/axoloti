@@ -1109,7 +1109,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuItemSelectAllActionPerformed
 
     private void jMenuItemDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDeleteActionPerformed
-        List<IAxoObjectInstance> selected = patchController.getSelectedObjects();
+        List<IAxoObjectInstance> selected = getDModel().getSelectedObjects();
         if (!selected.isEmpty()) {
             patchController.addMetaUndo("delete objects");
             for (IAxoObjectInstance o : selected) {

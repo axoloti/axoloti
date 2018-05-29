@@ -905,16 +905,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         }
     }
 
-    public List<IAxoObjectInstance> getSelectedObjects() { // TODO: move method to PatchModel
-        ArrayList<IAxoObjectInstance> selected = new ArrayList<>();
-        for (IAxoObjectInstance o : getModel().getObjectInstances()) {
-            if (o.getSelected()) {
-                selected.add(o);
-            }
-        }
-        return selected;
-    }
-
     public boolean promoteToOverloadedObj(IAxoObjectInstance axoObjectInstance) {
         if (axoObjectInstance.getDModel() instanceof AxoObjectFromPatch) {
             return false;

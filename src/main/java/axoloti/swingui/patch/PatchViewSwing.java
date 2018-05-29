@@ -221,7 +221,7 @@ public class PatchViewSwing extends PatchView {
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                    List<IAxoObjectInstance> selected = model.getController().getSelectedObjects();
+                    List<IAxoObjectInstance> selected = model.getSelectedObjects();
                     if (!selected.isEmpty()) {
                         model.getController().addMetaUndo("delete objects");
                         for (IAxoObjectInstance o : selected) {

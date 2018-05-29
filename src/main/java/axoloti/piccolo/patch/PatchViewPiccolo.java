@@ -154,7 +154,7 @@ public class PatchViewPiccolo extends PatchView {
                     PatchViewPiccolo.this.showClassSelector(e, null, patchAudio);
                 }
             } else if ((e.getKeyCode() == KeyEvent.VK_DELETE) || (e.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
-                List<IAxoObjectInstance> selected = getDModel().getController().getSelectedObjects();
+                List<IAxoObjectInstance> selected = getDModel().getSelectedObjects();
                 if (!selected.isEmpty()) {
                     getDModel().getController().addMetaUndo("delete objects");
                     for (IAxoObjectInstance o : selected) {
