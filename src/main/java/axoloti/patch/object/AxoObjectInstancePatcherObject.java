@@ -17,6 +17,7 @@
  */
 package axoloti.patch.object;
 
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.IAxoObject;
@@ -41,9 +42,7 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
 
     public AxoObjectInstancePatcherObject(AxoObjectPatcherObject obj, PatchModel patch1, String InstanceName1, Point location) {
         super(obj, patch1, InstanceName1, location);
-        if (ao == null) {
-            ao = new AxoObjectPatcherObject();
-        }
+        ao = obj;
         if (patch1 != null) {
             ao.setDocumentRoot(patch1.getDocumentRoot());
         } else {
@@ -76,6 +75,12 @@ public class AxoObjectInstancePatcherObject extends AxoObjectInstance {
         boolean b = super.setInstanceName(s);
         ao.setId(getInstanceName());
         return b;
+    }
+    
+    @Override
+    public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
+        super.setDocumentRoot(documentRoot);
+        ao.setDocumentRoot(documentRoot);
     }
 
 }

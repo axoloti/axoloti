@@ -48,7 +48,7 @@ public abstract class AbstractModel<C extends AbstractController> implements IMo
     }
 
     @Override
-    final public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
+    public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
         this.documentRoot = documentRoot;
     }
 
