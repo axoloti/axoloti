@@ -35,6 +35,7 @@ import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.datatransfer.Clipboard;
@@ -175,7 +176,7 @@ public class PatchViewSwing extends PatchView {
                     Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        showClassSelector(p, null, null);
+                        showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, null);
                     }
                 } else if (((ke.getKeyCode() == KeyEvent.VK_C) && !KeyUtils.isControlOrCommandDown(ke))
                         || ((ke.getKeyCode() == KeyEvent.VK_5) && KeyUtils.isControlOrCommandDown(ke))) {
@@ -186,28 +187,28 @@ public class PatchViewSwing extends PatchView {
                     Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        showClassSelector(p, null, patchInlet);
+                        showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchInlet);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_O) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        showClassSelector(p, null, patchOutlet);
+                        showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchOutlet);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_D) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
-                        showClassSelector(p, null, patchDisplay);
+                        showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchDisplay);
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_M) && !KeyUtils.isControlOrCommandDown(ke)) {
                     Point p = layers.getMousePosition();
                     ke.consume();
                     if (p != null) {
                         if (ke.isShiftDown()) {
-                            showClassSelector(p, null, patchMidiKey);
+                            showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchMidiKey);
                         } else {
-                            showClassSelector(p, null, patchMidi);
+                            showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchMidi);
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_A) && !KeyUtils.isControlOrCommandDown(ke)) {
@@ -215,9 +216,9 @@ public class PatchViewSwing extends PatchView {
                     ke.consume();
                     if (p != null) {
                         if (ke.isShiftDown()) {
-                            showClassSelector(p, null, patchAudioOut);
+                            showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchAudioOut);
                         } else {
-                            showClassSelector(p, null, patchAudio);
+                            showClassSelector(p, MouseInfo.getPointerInfo().getLocation(), null, patchAudio);
                         }
                     }
                 } else if ((ke.getKeyCode() == KeyEvent.VK_DELETE) || (ke.getKeyCode() == KeyEvent.VK_BACK_SPACE)) {
@@ -256,7 +257,8 @@ public class PatchViewSwing extends PatchView {
                 if (me.getButton() == MouseEvent.BUTTON1) {
                     model.getController().selectNone();
                     if (me.getClickCount() == 2) {
-                        showClassSelector(me.getPoint(), null, null);
+                        Point locOnScreen = me.getLocationOnScreen();
+                        showClassSelector(me.getPoint(), locOnScreen, null, null);
                     } else {
                         if ((osf != null) && osf.isVisible()) {
                             osf.accept();

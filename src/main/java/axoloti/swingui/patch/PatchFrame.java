@@ -1101,7 +1101,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_formWindowLostFocus
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
-        getPatchView().showClassSelector(new Point(20, 20), null, null);
+        // TODO: add object to a visible location in patch (when scrollbar is active...)
+        getPatchView().showClassSelector(new Point(20, 20), null, null, null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed

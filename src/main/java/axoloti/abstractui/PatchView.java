@@ -86,14 +86,14 @@ public abstract class PatchView extends View<PatchModel> {
 
     protected ObjectSearchFrame osf;
 
-    public void showClassSelector(Point p, AxoObjectInstanceViewAbstract o, String searchString) {
+    public void showClassSelector(Point patchLoc, Point screenLoc, AxoObjectInstanceViewAbstract o, String searchString) {
         if (isLocked()) {
             return;
         }
         if (osf == null) {
             osf = new ObjectSearchFrame(model);
         }
-        osf.launch(p, o, searchString);
+        osf.launch(patchLoc, screenLoc, o, searchString);
     }
 
     private Map<DataType, Boolean> cableTypeEnabled = new HashMap<>();

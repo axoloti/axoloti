@@ -395,7 +395,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getPatchView().showClassSelector(AxoObjectInstanceView.this.getLocation(), AxoObjectInstanceView.this, null);
+                getPatchView().showClassSelector(AxoObjectInstanceView.this.getLocation(), null, AxoObjectInstanceView.this, null);
             }
         });
         popup.add(popm_substitute);

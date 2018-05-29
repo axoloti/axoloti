@@ -154,7 +154,7 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
                 }
             }
             if (me.getClickCount() == 2) {
-                getPatchView().showClassSelector(AxoObjectInstanceViewAbstract.this.getLocation(), AxoObjectInstanceViewAbstract.this, null);
+                getPatchView().showClassSelector(AxoObjectInstanceViewAbstract.this.getLocation(), getLocationOnScreen(), AxoObjectInstanceViewAbstract.this, null);
                 me.consume();
             }
         }

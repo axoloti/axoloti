@@ -103,8 +103,8 @@ public class PObjectSearchFrame extends ObjectSearchFrame {
     }
 
     @Override
-    public void launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
-        super.launch(patchLoc, o, searchString, false);
+    public void launch(Point patchLoc, Point screenLoc, IAxoObjectInstanceView o, String searchString) {
+        super.launch(patchLoc, screenLoc, o, searchString, false);
 
         if (scale != patchView.getViewportView().getViewScale()) {
             this.scale = patchView.getViewportView().getViewScale();

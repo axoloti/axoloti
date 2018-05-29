@@ -31,7 +31,7 @@ class AxoObjectInstanceViewZombie extends AxoObjectInstanceView {
         popm_substitute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                getPatchView().showClassSelector(AxoObjectInstanceViewZombie.this.getLocation(), AxoObjectInstanceViewZombie.this, null);
+                getPatchView().showClassSelector(AxoObjectInstanceViewZombie.this.getLocation(), getLocationOnScreen(), AxoObjectInstanceViewZombie.this, null);
             }
         });
         popup.add(popm_substitute);

@@ -470,11 +470,12 @@ public class PatchViewPiccolo extends PatchView {
             osf = new PObjectSearchFrame(getDModel(), this);
         }
 
-        osf.launch(patchPosition, o, searchString);
-        Point ps = new Point(100, 100); // TODO: piccolo: show patch selector at object position
-        Point patchLocClipped = osf.clipToStayWithinScreen(canvasPosition);
-        osf.setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
-        osf.setVisible(true);
+        // TODO: piccolo: show patch selector at object position
+        osf.launch(patchPosition, null, o, searchString);
+        // obsolete code, review&remove
+        //Point patchLocClipped = osf.clipToStayWithinScreen(canvasPosition);
+        //osf.setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
+        //osf.setVisible(true);
     }
 
     @Override

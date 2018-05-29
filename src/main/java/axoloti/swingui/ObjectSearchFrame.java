@@ -249,7 +249,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         return p;
     }
 
-    public Point clipToStayWithinScreen(Point patchLoc) {
+    public Point clipToStayWithinScreen(Point screenLoc) {
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] gs = ge.getScreenDevices();
@@ -263,23 +263,29 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
             }
         }
 
-        Point patchFrameOnScreen = new Point(100, 100); // TODO: show ObjectSearchFrame at corresponding location
-
-        if (patchFrameOnScreen.getX() + patchLoc.getX() + getWidth() > allScreenBounds.getWidth() + allScreenBounds.getX()) {
-            patchLoc.x = (int) (allScreenBounds.getWidth() + allScreenBounds.getX() - patchFrameOnScreen.getX() - getWidth());
+        int x, y;
+        if (screenLoc.x < allScreenBounds.x) {
+            x = allScreenBounds.x;
+        } else if (screenLoc.x + getWidth() > allScreenBounds.x + allScreenBounds.width) {
+            x = allScreenBounds.x + allScreenBounds.width - getWidth();
+        } else {
+            x = screenLoc.x;
         }
-        if (patchFrameOnScreen.getY() + patchLoc.getY() + getHeight() > allScreenBounds.getHeight() + allScreenBounds.getY()) {
-            patchLoc.y = (int) (allScreenBounds.getHeight() + allScreenBounds.getY() - patchFrameOnScreen.getY() - getHeight());
+        if (screenLoc.y < allScreenBounds.y) {
+            y = allScreenBounds.y;
+        } else if (screenLoc.y + getHeight() > allScreenBounds.y + allScreenBounds.height) {
+            y = allScreenBounds.y + allScreenBounds.height - getHeight();
+        } else {
+            y = screenLoc.y;
         }
-
-        return patchLoc;
+        return new Point(x, y);
     }
 
-    public void launch(Point patchLoc, IAxoObjectInstanceView o, String searchString) {
-        launch(patchLoc, o, searchString, true);
+    public void launch(Point patchLoc, Point screenLoc, IAxoObjectInstanceView o, String searchString) {
+        launch(patchLoc, screenLoc, o, searchString, true);
     }
 
-    public void launch(Point patchLoc, IAxoObjectInstanceView o, String searchString, boolean setVisible) {
+    public void launch(Point patchLoc, Point screenLoc, IAxoObjectInstanceView o, String searchString, boolean setVisible) {
         if (this.objectTree != AxoObjects.getAxoObjects().objectTree) {
             DefaultMutableTreeNode root1 = new DefaultMutableTreeNode();
             this.objectTree = AxoObjects.getAxoObjects().objectTree;
@@ -293,10 +299,14 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         snapToGrid(patchLoc);
         patchLocX = patchLoc.x;
         patchLocY = patchLoc.y;
-        Point ps = new Point(100, 100);// TODO: show ObjectSearchFrame at corresponding location
-        Point patchLocClipped = clipToStayWithinScreen(patchLoc);
 
-        setLocation(patchLocClipped.x + ps.x, patchLocClipped.y + ps.y);
+        if (screenLoc != null) {
+            // little offset to avoid mouse landing in resizeable border
+            Point screenLoc2 = new Point(screenLoc.x - 5, screenLoc.y - 5);
+            Point screenLocClipped = clipToStayWithinScreen(screenLoc2);
+            setLocation(screenLocClipped);
+        }
+
         if (o != null) {
             target_object = o.getDModel();
         } else {
