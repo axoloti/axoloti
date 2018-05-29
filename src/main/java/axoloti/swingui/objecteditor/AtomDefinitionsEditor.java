@@ -241,6 +241,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
         jPanel1.add(jButtonAdd);
         jButtonRemove = new JButton("Remove");
         jButtonRemove.addActionListener(actionListenerRemove);
+        jButtonRemove.setEnabled(false);
         jPanel1.add(jButtonRemove);
         jButtonMoveUp = new JButton("Move up");
         jButtonMoveUp.addActionListener(actionListenerMoveUp);
