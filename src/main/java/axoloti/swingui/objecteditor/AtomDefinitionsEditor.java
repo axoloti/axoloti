@@ -83,7 +83,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
 
         private final int row;
 
-        public FocusEditTableRow(int row) {
+        FocusEditTableRow(int row) {
             this.row = row;
         }
 
@@ -310,6 +310,8 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
                         m.getController().changeDescription((String) value);
                     }
                     break;
+                    default:
+                        break;
                 }
             }
 

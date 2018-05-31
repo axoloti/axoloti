@@ -25,7 +25,8 @@ import axoloti.patch.PatchController;
  */
 public class PresetPanel extends javax.swing.JPanel {
 
-    PatchController patchController;
+    // TODO: add reference to PatchView
+    private final PatchController patchController;
 
     /**
      * Creates new form PresetPanel

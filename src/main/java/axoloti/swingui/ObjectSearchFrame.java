@@ -240,8 +240,8 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         });
     }
     protected IAxoObject previewObj;
-    int patchLocX;
-    int patchLocY;
+    private int patchLocX;
+    private int patchLocY;
 
     private Point snapToGrid(Point p) {
         p.x = Constants.X_GRID * (p.x / Constants.X_GRID);
@@ -468,7 +468,7 @@ public class ObjectSearchFrame extends ResizableUndecoratedFrame {
         }
     }
 
-    boolean accepted = false;
+    private boolean accepted = false;
 
     public void cancel() {
         accepted = false;

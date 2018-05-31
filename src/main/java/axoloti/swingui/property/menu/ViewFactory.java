@@ -11,6 +11,9 @@ import java.awt.Component;
  */
 public class ViewFactory {
 
+    private ViewFactory() {
+    }
+
     /*
     public static Component createView(Property property) {
         if (property instanceof BooleanProperty) {

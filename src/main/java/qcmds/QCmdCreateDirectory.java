@@ -61,7 +61,7 @@ public class QCmdCreateDirectory implements QCmdSerialTask {
         connection.transmitCreateDirectory(filename, date);
         String fn1 = filename;
         if (!fn1.endsWith("/")) {
-            fn1 = fn1 + "/";
+            fn1 += "/";
         }
         final String fn = fn1;
         try {

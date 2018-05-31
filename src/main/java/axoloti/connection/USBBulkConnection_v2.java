@@ -618,7 +618,9 @@ public class USBBulkConnection_v2 extends IConnection {
                     readsync.wait(1000);
                 }
                 i--;
-                if (i==0) break;
+                if (i == 0) {
+                    break;
+                }
             } catch (InterruptedException ex) {
                 return true;
             }
@@ -684,13 +686,14 @@ public class USBBulkConnection_v2 extends IConnection {
     @Override
     public void transmitPing() {
         writeBytes(pingPckt);
-        if ((disp_addr != 0) && (disp_length!=0))
+        if ((disp_addr != 0) && (disp_length != 0)) {
             transmitMemoryRead(disp_addr, disp_length * 4, new MemReadHandler() {
-            @Override
+                @Override
                 public void done(ByteBuffer mem) {
                     distributeToDisplays(mem);
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
@@ -1259,19 +1262,14 @@ public class USBBulkConnection_v2 extends IConnection {
      "AxoP" + bb + vvvv -> parameter change index bb (16bit), value vvvv (32bit)
      */
     private ReceiverState state = ReceiverState.header;
-    private int[] packetData = new int[64];
-    private int dataIndex = 0; // in bytes
     private int dataLength = 0; // in bytes
-    private CharBuffer textRcvBuffer = CharBuffer.allocate(256);
-    private ByteBuffer lcdRcvBuffer = ByteBuffer.allocate(256);
-    private ByteBuffer sdinfoRcvBuffer = ByteBuffer.allocate(12);
-    private ByteBuffer fileinfoRcvBuffer = ByteBuffer.allocate(256);
+    private final CharBuffer textRcvBuffer = CharBuffer.allocate(256);
 
     private int memReadAddr;
     private int memReadLength;
     private int memReadValue;
     private MemReadHandler memReadHandler;
-    private byte[] fwversion = new byte[4];
+    private final byte[] fwversion = new byte[4];
     private int fw_chunkaddr;
 
     @Override
@@ -1294,7 +1292,6 @@ public class USBBulkConnection_v2 extends IConnection {
         }
         if (i2 > 0) {
             dataLength = i2 * 4;
-            dataIndex = 0;
             dispData = ByteBuffer.allocate(dataLength);
             dispData.order(ByteOrder.LITTLE_ENDIAN);
             state = ReceiverState.displayPckt;

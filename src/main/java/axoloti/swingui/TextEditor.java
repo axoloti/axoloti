@@ -39,8 +39,8 @@ import org.fife.ui.rtextarea.RTextScrollPane;
  */
 public class TextEditor extends AJFrame<IModel> implements IAbstractEditor {
 
-    Property stringProperty; // TODO: turn into StringProperty
-    RSyntaxTextArea textArea;
+    private final Property stringProperty; // TODO: turn into StringProperty
+    private RSyntaxTextArea textArea;
 
     /**
      * Creates new form TextEditor

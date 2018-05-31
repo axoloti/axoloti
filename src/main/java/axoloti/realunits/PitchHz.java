@@ -59,10 +59,12 @@ public class PitchHz implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
-            if (units.contains("k") || units.contains("K"))
+            }
+            if (units.contains("k") || units.contains("K")) {
                 mul = 1000;
+            }
 
             double hz = num * mul;
             return ((Math.log(hz / 440.0) / Math.log(2)) * 12.0) - 64 + 69;

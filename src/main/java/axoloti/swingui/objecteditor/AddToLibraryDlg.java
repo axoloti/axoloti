@@ -36,11 +36,11 @@ import javax.swing.text.DocumentFilter;
  *
  * @author kodiak
  */
-public class AddToLibraryDlg extends javax.swing.JDialog {
+class AddToLibraryDlg extends javax.swing.JDialog {
 
     private final AxoObject obj;
 
-    public AddToLibraryDlg(AxoObjectEditor parent, boolean modal, AxoObject obj) {
+    AddToLibraryDlg(AxoObjectEditor parent, boolean modal, AxoObject obj) {
         super(parent, modal);
         initComponents();
         // for later use
@@ -387,7 +387,9 @@ public class AddToLibraryDlg extends javax.swing.JDialog {
             file.append(objpath).append(File.separator);
             file.append(objid);
             return file.toString() + ".axo";
-        } else return "";
+        } else {
+            return "";
+        }
     }
 
     private void modifiedData() {

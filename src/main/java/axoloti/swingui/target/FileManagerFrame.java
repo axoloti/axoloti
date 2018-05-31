@@ -517,7 +517,7 @@ public class FileManagerFrame extends TJFrame {
                             int i = mem.getInt();
                             for (int j = 0; j < 32; j++) {
                                 System.out.print((i & 1) == 1 ? "1" : "0");
-                                i = i>>1;
+                                i >>= 1;
                             }
                             System.out.println();
                         }

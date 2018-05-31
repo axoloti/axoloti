@@ -36,7 +36,7 @@ public class QCmdPing implements QCmdSerialTask {
     public String getDoneMessage() {
         return null;//"Done ping";
     }
-    private boolean noCauseDisconnect;
+    private final boolean noCauseDisconnect;
 
     public QCmdPing() {
         noCauseDisconnect = false;

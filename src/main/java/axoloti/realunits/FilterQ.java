@@ -50,8 +50,9 @@ public class FilterQ implements NativeToReal {
 
             String units1 = matcher.group("unit1");
             String units2 = matcher.group("unit2");
-            if (!(units1.contains("q") || units1.contains("Q") || units2.contains("q") || units2.contains("Q")))
+            if (!(units1.contains("q") || units1.contains("Q") || units2.contains("q") || units2.contains("Q"))) {
                 throw new ParseException("Not FilterQ", 0);
+            }
 
             double q = num;
             return -((32 / q) - 64);

@@ -25,7 +25,7 @@ import axoloti.connection.IConnection;
  */
 public class QCmdRecallPreset implements QCmdSerialTask {
 
-    int presetNo;
+    private final int presetNo;
 
     public QCmdRecallPreset(int presetNo) {
         this.presetNo = presetNo;

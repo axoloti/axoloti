@@ -91,7 +91,7 @@ public class PDialComponent extends PCtrlComponentAbstract {
                 } else {
                     double t = tick;
                     if (e.isShiftDown() || KeyUtils.isControlOrCommandDown(e)) {
-                        t = t * 0.1;
+                        t *= 0.1;
                     }
                     v = value + t * ((int) Math.round((mousePressedCoordY - PUtils.getYOnScreen(e))));
                 }
@@ -148,12 +148,12 @@ public class PDialComponent extends PCtrlComponentAbstract {
         if (isEnabled()) {
             double steps = tick;
             if (ke.isShiftDown()) {
-                steps = steps * 0.1; // mini steps!
+                steps *= 0.1; // mini steps!
                 if (KeyUtils.isControlOrCommandDown(ke)) {
-                    steps = steps * 0.1; // micro steps!
+                    steps *= 0.1; // micro steps!
                 }
             } else if (KeyUtils.isControlOrCommandDown(ke)) {
-                steps = steps * 10.0; //accelerate!
+                steps *= 10.0; //accelerate!
             }
             switch (ke.getKeyCode()) {
                 case KeyEvent.VK_UP:

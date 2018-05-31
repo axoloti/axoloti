@@ -98,14 +98,17 @@ public class PitchToNote implements NativeToReal {
             int incidental = 0, oct, delta = 0;
 
             note = matcher.group("note").toLowerCase().charAt(0);
-            if (matcher.group("sharp").length() != 0)
+            if (matcher.group("sharp").length() != 0) {
                 sharp = matcher.group("sharp").toLowerCase().charAt(0);
-            if (matcher.group("sign").length() != 0)
+            }
+            if (matcher.group("sign").length() != 0) {
                 sign = matcher.group("sign").toLowerCase().charAt(0);
+            }
             try {
                 oct = Integer.parseInt(matcher.group("oct"));
-                if (matcher.group("delta").length() != 0)
+                if (matcher.group("delta").length() != 0) {
                     delta = Integer.parseInt(matcher.group("delta"));
+                }
             } catch (java.lang.NumberFormatException ex) {
                 throw new ParseException("Not PitchToNote", 0);
             }
@@ -116,10 +119,11 @@ public class PitchToNote implements NativeToReal {
             }
             else if (sharp == 'b')
             {
-                if (note == 'a')
+                if (note == 'a') {
                     note = 'g';
-                else
+                } else {
                     note--;
+                }
                 incidental = 1;
             }
 

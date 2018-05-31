@@ -193,8 +193,8 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
         Point p1 = new Point(5, 5);
         Component p = (Component) jack;
         while (p != null) {
-            p1.x = p1.x + p.getX();
-            p1.y = p1.y + p.getY();
+            p1.x += p.getX();
+            p1.y += p.getY();
             if (p == axoObj) {
                 break;
             }

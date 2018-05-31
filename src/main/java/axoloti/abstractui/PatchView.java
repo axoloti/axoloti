@@ -177,8 +177,8 @@ public abstract class PatchView extends View<PatchModel> {
             if (!selection.isEmpty()) {
                 for (IAxoObjectInstance o : selection) {
                     Point p = o.getLocation();
-                    p.x = p.x + xstep;
-                    p.y = p.y + ystep;
+                    p.x += xstep;
+                    p.y += ystep;
                     p.x = xgrid * (p.x / xgrid);
                     p.y = ygrid * (p.y / ygrid);
                     o.getController().changeLocation(p.x, p.y);

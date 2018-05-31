@@ -85,12 +85,12 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
             double v;
             if ((mousePressedBtn == MouseEvent.BUTTON1)) {
                 double t = tick;
-                t = t * 0.1;
+                t *= 0.1;
                 if (e.isShiftDown()) {
-                    t = t * 0.1;
+                    t *= 0.1;
                 }
                 if (KeyUtils.isControlOrCommandDown(e)) {
-                    t = t * 0.1;
+                    t *= 0.1;
                 }
                 v = value + t * (mousePressedCoordY - PUtils.getYOnScreen(e));
                 if (robot == null) {
@@ -169,12 +169,12 @@ public class PNumberBoxComponent extends PCtrlComponentAbstract {
         if (isEnabled()) {
             double steps = tick;
             if (ke.isShiftDown()) {
-                steps = steps * 0.1; // mini steps!
+                steps *= 0.1; // mini steps!
                 if (KeyUtils.isControlOrCommandDown(ke)) {
-                    steps = steps * 0.1; // micro steps!
+                    steps *= 0.1; // micro steps!
                 }
             } else if (KeyUtils.isControlOrCommandDown(ke)) {
-                steps = steps * 10.0; //accelerate!
+                steps *= 10.0; //accelerate!
             }
             switch (ke.getKeyCode()) {
                 case KeyEvent.VK_UP:

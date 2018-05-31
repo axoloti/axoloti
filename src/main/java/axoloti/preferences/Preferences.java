@@ -51,67 +51,67 @@ import org.simpleframework.xml.core.Persister;
 public class Preferences {
 
     @Attribute(required = false)
-    String appVersion;
+    private String appVersion;
 
     @Element(required = false)
-    String CurrentFileDirectory;
+    private String CurrentFileDirectory;
 
     // search path will be removed from persistance,
     // here for compatibility only
     @Deprecated
     @Element(required = false)
-    String ObjectSearchPath;
+    private final String ObjectSearchPath;
     @Deprecated
     @Element(required = false)
-    String ComPortName;
+    private String ComPortName;
     @Element(required = false)
-    Integer PollInterval;
+    private Integer PollInterval;
     @Element(required = false)
-    Boolean MouseDialAngular;
+    private Boolean MouseDialAngular;
     @Element(required = false)
-    Boolean MouseDoNotRecenterWhenAdjustingControls;
+    private Boolean MouseDoNotRecenterWhenAdjustingControls;
     @Element(required = false)
-    Boolean ExpertMode;
+    private Boolean ExpertMode;
     @ElementList(required = false)
-    ArrayList<String> recentFiles = new ArrayList<>();
+    private ArrayList<String> recentFiles = new ArrayList<>();
 
     @Deprecated
     @Element(required = false)
-    String MidiInputDevice;
+    private String MidiInputDevice;
     @Element(required = false)
-    String RuntimeDir;
+    private String RuntimeDir;
     @Element(required = false)
-    String FirmwareDir;
+    private String FirmwareDir;
     @Element(required = false)
-    String FavouriteDir;
+    private String FavouriteDir;
     @Element(required = false)
-    String ControllerObject;
+    private String ControllerObject;
     @Element(required = false)
-    Boolean ControllerEnabled;
+    private Boolean ControllerEnabled;
     @Element(required = false)
-    String themePath;
+    private String themePath;
     @Element(required = false)
-    PatchViewType patchViewType;
+    private PatchViewType patchViewType;
     @Element(required = false)
-    Boolean mouseWheelPanEnabled;
+    private Boolean mouseWheelPanEnabled;
 
     @ElementMap(required = false, entry = "Boards", key = "cpuid", attribute = true, inline = true)
-    HashMap<String, String> BoardNames;
+    private HashMap<String, String> BoardNames;
 
     @ElementListUnion({
         @ElementList(entry = "gitlib", type = AxoGitLibrary.class, inline = true, required = false),
         @ElementList(entry = "filelib", type = AxoFileLibrary.class, inline = true, required = false)
     }
     )
-    ArrayList<AxolotiLibrary> libraries;
+    private ArrayList<AxolotiLibrary> libraries;
 
-    String[] ObjectPath;
+    private String[] ObjectPath;
 
-    boolean isDirty = false;
+    private boolean isDirty = false;
 
-    final int nRecentFiles = 16;
+    private final int nRecentFiles = 16;
 
-    final int minimumPollInterval = 20;
+    private final int minimumPollInterval = 20;
 
     protected Preferences() {
         if (CurrentFileDirectory == null) {

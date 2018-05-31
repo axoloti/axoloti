@@ -15,6 +15,9 @@ import java.nio.file.Files;
  */
 public class PatchFileBinary {
 
+    private PatchFileBinary() {
+    }
+
     public static byte[] getPatchFileBinary() throws IOException {
         // TODO: fourcc signatures
         // also firmware ignores them...

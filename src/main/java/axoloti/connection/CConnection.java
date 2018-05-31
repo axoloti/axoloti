@@ -21,12 +21,16 @@ package axoloti.connection;
 import axoloti.target.TargetModel;
 
 /**
+ * Connection singleton instance
  *
  * @author jtaelman
  */
 
-// Connection singleton instance
 public class CConnection {
+
+    private CConnection() {
+    }
+
     static private USBBulkConnection_v2 conn = null;
 
     public static IConnection getConnection() {

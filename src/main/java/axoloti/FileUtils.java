@@ -34,6 +34,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class FileUtils {
 
+    private FileUtils() {
+    }
+
     public final static FileFilter axpFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {

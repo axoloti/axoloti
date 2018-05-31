@@ -56,8 +56,9 @@ public class SquareRatio implements NativeToReal {
 
             String units1 = matcher.group("unit1");
             String units2 = matcher.group("unit2");
-            if (!(units1.contains("x") || units1.contains("X") || units1.contains("*") || units2.contains("x") || units2.contains("X") || units2.contains("*")))
+            if (!(units1.contains("x") || units1.contains("X") || units1.contains("*") || units2.contains("x") || units2.contains("X") || units2.contains("*"))) {
                 throw new ParseException("Not PitchToRatio", 0);
+            }
 
             return Math.sqrt(num * 4096.0);
         }

@@ -87,10 +87,12 @@ public class QCmdUploadPatch implements QCmdSerialTask {
             File f3 = new File(basepath + ".sdram.bin");
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath() + " " + f2.getAbsolutePath());
             uploadBinFile(connection, f, connection.getTargetProfile().getPatchAddr());
-            if (f2.length() > 0)
+            if (f2.length() > 0) {
                 uploadBinFile(connection, f2, connection.getTargetProfile().getSRAM3Addr());
-            if (f3.length() > 0)
+            }
+            if (f3.length() > 0) {
                 uploadBinFile(connection, f3, connection.getTargetProfile().getSDRAMAddr());
+            }
             return this;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(QCmdUploadPatch.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);

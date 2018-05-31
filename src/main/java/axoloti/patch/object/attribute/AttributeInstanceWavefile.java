@@ -64,10 +64,10 @@ public class AttributeInstanceWavefile extends AttributeInstance<AxoAttributeWav
             for (int i = 0; i < af.getFrameLength(); i++) {
                 s = s + SB.get(i * af.getFormat().getChannels()) + ", ";
                 if ((i & 0x7) == 0) {
-                    s = s + "\n        ";
+                    s += "\n        ";
                 }
             }
-            s = s + " 0}";
+            s += " 0}";
         } catch (UnsupportedAudioFileException ex) {
             Logger.getLogger(AttributeInstanceWavefile.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

@@ -1,6 +1,20 @@
 package axoloti.patch.object.parameter;
 
-import axoloti.object.parameter.*;
+import axoloti.object.parameter.Parameter;
+import axoloti.object.parameter.Parameter4LevelX16;
+import axoloti.object.parameter.ParameterBin1;
+import axoloti.object.parameter.ParameterBin12;
+import axoloti.object.parameter.ParameterBin16;
+import axoloti.object.parameter.ParameterBin1Momentary;
+import axoloti.object.parameter.ParameterBin32;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.object.parameter.ParameterFrac32SMapVSlider;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapVSlider;
+import axoloti.object.parameter.ParameterInt32Box;
+import axoloti.object.parameter.ParameterInt32BoxSmall;
+import axoloti.object.parameter.ParameterInt32HRadio;
+import axoloti.object.parameter.ParameterInt32VRadio;
 import axoloti.patch.object.AxoObjectInstance;
 /**
  *

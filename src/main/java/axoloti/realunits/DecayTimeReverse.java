@@ -55,8 +55,9 @@ public class DecayTimeReverse implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
+            }
 
             double t = num * mul;
             return 1 / (t / Math.log(2.0) * (16 / 48000.0) * 4096);

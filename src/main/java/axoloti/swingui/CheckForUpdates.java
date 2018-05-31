@@ -39,6 +39,9 @@ import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
  */
 public class CheckForUpdates {
 
+    private CheckForUpdates() {
+    }
+
     static public void checkForUpdates() {
         if (Version.AXOLOTI_VERSION.equalsIgnoreCase("(git missing)")) {
             JOptionPane.showMessageDialog(null, "No version info found.", "Checking for updates", JOptionPane.ERROR_MESSAGE);

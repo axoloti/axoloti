@@ -60,7 +60,7 @@ public class AttributeInstanceObjRef extends AttributeInstanceString<AxoAttribut
          }
          */
         while ((o.length() > 3) && (o.substring(0, 3).equals("../"))) {
-            o2 = o2 + "parent->";
+            o2 += "parent->";
             o = o.substring(3);
         }
         String ao[] = o.split("/");

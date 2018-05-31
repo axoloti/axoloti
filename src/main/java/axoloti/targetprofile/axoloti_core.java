@@ -132,10 +132,10 @@ public class axoloti_core {
         return 0x1000;
     }
 
-    ByteBuffer OTP0Data;
-    ByteBuffer OTP1Data;
-    ByteBuffer CPUIDData;
-    ByteBuffer BKPSRAMData;
+    private ByteBuffer OTP0Data;
+    private ByteBuffer OTP1Data;
+    private ByteBuffer CPUIDData;
+    private ByteBuffer BKPSRAMData;
 
     public void setOTP0Data(ByteBuffer b) {
         OTP0Data = b;
@@ -151,7 +151,7 @@ public class axoloti_core {
             String s = "";
             b.rewind();
             while (b.remaining() > 0) {
-                s = s + String.format("%08X", b.getInt());
+                s += String.format("%08X", b.getInt());
             }
         } else {
             Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number, invalid protocol?, update firmware", new Object());
@@ -167,11 +167,12 @@ public class axoloti_core {
         if (CPUIDData != null) {
             CPUIDData.rewind();
             while (CPUIDData.remaining() > 0) {
-                s = s + String.format("%08X", CPUIDData.getInt());
+                s += String.format("%08X", CPUIDData.getInt());
             }
             return s;
-        } else
+        } else {
             return "not connected";
+        }
     }
 
     public ByteBuffer getBKPSRAMData() {

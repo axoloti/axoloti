@@ -77,7 +77,7 @@ public class LedstripComponent extends ADispComponent {
                 g2.setColor(c_off);
             }
             g2.fillRect(i * bsize + inset, inset, bsize - inset - 1, bsize - inset);
-            v = v >> 1;
+            v >>= 1;
         }
     }
 

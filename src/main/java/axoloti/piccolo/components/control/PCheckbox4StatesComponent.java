@@ -105,7 +105,7 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
 
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_LEFT: {
-                selIndex = selIndex - 1;
+                selIndex -= 1;
                 if (selIndex < 0) {
                     selIndex = n - 1;
                 }
@@ -114,7 +114,7 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
                 return;
             }
             case KeyEvent.VK_RIGHT: {
-                selIndex = selIndex + 1;
+                selIndex += 1;
                 if (selIndex >= n) {
                     selIndex = 0;
                 }
@@ -245,7 +245,7 @@ public class PCheckbox4StatesComponent extends PCtrlComponentAbstract {
                         break;
                 }
                 g2.fillRect(i * bsize + inset, inset, bsize - inset - 1, bsize - inset);
-                v = v >> 2;
+                v >>= 2;
             }
         }
     }

@@ -96,8 +96,9 @@ public class QCmdProcessor implements Runnable {
     private static QCmdProcessor singleton = null;
 
     public static QCmdProcessor getQCmdProcessor() {
-        if (singleton == null)
+        if (singleton == null) {
             singleton = new QCmdProcessor();
+        }
         return singleton;
     }
 

@@ -58,10 +58,12 @@ public class FreqHz implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
-            if (units.contains("k") || units.contains("K"))
+            }
+            if (units.contains("k") || units.contains("K")) {
                 mul = 1000;
+            }
 
             double hz = num * mul;
             return (hz * 64.0) / (48000.0 * 0.5);

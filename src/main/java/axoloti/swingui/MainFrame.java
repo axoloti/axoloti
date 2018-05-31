@@ -88,7 +88,7 @@ public class MainFrame extends TJFrame implements ActionListener {
 
     public static MainFrame mainframe;
 
-    ThemeEditor themeEditor;
+    private final ThemeEditor themeEditor;
 
     private Thread qcmdprocessorThread;
     private boolean bGrabFocusOnSevereErrors = true;
@@ -122,7 +122,7 @@ public class MainFrame extends TJFrame implements ActionListener {
         DefaultCaret caret = (DefaultCaret) jTextPaneLog.getCaret();
         caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         jScrollPaneLog.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-            BoundedRangeModel brm = jScrollPaneLog.getVerticalScrollBar().getModel();
+            private final BoundedRangeModel brm = jScrollPaneLog.getVerticalScrollBar().getModel();
 
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -139,7 +139,7 @@ public class MainFrame extends TJFrame implements ActionListener {
         });
 
         jScrollPaneLog.addMouseWheelListener(new MouseWheelListener() {
-            BoundedRangeModel brm = jScrollPaneLog.getVerticalScrollBar().getModel();
+            private final BoundedRangeModel brm = jScrollPaneLog.getVerticalScrollBar().getModel();
 
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -564,6 +564,7 @@ public class MainFrame extends TJFrame implements ActionListener {
 
 // usually we run all tests, as many may fail for same reason and you want
 // a list of all affected files, but if you want to stop on first failure, flip this flag
+    // TODO: cleanup: elimate
     public static boolean stopOnFirstFail = false;
 
     public boolean runAllTests() {

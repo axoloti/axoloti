@@ -44,13 +44,11 @@ import org.simpleframework.xml.Root;
 public class Net extends AbstractModel<NetController> {
 
     @ElementList(inline = true, required = false)
-    List<OutletInstance> source = new ArrayList<>();
+    private List<OutletInstance> source = new ArrayList<>();
     @ElementList(inline = true, required = false)
-    List<InletInstance> dest = new ArrayList<>();
+    private List<InletInstance> dest = new ArrayList<>();
 
-    boolean selected = false;
-    
-    PatchModel parent;
+    private PatchModel parent;
 
     public Net() {
     }
@@ -84,7 +82,9 @@ public class Net extends AbstractModel<NetController> {
         for (int j = 0; j < dest.size(); j++) {
             InletInstance i = dest.get(j);
             IAxoObjectInstance o = i.getParent();
-            if (o == null) continue;
+            if (o == null) {
+                continue;
+            }
             if (!o.getInletInstances().contains(i)) {
                 String inletName = i.getName();
                 InletInstance i2 = o.findInletInstance(inletName);
@@ -97,7 +97,9 @@ public class Net extends AbstractModel<NetController> {
         for (int j = 0; j < source.size(); j++) {
             OutletInstance i = source.get(j);
             IAxoObjectInstance o = i.getParent();
-            if (o == null) continue;
+            if (o == null) {
+                continue;
+            }
             if (!o.getOutletInstances().contains(i)) {
                 String outletName = i.getName();
                 OutletInstance i2 = o.findOutletInstance(outletName);

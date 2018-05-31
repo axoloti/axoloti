@@ -59,9 +59,9 @@ public class CheckboxComponent extends ACtrlComponent {
         int mask = 1 << position;
         int v = (int) value;
         if (val) {
-            v = v | mask;
+            v |= mask;
         } else {
-            v = v & ~mask;
+            v &= ~mask;
         }
         fireValue((double) v);
     }
@@ -121,7 +121,7 @@ public class CheckboxComponent extends ACtrlComponent {
         }
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_LEFT: {
-                selIndex = selIndex - 1;
+                selIndex -= 1;
                 if (selIndex < 0) {
                     selIndex = n - 1;
                 }
@@ -130,7 +130,7 @@ public class CheckboxComponent extends ACtrlComponent {
                 return;
             }
             case KeyEvent.VK_RIGHT: {
-                selIndex = selIndex + 1;
+                selIndex += 1;
                 if (selIndex >= n) {
                     selIndex = 0;
                 }
@@ -230,7 +230,7 @@ public class CheckboxComponent extends ACtrlComponent {
                 if ((v & 1) != 0) {
                     g2.fillRect(i * bsize + inset, inset, bsize - inset - 1, bsize - inset);
                 }
-                v = v >> 1;
+                v >>= 1;
             }
         }
     }

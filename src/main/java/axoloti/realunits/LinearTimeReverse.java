@@ -55,8 +55,9 @@ public class LinearTimeReverse implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
+            }
 
             double t = num * mul;
             return 1.0 / (t / ((16 / 48000.0) * 8192));
