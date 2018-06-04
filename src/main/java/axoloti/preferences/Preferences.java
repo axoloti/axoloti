@@ -60,7 +60,7 @@ public class Preferences {
     // here for compatibility only
     @Deprecated
     @Element(required = false)
-    private final String ObjectSearchPath;
+    private String ObjectSearchPath;
     @Deprecated
     @Element(required = false)
     private String ComPortName;

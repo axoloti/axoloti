@@ -73,7 +73,7 @@ public class Synonyms {
     }
 
     @ElementMap(entry = "inlet", key = "a", value = "b", attribute=true ,inline = false)
-    private final HashMap<String, String> inlets;
+    private HashMap<String, String> inlets;
     @ElementMap(entry = "outlet", key = "a", value = "b", attribute=true ,inline = false)
-    private final HashMap<String, String> outlets;
+    private HashMap<String, String> outlets;
 }
