@@ -374,15 +374,11 @@ public abstract class PatchView extends View<PatchModel> {
     }
 
     public void showPreset(int i) {
-        // TODO: fix preset editing logic
-        /*
-         ArrayList<IAxoObjectInstanceView> objectInstanceViewsClone = (ArrayList<IAxoObjectInstanceView>) objectInstanceViews.clone();
-         for (IAxoObjectInstanceView o : objectInstanceViewsClone) {
-         for (IParameterInstanceView p : o.getParameterInstanceViews()) {
-         p.ShowPreset(i);
+        for (IAxoObjectInstanceView o : objectInstanceViews) {
+            for (IParameterInstanceView p : o.getParameterInstanceViews()) {
+                p.showPreset(i);
+            }
          }
-         }
-         */
     }
 
     @Override

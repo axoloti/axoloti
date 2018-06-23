@@ -132,7 +132,7 @@ void SetKVP_AVP(ui_node_t *node, const ui_node_t *parent,
 void SetKVP_IVP(ui_node_t *node, ui_node_t *parent,
                 const char *keyName, int *value, int min, int max) __attribute__ ((deprecated));
 void SetKVP_IPVP(ui_node_t *node, ui_node_t *parent,
-                 const char *keyName, ParameterExchange_t *PEx, int min,
+                 const char *keyName, Parameter_t *PEx, int min,
                  int max) __attribute__ ((deprecated));
 void SetKVP_FNCTN(ui_node_t *node, ui_node_t *parent,
                   const char *keyName, VoidFunction fnctn) __attribute__ ((deprecated));

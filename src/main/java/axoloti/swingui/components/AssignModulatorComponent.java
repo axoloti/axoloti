@@ -17,6 +17,7 @@
  */
 package axoloti.swingui.components;
 
+import axoloti.patch.Modulation;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Theme;
 import axoloti.utils.Constants;
@@ -26,6 +27,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
@@ -62,22 +64,22 @@ public class AssignModulatorComponent extends JComponent {
 
     void doPopup() {
         JPopupMenu sub2 = new JPopupMenu();
-        // FIXME
-//        AssignModulatorMenuItems mi = new AssignModulatorMenuItems(parameterInstanceView, sub2);
+        AssignModulatorMenuItems mi = new AssignModulatorMenuItems(parameterInstance, sub2);
         sub2.show(this, 0, getHeight() - 1);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (parameterInstance.getModulators() != null) {
+        List<Modulation> modulations = parameterInstance.getModulations();
+        if ((modulations != null) && (!modulations.isEmpty())) {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setFont(Constants.FONT);
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
             g2.fillRect(1, 1, getWidth(), getHeight());
-            if (parameterInstance.getModulators() != null) {
+            if (true) {
                 g2.setColor(Theme.getCurrentTheme().Component_Primary);
                 g2.fillRect(1, 1, 8, getHeight());
                 g2.setColor(Theme.getCurrentTheme().Component_Secondary);

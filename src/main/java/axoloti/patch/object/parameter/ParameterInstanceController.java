@@ -2,6 +2,9 @@ package axoloti.patch.object.parameter;
 
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
+import axoloti.patch.Modulation;
+import axoloti.patch.Modulator;
+import static axoloti.patch.object.parameter.ParameterInstance.MODULATIONS;
 import axoloti.patch.object.parameter.preset.Preset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,6 +65,29 @@ public class ParameterInstanceController extends AbstractController<ParameterIns
 
     public void changeValue(Object value) {
         setModelUndoableProperty(ParameterInstance.VALUE, value);
+    }
+
+    public void changeModulation(Modulator source, double amount) {
+        // remove corresponding Modulation if exists...
+        List<Modulation> modulations = getModel().getModulations();
+        for (Modulation m : modulations) {
+            if (m.getModulator() == source) {
+                generic_removeUndoableElementFromList(MODULATIONS, m);
+            }
+        }
+        modulations = new ArrayList<>(source.getModulations());
+        for (Modulation m : modulations) {
+            if (m.getModulator() == source) {
+                source.getController().removeModulation(m);
+            }
+        }
+        if (amount == 0.0) {
+            // do not add a new modulation
+        } else {
+            Modulation m = new Modulation(source, (ParameterInstanceFrac32) getModel());
+            m.setValue(amount);
+            generic_addUndoableElementToList(MODULATIONS, m);
+        }
     }
 
 }

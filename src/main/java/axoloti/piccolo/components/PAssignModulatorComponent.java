@@ -75,7 +75,7 @@ public class PAssignModulatorComponent extends PatchPNode {
         g2.setFont(Constants.FONT);
         g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         g2.fillRect(1, 1, (int) getWidth(), (int) getHeight());
-        if (parameterInstanceView.getDModel().getModulators() != null) {
+        if (parameterInstanceView.getDModel().getModulations() != null) {
             g2.setColor(Theme.getCurrentTheme().Component_Primary);
             g2.fillRect(1, 1, 8, (int) getHeight());
             g2.setColor(Theme.getCurrentTheme().Component_Secondary);

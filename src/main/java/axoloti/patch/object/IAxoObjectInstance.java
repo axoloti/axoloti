@@ -1,5 +1,6 @@
 package axoloti.patch.object;
 
+import axoloti.patch.Modulator;
 import axoloti.mvc.IModel;
 import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
@@ -37,6 +38,10 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
     List<AttributeInstance> getAttributeInstances();
 
     List<DisplayInstance> getDisplayInstances();
+
+    void setModulators(List<Modulator> mdoulators);
+
+    List<Modulator> getModulators();
 
     InletInstance findInletInstance(String n);
 

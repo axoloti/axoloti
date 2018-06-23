@@ -162,9 +162,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 }
             });
         fileMenu1.add(menuItemNewUndoListView);
-        
 
-        presetPanel = new PresetPanel(patchController);
+        presetPanel = new PresetPanel(patchView);
         visibleCablePanel = new VisibleCablePanel(getPatchView());
 
         jToolbarPanel.add(presetPanel);

@@ -18,8 +18,6 @@
 package axoloti.patch;
 
 import axoloti.Axoloti;
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.Version;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectPatcher;
@@ -101,8 +99,6 @@ public class PatchModel extends AbstractModel<PatchController> {
     @Element(required = false)
     Rectangle windowPos;
     public String FileNamePath; // TODO: move to DocumentRoot property
-
-    public ArrayList<Modulator> Modulators = new ArrayList<>(); // TODO: fix modulations, make property, make private
 
     @Element(required = false)
     private String helpPatch;
@@ -261,29 +257,6 @@ public class PatchModel extends AbstractModel<PatchController> {
         return null;
     }
 
-    public void updateModulation(Modulation n) {
-        // find modulator
-        Modulator m = null;
-        for (Modulator m1 : Modulators) {
-            if (m1.objinst == n.source) {
-                if ((m1.name == null) || (m1.name.isEmpty())) {
-                    m = m1;
-                    break;
-                } else if (m1.name.equals(n.modName)) {
-                    m = m1;
-                    break;
-                }
-            }
-        }
-        if (m == null) {
-            throw new UnsupportedOperationException("Modulator not found");
-        }
-        if (!m.Modulations.contains(n)) {
-            m.Modulations.add(n);
-            System.out.println("modulation added to Modulator " + Modulators.indexOf(m));
-        }
-    }
-
     public boolean save(File f) {
         sortByPosition();
         Strategy strategy = new AnnotationStrategy();
@@ -400,31 +373,6 @@ public class PatchModel extends AbstractModel<PatchController> {
 /////////        objectinstances = new ArrayModel<AxoObjectInstanceAbstract>(result);
         refreshIndexes();
         */
-    }
-
-    public Modulator getModulatorOfModulation(Modulation modulation) {
-        if (Modulators == null) {
-            return null;
-        }
-        for (Modulator m : Modulators) {
-            if (m.Modulations.contains(modulation)) {
-                return m;
-            }
-        }
-        return null;
-    }
-
-    public int getModulatorIndexOfModulation(Modulation modulation) {
-        if (Modulators == null) {
-            return -1;
-        }
-        for (Modulator m : Modulators) {
-            int i = m.Modulations.indexOf(modulation);
-            if (i >= 0) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     private List<IAxoObject> getUsedAxoObjects() {
@@ -734,17 +682,6 @@ public class PatchModel extends AbstractModel<PatchController> {
         return selected;
     }
 
-    public List<Modulator> getPatchModulators() {
-        return Collections.unmodifiableList(Modulators);
-    }
-
-    public void addModulator(Modulator m) {
-        if (Modulators == null) {
-            Modulators = new ArrayList<>();
-        }
-        Modulators.add(m);
-    }
-
     public void sanityCheck() {
         List<IAxoObjectInstance> objs = getObjectInstances();
         for (IAxoObjectInstance obj : objs) {
@@ -805,6 +742,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     public final static StringProperty PATCH_NOTES = new StringProperty("Notes", PatchModel.class);
     public final static StringProperty PATCH_HELP_PATCH = new StringProperty("HelpPatch", PatchModel.class);
     public final static Property PATCH_WINDOWPOS = new ObjectProperty("WindowPos", Rectangle.class, PatchModel.class);
+//    public final static ListProperty PATCH_MODULATORS = new ListProperty("Modulators", PatchModel.class);
 
     private final static Property[] PROPERTIES = {
         PATCH_LOCKED,
@@ -1043,6 +981,14 @@ public class PatchModel extends AbstractModel<PatchController> {
         firePropertyChange(
                 PATCH_MIDISELECTOR,
                 null, b);
+    }
+
+    public List<Modulator> getModulators() {
+        List<Modulator> modulators = new LinkedList<>();
+        for (IAxoObjectInstance obji : getObjectInstances()) {
+            modulators.addAll(obji.getModulators());
+        }
+        return modulators;
     }
 
     public void setParent(AxoObjectInstancePatcher container) {

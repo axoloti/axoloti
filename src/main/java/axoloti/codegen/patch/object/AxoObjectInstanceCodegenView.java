@@ -89,7 +89,7 @@ typedef struct ui_object {
             "{ name : " + CodeGeneration.CPPCharArrayStaticInitializer(getDModel().getInstanceName(), CodeGeneration.PARAM_NAME_LENGTH)
             + ", nparams : " + nparams);
         if (nparams > 0) {
-            s.append(", params : &params[" + parameterInstances.get(0).getIndex() + "]");
+            s.append(", params : &PExch[" + parameterInstances.get(0).getIndex() + "]");
             s.append(", param_names : &param_names[" + parameterInstances.get(0).getIndex() + "]");
         } else {
             s.append(", params : 0");
@@ -125,7 +125,6 @@ typedef struct ui_object {
                          + getDModel().getLegalName() + "_i.params[instance" + getDModel().getLegalName() + "::PARAM_INDEX_"
                          + p.getDModel().getDModel().PropagateToChild + "]));\n");
             }
-            c.append(p.getDModel().generateCodeInitModulator("parent->", ""));
             //           if ((p.getOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
             //String parentparametername = classname.substring(8);

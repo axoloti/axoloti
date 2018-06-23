@@ -36,9 +36,8 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
 
         midiAssign = new AssignMidiCCComponent(getDModel());
         btns.add(midiAssign);
-// FIXME: reintroduce modulator button
-//        modulationAssign = new AssignModulatorComponent(this);
-//        btns.add(modulationAssign);
+        modulationAssign = new AssignModulatorComponent(getDModel());
+        btns.add(modulationAssign);
         presetAssign = new AssignPresetComponent(this);
         btns.add(presetAssign);
         add(btns);
@@ -96,7 +95,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     public void populatePopup(JPopupMenu m) {
         super.populatePopup(m);
         JMenu m2 = new JMenu("Modulation");
-        // FIXME : reintroduce midi/modulation popup menu
         new AssignModulatorMenuItems(getDModel(), m2);
         m.add(m2);
     }
@@ -109,14 +107,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     }
 
     @Override
-    public void updateModulation(int index, double amount) {
-        getDModel().updateModulation(index, amount);
-        if (modulationAssign != null) {
-            modulationAssign.repaint();
-        }
-    }
-
-    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
     }
@@ -126,6 +116,8 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
         super.modelPropertyChange(evt);
         if (ParameterInstance.PRESETS.is(evt)) {
             presetAssign.repaint();
+        } else if (ParameterInstance.MODULATIONS.is(evt)) {
+            modulationAssign.repaint();
         }
     }
 

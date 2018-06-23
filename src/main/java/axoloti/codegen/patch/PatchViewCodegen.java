@@ -1,7 +1,5 @@
 package axoloti.codegen.patch;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.codegen.CodeGeneration;
 import axoloti.codegen.patch.object.AxoObjectInstanceCodegenViewFactory;
 import axoloti.codegen.patch.object.IAxoObjectInstanceCodegenView;
@@ -22,6 +20,8 @@ import axoloti.object.outlet.OutletCharPtr32;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
+import axoloti.patch.Modulation;
+import axoloti.patch.Modulator;
 import axoloti.patch.PatchModel;
 import axoloti.patch.net.Net;
 import axoloti.patch.net.NetController;
@@ -123,7 +123,7 @@ public class PatchViewCodegen extends View<PatchModel> {
     String generatePexchAndDisplayCodeV() {
         StringBuilder c = new StringBuilder();
         c.append("    static const uint32_t nparams = " + parameterInstances.size() + ";\n");
-        c.append("    Parameter_t params[nparams] = {\n");
+        c.append("    Parameter_t PExch[nparams] = {\n");
         for (ParameterInstanceView param : parameterInstances) {
             c.append(param.generateParameterInitializer());
         }
@@ -153,7 +153,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         {
             c.append("/* modsource defines */\n");
             int k = 0;
-            for (Modulator m : getDModel().Modulators) {
+            for (Modulator m : getDModel().getModulators()) {
                 c.append("static const int " + m.getCName() + " = " + k + ";\n");
                 k++;
             }
@@ -318,8 +318,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                  + "     int i;\n"
                  + "     int32_t *p = GetInitParams();\n"
                  + "     for(i=0;i<nparams;i++){\n"
-                 + "        ParameterChange(&params[i], p[i], 0xFFEF);\n"
-                 + "     }\n"
+                + "        ParameterChange(&PExch[i], p[i], 0xFFEF);\n"                 + "     }\n"
                  + "   }\n"
                  + "   index--;\n"
                  + "   if (index < NPRESETS) {\n"
@@ -329,13 +328,21 @@ public class PatchViewCodegen extends View<PatchModel> {
                  + "       for(i=0;i<NPRESET_ENTRIES;i++){\n"
                  + "         PresetParamChange_t *pp = &p[i];\n"
                  + "         if ((pp->pexIndex>=0)&&(pp->pexIndex<nparams)) {\n"
-                 + "            ParameterChange(&params[pp->pexIndex],pp->value,0xFFEF);"
-                 + "         }\n"
+                + "            ParameterChange(&PExch[pp->pexIndex],pp->value,0xFFEF);"                 + "         }\n"
                  + "         else break;\n"
                  + "       }\n"
                  + "   }\n"
                  + "}\n");
         return c.toString();
+    }
+
+    private ParameterInstanceView findCorrespondingParameterInstanceView(ParameterInstance param) {
+        for (ParameterInstanceView p : parameterInstances) {
+            if (p.getDModel() == param) {
+                return p;
+            }
+        }
+        return null;
     }
 
     public String generateModulationCode3() {
@@ -344,16 +351,18 @@ public class PatchViewCodegen extends View<PatchModel> {
         s.append("{");
         for (int i = 0; i < getDModel().getNModulationSources(); i++) {
             s.append("{");
-            if (i < getDModel().Modulators.size()) {
-                Modulator m = getDModel().Modulators.get(i);
+            if (i < getDModel().getModulators().size()) {
+                Modulator m = getDModel().getModulators().get(i);
                 for (int j = 0; j < getDModel().getNModulationTargetsPerSource(); j++) {
-                    if (j < m.Modulations.size()) {
-                        Modulation n = m.Modulations.get(j);
-                        ParameterInstance destination = n.destination;
-                        // TODO: fix modulations
-                        //   following line was commented out
-                        //   need to add a method to find ParameterInstanceView from parameter...
-                        // s.append("{" + destination.indexName() + ", " + destination.valToInt32(n.getValue()) + "}");
+                    if (j < m.getModulations().size()) {
+                        Modulation n = m.getModulations().get(j);
+                        ParameterInstance destination = n.getParameter();
+                        ParameterInstanceView piv = findCorrespondingParameterInstanceView(destination);
+                        s.append("{");
+                        s.append(piv.indexName());
+                        s.append(", ");
+                        s.append(destination.valToInt32(n.getValue()));
+                        s.append("}");
                     } else {
                         s.append("{-1,0}");
                     }
@@ -437,7 +446,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         c.append("   const int32_t *p;\n");
         c.append("   p = GetInitParams();\n");
         c.append("   for(j=0;j<" + parameterInstances.size() + ";j++){\n");
-        c.append("      Parameter_t *param = &params[j];\n");
+        c.append("      Parameter_t *param = &PExch[j];\n");
         c.append("      if (param->pfunction)\n");
         c.append("         (param->pfunction)(param);\n");
         c.append("      else\n");
@@ -769,7 +778,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "		},\n" + "		patch_parameter : {\n"
                 + "			header : CHUNK_HEADER(patch_parameter),\n"
                 + "			nparams : " + parameterInstances.size() + ",\n"
-                + "			pParams : &root.params[0],\n"
+                + "			pParams : &root.PExch[0],\n"
                 + "			pParam_names : root.param_names\n" + "		},\n"
                 + "		patch_ui_objects : {\n"
                 + "			header : CHUNK_HEADER(patch_ui_objects),\n"
@@ -1053,8 +1062,8 @@ public class PatchViewCodegen extends View<PatchModel> {
 
         sInitCode.append("int k;\n"
                 + "   for(k=0;k<nparams;k++){\n"
-                + "      params[k].pfunction = PropagateToVoices;\n"
-                + "      params[k].d.frac.finalvalue = (int32_t) (&(getVoices()[0].params[k]));\n"
+                + "      PExch[k].pfunction = PropagateToVoices;\n"
+                + "      PExch[k].d.frac.finalvalue = (int32_t) (&(getVoices()[0].PExch[k]));\n"
                 + "   }\n");
         sInitCode.append("int vi; for(vi=0;vi<attr_poly;vi++) {\n"
                 + "   voice *v = &getVoices()[vi];\n"
@@ -1064,15 +1073,15 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "   notePlaying[vi]=0;\n"
                 + "   voicePriority[vi]=0;\n"
                 + "   for (j = 0; j < v->nparams; j++) {\n"
-                + "      v->params[j].d.frac.value = 0;\n"
-                + "      v->params[j].d.frac.modvalue = 0;\n"
+                + "      v->PExch[j].d.frac.value = 0;\n"
+                + "      v->PExch[j].d.frac.modvalue = 0;\n"
                 + "   }\n"
                 + "}\n"
                 + "      for (k = 0; k < nparams; k++) {\n"
-                + "        if (params[k].pfunction){\n"
-                + "          (params[k].pfunction)(&params[k]);\n"
+                + "        if (PExch[k].pfunction){\n"
+                + "          (PExch[k].pfunction)(&PExch[k]);\n"
                 + "        } else {\n"
-                + "          params[k].d.frac.finalvalue = params[k].d.frac.value;\n"
+                + "          PExch[k].d.frac.finalvalue = PExch[k].d.frac.value;\n"
                 + "        }\n"
                 + "      }\n"
                 + "priority=0;\n"

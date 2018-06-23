@@ -17,8 +17,8 @@
  */
 package axoloti.piccolo.components;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
+import axoloti.patch.Modulation;
+import axoloti.patch.Modulator;
 import axoloti.piccolo.patch.object.parameter.PParameterInstanceViewFrac32UMap;
 import axoloti.swingui.components.control.HSliderComponent;
 import java.util.ArrayList;
@@ -42,21 +42,21 @@ public class PAssignModulatorMenuItems {
 
         hsls.clear();
 
-        for (Modulator m : parameterInstanceView.getDModel().getObjectInstance().getParent().getPatchModulators()) {
+        for (Modulator m : parameterInstanceView.getDModel().getObjectInstance().getParent().getModulators()) {
             JPanel p = new JPanel();
             p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
             String modlabel;
-            if ((m.name == null) || (m.name.isEmpty())) {
-                modlabel = m.objinst.getInstanceName();
+            if ((m.getName() == null) || (m.getName().isEmpty())) {
+                modlabel = m.getObjectInstance().getInstanceName();
             } else {
-                modlabel = m.objinst.getInstanceName() + ":" + m.name;
+                modlabel = m.getObjectInstance().getInstanceName() + ":" + m.getName();
             }
             p.add(new JLabel(modlabel + " "));
             HSliderComponent hsl = new HSliderComponent();
-            if (parameterInstanceView.getDModel().getModulators() != null) {
-                List<Modulation> modulators = parameterInstanceView.getDModel().getModulators();
+            if (parameterInstanceView.getDModel().getModulations() != null) {
+                List<Modulation> modulators = parameterInstanceView.getDModel().getModulations();
                 for (Modulation n : modulators) {
-                    if (m.Modulations.contains(n)) {
+                    if (m.getModulations().contains(n)) {
                         System.out.println("modulation restored " + n.getValue());
                         hsl.setValue(n.getValue());
                     }
@@ -92,7 +92,7 @@ public class PAssignModulatorMenuItems {
             p.add(hsl);
             parent.add(p);
         }
-        if (parameterInstanceView.getDModel().getObjectInstance().getParent().getPatchModulators().isEmpty()) {
+        if (parameterInstanceView.getDModel().getObjectInstance().getParent().getModulators().isEmpty()) {
             JMenuItem d = new JMenuItem("no modulation sources in patch");
             d.setEnabled(false);
             parent.add(d);

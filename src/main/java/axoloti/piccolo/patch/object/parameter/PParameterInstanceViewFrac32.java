@@ -1,6 +1,5 @@
 package axoloti.piccolo.patch.object.parameter;
 
-import axoloti.Modulation;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
@@ -9,7 +8,6 @@ import axoloti.patch.object.parameter.preset.PresetDouble;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -17,19 +15,6 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
 
     PParameterInstanceViewFrac32(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
-        initComponent();
-    }
-
-    private void initComponent() {
-        // TODO: piccolo: does not belong in view, cfr ParameterInstanceView32
-        if (getDModel().getModulators() != null) {
-            List<Modulation> modulators = getDModel().getModulators();
-            for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue());
-                m.postConstructor(getDModel());
-            }
-        }
-
     }
 
     @Override
@@ -77,10 +62,6 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
             return false;
         }
         return true;
-    }
-
-    public void updateModulation(int index, double amount) {
-        getDModel().updateModulation(index, amount);
     }
 
     @Override

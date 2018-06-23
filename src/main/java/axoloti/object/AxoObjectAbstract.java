@@ -17,7 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.Modulator;
 import axoloti.abstractui.IAbstractEditor;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
@@ -117,10 +116,6 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
         return id.compareTo(tn);
     }
 
-    public boolean providesModulationSource() {
-        return false;
-    }
-
     public String getCName() {
         return "noname";
     }
@@ -170,8 +165,8 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
     }
 
     @Override
-    public Modulator[] getModulators() {
-        return null;
+    public List<String> getModulators() {
+        return Collections.emptyList();
     }
 
     public abstract String generateUUID();

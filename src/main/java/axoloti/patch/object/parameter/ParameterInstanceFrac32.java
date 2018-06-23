@@ -17,15 +17,15 @@
  */
 package axoloti.patch.object.parameter;
 
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.object.parameter.ParameterFrac32;
+import axoloti.patch.Modulation;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.patch.object.parameter.preset.PresetDouble;
 import axoloti.utils.ListUtils;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -105,70 +105,21 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         return (PresetDouble) super.getPreset(i);
     }
 
-    // TODO: fix modulations
-    public void updateModulation(int index, double amount) {
-        //System.out.println("updatemodulation1:" + index);
-        if (amount != 0.0) {
-            // existing modulation
-            if (modulators == null) {
-                modulators = new ArrayList<>();
-            }
-            Modulator modulator = getParent().getParent().getPatchModulators().get(index);
-            //System.out.println("updatemodulation2:" + modulator.name);
-            Modulation n = null;
-            for (Modulation m : modulators) {
-                if (m.source == modulator.objinst) {
-                    if ((modulator.name == null) || (modulator.name.isEmpty())) {
-                        n = m;
-                        break;
-                    } else if (modulator.name.equals(m.modName)) {
-                        n = m;
-                        break;
-                    }
-                }
-            }
-            if (n == null) {
-                n = new Modulation();
-                //System.out.println("updatemodulation3:" + n.sourceName);
-                modulators.add(n);
-            }
-            n.source = modulator.objinst;
-            n.sourceName = modulator.objinst.getInstanceName();
-            n.modName = modulator.name;
-            n.setValue(amount);
-            n.destination = this;
-            getParent().getParent().updateModulation(n);
-        } else {
-            // remove modulation target if exists
-            Modulator modulator = getParent().getParent().getPatchModulators().get(index);
-            if (modulator == null) {
-                return;
-            }
-            for (Modulation n : modulator.Modulations) {
-                if (n.destination == this) {
-                    modulator.Modulations.remove(n);
-                }
-            }
-            for (int i = 0; i < modulators.size(); i++) {
-                Modulation n = modulators.get(i);
-                if (n.destination == this) {
-                    modulators.remove(n);
-                }
-                getParent().getParent().updateModulation(n);
-            }
-            if (modulators.isEmpty()) {
-                modulators = null;
-            }
-        }
+
+    @Override
+    public List<Modulation> getModulations() {
+        return ListUtils.export(modulators);
     }
 
     @Override
-    public ArrayList<Modulation> getModulators() {
-        return modulators;
-    }
-
-    public void removeModulation(Modulation m) {
-        modulators.remove(m);
+    public void setModulations(List<Modulation> modulations) {
+        List<Modulation> old_val = this.modulators;
+        if ((modulations == null) || modulations.isEmpty()) {
+            this.modulators = null;
+        } else {
+            this.modulators = new ArrayList<>(modulations);
+        }
+        firePropertyChange(MODULATIONS, old_val, this.modulators);
     }
 
     @Override
@@ -176,7 +127,15 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         super.copyValueFrom(p);
         if (p instanceof ParameterInstanceFrac32) {
             ParameterInstanceFrac32 p1 = (ParameterInstanceFrac32) p;
-            modulators = p1.getModulators();
+            List<Modulation> new_modulations = new LinkedList<>();
+            List<Modulation> orig_modulations = p1.getModulations();
+
+            for (Modulation m : orig_modulations) {
+                Modulation new_m = m.createClone();
+                new_m.setParameter(this);
+                new_modulations.add(new_m);
+            }
+            setModulations(new_modulations);
             setValue(p1.getValue());
         }
     }
@@ -186,12 +145,6 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
         Tx p = super.createParameterForParent();
         p.DefaultValue = new ValueFrac32(value);
         return p;
-    }
-
-    @Override
-    public String generateCodeInitModulator(String vprefix, String StructAccces) {
-        // TODO: fix modulations
-        return "";
     }
 
     @Override

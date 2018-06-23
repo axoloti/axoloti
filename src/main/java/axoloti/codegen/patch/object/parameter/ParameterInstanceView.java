@@ -31,7 +31,7 @@ public abstract class ParameterInstanceView extends View<ParameterInstance> {
     }
 
     public String PExName(String vprefix) {
-        return vprefix + "params[" + indexName() + "]";
+        return vprefix + "PExch[" + indexName() + "]";
     }
 
     public String controlOnParentName() {

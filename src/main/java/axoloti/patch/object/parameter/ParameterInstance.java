@@ -17,10 +17,10 @@
  */
 package axoloti.patch.object.parameter;
 
-import axoloti.Modulation;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.object.parameter.Parameter;
+import axoloti.patch.Modulation;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstancePatcher;
@@ -37,6 +37,7 @@ import axoloti.utils.CharEscape;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
@@ -73,6 +74,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
     public final static Property ON_PARENT = new BooleanProperty("OnParent", ParameterInstance.class, "Parameter on parent");
     public final static Property MIDI_CC = new MidiCCProperty("MidiCC", ParameterInstance.class, "Midi Continuous controller");
     public final static Property PRESETS = new ListProperty("Presets", ParameterInstance.class);
+    public final static ListProperty MODULATIONS = new ListProperty("Modulations", ParameterInstance.class);
     public final static Property VALUE = new ObjectProperty("Value", Object.class, ParameterInstance.class);
     public final static Property CONVERSION = new ObjectProperty("Conversion", NativeToReal.class, ParameterInstance.class);
     public final static PropagatedProperty NOLABEL = new PropagatedProperty(Parameter.NOLABEL, ParameterInstance.class);
@@ -81,6 +83,7 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         ON_PARENT,
         MIDI_CC,
         PRESETS,
+        MODULATIONS,
         VALUE,
         NOLABEL
     };
@@ -192,13 +195,12 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         return parameter;
     }
 
-    public String generateCodeInitModulator(String vprefix, String StructAccces) {
-        // TODO: fix modulations
-        return "";
+    public List<Modulation> getModulations() {
+        return Collections.emptyList();
     }
 
-    public ArrayList<Modulation> getModulators() {
-        return null;
+    public void setModulations(List<Modulation> modulators) {
+        throw new Error("ParamterInstance::setModulators");
     }
 
     public List<NativeToReal> getConvs() {

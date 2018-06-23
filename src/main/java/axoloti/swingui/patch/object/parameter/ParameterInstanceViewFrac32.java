@@ -1,6 +1,5 @@
 package axoloti.swingui.patch.object.parameter;
 
-import axoloti.Modulation;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
@@ -10,7 +9,6 @@ import axoloti.realunits.NativeToReal;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -18,18 +16,6 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
     ParameterInstanceViewFrac32(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);
-        initComponents();
-    }
-
-    private void initComponents() {
-        // TODO: fix modulations: does not belong in view, review
-        if (getDModel().getModulators() != null) {
-            List<Modulation> modulators = getDModel().getModulators();
-            for (Modulation m : modulators) {
-                System.out.println("mod amount " + m.getValue());
-                m.postConstructor(getDModel());
-            }
-        }
     }
 
     @Override
@@ -78,10 +64,6 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
             return false;
         }
         return true;
-    }
-
-    public void updateModulation(int index, double amount) {
-        getDModel().updateModulation(index, amount);
     }
 
     @Override

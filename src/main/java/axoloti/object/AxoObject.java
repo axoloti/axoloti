@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import static axoloti.Axoloti.CHIBIOS_DIR;
-import axoloti.Modulator;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeInt32;
@@ -342,39 +341,28 @@ public class AxoObject extends AxoObjectAbstract {
         ctrl.addView(o);
         return o;
     }*/
-    @Override
-    public boolean providesModulationSource() {
-        if ((ModulationSources != null) && (!ModulationSources.isEmpty())) {
-            return true;
-        }
-        if (providesModulationSource == null) {
-            return false;
-        }
-        return providesModulationSource;
-    }
-
     public void setProvidesModulationSource() {
         providesModulationSource = true;
     }
 
-    @Override
-    public Modulator[] getModulators() {
-        if ((providesModulationSource != null) && (providesModulationSource)) {
-            Modulator[] m = new Modulator[1];
-            //m[0].objinst = this;
-            m[0] = new Modulator();
-            m[0].name = "";
-            return m;
-        } else if ((ModulationSources != null) && (!ModulationSources.isEmpty())) {
-            Modulator[] m = new Modulator[ModulationSources.size()];
-            for (int i = 0; i < ModulationSources.size(); i++) {
-                String n = ModulationSources.get(i);
-                m[i] = new Modulator();
-                m[i].name = n;
-            }
-            return m;
+    public void setModulators(List<String> modulators) {
+        if (modulators == null) {
+            this.ModulationSources = null;
         } else {
-            return null;
+            this.ModulationSources = new ArrayList<>(modulators);
+        }
+        firePropertyChange(OBJ_MODULATORS, null, this.ModulationSources);
+    }
+
+    @Override
+    public List<String> getModulators() {
+        if (ModulationSources != null) {
+            return ListUtils.export(ModulationSources);
+        }
+        if ((providesModulationSource != null) && (providesModulationSource == true)) {
+            return Collections.singletonList(null);
+        } else {
+            return Collections.emptyList();
         }
     }
 
@@ -615,6 +603,7 @@ public class AxoObject extends AxoObjectAbstract {
     public static final ListProperty OBJ_INCLUDES = new ListProperty("Includes", AxoObject.class);
     public static final ListProperty OBJ_DEPENDS = new ListProperty("Depends", AxoObject.class);
     public static final ListProperty OBJ_MODULES = new ListProperty("Modules", AxoObject.class);
+    public static final ListProperty OBJ_MODULATORS = new ListProperty("Modulators", AxoObject.class);
 
     private static final Property[] PROPERTIES = {
         OBJ_ID,
@@ -633,7 +622,8 @@ public class AxoObject extends AxoObjectAbstract {
         OBJ_LOCAL_DATA,
         OBJ_KRATE_CODE,
         OBJ_SRATE_CODE,
-        OBJ_MIDI_CODE
+        OBJ_MIDI_CODE,
+        OBJ_MODULATORS
     };
 
     @Override

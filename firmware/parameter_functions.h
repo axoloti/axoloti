@@ -123,6 +123,7 @@ void pf_kexpdtime(Parameter_t *p) {
 
 
 // LEGACY
+#if 0
 void pfun_signed_clamp(ParameterExchange_t *p) {
   p->finalvalue = parameter_function::pfun_inl_signed_clamp(p->modvalue);
 }
@@ -162,6 +163,6 @@ void pfun_kexpltime(ParameterExchange_t *p) {
 void pfun_kexpdtime(ParameterExchange_t *p) {
   p->finalvalue = parameter_function::pfun_inl_kexpdtime(p->modvalue);
 }
-
+#endif
 
 #endif

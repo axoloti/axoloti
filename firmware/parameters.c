@@ -19,7 +19,7 @@
 #include "patch.h"
 #include "axoloti_math.h"
 
-#if 1 // Obsolete parameter structure
+#if 0 // Obsolete parameter structure
 void PExModulationSourceChange(PExModulationTarget_t *modulation,
                                int32_t nTargets,
                                ParameterExchange_t *parameters,
@@ -92,6 +92,34 @@ default:
 	  // assuming finalvalue and modvalue fields are on the same position for integer and bit parameters:
     param->d.frac.finalvalue = param->d.frac.modvalue;
 }
+
+void ModulationSourceChange(PExModulationTarget_t *modulation,
+                               int32_t nTargets,
+                               Parameter_t *parameters,
+                               int32_t *oldvalue,
+                               int32_t value) {
+  PExModulationTarget_t *s = modulation;
+  int t;
+  for (t = 0; t < nTargets; t++) {
+    PExModulationTarget_t *target = &s[t];
+    if (target->parameterIndex == -1)
+      continue;
+    Parameter_t *PEx = &parameters[target->parameterIndex];
+    int32_t v = PEx->d.frac.modvalue;
+    v -= ___SMMUL(*oldvalue, target->amount) << 5;
+    v += ___SMMUL(value, target->amount) << 5;
+    PEx->d.frac.modvalue = v;
+    if (PEx->pfunction) {
+      (PEx->pfunction)(PEx);
+      // TBC: modulation on root of polyphonic-subpatch-parameters
+    }
+    else {
+      PEx->d.frac.finalvalue = v;
+    }
+  }
+  *oldvalue = value;
+}
+
 
 #endif
 

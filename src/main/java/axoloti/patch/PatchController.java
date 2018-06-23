@@ -1,8 +1,6 @@
 package axoloti.patch;
 
 import axoloti.Axoloti;
-import axoloti.Modulation;
-import axoloti.Modulator;
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
@@ -74,6 +72,15 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         for (IAxoObjectInstance unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
         }
+        // resolve modulations
+        for (IAxoObjectInstance obji : getModel().getObjectInstances()) {
+            for (ParameterInstance parami : obji.getParameterInstances()) {
+                List<Modulation> ml = parami.getModulations();
+                for (Modulation m : ml) {
+                    m.getModulator();
+                }
+            }
+        }
         promoteOverloading(true);
     }
 
@@ -83,11 +90,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
 
     public void recallPreset(int i) {
         getQCmdProcessor().appendToQueue(new QCmdRecallPreset(i));
-    }
-
-    public void showPreset(int i) {
-        // TODO: fix preset editing logic
-        //patchView.ShowPreset(i);
     }
 
     public void compile() {
@@ -301,14 +303,9 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         }
         disconnect(o);
         ((AxoObjectInstanceAbstract) o).dispose();
-        int i;
-        for (i = getModel().Modulators.size() - 1; i >= 0; i--) {
-            Modulator m1 = getModel().Modulators.get(i);
-            if (m1.objinst == o) {
-                getModel().Modulators.remove(m1);
-                for (Modulation mt : m1.Modulations) {
-                    mt.destination.removeModulation(mt);
-                }
+        for (Modulator m : o.getModulators()) {
+            for (Modulation mt : m.getModulations()) {
+                mt.getParameter().getController().changeModulation(m, 0.0);
             }
         }
         boolean succeeded = 
@@ -333,17 +330,15 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 i++;
             }
             IAxoObjectInstance objinst = AxoObjectInstanceFactory.createView(obj, getModel(), n + i, loc);
-
-            Modulator[] m = obj.getModulators();
+            /*
+            List<Modulator> m = obj.getModulators();
             if (m != null) {
-                if (getModel().Modulators == null) {
-                    getModel().Modulators = new ArrayList<>();
-                }
                 for (Modulator mm : m) {
                     mm.objinst = objinst;
-                    getModel().Modulators.add(mm);
+                    addUndoableElementToList(PatchModel.PATCH_MODULATORS, mm);
                 }
             }
+             */
             addUndoableElementToList(PatchModel.PATCH_OBJECTINSTANCES, objinst);
             return objinst;
         } else {
@@ -429,35 +424,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         try {
             PatchModel p = serializer.read(PatchModel.class, string);
             Map<String, String> dict = new HashMap<>();
-            /* // TODO: fix modulations
-             ArrayList<IAxoObjectInstance> obj2 = new ArrayList<>(p.objectinstances);
-             for (AxoObjectInstanceAbstract o : obj2) {
-             o.patchModel = getModel();
-             AxoObjectAbstract obj = o.resolveType();
-             if (o instanceof AxoObjectInstance)
-             getModel().applyType((AxoObjectInstance)o, obj);
-             if (obj != null) {
-             Modulator[] m = obj.getPatchModulators();
-             if (m != null) {
-             if (getModel().Modulators == null) {
-             getModel().Modulators = new ArrayList<Modulator>();
-             }
-             for (Modulator mm : m) {
-             mm.objinst = o;
-             getModel().Modulators.add(mm);
-             }
-             }
-             } else {
-             //o.patch = this;
-             p.objectinstances.remove(o);
-             AxoObjectZombie z = new AxoObjectZombie();
-             AxoObjectInstanceZombie zombie = new AxoObjectInstanceZombie(z.createController(null, null), getModel(), o.getInstanceName(), new Point(o.getX(), o.getY()));
-             zombie.patchModel = getModel();
-             zombie.typeName = o.typeName;
-             p.objectinstances.add(zombie);
-             }
-             }
-             */
 
             selectNone();
 

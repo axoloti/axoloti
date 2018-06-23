@@ -205,10 +205,6 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
 
     private Point p = new Point();
 
-    public boolean providesModulationSource() {
-        return false;
-    }
-
     @Override
     public int compareTo(IAxoObjectInstance o) {
         if (o.getY() == this.y) {
@@ -290,6 +286,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
     public static final Property OBJ_INLET_INSTANCES = new ObjectProperty("InletInstances", List.class, AxoObjectInstanceAbstract.class);
     public static final Property OBJ_OUTLET_INSTANCES = new ObjectProperty("OutletInstances", List.class, AxoObjectInstanceAbstract.class);
     public static final Property OBJ_DISPLAY_INSTANCES = new ObjectProperty("DisplayInstances", List.class, AxoObjectInstanceAbstract.class);
+    public static final Property OBJ_INST_MODULATORS = new ObjectProperty("Modulators", List.class, AxoObjectInstanceAbstract.class);
     public static final PropagatedProperty OBJ_INST_AUTHOR = new PropagatedProperty(AxoObject.OBJ_AUTHOR, DisplayInstance.class);
     public static final PropagatedProperty OBJ_INST_LICENSE = new PropagatedProperty(AxoObject.OBJ_LICENSE, DisplayInstance.class);
     public static final PropagatedProperty OBJ_INST_DESCRIPTION = new PropagatedProperty(AxoObject.OBJ_DESCRIPTION, DisplayInstance.class);

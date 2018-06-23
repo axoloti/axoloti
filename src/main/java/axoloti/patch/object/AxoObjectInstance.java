@@ -35,6 +35,8 @@ import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
 import axoloti.object.parameter.Parameter;
+import axoloti.patch.Modulation;
+import axoloti.patch.Modulator;
 import axoloti.patch.PatchModel;
 import static axoloti.patch.object.AxoObjectInstanceAbstract.OBJ_PARAMETER_INSTANCES;
 import axoloti.patch.object.attribute.AttributeInstance;
@@ -75,6 +77,8 @@ import java.awt.Point;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
@@ -122,6 +126,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
     List<AttributeInstance> attributeInstances = new ArrayList<>();
     List<DisplayInstance> displayInstances = new ArrayList<>();
+
+    private List<Modulator> modulators;
 
     public AxoObjectInstance() {
         super();
@@ -288,14 +294,14 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     final Inlet parentInlet;
 
     @Override
-    public boolean providesModulationSource() {
-        IAxoObject atype = getDModel();
-        if (atype == null) {
-            return false;
-        } else {
-            //return atype.providesModulationSource();
-            return false; // TODO: fix modulations
-        }
+    public List<Modulator> getModulators() {
+        return modulators;
+    }
+
+    @Override
+    public void setModulators(List<Modulator> modulators) {
+        this.modulators = modulators;
+        firePropertyChange(OBJ_INST_MODULATORS, null, modulators);
     }
 
     @Override
@@ -362,6 +368,12 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
         for (OutletInstance p : getOutletInstances()) {
             p.dispose();
+        }
+        for (Modulator m : getModulators()) {
+            List<Modulation> modulations = new ArrayList<>(m.getModulations());
+            for (Modulation m1 : modulations) {
+                m1.getParameter().getController().changeModulation(m, 0);
+            }
         }
         AxoObjectInstancePatcher aoip = getContainer();
         if (aoip != null) {
@@ -547,6 +559,33 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     };
 
+    private void syncModulators() {
+        List<Modulator> prev_modulators;
+        if (modulators == null) {
+            prev_modulators = Collections.emptyList();
+        } else {
+            prev_modulators = new LinkedList<>(modulators);
+        }
+        List<Modulator> new_modulators = new ArrayList<>();
+        List<String> obj_modulators = getDModel().getModulators();
+        for (String obj_modulator_name : obj_modulators) {
+            Modulator modulator = null;
+            for (Modulator m : prev_modulators) {
+                if (((m.getName() == null) && (obj_modulator_name == null))
+                        || ((m.getName() == null) && (obj_modulator_name == null))) {
+                    modulator = m;
+                    prev_modulators.remove(m);
+                    break;
+                }
+            }
+            if (modulator == null) {
+                modulator = new Modulator(this, obj_modulator_name);
+            }
+            new_modulators.add(modulator);
+        }
+        getController().generic_setModelUndoableProperty(OBJ_INST_MODULATORS, new_modulators);
+    }
+
     private final PropagatedProperty propagateProperties[] = new PropagatedProperty[]{
         OBJ_INST_AUTHOR,
         OBJ_INST_DESCRIPTION,
@@ -565,6 +604,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
             inletInstanceSync.sync(inletInstances, (List) evt.getNewValue());
         } else if (AxoObject.OBJ_OUTLETS.is(evt)) {
             outletInstanceSync.sync(outletInstances, (List) evt.getNewValue());
+        } else if (AxoObject.OBJ_MODULATORS.is(evt)) {
+            syncModulators();
         } else {
             for (PropagatedProperty p : propagateProperties) {
                 if (p.is(evt)) {

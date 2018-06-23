@@ -26,7 +26,7 @@ typedef struct {
 
 void ApplyPreset(unsigned int index);
 
-#if 1
+#if 0
 // OBSOLETE but kept for backwards compatibility
 typedef struct _ParameterExchange {
   int32_t value;      // parameter value
@@ -146,7 +146,11 @@ typedef struct {
 } Parameter_name_t;
 
 void ParameterChange(Parameter_t *param, int32_t value, uint32_t signals);
-
+void ModulationSourceChange(PExModulationTarget_t *modulation,
+                               int32_t nTargets,
+                               Parameter_t *parameters,
+                               int32_t *oldvalue,
+                               int32_t value);
 enum {
 	display_meta_type_sq27,
 	display_meta_type_uq27,

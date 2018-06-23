@@ -1,5 +1,6 @@
 package axoloti.patch.object;
 
+import axoloti.patch.Modulator;
 import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
@@ -62,6 +63,16 @@ abstract class AxoObjectInstance0 extends AxoObjectInstanceAbstract {
     @Override
     public final List<DisplayInstance> getDisplayInstances() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<Modulator> getModulators() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void setModulators(List<Modulator> modulators) {
+        throw new Error("setModulators " + modulators);
     }
 
     @Override

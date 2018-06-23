@@ -102,11 +102,6 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
     }
 
     @Override
-    public void updateModulation(int index, double amount) {
-        getDModel().updateModulation(index, amount);
-    }
-
-    @Override
     protected void paint(PPaintContext paintContext) {
         super.paint(paintContext);
         Graphics2D g2 = paintContext.getGraphics();

@@ -1,6 +1,5 @@
 package axoloti.object;
 
-import axoloti.Modulator;
 import axoloti.abstractui.IAbstractEditor;
 import axoloti.mvc.IModel;
 import axoloti.object.attribute.AxoAttribute;
@@ -64,7 +63,7 @@ public interface IAxoObject extends IModel {
 
     List<String> getModules();
 
-    Modulator[] getModulators();
+    List<String> getModulators();
 
     boolean isCreatedFromRelativePath();
 
