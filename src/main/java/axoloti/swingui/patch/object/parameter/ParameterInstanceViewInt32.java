@@ -20,10 +20,10 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
     }
 
     @Override
-    public void showPreset(int i) {
-        presetEditActive = i;
+    public void update() {
+        int i = getPresetEditActive();
         if (i > 0) {
-            PresetInt p = getDModel().getPreset(presetEditActive);
+            PresetInt p = getDModel().getPreset(i);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 getControlComponent().setValue(p.getValue());
@@ -39,9 +39,12 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
 
     @Override
     public boolean handleAdjustment() {
-        PresetInt p = getDModel().getPreset(presetEditActive);
-        if (p != null) { // TODO: fix preset editing logic
-            //p.setValue((int)getControlComponent().getValue());
+        int presetEdit = getPresetEditActive();
+        PresetInt p = getDModel().getPreset(presetEdit);
+        int value = (int) getControlComponent().getValue();
+        if (p != null) {
+            getDModel().getController().addMetaUndo("change preset of parameter");
+            getDModel().getController().addPreset(presetEdit, value);
         } else if (getDModel().getValue() != (int) getControlComponent().getValue()) {
             int v = (int)getControlComponent().getValue();
             getDModel().getController().changeValue(v);
@@ -55,8 +58,11 @@ abstract class ParameterInstanceViewInt32 extends ParameterInstanceView {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (ParameterInstance.VALUE.is(evt)) {
-            int v = (Integer) evt.getNewValue();
-            getControlComponent().setValue(v);
+            update();
+        } else if (ParameterInstance.CONVERSION.is(evt)) {
+            update();
+        } else if (ParameterInstance.PRESETS.is(evt)) {
+            update();
         } else if (ParameterInt32.VALUE_MIN.is(evt)) {
 //            ctrl.
         }

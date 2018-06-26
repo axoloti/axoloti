@@ -4,8 +4,11 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.datatypes.ValueFrac32;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.patch.object.parameter.preset.PresetDouble;
+import axoloti.preferences.Theme;
 import axoloti.realunits.NativeToReal;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -24,14 +27,44 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     }
 
     @Override
-    void updateUnit() {
-        super.updateUnit();
+    void updateUnit(Double value) {
+        super.updateUnit(value);
         NativeToReal conv = getDModel().getConversion();
         if (conv != null) {
             String n = conv.convertToReal(new ValueFrac32(
-                    getDModel().getValue()));
+                    value));
             valuelbl.setText(n);
         }
+    }
+
+    @Override
+    public void update() {
+        int i = getPresetEditActive();
+        double valueShown;
+        Color bg;
+        if (i > 0) {
+            Preset p = getDModel().getPreset(i);
+            if (p != null) {
+                bg = Theme.getCurrentTheme().Parameter_Preset_Highlight;
+                valueShown = (Double) p.getValue();
+            } else {
+                bg = Theme.getCurrentTheme().Parameter_Default_Background;
+                valueShown = getDModel().getValue();
+            }
+        } else {
+            bg = Theme.getCurrentTheme().Parameter_Default_Background;
+            valueShown = getDModel().getValue();
+        }
+        getControlComponent().setValue(valueShown);
+        setBackground(bg);
+        updateUnit(valueShown);
+        /*
+         if ((presets != null) && (!presets.isEmpty())) {
+         lblPreset.setVisible(true);
+         } else {
+         lblPreset.setVisible(false);
+         }
+         */
     }
 
     @Override
@@ -50,12 +83,12 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
 
     @Override
     public boolean handleAdjustment() {
-        // TODO: fix preset editing logic
-        PresetDouble p = getDModel().getPreset(presetEditActive);
-        if (p != null) { // TODO: fix preset editing logic
-            //p.setValue(getControlComponent().getValue());
-        }
-        if (getDModel().getValue() != getControlComponent().getValue()) {
+        int presetEdit = getPresetEditActive();
+        double value = getControlComponent().getValue();
+        PresetDouble p = getDModel().getPreset(presetEdit);
+        if (p != null) {
+            getDModel().getController().addPreset(presetEdit, value);
+        } else if (getDModel().getValue() != value) {
             if (getDModel().getController() != null) {
                 Double d = getControlComponent().getValue();
                 getDModel().getController().changeValue(d);
@@ -70,11 +103,11 @@ abstract class ParameterInstanceViewFrac32 extends ParameterInstanceView {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (ParameterInstance.VALUE.is(evt)) {
-            Double v = (Double) evt.getNewValue();
-            getControlComponent().setValue(v);
-            updateUnit();
+            update();
         } else if (ParameterInstance.CONVERSION.is(evt)) {
-            updateUnit();
+            update();
+        } else if (ParameterInstance.PRESETS.is(evt)) {
+            update();
         }
     }
 }

@@ -65,6 +65,11 @@ public class ParameterInstance4LevelX16 extends ParameterInstance<Parameter4Leve
     }
 
     @Override
+    public PresetInt getPreset(int i) {
+        return (PresetInt) super.getPreset(i);
+    }
+
+    @Override
     public int valToInt32(Integer v) {
         return (int) v;
     }

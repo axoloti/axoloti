@@ -42,7 +42,7 @@ public class PAssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    PAssignPresetMenuItems.this.param.includeInPreset();
+                    //PAssignPresetMenuItems.this.param.includeInPreset();
                 }
             });
             parent.add(mi);
@@ -52,7 +52,7 @@ public class PAssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    PAssignPresetMenuItems.this.param.excludeFromPreset();
+                    //PAssignPresetMenuItems.this.param.excludeFromPreset();
                 }
             });
             parent.add(mi);
@@ -62,10 +62,10 @@ public class PAssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (PAssignPresetMenuItems.this.param.getDModel().getPresets() != null) {
-                        PAssignPresetMenuItems.this.param.getDModel().getPresets().clear();
-                    }
-                    PAssignPresetMenuItems.this.param.excludeFromPreset();
+                    //if (PAssignPresetMenuItems.this.param.getDModel().getPresets() != null) {
+                    //    PAssignPresetMenuItems.this.param.getDModel().getPresets().clear();
+                    //}
+                    //PAssignPresetMenuItems.this.param.excludeFromPreset();
                 }
             });
             parent.add(mi);

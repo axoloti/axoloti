@@ -10,10 +10,6 @@ public interface IParameterInstanceView extends IView<ParameterInstance> {
 
     boolean handleAdjustment();
 
-    void showPreset(int i);
-
-    void includeInPreset();
-
-    void excludeFromPreset();
+    void update();
 
 }

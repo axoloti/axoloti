@@ -241,6 +241,8 @@ public class VSliderComponent extends ACtrlComponent {
         if (isEnabled()) {
             g2.setPaint(Theme.getCurrentTheme().Component_Secondary);
             g2.fillRect(0, 0, getWidth(), height);
+            g2.setColor(getBackground());
+            g2.drawRect(1, 1, getWidth() - 2, height - 2);
             g2.setPaint(getForeground());
             if (isFocusOwner()) {
                 g2.setStroke(strokeThick);

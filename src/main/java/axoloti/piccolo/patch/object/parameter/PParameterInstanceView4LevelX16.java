@@ -20,7 +20,4 @@ class PParameterInstanceView4LevelX16 extends PParameterInstanceViewInt32 {
         return (PCheckbox4StatesComponent) ctrl;
     }
 
-    @Override
-    public void showPreset(int i) {
-    }
 }

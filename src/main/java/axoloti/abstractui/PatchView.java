@@ -373,12 +373,19 @@ public abstract class PatchView extends View<PatchModel> {
         return getPatchController().isLocked();
     }
 
+    private int presetEditActive = 0;
+
     public void showPreset(int i) {
+        presetEditActive = i;
         for (IAxoObjectInstanceView o : objectInstanceViews) {
             for (IParameterInstanceView p : o.getParameterInstanceViews()) {
-                p.showPreset(i);
+                p.update();
             }
          }
+    }
+
+    public int getPresetEditActive() {
+        return presetEditActive;
     }
 
     @Override

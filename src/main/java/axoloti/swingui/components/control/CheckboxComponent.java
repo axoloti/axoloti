@@ -208,6 +208,8 @@ public class CheckboxComponent extends ACtrlComponent {
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         }
         g2.fillRect(0, 0, bsize * n, bsize + 1);
+        g2.setColor(getBackground());
+        g2.drawRect(1, 1, bsize * n - 2, bsize - 1);
         g2.setPaint(getForeground());
 
         if (isFocusOwner()) {

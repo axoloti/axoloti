@@ -5,7 +5,6 @@ import axoloti.abstractui.IParameterInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.mvc.FocusEdit;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.preferences.Theme;
 import axoloti.property.Property;
 import axoloti.swingui.components.AssignMidiCCComponent;
@@ -23,7 +22,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
@@ -38,7 +36,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
 
     AssignMidiCCComponent midiAssign;
 
-    IAxoObjectInstanceView axoObjectInstanceView;
+    private final IAxoObjectInstanceView axoObjectInstanceView;
 
     ParameterInstanceView(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance);
@@ -56,11 +54,16 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
         pv.scrollTo(this);
     }
 
+    @Override
+    public void update() {
+    }
+
     final void initCtrlComponent(ACtrlComponent ctrl) {
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         JPanel lbls = new JPanel();
+        lbls.setOpaque(false);
         lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));
         this.add(lbls);
         label.setText(getDModel().getDModel().getName());
@@ -79,8 +82,8 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
                     getDModel().cycleConversions();
                 }
             });
-            updateUnit();
         }
+        update();
 
         //ACtrlComponent ctrl = getControlComponent();
         add(ctrl);
@@ -172,46 +175,23 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
     public void actionPerformed(ActionEvent e) {
     }
 
-    void updateUnit() {
+    void updateUnit(Double value) {
 //        if (getModel().getConvs() != null) {
 //            valuelbl.setText(getModel().getConversion().ToReal(
 //                    getModel().getValue().));
 //        }
     }
 
-    @Override
-    public abstract void showPreset(int i);
-
-    public int presetEditActive = 0;
-
-    @Override
-    public void includeInPreset() {
-        if (presetEditActive > 0) {
-            Preset p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                return;
-            }
-            if (getDModel().getPresets() == null) {
-                getDModel().setPresets(new ArrayList<Preset>());
-            }
-            p = getDModel().presetFactory(presetEditActive, getDModel().getValue());
-            getDModel().getPresets().add(p);
+    public int getPresetEditActive() {
+        IAxoObjectInstanceView objView = getAxoObjectInstanceView();
+        if (objView == null) {
+            return 0;
         }
-        showPreset(presetEditActive);
-    }
-
-    @Override
-    public void excludeFromPreset() {
-        if (presetEditActive > 0) {
-            Preset p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                getDModel().getPresets().remove(p);
-                if (getDModel().getPresets().isEmpty()) {
-                    getDModel().setPresets(null);
-                }
-            }
+        PatchView pv = objView.getPatchView();
+        if (pv == null) {
+            return 0;
         }
-        showPreset(presetEditActive);
+        return pv.getPresetEditActive();
     }
 
     public IAxoObjectInstanceView getAxoObjectInstanceView() {

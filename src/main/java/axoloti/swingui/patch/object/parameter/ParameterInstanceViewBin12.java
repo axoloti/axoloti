@@ -16,10 +16,6 @@ class ParameterInstanceViewBin12 extends ParameterInstanceViewBin {
         return new CheckboxComponent(0, 12);
     }
 
-    @Override
-    public void showPreset(int i) {
-    }
-
     private final CheckboxComponent ctrl = createControl();
 
     @Override

@@ -3,7 +3,6 @@ package axoloti.piccolo.patch.object.parameter;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
-import axoloti.patch.object.parameter.preset.PresetDouble;
 import axoloti.piccolo.components.PAssignMidiCCComponent;
 import axoloti.piccolo.components.PAssignMidiCCMenuItems;
 import axoloti.piccolo.components.PAssignModulatorComponent;
@@ -64,26 +63,6 @@ public class PParameterInstanceViewFrac32UMap extends PParameterInstanceViewFrac
         return d;
     }
 
-    /*
-     *  Preset logic
-     */
-    @Override
-    public void showPreset(int i) {
-        this.presetEditActive = i;
-        if (i > 0) {
-            PresetDouble p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue(p.getValue());
-            } else {
-                setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getDModel().getValue());
-            }
-        } else {
-            setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getDModel().getValue());
-        }
-    }
 
     @Override
     public void populatePopup(JPopupMenu m) {

@@ -19,10 +19,10 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
     }
 
     @Override
-    public void showPreset(int i) {
-        presetEditActive = i;
+    public void update() {
+        int i = getPresetEditActive();
         if (i > 0) {
-            PresetInt p = getDModel().getPreset(presetEditActive);
+            PresetInt p = getDModel().getPreset(i);
             if (p != null) {
                 setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
                 getControlComponent().setValue(p.getValue());
@@ -38,10 +38,12 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
 
     @Override
     public boolean handleAdjustment() {
-        PresetInt p = getDModel().getPreset(presetEditActive);
-        if (p != null) { // TODO: fix preset editing logic
-            //p.setValue((int) getControlComponent().getValue());
-        } else if (getDModel().getValue() != (int) getControlComponent().getValue()) {
+        int presetEdit = getPresetEditActive();
+        PresetInt p = getDModel().getPreset(presetEdit);
+        int value = (int) getControlComponent().getValue();
+        if (p != null) {
+            getDModel().getController().addPreset(presetEdit, value);
+        } else if (getDModel().getValue() != value) {
             if (getDModel().getController() != null) {
                 Integer vi32 = (int)getControlComponent().getValue();
                 getDModel().getController().changeValue(vi32);
@@ -56,8 +58,9 @@ abstract class ParameterInstanceViewBin extends ParameterInstanceView {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         super.modelPropertyChange(evt);
         if (ParameterInstanceBin.VALUE.is(evt)) {
-            Integer v = (Integer)evt.getNewValue();
-            getControlComponent().setValue(v);
+            update();
+        } else if (ParameterInstanceBin.PRESETS.is(evt)) {
+            update();
         }
     }
 }

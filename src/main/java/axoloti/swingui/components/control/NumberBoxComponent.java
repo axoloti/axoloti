@@ -310,6 +310,8 @@ public class NumberBoxComponent extends ACtrlComponent {
         }
 
         g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.setPaint(getBackground());
+        g2.drawRect(1, 1, getWidth() - 2, getHeight() - 2);
         g2.setPaint(getForeground());
         g2.drawRect(0, 0, getWidth(), getHeight());
 

@@ -20,9 +20,11 @@ class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
 
     @Override
     public boolean handleAdjustment() {
-        PresetInt p = null; // getDModel().getPreset(presetEditActive); // TODO: fix preset editing logic
-        if (p != null) { // TODO: fix preset editing logic
-            //p.setValue((int) getControlComponent().getValue());
+        int presetEdit = getPresetEditActive();
+        PresetInt p = getDModel().getPreset(presetEdit);
+        int value = (int) getControlComponent().getValue();
+        if (p != null) {
+            getDModel().getController().addPreset(presetEdit, value);
         } else if (getDModel().getValue() != (int) getControlComponent().getValue()) {
             int v = (int) getControlComponent().getValue();
             getDModel().getController().changeValue(v);
@@ -42,10 +44,6 @@ class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
     @Override
     public Checkbox4StatesComponent getControlComponent() {
         return ctrl;
-    }
-
-    @Override
-    public void showPreset(int i) {
     }
 
 }

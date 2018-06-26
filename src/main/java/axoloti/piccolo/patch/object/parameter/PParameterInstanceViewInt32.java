@@ -23,27 +23,9 @@ abstract class PParameterInstanceViewInt32 extends PParameterInstanceView {
     }
 
     @Override
-    public void showPreset(int i) {
-        presetEditActive = i;
-        if (i > 0) {
-            PresetInt p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                setPaint(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                getControlComponent().setValue(p.getValue());
-            } else {
-                setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-                getControlComponent().setValue(getDModel().getValue());
-            }
-        } else {
-            setPaint(Theme.getCurrentTheme().Parameter_Default_Background);
-            getControlComponent().setValue(getDModel().getValue());
-        }
-    }
-
-    @Override
     public boolean handleAdjustment() {
-        PresetInt p = getDModel().getPreset(presetEditActive);
-        if (p != null) { // TODO: fix preset editing logic
+        PresetInt p = null; //getDModel().getPreset(presetEditActive);
+        if (p != null) { // TODO: piccolo fix preset editing logic
             //p.setValue((int) getControlComponent().getValue());
         } else if (getDModel().getValue() != (int) getControlComponent().getValue()) {
             int v = (int) getControlComponent().getValue();

@@ -19,10 +19,6 @@ class PParameterInstanceViewBin12 extends PParameterInstanceViewBin {
     }
 
     @Override
-    public void showPreset(int i) {
-    }
-
-    @Override
     public PCheckboxComponent getControlComponent() {
         return (PCheckboxComponent) ctrl;
     }

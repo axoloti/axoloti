@@ -3,8 +3,6 @@ package axoloti.swingui.patch.object.parameter;
 import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceFrac32UMap;
-import axoloti.patch.object.parameter.preset.Preset;
-import axoloti.preferences.Theme;
 import axoloti.swingui.components.AssignMidiCCComponent;
 import axoloti.swingui.components.AssignModulatorComponent;
 import axoloti.swingui.components.AssignModulatorMenuItems;
@@ -31,7 +29,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
     private void initComponent() {
 
         JPanel btns = new JPanel();
-        btns.setBackground(Theme.getCurrentTheme().Object_Default_Background);
         btns.setLayout(new BoxLayout(btns, BoxLayout.PAGE_AXIS));
 
         midiAssign = new AssignMidiCCComponent(getDModel());
@@ -61,34 +58,6 @@ class ParameterInstanceViewFrac32UMap extends ParameterInstanceViewFrac32U {
                 getDModel().getTick());
         d.setNative(getDModel().getConvs());
         return d;
-    }
-
-    /*
-     *  Preset logic
-     */
-    @Override
-    public void showPreset(int i) {
-        this.presetEditActive = i;
-        if (i > 0) {
-            Preset p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
-                ctrl.setValue((Double)p.getValue());
-            } else {
-                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-                ctrl.setValue(getDModel().getValue());
-            }
-        } else {
-            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
-            ctrl.setValue(getDModel().getValue());
-        }
-        /*
-         if ((presets != null) && (!presets.isEmpty())) {
-         lblPreset.setVisible(true);
-         } else {
-         lblPreset.setVisible(false);
-         }
-         */
     }
 
     @Override

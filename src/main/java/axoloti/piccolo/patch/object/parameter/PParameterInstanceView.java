@@ -5,7 +5,6 @@ import axoloti.abstractui.IParameterInstanceView;
 import axoloti.abstractui.PatchView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstanceController;
-import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.piccolo.PUtils;
 import axoloti.piccolo.components.PAssignMidiCCComponent;
 import axoloti.piccolo.components.PAssignPresetMenuItems;
@@ -24,7 +23,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
@@ -189,47 +187,16 @@ public abstract class PParameterInstanceView extends PatchPNode implements Actio
     public void actionPerformed(ActionEvent e) {
     }
 
-    void updateUnit() {
+    @Override
+    public void update() {
     }
 
-    @Override
-    public abstract void showPreset(int i);
+    void updateUnit() {
+    }
 
     public boolean isOnParent() {
         return false;
 //        return parameterInstance.getOnParent();
-    }
-
-    public int presetEditActive = 0;
-
-    @Override
-    public void includeInPreset() {
-        if (presetEditActive > 0) {
-            Preset p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                return;
-            }
-            if (getDModel().getPresets() == null) {
-                getDModel().setPresets(new ArrayList<Preset>());
-            }
-            p = getDModel().presetFactory(presetEditActive, getDModel().getValue());
-            getDModel().getPresets().add(p);
-        }
-        showPreset(presetEditActive);
-    }
-
-    @Override
-    public void excludeFromPreset() {
-        if (presetEditActive > 0) {
-            Preset p = getDModel().getPreset(presetEditActive);
-            if (p != null) {
-                getDModel().getPresets().remove(p);
-                if (getDModel().getPresets().isEmpty()) {
-                    getDModel().setPresets(null);
-                }
-            }
-        }
-        showPreset(presetEditActive);
     }
 
     public Component getCanvas() {

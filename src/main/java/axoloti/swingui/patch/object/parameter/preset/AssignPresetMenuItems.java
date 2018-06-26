@@ -17,9 +17,12 @@
  */
 package axoloti.swingui.patch.object.parameter.preset;
 
+import axoloti.patch.object.parameter.ParameterInstanceController;
+import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.swingui.patch.object.parameter.ParameterInstanceView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -43,9 +46,18 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AssignPresetMenuItems.this.param.includeInPreset();
+                    int i = param.getPresetEditActive();
+                    if (i == 0) {
+                        return;
+                    }
+                    param.getDModel().getController().addMetaUndo("include in current preset");
+                    param.getDModel().getController().addPreset(i, param.getDModel().getValue());
                 }
             });
+            int i = param.getPresetEditActive();
+            if (param.getDModel().getPreset(i) != null) {
+                mi.setEnabled(false);
+            }
             parent.add(mi);
         }
         {
@@ -53,9 +65,18 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    AssignPresetMenuItems.this.param.excludeFromPreset();
+                    int i = param.getPresetEditActive();
+                    if (i == 0) {
+                        return;
+                    }
+                    param.getDModel().getController().addMetaUndo("exclude from current preset");
+                    param.getDModel().getController().removePreset(i);
                 }
             });
+            int i = param.getPresetEditActive();
+            if (param.getDModel().getPreset(i) == null) {
+                mi.setEnabled(false);
+            }
             parent.add(mi);
         }
         {
@@ -63,11 +84,17 @@ public class AssignPresetMenuItems {
             mi.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (AssignPresetMenuItems.this.param.getDModel().getPresets() != null) {
-                        AssignPresetMenuItems.this.param.getDModel().getPresets().clear();
+                    List<Preset> presets = AssignPresetMenuItems.this.param.getDModel().getPresets();
+                    ParameterInstanceController c = AssignPresetMenuItems.this.param.getDModel().getController();
+                    c.addMetaUndo("clear all presets of parameter");
+                    for (Preset p : presets) {
+                        c.removePreset(p.getIndex());
                     }
                 }
             });
+            if (param.getDModel().getPresets().isEmpty()) {
+                mi.setEnabled(false);
+            }
             parent.add(mi);
         }
 

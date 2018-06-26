@@ -49,8 +49,8 @@ abstract class PParameterInstanceViewFrac32 extends PParameterInstanceView {
     @Override
     public boolean handleAdjustment() {
         // TODO: piccolo fix preset logic
-        PresetDouble p = getDModel().getPreset(presetEditActive);
-        if (p != null) { // TODO: fix preset editing logic
+        PresetDouble p = null; // getDModel().getPreset(presetEditActive);
+        if (p != null) { // TODO: piccolo fix preset editing logic
             //p.setValue(getControlComponent().getValue());
         }
         if (getDModel().getValue() != getControlComponent().getValue()) {
