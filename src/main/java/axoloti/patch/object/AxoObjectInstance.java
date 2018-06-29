@@ -215,7 +215,6 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         if (parentOutlet != null) {
             parentOutlet.setName(s);
         }
-        // TODO: add firePropertyChange(...)
         return result;
     }
 

@@ -23,8 +23,6 @@ import axoloti.objectlibrary.AxoObjects;
 import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.preferences.Preferences;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
@@ -46,12 +44,7 @@ class AddToLibraryDlg extends javax.swing.JDialog {
         // for later use
         jAxoFile.setVisible(false);
         jAxoFileLabel.setVisible(false);
-        this.obj = new AxoObject();
-        try {
-            this.obj.copy(obj);
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(AddToLibraryDlg.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.obj = obj;
         populateFields();
         jObjectName.getDocument().addDocumentListener(new DocumentListener() {
             void update() {

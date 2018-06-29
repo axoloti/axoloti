@@ -28,7 +28,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
+public abstract class AxoAttribute extends AtomDefinition {
 
     public AxoAttribute() {
     }
@@ -48,11 +48,6 @@ public abstract class AxoAttribute extends AtomDefinition implements Cloneable {
 
     public String getCName() {
         return "attr_" + CharEscape.charEscape(getName());
-    }
-
-    @Override
-    public AxoAttribute clone() throws CloneNotSupportedException {
-        return (AxoAttribute) super.clone();
     }
 
     @Override

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
-public abstract class Iolet extends AtomDefinition implements Cloneable {
+public abstract class Iolet extends AtomDefinition {
 
     @Deprecated
     @Attribute(required = false)

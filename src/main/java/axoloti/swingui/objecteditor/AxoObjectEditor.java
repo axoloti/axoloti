@@ -870,9 +870,14 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemCopyToLibraryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyToLibraryActionPerformed
-        AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, getDModel());
-        dlg.setVisible(true);
-        close();
+        try {
+            AxoObject objClone = getDModel().createDeepClone();
+            AddToLibraryDlg dlg = new AddToLibraryDlg(this, true, objClone);
+            dlg.setVisible(true);
+            close();
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItemCopyToLibraryActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

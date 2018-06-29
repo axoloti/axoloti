@@ -30,7 +30,7 @@ import org.simpleframework.xml.Attribute;
  *
  * @author Johannes Taelman
  */
-public abstract class Display extends AtomDefinition implements Cloneable {
+public abstract class Display extends AtomDefinition {
 
     @Attribute(required = false)
     public Boolean noLabel;

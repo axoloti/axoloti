@@ -155,49 +155,48 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         }
     }
 
-    String generateCode3() {
-        Preferences prefs = Preferences.getPreferences();
-        /* TODO: fix "controller object"
-        controllerObjectInstance = null;
-        String cobjstr = prefs.getControllerObject();
-        if (prefs.isControllerEnabled() && cobjstr != null && !cobjstr.isEmpty()) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Using controller object: {0}", cobjstr);
-            AxoObjectAbstract x = null;
-            ArrayList<AxoObjectAbstract> objs = MainFrame.axoObjects.GetAxoObjectFromName(cobjstr, GetCurrentWorkingDirectory());
-            if ((objs != null) && (!objs.isEmpty())) {
-                x = objs.get(0);
-            }
-            if (x != null) {
-                controllerObjectInstance = x.CreateInstance(null, "ctrl0x123", new Point(0, 0));
-            } else {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Unable to created controller for : {0}", cobjstr);
-            }
-        }
-         */
-        getModel().createIID();
-        //TODO: (enhancement) use execution order, rather than UI ordering
-        if (USE_EXECUTION_ORDER) {
-            getModel().sortByExecution();
-        } else {
-            getModel().sortByPosition();
-        }
-        PatchViewCodegen codegen = new PatchViewCodegen(model);
-        String c = codegen.generateCode4();
-        return c;
-    }
-
     public PatchViewCodegen writeCode() {
         String buildDir = System.getProperty(Axoloti.HOME_DIR) + "/build";
         return writeCode(buildDir + "/xpatch");
     }
 
     public PatchViewCodegen writeCode(String file_basename) {
-//        String c = GenerateCode3();
         getModel().createIID();
         if (USE_EXECUTION_ORDER) {
             getModel().sortByExecution();
         } else {
             getModel().sortByPosition();
+        }
+
+        Preferences prefs = Preferences.getPreferences();
+        IAxoObjectInstance controllerObjectInstance;
+        if (prefs.isControllerEnabled()
+                && prefs.getControllerObject() != null
+                && !prefs.getControllerObject().isEmpty()) {
+
+            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Using controller object: {0}", prefs.getControllerObject());
+            IAxoObject x = null;
+            List<IAxoObject> objs3 = AxoObjects.getAxoObjects().getAxoObjectFromName(prefs.getControllerObject(), "");
+            if ((objs3 != null) && (!objs3.isEmpty())) {
+                x = objs3.get(0);
+            }
+            if (x != null) {
+                controllerObjectInstance = AxoObjectInstanceFactory.createView(x, getModel(), "ctrl0x123", new Point(0, 0));
+            } else {
+                controllerObjectInstance = null;
+                Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Unable to created controller for : {0}", prefs.getControllerObject());
+            }
+        } else {
+            controllerObjectInstance = null;
+        }
+
+        List<IAxoObjectInstance> objs = getModel().getObjectInstances();
+        if (controllerObjectInstance != null) {
+
+            List<IAxoObjectInstance> objs2 = new ArrayList<>(objs.size() + 1);
+            objs2.add(controllerObjectInstance);
+            objs2.addAll(objs);
+            getModel().setObjectInstances(objs2);
         }
         PatchViewCodegen codegen = new PatchViewCodegen(getModel());
         String c = codegen.generateCode4();
@@ -207,6 +206,9 @@ public class PatchController extends AbstractController<PatchModel, IView> {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
         } catch (IOException ex) {
             Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
+        }
+        if (controllerObjectInstance != null) {
+            getModel().setObjectInstances(objs);
         }
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
         return codegen;

@@ -43,7 +43,7 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> implements Comparable, Cloneable, IAxoObject {
+public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> implements Comparable, IAxoObject {
 
     @Attribute
     public String id;

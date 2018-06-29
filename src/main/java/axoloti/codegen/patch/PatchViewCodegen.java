@@ -167,24 +167,10 @@ public class PatchViewCodegen extends View<PatchModel> {
             }
         }
 
-// TODO: fix "controller object"
-//        c.append("/* controller classes */\n");
-//        if (getModel().controllerObjectInstance != null) {
-//            c.append(getModel().controllerObjectInstance.GenerateClass(classname, OnParentAccess, enableOnParent));
-//        }
-
         c.append("/* object classes */\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c.append(o.generateClass(classname, OnParentAccess, enableOnParent));
         }
-// TODO: fix "controller object"
-//        c.append("/* controller instances */\n");
-//        if (getModel().controllerObjectInstance != null) {
-//            String s = getModel().controllerObjectInstance.getCInstanceName();
-//            if (!s.isEmpty()) {
-//                c.append("     " + s + " " + s + "_i;\n");
-//            }
-//        }
 
         c.append("/* object instances */\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
@@ -393,21 +379,6 @@ public class PatchViewCodegen extends View<PatchModel> {
     public String generateObjInitCodePlusPlusSub(String className, String parentReference) {
         StringBuilder c = new StringBuilder();
 
-        /* TODO: fix "controller object"
-        if (getModel().controllerObjectInstance != null) {
-            String s = getModel().controllerObjectInstance.getCInstanceName();
-            if (!s.isEmpty()) {
-                c.append("   " + s + "_i.Init(" + parentReference);
-                for (DisplayInstance i : getModel().controllerObjectInstance.getDisplayInstances()) {
-                    if (i.getModel().getLength() > 0) {
-                        c.append(", ");
-                        c.append(i.valueName(""));
-                    }
-                }
-                c.append(" );\n");
-            }
-        }
-        */
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             String s = o.getDModel().getCInstanceName();
             if (!s.isEmpty()) {
@@ -481,12 +452,6 @@ public class PatchViewCodegen extends View<PatchModel> {
                 c.append("   " + o.getCInstanceName() + "_i.Dispose();\n");
             }
         }
-        if (getDModel().controllerObjectInstance != null) {
-            String s = getDModel().controllerObjectInstance.getCInstanceName();
-            if (!s.isEmpty()) {
-                c.append("   " + getDModel().controllerObjectInstance.getCInstanceName() + "_i.Dispose();\n");
-            }
-        }
 
         return c.toString();
     }
@@ -518,12 +483,6 @@ public class PatchViewCodegen extends View<PatchModel> {
         c.append("  int32buffer UNCONNECTED_OUTPUT_BUFFER;\n");
         c.append("//--------- </zero> ----------//\n");
 
-        c.append("//--------- <controller calls> ----------//\n");
-        /*
-        // TODO: fix "controller object"
-        if (getModel().controllerObjectInstance != null) {
-            c.append(GenerateDSPCodePlusPlusSubObj(getModel().controllerObjectInstance, ClassName, enableOnParent);
-        } */
         c.append("//--------- <object calls> ----------//\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c.append(generateDSPCodePlusPlusSubObj(o, ClassName, enableOnParent));
@@ -633,10 +592,6 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     public String generateMidiInCodePlusPlus() {
         StringBuilder c = new StringBuilder();
-        // TODO: fix "controller object"
-//        if (getModel().controllerObjectInstance != null) {
-//            c.append(getModel().controllerObjectInstance.GenerateCallMidiHandler());
-//        }
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             c.append(o.generateCallMidiHandler());
         }

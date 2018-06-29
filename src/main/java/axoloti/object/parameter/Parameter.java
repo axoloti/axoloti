@@ -38,7 +38,7 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-public abstract class Parameter extends AtomDefinition implements Cloneable {
+public abstract class Parameter extends AtomDefinition {
 
     @Attribute(required = false)
     public Boolean noLabel;

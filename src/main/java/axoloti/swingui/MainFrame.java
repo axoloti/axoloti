@@ -355,8 +355,7 @@ public class MainFrame extends TJFrame implements ActionListener {
                 "Known issues: \n"
                 + "* subpatch objects do not promote their objects? (breaks fx/flanger)\n"
                 + "* piccolo view: nets do not update correctly (swing views are fine)\n"
-                + "* preferences->\"controller object\" is broken\n"
-                + "* modulations are broken\n"
+                + "* modulations are broken (rename PExModulationSourceChange into ModulationSourceChange in obj code)\n"
                 + "* modules are broken\n");
         init();
     }

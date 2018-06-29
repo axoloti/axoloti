@@ -112,6 +112,8 @@ import axoloti.property.StringPropertyNull;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.ListUtils;
 import axoloti.utils.StringUtils;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,7 +126,11 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
 
 /**
  *
@@ -486,102 +492,20 @@ public class AxoObject extends AxoObjectAbstract {
         }
     }
 
-    @Override
-    public AxoObject clone() throws CloneNotSupportedException {
-        super.clone();
-        throw new CloneNotSupportedException();
-        /*
-        // This implementation does not make a shallow clone!
-        AxoObject c = (AxoObject) super.clone();
-        c.inlets = new ArrayList<Inlet>();
-        for (Inlet i : inlets) {
-            c.inlets.add(i.clone());
+    public AxoObject createDeepClone() throws CloneNotSupportedException {
+        try {
+            // clone by serialization/deserialization...
+            ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
+            Strategy strategy = new AnnotationStrategy();
+            Serializer serializer = new Persister(strategy);
+            serializer.write(this, os);
+            ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+            AxoObject o = serializer.read(AxoObject.class, is);
+            return o;
+        } catch (Exception ex) {
+            throw new CloneNotSupportedException();
         }
-        c.outlets = new ArrayList<Outlet>();
-        for (Outlet i : outlets) {
-            c.outlets.add(i.clone());
-        }
-        c.params = new ArrayList<Parameter>();
-        for (Parameter i : params) {
-            c.params.add(i.clone());
-        }
-        c.displays = new ArrayList<Display>();
-        for (Display i : displays) {
-            c.displays.add(i.clone());
-        }
-        c.attributes = new ArrayList<AxoAttribute>();
-        for (AxoAttribute i : attributes) {
-            c.attributes.add(i.clone());
-        }
-        return c;
-        */
     }
-
-    public void copy(AxoObject o) throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();
-        /*
-        // This implementation does not make a shallow clone!
-        inlets = new ArrayList<Inlet>();
-        for (Inlet i : o.inlets) {
-            inlets.add(i.clone());
-        }
-        outlets = new ArrayList<Outlet>();
-        for (Outlet i : o.outlets) {
-            outlets.add(i.clone());
-        }
-        params = new ArrayList<Parameter>();
-        for (Parameter i : o.params) {
-            params.add(i.clone());
-        }
-        displays = new ArrayList<Display>();
-        for (Display i : o.displays) {
-            displays.add(i.clone());
-        }
-        attributes = new ArrayList<AxoAttribute>();
-        for (AxoAttribute i : o.attributes) {
-            attributes.add(i.clone());
-        }
-
-        helpPatch = o.helpPatch;
-        providesModulationSource = o.providesModulationSource;
-        rotatedParams = o.rotatedParams;
-        if (o.ModulationSources != null) {
-            ModulationSources = (ArrayList<String>) o.ModulationSources.clone();
-        } else {
-            ModulationSources = null;
-        }
-        if (o.includes != null) {
-            includes = (HashSet<String>) o.includes.clone();
-        } else {
-            o.includes = null;
-        }
-        if (o.depends != null) {
-            depends = (HashSet<String>) o.depends.clone();
-        } else {
-            o.depends = null;
-
-        }
-
-        if (o.modules != null) {
-            modules = (HashSet<String>) o.modules.clone();
-        } else {
-            o.modules = null;
-        }
-
-        sLocalData = o.sLocalData;
-        sInitCode = o.sInitCode;
-        sDisposeCode = o.sDisposeCode;
-        sKRateCode = o.sKRateCode;
-        sSRateCode = o.sSRateCode;
-        sMidiCode = o.sMidiCode;
-        setAuthor(o.getAuthor());
-        setLicense(o.getLicense());
-        //sAuthor = o.sAuthor;
-        //sLicense = o.sLicense;
-        sDescription = o.sDescription;
-        */
-    }
-
 
     /* MVC code */
 

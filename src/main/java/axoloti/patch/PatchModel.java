@@ -105,11 +105,6 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     Integer dspLoad = 0;
 
-// TODO: fix "controller object" (and make private)
-    // a "controller object" is magically added to every top-level patch
-    // (configured in preferences)
-    public IAxoObjectInstance controllerObjectInstance;
-
     public boolean presetUpdatePending = false;
 
     boolean locked = false;
@@ -387,12 +382,6 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     public List<String> getIncludes() {
         List<String> includes = new LinkedList<>();
-        if (controllerObjectInstance != null) {
-            List<String> i = controllerObjectInstance.getDModel().getProcessedIncludes();
-            if (i != null) {
-                includes.addAll(i);
-            }
-        }
         for (IAxoObjectInstance o : objectinstances) {
             List<String> i = o.getDModel().getProcessedIncludes();
             if (i != null) {
