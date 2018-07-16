@@ -28,6 +28,8 @@ public interface DocumentWindow {
 
     void toFront();
 
+    boolean isActive();
+
     String getTitle();
 
     /*

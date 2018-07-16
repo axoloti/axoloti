@@ -55,25 +55,27 @@ public class WindowMenu extends JMenu {
     }
 
     private void jMenuWindowMenuSelected(javax.swing.event.MenuEvent evt) {
-        populateWindowMenu(this);
+        populateWindowMenu();
+
     }
 
     private void jMenuWindowMenuDeselected(javax.swing.event.MenuEvent evt) {
         removeAll();
     }
 
-    private static class WindowMenuItemActionListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            ((WindowMenuItem) e.getSource()).getDocumentWindow().toFront();
-        }
-    }
-    static private WindowMenuItemActionListener wmiAL = new WindowMenuItemActionListener();
-
     static private class WindowMenuItem extends JCheckBoxMenuItem {
 
-        final private DocumentWindow documentWindow;
+        private static class WindowMenuItemActionListener implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((WindowMenuItem) e.getSource()).getDocumentWindow().toFront();
+            }
+
+        }
+
+        private final DocumentWindow documentWindow;
+        private final static WindowMenuItemActionListener wmiAL = new WindowMenuItemActionListener();
 
         WindowMenuItem(DocumentWindow documentWindow, String itemname) {
             super(itemname);
@@ -82,28 +84,31 @@ public class WindowMenu extends JMenu {
         }
 
         WindowMenuItem(DocumentWindow documentWindow) {
-            super(documentWindow.getTitle());
-            this.documentWindow = documentWindow;
-            WindowMenuItem.this.addActionListener(wmiAL);
+            this(documentWindow, documentWindow.getTitle());
         }
 
-        DocumentWindow getDocumentWindow() {
+        private DocumentWindow getDocumentWindow() {
             return documentWindow;
         }
     }
 
-    static void populateDocuments(JMenu jMenuWindow, String prefix, List<DocumentWindow> dwl) {
+    private void populateDocuments(String prefix, List<DocumentWindow> dwl) {
+
         for (DocumentWindow p : dwl) {
+
             WindowMenuItem wmi = new WindowMenuItem(p, prefix + p.getTitle());
-            jMenuWindow.add(wmi);
+            add(wmi);
+            if (p.isActive()) {
+                wmi.setSelected(true);
+            }
             if (p.getChildDocuments() != null) {
-                populateDocuments(jMenuWindow, "> " + prefix, p.getChildDocuments());
+                populateDocuments("> " + prefix, p.getChildDocuments());
             }
         }
     }
 
-    static void populateWindowMenu(JMenu jMenuWindow) {
-        jMenuWindow.removeAll();
-        populateDocuments(jMenuWindow, "", DocumentWindowList.getList());
+    private void populateWindowMenu() {
+        removeAll();
+        populateDocuments("", DocumentWindowList.getList());
     }
 }
