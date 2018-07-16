@@ -38,6 +38,7 @@ import axoloti.swingui.components.VisibleCablePanel;
 import axoloti.swingui.mvc.UndoListViewFrame;
 import axoloti.swingui.mvc.UndoUI;
 import axoloti.target.fs.SDCardMountStatusListener;
+import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -1101,7 +1102,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jMenuItemAddObjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAddObjActionPerformed
         // TODO: add object to a visible location in patch (when scrollbar is active...)
-        getPatchView().showClassSelector(new Point(20, 20), null, null, null);
+        Point p = new Point(Constants.X_GRID, Constants.Y_GRID);
+        while(getDModel().findObjectInstance(p) != null) {
+            p.x += Constants.X_GRID;
+            p.y += Constants.Y_GRID;
+        }
+        getPatchView().showClassSelector(p, null, null, null);
     }//GEN-LAST:event_jMenuItemAddObjActionPerformed
 
     private void jMenuItemSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSelectAllActionPerformed

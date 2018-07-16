@@ -45,6 +45,7 @@ import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.StringUtils;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
@@ -246,6 +247,15 @@ public class PatchModel extends AbstractModel<PatchController> {
     public IAxoObjectInstance findObjectInstance(String n) {
         for (IAxoObjectInstance o : objectinstances) {
             if (n.equals(o.getInstanceName())) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    public IAxoObjectInstance findObjectInstance(Point p) {
+        for (IAxoObjectInstance o : objectinstances) {
+            if (p.equals(o.getLocation())) {
                 return o;
             }
         }
