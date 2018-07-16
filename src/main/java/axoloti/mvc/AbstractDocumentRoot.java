@@ -60,7 +60,9 @@ public class AbstractDocumentRoot extends AbstractModel<DocumentRootController> 
         if (dirty == false) {
             lastUndoableEditEventWhenSaved = undoManager.editToBeUndone();
         }
-        firePropertyChange(DIRTY, null, dirty);
+        boolean prev = this.dirty;
+        this.dirty = dirty;
+        firePropertyChange(DIRTY, prev, dirty);
     }
 
     public List getUndoEvents() {
