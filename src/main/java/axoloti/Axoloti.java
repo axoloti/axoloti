@@ -54,7 +54,14 @@ public class Axoloti {
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").contains("OS X")) {
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                //System.setProperty("apple.laf.useScreenMenuBar", "true");
+                //
+                // TODO: OSX: useScreenMenuBar
+                // Unfortunately, dynamically populated menus
+                // (like the Window or recent files menu)
+                // do not work with useScreenMenuBar...
+                // They show up but no ActionListener is called.
+                // useScreenMenuBar is disabled until a fix is found
             }
         } catch (URISyntaxException e) {
             throw new Error(e);
