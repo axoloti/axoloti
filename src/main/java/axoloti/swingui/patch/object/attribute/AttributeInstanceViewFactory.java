@@ -37,7 +37,7 @@ public class AttributeInstanceViewFactory {
             view = new AttributeInstanceViewTextEditor(model, obj);
         } else {
             view = null;
-            throw new Error("unkonwn attribute type");
+            throw new Error("unknown attribute type");
         }
         /*
          // these have different constructors... FIXME
