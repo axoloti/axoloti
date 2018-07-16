@@ -160,8 +160,8 @@ public class DialComponent extends ACtrlComponent {
 
     @Override
     protected void mouseReleased(MouseEvent e) {
+        getRootPane().setCursor(Cursor.getDefaultCursor());
         if (isEnabled() && !e.isPopupTrigger()) {
-            getRootPane().setCursor(Cursor.getDefaultCursor());
             mousePressedBtn = MouseEvent.NOBUTTON;
             fireEventAdjustmentFinished();
             e.consume();

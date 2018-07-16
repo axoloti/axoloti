@@ -72,6 +72,7 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
                     dragNetController.addView(dragnet);
                     //                }
                     dragnet.setVisible(true);
+                    getPatchView().selectionRectLayerPanel.removeAll();
                     getPatchView().selectionRectLayerPanel.add(dragnet);
                     e.consume();
                 }
@@ -88,7 +89,8 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
                 if (e.isPopupTrigger()) {
                     getPopup().show(IoletInstanceView.this, 0, getHeight() - 1);
                     e.consume();
-                } else if (dragnet != null) {
+                }
+                if (dragnet != null) {
                     dragnet.repaint();
                     pv.selectionRectLayerPanel.remove(dragnet);
                     getDModel().getController().changeConnected(saved_connected_state);
@@ -156,7 +158,7 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
                     return;
                 }
                 if (true) {
-                    /*!axoObj.isLocked()) {*/
+                    //!axoObj.isLocked()) {
                     Point p = SwingUtilities.convertPoint(IoletInstanceView.this, e.getPoint(), pv.objectLayerPanel);
                     Component c = pv.objectLayerPanel.findComponentAt(p);
                     while ((c != null) && !(c instanceof IoletInstanceView)) {

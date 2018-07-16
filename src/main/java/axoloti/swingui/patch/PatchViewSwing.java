@@ -34,6 +34,7 @@ import axoloti.swingui.patch.object.AxoObjectInstanceViewFactory;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -127,11 +128,9 @@ public class PatchViewSwing extends PatchView {
         objectLayerPanel.setName(Constants.OBJECT_LAYER_PANEL);
         draggedObjectLayerPanel.setName(Constants.DRAGGED_OBJECT_LAYER_PANEL);
 
-        selectionRectLayerPanel.add(selectionrectangle);
         selectionrectangle.setLocation(100, 100);
         selectionrectangle.setSize(100, 100);
         selectionrectangle.setOpaque(false);
-        selectionrectangle.setVisible(false);
 
         layers.setSize(Constants.PATCH_SIZE, Constants.PATCH_SIZE);
         layers.setVisible(true);
@@ -280,8 +279,8 @@ public class PatchViewSwing extends PatchView {
                 if (me.getButton() == MouseEvent.BUTTON1) {
                     selectionRectStart = me.getPoint();
                     selectionrectangle.setBounds(me.getX(), me.getY(), 1, 1);
+                    selectionRectLayerPanel.add(selectionrectangle);
                     selectionrectangle.setVisible(true);
-
                     layers.requestFocusInWindow();
                     me.consume();
                 } else {
@@ -297,6 +296,7 @@ public class PatchViewSwing extends PatchView {
                         o.getDModel().getController().changeSelected(bounds.intersects(r));
                     }
                     selectionrectangle.setVisible(false);
+                    layers.getRootPane().setCursor(Cursor.getDefaultCursor());
                     me.consume();
                 }
             }
@@ -308,21 +308,18 @@ public class PatchViewSwing extends PatchView {
         layers.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent ev) {
-                if (selectionrectangle.isVisible()) {
-                    int x1 = selectionRectStart.x;
-                    int y1 = selectionRectStart.y;
-                    int x2 = ev.getX();
-                    int y2 = ev.getY();
-                    int xmin = x1 < x2 ? x1 : x2;
-                    int xmax = x1 > x2 ? x1 : x2;
-                    int ymin = y1 < y2 ? y1 : y2;
-                    int ymax = y1 > y2 ? y1 : y2;
-                    int width = xmax - xmin;
-                    int height = ymax - ymin;
-                    selectionrectangle.setBounds(xmin, ymin, width, height);
-                    selectionrectangle.setVisible(true);
-                    ev.consume();
-                }
+                int x1 = selectionRectStart.x;
+                int y1 = selectionRectStart.y;
+                int x2 = ev.getX();
+                int y2 = ev.getY();
+                int xmin = x1 < x2 ? x1 : x2;
+                int xmax = x1 > x2 ? x1 : x2;
+                int ymin = y1 < y2 ? y1 : y2;
+                int ymax = y1 > y2 ? y1 : y2;
+                int width = xmax - xmin;
+                int height = ymax - ymin;
+                selectionrectangle.setBounds(xmin, ymin, width, height);
+                ev.consume();
             }
         });
 
