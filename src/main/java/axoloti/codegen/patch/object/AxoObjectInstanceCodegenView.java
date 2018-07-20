@@ -122,8 +122,8 @@ typedef struct ui_object {
                 c.append("// on Parent: propagate " + p.getDModel().getName() + " " + enableOnParent + " " + getDModel().getLegalName() + "" + p.getDModel().getDModel().PropagateToChild + "\n");
                 c.append(p.PExName("parent->") + ".pfunction = PropagateToSub;\n");
                 c.append(p.PExName("parent->") + ".d.frac.finalvalue = (int32_t)(&(parent->instance"
-                         + getDModel().getLegalName() + "_i.params[instance" + getDModel().getLegalName() + "::PARAM_INDEX_"
-                         + p.getDModel().getDModel().PropagateToChild + "]));\n");
+                        + getDModel().getLegalName() + "_i.PExch[instance" + getDModel().getLegalName() + "::PARAM_INDEX_"
+                        + p.getDModel().getDModel().PropagateToChild + "]));\n");
             }
             //           if ((p.getOnParent() && !enableOnParent)) {
             //c += "// on Parent: propagate " + p.name + "\n";
