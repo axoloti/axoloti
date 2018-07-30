@@ -25,7 +25,7 @@ IF %ERRORLEVEL% NEQ 0 (
 	GOTO fail
 )
 
-arm-none-eabi-gcc --version 2>&1 | FINDSTR /i "7-2017-q4" > NUL
+arm-none-eabi-gcc --version 2>&1 | FINDSTR /i "7-2018-q2" > NUL
 IF %ERRORLEVEL% NEQ 0 (
    ECHO error: GCC version not matching:
    arm-none-eabi-gcc --version

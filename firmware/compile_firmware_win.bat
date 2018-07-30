@@ -25,10 +25,10 @@ IF %ERRORLEVEL% NEQ 0 (
 
 echo "Compiling firmware flasher..."
 cd flasher
-if not exist ".dep\" mkdir .dep
 if not exist "flasher_build\" mkdir flasher_build
 if not exist "flasher_build\obj\" mkdir flasher_build\obj
 if not exist "flasher_build\lst\" mkdir flasher_build\lst
+if not exist "flasher_build\.dep\" mkdir flasher_build\.dep
 make
 IF %ERRORLEVEL% NEQ 0 (
 	exit /b 1
@@ -37,10 +37,10 @@ cd ..
 
 echo "Compiling firmware mounter..."
 cd mounter
-if not exist ".dep\" mkdir .dep
 if not exist "mounter_build\" mkdir mounter_build
 if not exist "mounter_build\obj\" mkdir mounter_build\obj
 if not exist "mounter_build\lst\" mkdir mounter_build\lst
+if not exist "mounter_build\.dep\" mkdir mounter_build\.dep
 make
 IF %ERRORLEVEL% NEQ 0 (
 	exit /b 1
