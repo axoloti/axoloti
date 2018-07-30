@@ -296,11 +296,11 @@
 			 <exclude name="firmware/**/obj/**"/>
 			 <exclude name="firmware/**/lst/**"/>
 			 <include name="old_firmware/**"/>
-			 <include name="ChibiOS_18.2.0/*"/>
-			 <include name="ChibiOS_18.2.0/community/os/**"/>
-			 <include name="ChibiOS_18.2.0/ext/**"/>
-			 <include name="ChibiOS_18.2.0/os/**"/>
-			 <include name="ChibiOS_18.2.0/docs/**"/>
+			 <include name="ChibiOS_18.2.1/*"/>
+			 <include name="ChibiOS_18.2.1/community/os/**"/>
+			 <include name="ChibiOS_18.2.1/ext/**"/>
+			 <include name="ChibiOS_18.2.1/os/**"/>
+			 <include name="ChibiOS_18.2.1/docs/**"/>
 			 <include name="CMSIS/**"/>
 			 <include name="patch/**"/>
 			 <include name="*.txt"/>

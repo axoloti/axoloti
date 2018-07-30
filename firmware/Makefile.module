@@ -21,9 +21,8 @@ axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
+include $(axoloti_firmware)/ch_version.mk
 
-CHIBIOS = ${axoloti_release}/ChibiOS_16.1.8
-CHIBIOS_CONTRIB = $(CHIBIOS)/community
 CMSIS = ${axoloti_release}/CMSIS
 LCPP=g++
 

@@ -70,8 +70,7 @@ PROJECT = mounter
 BUILDDIR = mounter_build
 
 # Imported source files and paths
-CHIBIOS = ${axoloti_release}/ChibiOS_18.2.0
-CHIBIOS_CONTRIB = $(CHIBIOS)/community
+include $(axoloti_firmware)/ch_version.mk
 
 # Startup files.
 include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk

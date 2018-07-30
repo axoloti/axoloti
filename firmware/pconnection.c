@@ -391,7 +391,7 @@ static msg_t get(void *ip) {
 	return 0;
 }
 
-static const struct LogStreamVMT vmt = {writes, reads, put, get};
+static const struct LogStreamVMT vmt = {(size_t)0, writes, reads, put, get};
 
 LogStream logstream;
 

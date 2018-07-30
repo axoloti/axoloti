@@ -70,7 +70,6 @@ PROJECT = flasher
 BUILDDIR = flasher_build
 
 # Imported source files and paths
-CHIBIOS = ${axoloti_release}/ChibiOS_18.2.0
 CHIBIOS_CONTRIB = $(CHIBIOS)/community
 
 # Startup files.

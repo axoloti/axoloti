@@ -33,7 +33,7 @@ then
     mkdir "${PLATFORM_ROOT}/src"
 fi
 
-CH_VERSION=18.2.0
+CH_VERSION=18.2.1
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ];
 then
     cd "${PLATFORM_ROOT}/src"
@@ -64,23 +64,23 @@ else
 fi
 
 
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc" ];
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc" ];
 then
     cd "${PLATFORM_ROOT}"
-    ARDIR=gcc-arm-none-eabi-7-2017q4
-    ARCHIVE_BASE="gcc-arm-none-eabi-7-2017-q4-major"
+    ARDIR=gcc-arm-none-eabi-7-2018q2
+    ARCHIVE_BASE="gcc-arm-none-eabi-7-2018-q2-update"
     ARCHIVE=${ARCHIVE_BASE}-mac.tar.bz2
     if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2017q4/${ARCHIVE} > ${ARCHIVE}
+        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfj ${ARCHIVE}
     rm ${ARCHIVE}
 else
-    echo "gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc already present, skipping..."
+    echo "gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc already present, skipping..."
 fi
 
 

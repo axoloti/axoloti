@@ -7,7 +7,7 @@ PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 mkdir -p "${PLATFORM_ROOT}/src"
 cd "${PLATFORM_ROOT}"
 
-CH_VERSION=18.2.0
+CH_VERSION=18.2.1
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ];
 then
     cd "${PLATFORM_ROOT}/src"

@@ -86,7 +86,7 @@ mkdir -p "${PLATFORM_ROOT}/lib"
 mkdir -p "${PLATFORM_ROOT}/src"
 
 
-CH_VERSION=18.2.0
+CH_VERSION=18.2.1
 if [ ! -d "${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}" ];
 then
     cd "${PLATFORM_ROOT}/src"

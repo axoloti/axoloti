@@ -98,9 +98,7 @@ axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
-CHIBIOS = ${axoloti_release}/ChibiOS_18.2.0
-CHIBIOS_CONTRIB = $(CHIBIOS)/community
-
+include $(axoloti_firmware)/ch_version.mk
 
 # theoretically should be this...., but CSRC expansion cannot cope with escape spaces
 #SPACE :=
@@ -206,6 +204,7 @@ CSRC = $(STARTUPSRC) \
        $(FATFSSRC) \
        $(CHIBIOS)/os/hal/lib/streams/chprintf.c \
        $(CHIBIOS)/os/hal/lib/streams/memstreams.c \
+       ${FIRMWARE}/ch_version_check.c \
        ${FIRMWARE}/axoloti_control.c \
        ${FIRMWARE}/codec.c \
        ${FIRMWARE}/axoloti.c \

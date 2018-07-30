@@ -246,7 +246,7 @@ public class Axoloti {
             System.err.println("Firmware directory is invalid");
         }
 
-        buildEnvironment(CHIBIOS_DIR, System.getProperty(RELEASE_DIR) + File.separator + "ChibiOS_18.2.0");
+        buildEnvironment(CHIBIOS_DIR, System.getProperty(RELEASE_DIR) + File.separator + "ChibiOS_18.2.1");
         if (!getTestDir(CHIBIOS_DIR)) {
             System.err.println("chibios directory is invalid");
         }
