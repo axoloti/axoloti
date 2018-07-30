@@ -70,7 +70,7 @@ PROJECT = flasher
 BUILDDIR = flasher_build
 
 # Imported source files and paths
-CHIBIOS_CONTRIB = $(CHIBIOS)/community
+include ../ch_version.mk
 
 # Startup files.
 include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk

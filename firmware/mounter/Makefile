@@ -70,7 +70,7 @@ PROJECT = mounter
 BUILDDIR = mounter_build
 
 # Imported source files and paths
-include $(axoloti_firmware)/ch_version.mk
+include ../ch_version.mk
 
 # Startup files.
 include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
