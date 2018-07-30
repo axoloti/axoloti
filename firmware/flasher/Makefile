@@ -68,6 +68,7 @@ endif
 # Define project name here
 PROJECT = flasher
 BUILDDIR = flasher_build
+DEPDIR = BUILDDIR/.dep
 
 # Imported source files and paths
 include ../ch_version.mk

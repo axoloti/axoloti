@@ -68,6 +68,7 @@ endif
 # Define project name here
 PROJECT = mounter
 BUILDDIR = mounter_build
+DEPDIR = BUILDDIR/.dep
 
 # Imported source files and paths
 include ../ch_version.mk
