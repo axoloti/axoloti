@@ -188,16 +188,16 @@ fi
 
 case $OS in
     Ubuntu|Debian)
-        echo "apt-get install openjdk-7-jdk"
-        sudo apt-get install openjdk-7-jdk
+        echo "apt-get install openjdk-8-jdk"
+        sudo apt-get install openjdk-8-jdk
         ;;
     Archlinux)
-        echo "pacman -Syy jdk7-openjdk"
-        sudo pacman -S --noconfirm jdk7-openjdk
+        echo "pacman -Syy jdk8-openjdk"
+        sudo pacman -S --noconfirm jdk8-openjdk
         ;;
     Gentoo)
-	echo "emerge --update jdk:1.7 ant"
-	sudo emerge --update jdk:1.7 ant
+	echo "emerge --update jdk:1.8 ant"
+	sudo emerge --update jdk:1.8 ant
 	;;
 esac
 
