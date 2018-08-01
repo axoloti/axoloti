@@ -6,8 +6,10 @@ matrix:
       - os: osx
         osx_image: xcode8.3
         before_install:
+        - brew install p7zip
         - ./platform_osx/build.sh
       - os: linux
+        sudo: required
         before_install:
         - ./platform_linux/build.sh
 
