@@ -37,8 +37,8 @@ case $OS in
     Ubuntu|Debian|DebianJessie32bit)
         echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0 p7zip-full"
       if [ $OS==DebianJessie32bit ]; then
-            sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl p7zip-full fakeroot
+            sudo apt-get install -y build-essential libtool libudev-dev automake autoconf \
+               ant curl p7zip-full fakeroot unzip udev
       else
             sudo apt-get install -y libtool libudev-dev automake autoconf \
                ant curl lib32z1 lib32ncurses5 p7zip-full fakeroot
@@ -52,6 +52,8 @@ case $OS in
         set +e
         if ! install_lib_bz2; then
             set -e
+            sudo dpkg --add-architecture i386
+            sudo apt-get update
             sudo apt-get install -y libbz2-1.0:i386
         fi
         ;;
@@ -188,16 +190,16 @@ fi
 
 case $OS in
     Ubuntu|Debian)
-        echo "apt-get install openjdk-7-jdk"
-        sudo apt-get install openjdk-7-jdk
+        echo "apt-get install openjdk-8-jdk"
+        sudo apt-get install openjdk-8-jdk
         ;;
     Archlinux)
-        echo "pacman -Syy jdk7-openjdk"
-        sudo pacman -S --noconfirm jdk7-openjdk
+        echo "pacman -Syy jdk8-openjdk"
+        sudo pacman -S --noconfirm jdk8-openjdk
         ;;
     Gentoo)
-	echo "emerge --update jdk:1.7 ant"
-	sudo emerge --update jdk:1.7 ant
+	echo "emerge --update jdk:1.8 ant"
+	sudo emerge --update jdk:1.8 ant
 	;;
 esac
 
