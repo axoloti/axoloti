@@ -37,8 +37,8 @@ case $OS in
     Ubuntu|Debian|DebianJessie32bit)
         echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0 p7zip-full"
       if [ $OS==DebianJessie32bit ]; then
-            sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl p7zip-full fakeroot
+            sudo apt-get install -y build-essential libtool libudev-dev automake autoconf \
+               ant curl p7zip-full fakeroot unzip udev
       else
             sudo apt-get install -y libtool libudev-dev automake autoconf \
                ant curl lib32z1 lib32ncurses5 p7zip-full fakeroot
