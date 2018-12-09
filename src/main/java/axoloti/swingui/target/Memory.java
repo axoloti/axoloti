@@ -1,15 +1,16 @@
 package axoloti.swingui.target;
 
 import axoloti.connection.IConnection;
-import axoloti.target.PollHandler;
 import axoloti.target.TargetModel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import qcmds.QCmdMemRead;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +18,7 @@ import qcmds.QCmdMemRead;
  */
 public class Memory extends TJFrame implements ActionListener {
 
-    private PollHandler poller;
+    private Runnable poller;
 
     /**
      * Creates new form Memory
@@ -34,11 +35,8 @@ public class Memory extends TJFrame implements ActionListener {
         jTextAreaMemoryContent.setFont(Font.getFont(Font.MONOSPACED));
         jTextAreaMemoryContent.setEditable(false);
 
-        poller = new PollHandler() {
-            @Override
-            public void operation() {
-                readmem();
-            }
+        poller = () -> {
+            readmem();
         };
 
     }
@@ -162,37 +160,38 @@ public class Memory extends TJFrame implements ActionListener {
     }// </editor-fold>//GEN-END:initComponents
 
     void readmem() {
-        jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
-        int length = 256;
-        IConnection conn = getDModel().getConnection();
-        conn.appendToQueue(new QCmdMemRead(addr, length, new IConnection.MemReadHandler() {
-            @Override
-            public void done(ByteBuffer mem) {
-                StringBuilder sb = new StringBuilder();
-                if (mem != null) {
-                    for (int i = 0; i < (length / 16); i++) {
-                        ByteBuffer bc = mem.duplicate();
-                        int v1 = mem.getInt();
-                        int v2 = mem.getInt();
-                        int v3 = mem.getInt();
-                        int v4 = mem.getInt();
-                        char[] ascii = new char[16];
-                        for (int j = 0; j < 16; j++) {
-                            char c = (char) bc.get();
-                            if (c < 32) {
-                                c = '.';
-                            }
-                            if (c > 128) {
-                                c = '.';
-                            }
-                            ascii[j] = c;
+        try {
+            jTextAreaMemoryContent.setFont(new Font("monospaced", Font.PLAIN, 12));
+            int length = 256;
+            IConnection conn = getDModel().getConnection();
+            ByteBuffer mem = conn.read(addr, length);
+            StringBuilder sb = new StringBuilder();
+            if (mem != null) {
+                for (int i = 0; i < (length / 16); i++) {
+                    ByteBuffer bc = mem.duplicate();
+                    int v1 = mem.getInt();
+                    int v2 = mem.getInt();
+                    int v3 = mem.getInt();
+                    int v4 = mem.getInt();
+                    char[] ascii = new char[16];
+                    for (int j = 0; j < 16; j++) {
+                        char c = (char) bc.get();
+                        if (c < 32) {
+                            c = '.';
                         }
-                        sb.append(String.format("%08x : %08x %08x %08x %08x  %s%n", addr + (i * 16), v1, v2, v3, v4, String.valueOf(ascii)));
+                        if (c > 128) {
+                            c = '.';
+                        }
+                        ascii[j] = c;
                     }
+                    sb.append(String.format("%08x : %08x %08x %08x %08x  %s%n", addr + (i * 16), v1, v2, v3, v4, String.valueOf(ascii)));
                 }
-                jTextAreaMemoryContent.setText(sb.toString());
             }
-        }));
+            jTextAreaMemoryContent.setText(sb.toString());
+        } catch (IOException ex) {
+            jTextAreaMemoryContent.setText(ex.toString());
+            Logger.getLogger(Memory.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private int addr = 0;

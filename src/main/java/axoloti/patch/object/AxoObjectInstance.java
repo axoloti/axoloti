@@ -305,27 +305,23 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<SDFileReference> getFileDepends() {
-        List<SDFileReference> files = getDModel().getFileDepends();
-        if (files == null) {
-            files = new ArrayList<>();
-        } else {
-            String p1 = getDModel().getPath();
+        LinkedList<SDFileReference> files = new LinkedList<>(getDModel().getFileDepends());
+        String p1 = getDModel().getPath();
+        if (p1 == null) {
+            // embedded object, reference path is of the patch
+            p1 = getParent().getFileNamePath();
             if (p1 == null) {
-                // embedded object, reference path is of the patch
-                p1 = getParent().getFileNamePath();
-                if (p1 == null) {
-                    p1 = "";
-                }
+                p1 = "";
             }
-            File f1 = new File(p1);
-            java.nio.file.Path p = f1.toPath().getParent();
-            for (SDFileReference f : files) {
-                f.resolve(p);
-            }
+        }
+        File f1 = new File(p1);
+        java.nio.file.Path p = f1.toPath().getParent();
+        for (SDFileReference f : files) {
+            f.resolve(p);
         }
         if (attributeInstances != null) {
             for (AttributeInstance a : attributeInstances) {
-                ArrayList<SDFileReference> f2 = a.getDependendSDFiles();
+                List<SDFileReference> f2 = a.getDependendSDFiles();
                 if (f2 != null) {
                     files.addAll(f2);
                 }

@@ -8,19 +8,18 @@ import axoloti.mvc.IModel;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
-import axoloti.target.CompletionHandler;
+import axoloti.target.TargetModel;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import qcmds.QCmdMemRead;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdUploadFile;
-import qcmds.QCmdWriteMem;
+import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -40,57 +39,46 @@ public class MidiOutputRoutingTable extends AbstractModel {
         return addr + 8;
     }
 
-    public void retrieve(IConnection conn, CompletionHandler completionHandler) {
-        conn.appendToQueue(new QCmdMemRead(addr, 60, new IConnection.MemReadHandler() {
-            @Override
-            public void done(ByteBuffer mem1) {
-                int name_addr = mem1.getInt();
+    public void retrieve(IConnection conn) throws IOException {
+        ByteBuffer mem1 = conn.read(addr, 60);
+        int name_addr = mem1.getInt();
 
-                conn.appendToQueue(new QCmdMemRead(name_addr, 60, new IConnection.MemReadHandler() {
-                    @Override
-                    public void done(ByteBuffer mem) {
-                        String c = "";
-                        byte b = mem.get();
-                        while (b != 0) {
+        ByteBuffer mem = conn.read(name_addr, 60);
+        String c = "";
+        byte b = mem.get();
+        while (b != 0) {
 //                            System.out.println(String.format("%02X %c",(int)b, (char)b));
-                            c += (char) b;
-                            b = mem.get();
-                        }
-                        setPortName(c);
-                        int nports = mem1.getInt();
-                        if (nports == 0) {
-                            completionHandler.done();
-                        } else {
-                            conn.appendToQueue(new QCmdMemRead(getTableAddr(), nports * 4, new IConnection.MemReadHandler() {
-                                @Override
-                                public void done(ByteBuffer mem) {
-                                    int vports1[] = new int[nports];
-                                    for (int i = 0; i < nports; i++) {
-                                        vports1[i] = mem.getInt();
-                                        System.out.println(String.format("MidiOutputRouting %s:%d map %08X ", getPortName(), i, vports1[i]));
-                                    }
-                                    setMapping(vports1);
-                                    completionHandler.done();
-                                }
-                            }));
-                        }
-                    }
-                }));
+            c += (char) b;
+            b = mem.get();
+        }
+        setPortName(c);
+        int nports = mem1.getInt();
+        if (nports != 0) {
+            ByteBuffer mem3 = conn.read(getTableAddr(), nports * 4);
+            int vports1[] = new int[nports];
+            for (int i = 0; i < nports; i++) {
+                vports1[i] = mem3.getInt();
+                System.out.println(String.format("MidiOutputRouting %s:%d map %08X ", getPortName(), i, vports1[i]));
             }
-        }));
+            setMapping(vports1);
+        }
     }
 
     public void apply(IConnection conn) {
-        if ((vports != null) && (vports.length != 0)) {
-            byte[] b = new byte[vports.length * 4];
-            ByteBuffer bb = ByteBuffer.wrap(b);
-            bb.order(ByteOrder.LITTLE_ENDIAN);
-            int i = 0;
-            for (int v : vports) {
-                bb.putInt(v);
-                System.out.println(String.format("set outputMap %s %d %08X", portname, i++, v));
+        try {
+            if ((vports != null) && (vports.length != 0)) {
+                byte[] b = new byte[vports.length * 4];
+                ByteBuffer bb = ByteBuffer.wrap(b);
+                bb.order(ByteOrder.LITTLE_ENDIAN);
+                int i = 0;
+                for (int v : vports) {
+                    bb.putInt(v);
+                    System.out.println(String.format("set outputMap %s %d %08X", portname, i++, v));
+                }
+                conn.write(getTableAddr(), b);
             }
-            conn.appendToQueue(new QCmdWriteMem(getTableAddr(), b));
+        } catch (IOException ex) {
+            Logger.getLogger(MidiOutputRoutingTable.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -143,14 +131,13 @@ public class MidiOutputRoutingTable extends AbstractModel {
         bb.rewind();
         bb.get(b);
         InputStream is = new ByteArrayInputStream(b);
-        QCmdProcessor p = QCmdProcessor.getQCmdProcessor();
-        p.appendToQueue(new QCmdUploadFile(is, fn));
-        try {
-            p.waitQueueFinished();
-        } catch (Exception ex) {
-            Logger.getLogger(MidiOutputRoutingTable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+            try {
+                TargetModel.getTargetModel().upload(fn, is, Calendar.getInstance(), b.length, ctx);
+            } catch (IOException ex) {
+                ctx.reportException(ex);
+            }
+        });
     }
 
     @Override

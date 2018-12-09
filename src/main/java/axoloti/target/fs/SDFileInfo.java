@@ -29,10 +29,26 @@ public class SDFileInfo {
     Calendar timestamp;
     int size;
 
-    public SDFileInfo(String filename, Calendar timestamp, int size) {
+    public SDFileInfo(String filename, int size, Calendar timestamp) {
         this.filename = filename;
         this.timestamp = timestamp;
         this.size = size;
+    }
+
+    public SDFileInfo(String filename, int size, int timestamp) {
+        this(filename, size, timestampFromInt(timestamp));
+    }
+
+    private static Calendar timestampFromInt(int timestamp) {
+        int DY = 1980 + ((timestamp & 0x0FE00) >> 9);
+        int DM = ((timestamp & 0x01E0) >> 5);
+        int DD = (timestamp & 0x001F);
+        int TH = (int) ((timestamp & 0x0F8000000l) >> 27);
+        int TM = (timestamp & 0x07E00000) >> 21;
+        int TS = (timestamp & 0x001F0000) >> 15;
+        Calendar date = Calendar.getInstance();
+        date.set(DY, DM - 1, DD, TH, TM, TS);
+        return date;
     }
 
     public String getFilename() {

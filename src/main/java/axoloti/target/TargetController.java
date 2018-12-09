@@ -13,5 +13,4 @@ public class TargetController extends AbstractController<TargetModel, IView> {
         super(model);
     }
 
-
 }

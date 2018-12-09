@@ -24,6 +24,9 @@ import axoloti.target.TargetModel;
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
 
@@ -40,14 +43,13 @@ public class KeyboardFrame extends TJFrame {
 
     private final DialComponent pbenddial;
 
-    int getCable() {
+    private int getCable() {
         return ((SpinnerNumberModel) jSpinnerCable.getModel()).getNumber().intValue() - 1;
     }
 
-    int getChannel() {
-        return ((SpinnerNumberModel) jSpinnerChannel.getModel()).getNumber().intValue() - 1;
+    private byte getChannel() {
+        return (byte) (((SpinnerNumberModel) jSpinnerChannel.getModel()).getNumber().intValue() - 1);
     }
-
 
     public KeyboardFrame(TargetModel targetModel) {
         super(targetModel);
@@ -55,12 +57,28 @@ public class KeyboardFrame extends TJFrame {
         piano = new PianoComponent() {
             @Override
             public void keyDown(int key) {
-                getDModel().getConnection().sendMidi(getCable(), 0x90 + getChannel(), key & 0x7F, jSliderVelocity.getValue());
+                try {
+                    getDModel().getConnection().sendMidi(getCable(),
+                            (byte) (0x90 | getChannel()),
+                            (byte) (key & 0x7F),
+                            (byte) jSliderVelocity.getValue()
+                    );
+                } catch (IOException ex) {
+                    Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             @Override
             public void keyUp(int key) {
-                getDModel().getConnection().sendMidi(getCable(), 0x80 + getChannel(), key & 0x7F, 80);
+                try {
+                    getDModel().getConnection().sendMidi(getCable(),
+                            (byte) (0x80 | getChannel()),
+                            (byte) (key & 0x7F),
+                            (byte) 80
+                    );
+                } catch (IOException ex) {
+                    Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
         };
@@ -76,7 +94,15 @@ public class KeyboardFrame extends TJFrame {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
-                    getDModel().getConnection().sendMidi(getCable(), 0xE0 + getChannel(), 0, 0x07F & (int) (pbenddial.getValue() - 64.0));
+                    try {
+                        getDModel().getConnection().sendMidi(getCable(),
+                                (byte) (0xE0 + getChannel()),
+                                (byte) 0,
+                                (byte) (0x07F & (int) (pbenddial.getValue() - 64.0))
+                        );
+                    } catch (IOException ex) {
+                        Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         });
@@ -177,8 +203,16 @@ public class KeyboardFrame extends TJFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAllNotesOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAllNotesOffActionPerformed
-        getDModel().getConnection().sendMidi(getCable(), 0xB0 + getChannel(), 0x7B, 80);
-        piano.clear();
+        try {
+            getDModel().getConnection().sendMidi(getCable(), 
+                    (byte) (0xB0 + getChannel()),
+                    (byte) 0x7B,
+                    (byte) 80
+            );
+            piano.clear();
+        } catch (IOException ex) {
+            Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonAllNotesOffActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

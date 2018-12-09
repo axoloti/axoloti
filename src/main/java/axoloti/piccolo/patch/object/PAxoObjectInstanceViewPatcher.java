@@ -8,7 +8,6 @@ import axoloti.piccolo.patch.PatchViewPiccolo;
 import axoloti.swingui.patch.PatchFrame;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
-import qcmds.QCmdProcessor;
 
 public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
 
@@ -28,7 +27,7 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
     public void initSubpatchFrame() {
         if (pf == null) {
             PatchModel subpatch = getDModel().getSubPatchModel();
-            pf = new PatchFrame(subpatch, QCmdProcessor.getQCmdProcessor(), true);
+            pf = new PatchFrame(subpatch, true);
             subpatch.getController().addView(pf);
         }
     }

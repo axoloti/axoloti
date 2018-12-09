@@ -25,6 +25,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.core.Persist;
 
@@ -73,7 +74,7 @@ public class AttributeInstanceSDFile extends AttributeInstanceString<AxoAttribut
     }
 
     @Override
-    public ArrayList<SDFileReference> getDependendSDFiles() {
+    public List<SDFileReference> getDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<>();
         File f = getFile();
         if (f != null && f.exists()) {

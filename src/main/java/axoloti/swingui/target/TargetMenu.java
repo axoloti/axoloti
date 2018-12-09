@@ -1,24 +1,23 @@
 package axoloti.swingui.target;
 
 import axoloti.Axoloti;
+import axoloti.connection.CConnection;
+import axoloti.connection.ConnectionTest;
 import axoloti.connection.FirmwareUpgrade_1_0_12;
 import axoloti.connection.IConnection;
 import axoloti.mvc.IView;
 import axoloti.preferences.Preferences;
+import axoloti.shell.CompileFirmware;
+import axoloti.shell.UploadFirmwareDFU;
 import axoloti.target.TargetModel;
 import axoloti.usb.Usb;
 import java.beans.PropertyChangeEvent;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import qcmds.QCmdBringToDFUMode;
-import qcmds.QCmdPing;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdStartMounter;
-import qcmds.QCmdStop;
-import qcmds.QCmdUploadPatch;
 
 /**
  *
@@ -51,6 +50,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private JMenuItem jMenuItemFileManager;
     private JMenuItem jMenuItemRemote;
     private JMenuItem jMenuItemMemoryViewer;
+    private JMenuItem jMenuItemTest;
 
     public TargetMenu(TargetModel targetModel) {
         super("Board");
@@ -95,16 +95,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
             }
         });
         add(jMenuItemPing);
-
-        jMenuItemPanic = new JMenuItem("Panic");
-        jMenuItemPanic.setEnabled(false);
-        jMenuItemPanic.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemPanicActionPerformed(evt);
-            }
-        });
-        add(jMenuItemPanic);
 
         jMenuItemMount = new JMenuItem("Enter card reader mode (disconnects editor)");
         jMenuItemMount.addActionListener(new java.awt.event.ActionListener() {
@@ -256,6 +246,19 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         });
         add(jMenuItemMemoryViewer);
 
+        jMenuItemTest = new JMenuItem("Run tests...");
+        jMenuItemTest.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    ConnectionTest.doAllTests(CConnection.getConnection());
+                } catch (IOException ex) {
+                    Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        add(jMenuItemTest);
+
     }
 
     private void jMenuItemFDisconnectActionPerformed(java.awt.event.ActionEvent evt) {
@@ -270,12 +273,13 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         getDModel().getConnection().selectPort();
     }
 
-    private void jMenuItemPanicActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().panic();
-    }
-
     private void jMenuItemPingActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdPing());
+        try {
+            IConnection conn = CConnection.getConnection();
+            conn.transmitPing();
+        } catch (IOException ex) {
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,9 +289,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {
         if (Usb.isDFUDeviceAvailable()) {
             getDModel().updateLinkFirmwareID();
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdStop());
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdDisconnect());
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdFlashDFU());
+            UploadFirmwareDFU.doit();
         } else {
             Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and then connect the micro-USB port to your computer while holding button S1. The LEDs will stay off when in DFU mode.");
         }
@@ -300,11 +302,19 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().appendToQueue(new qcmds.QCmdCompileFirmware());
+        CompileFirmware.doit();
     }
 
     private void jMenuItemEnterDFUActionPerformed(java.awt.event.ActionEvent evt) {
-        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdBringToDFUMode());
+        final String msg = "Done enabling DFU. The regular USB communication will now abort, " + "and Axoloti Core will restart itself in \"rescue\" (DFU) mode."
+                + "\"Flash (rescue)\" will restart Axoloti Core again in normal mode when completed."
+                + "To leave \"rescue\" mode, power-cycle your Axoloti Core.";
+        try {
+            IConnection conn = CConnection.getConnection();
+            conn.bringToDFU();
+        } catch (IOException ex) {
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,11 +344,16 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter";
-        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStop());
-        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdUploadPatch(fname));
-        QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStartMounter());
-        Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "will disconnect, unmount sdcard to go back to normal mode (required to connect)");
+        try {
+            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter";
+            IConnection conn = CConnection.getConnection();
+            conn.transmitStop();
+            TargetModel.getTargetModel().uploadPatchToMemory(fname);
+            conn.transmitStart();
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "SDCard mounter active, editor connection lost. Unmount/eject the sdcard volume in Explorer or Finder to enable editor connection again.");
+        } catch (IOException ex) {
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

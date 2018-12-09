@@ -1,8 +1,11 @@
 package axoloti.target;
 
+import axoloti.Axoloti;
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
+import axoloti.job.IJobContext;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.property.BooleanProperty;
@@ -11,26 +14,26 @@ import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
-import axoloti.swingui.MainFrame;
 import axoloti.target.fs.SDCardInfo;
+import axoloti.target.fs.SDFileInfo;
 import axoloti.target.midimonitor.MidiMonitorData;
 import axoloti.target.midirouting.MidiInputRoutingTable;
 import axoloti.target.midirouting.MidiOutputRoutingTable;
 import axoloti.utils.FirmwareID;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import qcmds.QCmdMemRead;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdStartFlasher;
-import qcmds.QCmdStop;
-import qcmds.QCmdUploadFWSDRam;
-import qcmds.QCmdUploadPatch;
+import java.util.zip.CRC32;
 
 /**
  *
@@ -53,79 +56,52 @@ public class TargetModel extends AbstractModel {
 
     private IConnection connection;
 
-//    QCmdProcessor qCmdProcessor = QCmdProcessor.getQCmdProcessor();
-
     private String linkFirmwareID;
     private List<MidiInputRoutingTable> inputRoutingTables = Collections.emptyList();
     private List<MidiOutputRoutingTable> outputRoutingTables = Collections.emptyList();
     private boolean sDCardMounted;
     private TargetRTInfo RTInfo;
-    private SDCardInfo sdcardInfo = new SDCardInfo();
+    private SDCardInfo sdcardInfo = new SDCardInfo(0, 0, 0, Collections.emptyList());
     private MidiMonitorData midiMonitor;
     private String patchName;
     private int patchIndex;
     public boolean warnedAboutFWCRCMismatch = false;
 
-    void readInputMapFromTarget() {
+    void readInputMapFromTarget() throws IOException {
         ChunkData chunk_input = connection.getFWChunks().getOne(FourCCs.FW_MIDI_INPUT_ROUTING);
         ByteBuffer data = chunk_input.getData();
         int n_input_interfaces = data.remaining() / 4;
         List<MidiInputRoutingTable> cirs = new ArrayList<>(n_input_interfaces);
         for (int i = 0; i < n_input_interfaces; i++) {
             int addr = data.getInt();
-            cirs.add(new MidiInputRoutingTable(addr));
+            MidiInputRoutingTable mirt = new MidiInputRoutingTable(addr);
+            mirt.retrieve(connection);
+            cirs.add(mirt);
         }
-        CompletionHandler ch = new CompletionHandler() {
-            int i = 0;
-
-            @Override
-            public void done() {
-                System.out.println("ch " + i);
-                if (i < n_input_interfaces) {
-                    cirs.get(i).retrieve(connection, this);
-                    i++;
-                } else {
-                    System.out.println("ch done " + i);
-                    setInputRoutingTable(cirs);
-                }
-            }
-
-        };
-        ch.done();
+        setInputRoutingTable(cirs);
     }
 
-    void readOutputMapFromTarget() {
+    void readOutputMapFromTarget() throws IOException {
         ChunkData chunk_output = connection.getFWChunks().getOne(FourCCs.FW_MIDI_OUTPUT_ROUTING);
         ByteBuffer data = chunk_output.getData();
         int n_output_interfaces = data.remaining() / 4;
         List<MidiOutputRoutingTable> cors = new ArrayList<>(n_output_interfaces);
         for (int i = 0; i < n_output_interfaces; i++) {
             int addr = data.getInt();
-            cors.add(new MidiOutputRoutingTable(addr));
+            MidiOutputRoutingTable mort = new MidiOutputRoutingTable(addr);
+            mort.retrieve(connection);
+            cors.add(mort);
         }
-        CompletionHandler ch = new CompletionHandler() {
-            int i = 0;
-
-            @Override
-            public void done() {
-                System.out.println("ch " + i);
-                if (i < n_output_interfaces) {
-                    cors.get(i).retrieve(connection, this);
-                    i++;
-                } else {
-                    System.out.println("ch done " + i);
-                    setOutputRoutingTable(cors);
-                }
-            }
-
-        };
-        ch.done();
-
+        setOutputRoutingTable(cors);
     }
 
     public void readFromTarget() {
-        readInputMapFromTarget();
-        readOutputMapFromTarget();
+        try {
+            readInputMapFromTarget();
+            readOutputMapFromTarget();
+        } catch (IOException ex) {
+            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void applyToTarget() {
@@ -188,11 +164,23 @@ public class TargetModel extends AbstractModel {
 
     public void setConnection(IConnection connection) {
         if ((connection != null) && (this.connection == null)) {
-            setSDCardInfo(new SDCardInfo());
+            setSDCardInfo(new SDCardInfo(0, 0, 0, Collections.emptyList()));
         }
         this.connection = connection;
         firePropertyChange(CONNECTION,
                 null, connection);
+    }
+
+    public void refreshFiles() {
+        IConnection conn = CConnection.getConnection();
+        if (conn.isConnected()) {
+            try {
+                SDCardInfo sdci = conn.getFileList();
+                setSDCardInfo(sdci);
+            } catch (IOException ex) {
+                Logger.getLogger(SDCardInfo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public String getFirmwareLinkID() {
@@ -209,16 +197,93 @@ public class TargetModel extends AbstractModel {
         setFirmwareLinkID(FirmwareID.getFirmwareID());
     }
 
+    private void uploadFWToSDRam(File f) {
+        Logger.getLogger(TargetModel.class.getName()).log(Level.INFO, "firmware file path: {0}", f.getAbsolutePath());
+        int tlength = (int) f.length();
+        try (FileInputStream inputStream = new FileInputStream(f)) {
+            int offset = 0;
+            byte[] header = new byte[16];
+            header[0] = 'f';
+            header[1] = 'l';
+            header[2] = 'a';
+            header[3] = 's';
+            header[4] = 'c';
+            header[5] = 'o';
+            header[6] = 'p';
+            header[7] = 'y';
+            header[8] = (byte) (tlength);
+            header[9] = (byte) (tlength >> 8);
+            header[10] = (byte) (tlength >> 16);
+            header[11] = (byte) (tlength >> 24);
+            byte[] bb = new byte[tlength];
+            int nRead = inputStream.read(bb, 0, tlength);
+            if (nRead != tlength) {
+                Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
+            }
+            Logger.getLogger(TargetModel.class.getName()).log(Level.INFO, "firmware file size: {0}", tlength);
+//            bb.order(ByteOrder.LITTLE_ENDIAN);
+            CRC32 zcrc = new CRC32();
+            zcrc.update(bb);
+            int zcrcv = (int) zcrc.getValue();
+            Logger.getLogger(TargetModel.class.getName()).log(Level.INFO, "firmware crc: 0x{0}", Integer.toHexString(zcrcv).toUpperCase());
+            header[12] = (byte) (zcrcv);
+            header[13] = (byte) (zcrcv >> 8);
+            header[14] = (byte) (zcrcv >> 16);
+            header[15] = (byte) (zcrcv >> 24);
+            connection.write(connection.getTargetProfile().getSDRAMAddr() + offset, header);
+            inputStream.close();
+
+            try (FileInputStream inputStream2 = new FileInputStream(f)) {
+                offset += header.length;
+                int MaxBlockSize = 32768;
+                do {
+                    int l;
+                    if (tlength > MaxBlockSize) {
+                        l = MaxBlockSize;
+                        tlength -= MaxBlockSize;
+                    } else {
+                        l = tlength;
+                        tlength = 0;
+                    }
+                    byte[] buffer = new byte[l];
+                    nRead = inputStream2.read(buffer, 0, l);
+                    if (nRead != l) {
+                        Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
+                    }
+                    connection.write(connection.getTargetProfile().getSDRAMAddr() + offset, buffer);
+                    offset += nRead;
+                } while (tlength > 0);
+                inputStream2.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
+            } catch (IOException ex) {
+                Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "IOException", ex);
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "FileNotFoundException", ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "IOException", ex);
+        }
+    }
+
     public void flashUsingSDRam(String fname_flasher, String fname_fw) {
-        updateLinkFirmwareID();
-        File p = new File(fname_fw);
-        if (p.canRead()) {
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStop());
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdUploadFWSDRam(p));
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdUploadPatch(fname_flasher));
-            QCmdProcessor.getQCmdProcessor().appendToQueue(new QCmdStartFlasher());
-        } else {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", fname_fw);
+
+        try {
+            updateLinkFirmwareID();
+            File p = new File(fname_fw);
+            if (p.canRead()) {
+                IConnection conn = CConnection.getConnection();
+                conn.transmitStop();
+                uploadFWToSDRam(p);
+                TargetModel.this.uploadPatchToMemory(fname_flasher);
+                conn.transmitStart();
+                Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "Firmware flashing: do not unplug the board until the leds stop blinking! You can connect again after the leds stop blinking.");
+            } else {
+                Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "can''t read firmware, please compile firmware! (file: {0} )", fname_fw);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -283,35 +348,36 @@ public class TargetModel extends AbstractModel {
     }
 
     public void readPatchName() {
-        if (connection.getFWChunks() == null) {
-            setPatchName("disconnected");
-            return;
-        }
-        ChunkData chunk_output = connection.getFWChunks().getOne(FourCCs.FW_PATCH_NAME);
-        if (chunk_output == null) {
-            setPatchName("???");
-            return;
-        }
-        ByteBuffer data = chunk_output.getData();
-        int addr = data.getInt();
-        connection.appendToQueue(new QCmdMemRead(addr, 32, new IConnection.MemReadHandler() {
-            @Override
-            public void done(ByteBuffer mem) {
-                if (mem == null) {
-                    setPatchName("failed");
-                    return;
-                }
-                String s = "";
-                while (mem.hasRemaining()) {
-                    char c = (char) mem.get();
-                    if (c == 0) {
-                        break;
-                    }
-                    s += c;
-                }
-                setPatchName(s);
+        try {
+            if ((connection == null) || (connection.getFWChunks() == null)) {
+                setPatchName("disconnected");
+                return;
             }
-        }));
+            ChunkData chunk_output = connection.getFWChunks().getOne(FourCCs.FW_PATCH_NAME);
+            if (chunk_output == null) {
+                setPatchName("???");
+                return;
+            }
+            ByteBuffer data = chunk_output.getData();
+            int addr = data.getInt();
+
+            ByteBuffer mem = connection.read(addr, 32);
+            if (mem == null) {
+                setPatchName("failed");
+                return;
+            }
+            String s = "";
+            while (mem.hasRemaining()) {
+                char c = (char) mem.get();
+                if (c == 0) {
+                    break;
+                }
+                s += c;
+            }
+            setPatchName(s);
+        } catch (IOException ex) {
+            Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String getPatchName() {
@@ -323,17 +389,17 @@ public class TargetModel extends AbstractModel {
         firePropertyChange(PATCHNAME, null, patchName);
     }
 
-    private final List<PollHandler> pollers = new LinkedList<>();
+    private final List<Runnable> pollers = new LinkedList<>();
 
-    public List<PollHandler> getPollers() {
+    public List<Runnable> getPollers() {
         return Collections.unmodifiableList(pollers);
     }
 
-    public void addPoller(PollHandler poller) {
+    public void addPoller(Runnable poller) {
         pollers.add(poller);
     }
 
-    public void removePoller(PollHandler poller) {
+    public void removePoller(Runnable poller) {
         pollers.remove(poller);
     }
 
@@ -345,6 +411,122 @@ public class TargetModel extends AbstractModel {
     @Override
     public IModel getParent() {
         return null;
+    }
+
+    public void uploadPatchToMemory(String basepath) throws FileNotFoundException, IOException {
+        // from now on there can be multiple segments!
+        File f1 = new File(basepath + ".sram1.bin");
+        File f2 = new File(basepath + ".sram3.bin");
+        File f3 = new File(basepath + ".sdram.bin");
+        //Logger.getLogger(TargetModel.class.getName()).log(Level.INFO, "bin path: {0}", f.getAbsolutePath() + " " + f2.getAbsolutePath());
+        connection.write(connection.getTargetProfile().getPatchAddr(), f1);
+        if (f2.length() > 0) {
+            connection.write(connection.getTargetProfile().getSRAM3Addr(), f2);
+        }
+        if (f3.length() > 0) {
+            connection.write(connection.getTargetProfile().getSDRAMAddr(), f3);
+        }
+//      log("Done uploading patch");
+    }
+
+    public void uploadPatchToMemory() throws FileNotFoundException, IOException {
+        String basepath = System.getProperty(Axoloti.HOME_DIR) + "/build/xpatch";
+        TargetModel.this.uploadPatchToMemory(basepath);
+    }
+
+    public void deleteFile(String filename) throws IOException {
+        getConnection().deleteFile(filename);
+        LinkedList<SDFileInfo> files = new LinkedList<>(getSDCardInfo().getFiles());
+        SDFileInfo f1 = null;
+        for (SDFileInfo f : files) {
+            String fname = f.getFilename();
+            if (fname.equalsIgnoreCase(filename)
+                    || fname.equalsIgnoreCase(filename + "/")) {
+                f1 = f;
+                break;
+            }
+        }
+        if (f1 != null) {
+            files.remove(f1);
+        }
+        SDCardInfo sdci = new SDCardInfo(0, 0, 0, files);
+        setSDCardInfo(sdci);
+    }
+
+    public void createDirectory(String filename, Calendar date, IJobContext ctx) throws IOException {
+        String fn1 = filename;
+        if (!fn1.endsWith("/")) {
+            fn1 += "/";
+        }
+        final String fn = fn1;
+
+        getConnection().createDirectory(filename, date);
+
+        ctx.doInSync(() -> {
+            LinkedList<SDFileInfo> files = new LinkedList<>();
+            SDCardInfo sdci0 = getSDCardInfo();
+            if (sdci0 != null) {
+                files.addAll(sdci0.getFiles());
+                SDFileInfo sdfi = null;
+                for (SDFileInfo f : files) {
+                    if (f.getFilename().equalsIgnoreCase(fn)) {
+                        // already present
+                        sdfi = f;
+                    }
+                }
+                if (sdfi != null) {
+                    files.remove(sdfi);
+                }
+            }
+            files.add(new SDFileInfo(fn, 0, 0));
+            SDCardInfo sdci = new SDCardInfo(0, 0, 0, files);
+            setSDCardInfo(sdci);
+        });
+    }
+
+    public void createDirectory(String filename, IJobContext ctx) throws IOException {
+        createDirectory(filename, Calendar.getInstance(), ctx);
+    }
+
+    public void upload(String filename, InputStream inputStream, Calendar cal, int size, IJobContext ctx) throws IOException {
+        for (int i = 1; i < filename.length(); i++) {
+            if (filename.charAt(i) == '/') {
+                createDirectory(filename.substring(0, i), ctx);
+            }
+        }
+        getConnection().upload(filename, inputStream, cal, size, ctx);
+        ctx.doInSync(() -> {
+            LinkedList<SDFileInfo> files = new LinkedList<>();
+            SDCardInfo sdci0 = getSDCardInfo();
+            if (sdci0 != null) {
+                files.addAll(sdci0.getFiles());
+                SDFileInfo sdfi = null;
+                for (SDFileInfo f : files) {
+                    if (f.getFilename().equalsIgnoreCase(filename)) {
+                        // already present
+                        sdfi = f;
+                    }
+                }
+                if (sdfi != null) {
+                    files.remove(sdfi);
+                }
+            }
+            files.add(new SDFileInfo(filename, size, cal));
+            SDCardInfo sdci = new SDCardInfo(0, 0, 0, files);
+            setSDCardInfo(sdci);
+        });
+    }
+
+    public void upload(String filename, InputStream inputStream, IJobContext ctx) throws IOException {
+        upload(filename, inputStream, Calendar.getInstance(), 0, ctx);
+    }
+
+    public void upload(String filename, File file, IJobContext ctx) throws IOException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(file.lastModified());
+        int size = (int) file.length();
+        FileInputStream inputStream = new FileInputStream(file);
+        upload(filename, inputStream, cal, size, ctx);
     }
 
 }

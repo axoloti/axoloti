@@ -654,7 +654,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         firePropertyChange(PATCH_HELP_PATCH, null, helpPatch);
     }
 
-    public ArrayList<SDFileReference> getDependendSDFiles() {
+    public List<SDFileReference> getDependendSDFiles() {
         ArrayList<SDFileReference> files = new ArrayList<>();
         for (IAxoObjectInstance o : objectinstances) {
             List<SDFileReference> f2 = o.getFileDepends();
@@ -662,7 +662,7 @@ public class PatchModel extends AbstractModel<PatchController> {
                 files.addAll(f2);
             }
         }
-        return files;
+        return Collections.unmodifiableList(files);
     }
 
     @Deprecated

@@ -56,6 +56,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
+import axoloti.job.JobContext;
+import axoloti.job.IJobContext;
 
 /**
  *
@@ -862,7 +864,8 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         if (!isCompositeObject()) {
             AxoObjects.getAxoObjects().writeAxoObject(getDModel().getPath(), getDModel());
             updateReferenceXML();
-            AxoObjects.getAxoObjects().loadAxoObjects1();
+            IJobContext progress = new JobContext();
+            AxoObjects.getAxoObjects().loadAxoObjects1(progress);
         } else {
             JOptionPane.showMessageDialog(null, "The original object file " + getDModel().getPath() + " contains multiple objects, the object editor does not support this.\n"
                     + "Your changes are NOT saved!");

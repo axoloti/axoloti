@@ -5,7 +5,6 @@ import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectFromPatch;
 import axoloti.object.IAxoObject;
 import axoloti.swingui.patch.PatchFrame;
-import qcmds.QCmdProcessor;
 
 /**
  *
@@ -20,7 +19,7 @@ public class ObjectEditorFactory {
         IAbstractEditor editor = null;
         if (obj instanceof AxoObjectFromPatch) {
             AxoObjectFromPatch obj1 = (AxoObjectFromPatch) obj;
-            PatchFrame pf = new PatchFrame(obj1.getPatchModel(), QCmdProcessor.getQCmdProcessor());
+            PatchFrame pf = new PatchFrame(obj1.getPatchModel());
             pf.setVisible(true);
             editor = pf;
         } else if (obj instanceof AxoObject) {

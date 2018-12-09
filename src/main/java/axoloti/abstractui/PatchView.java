@@ -38,7 +38,6 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
-import qcmds.QCmdProcessor;
 
 public abstract class PatchView extends View<PatchModel> {
 
@@ -233,7 +232,7 @@ public abstract class PatchView extends View<PatchModel> {
         documentRoot.getUndoManager().discardAllEdits();
         long ChronoControllerCreated = Calendar.getInstance().getTimeInMillis();
         System.out.println("ChronoControllerCreated " + (ChronoControllerCreated - ChronoStart));
-        PatchFrame pf = new PatchFrame(pm, QCmdProcessor.getQCmdProcessor());
+        PatchFrame pf = new PatchFrame(pm);
         long ChronoFrameCreated = Calendar.getInstance().getTimeInMillis();
         System.out.println("ChronoFrameCreated " + (ChronoFrameCreated - ChronoControllerCreated));
         long ChronoAddView = Calendar.getInstance().getTimeInMillis();

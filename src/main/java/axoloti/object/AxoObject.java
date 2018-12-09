@@ -249,7 +249,7 @@ public class AxoObject extends AxoObjectAbstract {
     public List<AxoAttribute> attributes = new ArrayList<>(); // literal constants
 
     @Path("file-depends")
-    @ElementList(entry = "file-depend", type = String.class, inline = true, required = false)
+    @ElementList(entry = "file-depend", type = SDFileReference.class, inline = true, required = false)
     public List<SDFileReference> filedepends;
 
     @Path("includes")

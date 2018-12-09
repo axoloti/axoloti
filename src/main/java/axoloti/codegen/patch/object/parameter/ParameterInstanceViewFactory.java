@@ -33,10 +33,10 @@ public class ParameterInstanceViewFactory {
             view = new ParameterInstanceViewFrac32S(model);
         } else if (model instanceof ParameterInstanceFrac32UMapVSlider) {
             view = new ParameterInstanceViewFrac32U(model);
-        } else if (model instanceof ParameterInstanceFrac32UMap) {
-            view = new ParameterInstanceViewFrac32U(model);
         } else if (model instanceof ParameterInstanceFrac32SMap) {
             view = new ParameterInstanceViewFrac32S(model);
+        } else if (model instanceof ParameterInstanceFrac32UMap) {
+            view = new ParameterInstanceViewFrac32U(model);
         } else if (model instanceof ParameterInstanceInt32) {
             view = new ParameterInstanceViewInt32(model);
         } else if (model instanceof ParameterInstanceBin12) {

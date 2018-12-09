@@ -15,8 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
-import qcmds.QCmdCreateDirectory;
-import qcmds.QCmdProcessor;
 
 /**
  *
@@ -306,10 +304,6 @@ public class MidiRouting extends TJFrame {
     }
 
     void writeSettings() {
-        QCmdProcessor p = QCmdProcessor.getQCmdProcessor();
-        p.appendToQueue(new QCmdCreateDirectory("/settings"));
-        p.appendToQueue(new QCmdCreateDirectory("/settings/midi-in"));
-        p.appendToQueue(new QCmdCreateDirectory("/settings/midi-out"));
         for (MidiOutputRoutingTable mort : outputRoutingTables) {
             if (mort == null) {
                 continue;

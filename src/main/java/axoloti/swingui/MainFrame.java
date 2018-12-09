@@ -27,6 +27,11 @@ import axoloti.abstractui.DocumentWindowList;
 import axoloti.abstractui.PatchView;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
+import axoloti.job.GlobalJobProcessor;
+import axoloti.job.GlobalProgress;
+import axoloti.job.IJobContext;
+import axoloti.job.IProgressReporter;
+import axoloti.job.JobContext;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.objectlibrary.AxolotiLibrary;
@@ -78,7 +83,6 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
-import qcmds.QCmdProcessor;
 
 /**
  *
@@ -90,7 +94,6 @@ public class MainFrame extends TJFrame implements ActionListener {
 
     private final ThemeEditor themeEditor;
 
-    private Thread qcmdprocessorThread;
     private boolean bGrabFocusOnSevereErrors = true;
 
     private boolean doAutoScroll = true;
@@ -107,6 +110,8 @@ public class MainFrame extends TJFrame implements ActionListener {
         fileMenu.initComponents();
 
         mainframe = this;
+
+        GlobalProgress.setInstance(getProgressReporter());
 
         final Style styleParent = jTextPaneLog.addStyle(null, null);
         StyleConstants.setFontFamily(styleParent, Font.MONOSPACED);
@@ -264,11 +269,6 @@ public class MainFrame extends TJFrame implements ActionListener {
                     }
                     Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "Axoloti version : {0}  build time : {1}", new Object[]{Version.AXOLOTI_VERSION, Version.AXOLOTI_BUILD_TIME});
 
-                    QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-                    qcmdprocessorThread = new Thread(qcmdprocessor);
-                    qcmdprocessorThread.setName("QCmdProcessor");
-                    qcmdprocessorThread.start();
-
                     // user library, ask user if they wish to upgrade, or do manuall
                     // this allows them the opportunity to manually backup their files!
                     AxolotiLibrary ulib = Preferences.getPreferences().getLibrary(AxolotiLibrary.USER_LIBRARY_ID);
@@ -310,7 +310,10 @@ public class MainFrame extends TJFrame implements ActionListener {
                         lib.reportStatus();
                     }
 
-                    AxoObjects.loadAxoObjects();
+                    IJobContext jobContext = new JobContext();
+                    GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+                        AxoObjects.loadAxoObjects(jobContext);
+                    });
 
                     if (!Axoloti.isFailSafeMode()) {
                         boolean success = CConnection.getConnection().connect(null);
@@ -411,8 +414,6 @@ public class MainFrame extends TJFrame implements ActionListener {
         jTextPaneLog = new javax.swing.JTextPane();
         jPanelProgress = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 32767));
-        jLabelProgress = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new axoloti.swingui.menus.FileMenu();
         jMenuEdit = new javax.swing.JMenu();
@@ -506,16 +507,10 @@ public class MainFrame extends TJFrame implements ActionListener {
         jPanelProgress.setLayout(new javax.swing.BoxLayout(jPanelProgress, javax.swing.BoxLayout.LINE_AXIS));
 
         jProgressBar1.setAlignmentX(0.0F);
-        jProgressBar1.setMaximumSize(new java.awt.Dimension(100, 16));
+        jProgressBar1.setMaximumSize(new java.awt.Dimension(10000, 16));
         jProgressBar1.setMinimumSize(new java.awt.Dimension(100, 16));
         jProgressBar1.setPreferredSize(new java.awt.Dimension(100, 16));
         jPanelProgress.add(jProgressBar1);
-        jPanelProgress.add(filler1);
-
-        jLabelProgress.setFocusable(false);
-        jLabelProgress.setMaximumSize(new java.awt.Dimension(500, 14));
-        jLabelProgress.setPreferredSize(new java.awt.Dimension(150, 14));
-        jPanelProgress.add(jLabelProgress);
 
         getContentPane().add(jPanelProgress);
 
@@ -554,7 +549,6 @@ public class MainFrame extends TJFrame implements ActionListener {
                 connection.disconnect();
             }
         } else {
-            QCmdProcessor.getQCmdProcessor().panic();
             jCheckBoxConnect.setEnabled(false);
             boolean success = CConnection.getConnection().connect(null);
         }
@@ -726,7 +720,7 @@ public class MainFrame extends TJFrame implements ActionListener {
             boolean status;
             PatchModel patchModel = serializer.read(PatchModel.class, f);
             PatchController patchController = patchModel.getController();
-            PatchFrame patchFrame = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
+            PatchFrame patchFrame = new PatchFrame(patchModel);
             PatchView patchView = PatchViewFactory.patchViewFactory(patchModel);
             patchController.addView(patchFrame);
             status = patchModel.save(f);
@@ -765,14 +759,13 @@ public class MainFrame extends TJFrame implements ActionListener {
         AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
         patchModel.setDocumentRoot(documentRoot);
         PatchController patchController = patchModel.getController();
-        PatchFrame pf = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
+        PatchFrame pf = new PatchFrame(patchModel);
         patchController.addView(pf);
         pf.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private axoloti.swingui.menus.FileMenu fileMenu;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private axoloti.swingui.menus.HelpMenu helpMenu1;
@@ -783,7 +776,6 @@ public class MainFrame extends TJFrame implements ActionListener {
     private javax.swing.JLabel jLabelIcon;
     private javax.swing.JLabel jLabelPatch;
     private javax.swing.JLabel jLabelPatchName;
-    private javax.swing.JLabel jLabelProgress;
     private javax.swing.JLabel jLabelSDCardPresent;
     private javax.swing.JLabel jLabelVoltages;
     private javax.swing.JMenuBar jMenuBar1;
@@ -801,14 +793,6 @@ public class MainFrame extends TJFrame implements ActionListener {
     private javax.swing.JTextPane jTextPaneLog;
     private axoloti.swingui.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
-
-    public void setProgressValue(int i) {
-        jProgressBar1.setValue(i);
-    }
-
-    public void setProgressMessage(String s) {
-        jLabelProgress.setText(s);
-    }
 
     private void showConnectDisconnect(boolean connect) {
         jCheckBoxConnect.setSelected(connect);
@@ -993,6 +977,38 @@ public class MainFrame extends TJFrame implements ActionListener {
             String s = (String) evt.getNewValue();
             jLabelPatchName.setText(s);
         }
+    }
+
+    public IProgressReporter getProgressReporter() {
+
+        jProgressBar1.setMinimum(0);
+        jProgressBar1.setMaximum(16384);
+        jProgressBar1.setStringPainted(true);
+        return new IProgressReporter() {
+            @Override
+            public void setProgress(float value) {
+                jProgressBar1.setValue((int) (value * 16384));
+            }
+
+            @Override
+            public void setProgressIndeterminate() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
+            public void setNote(String note) {
+                jProgressBar1.setEnabled(true);
+                jProgressBar1.setString(note);
+            }
+
+            @Override
+            public void setReady() {
+                jProgressBar1.setEnabled(false);
+                jProgressBar1.setString("ready");
+                jProgressBar1.setValue(0);
+            }
+        };
+
     }
 
 }

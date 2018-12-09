@@ -45,6 +45,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JPopupMenu.Separator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import axoloti.job.JobContext;
+import axoloti.job.IJobContext;
 
 /**
  *
@@ -234,7 +236,8 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuReloadObjectsActionPerformed(java.awt.event.ActionEvent evt) {
-        AxoObjects.loadAxoObjects();
+        IJobContext progress = new JobContext();
+        AxoObjects.loadAxoObjects(progress);
     }
 
     private void jMenuOpenURLActionPerformed(java.awt.event.ActionEvent evt) {
@@ -269,7 +272,8 @@ public class FileMenu extends JMenu {
         for (AxolotiLibrary lib : Preferences.getPreferences().getLibraries()) {
             lib.sync();
         }
-        AxoObjects.loadAxoObjects();
+        IJobContext progress = new JobContext();
+        AxoObjects.loadAxoObjects(progress);
     }
 
     private void jMenuNewBankActionPerformed(java.awt.event.ActionEvent evt) {

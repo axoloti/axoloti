@@ -1,13 +1,15 @@
 package axoloti.patchbank;
 
-import axoloti.connection.CConnection;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
+import axoloti.patch.PatchController;
+import axoloti.patch.PatchModel;
 import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
-import axoloti.swingui.patch.PatchFrame;
-import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.shell.ExecutionFailedException;
+import axoloti.target.TargetModel;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -20,12 +22,19 @@ import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdUploadFile;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.strategy.Strategy;
+import axoloti.job.GlobalJobProcessor;
+import axoloti.job.IJobContext;
 
 /**
  *
@@ -135,51 +144,71 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
     }
 
     public void upload() {
-        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        if (CConnection.getConnection().isConnected()) {
-            processor.appendToQueue(new QCmdUploadFile(new ByteArrayInputStream(getContents()), "/index.axb"));
+        TargetModel targetModel = TargetModel.getTargetModel();
+        if (targetModel.getConnection().isConnected()) {
+            GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+                try {
+                    byte b[] = getContents();
+                    targetModel.upload(
+                            "/index.axb",
+                            new ByteArrayInputStream(b),
+                            Calendar.getInstance(),
+                            b.length,
+                            ctx);
+                } catch (IOException ex) {
+                    ctx.reportException(ex);
+                }
+            });
         }
     }
 
-    public void uploadOneFile(File f) {
+    public void uploadOneFile(File f, IJobContext ctx) throws IOException, ExecutionFailedException, InterruptedException, ExecutionException {
         if (!f.isFile() || !f.canRead()) {
             return;
         }
-        // TODO: avoid swingui references
-        PatchFrame pf = PatchViewSwing.openPatchInvisible(f);
-        if (pf != null) {
-            boolean isVisible = pf.isVisible();
-            pf.getDModel().getController().uploadToSDCard();
-            if (!isVisible) {
-                pf.close();
-            }
-
-            //FIXME: workaround waitQueueFinished bug
+        CompletableFuture<PatchController> pccf = new CompletableFuture<>();
+        ctx.doInSync(() -> {
+            Strategy strategy = new AnnotationStrategy();
+            Serializer serializer = new Persister(strategy);
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-            }
-
-            try {
-                QCmdProcessor.getQCmdProcessor().waitQueueFinished();
+                PatchModel patchModel = serializer.read(PatchModel.class, f);
+                patchModel.setFileNamePath(f.getAbsolutePath());
+                AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+                patchModel.setDocumentRoot(documentRoot);
+                documentRoot.getUndoManager().discardAllEdits();
+                pccf.complete(patchModel.getController());
             } catch (Exception ex) {
-                Logger.getLogger(PatchBankModel.class.getName()).log(Level.SEVERE, null, ex);
+                ctx.reportException(ex);
             }
+        });
+        PatchController pc = pccf.get();
+        if (pc != null) {
+            pc.uploadToSDCard(ctx);
         }
     }
 
-    public void uploadAll() {
-        Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Uploading patch bank file");
-        QCmdProcessor processor = QCmdProcessor.getQCmdProcessor();
-        if (CConnection.getConnection().isConnected()) {
-            processor.appendToQueue(new QCmdUploadFile(new ByteArrayInputStream(getContents()), "/index.axb"));
+    public void uploadAll(IJobContext ctx) {
+        try {
+            Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Uploading patch bank file");
+            final byte b[] = getContents();
+            TargetModel.getTargetModel().upload(
+                    "/index.axb",
+                    new ByteArrayInputStream(b),
+                    Calendar.getInstance(),
+                    b.length,
+                    ctx
+            );
+            final int n = files.size();
+            IJobContext ctxs[] = ctx.createSubContexts(n);
+            for (int i = 0; i < n; i++) {
+                File f = files.get(i);
+                Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
+                uploadOneFile(f, ctxs[i]);
+            }
+            Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Patch bank uploaded");
+        } catch (IOException | ExecutionFailedException | InterruptedException | ExecutionException ex) {
+            ctx.reportException(ex);
         }
-
-        for (File f : files) {
-            Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
-            uploadOneFile(f);
-        }
-        Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Patch bank uploaded");
     }
 
     @Override

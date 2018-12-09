@@ -1,6 +1,5 @@
 package axoloti.swingui.target;
 
-import axoloti.target.PollHandler;
 import axoloti.target.TargetModel;
 import axoloti.target.midimonitor.MidiMessage;
 import axoloti.target.midimonitor.MidiMonitorData;
@@ -15,7 +14,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class MidiMonitor extends TJFrame {
 
-    private PollHandler poller;
+    private Runnable poller;
 
     /**
      * Creates new form Memory
@@ -121,11 +120,8 @@ public class MidiMonitor extends TJFrame {
         jMidiMonitorTable.setFont(new Font("monospaced", Font.PLAIN, 12));
         doLayout();
 
-        poller = new PollHandler() {
-            @Override
-            public void operation() {
-                refresh();
-            }
+        poller = () -> {
+            refresh();
         };
     }
 

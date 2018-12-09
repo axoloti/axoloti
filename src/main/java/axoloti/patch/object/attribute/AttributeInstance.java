@@ -25,7 +25,6 @@ import axoloti.property.Property;
 import axoloti.target.fs.SDFileReference;
 import static axoloti.utils.CharEscape.charEscape;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -71,7 +70,7 @@ public abstract class AttributeInstance<T extends AxoAttribute> extends AtomInst
         return attribute;
     }
 
-    public ArrayList<SDFileReference> getDependendSDFiles() {
+    public List<SDFileReference> getDependendSDFiles() {
         return null;
     }
 

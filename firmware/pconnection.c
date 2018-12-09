@@ -54,7 +54,7 @@ static int isConnected = 0;
 static char FileName[256];
 static FIL pFile;
 static int pFileSize;
-static FILINFO fno;
+static FILINFO fno1;
 
 static void CloseFile(void) {
   FRESULT err;
@@ -189,8 +189,8 @@ static msg_t bulk_tx_memrdx(void) {
 static msg_t bulk_tx_fileinfo(void) {
     char *msg = &((char*)fbuff)[0];
     *((int32_t*)fbuff) = tx_hdr_fileinfo;
-    *(int32_t *)(&msg[4]) = fno.fsize;
-    *(int32_t *)(&msg[8]) = fno.fdate + (fno.ftime<<16);
+    *(int32_t *)(&msg[4]) = fno1.fsize;
+    *(int32_t *)(&msg[8]) = fno1.fdate + (fno1.ftime<<16);
     strcpy(&msg[12], &FileName[6]);
     int l = strlen(&msg[12]) + 13;
     return BulkUsbTransmitPacket((const unsigned char* )msg, l);
@@ -634,9 +634,9 @@ static void ManipulateFile(void) {
         report_fatfs_error(err,&FileName[6]);
       }
       // and set timestamp
-      fno.fdate = FileName[2] + (FileName[3]<<8);
-      fno.ftime = FileName[4] + (FileName[5]<<8);
-      err = f_utime(&FileName[6],&fno);
+      fno1.fdate = FileName[2] + (FileName[3]<<8);
+      fno1.ftime = FileName[4] + (FileName[5]<<8);
+      err = f_utime(&FileName[6],&fno1);
       if (err != FR_OK) {
         report_fatfs_error(err,&FileName[6]);
       }
@@ -672,11 +672,11 @@ static void ManipulateFile(void) {
     } else if (FileName[1]=='I') {
       // get file info
       FRESULT err;
-      FILINFO fno;
-      err =  f_stat(&FileName[6],&fno);
-      if (err == FR_OK) { // condition?
-    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_fileinfo);
+      err =  f_stat(&FileName[6],&fno1);
+      if (err != FR_OK) {
+    	     fno1.fsize = -1;
       }
+    	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_fileinfo);
     } else if (FileName[1]=='c') {
   	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_filecontents);
     }
@@ -737,8 +737,14 @@ static THD_FUNCTION(BulkReader, arg) {
         	  chEvtSignal(thd_bulk_Writer,evt_bulk_tx_paramchange);
     	  }
       } else if (header == rcv_hdr_getfwid) {
-    	  // AxoV : get firmware version
-    	  chEvtSignal(thd_bulk_Writer,evt_bulk_fw_ver);
+		  // AxoV : get firmware version
+		  chEvtSignal(thd_bulk_Writer,evt_bulk_fw_ver);
+		  if (msg == 4) {
+			  LogTextMessage("Firmware is newer than the software release,");
+			  LogTextMessage("firmware update will fail,");
+			  LogTextMessage("and connection will fail too.");
+			  LogTextMessage("You need to downgrade firmware via the rescue (DFU) method!");
+		  }
       } else if (header == rcv_hdr_memrd32) {
     	  // Axoy : read memory single 32bit
     	  rcv_pckt_memrd32_t * b = (rcv_pckt_memrd32_t *)bulk_rxbuf;

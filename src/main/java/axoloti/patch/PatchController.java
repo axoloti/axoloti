@@ -28,7 +28,11 @@ import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.preferences.Preferences;
+import axoloti.shell.CompileModule;
+import axoloti.shell.CompilePatch;
+import axoloti.shell.ExecutionFailedException;
 import axoloti.target.TargetModel;
+import axoloti.target.fs.SDFileInfo;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.Constants;
 import java.awt.Point;
@@ -51,11 +55,7 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
-import qcmds.QCmdCompileModule;
-import qcmds.QCmdCompilePatch;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdRecallPreset;
-import qcmds.QCmdUploadFile;
+import axoloti.job.IJobContext;
 
 public class PatchController extends AbstractController<PatchModel, IView> {
 
@@ -84,26 +84,36 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         promoteOverloading(true);
     }
 
-    public QCmdProcessor getQCmdProcessor() {
-        return QCmdProcessor.getQCmdProcessor();
-    }
-
     public void recallPreset(int i) {
-        getQCmdProcessor().appendToQueue(new QCmdRecallPreset(i));
+        IConnection conn = CConnection.getConnection();
+        try {
+            conn.transmitRecallPreset(i);
+        } catch (IOException ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void compile() {
-        for (String module : getModel().getModules()) {
-            getQCmdProcessor().appendToQueue(new QCmdCompileModule(this,
-                    module,
-                    getModel().getModuleDir(module)));
+        try {
+            for (String module : getModel().getModules()) {
+                CompileModule.run(
+                        module,
+                        getModel().getModuleDir(module));
+            }
+            CompilePatch.run();
+        } catch (ExecutionFailedException ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        getQCmdProcessor().appendToQueue(new QCmdCompilePatch(this));
     }
 
-    public void uploadDependentFiles(String sdpath) {
-        ArrayList<SDFileReference> files = getModel().getDependendSDFiles();
-        for (SDFileReference fref : files) {
+    public void uploadDependentFiles(String sdpath, IJobContext ctx) {
+        IConnection conn = CConnection.getConnection();
+        TargetModel targetModel = TargetModel.getTargetModel();
+        List<SDFileReference> files = getModel().getDependendSDFiles();
+        IJobContext ctxs[] = ctx.createSubContexts(files.size());
+        for (int j = 0; j < files.size(); j++) {
+            SDFileReference fref = files.get(j);
+            IJobContext ctxi = ctxs[j];
             File f = fref.localfile;
             if (f == null) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "File not resolved: {0}", fref.targetPath);
@@ -125,32 +135,21 @@ public class PatchController extends AbstractController<PatchModel, IView> {
             if (targetfn.charAt(0) != '/') {
                 targetfn = sdpath + "/" + fref.targetPath;
             }
-            if (!TargetModel.getTargetModel().getSDCardInfo().exists(targetfn, f.lastModified(), f.length())) {
-                try {
-                    getQCmdProcessor().appendToQueue(new qcmds.QCmdGetFileInfo(targetfn));
-                    getQCmdProcessor().waitQueueFinished();
-                    getQCmdProcessor().appendToQueue(new qcmds.QCmdPing());
-                    getQCmdProcessor().waitQueueFinished();
-                    if (!TargetModel.getTargetModel().getSDCardInfo().exists(targetfn, f.lastModified(), f.length())) {
-                        if (f.length() > 8 * 1024 * 1024) {
-                            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
-                            continue;
-                        }
-                        for (int i = 1; i < targetfn.length(); i++) {
-                            if (targetfn.charAt(i) == '/') {
-                                getQCmdProcessor().appendToQueue(new qcmds.QCmdCreateDirectory(targetfn.substring(0, i)));
-                                getQCmdProcessor().waitQueueFinished();
-                            }
-                        }
-                        getQCmdProcessor().appendToQueue(new QCmdUploadFile(f, targetfn));
-                    } else {
-                        Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
-                    }
-                } catch (Exception ex) {
-                    Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                SDFileInfo fileInfo = conn.getFileInfo(targetfn);
+                if ((fileInfo != null)
+                        && (Math.abs(fileInfo.getTimestamp().getTimeInMillis() - f.lastModified()) < 2000)
+                        && (f.length() == fileInfo.getSize())) {
+                    Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
+                    continue;
                 }
-            } else {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} matches timestamp and size, skip uploading", f.getName());
+                if (f.length() > 8 * 1024 * 1024) {
+                    Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
+                    continue;
+                }
+                targetModel.upload(targetfn, f, ctxi);
+            } catch (IOException ex) {
+                Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -217,81 +216,77 @@ public class PatchController extends AbstractController<PatchModel, IView> {
     public void uploadToFlash() {
         try {
             PatchController.this.writeCode();
-            QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-            qcmdprocessor.appendToQueue(new qcmds.QCmdStop());
-            qcmdprocessor.appendToQueue(new qcmds.QCmdCompilePatch(this));
-            qcmdprocessor.waitQueueFinished();
+            CompilePatch.run();
             IConnection conn = CConnection.getConnection();
+            conn.transmitStop();
             byte[] bb = PatchFileBinary.getPatchFileBinary();
             // TODO: add test if it really fits in the flash partition, issue #409
-            qcmdprocessor.appendToQueue(new qcmds.QCmdWriteMem(conn.getTargetProfile().getSDRAMAddr(), bb));
-            qcmdprocessor.appendToQueue(new qcmds.QCmdCopyPatchToFlash());
-        } catch (Exception ex) {
+            conn.transmitStop();
+            conn.write(conn.getTargetProfile().getSDRAMAddr(), bb);
+            conn.transmitCopyToFlash();
+            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Patch written to flash memory,"
+                    + "it will run at powerup when no sdcard is present or sdcard does not contain /start.bin");
+        } catch (ExecutionFailedException | IOException ex) {
             Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void uploadToSDCard(String sdfilename) {
-        try {
+    public void uploadToSDCard(String sdfilename, IJobContext ctx) throws IOException, ExecutionFailedException {
+        // TODO: fix ctx usage
+        ctx.doInSync(() -> {
             PatchController.this.writeCode();
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
-            QCmdProcessor qcmdprocessor = QCmdProcessor.getQCmdProcessor();
-            qcmdprocessor.appendToQueue(new qcmds.QCmdStop());
-            for (String module : getModel().getModules()) {
-                qcmdprocessor.appendToQueue(new QCmdCompileModule(this,
-                        module,
-                        getModel().getModuleDir(module)
-                ));
-            }
-            qcmdprocessor.appendToQueue(new qcmds.QCmdCompilePatch(this));
-            // create subdirs...
+        });
+        Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
 
-            for (int i = 1; i < sdfilename.length(); i++) {
-                if (sdfilename.charAt(i) == '/') {
-                    qcmdprocessor.appendToQueue(new qcmds.QCmdCreateDirectory(sdfilename.substring(0, i)));
-                    qcmdprocessor.waitQueueFinished();
-                }
-            }
-            qcmdprocessor.waitQueueFinished();
-            Calendar cal = Calendar.getInstance();
-            if (true) { // getModel().isDirty()) {
-                // TODO: use time of last modification?
-            } else {
-                if (getFileNamePath() != null && !getFileNamePath().isEmpty()) {
-                    File f = new File(getFileNamePath());
-                    if (f.exists()) {
-                        cal.setTimeInMillis(f.lastModified());
-                    }
-                }
-            }
-            qcmdprocessor.appendToQueue(new qcmds.QCmdUploadPatchSD(sdfilename, cal));
-
-            Serializer serializer = new Persister();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
-            try {
-                serializer.write(getModel(), baos);
-            } catch (Exception ex) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-            String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
-            qcmdprocessor.appendToQueue(new qcmds.QCmdUploadFile(bais, sdfnPatch));
-
-            String dir;
-            int i = sdfilename.lastIndexOf('/');
-            if (i > 0) {
-                dir = sdfilename.substring(0, i);
-            } else {
-                dir = "";
-            }
-            uploadDependentFiles(dir);
-        } catch (Exception ex) {
-            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+        TargetModel targetModel = TargetModel.getTargetModel();
+        targetModel.getConnection().transmitStop();
+        for (String module : getModel().getModules()) {
+            CompileModule.run(module,
+                    getModel().getModuleDir(module));
         }
+        CompilePatch.run();
+
+        Calendar cal = Calendar.getInstance();
+        if (getDocumentRoot().getDirty()) {
+            // document modified, use current time
+            // TODO: (low priority) use time of last modification rather than current time
+        } else {
+            if (getFileNamePath() != null && !getFileNamePath().isEmpty()) {
+                File f = new File(getFileNamePath());
+                if (f.exists()) {
+                    cal.setTimeInMillis(f.lastModified());
+                }
+            }
+        }
+        byte b[] = PatchFileBinary.getPatchFileBinary();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(b);
+        targetModel.upload(sdfilename, inputStream, cal, b.length, ctx);
+
+        Serializer serializer = new Persister();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
+        try {
+            serializer.write(getModel(), baos);
+        } catch (Exception ex) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        byte[] ba = baos.toByteArray();
+        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
+        String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
+
+        targetModel.upload(sdfnPatch, bais, cal, ba.length, ctx);
+
+        String dir;
+        int i = sdfilename.lastIndexOf('/');
+        if (i > 0) {
+            dir = sdfilename.substring(0, i);
+        } else {
+            dir = "";
+        }
+        uploadDependentFiles(dir, ctx);
     }
 
-    public void uploadToSDCard() {
-        PatchController.this.uploadToSDCard("/" + getSDCardPath() + "/patch.bin");
+    public void uploadToSDCard(IJobContext ctx) throws IOException, ExecutionFailedException {
+        uploadToSDCard("/" + getSDCardPath() + "/patch.bin", ctx);
     }
 
     public void setFileNamePath(String FileNamePath) {

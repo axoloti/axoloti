@@ -25,6 +25,7 @@ import axoloti.connection.ConnectionStatusListener;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.patchbank.PatchBankModel;
 import axoloti.preferences.Preferences;
+import axoloti.shell.ExecutionFailedException;
 import axoloti.swingui.menus.StandardMenubar;
 import axoloti.swingui.mvc.AJFrame;
 import axoloti.swingui.patch.PatchViewSwing;
@@ -40,6 +41,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -49,6 +51,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.AbstractTableModel;
+import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -167,7 +170,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                             if (i > 0) {
                                 fn = fn.substring(0, i);
                             }
-                            SDFileInfo sdfi = TargetModel.getTargetModel().getSDCardInfo().find("/" + fn + "/patch.bin");
+                            TargetModel targetModel = TargetModel.getTargetModel();
+                            SDFileInfo sdfi = targetModel.getSDCardInfo().find("/" + fn + "/patch.bin");
                             if (sdfi != null) {
                                 if (en) {
                                     returnValue = "resolved locally, and exists on sdcard";
@@ -622,11 +626,21 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
         File f = getDModel().getFiles().get(jTable1.getSelectedRow());
-        model.uploadOneFile(f);
+        GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+            try {
+                model.uploadOneFile(f, ctx);
+            } catch (IOException | ExecutionFailedException | InterruptedException | ExecutionException ex) {
+                ctx.reportException(ex);
+            }
+        });
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
     private void jUploadAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jUploadAllActionPerformed
-        model.uploadAll();
+
+        GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+            model.uploadAll(ctx);
+        });
+
     }//GEN-LAST:event_jUploadAllActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

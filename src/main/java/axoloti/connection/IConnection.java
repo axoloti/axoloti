@@ -1,16 +1,24 @@
 package axoloti.connection;
 
 import axoloti.chunks.ChunkParser;
+import axoloti.job.IJobContext;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.View;
 import static axoloti.swingui.dialogs.USBPortSelectionDlg.convertErrorToString;
 import axoloti.target.TargetModel;
+import axoloti.target.fs.SDCardInfo;
 import axoloti.target.fs.SDCardMountStatusListener;
+import axoloti.target.fs.SDFileInfo;
 import axoloti.targetprofile.axoloti_core;
 import axoloti.usb.LibUSBContext;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.usb4java.Device;
@@ -19,7 +27,6 @@ import org.usb4java.DeviceHandle;
 import org.usb4java.DeviceList;
 import org.usb4java.LibUsb;
 import org.usb4java.LibUsbException;
-import qcmds.QCmdSerialTask;
 
 /**
  *
@@ -31,53 +38,58 @@ public abstract class IConnection extends View<TargetModel> {
         super(targetModel);
     }
 
-    public interface MemReadHandler
-    {
-        public void done(ByteBuffer mem);
-    }
-
     abstract public boolean isConnected();
     abstract public void disconnect();
     abstract public boolean connect(String cpuid);
     abstract public void selectPort();
-    abstract public void transmitStop();
-    abstract public void transmitStart();
-    abstract public void transmitStart(String patchName);
-    abstract public void transmitStart(int patchIndex);
-    abstract public void transmitPing();
-    abstract public void transmitRecallPreset(int presetNo);
-    abstract public void uploadFragment(byte[] buffer, int offset);
-    abstract public void transmitGetFileList();
-    abstract public void transmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3);
-    abstract public void transmitCreateFile(String filename, int size);
-    abstract public void transmitGetFileInfo(String filename);
-    abstract public void transmitGetFileContents(String filename, MemReadHandler handler);
-    abstract public void transmitCreateFile(String filename, int size, Calendar date);
-    abstract public void transmitCreateDirectory(String filename, Calendar date);
-    abstract public void transmitDeleteFile(String filename);
-    abstract public void transmitChangeWorkingDirectory(String path);
-    abstract public void transmitAppendFile(byte[] buffer);
-    abstract public void transmitCloseFile();
-    abstract public void transmitMemoryRead(int addr, int length, MemReadHandler handler);
-    abstract public void transmitMemoryRead(int addr, int length);
-    abstract public void transmitMemoryRead1Word(int addr);
-    abstract public void sendUpdatedPreset(byte[] b);
-    abstract public void sendMidi(int cable, int m0, int m1, int m2);
-    abstract public boolean appendToQueue(QCmdSerialTask cmd);
-    abstract public void transmitGetFWVersion();
-    abstract public void transmitCopyToFlash();
-    abstract public void bringToDFU();
-    abstract public void clearSync();
-    abstract public boolean waitSync(int msec);
-    abstract public boolean waitSync();
-    abstract public void clearReadSync();
-    abstract public boolean waitReadSync();
+
+    abstract public void transmitPacket(byte[] b) throws IOException;
+
+    abstract public void transmitStop() throws IOException;
+
+    abstract public void transmitStart() throws IOException;
+
+    abstract public void transmitStart(String patchName) throws IOException;
+
+    abstract public void transmitStart(int patchIndex) throws IOException;
+
+    abstract public void transmitPing() throws IOException;
+
+    abstract public void transmitRecallPreset(int presetNo) throws IOException;
+
+    abstract public void transmitVirtualInputEvent(byte b0, byte b1, byte b2, byte b3) throws IOException;
+
+    abstract public ByteBuffer read(int addr, int length) throws IOException;
+    abstract public void write(int addr, byte[] data) throws IOException;
+    abstract public void write(int address, File f) throws FileNotFoundException, IOException;
+
+    abstract public SDCardInfo getFileList() throws IOException;
+
+    abstract public SDFileInfo getFileInfo(String filename) throws IOException;
+
+    abstract public void upload(String filename, InputStream inputStream, Calendar cal, int size, IJobContext ctx) throws IOException;
+
+    abstract public ByteBuffer download(String filename, IJobContext ctx) throws IOException;
+
+    abstract public void createDirectory(String filename, Calendar date) throws IOException;
+
+    abstract public void deleteFile(String filename) throws IOException;
+
+    abstract public void transmitChangeWorkingDirectory(String path) throws IOException;
+
+    abstract public void sendUpdatedPreset(byte[] b) throws IOException;
+
+    abstract public void sendMidi(int cable, byte m0, byte m1, byte m2) throws IOException;
+
+    abstract public void transmitGetFWVersion() throws IOException;
+
+    abstract public void transmitCopyToFlash() throws IOException;
+
+    abstract public void bringToDFU() throws IOException;
+
     abstract public void setPatch(PatchViewLive patchViewLive);
     abstract public axoloti_core getTargetProfile();
-    abstract public ByteBuffer getMemReadBuffer();
-    abstract public int getMemRead1Word();
     abstract public boolean getSDCardPresent();
-    abstract public void setDisplayAddr(int a, int l);
     abstract public ChunkParser getFWChunks();
     abstract public String getFWID();
 
@@ -202,11 +214,8 @@ public abstract class IConnection extends View<TargetModel> {
         for (SDCardMountStatusListener sdcml : sdcmls) {
             sdcml.showSDCardUnmounted();
         }
-        getDModel().getSDCardInfo().setInfo(0, 0, 0);
+        getDModel().setSDCardInfo(new SDCardInfo(0, 0, 0, Collections.emptyList()));
         getDModel().setSDCardMounted(false);
     }
-
-    @Deprecated
-    abstract public void writeBytes(byte[] data);
 
 }

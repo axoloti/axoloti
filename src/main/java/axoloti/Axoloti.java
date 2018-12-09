@@ -17,6 +17,8 @@
  */
 package axoloti;
 
+import axoloti.job.IJobContext;
+import axoloti.job.JobContext;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.preferences.Preferences;
@@ -168,7 +170,7 @@ public class Axoloti {
         return failSafeMode;
     }
 
-    private static void initProperties() throws URISyntaxException, IOException {
+    public static void initProperties() throws URISyntaxException, IOException {
         String curDir = System.getProperty("user.dir");
         File jarFile = new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         String jarDir = jarFile.getParentFile().getCanonicalPath();
@@ -337,7 +339,8 @@ public class Axoloti {
             try {
                 MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
                 AxoObjects objs = new AxoObjects();
-                AxoObjects.loadAxoObjects();
+                IJobContext progress = new JobContext();
+                AxoObjects.loadAxoObjects(progress);
                 if (SplashScreen.getSplashScreen() != null) {
                     SplashScreen.getSplashScreen().close();
                 }
@@ -367,16 +370,14 @@ public class Axoloti {
                 System.exit(-2);
             }
         } else {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
+            EventQueue.invokeLater(() -> {
+                try {
+//                        TestProgress.doit();
+                    MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
                         frame.setVisible(true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
             });
         }
     }

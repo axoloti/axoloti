@@ -19,6 +19,9 @@ package axoloti.target.fs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  *
@@ -26,27 +29,33 @@ import java.util.Calendar;
  */
 public class SDCardInfo {
 
-    private final ArrayList<SDFileInfo> files = new ArrayList<>();
+    private final ArrayList<SDFileInfo> files;
     boolean available = false;
     int clusters = 0;
     int clustersize = 0;
     int sectorsize = 0;
 
-    boolean busy = false;
-
-    public SDCardInfo() {
-    }
-
-    public void setInfo(int clusters, int clustersize, int sectorsize) {
+    public SDCardInfo(
+            int clusters,
+            int clustersize,
+            int sectorsize,
+            List<SDFileInfo> files
+    ) {
         this.clusters = clusters;
         this.clustersize = clustersize;
         this.sectorsize = sectorsize;
-        files.clear();
-        busy = true;
+        this.files = new ArrayList<>(files);
+        this.files.sort(new Comparator<SDFileInfo>() {
+            @Override
+            public int compare(SDFileInfo o1, SDFileInfo o2) {
+                return o1.getFilename().compareTo(o2.getFilename());
+            }
+        });
     }
 
-    public ArrayList<SDFileInfo> getFiles() {
-        return (ArrayList<SDFileInfo>) files.clone();
+
+    public List<SDFileInfo> getFiles() {
+        return Collections.unmodifiableList(files);
     }
 
     public int getClusters() {
@@ -61,24 +70,13 @@ public class SDCardInfo {
         return sectorsize;
     }
 
-    public void addFile(String fname, int size, int timestamp) {
-        int DY = 1980 + ((timestamp & 0x0FE00) >> 9);
-        int DM = ((timestamp & 0x01E0) >> 5);
-        int DD = (timestamp & 0x001F);
-        int TH = (int) ((timestamp & 0x0F8000000l) >> 27);
-        int TM = (timestamp & 0x07E00000) >> 21;
-        int TS = (timestamp & 0x001F0000) >> 15;
-        Calendar date = Calendar.getInstance();
-        date.set(DY, DM - 1, DD, TH, TM, TS);
-        addFile(fname, size, date);
-    }
-
-    public void addFile(String fname, int size, Calendar date) {
+    @Deprecated
+    private void addFile(String fname, int size, Calendar date) {
+        // probably broken
         if (fname.lastIndexOf(0) > 0) {
             fname = fname.substring(0, fname.lastIndexOf(0));
         }
         if (fname.equals("/")) {
-            busy = false;
             return;
         }
         SDFileInfo sdf = null;
@@ -93,7 +91,7 @@ public class SDCardInfo {
             sdf.timestamp = date;
             return;
         }
-        sdf = new SDFileInfo(fname, date, size);
+//        sdf = new SDFileInfo(fname, date, size);
         files.add(sdf);
     }
 

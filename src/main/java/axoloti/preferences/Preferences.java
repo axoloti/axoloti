@@ -258,6 +258,10 @@ public class Preferences {
 
     private static Preferences singleton;
 
+    public static void loadDefaultPreferences() {
+        singleton = new Preferences();
+    }
+
     public static Preferences getPreferences() {
         if (singleton == null) {
             File p = new File(Preferences.getPrefsFileLoc());

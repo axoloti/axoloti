@@ -22,8 +22,10 @@ import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.abstractui.IAbstractEditor;
 import axoloti.abstractui.PatchView;
+import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.connection.CConnection;
 import axoloti.connection.ConnectionStatusListener;
+import axoloti.connection.IConnection;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.IView;
 import axoloti.objectlibrary.AxoObjects;
@@ -32,11 +34,13 @@ import axoloti.patch.PatchModel;
 import axoloti.patch.PatchViewType;
 import axoloti.patch.object.IAxoObjectInstance;
 import axoloti.preferences.Preferences;
+import axoloti.shell.ExecutionFailedException;
 import axoloti.swingui.TextEditor;
 import axoloti.swingui.components.PresetPanel;
 import axoloti.swingui.components.VisibleCablePanel;
 import axoloti.swingui.mvc.UndoListViewFrame;
 import axoloti.swingui.mvc.UndoUI;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
@@ -74,9 +78,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import qcmds.QCmdProcessor;
-import qcmds.QCmdStop;
-import qcmds.QCmdUploadPatch;
+import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -100,13 +102,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private JScrollPane jScrollPane1;
 
-    public PatchFrame(final PatchModel patchModel, QCmdProcessor qcmdprocessor) {
-        this(patchModel, qcmdprocessor, false);
+    public PatchFrame(final PatchModel patchModel) {
+        this(patchModel, false);
     }
 
-    public PatchFrame(final PatchModel patchModel, QCmdProcessor qcmdprocessor, boolean usePiccolo) {
+    public PatchFrame(final PatchModel patchModel, boolean usePiccolo) {
         this.patchModel = patchModel;
-        this.qcmdprocessor = qcmdprocessor;
         this.patchController = patchModel.getController();
         patchView = PatchViewFactory.patchViewFactory(patchModel);
         initComponents();
@@ -131,7 +132,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             public void actionPerformed(ActionEvent e) {
                 PatchViewType save = Preferences.getPreferences().getPatchViewType();
                 Preferences.getPreferences().setPatchViewType(PatchViewType.SWING);
-                PatchFrame pf = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor());
+                PatchFrame pf = new PatchFrame(patchModel);
                 patchController.addView(pf);
                 pf.setVisible(true);
                 Preferences.getPreferences().setPatchViewType(save);
@@ -145,7 +146,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             public void actionPerformed(ActionEvent e) {
                 PatchViewType save = Preferences.getPreferences().getPatchViewType();
                 Preferences.getPreferences().setPatchViewType(PatchViewType.PICCOLO);
-                PatchFrame pf = new PatchFrame(patchModel, QCmdProcessor.getQCmdProcessor(), true);
+                PatchFrame pf = new PatchFrame(patchModel, true);
                 patchController.addView(pf);
                 pf.setVisible(true);
                 Preferences.getPreferences().setPatchViewType(save);
@@ -362,8 +363,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     public PatchModel getDModel() {
         return patchModel;
     }
-
-    QCmdProcessor qcmdprocessor;
 
     public void scrollTo(Rectangle rect) {
         jScrollPane1.scrollRectToVisible(rect);
@@ -832,13 +831,17 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jCheckBoxLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLiveActionPerformed
         if (jCheckBoxLive.isSelected()) {
             if (goLive()) {
-                jCheckBoxLive.setEnabled(false);
+                // success
             } else {
                 jCheckBoxLive.setSelected(false);
             }
         } else {
-            qcmdprocessor.appendToQueue(new QCmdStop());
             patchController.setLocked(false);
+            try {
+                CConnection.getConnection().transmitStop();
+            } catch (IOException ex) {
+                Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jCheckBoxLiveActionPerformed
 
@@ -972,11 +975,16 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuCompileCodeActionPerformed
 
     private void jMenuUploadCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUploadCodeActionPerformed
-        //patchController.GetQCmdProcessor().setPatchController(null);
-        patchController.getQCmdProcessor().appendToQueue(new QCmdStop());
-        patchController.getQCmdProcessor().appendToQueue(new QCmdUploadPatch());
+        try {
+            //patchController.GetQCmdProcessor().setPatchController(null);
+            IConnection conn = CConnection.getConnection();
+            conn.transmitStop();
+            TargetModel.getTargetModel().uploadPatchToMemory();
 //        patchController.GetQCmdProcessor().AppendToQueue(new QCmdStart(patchController));
-        //patchController.GetQCmdProcessor().AppendToQueue(new QCmdLock(patchController));
+//patchController.GetQCmdProcessor().AppendToQueue(new QCmdLock(patchController));
+        } catch (IOException ex) {
+            Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuUploadCodeActionPerformed
 
     private void jMenuItemLockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLockActionPerformed
@@ -1039,20 +1047,36 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 jCheckBoxMenuItemLive.setEnabled(false);
             } else {
                 jCheckBoxMenuItemLive.setSelected(false);
-
             }
         } else {
-            qcmdprocessor.appendToQueue(new QCmdStop());
-            patchController.setLocked(false);
+            try {
+                patchController.setLocked(false);
+                IConnection conn = CConnection.getConnection();
+                conn.transmitStop();
+            } catch (IOException ex) {
+                Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jCheckBoxMenuItemLiveActionPerformed
 
     private void jMenuItemUploadSDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDActionPerformed
-        patchController.uploadToSDCard();
+        GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+            try {
+                patchController.uploadToSDCard(ctx);
+            } catch (IOException|ExecutionFailedException ex) {
+                ctx.reportException(ex);
+            }
+        });
     }//GEN-LAST:event_jMenuItemUploadSDActionPerformed
 
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
-        patchController.uploadToSDCard("/start.bin");
+        GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+            try {
+                patchController.uploadToSDCard("/start.bin", ctx);
+            } catch (IOException|ExecutionFailedException ex) {
+                ctx.reportException(ex);
+            }
+        });
     }//GEN-LAST:event_jMenuItemUploadSDStartActionPerformed
 
     private void jMenuSaveClipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveClipActionPerformed
@@ -1145,7 +1169,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     ; // fall thru
             }
         }
-        PatchViewLive.goLive(patchModel);
+        PatchViewCodegen pvcg = patchModel.getController().writeCode();
+        PatchViewLive pvl = new PatchViewLive(patchModel, pvcg);
+        pvl.goLive();
         return true;
     }
 

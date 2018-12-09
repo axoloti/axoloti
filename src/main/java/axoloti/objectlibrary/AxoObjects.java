@@ -17,6 +17,7 @@
  */
 package axoloti.objectlibrary;
 
+import axoloti.job.IJobContext;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
@@ -53,9 +54,9 @@ public class AxoObjects {
 
     private static AxoObjects axoObjects;
 
-    public static void loadAxoObjects() {
+    public static void loadAxoObjects(IJobContext progress) {
         axoObjects = new AxoObjects();
-        axoObjects.loadAxoObjects1();
+        axoObjects.loadAxoObjects1(progress);
     }
 
     public static AxoObjects getAxoObjects() {
@@ -168,8 +169,8 @@ public class AxoObjects {
         objectUUIDMap = new HashMap<>();
     }
 
-    public AxoObjectTreeNode loadAxoObjectsFromFolder(File folder, String prefix) {
-
+    public AxoObjectTreeNode loadAxoObjectsFromFolder(File folder, String prefix, IJobContext progress) {
+        progress.setNote("Loading objects from directory " + folder);
         String id = folder.getName();
         // is this objects in a library, if so use the library name
         if (prefix.length() == 0 && folder.getName().equals("objects")) {
@@ -226,10 +227,17 @@ public class AxoObjects {
                 return (no1.compareTo(no2));
             }
         });
+
+        int n = fileList.size();
+        IJobContext subprogress[] = progress.createSubContexts(n);
+        progress.setProgress(0);
+//        progress.setMaximum(+1);
+        int iProgress = 0;
         for (final File fileEntry : fileList) {
+//            progress.setProgress(iProgress++);
             if (fileEntry.isDirectory()) {
                 String dirname = fileEntry.getName();
-                AxoObjectTreeNode s = loadAxoObjectsFromFolder(fileEntry, prefix + "/" + dirname);
+                AxoObjectTreeNode s = loadAxoObjectsFromFolder(fileEntry, prefix + "/" + dirname, subprogress[iProgress]);
                 if (s.objects.size() > 0 || s.subNodes.size() > 0) {
                     t.subNodes.put(dirname, s);
                     for (IAxoObject o : t.objects) {
@@ -315,14 +323,15 @@ public class AxoObjects {
                     }
                 }
             }
+            iProgress++;
         }
         return t;
     }
 
-    public void loadAxoObjects1(String path) {
+    public void loadAxoObjects1(String path, IJobContext progress) {
         File folder = new File(path);
         if (folder.isDirectory()) {
-            AxoObjectTreeNode t = loadAxoObjectsFromFolder(folder, "");
+            AxoObjectTreeNode t = loadAxoObjectsFromFolder(folder, "", progress);
             if (t.objects.size() > 0 || t.subNodes.size() > 0) {
                 String dirname = folder.getName();
                 if (!objectTree.subNodes.containsKey(dirname)) {
@@ -356,24 +365,24 @@ public class AxoObjects {
 
     public Thread loaderThread;
 
-    public void loadAxoObjects1() {
-        Runnable objloader = new Runnable() {
-            @Override
-            public void run() {
+    public void loadAxoObjects1(IJobContext ctx) {
+        Runnable objloader = () -> {
                 objectTree = new AxoObjectTreeNode("/");
                 objectList = new ArrayList<>();
                 objectUUIDMap = new HashMap<>();
                 List<String> spath = Preferences.getPreferences().getObjectSearchPath();
-                if (spath != null) {
-                    for (String path : spath) {
-                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
-                        loadAxoObjects1(path);
-                    }
-                } else {
+                if (spath == null) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "search path empty!");
+                    spath = Collections.emptyList();
+                }
+                IJobContext ctxs[] = ctx.createSubContexts(spath.size());
+                for (int i = 0; i < spath.size(); i++) {
+                    String path = spath.get(i);
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
+                    loadAxoObjects1(path, ctxs[i]);
                 }
                 Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
-            }
+                ctx.setReady();
         };
         loaderThread = new Thread(objloader);
         loaderThread.start();
