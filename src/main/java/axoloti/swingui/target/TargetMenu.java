@@ -38,7 +38,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private JMenuItem jMenuItemFlashUpgrade_v1_v2;
     private JMenuItem jMenuItemFlashSDR;
     private JMenuItem jMenuItemMount;
-    private JMenuItem jMenuItemPanic;
     private JMenuItem jMenuItemPing;
     private JMenuItem jMenuItemRefreshFWID;
     private JSeparator jDevSeparator;
@@ -50,7 +49,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private JMenuItem jMenuItemFileManager;
     private JMenuItem jMenuItemRemote;
     private JMenuItem jMenuItemMemoryViewer;
-    private JMenuItem jMenuItemTest;
+    private JMenuItem jMenuItemTestProtocol;
 
     public TargetMenu(TargetModel targetModel) {
         super("Board");
@@ -246,8 +245,8 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         });
         add(jMenuItemMemoryViewer);
 
-        jMenuItemTest = new JMenuItem("Run tests...");
-        jMenuItemTest.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemTestProtocol = new JMenuItem("Run protocol tests...");
+        jMenuItemTestProtocol.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
@@ -257,7 +256,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
                 }
             }
         });
-        add(jMenuItemTest);
+        add(jMenuItemTestProtocol);
 
     }
 
@@ -366,6 +365,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
             jMenuItemSelectCom.setEnabled(!connect);
             jMenuItemEnterDFU.setEnabled(connect);
             jMenuItemMount.setEnabled(connect);
+            jMenuItemTestProtocol.setEnabled(connect);
             jMenuItemFlashDefault.setEnabled(
                     (connection != null)
                     && connection.getTargetProfile().hasSDRAM());

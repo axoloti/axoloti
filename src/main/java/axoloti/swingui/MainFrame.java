@@ -979,7 +979,7 @@ public class MainFrame extends TJFrame implements ActionListener {
         }
     }
 
-    public IProgressReporter getProgressReporter() {
+    private IProgressReporter getProgressReporter() {
 
         jProgressBar1.setMinimum(0);
         jProgressBar1.setMaximum(16384);

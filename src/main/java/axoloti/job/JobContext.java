@@ -24,7 +24,7 @@ public class JobContext implements IJobContext {
     private final float start;
     private final float end;
 
-    int maximum = 100;
+    private int maximum = 100;
 
     @Override
     public void setMaximum(int maximum) {

@@ -1250,7 +1250,7 @@ public class USBBulkConnection_v2 extends IConnection {
     final int tx_hdr_filecontents = 0x466F7841; // "AxoF"
 
     final boolean log_rx_diagnostics = false;
-    boolean receiving_full_filelist = false;
+    private boolean receiving_full_filelist = false;
 
     void processPacket(ByteBuffer rbuf, int size) {
         if (size == 0) {

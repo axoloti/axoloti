@@ -27,9 +27,10 @@ import java.awt.Graphics2D;
  */
 public class VRadioComponent extends HRadioComponent {
 
+    private int bsize = 14;
+
     public VRadioComponent(int value, int n) {
         super(value, n);
-        bsize = 14;
     }
 
     @Override
@@ -38,8 +39,8 @@ public class VRadioComponent extends HRadioComponent {
         if (i < 0) {
             return 0;
         }
-        if (i > n - 1) {
-            return n - 1;
+        if (i > getMax() - 1) {
+            return getMax() - 1;
         }
         return i;
     }
@@ -51,7 +52,7 @@ public class VRadioComponent extends HRadioComponent {
         } else {
             g2.setColor(Theme.getCurrentTheme().Object_Default_Background);
         }
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < getMax(); i++) {
             g2.fillOval(0, i * bsize, bsize, bsize);
         }
 
@@ -60,27 +61,27 @@ public class VRadioComponent extends HRadioComponent {
             g2.setStroke(strokeThick);
         }
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < getMax(); i++) {
             g2.drawOval(0, i * bsize, bsize, bsize);
         }
 
         if (isEnabled()) {
-            g2.fillOval(2, (int) value * bsize + 2, bsize - 3, bsize - 3);
+            g2.fillOval(2, (int) getValue() * bsize + 2, bsize - 3, bsize - 3);
         }
     }
 
     @Override
     public Dimension getMinimumSize() {
-        return new Dimension(bsize + 2, bsize * n + 2);
+        return new Dimension(bsize + 2, bsize * getMax() + 2);
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(bsize + 2, bsize * n + 2);
+        return new Dimension(bsize + 2, bsize * getMax() + 2);
     }
 
     @Override
     public Dimension getMaximumSize() {
-        return new Dimension(bsize + 2, bsize * n + 2);
+        return new Dimension(bsize + 2, bsize * getMax() + 2);
     }
 }

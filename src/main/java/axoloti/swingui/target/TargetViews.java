@@ -22,13 +22,12 @@ public class TargetViews implements IView<TargetModel> {
 
     final TargetModel targetModel;
 
-    KeyboardFrame keyboard;
-    FileManagerFrame fileManager;
-    AxolotiRemoteControl remote;
-    MidiRouting midiRouting;
-    MidiMonitor midiMonitor;
-    Memory memory;
-
+    private KeyboardFrame keyboard;
+    private FileManagerFrame fileManager;
+    private AxolotiRemoteControl remote;
+    private MidiRouting midiRouting;
+    private MidiMonitor midiMonitor;
+    private Memory memory;
 
     public TargetViews(TargetModel targetModel) {
         this.targetModel = targetModel;

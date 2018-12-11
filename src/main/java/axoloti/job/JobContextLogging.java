@@ -11,17 +11,12 @@ import javax.swing.SwingUtilities;
  */
 public class JobContextLogging implements IJobContext {
 
-    int minimum;
-    int maximum;
-
     public JobContextLogging() {
         Logger.getLogger(JobContextLogging.class.getName()).log(Level.INFO, null, "new JobContextLogging");
     }
 
-
     @Override
     public void setMaximum(int maximum) {
-        this.maximum = maximum;
     }
 
     @Override

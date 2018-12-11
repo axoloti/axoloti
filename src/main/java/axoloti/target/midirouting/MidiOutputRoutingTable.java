@@ -2,6 +2,7 @@ package axoloti.target.midirouting;
 
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
+import axoloti.job.GlobalJobProcessor;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
@@ -19,7 +20,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import axoloti.job.GlobalJobProcessor;
 
 /**
  *

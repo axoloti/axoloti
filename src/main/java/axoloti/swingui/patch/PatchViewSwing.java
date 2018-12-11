@@ -504,7 +504,7 @@ public class PatchViewSwing extends PatchView {
 
     private final HashMap<IModel, AxoObjectInstanceViewAbstract> view_cache = new HashMap<>();
 
-    ArrayView<IAxoObjectInstanceView, IAxoObjectInstance> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView, IAxoObjectInstance>() {
+    private ArrayView<IAxoObjectInstanceView, IAxoObjectInstance> objectInstanceViewSync = new ArrayView<IAxoObjectInstanceView, IAxoObjectInstance>() {
         @Override
         protected IAxoObjectInstanceView viewFactory(IAxoObjectInstance model) {
             AxoObjectInstanceViewAbstract view = view_cache.get(model);
@@ -535,7 +535,7 @@ public class PatchViewSwing extends PatchView {
 
     };
 
-    ArrayView<INetView, Net> netViewSync = new ArrayView<INetView, Net>() {
+    private ArrayView<INetView, Net> netViewSync = new ArrayView<INetView, Net>() {
         @Override
         protected INetView viewFactory(Net net) {
             NetView view = new NetView(net, PatchViewSwing.this);

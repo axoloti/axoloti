@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  */
 public class axoloti_core {
 
-    enum cputype_e {
+    private enum cputype_e {
 
         STM32F40xxx,
         STM32F42xxx

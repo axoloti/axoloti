@@ -26,6 +26,7 @@ import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.connection.CConnection;
 import axoloti.connection.ConnectionStatusListener;
 import axoloti.connection.IConnection;
+import axoloti.job.GlobalJobProcessor;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.IView;
 import axoloti.objectlibrary.AxoObjects;
@@ -66,6 +67,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,7 +80,6 @@ import javax.swing.KeyStroke;
 import javax.swing.text.DefaultEditorKit;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -414,6 +415,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jCheckBoxLive.setEnabled(true);
     }
 
+    @Override
     public void close() {
         DocumentWindowList.unregisterWindow(this);
         CConnection.getConnection().removeConnectionStatusListener(this);
@@ -459,7 +461,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    TextEditor notesEditor;
+    private TextEditor notesEditor;
 
     void showNotesFrame() {
         if (notesEditor == null) {
@@ -1244,11 +1246,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }
 
-    ArrayList<DocumentWindow> dwl = new ArrayList<>();
+    private ArrayList<DocumentWindow> dwl = new ArrayList<>();
 
     @Override
-    public ArrayList<DocumentWindow> getChildDocuments() {
-        return dwl;
+    public List<DocumentWindow> getChildDocuments() {
+        return Collections.unmodifiableList(dwl);
     }
 
     @Override

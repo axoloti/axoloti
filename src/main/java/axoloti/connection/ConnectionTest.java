@@ -1,13 +1,13 @@
 package axoloti.connection;
 
+import axoloti.job.GlobalJobProcessor;
+import axoloti.job.IJobContext;
 import axoloti.target.fs.SDFileInfo;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Calendar;
 import javax.imageio.IIOException;
-import axoloti.job.GlobalJobProcessor;
-import axoloti.job.IJobContext;
 
 /**
  *
@@ -150,7 +150,7 @@ public class ConnectionTest {
     }
 
     public static void doAllTests(IConnection c) throws IOException {
-        
+
         GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
             try {
                 ctx.setNote("doAllTests");

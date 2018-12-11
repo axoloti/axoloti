@@ -144,7 +144,7 @@ public abstract class PatchView extends View<PatchModel> {
         return p;
     }
 
-    protected enum Direction {
+    public enum Direction {
         UP, LEFT, DOWN, RIGHT
     }
 

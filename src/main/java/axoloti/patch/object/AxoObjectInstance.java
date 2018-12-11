@@ -294,7 +294,11 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
 
     @Override
     public List<Modulator> getModulators() {
-        return modulators;
+        if (modulators == null) {
+            return null;
+        } else {
+            return Collections.unmodifiableList(modulators);
+        }
     }
 
     @Override

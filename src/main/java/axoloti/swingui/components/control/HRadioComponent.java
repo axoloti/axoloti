@@ -34,9 +34,9 @@ import java.awt.event.MouseEvent;
  */
 public class HRadioComponent extends ACtrlComponent {
 
-    double value;
-    int n;
-    int bsize = 12;
+    private double value;
+    private int n;
+    private int bsize = 12;
 
     public HRadioComponent(int value, int n) {
         super();
@@ -232,6 +232,10 @@ public class HRadioComponent extends ACtrlComponent {
         setSize(getPreferredSize());
         revalidate();
 //        doLayout();
+    }
+
+    public int getMax() {
+        return n;
     }
 
     @Override

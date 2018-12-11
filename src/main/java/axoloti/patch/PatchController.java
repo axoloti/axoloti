@@ -5,6 +5,7 @@ import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
 import axoloti.datatypes.DataType;
+import axoloti.job.IJobContext;
 import axoloti.mvc.AbstractController;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
@@ -55,7 +56,6 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
-import axoloti.job.IJobContext;
 
 public class PatchController extends AbstractController<PatchModel, IView> {
 
@@ -305,8 +305,8 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 mt.getParameter().getController().changeModulation(m, 0.0);
             }
         }
-        boolean succeeded = 
-                removeUndoableElementFromList(PatchModel.PATCH_OBJECTINSTANCES, o);
+        boolean succeeded
+                = removeUndoableElementFromList(PatchModel.PATCH_OBJECTINSTANCES, o);
 //        if (succeeded) {
 //            o.dispose();
 //        }
@@ -680,7 +680,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
     }
 
     // ------------- new objectinstances MVC stuff
-
     public Net getNetFromIolet(IoletInstance il) {
         for (Net n : getModel().getNets()) {
             if (il.isSource()) {
@@ -689,8 +688,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                         return n;
                     }
                 }
-            }
-            else {
+            } else {
                 for (InletInstance d : n.getDestinations()) {
                     if (d == il) {
                         return n;
