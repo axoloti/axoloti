@@ -1,12 +1,14 @@
 package axoloti.shell;
 
+import axoloti.job.IJobContext;
+import axoloti.job.JobContext;
 import static axoloti.shell.ShellTask.getFirmwareDir;
 import axoloti.utils.OSDetect;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -49,7 +51,12 @@ public class CompileModule {
                 getExec(),
                 getEnvironment(module, moduleDir));
         println("Start compiling module " + module);
-        GlobalJobProcessor.getJobProcessor().exec(shellTask.getJob());
+        IJobContext ctx = new JobContext();
+        Thread t = new Thread(() -> {
+            Consumer<IJobContext> j = shellTask.getJob();
+            j.accept(ctx);
+        });
+        t.start();
         boolean success = shellTask.isSuccess();
         if (success) {
             println("Done compiling module " + module);
