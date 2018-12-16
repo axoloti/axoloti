@@ -46,6 +46,10 @@ public class ParameterInstance4LevelX16 extends ParameterInstance<Parameter4Leve
     public ParameterInstance4LevelX16() {
     }
 
+    public ParameterInstance4LevelX16(@Attribute(name = "value") int v) {
+        this.value = v;
+    }
+
     public ParameterInstance4LevelX16(Parameter4LevelX16 param, AxoObjectInstance axoObjInstance) {
         super(param, axoObjInstance);
     }
@@ -95,4 +99,14 @@ public class ParameterInstance4LevelX16 extends ParameterInstance<Parameter4Leve
         this.presets = presets;
         firePropertyChange(ParameterInstance.PRESETS, prevValue, this.presets);
     }
+
+    @Override
+    public void copyValueFrom(ParameterInstance p) {
+        super.copyValueFrom(p);
+        if (p instanceof ParameterInstance4LevelX16) {
+            ParameterInstance4LevelX16 p1 = (ParameterInstance4LevelX16) p;
+            setValue(p1.getValue());
+        }
+    }
+
 }

@@ -25,7 +25,7 @@ import axoloti.object.display.DisplayVScale;
  *
  * TODO: complete DisplayInstanceVScale
  */
-public class DisplayInstanceVScale extends DisplayInstance1<DisplayVScale> {
+public class DisplayInstanceVScale extends DisplayInstance<DisplayVScale> {
 
     public DisplayInstanceVScale(DisplayVScale display) {
         super(display);
@@ -33,12 +33,11 @@ public class DisplayInstanceVScale extends DisplayInstance1<DisplayVScale> {
 
     @Override
     public Object getValue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
     public void setValue(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

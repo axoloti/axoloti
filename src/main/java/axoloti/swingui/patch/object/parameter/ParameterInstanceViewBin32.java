@@ -4,7 +4,7 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.swingui.components.control.CheckboxComponent;
 
-class ParameterInstanceViewBin32 extends ParameterInstanceViewInt32 {
+class ParameterInstanceViewBin32 extends ParameterInstanceViewBin {
 
     ParameterInstanceViewBin32(ParameterInstance parameterInstance, IAxoObjectInstanceView axoObjectInstanceView) {
         super(parameterInstance, axoObjectInstanceView);

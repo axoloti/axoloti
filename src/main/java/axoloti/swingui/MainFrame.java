@@ -24,7 +24,6 @@ import static axoloti.Axoloti.RELEASE_DIR;
 import static axoloti.Axoloti.RUNTIME_DIR;
 import axoloti.Version;
 import axoloti.abstractui.DocumentWindowList;
-import axoloti.abstractui.PatchView;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
 import axoloti.job.GlobalJobProcessor;
@@ -40,7 +39,6 @@ import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
 import axoloti.preferences.Theme;
 import axoloti.swingui.patch.PatchFrame;
-import axoloti.swingui.patch.PatchViewFactory;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patchbank.PatchBank;
 import axoloti.swingui.preferences.ThemeEditor;
@@ -60,7 +58,6 @@ import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -79,10 +76,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 
 /**
  *
@@ -331,22 +324,23 @@ public class MainFrame extends TJFrame implements ActionListener {
                 if (arg.endsWith(".axp") || arg.endsWith(".axs") || arg.endsWith(".axh")) {
                     final File f = new File(arg);
                     if (f.exists() && f.canRead()) {
-                        Runnable r = new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    // wait for objects be loaded
-                                    if (AxoObjects.getAxoObjects().loaderThread.isAlive()) {
-                                        EventQueue.invokeLater(this);
-                                    } else {
-                                        PatchViewSwing.openPatch(f);
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-                        EventQueue.invokeLater(r);
+                        // TODO: fix opening from command line
+//                        Runnable r = new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    // wait for objects be loaded
+//                                    if (AxoObjects.getAxoObjects().loaderThread.isAlive()) {
+//                                        EventQueue.invokeLater(this);
+//                                    } else {
+//                                        PatchViewSwing.openPatch(f);
+//                                    }
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        };
+//                        EventQueue.invokeLater(r);
                     }
                 } else if (arg.endsWith(".axo")) {
                     // NOP for AXO at the moment
@@ -356,10 +350,8 @@ public class MainFrame extends TJFrame implements ActionListener {
 
         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,
                 "Known issues: \n"
-                + "* subpatch objects do not promote their objects? (breaks fx/flanger)\n"
                 + "* piccolo view: nets do not update correctly (swing views are fine)\n"
-                + "* modulations are broken (rename PExModulationSourceChange into ModulationSourceChange in obj code)\n"
-                + "* modules are broken\n");
+        );
         init();
     }
 
@@ -554,185 +546,7 @@ public class MainFrame extends TJFrame implements ActionListener {
         }
     }//GEN-LAST:event_jCheckBoxConnectActionPerformed
 
-// usually we run all tests, as many may fail for same reason and you want
-// a list of all affected files, but if you want to stop on first failure, flip this flag
-    // TODO: cleanup: elimate
-    public static boolean stopOnFirstFail = false;
 
-    public boolean runAllTests() {
-        boolean r1 = runPatchTests();
-        if (!r1 && stopOnFirstFail) {
-            return r1;
-        }
-        boolean r2 = runObjectTests();
-        if (!r2 && stopOnFirstFail) {
-            return r2;
-        }
-        return r1 && r2;
-    }
-
-    public boolean runPatchTests() {
-        AxolotiLibrary fLib = Preferences.getPreferences().getLibrary(AxolotiLibrary.FACTORY_ID);
-        if (fLib == null) {
-            return false;
-        }
-        File testDirName = new File("test");
-        if (!testDirName.isDirectory()) {
-            testDirName.mkdir();
-        }
-        testDirName = new File("test/" + fLib.getId());
-        if (!testDirName.isDirectory()) {
-            testDirName.mkdir();
-        }
-        testDirName = new File("test/" + fLib.getId() + "/patches/");
-        if (!testDirName.isDirectory()) {
-            testDirName.mkdir();
-        }
-        return runTestDir(new File(fLib.getLocalLocation() + "patches"), "test/" + fLib.getId());
-    }
-
-    public boolean runObjectTests() {
-        AxolotiLibrary fLib = Preferences.getPreferences().getLibrary(AxolotiLibrary.FACTORY_ID);
-        if (fLib == null) {
-            return false;
-        }
-        File testDirName = new File("test");
-        if (!testDirName.isDirectory()) {
-            testDirName.mkdir();
-        }
-        testDirName = new File("test/" + fLib.getId());
-        if (!testDirName.isDirectory()) {
-            testDirName.mkdir();
-        }
-        testDirName = new File("test/" + fLib.getId() + "/objects/");
-        if (!testDirName.isDirectory()) {
-            testDirName.mkdir();
-        }
-        return runTestDir(new File(fLib.getLocalLocation() + "objects"), "test/" + fLib.getId());
-    }
-
-    public boolean runFileTest(String patchName) {
-        return runTestDir(new File(patchName), "");
-    }
-
-    private boolean runTestDir(File f, String targetPath) {
-        if (!f.exists()) {
-            return true;
-        }
-        if (f.isDirectory()) {
-            targetPath += File.separator + f.getName();
-            File testDirName = new File(targetPath);
-            if (!testDirName.isDirectory()) {
-                testDirName.mkdir();
-            }
-            File[] files = f.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File f, String name) {
-                    File t = new File(f + File.separator + name);
-                    if (t.isDirectory()) {
-                        return true;
-                    }
-
-                    if (name.length() < 4) {
-                        return false;
-                    }
-                    String extension = name.substring(name.length() - 4);
-                    boolean b = (extension.equals(".axh") || extension.equals(".axp"));
-                    return b;
-                }
-            });
-            for (File s : files) {
-                if (!runTestDir(s, targetPath) && stopOnFirstFail) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        return runTestCompile(f, targetPath);
-    }
-
-    private boolean runTestCompile(File f, String destinationPath) {
-        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "testing {0}", f.getPath());
-
-        Strategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy);
-        try {
-            boolean status;
-            PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.getController();
-            String basename = f.getName();
-            File testDirName = new File(destinationPath);
-            if (!testDirName.isDirectory()) {
-                testDirName.mkdir();
-            }
-            String outFileName = destinationPath + File.separator + basename.substring(0, basename.lastIndexOf('.'));
-            patchController.writeCode(outFileName);
-            return true;
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "COMPILE FAILED: " + f.getPath(), ex);
-            return false;
-        }
-    }
-
-    public boolean runFileUpgrade(String patchName) {
-        return runUpgradeDir(new File(patchName));
-    }
-
-    private boolean runUpgradeDir(File f) {
-        if (!f.exists()) {
-            return true;
-        }
-        if (f.isDirectory()) {
-            File[] files = f.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File f, String name) {
-                    File t = new File(f + File.separator + name);
-                    if (t.isDirectory()) {
-                        return true;
-                    }
-
-                    if (name.length() < 4) {
-                        return false;
-                    }
-                    String extension = name.substring(name.length() - 4);
-                    boolean b = (extension.equals(".axh") || extension.equals(".axp") || extension.equals(".axs"));
-                    return b;
-                }
-            });
-            for (File s : files) {
-                if (!runUpgradeDir(s) && stopOnFirstFail) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        return runUpgradeFile(f);
-    }
-
-    private boolean runUpgradeFile(File f) {
-        Logger.getLogger(MainFrame.class.getName()).log(Level.INFO, "upgrading {0}", f.getPath());
-
-        Strategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy);
-        try {
-            boolean status;
-            PatchModel patchModel = serializer.read(PatchModel.class, f);
-            PatchController patchController = patchModel.getController();
-            PatchFrame patchFrame = new PatchFrame(patchModel);
-            PatchView patchView = PatchViewFactory.patchViewFactory(patchModel);
-            patchController.addView(patchFrame);
-            status = patchModel.save(f);
-            if (status == false) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: {0}", f.getPath());
-            }
-            return status;
-        } catch (Exception ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "UPGRADING FAILED: " + f.getPath(), ex);
-            return false;
-        }
-    }
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         quit();

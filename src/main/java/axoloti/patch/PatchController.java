@@ -81,6 +81,9 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 }
             }
         }
+        for (Net n : model.getNets()) {
+            n.createController();
+        }
         promoteOverloading(true);
     }
 
@@ -93,17 +96,13 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         }
     }
 
-    public void compile() {
-        try {
-            for (String module : getModel().getModules()) {
-                CompileModule.run(
-                        module,
-                        getModel().getModuleDir(module));
-            }
-            CompilePatch.run();
-        } catch (ExecutionFailedException ex) {
-            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+    public void compile() throws ExecutionFailedException {
+        for (String module : getModel().getModules()) {
+            CompileModule.run(
+                    module,
+                    getModel().getModuleDir(module));
         }
+        CompilePatch.run();
     }
 
     public void uploadDependentFiles(String sdpath, IJobContext ctx) {

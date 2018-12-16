@@ -54,10 +54,6 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
         pv.scrollTo(this);
     }
 
-    @Override
-    public void update() {
-    }
-
     final void initCtrlComponent(ACtrlComponent ctrl) {
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));

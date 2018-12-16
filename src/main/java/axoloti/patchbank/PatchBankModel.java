@@ -1,6 +1,5 @@
 package axoloti.patchbank;
 
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.patch.PatchController;
@@ -29,10 +28,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 import axoloti.job.GlobalJobProcessor;
 import axoloti.job.IJobContext;
 
@@ -168,14 +163,8 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
         }
         CompletableFuture<PatchController> pccf = new CompletableFuture<>();
         ctx.doInSync(() -> {
-            Strategy strategy = new AnnotationStrategy();
-            Serializer serializer = new Persister(strategy);
             try {
-                PatchModel patchModel = serializer.read(PatchModel.class, f);
-                patchModel.setFileNamePath(f.getAbsolutePath());
-                AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
-                patchModel.setDocumentRoot(documentRoot);
-                documentRoot.getUndoManager().discardAllEdits();
+                PatchModel patchModel = PatchModel.open(f);
                 pccf.complete(patchModel.getController());
             } catch (Exception ex) {
                 ctx.reportException(ex);

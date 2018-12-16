@@ -7,8 +7,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.UndoManager;
@@ -82,7 +80,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
 
         // this check fails with automated tests
         if (!SwingUtilities.isEventDispatchThread()) {
-            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
+//            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
         }
         for (View view : registeredViews) {
             view.modelPropertyChange(evt);

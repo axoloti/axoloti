@@ -5,6 +5,7 @@ import axoloti.patch.object.display.DisplayInstanceFrac32;
 import axoloti.patch.object.display.DisplayInstanceFrac8S128VBar;
 import axoloti.patch.object.display.DisplayInstanceFrac8U128VBar;
 import axoloti.patch.object.display.DisplayInstanceInt32;
+import axoloti.patch.object.display.DisplayInstanceVScale;
 
 /**
  *
@@ -25,6 +26,8 @@ public class DisplayInstanceViewFactory {
             view = new DisplayInstanceView128B(model);
         } else if (model instanceof DisplayInstanceFrac8U128VBar) {
             view = new DisplayInstanceView128B(model);
+        } else if (model instanceof DisplayInstanceVScale) {
+            view = new DisplayInstanceView0(model);
         } else {
             view = null;
             throw new Error("display type not implemented: " + model.getClass());

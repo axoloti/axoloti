@@ -19,6 +19,8 @@ package axoloti.swingui.menus;
 
 import axoloti.FileUtils;
 import axoloti.abstractui.PatchView;
+import axoloti.job.IJobContext;
+import axoloti.job.JobContext;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.patch.PatchModel;
@@ -45,8 +47,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JPopupMenu.Separator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import axoloti.job.JobContext;
-import axoloti.job.IJobContext;
 
 /**
  *
@@ -225,9 +225,11 @@ public class FileMenu extends JMenu {
     }
 
     private void jMenuAutoTestActionPerformed(java.awt.event.ActionEvent evt) {
-        if (JOptionPane.showConfirmDialog(MainFrame.mainframe, "Running these tests, takes a long time and will freeze UI, with no output, until complete, do you wish to continue?") == JOptionPane.YES_OPTION) {
-            MainFrame.mainframe.runAllTests();
-        }
+        // TODO: fix launching tests from menu, use cmdline option for now
+//        if (JOptionPane.showConfirmDialog(MainFrame.mainframe, "Running these tests, takes a long time and will freeze UI, with no output, until complete, do you wish to continue?") == JOptionPane.YES_OPTION) {
+//
+//            MainFrame.mainframe.runAllTests();
+//        }
     }
 
     private void jMenuRegenerateObjectsActionPerformed(java.awt.event.ActionEvent evt) {

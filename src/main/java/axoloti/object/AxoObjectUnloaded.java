@@ -18,6 +18,7 @@
 package axoloti.object;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import org.simpleframework.xml.Root;
 
 /**
@@ -40,7 +41,7 @@ public class AxoObjectUnloaded extends AxoObjectAbstract0 {
 
     private AxoObjectFromPatch loadedObject;
 
-    public AxoObjectFromPatch load() {
+    public AxoObjectFromPatch load() throws FileNotFoundException {
         if (loadedObject == null) {
             loadedObject = new AxoObjectFromPatch(f);
             loadedObject.id = id;

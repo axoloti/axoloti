@@ -38,6 +38,7 @@ import axoloti.property.StringProperty;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.CharEscape;
 import java.awt.Point;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -152,7 +153,11 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
                 type = types.get(0);
                 if (type instanceof AxoObjectUnloaded) {
                     AxoObjectUnloaded aou = (AxoObjectUnloaded) type;
-                    type = aou.load();
+                    try {
+                        type = aou.load();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
                 return type;
             }

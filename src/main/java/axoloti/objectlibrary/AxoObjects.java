@@ -122,13 +122,17 @@ public class AxoObjects {
                 f = new File(fnameP);
                 if (f.isFile()) {
                     Logger.getLogger(AxoObjects.class.getName()).log(Level.FINE, "hit : {0}", fnameP);
-                    AxoObjectAbstract o = new AxoObjectFromPatch(f);
-                    if (n.startsWith("./") || n.startsWith("../")) {
-                        o.createdFromRelativePath = true;
+                    try {
+                        AxoObjectAbstract o = new AxoObjectFromPatch(f);
+                        if (n.startsWith("./") || n.startsWith("../")) {
+                            o.createdFromRelativePath = true;
+                        }
+                        o.setPath(f.getPath());
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameP);
+                        set.add(o);
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    o.setPath(f.getPath());
-                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "loaded : {0}", fnameP);
-                    set.add(o);
                     return set;
                 }
             }
@@ -363,29 +367,23 @@ public class AxoObjects {
         }
     }
 
-    public Thread loaderThread;
-
     public void loadAxoObjects1(IJobContext ctx) {
-        Runnable objloader = () -> {
-                objectTree = new AxoObjectTreeNode("/");
-                objectList = new ArrayList<>();
-                objectUUIDMap = new HashMap<>();
-                List<String> spath = Preferences.getPreferences().getObjectSearchPath();
-                if (spath == null) {
-                    Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "search path empty!");
-                    spath = Collections.emptyList();
-                }
-                IJobContext ctxs[] = ctx.createSubContexts(spath.size());
-                for (int i = 0; i < spath.size(); i++) {
-                    String path = spath.get(i);
-                    Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
-                    loadAxoObjects1(path, ctxs[i]);
-                }
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
-                ctx.setReady();
-        };
-        loaderThread = new Thread(objloader);
-        loaderThread.start();
+        objectTree = new AxoObjectTreeNode("/");
+        objectList = new ArrayList<>();
+        objectUUIDMap = new HashMap<>();
+        List<String> spath = Preferences.getPreferences().getObjectSearchPath();
+        if (spath == null) {
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, "search path empty!");
+            spath = Collections.emptyList();
+        }
+        IJobContext ctxs[] = ctx.createSubContexts(spath.size());
+        for (int i = 0; i < spath.size(); i++) {
+            String path = spath.get(i);
+            Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "search path : {0}", path);
+            loadAxoObjects1(path, ctxs[i]);
+        }
+        Logger.getLogger(AxoObjects.class.getName()).log(Level.INFO, "finished loading objects");
+        ctx.setReady();
     }
 
     public static String convertToLegalFilename(String s) {

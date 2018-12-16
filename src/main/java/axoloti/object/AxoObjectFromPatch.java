@@ -18,7 +18,6 @@
 package axoloti.object;
 
 import axoloti.codegen.patch.PatchViewCodegen;
-import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.display.Display;
 import axoloti.object.inlet.Inlet;
@@ -27,10 +26,7 @@ import axoloti.object.parameter.Parameter;
 import axoloti.objectlibrary.AxoObjects;
 import axoloti.patch.PatchModel;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -41,16 +37,9 @@ public class AxoObjectFromPatch extends AxoObject {
     private PatchModel patchModel;
     private final File f;
 
-    public AxoObjectFromPatch(File f) {
+    public AxoObjectFromPatch(File f) throws FileNotFoundException {
         this.f = f;
-        Serializer serializer = new Persister();
-        try {
-            patchModel = serializer.read(PatchModel.class, f);
-            patchModel.setFileNamePath(f.getPath());
-            patchModel.setDocumentRoot(new AbstractDocumentRoot());
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        patchModel = PatchModel.open(f);
         shortId = f.getName().substring(0, f.getName().lastIndexOf('.'));
         setPath(f.getAbsolutePath());
         updateObject();

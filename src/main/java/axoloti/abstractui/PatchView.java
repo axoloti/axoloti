@@ -34,10 +34,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
 
 public abstract class PatchView extends View<PatchModel> {
 
@@ -242,10 +238,8 @@ public abstract class PatchView extends View<PatchModel> {
     }
 
     public static void openPatch(String name, InputStream stream) {
-        Strategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy);
         try {
-            PatchModel patchModel = serializer.read(PatchModel.class, stream);
+            PatchModel patchModel = PatchModel.open(name, stream);
             PatchFrame pf = openPatchModel(patchModel, name);
             pf.setVisible(true);
 
@@ -265,22 +259,10 @@ public abstract class PatchView extends View<PatchModel> {
             }
         }
 
-        Strategy strategy = new AnnotationStrategy();
-        Serializer serializer = new Persister(strategy);
         try {
-            PatchModel patchModel = serializer.read(PatchModel.class, f);
+            PatchModel patchModel = PatchModel.open(f);
             PatchFrame pf = openPatchModel(patchModel, f.getAbsolutePath());
             return pf;
-        } catch (java.lang.reflect.InvocationTargetException ite) {
-            Throwable targetException = ite.getTargetException();
-            if (targetException instanceof PatchModel.PatchVersionException) {
-                PatchModel.PatchVersionException pve = (PatchModel.PatchVersionException) targetException;
-                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
-                        new Object[]{f.getAbsoluteFile(), pve.getMessage()});
-            } else {
-                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ite);
-            }
-            return null;
         } catch (Exception ex) {
             Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ex);
             return null;

@@ -4,7 +4,9 @@ import axoloti.abstractui.IAxoObjectInstanceView;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.ParameterInstance4LevelX16;
 import axoloti.patch.object.parameter.preset.PresetInt;
+import axoloti.preferences.Theme;
 import axoloti.swingui.components.control.Checkbox4StatesComponent;
+import java.beans.PropertyChangeEvent;
 
 class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
 
@@ -44,6 +46,34 @@ class ParameterInstanceView4LevelX16 extends ParameterInstanceView {
     @Override
     public Checkbox4StatesComponent getControlComponent() {
         return ctrl;
+    }
+
+    @Override
+    public void update() {
+        int i = getPresetEditActive();
+        if (i > 0) {
+            PresetInt p = getDModel().getPreset(i);
+            if (p != null) {
+                setBackground(Theme.getCurrentTheme().Parameter_Preset_Highlight);
+                getControlComponent().setValue(p.getValue());
+            } else {
+                setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
+                getControlComponent().setValue(getDModel().getValue());
+            }
+        } else {
+            setBackground(Theme.getCurrentTheme().Parameter_Default_Background);
+            getControlComponent().setValue(getDModel().getValue());
+        }
+    }
+
+    @Override
+    public void modelPropertyChange(PropertyChangeEvent evt) {
+        super.modelPropertyChange(evt);
+        if (ParameterInstance4LevelX16.VALUE.is(evt)) {
+            update();
+        } else if (ParameterInstance4LevelX16.PRESETS.is(evt)) {
+            update();
+        }
     }
 
 }

@@ -81,7 +81,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             for (DisplayInstanceView p : o.getDisplayInstanceViews()) {
                 p.setOffset(offset);
                 p.setIndex(i);
-                int l = p.getDModel().getLength();
+                int l = p.getDModel().getDModel().getLength();
                 offset += l;
                 i++;
                 displayInstances.add(p);
@@ -384,7 +384,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             if (!s.isEmpty()) {
                 c.append("   " + o.getDModel().getCInstanceName() + "_i.Init(" + parentReference);
                 for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
-                    if (i.getDModel().getLength() > 0) {
+                    if (i.getDModel().getDModel().getLength() > 0) {
                         c.append(", ");
                         c.append(i.valueName(""));
                     }

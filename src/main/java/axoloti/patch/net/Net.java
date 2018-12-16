@@ -240,7 +240,7 @@ public class Net extends AbstractModel<NetController> {
     }
 
     @Override
-    protected NetController createController() {
+    public NetController createController() {
         return new NetController(this);
     }
 

@@ -67,7 +67,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -973,7 +972,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuGenerateCodeActionPerformed
 
     private void jMenuCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCompileCodeActionPerformed
-        patchController.compile();
+        try {
+            patchController.compile();
+        } catch (ExecutionFailedException ex) {
+            Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuCompileCodeActionPerformed
 
     private void jMenuUploadCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUploadCodeActionPerformed
@@ -1118,8 +1121,12 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuSaveCopyActionPerformed
 
     private void jMenuGenerateAndCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateAndCompileCodeActionPerformed
-        patchController.writeCode();
-        patchController.compile();
+        try {
+            patchController.writeCode();
+            patchController.compile();
+        } catch (ExecutionFailedException ex) {
+            Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -1250,7 +1257,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public List<DocumentWindow> getChildDocuments() {
-        return Collections.unmodifiableList(dwl);
+        return dwl;
     }
 
     @Override

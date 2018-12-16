@@ -19,6 +19,8 @@ package axoloti.patch;
 
 import axoloti.Axoloti;
 import axoloti.Version;
+import axoloti.abstractui.PatchView;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.AbstractModel;
 import axoloti.object.AxoObjectPatcher;
 import axoloti.object.IAxoObject;
@@ -48,6 +50,9 @@ import axoloti.utils.StringUtils;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -138,6 +143,39 @@ public class PatchModel extends AbstractModel<PatchController> {
         PatchVersionException(String msg) {
             super(msg);
         }
+    }
+
+    public static PatchModel open(String patchName, InputStream stream) throws FileNotFoundException {
+        Strategy strategy = new AnnotationStrategy();
+        Serializer serializer = new Persister(strategy);
+        try {
+            PatchModel patchModel = serializer.read(PatchModel.class, stream);
+            patchModel.setFileNamePath(patchName);
+            AbstractDocumentRoot documentRoot = new AbstractDocumentRoot();
+            patchModel.setDocumentRoot(documentRoot);
+            PatchController patchController = patchModel.getController();
+            documentRoot.getUndoManager().discardAllEdits();
+            return patchModel;
+        } catch (java.lang.reflect.InvocationTargetException ite) {
+            Throwable targetException = ite.getTargetException();
+            if (targetException instanceof PatchModel.PatchVersionException) {
+                PatchModel.PatchVersionException pve = (PatchModel.PatchVersionException) targetException;
+                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, "Patch produced with newer version of Axoloti {0} {1}",
+                        new Object[]{patchName, pve.getMessage()});
+            } else {
+                Logger.getLogger(PatchView.class.getName()).log(Level.SEVERE, null, ite);
+            }
+            return null;
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    public static PatchModel open(File f) throws FileNotFoundException {
+        if (!f.canRead()) {
+            throw new FileNotFoundException();
+        }
+        return open(f.getPath(), new FileInputStream(f));
     }
 
     private static final int AVX = getVersionX(Version.AXOLOTI_SHORT_VERSION),

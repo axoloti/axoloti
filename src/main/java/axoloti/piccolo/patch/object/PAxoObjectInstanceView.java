@@ -34,7 +34,6 @@ import axoloti.swingui.objecteditor.ObjectEditorFactory;
 import axoloti.swingui.patch.PatchViewSwing;
 import axoloti.swingui.patch.object.attribute.AttributeInstanceView;
 import axoloti.swingui.patch.object.inlet.InletInstanceView;
-import axoloti.swingui.patch.object.outlet.OutletInstanceView;
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.event.ActionEvent;
@@ -276,7 +275,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
     ArrayView<IOutletInstanceView, OutletInstance> outletInstanceViewSync = new ArrayView<IOutletInstanceView, OutletInstance>() {
         @Override
         protected IOutletInstanceView viewFactory(OutletInstance outlet) {
-            IOutletInstanceView view = (OutletInstanceView) view_cache.get(outlet);
+            IOutletInstanceView view = (IOutletInstanceView) view_cache.get(outlet);
             if (view == null) {
                 view = POutletInstanceViewFactory.createView(outlet, PAxoObjectInstanceView.this);
             }

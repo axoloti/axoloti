@@ -29,9 +29,4 @@ public abstract class DisplayInstance1<T extends Display> extends DisplayInstanc
         super(display);
     }
 
-    @Override
-    public int getLength() {
-        return 1;
-    }
-//    public abstract Value getValueRef();
 }

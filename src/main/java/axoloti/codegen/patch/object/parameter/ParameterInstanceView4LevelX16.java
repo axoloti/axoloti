@@ -13,6 +13,11 @@ public class ParameterInstanceView4LevelX16 extends ParameterInstanceViewInt32 {
     }
 
     @Override
+    public String generateParameterInitializer() {
+        return "";
+    }
+
+    @Override
     public String generateCodeMidiHandler(String vprefix) {
         return "";
     }

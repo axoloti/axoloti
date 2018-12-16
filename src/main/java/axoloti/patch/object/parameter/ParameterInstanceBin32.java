@@ -19,6 +19,7 @@ package axoloti.patch.object.parameter;
 
 import axoloti.object.parameter.ParameterBin;
 import axoloti.patch.object.AxoObjectInstance;
+import org.simpleframework.xml.Attribute;
 
 /**
  *
@@ -28,6 +29,10 @@ public class ParameterInstanceBin32 extends ParameterInstanceBin {
 
     public ParameterInstanceBin32() {
         super();
+    }
+
+    public ParameterInstanceBin32(@Attribute(name = "value") int v) {
+        super(v);
     }
 
     public ParameterInstanceBin32(ParameterBin param, AxoObjectInstance axoObj1) {

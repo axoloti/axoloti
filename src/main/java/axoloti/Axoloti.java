@@ -30,6 +30,7 @@ import java.awt.SplashScreen;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -290,11 +291,12 @@ public class Axoloti {
         boolean cmdRunObjectTest = false;
         boolean cmdRunFileTest = false;
         boolean cmdRunUpgrade = false;
+        boolean stopOnFirstFail = false;
         String cmdFile = null;
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.equalsIgnoreCase("-exitOnFirstFail")) {
-                MainFrame.stopOnFirstFail = true;
+                stopOnFirstFail = true;
             }
 
             // exclusive options
@@ -338,31 +340,39 @@ public class Axoloti {
         if (cmdLineOnly) {
             try {
                 MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
+                Tests tests = new Tests();
                 AxoObjects objs = new AxoObjects();
                 IJobContext progress = new JobContext();
                 AxoObjects.loadAxoObjects(progress);
                 if (SplashScreen.getSplashScreen() != null) {
                     SplashScreen.getSplashScreen().close();
                 }
-                try {
-                    objs.loaderThread.join();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
-                }
 
                 System.out.println("Axoloti cmd line initialised");
                 int exitCode = 0;
+                List<String> failedPatches = null;
                 if (cmdRunAllTest) {
-                    exitCode = frame.runAllTests() ? 0 : -1;
+                    failedPatches = tests.runAllTests(stopOnFirstFail);
+                    exitCode = failedPatches.isEmpty() ? 0 : -1;
                 } else if (cmdRunPatchTest) {
-                    exitCode = frame.runPatchTests() ? 0 : -1;
+                    failedPatches = tests.runPatchTests(stopOnFirstFail);
+                    exitCode = failedPatches.isEmpty() ? 0 : -1;
                 } else if (cmdRunObjectTest) {
-                    exitCode = frame.runObjectTests() ? 0 : -1;
+                    failedPatches = tests.runObjectTests(stopOnFirstFail);
+                    exitCode = failedPatches.isEmpty() ? 0 : -1;
                 } else if (cmdRunFileTest) {
-                    exitCode = frame.runFileTest(cmdFile) ? 0 : -1;
+                    exitCode = tests.runFileTest(cmdFile) ? 0 : -1;
                 } else if (cmdRunUpgrade) {
-                    exitCode = frame.runFileUpgrade(cmdFile) ? 0 : -1;
+                    exitCode = tests.runFileUpgrade(cmdFile) ? 0 : -1;
                 }
+
+                if (failedPatches != null && !failedPatches.isEmpty()) {
+                    System.out.println("List of failing patches:");
+                    for (String patchname : failedPatches) {
+                        System.out.println(patchname);
+                    }
+                }
+
                 System.out.println("Axoloti cmd line complete");
                 System.exit(exitCode);
             } catch (Exception e) {
@@ -372,7 +382,6 @@ public class Axoloti {
         } else {
             EventQueue.invokeLater(() -> {
                 try {
-//                        TestProgress.doit();
                     MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
                         frame.setVisible(true);
                     } catch (Exception e) {

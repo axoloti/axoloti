@@ -56,15 +56,6 @@ public abstract class DisplayInstance<T extends Display> extends AtomInstance<T,
         return super.getController();
     }
 
-    /**
-     * Get the data size of this display for use during code generation.
-     *
-     * @return Display size in number of 32bit words
-     */
-    public int getLength() {
-        return getDModel().getLength();
-    }
-
     public abstract Object getValue();
 
     public abstract void setValue(Object o);
