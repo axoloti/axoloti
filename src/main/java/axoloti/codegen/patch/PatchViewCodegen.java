@@ -1276,7 +1276,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(this, dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
@@ -1291,9 +1291,9 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "           lowChannel = highChannel + 1 - data2;\n"
                 + "         }\n"
                 + "         for(int i=0;i<attr_poly;i++) {\n"
-                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB);\n"
-                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB);\n"
-                + "           getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange);\n"
+                + "           getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB);\n"
+                + "           getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB);\n"
+                + "           getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange);\n"
                 + "         }\n" //for
                 + "      }\n" //if mainchannel
                 + "    } else {\n" // enable/disable
@@ -1307,7 +1307,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == MIDI_C_RPN_MSB || data1 == MIDI_C_RPN_LSB || data1 == MIDI_C_DATA_ENTRY) {\n"
@@ -1319,9 +1319,9 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "               for(i=0;i<attr_poly;i++) {\n"
                 + "                 if (voiceChannel[i] != channel) {\n" // because already sent above
                 + "                   pitchbendRange = data2;\n"
-                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB);\n"
-                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB);\n"
-                + "                   getVoices()[i].MidiInHandler(dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange);\n"
+                + "                   getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB);\n"
+                + "                   getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB);\n"
+                + "                   getVoices()[i].MidiInHandler(this, dev, port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange);\n"
                 + "                 }\n" // if
                 + "               }\n" //for
                 + "             }\n" // if lsb/msb=0
@@ -1336,7 +1336,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
+                + "          getVoices()[i].MidiInHandler(this, dev, port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0);\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n" //sus=1
@@ -1348,7 +1348,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "      getVoices()[i].MidiInHandler(dev, port, MIDI_PITCH_BEND + attr_midichannel, data1, data2);\n"
+                + "      getVoices()[i].MidiInHandler(this, dev, port, MIDI_PITCH_BEND + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {" // end pb, other midi
@@ -1358,7 +1358,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "         getVoices()[i].MidiInHandler(dev, port, msg + attr_midichannel, data1, data2);\n"
+                + "         getVoices()[i].MidiInHandler(this, dev, port, msg + attr_midichannel, data1, data2);\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n"; // other midi
@@ -1368,7 +1368,7 @@ public class PatchViewCodegen extends View<PatchModel> {
 //        String fnNoExtension = f1.getName().substring(0, f1.getName().lastIndexOf(".axo"));
 //    }
     // Poly voices from one (or omni) midi channel
-    AxoObject generateAxoObjPoly(AxoObject template) {
+    private AxoObject generateAxoObjPoly(AxoObject template) {
         AxoObject ao = template;
         ao.id = "unnamedobject";
         ao.includes = getDModel().getIncludes();
@@ -1425,7 +1425,7 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     // Poly (Multi) Channel supports per Channel CC/Touch
     // all channels are independent
-    AxoObject generateAxoObjPolyChannel(AxoObject template) {
+    private AxoObject generateAxoObjPolyChannel(AxoObject template) {
         AxoObject o = generateAxoObjPoly(template);
         generatePolyChannelCode(o);
         return o;
@@ -1434,7 +1434,7 @@ public class PatchViewCodegen extends View<PatchModel> {
     // Poly Expression supports the Midi Polyphonic Expression (MPE) Spec
     // Can be used with (or without) the MPE objects
     // the midi channel of the patch is the 'main/global channel'
-    AxoObject generateAxoObjPolyExpression(AxoObject template) {
+    private AxoObject generateAxoObjPolyExpression(AxoObject template) {
         AxoObject o = generateAxoObjPoly(template);
         generatePolyExpressionCode(o);
         return o;
