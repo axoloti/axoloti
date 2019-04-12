@@ -74,9 +74,9 @@ unsigned short adcvalues[ADC_GRP1_NUM_CHANNELS * ADC_GRP1_BUF_DEPTH] DMA_MEM_FW;
  */
 static const ADCConversionGroup adcgrpcfg1 = {
 	TRUE,      //circular buffer mode
-    ADC_GRP1_NUM_CHANNELS,        //Number of the analog channels
-    NULL,                         //Callback function (not needed here)
-    0,             //Error callback
+    ADC_GRP1_NUM_CHANNELS, //Number of the analog channels
+    0, //Callback function (not needed here)
+    0, //Error callback
     0, /* CR1 */
     0, /* CR2 */
     ADC_SMPR1_SMP_AN10(ADC_SAMPLE_144) | ADC_SMPR1_SMP_AN11(ADC_SAMPLE_144)
@@ -88,6 +88,8 @@ static const ADCConversionGroup adcgrpcfg1 = {
         | ADC_SMPR2_SMP_AN4(ADC_SAMPLE_144) | ADC_SMPR2_SMP_AN5(ADC_SAMPLE_144)
         | ADC_SMPR2_SMP_AN6(ADC_SAMPLE_144) | ADC_SMPR2_SMP_AN7(ADC_SAMPLE_144)
         | ADC_SMPR2_SMP_AN8(ADC_SAMPLE_144) | ADC_SMPR2_SMP_AN9(ADC_SAMPLE_144), //sample times ch0-9
+	0, /* HTR */
+	0, /* LTR */
     ADC_SQR1_SQ13_N(ADC_CHANNEL_IN12) | ADC_SQR1_SQ14_N(ADC_CHANNEL_IN13)
         | ADC_SQR1_SQ15_N(ADC_CHANNEL_IN14) | ADC_SQR1_SQ16_N(ADC_CHANNEL_IN15)
         | ADC_SQR1_NUM_CH(ADC_GRP1_NUM_CHANNELS), //SQR1: Conversion group sequence 13...16 + sequence length

@@ -33,7 +33,7 @@ then
     mkdir "${PLATFORM_ROOT}/src"
 fi
 
-CH_VERSION=18.2.1
+CH_VERSION=18.2.2
 if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ];
 then
     cd "${PLATFORM_ROOT}/src"
