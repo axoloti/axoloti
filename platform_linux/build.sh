@@ -55,7 +55,7 @@ case $OS in
             sudo apt-get install -y libbz2-1.0:i386
         fi
         ;;
-    Archlinux|Arch)
+    Archlinux|Arch|ManjaroLinux)
         echo "pacman -Syy"
         sudo pacman -Syy
         echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl lib32-ncurses lib32-bzip2"
