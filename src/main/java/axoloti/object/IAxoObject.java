@@ -43,6 +43,8 @@ public interface IAxoObject extends IModel {
 
     String getUUID();
 
+    String getSHA();
+
     String getDefaultInstanceName();
 
     @Override

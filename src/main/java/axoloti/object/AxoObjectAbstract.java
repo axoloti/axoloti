@@ -239,6 +239,11 @@ public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> 
     }
 
     @Override
+    public String getSHA() {
+        return sha;
+    }
+
+    @Override
     public String getDescription() {
         return StringUtils.denullString(sDescription);
     }

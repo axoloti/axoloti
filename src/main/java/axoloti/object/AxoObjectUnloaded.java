@@ -54,4 +54,8 @@ public class AxoObjectUnloaded extends AxoObjectAbstract0 {
         return "unloaded";
     }
 
+    @Override
+    public String getSHA() {
+        return null;
+    }
 }

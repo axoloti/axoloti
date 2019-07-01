@@ -144,6 +144,18 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
         if (type == null) {
             List<IAxoObject> types = AxoObjects.getAxoObjects().getAxoObjectFromName(typeName, directory);
             if (types == null) {
+                // last resort, resolve from sha tag
+                String tsha = typeSHA;
+                List<IAxoObject> objs = AxoObjects.getAxoObjects().objectList;
+                for (IAxoObject obj : objs) {
+                    String sha = obj.getSHA();
+                    if (sha != null && sha.equals(tsha)) {
+                        type = obj;
+                        Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} found via sha tag, future releases may not support this anymore.", typeName);
+                        return type;
+                    }
+                }
+                // unresolved, return zombie
                 Logger.getLogger(AxoObjectInstanceAbstract.class.getName()).log(Level.SEVERE, "Object name {0} not found", typeName);
                 return new AxoObjectZombie(typeName, "");
             } else { // pick first

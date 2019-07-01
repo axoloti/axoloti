@@ -36,4 +36,9 @@ public class AxoObjectHyperlink extends AxoObjectAbstract0 {
         return null;
     }
 
+    @Override
+    public String getSHA() {
+        return null;
+    }
+
 }
