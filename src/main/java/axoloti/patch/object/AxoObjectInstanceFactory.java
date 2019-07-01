@@ -10,6 +10,9 @@ import axoloti.object.AxoObjectZombie;
 import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import java.awt.Point;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +27,11 @@ public class AxoObjectInstanceFactory {
 
         AxoObjectInstanceAbstract obji;
         if (obj instanceof AxoObjectUnloaded) {
-            obj = ((AxoObjectUnloaded) obj).load();
+            try {
+                obj = ((AxoObjectUnloaded) obj).load();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(AxoObjectInstanceFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         if (obj instanceof AxoObjectComment) {
