@@ -1,6 +1,6 @@
 @ECHO OFF
 
-set PATH=%axoloti_runtime%\platform_win\gcc-arm-none-eabi-7-2018q2\bin;%axoloti_runtime%\platform_win\bin
+set PATH=%axoloti_runtime%\platform_win\gcc-arm-none-eabi-8-2018q4\bin;%axoloti_runtime%\platform_win\bin
 
 call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
