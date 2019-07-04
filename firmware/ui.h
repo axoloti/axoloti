@@ -197,5 +197,8 @@ extern void update_list_nav(int current_menu_length);
 extern ui_node_t ObjMenu;
 extern ui_node_t ParamMenu;
 
+typedef struct led_array led_array_t;
+
+void ShowParameterOnEncoderLEDRing(led_array_t *led_array, Parameter_t *p);
 
 #endif

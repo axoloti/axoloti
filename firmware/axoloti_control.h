@@ -31,7 +31,7 @@
 
 extern uint8_t lcd_buffer[(LCDHEADER + LCDWIDTH) * LCDROWS];
 
-typedef struct {
+struct led_array {
 	union {
 		struct {
 		  unsigned int led1a :1;
@@ -69,7 +69,9 @@ typedef struct {
 		};
 		uint32_t led_32b;
 	};
-} led_array_t;
+};
+
+typedef struct led_array led_array_t;
 
 extern led_array_t leds[LEDSIZE];
 #define LED_RING_TOPLEFT (&leds[0])
