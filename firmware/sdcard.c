@@ -304,7 +304,7 @@ int sdcard_loadPatch1(char *fname) {
   FRESULT err;
 
   StopPatch();
-  strncpy(patch_name, fname, sizeof(patch_name));
+  strncpy(patch_name, fname, sizeof(patch_name)-1);
 //  LogTextMessage("load %s",fname);
 
   // change working directory
