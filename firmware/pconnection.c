@@ -206,12 +206,12 @@ static msg_t bulk_tx_filecontents(void) {
     fbuff[1] = f_size(&pFile);
     msg_t m = BulkUsbTransmitPacket((const unsigned char* )fbuff, 8);
     if (m!=MSG_OK) return m;
-    int bytes_read;
-    unsigned int bs = 64*8;
+    size_t bytes_read;
+    size_t bs = 64*8;
     if (sizeof(fbuff)<bs) bs = sizeof(fbuff);
     while (1) {
         FRESULT err = f_read(&pFile, (char *)fbuff, bs,
-                                  (void *)&bytes_read);
+                                   &bytes_read);
         (void)err;
         m = BulkUsbTransmit((uint8_t *)fbuff, bytes_read);
         if (bytes_read < bs) {
