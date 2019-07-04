@@ -167,7 +167,7 @@ int bin_loader_flash(const void * startloc, uint32_t size) {
 	for (i = 0; i < pre->nsegments; i++) {
 		uint32_t segment_length = segment->segment_length;
 		uint8_t * segment_dest_addr = (uint8_t *) segment->segment_dest_addr;
-		uint8_t * segment_src = segment->segment_source_offset + startloc;
+		const uint8_t * segment_src = segment->segment_source_offset + startloc;
 		// TODO: validate addr/size by region
 		if (!((segment_dest_addr == (void *) 0x0)
 				|| (segment_dest_addr == (void *) 0x20000000)
