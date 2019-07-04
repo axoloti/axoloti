@@ -273,6 +273,7 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
     }
     if (dindex < 9)
       return &vcom_strings[dindex];
+    break;
   case 0xEE:
     return &vcid_descriptor;
   }
