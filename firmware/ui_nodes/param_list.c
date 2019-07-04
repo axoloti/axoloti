@@ -13,19 +13,6 @@ static bool canNavigateDown(void) {
 	return ((menu_stack[menu_stack_position].currentpos + 4) < (int)patchMeta.nparams);
 }
 
-int value_from_input_event(input_event evt) {
-	switch (evt.fields.button) {
-	case btn_encoder:
-		return evt.fields.value;
-	case btn_up:
-		return 1;
-	case btn_down:
-		return -1;
-	default:
-		return 0;
-	}
-}
-
 static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 	if (!evt.fields.value)
 		return 0;
@@ -45,7 +32,7 @@ static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 		int q = evt.fields.quadrant - quadrant_topleft;
 		int i = q + menu_stack[menu_stack_position].currentpos;
 		if (i < (int)patchMeta.nparams) {
-			int v = value_from_input_event(evt);
+			int v = getValuFromInputEvent(evt);
 			if (v) {
 				Parameter_t *p = &patchMeta.params[i];
 				ProcessEncoderParameter(p, v);

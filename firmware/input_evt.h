@@ -56,6 +56,7 @@ extern bool evtIsEnter(input_event evt);
 extern bool evtIsUp(input_event evt);
 extern bool evtIsDown(input_event evt);
 
+int getValuFromInputEvent(input_event evt);
 
 extern void queueInputEventI(input_event evt);
 

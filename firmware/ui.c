@@ -594,6 +594,19 @@ void ui_go_home(void) {
 		chEvtSignal(thd_ui2, ~0);
 }
 
+int getValuFromInputEvent(input_event evt) {
+        switch (evt.fields.button) {
+        case btn_encoder:
+                return evt.fields.value;
+        case btn_up:
+                return 1;
+        case btn_down:
+                return -1;
+        default:
+                return 0;
+        }
+}
+
 #if 0 // obsolete
 
 void k_scope_disp_frac32_64(void * userdata) {

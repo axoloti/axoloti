@@ -45,7 +45,7 @@ static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 				((char *) ObjMenu.name)[i] = 0;
 				return ui_enter_node(&ObjMenu);
 			} else if (patchMeta.objects[i].nparams) {
-				int v = value_from_input_event(evt);
+				int v = getValuFromInputEvent(evt);
 				if (v) {
 					Parameter_t *p = &patchMeta.objects[i].params[0];
 					ProcessEncoderParameter(p, v);
