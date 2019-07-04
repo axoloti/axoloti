@@ -10,7 +10,7 @@ static bool canNavigateUp(void) {
 }
 
 static bool canNavigateDown(void) {
-	return ((menu_stack[menu_stack_position].currentpos + 4) < patchMeta.nparams);
+	return ((menu_stack[menu_stack_position].currentpos + 4) < (int)patchMeta.nparams);
 }
 
 int value_from_input_event(input_event evt) {
