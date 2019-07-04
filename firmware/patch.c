@@ -306,7 +306,7 @@ static THD_FUNCTION(ThreadDSP, arg) {
       }
       else if (loadPatchIndex == START_FLASH) {
     	*(uint32_t *)PATCHMAINLOC = 0;
-    	bin_loader_flash(PATCHFLASHLOC, PATCHFLASHSIZE);
+        bin_loader_flash((const void *)PATCHFLASHLOC, PATCHFLASHSIZE);
         if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
             && (*(uint32_t *)PATCHMAINLOC != 0)) {
           StartPatch1();

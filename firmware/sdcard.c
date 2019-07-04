@@ -143,7 +143,7 @@ typedef struct {
 #define MAX_SEGMENTS 3
 uint8_t patch_header[sizeof(bin_header_t) + MAX_SEGMENTS*sizeof(bin_segment_t)] DMA_MEM_FW;
 
-int bin_loader_flash(uint8_t *startloc, uint32_t size) {
+int bin_loader_flash(const void * startloc, uint32_t size) {
 	bin_header_t *pre = (bin_header_t *) startloc;
 	bin_segment_t *segment = (bin_segment_t *) (&pre->segments);
 
