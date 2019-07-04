@@ -200,5 +200,6 @@ extern ui_node_t ParamMenu;
 typedef struct led_array led_array_t;
 
 void ShowParameterOnEncoderLEDRing(led_array_t *led_array, Parameter_t *p);
+void ShowParameterOnButtonArrayLEDs(led_array_t *led_array, Parameter_t *p);
 
 #endif
