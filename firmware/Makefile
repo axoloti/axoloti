@@ -256,6 +256,7 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/ui_nodes/param_list.c \
        ${FIRMWARE}/ui_nodes/param.c \
        ${FIRMWARE}/ui_nodes/short_value.c \
+       ${FIRMWARE}/ui_nodes/ui_nodes/ui_nodes_common.c \
        ${FIRMWARE}/menu_content/adc_menu.c \
        ${FIRMWARE}/menu_content/food_menu.c \
        ${FIRMWARE}/menu_content/loadpatch_menu.c \
