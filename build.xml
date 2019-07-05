@@ -78,7 +78,6 @@
 
   <target name="-post-init" depends="create.build.version">
   </target>
-  <!-- Overrides -do-jar-->
 
   <target name="-javadoc-build">
   </target>
@@ -296,11 +295,11 @@
 			 <exclude name="firmware/**/obj/**"/>
 			 <exclude name="firmware/**/lst/**"/>
 			 <include name="old_firmware/**"/>
-			 <include name="ChibiOS_18.2.1/*"/>
-			 <include name="ChibiOS_18.2.1/community/os/**"/>
-			 <include name="ChibiOS_18.2.1/ext/**"/>
-			 <include name="ChibiOS_18.2.1/os/**"/>
-			 <include name="ChibiOS_18.2.1/docs/**"/>
+			 <include name="ChibiOS_18.2.2/*"/>
+			 <include name="ChibiOS_18.2.2/community/os/**"/>
+			 <include name="ChibiOS_18.2.2/ext/**"/>
+			 <include name="ChibiOS_18.2.2/os/**"/>
+			 <include name="ChibiOS_18.2.2/docs/**"/>
 			 <include name="CMSIS/**"/>
 			 <include name="patch/**"/>
 			 <include name="*.txt"/>
