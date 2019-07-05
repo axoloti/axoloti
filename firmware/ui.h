@@ -202,4 +202,9 @@ typedef struct led_array led_array_t;
 void ShowParameterOnEncoderLEDRing(led_array_t *led_array, Parameter_t *p);
 void ShowParameterOnButtonArrayLEDs(led_array_t *led_array, Parameter_t *p);
 
+void ProcessEncoderParameter(Parameter_t *p, int8_t v);
+void ProcessStepButtonsParameter(Parameter_t *p);
+
+void pollProcessUIEvent(void);
+
 #endif
