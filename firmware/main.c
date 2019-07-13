@@ -42,12 +42,11 @@
 #include "usbh.h"
 #include "sysmon.h"
 #include "spilink.h"
+#include "dbg_stream.h"
 
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
 /*===========================================================================*/
-
-#define ENABLE_SERIAL_DEBUG 1
 
 int main(void) {
   // remap SRAM1 to 0x00000000
@@ -61,17 +60,8 @@ int main(void) {
   sdcard_init();
   sysmon_init();
 
-#if ENABLE_SERIAL_DEBUG
-// SD2 for serial debug output
-  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7) | PAL_MODE_INPUT); // RX
-  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL); // TX
-  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7)); // TX
-// 115200 baud
-  static const SerialConfig sd2Cfg = {115200,
-        0, 0, 0};
-  sdStart(&SD2, &sd2Cfg);
-  chprintf((BaseSequentialStream * )&SD2,"Hello world!\r\n");
-#endif
+  dbg_stream_init();
+  chprintf(dbg_stream,"Hello world!\r\n");
 
   exception_init();
 
