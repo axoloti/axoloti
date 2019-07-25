@@ -23,6 +23,6 @@ static msg_t _get(void *ip) {
 
 static const struct BaseSequentialStreamVMT vmt = {(size_t)0, _writes, _reads, _put, _get};
 
-const BaseSequentialStream null_stream = {
+BaseSequentialStream null_stream = {
 		&vmt
 };

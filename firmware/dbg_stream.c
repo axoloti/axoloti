@@ -3,7 +3,7 @@
 #include "semihosting_stream.h"
 #include "null_stream.h"
 
-const BaseSequentialStream * dbg_stream;
+BaseSequentialStream * dbg_stream;
 
 void dbg_stream_init(void) {
 	if (CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk) {

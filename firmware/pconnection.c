@@ -42,8 +42,6 @@
 #include "axoloti_math.h"
 #include "sdram.h"
 
-//#define DEBUG_SERIAL 1
-
 static uint32_t fwid;
 
 static thread_t * thd_bulk_Writer;

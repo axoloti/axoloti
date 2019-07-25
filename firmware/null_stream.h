@@ -1,2 +1,2 @@
 
-extern const BaseSequentialStream null_stream;
+extern BaseSequentialStream null_stream;

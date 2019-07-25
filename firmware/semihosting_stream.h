@@ -4,4 +4,4 @@
 
 void semihosting_stream_init(void);
 
-extern const BaseSequentialStream SHS;
+extern BaseSequentialStream SHS;

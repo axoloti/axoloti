@@ -247,6 +247,9 @@ CSRC = $(STARTUPSRC) \
        ${FIRMWARE}/watchdog.c \
        ${FIRMWARE}/sysmon.c \
        ${FIRMWARE}/axoloti_memory.c \
+       ${FIRMWARE}/semihosting_stream.c \
+       ${FIRMWARE}/dbg_stream.c \
+       ${FIRMWARE}/null_stream.c \
        ${FIRMWARE}/qgfx.c \
        ${FIRMWARE}/ui_nodes/action_function.c \
        ${FIRMWARE}/ui_nodes/int_value.c \
@@ -406,8 +409,7 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm 
-
+ULIBS = --specs=rdimon.specs -lrdimon -lm
 #
 # End of user defines
 ##############################################################################
