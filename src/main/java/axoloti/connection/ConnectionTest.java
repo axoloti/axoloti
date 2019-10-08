@@ -63,7 +63,7 @@ public class ConnectionTest {
 
     public static void doMemoryTest(IConnection c, IJobContext ctx) throws IOException {
         int sizes[] = {4, 8, 16, 32, 64, 128, 252, 256};
-        int addrs[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        int addrs[] = {0x100, 0x100, 0x100, 0x100, 0x100, 0x100, 0x100, 0x100};
         int iters = sizes.length * 2;
         ctx.setNote("Memory read/write test");
         ctx.setMaximum(iters);
@@ -87,9 +87,9 @@ public class ConnectionTest {
         int iters = sizes.length;
         ctx.setNote("File read/write test");
         ctx.setProgress(0);
-        IJobContext ctxs[] = ctx.createSubContexts(iters);
+        IJobContext ctxs[] = ctx.createSubContexts(iters * 2);
         for (int i = 0; i < iters; i++) {
-            IJobContext ctx1 = ctxs[i];
+            IJobContext ctx1 = ctxs[i * 2];
             ctx1.setNote("File read/write test " + i);
             ctx1.setProgress(0);
             int size = sizes[i];
@@ -99,7 +99,8 @@ public class ConnectionTest {
             Calendar cal = Calendar.getInstance();
             cal.set(2005, 1, i, 12, 34, 56);
             c.upload(filename, new ByteArrayInputStream(testData), cal, size, ctx1);
-            ByteBuffer readData = c.download(filename, ctx1);
+            IJobContext ctx2 = ctxs[i * 2 + 1];
+            ByteBuffer readData = c.download(filename, ctx2);
             int result = compareByteArrays(testData, ByteBufferToArray(readData));
             if (result != 0) {
                 throw new IOException(String.format("filesystem test readback failed..."));

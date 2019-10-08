@@ -17,7 +17,6 @@
  */
 package axoloti.object;
 
-import static axoloti.Axoloti.CHIBIOS_DIR;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeInt32;
@@ -433,7 +432,7 @@ public class AxoObject extends AxoObjectAbstract {
                     s2 = s2.replace('\\', '/');
                     r.add(s2);
                 } else if (s.startsWith("chibios/")) {
-                    r.add((new File(System.getProperty(CHIBIOS_DIR))).getAbsolutePath() + s.substring(7));
+                    // r.add((new File(System.getProperty(CHIBIOS_DIR))).getAbsolutePath() + s.substring(7));
                 } else {
                     r.add(s);
                 }

@@ -33,9 +33,12 @@ public class CConnection {
 
     static private USBBulkConnection_v2 conn = null;
 
+    // TODO: remove CConnection singleton
     public static IConnection getConnection() {
         if (conn == null) {
-            conn = new USBBulkConnection_v2(TargetModel.getTargetModel());
+            IConnectionCB cbs = new ConnectionCB(TargetModel.getTargetModel());
+            conn = new USBBulkConnection_v2(cbs);
+            cbs.setConnection(conn);
         }
         return conn;
     }

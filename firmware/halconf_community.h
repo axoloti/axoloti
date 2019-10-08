@@ -131,7 +131,7 @@
 #define HAL_USBHUVC_STATUS_PACKETS_COUNT              10
 
 /* HID */
-#define HAL_USBH_USE_HID                              TRUE
+#define HAL_USBH_USE_HID                              FALSE
 #define HAL_USBHHID_MAX_INSTANCES                     2
 #define HAL_USBHHID_USE_INTERRUPT_OUT                 FALSE
 

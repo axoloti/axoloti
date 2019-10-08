@@ -84,8 +84,10 @@ public class Preferences {
     private String FirmwareDir;
     @Element(required = false)
     private String FavouriteDir;
+    @Deprecated
     @Element(required = false)
     private String ControllerObject;
+    @Deprecated
     @Element(required = false)
     private Boolean ControllerEnabled;
     @Element(required = false)
@@ -426,22 +428,6 @@ public class Preferences {
             BoardNames.put(cpuid, name);
         }
         setDirty();
-    }
-
-    public String getControllerObject() {
-        return ControllerObject;
-    }
-
-    public void setControllerObject(String s) {
-        ControllerObject = s;
-    }
-
-    public void setControllerEnabled(boolean b) {
-        ControllerEnabled = b;
-    }
-
-    public boolean isControllerEnabled() {
-        return ControllerEnabled;
     }
 
     public final void resetLibraries(boolean delete) {

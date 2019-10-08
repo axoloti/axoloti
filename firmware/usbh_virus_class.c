@@ -1,18 +1,18 @@
+#include <string.h>
 #include "hal.h"
+#include "logging.h"
 
 #if !HAL_USE_USBH
 #error "USBHMIDI needs USBH"
 #endif
 
-#include <string.h>
 #include "usbh_midi_class.h"
 #include "usbh/internal.h"
 
+#include "midi.h"
 #include "midi_buffer.h"
 #include "midi_routing.h"
 #include "usbh_conf.h"
-
-void LogTextMessage(const char* format, ...);
 
 #if USBH_MIDI_DEBUG_ENABLE_TRACE
 #define udbgf(f, ...)  usbDbgPrintf(f, ##__VA_ARGS__)

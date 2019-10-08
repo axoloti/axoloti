@@ -82,7 +82,10 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         if (!SwingUtilities.isEventDispatchThread()) {
 //            Logger.getLogger(AbstractController.class.getName()).log(Level.SEVERE, "not in EventDispatchThread");
         }
-        for (View view : registeredViews) {
+        // a copy of the views is made
+        // so a view can unregister itself in response to a propertychange
+        List<View> v = new ArrayList<>(registeredViews);
+        for (View view : v) {
             view.modelPropertyChange(evt);
         }
     }

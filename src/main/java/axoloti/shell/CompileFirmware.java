@@ -17,13 +17,13 @@ public class CompileFirmware {
     private CompileFirmware() {
     }
 
-    private static String getExec() {
+    private static String[] getExec() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return ShellTask.getFirmwareDir() + "/compile_firmware_win.bat";
+            return new String[]{ShellTask.getFirmwareDir() + "/compile_firmware_win.bat"};
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh ./compile_firmware_osx.sh";
+            return new String[]{"/bin/sh", "./compile_firmware_osx.sh"};
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh ./compile_firmware_linux.sh";
+            return new String[]{"/bin/sh", "./compile_firmware_linux.sh"};
         } else {
             Logger.getLogger(CompileFirmware.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;

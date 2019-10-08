@@ -82,9 +82,6 @@ import org.simpleframework.xml.strategy.Strategy;
 @Root(name = "patch")
 public class PatchModel extends AbstractModel<PatchController> {
 
-    //TODO: (enhancement) use execution order, rather than UI ordering
-    static final boolean USE_EXECUTION_ORDER = false;
-
     @Attribute(required = false)
     String appVersion;
     @ElementListUnion({
@@ -342,7 +339,7 @@ public class PatchModel extends AbstractModel<PatchController> {
          */
     }
 
-    void sortByPosition() {
+    public void sortByPosition() {
         ArrayList<IAxoObjectInstance> clone = new ArrayList<>();
         clone.addAll(objectinstances);
         Collections.sort(clone);
@@ -384,7 +381,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         */
     }
 
-    void sortByExecution() {
+    public void sortByExecution() {
         /*
         LinkedList<AxoObjectInstanceAbstract> endpoints = new LinkedList<AxoObjectInstanceAbstract>();
         LinkedList<AxoObjectInstanceAbstract> result = new LinkedList<AxoObjectInstanceAbstract>();
@@ -458,7 +455,14 @@ public class PatchModel extends AbstractModel<PatchController> {
                 modules.addAll(i);
             }
         }
-        return Collections.unmodifiableList(modules);
+        // uniqify but keep in order
+        List<String> modules2 = new LinkedList<>();
+        for (String m : modules) {
+            if (!modules2.contains(m)) {
+                modules2.add(m);
+            }
+        }
+        return Collections.unmodifiableList(modules2);
     }
 
     public String getModuleDir(String module) {
@@ -477,7 +481,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         return IID;
     }
 
-    void createIID() {
+    public void createIID() {
         java.util.Random r = new java.util.Random();
         IID = r.nextInt();
     }
@@ -779,6 +783,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     public final static StringProperty PATCH_NOTES = new StringProperty("Notes", PatchModel.class);
     public final static StringProperty PATCH_HELP_PATCH = new StringProperty("HelpPatch", PatchModel.class);
     public final static Property PATCH_WINDOWPOS = new ObjectProperty("WindowPos", Rectangle.class, PatchModel.class);
+    public final static Property PATCH_RECALLPRESET = new IntegerProperty("RecallPreset", PatchModel.class);
 //    public final static ListProperty PATCH_MODULATORS = new ListProperty("Modulators", PatchModel.class);
 
     private final static Property[] PROPERTIES = {
@@ -826,10 +831,11 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public void setLocked(Boolean locked) {
+        Boolean prev_val = this.locked;
         this.locked = locked;
         firePropertyChange(
                 PATCH_LOCKED,
-                null, locked);
+                prev_val, locked);
     }
 
     public Integer getDspLoad() {
@@ -1026,6 +1032,16 @@ public class PatchModel extends AbstractModel<PatchController> {
             modulators.addAll(obji.getModulators());
         }
         return modulators;
+    }
+
+    public Integer getRecallPreset() {
+        return null;
+    }
+
+    public void setRecallPreset(Integer v) {
+        firePropertyChange(
+                PATCH_RECALLPRESET,
+                null, v);
     }
 
     public void setParent(AxoObjectInstancePatcher container) {

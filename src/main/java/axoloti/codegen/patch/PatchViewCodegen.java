@@ -30,7 +30,6 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.preset.Preset;
-import axoloti.target.TargetModel;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,6 +44,9 @@ import java.util.logging.Logger;
  */
 public class PatchViewCodegen extends View<PatchModel> {
 
+    //TODO: (enhancement) use execution order, rather than UI ordering
+    public static final boolean USE_EXECUTION_ORDER = false;
+
     private final List<IAxoObjectInstanceCodegenView> objectInstanceViews;
     private final List<ParameterInstanceView> parameterInstances;
     private final List<DisplayInstanceView> displayInstances;
@@ -53,6 +55,12 @@ public class PatchViewCodegen extends View<PatchModel> {
     public PatchViewCodegen(PatchModel patchModel) {
         super(patchModel);
 
+        patchModel.createIID();
+        if (USE_EXECUTION_ORDER) {
+            patchModel.sortByExecution();
+        } else {
+            patchModel.sortByPosition();
+        }
         // needed...
         patchModel.getController();
 
@@ -102,16 +110,6 @@ public class PatchViewCodegen extends View<PatchModel> {
         }
         return inc.toString();
     }
-
-    public String generateModules() {
-        StringBuilder inc = new StringBuilder();
-        List<String> modules = getDModel().getModules();
-        for (String s : modules) {
-            inc.append("#include \"" + s + "_wrapper.h\"\n");
-        }
-        return inc.toString();
-    }
-
 
     /* the c++ code generator */
     String generatePexchAndDisplayCode() {
@@ -199,8 +197,69 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     String generateStructCodePlusPlus(String classname, boolean enableOnParent, String parentclassname) {
         StringBuilder c = new StringBuilder();
-        c.append("class " + classname + "{\n");
-        c.append("   public:\n");
+        c.append("class rootc : public PatchInstance {\n"
+                + "public:\n"
+                + "  void tick( int32_t * inbuf, int32_t * outbuf) {\n"
+                + "    int32_t *p = outbuf;\n"
+                + "    int i;\n"
+                + "    for(i=0;i<BUFSIZE;i++){*p++=0;*p++=0;}\n"
+                + "    AudioInputLeft = &inbuf[0];\n"
+                + "    AudioInputRight = &inbuf[BUFSIZE];\n"
+                + "    AudioOutputLeft = &outbuf[0];\n"
+                + "    AudioOutputRight = &outbuf[BUFSIZE];\n"
+                + "    dsp();\n"
+                + "  }\n"
+                + "\n"
+                + "  void midiInHandler(int32_t m) {\n"
+                + "    struct mfields {\n"
+                + "      unsigned cin :4;\n"
+                + "      unsigned port :4;\n"
+                + "      uint8_t b0;\n"
+                + "      uint8_t b1;\n"
+                + "      uint8_t b2;\n"
+                + "    };\n"
+                + "    struct mfields *mf = (mfields *)&m;\n"
+                + "    int dev = mf->port;\n"
+                + "    int port = 0;\n"
+                + "    uint8_t status = mf->b0;\n"
+                + "    uint8_t data1 = mf->b1;\n"
+                + "    uint8_t data2 = mf->b2;\n"
+                + "    midiInHandler(dev,port,status,data1,data2);\n"
+                + "  }\n"
+                + "\n"
+                + "  void* getProperty(ax_property_id_t id, int index) {\n"
+                + "    switch(id) {\n"
+                + "    case ax_prop_displayvector :\n"
+                + "      return displayVector;\n"
+                + "    case ax_prop_displayvector_size:\n"
+                + "      return (void*)(sizeof(displayVector)/sizeof(int32_t));\n"
+                + "    case ax_prop_nparams:\n"
+                + "      return (void*)nparams;\n"
+                + "    case ax_prop_param:\n"
+                + "      return &PExch[index];\n"
+                + "    case ax_prop_paramName:\n"
+                + "      return &param_names[index].name[0];\n"
+                + "    case ax_prop_presetData:\n"
+                + "      return presets;\n"
+                + "    default:\n"
+                + "      return 0;\n"
+                + "    }\n"
+                + "  }\n"
+                + "\n"
+                + "  int setProperty(ax_property_id_t id, int index, void * value) {\n"
+                + "    switch(id) {\n"
+                + "    case ax_prop_applyPreset: {\n"
+                + "      ApplyPreset(index);\n"
+                + "      return 0;\n"
+                + "    }\n"
+                + "    default:\n"
+                + "      return -1;\n"
+                + "    }\n"
+                + "  }\n"
+                + "\n"
+                + "  int reserved1(){return 0;}\n"
+                + "  int reserved2(){return 0;}\n"
+                + "\n");
         c.append(generateStructCodePlusPlusSub(parentclassname, enableOnParent));
         return c.toString();
     }
@@ -300,11 +359,12 @@ public class PatchViewCodegen extends View<PatchModel> {
         c.append("}\n\n");
 
         c.append("void ApplyPreset(int index){\n"
-                 + "   if (!index) {\n"
+                + "   if (!index) {\n"
                  + "     int i;\n"
                  + "     int32_t *p = GetInitParams();\n"
                  + "     for(i=0;i<nparams;i++){\n"
-                + "        ParameterChange(&PExch[i], p[i], 0xFFEF);\n"                 + "     }\n"
+                + "        parameter_setVal(&PExch[i], p[i], 0xFFEF);\n"
+                + "     }\n"
                  + "   }\n"
                  + "   index--;\n"
                  + "   if (index < NPRESETS) {\n"
@@ -314,8 +374,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                  + "       for(i=0;i<NPRESET_ENTRIES;i++){\n"
                  + "         PresetParamChange_t *pp = &p[i];\n"
                  + "         if ((pp->pexIndex>=0)&&(pp->pexIndex<nparams)) {\n"
-                + "            ParameterChange(&PExch[pp->pexIndex],pp->value,0xFFEF);"                 + "         }\n"
-                 + "         else break;\n"
+                + "            parameter_setVal(&PExch[pp->pexIndex],pp->value,0xFFEF);" + "         }\n"                 + "         else break;\n"
                  + "       }\n"
                  + "   }\n"
                  + "}\n");
@@ -459,8 +518,9 @@ public class PatchViewCodegen extends View<PatchModel> {
     String generateDisposeCodePlusPlus(String className) {
         StringBuilder c = new StringBuilder();
         c.append("/* dispose */\n");
-        c.append("void Dispose() {\n");
+        c.append("void dispose() {\n");
         c.append(generateDisposeCodePlusPlusSub(className));
+        c.append("  this->~rootc();\n");
         c.append("}\n\n");
         return c.toString();
     }
@@ -583,8 +643,6 @@ public class PatchViewCodegen extends View<PatchModel> {
         StringBuilder c = new StringBuilder("/* krate */\n");
         c.append("void dsp (void) {\n");
         c.append("  int i;\n");
-        c.append("  for(i=0;i<BUFSIZE;i++) AudioOutputLeft[i]=0;\n");
-        c.append("  for(i=0;i<BUFSIZE;i++) AudioOutputRight[i]=0;\n");
         c.append(generateDSPCodePlusPlusSub(ClassName, enableOnParent));
         c.append("}\n\n");
         return c.toString();
@@ -601,166 +659,26 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     String generateMidiCodePlusPlus(String ClassName) {
         StringBuilder c = new StringBuilder();
-        c.append("void MidiInHandler(" + ClassName + " *parent, midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n");
+        c.append("void midiInHandler(midi_device_t dev, uint8_t port,uint8_t status, uint8_t data1, uint8_t data2){\n");
         c.append(generateMidiInCodePlusPlus());
         c.append("}\n\n");
         return c.toString();
     }
 
-
     String generatePatchCodePlusPlus(String ClassName) {
         StringBuilder c = new StringBuilder();
         c.append("};\n\n");
-        c.append("static rootc root;\n");
-
-        c.append("void PatchProcess( int32_t * inbuf, int32_t * outbuf) {\n"
-                 + "  int i;\n"
-                 + "  for(i=0;i<BUFSIZE;i++){\n"
-                 + "    AudioInputLeft[i] = inbuf[i*2]>>4;\n"
-                 + "    switch(AudioInputMode) {\n"
-                 + "       case A_MONO:\n"
-                 + "             AudioInputRight[i] = AudioInputLeft[i];break;\n"
-                 + "       case A_BALANCED:\n"
-                 + "             AudioInputLeft[i] = (AudioInputLeft[i] - (inbuf[i*2+1]>>4) ) >> 1;\n"
-                 + "             AudioInputRight[i] = AudioInputLeft[i];"
-                 + "             break;\n"
-                 + "       case A_STEREO:\n"
-                 + "       default:\n"
-                 + "             AudioInputRight[i] = inbuf[i*2+1]>>4;\n"
-                 + "     }\n"
-                 + "  }\n"
-                 + "  root.dsp();\n");
-        if (true /*TBC: review: getModel().getSaturate()*/) {
-            c.append("  for(i=0;i<BUFSIZE;i++){\n"
-                     + "    outbuf[i*2] = __SSAT(AudioOutputLeft[i],28)<<4;\n"
-                     + "    switch(AudioOutputMode) {\n"
-                     + "       case A_MONO:\n"
-                     + "             outbuf[i*2+1] = 0;break;\n"
-                     + "       case A_BALANCED:\n"
-                     + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
-                     + "       case A_STEREO:\n"
-                     + "       default:\n"
-                     + "             outbuf[i*2+1] = __SSAT(AudioOutputRight[i],28)<<4;\n"
-                     + "     }\n"
-                     + "  }\n");
-        } else {
-            c.append("  for(i=0;i<BUFSIZE;i++){\n"
-                     + "    outbuf[i*2] = AudioOutputLeft[i];\n"
-                     + "    switch(AudioOutputMode) {\n"
-                     + "       case A_MONO:\n"
-                     + "             outbuf[i*2+1] = 0;break;\n"
-                     + "       case A_BALANCED:\n"
-                     + "             outbuf[i*2+1] = ~ outbuf[i*2];break;\n"
-                     + "       case A_STEREO:\n"
-                     + "       default:\n"
-                     + "             outbuf[i*2+1] = AudioOutputRight[i];\n"
-                     + "     }\n"
-                     + "  }\n");
-        }
-        c.append("}\n\n");
-
-        c.append("void ApplyPreset(int32_t i) {\n"
-                 + "   root.ApplyPreset(i);\n"
-                 + "}\n\n");
-
-        c.append("void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2){\n"
-                 + "  root.MidiInHandler(&root, dev, port, status, data1, data2);\n"
-                 + "}\n\n");
-
-        c.append("typedef void (*funcp_t)(void);\n"
-                 + "typedef funcp_t * funcpp_t;\n"
-                 + "extern funcp_t __ctor_array_start;\n"
-                 + "extern funcp_t __ctor_array_end;"
-                 + "extern funcp_t __dtor_array_start;\n"
-                 + "extern funcp_t __dtor_array_end;");
-
-        c.append("void PatchDispose( ) {\n"
-                 + "  root.Dispose();\n"
-                 + "  {\n"
-                 + "    funcpp_t fpp = &__dtor_array_start;\n"
-                 + "    while (fpp < &__dtor_array_end) {\n"
-                 + "      (*fpp)();\n"
-                 + "      fpp++;\n"
-                 + "    }\n"
-                 + "  }\n"
-                 + "}\n\n");
-
-        c.append("void xpatch_init2(int32_t fwid)\n"
-                 + "{\n"
-                + "  if (fwid != 0x" + TargetModel.getTargetModel().getFirmwareLinkID() + ") {\n"                 + "    return;"
-                 + "  }\n"
-                 + "  extern uint32_t _pbss_start;\n"
-                 + "  extern uint32_t _pbss_end;\n"
-                 + "  volatile uint32_t *p;\n"
-                 + "  for(p=&_pbss_start;p<&_pbss_end;p++) *p=0;\n"
-                 + "  {\n"
-                 + "    funcpp_t fpp = &__ctor_array_start;\n"
-                 + "    while (fpp < &__ctor_array_end) {\n"
-                 + "      (*fpp)();\n"
-                 + "      fpp++;\n"
-                 + "    }\n"
-                 + "  }\n"
-                 + "  extern char _sdram_dyn_start;\n"
-                 + "  extern char _sdram_dyn_end;\n"
-                 + "  sdram_init(&_sdram_dyn_start,&_sdram_dyn_end);\n"
-                 + "  root.Init();\n"
-                 + "}\n\n");
-
-        c.append("#define fourcc_patch_root FOURCC('A','X','P','T')\n"
-                 + "typedef struct {\n"
-                 + "	chunk_header_t header;\n"
-                 + "	chunk_patch_meta_t patch_meta;\n"
-                 + "	chunk_patch_preset_t patch_preset;\n"
-                 + "	chunk_patch_parameter_t patch_parameter;\n"
-                 + "	chunk_patch_ui_objects_t patch_ui_objects;\n"
-                 + "	chunk_patch_initpreset_t patch_initpreset;\n"
-                 + "	chunk_patch_display_t patch_display;\n"
-                 + "	chunk_patch_display_meta_t patch_display_meta;\n"
-                 + "	chunk_patch_functions_t patch_functions;\n"
-                 + "} chunk_patch_root_t;\n"
-                 + "\n"
-                 + "chunk_patch_root_t patch_root_chunk = {\n"
-                 + "		header : CHUNK_HEADER(patch_root),\n"
-                 + "		patch_meta : {\n"
-                 + "			header : CHUNK_HEADER(patch_meta),\n"
-                + "			patchID : " + getDModel().getIID() + ",\n"                 + "			patchname : {'p','a','t','c','h'}\n"
-                 + "		},\n"
-                 + "		patch_preset : {\n"
-                 + "			header : CHUNK_HEADER(patch_preset),\n"
-                 + "			npresets : " + getDModel().getNPresets() + ",\n"
-                 + "			npreset_entries : " + getDModel().getNPresetEntries() + ",\n"
-                + "			pPresets : &root.presets[0][0][0],\n"
-                + "		},\n" + "		patch_parameter : {\n"
-                + "			header : CHUNK_HEADER(patch_parameter),\n"
-                + "			nparams : " + parameterInstances.size() + ",\n"
-                + "			pParams : &root.PExch[0],\n"
-                + "			pParam_names : root.param_names\n" + "		},\n"
-                + "		patch_ui_objects : {\n"
-                + "			header : CHUNK_HEADER(patch_ui_objects),\n"
-                + "                     nobjects : root.n_ui_objects,\n"
-                + "			pObjects : root.ui_objects,\n"
-                + "		},\n"                 + "		patch_initpreset : {\n"
-                 + "			header : CHUNK_HEADER(patch_initpreset),\n"
-                 + "		},\n"
-                 + "		patch_display : {\n"
-                 + "			header : CHUNK_HEADER(patch_display),\n"
-                 + "                     ndisplayVector : " + displayDataLength + ",\n"
-                 + "                     pDisplayVector : root.displayVector,\n"
-                 + "		},\n"
-                 + "		patch_display_meta : {\n"
-                 + "			header : CHUNK_HEADER(patch_display_meta),\n"
-                 + "			ndisplay_metas : root.ndisplay_metas,\n"
-                 + "			pDisplay_metas : &root.display_metas[0]\n"
-                 + "		},\n"
-                 + "		patch_functions : {\n"
-                 + "			header : CHUNK_HEADER(patch_functions),\n"
-                 + "					fptr_patch_init: xpatch_init2,\n"
-                 + "					fptr_patch_dispose: PatchDispose,\n"
-                 + "					fptr_dsp_process: PatchProcess,\n"
-                 + "					fptr_MidiInHandler: PatchMidiInHandler,\n"
-                 + "					fptr_applyPreset: ApplyPreset,\n"
-                 + "		},\n"
-                 + "};\n");
+        c.append("extern \"C\" {\n"
+                + "  int getInstanceSize() {\n"
+                + "    return sizeof(rootc);\n"
+                + "  }\n"
+                + "\n"
+                + "  int initInstance(PatchInstance *instance /*,... args */) {\n"
+                + "    // placement new\n"
+                + "    rootc * _inst = new((void *)instance) rootc();\n"
+                + "    _inst->Init();\n"
+                + "  }\n"
+                + "}\n");
 
         return c.toString();
     }
@@ -781,39 +699,64 @@ public class PatchViewCodegen extends View<PatchModel> {
             c.append("//$MODULES=" + modules.toString() + "\n");
             c.append("//$MODULE_DIRS=" + moduleDirs.toString() + "\n");
         }
-
+        c.append("#include <new>");
         c.append(generateIncludes());
         c.append("\n");
-        c.append(generateModules());
+        // modules are included through makefile
         c.append("\n"
-                 + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
-                 + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n");
+                + "#pragma GCC diagnostic ignored \"-Wunused-variable\"\n"
+                + "#pragma GCC diagnostic ignored \"-Wunused-parameter\"\n");
         if (true == false) {
             c.append("#define MIDICHANNEL 0 // DEPRECATED!\n");
         } else {
             c.append("#define MIDICHANNEL " + (getDModel().getMidiChannel() - 1) + " // DEPRECATED!\n");
         }
-        c.append("void xpatch_init2(int32_t fwid);\n"
-                 + "extern \"C\" __attribute__ ((section(\".boot\"))) void xpatch_init(int32_t fwid){\n"
-                 + "  xpatch_init2(fwid);\n"
-                 + "}\n\n");
 
-        c.append("void PatchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2);\n\n");
+        c.append("\n"
+                + "static int32_t * AudioInputLeft;\n"
+                + "static int32_t * AudioInputRight;\n"
+                + "static int32_t * AudioOutputLeft;\n"
+                + "static int32_t * AudioOutputRight;\n\n");
 
-        c.append("     int32buffer AudioInputLeft;\n");
-        c.append("     int32buffer AudioInputRight;\n");
-        c.append("     int32buffer AudioOutputLeft;\n");
-        c.append("     int32buffer AudioOutputRight;\n");
+        c.append("static void ModulationSourceChange(PExModulationTarget_t *modulation,\n"
+                + "                               int32_t nTargets,\n"
+                + "                               Parameter_t *parameters,\n"
+                + "                               int32_t *oldvalue,\n"
+                + "                               int32_t value) {\n"
+                + "  PExModulationTarget_t *s = modulation;\n"
+                + "  int t;\n"
+                + "  for (t = 0; t < nTargets; t++) {\n"
+                + "    PExModulationTarget_t *target = &s[t];\n"
+                + "    if (target->parameterIndex == -1)\n"
+                + "      continue;\n"
+                + "    Parameter_t *PEx = &parameters[target->parameterIndex];\n"
+                + "    int32_t v = PEx->d.frac.modvalue;\n"
+                + "    v -= ___SMMUL(*oldvalue, target->amount) << 5;\n"
+                + "    v += ___SMMUL(value, target->amount) << 5;\n"
+                + "    PEx->d.frac.modvalue = v;\n"
+                + "    if (PEx->pfunction) {\n"
+                + "      (PEx->pfunction)(PEx);\n"
+                + "      // TBC: modulation on root of polyphonic-subpatch-parameters\n"
+                + "    }\n"
+                + "    else {\n"
+                + "      PEx->d.frac.finalvalue = v;\n"
+                + "    }\n"
+                + "  }\n"
+                + "  *oldvalue = value;\n"
+                + "}\n\n");
+
+        c.append("extern \"C\" void patchMidiInHandler(midi_device_t dev, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2);\n\n");
+
         c.append("     typedef enum { A_STEREO, A_MONO, A_BALANCED } AudioModeType;\n");
-        c.append("     AudioModeType AudioOutputMode = A_STEREO;\n");
-        c.append("     AudioModeType AudioInputMode = A_STEREO;\n");
+        c.append("     static AudioModeType AudioOutputMode = A_STEREO;\n");
+        c.append("     static AudioModeType AudioInputMode = A_STEREO;\n");
         c.append("static void PropagateToSub(Parameter_t *origin) {\n"
                  + "      Parameter_t *p = (Parameter_t *)origin->d.frac.finalvalue;\n"
                  //                + "      LogTextMessage(\"tosub %8x\",origin->modvalue);\n"
-                 + "      ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
-                 + "}\n");
+                 + "      parameter_setVal(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"                 + "}\n");
 
-        c.append(generateStructCodePlusPlus("rootc", false, "rootc")                 + "static const int polyIndex = 0;\n"
+        c.append(generateStructCodePlusPlus("rootc", false, "rootc")
+                + "static const int polyIndex = 0;\n"
                 + generateUICode()
                 + generateParamInitCode3("rootc")
                 + generatePresetCode3("rootc")
@@ -996,7 +939,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 //                + "      LogTextMessage(\"tovcs %8x\",origin->modvalue);\n"
                 + "      int vi;\n"
                 + "      for (vi = 0; vi < attr_poly; vi++) {\n"
-                + "        ParameterChange(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
+                + "        parameter_setVal(p,origin->d.frac.modvalue,0xFFFFFFEE);\n"
                 + "          p = (Parameter_t *)((int)p + sizeof(voice)); // dirty trick...\n"
                 + "      }"
                 + "}\n");

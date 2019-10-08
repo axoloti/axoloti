@@ -9,7 +9,6 @@ import axoloti.mvc.IModel;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
-import axoloti.target.TargetModel;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -133,7 +132,8 @@ public class MidiOutputRoutingTable extends AbstractModel {
         InputStream is = new ByteArrayInputStream(b);
         GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
             try {
-                TargetModel.getTargetModel().upload(fn, is, Calendar.getInstance(), b.length, ctx);
+                IConnection conn = CConnection.getConnection();
+                conn.upload(fn, is, Calendar.getInstance(), b.length, ctx);
             } catch (IOException ex) {
                 ctx.reportException(ex);
             }

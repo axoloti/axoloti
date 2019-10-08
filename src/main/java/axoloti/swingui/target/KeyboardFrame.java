@@ -165,13 +165,12 @@ public class KeyboardFrame extends TJFrame {
         jPanel1.add(jSpinnerChannel);
         jPanel1.add(filler2);
 
-        jLabel3.setText("Cable");
+        jLabel3.setText("Virtual input port");
         jPanel1.add(jLabel3);
         jPanel1.add(filler5);
 
-        jSpinnerCable.setModel(new javax.swing.SpinnerNumberModel(1, 1, 16, 1));
+        jSpinnerCable.setModel(new javax.swing.SpinnerNumberModel(1, 1, 8, 1));
         jSpinnerCable.setMaximumSize(null);
-        jSpinnerCable.setMinimumSize(null);
         jSpinnerCable.setPreferredSize(new java.awt.Dimension(0, 25));
         jPanel1.add(jSpinnerCable);
         jPanel1.add(filler6);

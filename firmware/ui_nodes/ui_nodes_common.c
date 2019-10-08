@@ -1,3 +1,4 @@
+#include "hal.h"
 #include "../ui.h"
 #include "ui_nodes_common.h"
 #include "patch.h"

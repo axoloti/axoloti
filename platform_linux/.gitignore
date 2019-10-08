@@ -3,3 +3,5 @@ gcc-arm-none-eabi-*.tar.bz2
 include/
 lib/
 share/
+src/ChibiOS_*.7z
+

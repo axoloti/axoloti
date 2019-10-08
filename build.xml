@@ -113,6 +113,7 @@
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+      <zipfileset excludes="META-INF/*.SF" src="lib/usb4java-1.2.0/lib/commons-lang3-3.2.1.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/piccolo2d-core-3.1.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/piccolo2d-extras-3.1.jar"/>
       <zipfileset excludes="META-INF/*.SF" src="lib/marlin-0.9.1-Unsafe.jar"/>
@@ -246,7 +247,7 @@
           <condition>
               <not>
                   <resourcecount count="3">
-                      <fileset id="fs" dir="firmware" includes="build/axoloti.bin,mounter/mounter_build/mounter.bin,flasher/flasher_build/flasher.bin"/>
+                      <fileset id="fs" dir="firmware" includes="build/axoloti.bin,mounter/mounter_build/mounter.elf,flasher/flasher_build/flasher.elf"/>
                   </resourcecount>
               </not>
           </condition>
@@ -288,26 +289,23 @@
              <include name="marlin-0.9.1-Unsafe.jar"/>
 		 </fx:fileset>
 		 <fx:fileset dir=".">
-			 <include name="doc/*"/>
-			 <include name="firmware/**"/>
+			 <include name="doc/**"/>
+			 <include name="api/**"/>
+			 <include name="env/**"/>
+			 <include name="firmware/build/axoloti.bin"/>
+			 <include name="firmware/mounter/mounter_build/mounter.elf"/>
 			 <!-- .git is excluded by default -->
-			 <exclude name="firmware/**/.dep/**"/>
-			 <exclude name="firmware/**/obj/**"/>
-			 <exclude name="firmware/**/lst/**"/>
 			 <include name="old_firmware/**"/>
-			 <include name="ChibiOS_18.2.2/*"/>
-			 <include name="ChibiOS_18.2.2/community/os/**"/>
-			 <include name="ChibiOS_18.2.2/ext/**"/>
-			 <include name="ChibiOS_18.2.2/os/**"/>
-			 <include name="ChibiOS_18.2.2/docs/**"/>
-			 <include name="CMSIS/**"/>
-			 <include name="patch/**"/>
-			 <include name="*.txt"/>
 			 <include name="public_key.der"/>
-		 </fx:fileset>
-		 <fx:fileset os="Windows" dir="platform_win">
-			<include name="bin/*"/>
-			<include name="gcc-arm-none-eabi-6-2017-q1-update/**"/>
+		</fx:fileset>
+		<fx:fileset os="Windows" dir="." type="native">
+			<include name="platform_win/bin/*"/>
+		</fx:fileset>
+		<fx:fileset os="Mac OS X" dir="." type="native">
+			<include name="platform_osx/bin/dfu-util"/>
+			<include name="platform_osx/bin/make"/>
+			<include name="platform_osx/bin/libusb-1.0.0.dylib"/>
+			<include name="platform_osx/bin/libusb-1.0.dylib"/>
 		</fx:fileset>
 	</fx:resources>
 

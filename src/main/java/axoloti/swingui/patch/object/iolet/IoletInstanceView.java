@@ -57,20 +57,21 @@ public abstract class IoletInstanceView<T extends IoletInstance> extends ViewPan
                     e.consume();
                 } else {
                     setHighlighted(true);
-                    //            if (!axoObj.isLocked()) {
-                    //                if (dragnet == null) {
-                    Net dnet = new NetDrag();
-                    NetController dragNetController = dnet.getController();
-                    dragtarget = null;
-                    saved_connected_state = model.getConnected();
-                    if (IoletInstanceView.this instanceof InletInstanceView) {
-                        dragNetController.connectInlet((InletInstance) getDModel());
-                    } else {
-                        dragNetController.connectOutlet((OutletInstance) getDModel());
+                    if (!axoObj.isLocked()) {
+                        if (dragnet == null) {
+                            Net dnet = new NetDrag();
+                            NetController dragNetController = dnet.getController();
+                            dragtarget = null;
+                            saved_connected_state = model.getConnected();
+                            if (IoletInstanceView.this instanceof InletInstanceView) {
+                                dragNetController.connectInlet((InletInstance) getDModel());
+                            } else {
+                                dragNetController.connectOutlet((OutletInstance) getDModel());
+                            }
+                            dragnet = new NetDragging(dnet, getPatchView());
+                            dragNetController.addView(dragnet);
+                        }
                     }
-                    dragnet = new NetDragging(dnet, getPatchView());
-                    dragNetController.addView(dragnet);
-                    //                }
                     dragnet.setVisible(true);
                     getPatchView().selectionRectLayerPanel.removeAll();
                     getPatchView().selectionRectLayerPanel.add(dragnet);

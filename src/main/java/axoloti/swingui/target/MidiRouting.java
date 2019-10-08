@@ -37,7 +37,7 @@ public class MidiRouting extends TJFrame {
     private JTable table_midi_out_routing;
 
     private void initComponents() {
-        setMinimumSize(new java.awt.Dimension(600, 250));
+        setMinimumSize(new java.awt.Dimension(400, 250));
         table_midi_in_routing = new JTable(new AbstractTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -70,7 +70,7 @@ public class MidiRouting extends TJFrame {
 
             @Override
             public int getColumnCount() {
-                return 17;
+                return 9;
             }
 
             @Override
@@ -175,7 +175,7 @@ public class MidiRouting extends TJFrame {
 
             @Override
             public int getColumnCount() {
-                return 17;
+                return 9;
             }
 
             @Override
@@ -196,9 +196,9 @@ public class MidiRouting extends TJFrame {
                         if (row == rowIndex) {
                             if (columnIndex == 0) {
                                 if (mapping.length > 1) {
-                                    return v.getPortName() + " #" + i + " ->";
+                                    return v.getPortName() + " #" + i + " <-";
                                 } else {
-                                    return v.getPortName() + " ->";
+                                    return v.getPortName() + " <-";
                                 }
                             } else {
                                 return ((mapping[i] & (1 << (columnIndex - 1))) != 0);
@@ -247,7 +247,7 @@ public class MidiRouting extends TJFrame {
         table_midi_out_routing.setRowSelectionAllowed(false);
         table_midi_out_routing.setColumnSelectionAllowed(false);
         table_midi_out_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
-        for (int i = 1; i < 17; i++) {
+        for (int i = 1; i < 9; i++) {
             table_midi_out_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
         }
         table_midi_out_routing.doLayout();
@@ -280,13 +280,13 @@ public class MidiRouting extends TJFrame {
         this.add(vPane);
 
         table_midi_out_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
-        for (int i = 1; i < 17; i++) {
+        for (int i = 1; i < 9; i++) {
             table_midi_out_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
         }
         table_midi_out_routing.doLayout();
 
         table_midi_in_routing.getColumnModel().getColumn(0).setPreferredWidth(150);
-        for (int i = 1; i < 17; i++) {
+        for (int i = 1; i < 9; i++) {
             table_midi_in_routing.getColumnModel().getColumn(i).setPreferredWidth(25);
         }
         table_midi_in_routing.doLayout();

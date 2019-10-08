@@ -1,0 +1,3 @@
+[submodule "firmware/elfloader"]
+	path = firmware/elfloader
+	url = https://github.com/JohannesTaelman/elfloader

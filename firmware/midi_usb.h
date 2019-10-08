@@ -27,6 +27,7 @@
 #ifndef MIDI_USB_H
 #define MIDI_USB_H
 
+#include "midi.h"
 #include "midi_buffer.h"
 #include "midi_routing.h"
 

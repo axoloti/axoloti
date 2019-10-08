@@ -28,6 +28,8 @@
 
 static uint8_t blkbuf[512];
 
+
+
 #if 0
 /* Turns on a LED when there is I/O activity on the USB port */
 static void usbActivity(bool active)
@@ -61,7 +63,6 @@ int main(void)
 {
     /* system & hardware initialization */
     halInit();
-
     // float usb inputs, hope the host notices detach...
     palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
     palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
@@ -76,7 +77,6 @@ int main(void)
   ch.dbg.isr_cnt = 0;
   ch.dbg.lock_cnt = 0;
 #endif
-
     chSysInit();
 
     sdStart(&SD2, &sercfg);
@@ -135,57 +135,8 @@ int main(void)
   msdStop(&USBMSD1);
 }
 
-extern void _crt0_entry(void);
+void _crt0_entry(void);
 
-void patch_init(int32_t fwID) {
-	(void)fwID;
-	_crt0_entry();
+void getInstanceSize(void) {
+  _crt0_entry();
 }
-
-typedef void (*fptr_patch_init_t)(int32_t fwID);
-// stripped function signatures, won't get there anyway...
-typedef void (*fptr_patch_dispose_t)(void);
-typedef void (*fptr_patch_dsp_process_t)(void);
-typedef void (*fptr_patch_midi_in_handler_t)(void);
-typedef void (*fptr_patch_applyPreset_t)(void);
-
-#define fourcc_patch_meta FOURCC('P','T','C','H')
-typedef struct {
-	chunk_header_t header;
-	int32_t patchID;
-	char patchname[64];
-} chunk_patch_meta_t;
-
-#define fourcc_patch_functions FOURCC('P','F','U','N')
-typedef struct {
-	chunk_header_t header;
-	fptr_patch_init_t fptr_patch_init;
-	fptr_patch_dispose_t fptr_patch_dispose;
-	fptr_patch_dsp_process_t fptr_dsp_process;
-	fptr_patch_midi_in_handler_t fptr_MidiInHandler;
-	fptr_patch_applyPreset_t fptr_applyPreset;
-} chunk_patch_functions_t;
-
-#define fourcc_patch_root FOURCC('A','X','P','T')
-typedef struct {
-	chunk_header_t header;
-	chunk_patch_meta_t patch_meta;
-	chunk_patch_functions_t patch_functions;
-} chunk_patch_root_t;
-
-chunk_patch_root_t patch_root_chunk = {
-		header : CHUNK_HEADER(patch_root),
-		patch_meta : {
-			header : CHUNK_HEADER(patch_meta),
-			patchID : 0,
-			patchname : {'f','l','a','s','h','e','r'}
-		},
-		patch_functions : {
-			header : CHUNK_HEADER(patch_functions),
-					fptr_patch_init: patch_init,
-					fptr_patch_dispose: 0,
-					fptr_dsp_process: 0,
-					fptr_MidiInHandler: 0,
-					fptr_applyPreset: 0,
-		},
-};

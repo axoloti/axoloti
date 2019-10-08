@@ -47,8 +47,6 @@ uint32_t CalcCRC32(uint8_t *buffer, uint32_t size) {
     buffer += 4;
     ui32x = revbit(ui32x); //reverse the bit order of input data
     CRC->DR = ui32x;
-    if ((i && 0xFFF) == 0)
-      watchdog_feed();
   }
   ui32x = CRC->DR;
 

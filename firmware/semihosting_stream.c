@@ -4,7 +4,10 @@
 #include "semihosting_stream.h"
 #include <unistd.h>
 
-extern void initialise_monitor_handles(void);
+// avoid undefined reference when linking with nosys
+__attribute__((weak))
+void initialise_monitor_handles(void){
+}
 
 void semihosting_stream_init(void) {
 	initialise_monitor_handles();

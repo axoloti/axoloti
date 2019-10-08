@@ -21,15 +21,10 @@
 #include "ch.h"
 
 void sdcard_init(void);
-int sdcard_loadPatch1(char *fname);
-int sdcard_bin_writer(char *fname);
-int bin_loader_flash(const void * startloc, uint32_t size);
 void sdcard_attemptMountIfUnmounted(void);
 void sdcard_unmount(void);
 
 //extern FATFS SDC_FS;
 extern bool fs_ready;
-
-extern uint32_t fbuff[256];
 
 #endif

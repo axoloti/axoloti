@@ -1,5 +1,9 @@
 package axoloti.patchbank;
 
+import axoloti.connection.CConnection;
+import axoloti.connection.IConnection;
+import axoloti.job.GlobalJobProcessor;
+import axoloti.job.IJobContext;
 import axoloti.mvc.AbstractModel;
 import axoloti.mvc.IModel;
 import axoloti.patch.PatchController;
@@ -8,7 +12,6 @@ import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.shell.ExecutionFailedException;
-import axoloti.target.TargetModel;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -23,13 +26,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import axoloti.job.GlobalJobProcessor;
-import axoloti.job.IJobContext;
 
 /**
  *
@@ -41,7 +43,7 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
 
     public final static String FILE_EXTENSION = ".axb";
 
-    private List<File> files = new ArrayList<>();
+    private List<String> files = new LinkedList<>();
 
     public final static Property FILE = new ObjectProperty("File", File.class, PatchBankModel.class);
     public final static Property FILES = new ListProperty("Files", PatchBankModel.class);
@@ -69,7 +71,10 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
         }
     }
 
-    private File fromRelative(String s) {
+    public File fromRelative(String s) {
+        if (file == null) {
+            return new File(s);
+        }
         Path basePath = file.toPath();
         Path baseParent = basePath.getParent();
         Path resolvedPath = baseParent.resolve(s);
@@ -85,18 +90,16 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
         String s;
         while ((s = fbs.readLine())
                 != null) {
-            File ff = fromRelative(s);
-            if (ff != null) {
-                files.add(ff);
+            if (s != null) {
+                files.add(s);
             }
         }
     }
 
     public byte[] getContents() {
         ByteBuffer data = ByteBuffer.allocateDirect(128 * 256);
-        for (File file : files) {
-            String fn = (String) file.getName();
-            for (char c : fn.toCharArray()) {
+        for (String f : files) {
+            for (char c : f.toCharArray()) {
                 data.put((byte) c);
             }
             data.put((byte) '\n');
@@ -110,9 +113,8 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
 
     public void save() {
         try (PrintWriter pw = new PrintWriter(file)) {
-            for (File file : files) {
-                String fn = toRelative(file);
-                pw.println(fn);
+            for (String f : files) {
+                pw.println(f);
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PatchBankModel.class
@@ -129,22 +131,22 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
         firePropertyChange(FILE, null, file);
     }
 
-    public List<File> getFiles() {
+    public List<String> getFiles() {
         return Collections.unmodifiableList(files);
     }
 
-    public void setFiles(List<File> files) {
+    public void setFiles(List<String> files) {
         this.files = files;
         firePropertyChange(FILES, null, files);
     }
 
     public void upload() {
-        TargetModel targetModel = TargetModel.getTargetModel();
-        if (targetModel.getConnection().isConnected()) {
+        IConnection conn = CConnection.getConnection();
+        if (conn.isConnected()) {
             GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
                 try {
                     byte b[] = getContents();
-                    targetModel.upload(
+                    conn.upload(
                             "/index.axb",
                             new ByteArrayInputStream(b),
                             Calendar.getInstance(),
@@ -157,7 +159,8 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
         }
     }
 
-    public void uploadOneFile(File f, IJobContext ctx) throws IOException, ExecutionFailedException, InterruptedException, ExecutionException {
+    public void uploadOneFile(String fname, IJobContext ctx) throws IOException, ExecutionFailedException, InterruptedException, ExecutionException {
+        File f = fromRelative(fname);
         if (!f.isFile() || !f.canRead()) {
             return;
         }
@@ -180,7 +183,8 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
         try {
             Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Uploading patch bank file");
             final byte b[] = getContents();
-            TargetModel.getTargetModel().upload(
+            IConnection conn = CConnection.getConnection();
+            conn.upload(
                     "/index.axb",
                     new ByteArrayInputStream(b),
                     Calendar.getInstance(),
@@ -190,8 +194,8 @@ public class PatchBankModel extends AbstractModel<PatchBankController> {
             final int n = files.size();
             IJobContext ctxs[] = ctx.createSubContexts(n);
             for (int i = 0; i < n; i++) {
-                File f = files.get(i);
-                Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f.getName());
+                String f = files.get(i);
+                Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Compiling and uploading : {0}", f);
                 uploadOneFile(f, ctxs[i]);
             }
             Logger.getLogger(PatchBankModel.class.getName()).log(Level.INFO, "Patch bank uploaded");

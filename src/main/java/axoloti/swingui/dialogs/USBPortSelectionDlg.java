@@ -17,87 +17,111 @@
  */
 package axoloti.swingui.dialogs;
 
-import axoloti.mvc.IView;
+import axoloti.connection.IDevice;
+import axoloti.connection.USBDeviceLister;
 import axoloti.preferences.Preferences;
-import axoloti.target.TargetModel;
-import static axoloti.usb.Usb.PID_AXOLOTI;
-import static axoloti.usb.Usb.PID_AXOLOTI_SDCARD;
-import static axoloti.usb.Usb.PID_STM_DFU;
-import static axoloti.usb.Usb.VID_AXOLOTI;
-import static axoloti.usb.Usb.VID_STM;
-import static axoloti.usb.Usb.deviceToPath;
-import axoloti.utils.OSDetect;
-import static axoloti.utils.OSDetect.getOS;
-import java.beans.PropertyChangeEvent;
+import java.util.List;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
-import org.usb4java.Device;
-import org.usb4java.DeviceDescriptor;
-import org.usb4java.DeviceHandle;
-import org.usb4java.DeviceList;
-import org.usb4java.LibUsb;
-import org.usb4java.LibUsbException;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<TargetModel> {
-
-    private String cpuid;
-    private final String defCPUID;
-
-    private final String sDFUBootloader = "STM DFU Bootloader";
-    private final String sAxolotiCore = "Axoloti Core";
-    private final String sAxolotiSDCard = "Axoloti SDCard reader";
-
-    private final TargetModel targetModel;
+public class USBPortSelectionDlg extends javax.swing.JDialog {
 
     /**
      * Creates new form USBPortSelectionDlg
      *
      * @param parent parent frame
      * @param modal is modal
-     * @param defCPUID default port name
      */
-    public USBPortSelectionDlg(java.awt.Frame parent, boolean modal, String defCPUID, TargetModel targetModel) {
+    public USBPortSelectionDlg(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        this.targetModel = targetModel;
         initComponents();
-        System.out.println("default cpuid: " + defCPUID);
-        this.defCPUID = defCPUID;
-        cpuid = defCPUID;
         populate();
         initComponents2();
     }
 
+    private final Runnable hotplugCallback = () -> {
+        populate();
+    };
+
     private void initComponents2() {
         getRootPane().setDefaultButton(jButtonOK);
+
+        jTable1.setModel(new AbstractTableModel() {
+            private final String[] columnNames = {"Name", "Device", "Location", "Info"};
+
+            @Override
+            public int getRowCount() {
+                return devices.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return columnNames.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columnNames[column];
+            }
+
+            @Override
+            public Object getValueAt(int row, int column) {
+                IDevice device = devices.get(row);
+                switch (column) {
+                    case 0: // Name
+                        return Preferences.getPreferences().getBoardName(device.getCPUID());
+                    case 1: // Device
+                        return device.getType();
+                    case 2: // Location
+                        return device.getLocation();
+                    case 3: // Info
+                        return device.getInfo();
+                    default:
+                        return "?";
+                }
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+                if (columnIndex == 0) {
+                    IDevice device = devices.get(rowIndex);
+                    Preferences.getPreferences().setBoardName(device.getCPUID(), (String) aValue);
+                }
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return (columnIndex == 0);
+            }
+
+            @Override
+            public Class getColumnClass(int column) {
+                return String.class;
+            }
+        });
+
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                 int r = jTable1.getSelectedRow();
                 if (r >= 0) {
-                    String devName = (String) model.getValueAt(r, 1);
-                    if (devName.equals(sAxolotiCore)) {
-                        jButtonOK.setEnabled(true);
-                        cpuid = (String) model.getValueAt(r, 3);
-                    } else {
-                        jButtonOK.setEnabled(false);
-                    }
+                    IDevice device = devices.get(r);
+                    jButtonOK.setEnabled(device.canConnect());
                 } else {
-                    cpuid = null;
+                    jButtonOK.setEnabled(false);
                 }
             }
         });
 
         jTable1.getModel().addTableModelListener(new TableModelListener() {
-
             @Override
             public void tableChanged(TableModelEvent e) {
                 int row = e.getFirstRow();
@@ -114,105 +138,14 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
                 prefs.savePrefs();
             }
         });
-
+        USBDeviceLister.getInstance().registerHotplugCallback(hotplugCallback);
     }
 
-    public static String convertErrorToString(int result) {
-        if (result < 0) {
-            if (getOS() == OSDetect.OS.WIN) {
-                if (result == LibUsb.ERROR_NOT_FOUND) {
-                    return "not accesseable : driver not installed";
-                } else if (result == LibUsb.ERROR_ACCESS) {
-                    return "not accesseable : busy?";
-                } else {
-                    return "not accesseable : " + result;
-                }
-            } else if (getOS() == OSDetect.OS.LINUX) {
-                if (result == LibUsb.ERROR_ACCESS) {
-                    return "insufficient permissions";
-                    // log message:  - install udev rules by running axoloti/platform/linux/add_udev_rules.sh"
-                } else {
-                    return "not accesseable : " + result;
-                }
-            } else {
-                return "not accesseable : " + result;
-            }
-        } else {
-            return null;
-        }
-    }
+    List<IDevice> devices;
 
     final void populate() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-
-        DeviceList list = new DeviceList();
-        int result = LibUsb.getDeviceList(null, list);
-        if (result < 0) {
-            throw new LibUsbException("Unable to get device list", result);
-        }
-        try {
-            // Iterate over all devices and scan for the right one
-            for (Device device : list) {
-                DeviceDescriptor descriptor = new DeviceDescriptor();
-                result = LibUsb.getDeviceDescriptor(device, descriptor);
-                if (result == LibUsb.SUCCESS) {
-                    if (descriptor.idVendor() == VID_STM) {
-                        if (descriptor.idProduct() == PID_STM_DFU) {
-                            DeviceHandle handle = new DeviceHandle();
-                            result = LibUsb.open(device, handle);
-                            if (result < 0) {
-                                if (getOS() == OSDetect.OS.WIN) {
-                                    if (result == LibUsb.ERROR_NOT_SUPPORTED) {
-                                        model.addRow(new String[]{"", sDFUBootloader, deviceToPath(device), "not accesseable : wrong driver installed"});
-                                    } else if (result == LibUsb.ERROR_ACCESS) {
-                                        model.addRow(new String[]{"", sDFUBootloader, deviceToPath(device), "not accesseable : busy?"});
-                                    } else {
-                                        model.addRow(new String[]{"", sDFUBootloader, deviceToPath(device), "not accesseable : " + result});
-                                    }
-                                } else {
-                                    model.addRow(new String[]{"", sDFUBootloader, deviceToPath(device), "not accesseable : " + result});
-                                }
-                            } else {
-                                model.addRow(new String[]{"", sDFUBootloader, deviceToPath(device), "driver OK, CPU ID indeterminate"});
-                                LibUsb.close(handle);
-                            }
-                        }
-                    } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI) {
-                        DeviceHandle handle = new DeviceHandle();
-                        result = LibUsb.open(device, handle);
-                        if (result < 0) {
-                            model.addRow(new String[]{"", sAxolotiCore, deviceToPath(device), convertErrorToString(result)});
-                        } else {
-                            String serial = LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber());
-                            String name = Preferences.getPreferences().getBoardName(serial);
-                            if (name == null) {
-                                name = "";
-                            }
-                            model.addRow(new String[]{name, sAxolotiCore, deviceToPath(device), serial});
-                            LibUsb.close(handle);
-                        }
-                    } else if (descriptor.idVendor() == VID_AXOLOTI && descriptor.idProduct() == PID_AXOLOTI_SDCARD) {
-                        model.addRow(new String[]{"", sAxolotiSDCard, deviceToPath(device), "unmount disk to connect"});
-                    }
-                } else {
-                    throw new LibUsbException("Unable to read device descriptor", result);
-                }
-            }
-            for (int r = 0; r < model.getRowCount(); r++) {
-                String id = (String) model.getValueAt(r, 3);
-                if (id.equals(this.defCPUID)) {
-                    jTable1.setRowSelectionInterval(r, r);
-                }
-            }
-        } finally {
-            // Ensure the allocated device list is freed
-            LibUsb.freeDeviceList(list, true);
-        }
-    }
-
-    public String getCPUID() {
-        return cpuid;
+        devices = USBDeviceLister.getInstance().getConnectables();
+        ((AbstractTableModel) jTable1.getModel()).fireTableDataChanged();
     }
 
     /**
@@ -227,7 +160,7 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
         jButtonOK = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButtonCancel = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButtonRefresh = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -252,37 +185,14 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
             }
         });
 
-        jButton1.setText("refresh");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRefresh.setText("refresh");
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonRefreshActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Name", "Device", "Location", "CPU ID"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -301,25 +211,24 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
                         .addComponent(jButtonCancel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonOK, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(146, 146, 146)
-                        .addComponent(jButton1)
-                        .addGap(0, 88, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonRefresh)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonRefresh))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonCancel)
                     .addComponent(jButtonOK))
                 .addContainerGap())
@@ -333,13 +242,13 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
     }//GEN-LAST:event_jButtonOKActionPerformed
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        //port = null;
         setVisible(false);
+        dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
         populate();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() == 2) {
@@ -348,29 +257,35 @@ public class USBPortSelectionDlg extends javax.swing.JDialog implements IView<Ta
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void onSelect() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        if (jTable1.getSelectedRowCount() > 0) {
-            int selRow = jTable1.getSelectedRow();
-            cpuid = (String) model.getValueAt(selRow, 3);
+        int row = jTable1.getSelectedRow();
+        if (row < 0) {
+            return;
         }
+        if (jTable1.getSelectedRowCount() != 1) {
+            return;
+        }
+        IDevice dev = devices.get(row);
+        if (!dev.canConnect()) {
+            return;
+        }
+        USBDeviceLister.getInstance().setDefaultDevice(dev);
         setVisible(false);
+        dispose();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        USBDeviceLister.getInstance().unregisterHotplugCallback(hotplugCallback);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonOK;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void modelPropertyChange(PropertyChangeEvent evt) {
-    }
-
-    @Override
-    public TargetModel getDModel() {
-        return targetModel;
-    }
 }

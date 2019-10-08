@@ -19,7 +19,8 @@
 #define __SERIAL_MIDI_H
 
 #include <stdint.h>
-#include <midi.h>
+#include "midi.h"
+#include "midi_buffer.h"
 
 void serial_midi_init(void);
 

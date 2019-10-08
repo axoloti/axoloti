@@ -6,8 +6,8 @@
 #include "chprintf.h"
 #include "sdcard.h"
 #include "exceptions.h"
-#include "pconnection.h"
 #include "patch.h"
+#include "logging.h"
 
 /*
  * todo: indicate patch load success/fail...
@@ -92,7 +92,7 @@ static void refresh(int launch) {
 			LCD_drawStringInvN(0, 1 + i - sel, fno.fname, 20);
 			if (launch) {
 				f_closedir(&dir);
-				LoadPatch(fn_patch);
+				patch_load(fn_patch,0);
 				return;
 			}
 		} else if (i - sel > 0)

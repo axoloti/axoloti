@@ -7,8 +7,8 @@
 int load_patch_index = 0;
 
 void EnterMenuPatchLoad(void) {
-	LoadPatchIndexed(load_patch_index);
-	// TODO: show success/fail somehow
+  patch_loadIndex(load_patch_index,0);
+  // TODO: show success/fail somehow
 }
 
 #define PatchLoadMenu_length 2
@@ -43,6 +43,10 @@ void EnterMenuFormat(void) {
 }
 
 // TODO: Write - compose/modify a patchname...
+void WritePatch(){
+  while(1){}
+  // TODO: store patch
+}
 
 const ui_node_t SdcMenu[SdcMenu_length] = {
   { &nodeFunctionTable_node_list, "Load patch", .nodeList = {&PatchLoadMenu, PatchLoadMenu_length}},

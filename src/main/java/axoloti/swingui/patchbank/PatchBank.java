@@ -22,6 +22,8 @@ import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.connection.CConnection;
 import axoloti.connection.ConnectionStatusListener;
+import axoloti.connection.IConnection;
+import axoloti.job.GlobalJobProcessor;
 import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.patchbank.PatchBankModel;
 import axoloti.preferences.Preferences;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -51,7 +54,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.AbstractTableModel;
-import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -88,8 +90,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         });
         menuBar.addMenuItemToFileMenu(jMenuItemSaveAs);
         setJMenuBar(menuBar);
-
-        CConnection.getConnection().addConnectionStatusListener(this);
+        // TODO: ConnectionStatusListener
+//        CConnection.getConnection().addConnectionStatusListener(this);
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Index", "File", "on sdcard"};
 
@@ -130,13 +132,10 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                     case 1:
                         String svalue = (String) value;
                         if (svalue != null && !svalue.isEmpty()) {
-                            File f = new File(svalue);
-                            if (f.exists() && f.isFile() && f.canRead()) {
-                                ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
-                                files.set(rowIndex, f);
-                                model.getController().addMetaUndo("Change");
-                                model.getController().changePatchBankFiles(files);
-                            }
+                            List<String> files = new ArrayList<>(getDModel().getFiles());
+                            files.set(rowIndex, svalue);
+                            model.getController().addMetaUndo("Change");
+                            model.getController().changePatchBankFiles(files);
                         }
                         break;
                     case 2:
@@ -153,16 +152,17 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                         returnValue = Integer.toString(rowIndex);
                         break;
                     case 1: {
-                        File f = getDModel().getFiles().get(rowIndex);
+                        String f = getDModel().getFiles().get(rowIndex);
                         if (f != null) {
-                            returnValue = getDModel().toRelative(f);
+                            returnValue = f;
                         } else {
                             returnValue = "";
                         }
                         break;
                     }
                     case 2: {
-                        File f = getDModel().getFiles().get(rowIndex);
+                        String s = getDModel().getFiles().get(rowIndex);
+                        File f = getDModel().fromRelative(s);
                         if (f != null) {
                             boolean en = f.exists();
                             String fn = f.getName();
@@ -171,7 +171,13 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                                 fn = fn.substring(0, i);
                             }
                             TargetModel targetModel = TargetModel.getTargetModel();
-                            SDFileInfo sdfi = targetModel.getSDCardInfo().find("/" + fn + "/patch.bin");
+                            IConnection conn = CConnection.getConnection();
+                            SDFileInfo sdfi = null;
+                            try {
+                                sdfi = conn.getFileInfo("/" + fn + "/patch.bin");
+                            } catch (IOException ex) {
+                                // mute exceptions
+                            }
                             if (sdfi != null) {
                                 if (en) {
                                     returnValue = "resolved locally, and exists on sdcard";
@@ -218,7 +224,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         } else {
             jButtonUp.setEnabled(row > 0);
             jButtonDown.setEnabled(row < getDModel().getFiles().size() - 1);
-            File f = getDModel().getFiles().get(row);
+            String s = getDModel().getFiles().get(row);
+            File f = getDModel().fromRelative(s);
             boolean en = (f != null) && (f.exists());
             jButtonOpen.setEnabled(en);
             jButtonUpload.setEnabled(en);
@@ -311,7 +318,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
 
     public void close() {
         DocumentWindowList.unregisterWindow(this);
-        CConnection.getConnection().removeConnectionStatusListener(this);
+        // TODO: ConnectionStatusListener
+//        CConnection.getConnection().removeConnectionStatusListener(this);
         dispose();
     }
 
@@ -566,8 +574,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         if (row < 1) {
             return;
         }
-        ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
-        File o = files.remove(row);
+        List<String> files = new LinkedList<>(getDModel().getFiles());
+        String o = files.remove(row);
         files.add(row - 1, o);
         model.getController().addMetaUndo("Move up");
         model.getController().changePatchBankFiles(files);
@@ -579,11 +587,11 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         if (row < 0) {
             return;
         }
-        ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
+        List<String> files = new LinkedList<>(getDModel().getFiles());
         if (row > (files.size() - 1)) {
             return;
         }
-        File o = files.remove(row);
+        String o = files.remove(row);
         files.add(row + 1, o);
         model.getController().addMetaUndo("Move down");
         model.getController().changePatchBankFiles(files);
@@ -595,7 +603,7 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         if (row < 0) {
             return;
         }
-        ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
+        List<String> files = new LinkedList<>(getDModel().getFiles());
         files.remove(row);
         model.getController().addMetaUndo("Remove");
         model.getController().changePatchBankFiles(files);
@@ -607,8 +615,9 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         fc.addChoosableFileFilter(axpFileFilter);
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            ArrayList<File> files = new ArrayList<>(getDModel().getFiles());
-            files.add(fc.getSelectedFile());
+            List<String> files = new LinkedList<>(getDModel().getFiles());
+            // TODO: PatchBank add file
+            files.add(fc.getSelectedFile().getName());
             model.getController().addMetaUndo("Add");
             model.getController().changePatchBankFiles(files);
         }
@@ -617,7 +626,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
     private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
         int row = jTable1.getSelectedRow();
         if (row >= 0) {
-            File f = getDModel().getFiles().get(jTable1.getSelectedRow());
+            String s = getDModel().getFiles().get(row);
+            File f = getDModel().fromRelative(s);
             if (f.isFile() && f.canRead()) {
                 PatchViewSwing.openPatch(f);
             }
@@ -625,10 +635,11 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-        File f = getDModel().getFiles().get(jTable1.getSelectedRow());
+        int row = jTable1.getSelectedRow();
+        String s = getDModel().getFiles().get(row);
         GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
             try {
-                model.uploadOneFile(f, ctx);
+                model.uploadOneFile(s, ctx);
             } catch (IOException | ExecutionFailedException | InterruptedException | ExecutionException ex) {
                 ctx.reportException(ex);
             }

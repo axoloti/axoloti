@@ -22,6 +22,7 @@
 #include "parameters.h"
 #include "stdbool.h"
 #include "input_evt.h"
+#include "patch.h"
 
 extern int8_t EncBuffer[4];
 
@@ -65,9 +66,8 @@ typedef struct {
 } ui_node_action_function_t;
 
 typedef struct {
-	Parameter_t *params;
-	Parameter_name_t *param_names;
-	int32_t nparams;
+  patch_t *patch;
+  int32_t nparams;
 } ui_node_param_list_t;
 
 typedef struct {

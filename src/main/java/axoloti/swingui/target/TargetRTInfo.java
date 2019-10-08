@@ -34,6 +34,7 @@ public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetMode
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabelVuIn1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -44,41 +45,103 @@ public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetMode
         jLabelVuOut2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabelUnderruns = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabelDsp = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabelSram1 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabelSram3 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabelCcmsram = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabelSdram = new javax.swing.JLabel();
+
+        jLabel6.setText("jLabel6");
 
         setMinimumSize(new java.awt.Dimension(186, 80));
         setPreferredSize(new java.awt.Dimension(200, 100));
         setSize(new java.awt.Dimension(200, 100));
-        setLayout(new java.awt.GridLayout(5, 2));
+        setLayout(new java.awt.GridLayout(10, 2));
 
+        jLabel1.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel1.setText("in L");
         add(jLabel1);
 
+        jLabelVuIn1.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelVuIn1.setText("0           ");
         add(jLabelVuIn1);
 
+        jLabel2.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel2.setText("in R");
         add(jLabel2);
 
+        jLabelVuIn2.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelVuIn2.setText("0");
         add(jLabelVuIn2);
 
+        jLabel3.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel3.setText("out L");
         add(jLabel3);
 
+        jLabelVuOut1.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelVuOut1.setText("0");
         add(jLabelVuOut1);
 
+        jLabel4.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel4.setText("out R");
         add(jLabel4);
 
+        jLabelVuOut2.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelVuOut2.setText("0");
         add(jLabelVuOut2);
 
+        jLabel5.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel5.setText("underruns ");
         add(jLabel5);
 
+        jLabelUnderruns.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelUnderruns.setText("0");
         add(jLabelUnderruns);
+
+        jLabel7.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabel7.setText("dsp");
+        add(jLabel7);
+
+        jLabelDsp.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelDsp.setText("0");
+        add(jLabelDsp);
+
+        jLabel8.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabel8.setText("sram1 free");
+        add(jLabel8);
+
+        jLabelSram1.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelSram1.setText("0");
+        add(jLabelSram1);
+
+        jLabel9.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabel9.setText("sram3 free");
+        add(jLabel9);
+
+        jLabelSram3.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelSram3.setText("0");
+        add(jLabelSram3);
+
+        jLabel12.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabel12.setText("ccmram free");
+        add(jLabel12);
+
+        jLabelCcmsram.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelCcmsram.setText("0");
+        add(jLabelCcmsram);
+
+        jLabel10.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabel10.setText("sdram free");
+        add(jLabel10);
+
+        jLabelSdram.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelSdram.setText("0");
+        add(jLabelSdram);
     }// </editor-fold>//GEN-END:initComponents
 
     @Override
@@ -91,12 +154,17 @@ public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetMode
                 double inLevel2dB = 10 * Math.log10(Math.abs(rtinfo.inLevel2) + 1) - r;
                 double outLevel1dB = 10 * Math.log10(Math.abs(rtinfo.outLevel1) + 1) - r;
                 double outLevel2dB = 10 * Math.log10(Math.abs(rtinfo.outLevel2) + 1) - r;
-                jLabelVuIn1.setText(String.format("%3.1f", inLevel1dB));
-                jLabelVuIn2.setText(String.format("%3.1f", inLevel2dB));
+                jLabelVuIn1.setText(String.format("%7.1f dB", inLevel1dB));
+                jLabelVuIn2.setText(String.format("%7.1f dB", inLevel2dB));
                 int mininf = -130;
-                jLabelVuOut1.setText(outLevel1dB > mininf ? String.format("%3.1f", outLevel1dB) : "-inf");
-                jLabelVuOut2.setText(outLevel2dB > mininf ? String.format("%3.1f", outLevel2dB) : "-inf");
-                jLabelUnderruns.setText(Integer.toString(rtinfo.underruns));
+                jLabelVuOut1.setText(outLevel1dB > mininf ? String.format("%7.1f dB", outLevel1dB) : "   -inf dB");
+                jLabelVuOut2.setText(outLevel2dB > mininf ? String.format("%7.1f dB", outLevel2dB) : "   -inf dB");
+                jLabelUnderruns.setText(String.format("%7d", rtinfo.underruns));
+                jLabelDsp.setText(String.format("%7.0f %%", rtinfo.dsp));
+                jLabelSram1.setText(String.format("%7d", rtinfo.sram1_free));
+                jLabelSram3.setText(String.format("%7d", rtinfo.sram3_free));
+                jLabelCcmsram.setText(String.format("%7d", rtinfo.ccmsram_free));
+                jLabelSdram.setText(String.format("%7d", rtinfo.sdram_free));
             } else {
                 jLabelVuIn1.setText("");
                 jLabelVuIn2.setText("");
@@ -118,10 +186,21 @@ public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetMode
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelCcmsram;
+    private javax.swing.JLabel jLabelDsp;
+    private javax.swing.JLabel jLabelSdram;
+    private javax.swing.JLabel jLabelSram1;
+    private javax.swing.JLabel jLabelSram3;
     private javax.swing.JLabel jLabelUnderruns;
     private javax.swing.JLabel jLabelVuIn1;
     private javax.swing.JLabel jLabelVuIn2;

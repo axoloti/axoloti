@@ -18,10 +18,6 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
-#undef __FPU_PRESENT
-#define STM32F427xx
-
-
 /*
  * Board oscillators-related settings.
  * NOTE: LSE not fitted.

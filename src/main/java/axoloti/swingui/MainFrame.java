@@ -26,6 +26,11 @@ import axoloti.Version;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
+import axoloti.connection.IDevice;
+import axoloti.connection.ILivePatch;
+import axoloti.connection.IPatchCB;
+import axoloti.connection.LivePatch;
+import axoloti.connection.USBDeviceLister;
 import axoloti.job.GlobalJobProcessor;
 import axoloti.job.GlobalProgress;
 import axoloti.job.IJobContext;
@@ -46,6 +51,7 @@ import axoloti.swingui.target.TJFrame;
 import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
 import axoloti.utils.KeyUtils;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -64,6 +70,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -72,6 +79,7 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Style;
@@ -99,7 +107,7 @@ public class MainFrame extends TJFrame implements ActionListener {
     public MainFrame(String args[], TargetModel targetModel) {
         super(targetModel);
         initComponents();
-        jLabelVoltages.setSize(jLabelVoltages.getPreferredSize());
+        jLabelVolt50.setSize(jLabelVolt50.getPreferredSize());
         fileMenu.initComponents();
 
         mainframe = this;
@@ -353,12 +361,85 @@ public class MainFrame extends TJFrame implements ActionListener {
                 + "* piccolo view: nets do not update correctly (swing views are fine)\n"
         );
         init();
+        USBDeviceLister.getInstance().registerHotplugCallback(hotplugCallback);
     }
 
     private void init() {
         doLayout();
         model.getController().addView(this);
+        jTablePatches.setModel(new AbstractTableModel() {
+            private final String[] columnNames = {"PatchID", "name", "stop"};
+            private final Class<?>[] columnTypes = {String.class, String.class, Boolean.class};
+
+            @Override
+            public int getRowCount() {
+                List<Integer> patches = model.getPatchList();
+                if (patches == null) {
+                    return 0;
+                }
+                return patches.size();
+            }
+
+            @Override
+            public int getColumnCount() {
+                return columnNames.length;
+            }
+
+            @Override
+            public String getColumnName(int column) {
+                return columnNames[column];
+            }
+
+            @Override
+            public Object getValueAt(int row, int column) {
+                List<ILivePatch> patches = model.getPatchList();
+                if (patches == null) {
+                    return "null";
+                }
+                switch (column) {
+                    case 0: //patchID
+                        return String.format("0x%08x", ((LivePatch) patches.get(row)).getPatchRef());
+                    case 1: //name
+                        return patches.get(row).getName();
+                    case 2:
+                        return false;
+                }
+                return "?";
+            }
+
+            @Override
+            public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+                List<ILivePatch> patches = model.getPatchList();
+                if (patches == null) {
+                    return;
+                }
+                try {
+                    patches.get(rowIndex).transmitStop();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex == 2;
+            }
+
+            @Override
+            public Class getColumnClass(int column) {
+                return columnTypes[column];
+            }
+        });
     }
+
+    private Runnable hotplugCallback = () -> {
+        if (!CConnection.getConnection().isConnected()) {
+            IDevice dev = USBDeviceLister.getInstance().getDefaultDevice();
+            if (dev != null) {
+                CConnection.getConnection().connect(dev);
+            }
+        }
+    };
 
     static boolean getTestDir(String var, boolean write) {
         String ev = System.getProperty(var);
@@ -394,14 +475,16 @@ public class MainFrame extends TJFrame implements ActionListener {
         jCheckBoxConnect = new javax.swing.JCheckBox();
         jLabelCPUID = new javax.swing.JLabel();
         jLabelFirmwareID = new javax.swing.JLabel();
-        jLabelVoltages = new javax.swing.JLabel();
-        jLabelPatch = new javax.swing.JLabel();
-        jLabelPatchName = new javax.swing.JLabel();
+        jLabelVolt50 = new javax.swing.JLabel();
+        jLabelVolt33 = new javax.swing.JLabel();
         jLabelSDCardPresent = new javax.swing.JLabel();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0), new java.awt.Dimension(32767, 0));
         jPanel5 = new javax.swing.JPanel();
         jPanel4 = new axoloti.swingui.target.TargetRTInfo(getDModel());
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTablePatches = new javax.swing.JTable();
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
         jPanelProgress = new javax.swing.JPanel();
@@ -417,7 +500,8 @@ public class MainFrame extends TJFrame implements ActionListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Axoloti");
         setMinimumSize(new java.awt.Dimension(200, 200));
-        setPreferredSize(new java.awt.Dimension(400, 320));
+        setPreferredSize(new java.awt.Dimension(600, 400));
+        setSize(new java.awt.Dimension(600, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -425,6 +509,8 @@ public class MainFrame extends TJFrame implements ActionListener {
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
+        jPanel2.setAlignmentX(0.0F);
+        jPanel2.setMinimumSize(new java.awt.Dimension(246, 155));
         jPanel2.setPreferredSize(new java.awt.Dimension(272, 0));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -434,6 +520,7 @@ public class MainFrame extends TJFrame implements ActionListener {
         jLabelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/axoloti_icon.png"))); // NOI18N
         jPanel3.add(jLabelIcon);
 
+        jButtonClear.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jButtonClear.setText("Clear");
         jButtonClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -447,6 +534,7 @@ public class MainFrame extends TJFrame implements ActionListener {
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
+        jCheckBoxConnect.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jCheckBoxConnect.setText("Connect");
         jCheckBoxConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -455,27 +543,30 @@ public class MainFrame extends TJFrame implements ActionListener {
         });
         jPanel1.add(jCheckBoxConnect);
 
+        jLabelCPUID.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelCPUID.setText("CPUID");
         jPanel1.add(jLabelCPUID);
 
+        jLabelFirmwareID.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelFirmwareID.setText("FirmwareID");
         jPanel1.add(jLabelFirmwareID);
 
-        jLabelVoltages.setText("5V : 5.00V VDD : 3.30V ");
-        jPanel1.add(jLabelVoltages);
+        jLabelVolt50.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelVolt50.setText("5V  : -.--V");
+        jPanel1.add(jLabelVolt50);
 
-        jLabelPatch.setText("patchIndex");
-        jPanel1.add(jLabelPatch);
+        jLabelVolt33.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jLabelVolt33.setText("VDD : -.--V ");
+        jPanel1.add(jLabelVolt33);
 
-        jLabelPatchName.setText("patchName");
-        jPanel1.add(jLabelPatchName);
-
+        jLabelSDCardPresent.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabelSDCardPresent.setText("no SDCard");
         jPanel1.add(jLabelSDCardPresent);
 
         jPanel2.add(jPanel1);
         jPanel2.add(filler3);
 
+        jPanel5.setAlignmentX(1.0F);
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.PAGE_AXIS));
 
         getDModel().getController().addView((axoloti.swingui.target.TargetRTInfo)jPanel4);
@@ -486,15 +577,49 @@ public class MainFrame extends TJFrame implements ActionListener {
 
         getContentPane().add(jPanel2);
 
+        jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        jScrollPane1.setAlignmentX(0.0F);
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(23, 50));
+
+        jTablePatches.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        jTablePatches.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTablePatches.setAlignmentX(0.0F);
+        jTablePatches.setMinimumSize(new java.awt.Dimension(60, 94));
+        jTablePatches.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablePatchesMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTablePatches);
+
+        jSplitPane1.setLeftComponent(jScrollPane1);
+
         jScrollPaneLog.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPaneLog.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPaneLog.setAlignmentX(0.0F);
+        jScrollPaneLog.setMinimumSize(new java.awt.Dimension(123, 53));
         jScrollPaneLog.setPreferredSize(new java.awt.Dimension(32767, 32767));
 
         jTextPaneLog.setEditable(false);
+        jTextPaneLog.setAlignmentX(0.0F);
         jScrollPaneLog.setViewportView(jTextPaneLog);
 
-        getContentPane().add(jScrollPaneLog);
+        jSplitPane1.setRightComponent(jScrollPaneLog);
 
+        getContentPane().add(jSplitPane1);
+
+        jPanelProgress.setAlignmentX(0.0F);
         jPanelProgress.setMaximumSize(new java.awt.Dimension(605, 16));
         jPanelProgress.setLayout(new javax.swing.BoxLayout(jPanelProgress, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -552,6 +677,18 @@ public class MainFrame extends TJFrame implements ActionListener {
         quit();
     }//GEN-LAST:event_formWindowClosing
 
+    private void jTablePatchesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePatchesMouseClicked
+        if (evt.getClickCount() == 2) {
+            int selectedRow = jTablePatches.getSelectedRow();
+            if (selectedRow >= 0) {
+                List<ILivePatch> patches = model.getPatchList();
+                ILivePatch patch = patches.get(selectedRow);
+                IPatchCB cbs = patch.getCallbacks();
+                cbs.openEditor();
+            }
+        }
+    }//GEN-LAST:event_jTablePatchesMouseClicked
+
     public void openPatchFromURL() {
         String url = JOptionPane.showInputDialog(this, "Enter URL:");
         if (url == null) {
@@ -588,10 +725,9 @@ public class MainFrame extends TJFrame implements ActionListener {
     private javax.swing.JLabel jLabelCPUID;
     private javax.swing.JLabel jLabelFirmwareID;
     private javax.swing.JLabel jLabelIcon;
-    private javax.swing.JLabel jLabelPatch;
-    private javax.swing.JLabel jLabelPatchName;
     private javax.swing.JLabel jLabelSDCardPresent;
-    private javax.swing.JLabel jLabelVoltages;
+    private javax.swing.JLabel jLabelVolt33;
+    private javax.swing.JLabel jLabelVolt50;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuBoard;
     private javax.swing.JMenu jMenuEdit;
@@ -603,7 +739,10 @@ public class MainFrame extends TJFrame implements ActionListener {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPaneLog;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTable jTablePatches;
     private javax.swing.JTextPane jTextPaneLog;
     private axoloti.swingui.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
@@ -613,11 +752,9 @@ public class MainFrame extends TJFrame implements ActionListener {
         jCheckBoxConnect.setEnabled(true);
         if (!connect) {
             setCpuID(null);
-            jLabelVoltages.setText(" ");
-            jLabelPatch.setText(" ");
+            jLabelVolt50.setText(" ");
             v5000c = 0;
             vdd00c = 0;
-            jLabelPatch.setText("");
             jLabelSDCardPresent.setText(" ");
         }
     }
@@ -651,38 +788,15 @@ public class MainFrame extends TJFrame implements ActionListener {
             if (!TargetModel.getTargetModel().getWarnedAboutFWCRCMismatch()) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, linkFwId});
                 TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(true);
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        interactiveFirmwareUpdate();
-                    }
-                });
+                // TODO: fix flasher
+//                SwingUtilities.invokeLater(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        interactiveFirmwareUpdate();
+//                    }
+//                });
             }
         }
-    }
-
-    private void showPatchIndex(int patchIndex) {
-        String s;
-        switch (patchIndex) {
-            case -1:
-                s = "running /start.bin";
-                break;
-            case -2:
-                s = "running flash patch";
-                break;
-            case -3:
-                s = "running sdcard .bin file";
-                break;
-            case -4:
-                s = "running live patch";
-                break;
-            case -5:
-                s = " ";
-                break;
-            default:
-                s = "running #" + patchIndex;
-        }
-        jLabelPatch.setText(s);
     }
 
     private int v5000c = 0;
@@ -702,15 +816,19 @@ public class MainFrame extends TJFrame implements ActionListener {
             upd = true;
         }
         if (upd) {
-            jLabelVoltages.setText(String.format("5V: %.2fV VDD: %.2fV", v5000c / 100.0f, vdd00c / 100.0f));
+            jLabelVolt50.setText(String.format(" 5V: %.2fV", v5000c / 100.0f));
+            jLabelVolt33.setText(String.format("VDD: %.2fV", vdd00c / 100.0f));
         }
 
         if (warning != pwarn) {
+            Color c;
             if (warning) {
-                jLabelVoltages.setForeground(Theme.getCurrentTheme().Error_Text);
+                c = Theme.getCurrentTheme().Error_Text;
             } else {
-                jLabelVoltages.setForeground(Theme.getCurrentTheme().Normal_Text);
+                c = Theme.getCurrentTheme().Normal_Text;
             }
+            jLabelVolt50.setForeground(c);
+            jLabelVolt33.setForeground(c);
         }
         pwarn = warning;
     }
@@ -727,9 +845,12 @@ public class MainFrame extends TJFrame implements ActionListener {
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
         if (s == 0) {
-            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
             String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-            getDModel().flashUsingSDRam(fname, pname);
+            try {
+                getDModel().flashUsingSDRam(pname);
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -784,12 +905,8 @@ public class MainFrame extends TJFrame implements ActionListener {
             } else {
                 jLabelSDCardPresent.setText("no SDCard");
             }
-        } else if (TargetModel.PATCHINDEX.is(evt)) {
-            int i = (Integer)evt.getNewValue();
-            showPatchIndex(i);
-        } else if (TargetModel.PATCHNAME.is(evt)) {
-            String s = (String) evt.getNewValue();
-            jLabelPatchName.setText(s);
+        } else if (TargetModel.PATCHLIST.is(evt)) {
+            ((AbstractTableModel) jTablePatches.getModel()).fireTableDataChanged();
         }
     }
 

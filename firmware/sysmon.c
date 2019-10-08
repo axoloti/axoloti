@@ -42,6 +42,13 @@ static THD_WORKING_AREA(waThreadSysmon, 256);
 static THD_FUNCTION(ThreadSysmon, arg) {
   (void)arg;
   chRegSetThreadName("sysmon");
+  int sdtmr = 0;
+  bool sdcsw1 = palReadPad(SDCSW_PORT, SDCSW_PIN);
+  if (!sdcsw1) {
+    sdtmr = 5;
+  } else {
+    sdtmr = -5;
+  }
   pattern_index = 0;
   while (1) {
     uint8_t pi = pattern_index;
@@ -83,23 +90,31 @@ static THD_FUNCTION(ThreadSysmon, arg) {
 // sdcard switch monitor
 #ifdef SDCSW_PIN
     bool sdcsw = palReadPad(SDCSW_PORT, SDCSW_PIN);
-    if (sdcsw && !sdcsw_prev) {
-//      LogTextMessage("sdcard ejected");
-      StopPatch();
-      sdcard_unmount();
-    }
-    else if (!sdcsw && sdcsw_prev) {
-//      LogTextMessage("sdcard inserted");
-      sdcard_attemptMountIfUnmounted();
-      if (!fs_ready) {
-        pattern_index = 0;
-        pattern = BLINK_OVERLOAD;
+    if (!sdcsw) {
+      // sdcard present
+      sdtmr++;
+      if (sdtmr<0) sdtmr = 0;
+      if (sdtmr>5) sdtmr = 5;
+      if (sdtmr == 4) {
+        sdcard_attemptMountIfUnmounted();
+        if (fs_ready) {
+          patch_loadStartSD(0);
+        } else {
+          pattern_index = 0;
+          pattern = BLINK_OVERLOAD;
+        }
       }
-      LoadPatchStartSD();
+    } else {
+      // sdcard not present
+      sdtmr--;
+      if (sdtmr>0) sdtmr = 0;
+      if (sdtmr<-2) sdtmr = -2;
+      if (sdtmr==-1) {
+        patch_stop(0);
+        sdcard_unmount();
+      }
     }
-    sdcsw_prev = sdcsw;
 #endif
-
     chThdSleepMilliseconds(100);
   }
 }

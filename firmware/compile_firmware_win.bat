@@ -4,7 +4,7 @@ call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
 call :setrelease "%axoloti_release%"
 
-set PATH=%axoloti_runtime%\platform_win\gcc-arm-none-eabi-8-2018q4\bin;%axoloti_runtime%\platform_win\bin
+set PATH=%axoloti_runtime%\platform_win\gcc-arm-none-eabi-7-2018q2\bin;%axoloti_runtime%\platform_win\bin
 
 echo %PATH%
 arm-none-eabi-gcc --version
@@ -17,23 +17,10 @@ if not exist "build\obj\" mkdir build\obj
 if not exist "build\lst\" mkdir build\lst
 
 echo "Compiling firmware..."
-make -f Makefile.patch clean
 make
 IF %ERRORLEVEL% NEQ 0 (
 	exit /b 1
 )
-
-echo "Compiling firmware flasher..."
-cd flasher
-if not exist "flasher_build\" mkdir flasher_build
-if not exist "flasher_build\obj\" mkdir flasher_build\obj
-if not exist "flasher_build\lst\" mkdir flasher_build\lst
-if not exist "flasher_build\.dep\" mkdir flasher_build\.dep
-make
-IF %ERRORLEVEL% NEQ 0 (
-	exit /b 1
-)
-cd ..
 
 echo "Compiling firmware mounter..."
 cd mounter

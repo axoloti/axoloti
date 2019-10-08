@@ -18,24 +18,30 @@
 #ifndef __PCONNECTION_H
 #define __PCONNECTION_H
 
+#include <stdarg.h>
+
 typedef struct {
 	uint32_t header;
 	uint32_t version;
 	uint32_t dspload;
 	uint32_t patchID;
 	uint32_t voltage;
-	uint32_t loadPatchIndex;
+	uint32_t loadPatchIndex; // TODO: OBSOLETE
 	uint32_t fs_ready;
 	float vu_input[2];
 	float vu_output[2];
 	uint32_t underruns;
+	uint32_t sram1_free;
+  uint32_t sram3_free;
+  uint32_t ccmram_free;
+  uint32_t sdram_free;
 } tx_pckt_ack_v2_t;
 
 extern tx_pckt_ack_v2_t tx_pckt_ack_v2;
 
+void pconnection_suspend(void);
+void pconnection_wakeup(void);
+
 void InitPConnection(void);
-extern void BootLoaderInit(void);
-void LogTextMessage(const char* format, ...);
-int GetFirmwareID(void);
 
 #endif

@@ -17,12 +17,12 @@
  */
 package axoloti.swingui.preferences;
 
-import axoloti.preferences.Preferences;
-import axoloti.swingui.MainFrame;
-import axoloti.swingui.dialogs.AxolotiLibraryEditor;
 import axoloti.objectlibrary.AxoFileLibrary;
 import axoloti.objectlibrary.AxoGitLibrary;
 import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.preferences.Preferences;
+import axoloti.swingui.MainFrame;
+import axoloti.swingui.dialogs.AxolotiLibraryEditor;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -57,9 +57,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
         txtFavDir.setText(prefs.getFavouriteDir());
         txtFirmwareDir.setText(System.getProperty(axoloti.Axoloti.FIRMWARE_DIR));
         txtRuntimeDir.setText(System.getProperty(axoloti.Axoloti.RUNTIME_DIR));
-        jControllerEnabled.setSelected(prefs.isControllerEnabled());
-        jTextFieldController.setText(prefs.getControllerObject());
-        jTextFieldController.setEnabled(prefs.isControllerEnabled());
         populateLibrary();
 
         //double click to edit library
@@ -124,8 +121,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
         prefs.setPollInterval(Integer.parseInt(jTextFieldPollInterval.getText()));
         prefs.setMouseDialAngular(jComboBox1.getSelectedItem().equals("Angular"));
         prefs.setFavouriteDir(txtFavDir.getText());
-        prefs.setControllerObject(jTextFieldController.getText().trim());
-        prefs.setControllerEnabled(jControllerEnabled.isSelected());
         prefs.setMouseWheelPan(mouseWheelComboBox.getSelectedItem().equals("Pan"));
     }
 
@@ -167,9 +162,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
         btnRuntimeDir = new javax.swing.JButton();
         txtFavDir = new javax.swing.JLabel();
         btnFavDir = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        jTextFieldController = new javax.swing.JTextField();
-        jControllerEnabled = new javax.swing.JCheckBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         jLibraryTable = new javax.swing.JTable();
         jAddLibBtn = new javax.swing.JButton();
@@ -243,17 +235,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
         btnFavDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFavDirActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setText("Controller Object");
-
-        jTextFieldController.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-
-        jControllerEnabled.setText("Enabled");
-        jControllerEnabled.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jControllerEnabledActionPerformed(evt);
             }
         });
 
@@ -412,12 +393,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
                                         .addComponent(jDelLibBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jEditLib, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldController, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(28, 28, 28)
-                                .addComponent(jControllerEnabled))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
                                     .addComponent(jLabel9))
@@ -427,7 +402,7 @@ public class PreferencesFrame extends javax.swing.JDialog {
                                     .addComponent(themeEditButton, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(784, Short.MAX_VALUE)
                 .addComponent(jButtonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -476,11 +451,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxNoMouseReCenter)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextFieldController, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jControllerEnabled))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(themeEditButton)
                     .addComponent(jLabel8))
@@ -557,10 +527,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_btnFavDirActionPerformed
-
-    private void jControllerEnabledActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jControllerEnabledActionPerformed
-        jTextFieldController.setEnabled(jControllerEnabled.isSelected());
-    }//GEN-LAST:event_jControllerEnabledActionPerformed
 
     private void jAddLibBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddLibBtnActionPerformed
 
@@ -662,7 +628,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
     private javax.swing.JButton jButtonSave;
     private javax.swing.JCheckBox jCheckBoxNoMouseReCenter;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JCheckBox jControllerEnabled;
     private javax.swing.JButton jDelLibBtn;
     private javax.swing.JButton jEditLib;
     private javax.swing.JLabel jLabel1;
@@ -670,7 +635,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -678,7 +642,6 @@ public class PreferencesFrame extends javax.swing.JDialog {
     private javax.swing.JTable jLibraryTable;
     private javax.swing.JButton jResetLib;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextFieldController;
     private javax.swing.JTextField jTextFieldPollInterval;
     private javax.swing.JComboBox mouseWheelComboBox;
     private javax.swing.JButton themeEditButton;

@@ -1,5 +1,6 @@
 #include "../ui.h"
-#include "../midi.h"
+#include "midi.h"
+#include "../midi_buffer.h"
 #include "../axoloti_control.h"
 
 static uint32_t fhandle_evt_midimon(const struct ui_node * node, input_event evt) {

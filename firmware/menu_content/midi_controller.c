@@ -1,7 +1,8 @@
 
 #include "../qgfx.h"
 #include "../ui.h"
-#include "../midi.h"
+#include "midi.h"
+#include "../midi_buffer.h"
 #include "../axoloti_control.h"
 #include "../glcdfont.h"
 

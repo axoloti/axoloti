@@ -21,14 +21,15 @@
 #include "loadpatch_menu.h"
 #include "adc_menu.h"
 #include "food_menu.h"
-#include "midi_clock.h"
+#include "midi_clock_menu.h"
 #include "midi_controller.h"
 #include "midi_monitor.h"
 #include "sdcard_menu.h"
 #include "test_menu.h"
 #include "processes_menu.h"
-
 #include "patch.h"
+#include "patch_impl.h"
+#include "patch_wrapper.h"
 
 // ------ Main menu stuff ------
 
@@ -58,15 +59,16 @@ void ui_deinit_patch(void) {
 	ui_go_home();
 	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = 0;
 	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = 0;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = 0;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = 0;
+	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.patch = 0;
 	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = 0;
 }
 
 void ui_init_patch(void) {
-	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = patchMeta.objects;
-	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = patchMeta.nobjects;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.params = patchMeta.params;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.param_names = patchMeta.param_names;
-	MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = patchMeta.nparams;
+  patch_t *patch = patch_iter_first();
+#if 0 // TODO: re-implement UI
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.objs = patch->objects;
+	MainMenu[MAIN_MENU_INDEX_PATCH].objList.nobjs = patch->nobjects;
+#endif
+  MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.patch = patch;
+  MainMenu[MAIN_MENU_INDEX_PARAMS].paramList.nparams = patch_getNParams(patch);
 }

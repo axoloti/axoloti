@@ -20,10 +20,9 @@
 #include "hal.h"
 #include "ff.h"
 #include "codec.h"
-#include "chprintf.h"
-#include "pconnection.h"
 #include "axoloti_board.h"
 #include "exceptions.h"
+#include "logging.h"
 
 __attribute__ ((naked))
 static void report_exception(void) {
@@ -198,7 +197,6 @@ void exception_initiate_dfu(void) {
       volatile int k = 1 << 8;
       while (k--) {
       }
-      watchdog_feed();
     }
   }
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
@@ -261,13 +259,12 @@ void exception_checkandreport(void) {
       LogTextMessage("midi output overflow");
     }
     else if (exceptiondump->type == halt) {
-      LogTextMessage("Panic: %s",exceptiondump->r0);
+      LogTextMessage("Rebooted after fatal error: %s",exceptiondump->r0);
     }
     else {
       LogTextMessage("unknown exception?");
     }
 
-#if 0 // causes crash?
     if (report_registers) {
       LogTextMessage("pc=0x%x", exceptiondump->pc);
       LogTextMessage("psr=0x%x", exceptiondump->psr);
@@ -285,9 +282,6 @@ void exception_checkandreport(void) {
         LogTextMessage("mmfar=0x%x",exceptiondump->mmfar);
       }
     }
-#else
-    (void)report_registers;
-#endif
   }
 }
 
@@ -389,7 +383,6 @@ static void terminator(void) {
       volatile int k = 1 << 8;
       while (k--) {
       }
-      watchdog_feed();
     }
   }
 
@@ -401,6 +394,7 @@ static void terminator(void) {
   NVIC_SystemReset();
 }
 
+__attribute__ ((externally_visible))
 void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   volatile uint32_t r0;
   volatile uint32_t r1;
@@ -422,10 +416,7 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   psr = pulFaultStackAddress[7];
 
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
-  if (WWDG->SR & WWDG_SR_EWIF)
-    exceptiondump->type = watchdog_soft;
-  else
-    exceptiondump->type = fault;
+  exceptiondump->type = fault;
   exceptiondump->r0 = r0;
   exceptiondump->r1 = r1;
   exceptiondump->r2 = r2;
@@ -440,10 +431,6 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   exceptiondump->mmfar = SCB->MMFAR;
   exceptiondump->bfar = SCB->BFAR;
 
-#if WATCHDOG_ENABLED
-  WWDG->CR = WWDG_CR_T;
-#endif
-
   palClearPad(LED1_PORT, LED1_PIN);
 
   codec_clearbuffer();
@@ -456,6 +443,7 @@ void MemManage_Handler(void) __attribute__((alias("report_exception")));
 void BusFault_Handler(void) __attribute__((alias("report_exception")));
 void UsageFault_Handler(void) __attribute__((alias("report_exception")));
 
+#if 0
 __attribute__ ((naked))
 CH_IRQ_HANDLER(WWDG_IRQHandler){
 __asm volatile
@@ -469,6 +457,7 @@ __asm volatile
     " bx r2                                                     \n"
 );
 }
+#endif
 
 void report_halt(const char *reason) {
   /* Pointing to the passed message.*/
@@ -478,11 +467,10 @@ void report_halt(const char *reason) {
   exceptiondump->type = halt;
   exceptiondump->r0 = (uint32_t)reason;
 
-  if (!(CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk)) {
-	  // no debugger connected, do system reset
-	  NVIC_SystemReset();
-  } else {
-	  // software breakpoint
-	  asm("BKPT 255");
+  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+    // debugger connected, software breakpoint
+    asm("BKPT 255");
   }
+  // no debugger connected, do system reset
+  NVIC_SystemReset();
 }

@@ -1,9 +1,9 @@
 package axoloti.shell;
 
+import axoloti.job.GlobalJobProcessor;
 import axoloti.utils.OSDetect;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import axoloti.job.GlobalJobProcessor;
 
 /**
  *
@@ -14,27 +14,34 @@ public class UploadFirmwareDFU {
     private UploadFirmwareDFU() {
     }
 
-    private static String getExec() {
+    private static String[] getExec(String firmwareFilename) {
+        String dfu_util_filename = "";
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return ShellTask.getRuntimeDir() + "/platform_win/upload_fw_dfu.bat";
+            dfu_util_filename = ShellTask.getRuntimeDir() + "/platform_win/bin/dfu-util";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh " + ShellTask.getRuntimeDir() + "/platform_osx/upload_fw_dfu.sh";
+            dfu_util_filename = ShellTask.getRuntimeDir() + "/platform_osx/bin/dfu-util";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh " + ShellTask.getRuntimeDir() + "/platform_linux/upload_fw_dfu.sh";
+            dfu_util_filename = ShellTask.getRuntimeDir() + "/platform_linux/bin/dfu-util";
         } else {
             Logger.getLogger(UploadFirmwareDFU.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
         }
+        return new String[]{dfu_util_filename,
+            "--device", "0483:df11",
+            "-i", "0",
+            "-a", "0",
+            "-D", firmwareFilename,
+            "--dfuse-address=0x08000000:leave"};
     }
 
     private static String getWorkingDir() {
         return System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
     }
 
-    private static void run() {
+    private static void run(String firmwareFilename) {
         ShellTask shellTask = new ShellTask(
                 getWorkingDir(),
-                getExec(),
+                getExec(firmwareFilename),
                 ShellTask.getEnvironment());
         println("Start flashing firmware with DFU");
 
@@ -48,7 +55,8 @@ public class UploadFirmwareDFU {
     }
 
     public static void doit() {
-        Thread thread = new Thread(() -> run());
+        String firmwareFilename = ShellTask.getFirmwareDir() + "/build/axoloti.bin";
+        Thread thread = new Thread(() -> run(firmwareFilename));
         thread.start();
     }
 

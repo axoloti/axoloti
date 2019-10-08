@@ -16,7 +16,6 @@ import axoloti.object.AxoObjectPatcherObject;
 import axoloti.object.IAxoObject;
 import axoloti.object.inlet.Inlet;
 import axoloti.objectlibrary.AxoObjects;
-import static axoloti.patch.PatchModel.USE_EXECUTION_ORDER;
 import axoloti.patch.net.Net;
 import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.AxoObjectInstanceAbstract;
@@ -28,20 +27,19 @@ import axoloti.patch.object.inlet.InletInstance;
 import axoloti.patch.object.iolet.IoletInstance;
 import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.patch.object.parameter.ParameterInstance;
-import axoloti.preferences.Preferences;
-import axoloti.shell.CompileModule;
 import axoloti.shell.CompilePatch;
+import axoloti.shell.CompilePatchResult;
 import axoloti.shell.ExecutionFailedException;
 import axoloti.target.TargetModel;
 import axoloti.target.fs.SDFileInfo;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.Constants;
+import axoloti.utils.MakeUtils;
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -87,31 +85,25 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         promoteOverloading(true);
     }
 
-    public void recallPreset(int i) {
-        IConnection conn = CConnection.getConnection();
-        try {
-            conn.transmitRecallPreset(i);
-        } catch (IOException ex) {
-            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void compile() throws ExecutionFailedException {
+    public CompilePatchResult compile(String patch) throws ExecutionFailedException {
+        String modulePaths = "";
         for (String module : getModel().getModules()) {
-            CompileModule.run(
-                    module,
-                    getModel().getModuleDir(module));
+            String m = getModel().getModuleDir(module);
+            m = MakeUtils.sq(m);
+            modulePaths += m + " ";
         }
-        CompilePatch.run();
+        if (modulePaths.length() > 0) {
+            modulePaths = modulePaths.substring(0, modulePaths.length() - 1);
+        }
+        return CompilePatch.run(new String[]{"MODULEPATHS=" + modulePaths}, patch);
     }
 
-    public void uploadDependentFiles(String sdpath, IJobContext ctx) {
+    public void uploadDependentFiles(SDFileReference[] files, String sdpath, IJobContext ctx) {
+        // TODO: move method to targetDevice
         IConnection conn = CConnection.getConnection();
-        TargetModel targetModel = TargetModel.getTargetModel();
-        List<SDFileReference> files = getModel().getDependendSDFiles();
-        IJobContext ctxs[] = ctx.createSubContexts(files.size());
-        for (int j = 0; j < files.size(); j++) {
-            SDFileReference fref = files.get(j);
+        IJobContext ctxs[] = ctx.createSubContexts(files.length);
+        for (int j = 0; j < files.length; j++) {
+            SDFileReference fref = files[j];
             IJobContext ctxi = ctxs[j];
             File f = fref.localfile;
             if (f == null) {
@@ -119,7 +111,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 continue;
             }
             if (!f.exists()) {
-                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "File does not exist: {0}", f.getName());
+                Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "File does not exist: {0}", f.getPath());
                 continue;
             }
             if (!f.canRead()) {
@@ -146,11 +138,20 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                     Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "file {0} is larger than 8MB, skip uploading", f.getName());
                     continue;
                 }
-                targetModel.upload(targetfn, f, ctxi);
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(f.lastModified());
+                int size = (int) f.length();
+                FileInputStream inputStream = new FileInputStream(f);
+                conn.upload(targetfn, inputStream, cal, size, ctxi);
             } catch (IOException ex) {
                 Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public void uploadDependentFiles(String sdpath, IJobContext ctx) {
+        List<SDFileReference> files = getModel().getDependendSDFiles();
+        uploadDependentFiles(files.toArray(new SDFileReference[]{}), sdpath, ctx);
     }
 
     public PatchViewCodegen writeCode() {
@@ -159,91 +160,36 @@ public class PatchController extends AbstractController<PatchModel, IView> {
     }
 
     public PatchViewCodegen writeCode(String file_basename) {
-        getModel().createIID();
-        if (USE_EXECUTION_ORDER) {
-            getModel().sortByExecution();
-        } else {
-            getModel().sortByPosition();
-        }
 
-        Preferences prefs = Preferences.getPreferences();
-        IAxoObjectInstance controllerObjectInstance;
-        if (prefs.isControllerEnabled()
-                && prefs.getControllerObject() != null
-                && !prefs.getControllerObject().isEmpty()) {
-
-            Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Using controller object: {0}", prefs.getControllerObject());
-            IAxoObject x = null;
-            List<IAxoObject> objs3 = AxoObjects.getAxoObjects().getAxoObjectFromName(prefs.getControllerObject(), "");
-            if ((objs3 != null) && (!objs3.isEmpty())) {
-                x = objs3.get(0);
-            }
-            if (x != null) {
-                controllerObjectInstance = AxoObjectInstanceFactory.createView(x, getModel(), "ctrl0x123", new Point(0, 0));
-            } else {
-                controllerObjectInstance = null;
-                Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Unable to created controller for : {0}", prefs.getControllerObject());
-            }
-        } else {
-            controllerObjectInstance = null;
-        }
-
-        List<IAxoObjectInstance> objs = getModel().getObjectInstances();
-        if (controllerObjectInstance != null) {
-
-            List<IAxoObjectInstance> objs2 = new ArrayList<>(objs.size() + 1);
-            objs2.add(controllerObjectInstance);
-            objs2.addAll(objs);
-            getModel().setObjectInstances(objs2);
-        }
         PatchViewCodegen codegen = new PatchViewCodegen(getModel());
         String c = codegen.generateCode4();
-        try (FileOutputStream f = new FileOutputStream(file_basename + ".cpp")) {
-            f.write(c.getBytes());
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, ex.toString());
-        }
-        if (controllerObjectInstance != null) {
-            getModel().setObjectInstances(objs);
-        }
         Logger.getLogger(PatchModel.class.getName()).log(Level.INFO, "Generate code complete");
         return codegen;
     }
 
     public void uploadToFlash() {
         try {
-            PatchController.this.writeCode();
-            CompilePatch.run();
+            PatchViewCodegen codegen = new PatchViewCodegen(getModel());
+            String c = codegen.generateCode4();
+            CompilePatchResult cpr = compile(c);
             IConnection conn = CConnection.getConnection();
-            conn.transmitStop();
-            byte[] bb = PatchFileBinary.getPatchFileBinary();
-            // TODO: add test if it really fits in the flash partition, issue #409
-            conn.transmitStop();
-            conn.write(conn.getTargetProfile().getSDRAMAddr(), bb);
-            conn.transmitCopyToFlash();
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "Patch written to flash memory,"
-                    + "it will run at powerup when no sdcard is present or sdcard does not contain /start.bin");
-        } catch (ExecutionFailedException | IOException ex) {
+            conn.uploadPatchToFlash(cpr.getElf(), "flash patch x");
+        } catch (ExecutionFailedException ex) {
+            Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void uploadToSDCard(String sdfilename, IJobContext ctx) throws IOException, ExecutionFailedException {
         // TODO: fix ctx usage
-        ctx.doInSync(() -> {
-            PatchController.this.writeCode();
-        });
         Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "sdcard filename:{0}", sdfilename);
 
         TargetModel targetModel = TargetModel.getTargetModel();
         targetModel.getConnection().transmitStop();
-        for (String module : getModel().getModules()) {
-            CompileModule.run(module,
-                    getModel().getModuleDir(module));
-        }
-        CompilePatch.run();
+        PatchViewCodegen codegen = new PatchViewCodegen(getModel());
+        String c = codegen.generateCode4();
+        CompilePatchResult cpr = compile(c);
 
         Calendar cal = Calendar.getInstance();
         if (getDocumentRoot().getDirty()) {
@@ -257,35 +203,37 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 }
             }
         }
-        byte b[] = PatchFileBinary.getPatchFileBinary();
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(b);
-        targetModel.upload(sdfilename, inputStream, cal, b.length, ctx);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(cpr.getElf());
+        IConnection conn = CConnection.getConnection();
+        conn.upload(sdfilename, inputStream, cal, cpr.getElf().length, ctx);
 
-        Serializer serializer = new Persister();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
-        try {
-            serializer.write(getModel(), baos);
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+        if (false) {
+            Serializer serializer = new Persister();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
+            try {
+                serializer.write(getModel(), baos);
+            } catch (Exception ex) {
+                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            byte[] ba = baos.toByteArray();
+            ByteArrayInputStream bais = new ByteArrayInputStream(ba);
+            String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
+
+            conn.upload(sdfnPatch, bais, cal, ba.length, ctx);
+
+            String dir;
+            int i = sdfilename.lastIndexOf('/');
+            if (i > 0) {
+                dir = sdfilename.substring(0, i);
+            } else {
+                dir = "";
+            }
+            uploadDependentFiles(dir, ctx);
         }
-        byte[] ba = baos.toByteArray();
-        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
-        String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
-
-        targetModel.upload(sdfnPatch, bais, cal, ba.length, ctx);
-
-        String dir;
-        int i = sdfilename.lastIndexOf('/');
-        if (i > 0) {
-            dir = sdfilename.substring(0, i);
-        } else {
-            dir = "";
-        }
-        uploadDependentFiles(dir, ctx);
     }
 
     public void uploadToSDCard(IJobContext ctx) throws IOException, ExecutionFailedException {
-        uploadToSDCard("/" + getSDCardPath() + "/patch.bin", ctx);
+        uploadToSDCard("/" + getSDCardPath() + ".elf", ctx);
     }
 
     public void setFileNamePath(String FileNamePath) {
@@ -313,8 +261,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
     }
 
     public IAxoObjectInstance addObjectInstance(IAxoObject obj, Point loc) {
-        if (true) {
-            /*!isLocked()) {*/
+        if (!isLocked()) {
 
             if (obj == null) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "AddObjectInstance NULL");
@@ -338,7 +285,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
             addUndoableElementToList(PatchModel.PATCH_OBJECTINSTANCES, objinst);
             return objinst;
         } else {
-            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "can't add connection: locked!");
+            Logger.getLogger(PatchController.class.getName()).log(Level.INFO, "{0}", "can't add connection: locked!");
             return null;
         }
     }
@@ -676,6 +623,10 @@ public class PatchController extends AbstractController<PatchModel, IView> {
 
     public void setDspLoad(int DSPLoad) {
         setModelProperty(PatchModel.PATCH_DSPLOAD, (Integer) DSPLoad);
+    }
+
+    public void recallPreset(int presetIndex) {
+        setModelProperty(PatchModel.PATCH_RECALLPRESET, (Integer) presetIndex);
     }
 
     // ------------- new objectinstances MVC stuff

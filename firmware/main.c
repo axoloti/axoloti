@@ -18,31 +18,29 @@
 
 #include "axoloti_defines.h"
 
-
 #include "ch.h"
 #include "hal.h"
 #include "sdram.h"
 #include "chprintf.h"
 #include "string.h"
-#include <stdio.h>
 #include "codec.h"
 #include "ui.h"
-#include "midi.h"
 #include "midi_usb.h"
 #include "sdcard.h"
 #include "patch.h"
+#include "patch_impl.h"
 #include "pconnection.h"
 #include "axoloti_control.h"
 #include "axoloti_math.h"
 #include "axoloti_board.h"
+#include "axoloti_memory_impl.h"
 #include "exceptions.h"
-#include "watchdog.h"
-#include "chprintf.h"
 #include "usbcfg.h"
 #include "usbh.h"
 #include "sysmon.h"
 #include "spilink.h"
 #include "dbg_stream.h"
+#include "sys/fcntl.h"
 
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
@@ -55,17 +53,25 @@ int main(void) {
 
   halInit();
   chSysInit();
+
+  configSDRAM();
+  axoloti_mem_init();
+
   pThreadSpilink = 0;
 
   sdcard_init();
   sysmon_init();
 
   dbg_stream_init();
-  chprintf(dbg_stream,"Hello world!\r\n");
+//  chprintf(dbg_stream,"Hello world!\r\n");
+
+  // semihosting test
+//  int fid = _open("test.txt", O_RDONLY|O_CREAT);
+//  _write(fid,"xxxx",3);
+//  _close(fid);
+
 
   exception_init();
-
-  InitPatch0();
 
   InitPConnection();
   midi_usb_init();
@@ -74,7 +80,7 @@ int main(void) {
   palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
   palSetPad(GPIOC, 1);
 
-  chThdSleepMilliseconds(10);
+  chThdSleepMilliseconds(200);
 
   palSetPadMode(SW2_PORT, SW2_PIN, PAL_MODE_INPUT_PULLDOWN);
 
@@ -82,14 +88,12 @@ int main(void) {
 
 // connect PB10 to ground to enable slave mode
   bool is_master = palReadPad(GPIOB, GPIOB_PIN10);
-  start_dsp_thread();
-  codec_init(is_master);
   adc_init();
   axoloti_math_init();
+  extern void midi_init(); // TODO: cleanup
   midi_init();
 
   if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
-//    watchdog_init();
     chThdSleepMilliseconds(1);
   }
 
@@ -97,28 +101,29 @@ int main(void) {
   spilink_init(is_master);
   ui_init();
 
-  configSDRAM();
   //memTest();
 
   MY_USBH_Init();
 
   sdcard_attemptMountIfUnmounted();
 
-  if (!exception_check()) {
-    // only try booting a patch when no exception is to be reported
-	// TODO: maybe only skip startup patch when exception was caused by startup patch
-    // and button S2 is not pressed
+  start_dsp_thread();
+  codec_init(is_master);
 
+  if (!exception_check() && !palReadPad(SW2_PORT, SW2_PIN))  {
+    // only try booting a patch when no exception is to be reported
+    // and button S2 is not pressed
+    patch_t * patch = 0;
     if (fs_ready) {
-      LoadPatchStartSD();
+      patch = patch_loadStartSD(0);
     }
     // if no patch booting or running yet
     // try loading from flash
-    if (patchStatus == STOPPED) {
-        LoadPatchStartFlash();
+    if (!patch) {
+      // load patch in flash
+      patch = patch_load("@08080000:flash",0);
     }
   }
-
 	while (1) {
 		usbhMainLoop(&USBHD2);
 		chThdSleepMilliseconds(1000);

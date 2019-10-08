@@ -2,9 +2,9 @@
 
 // verify chibios version
 
-#define EXPECTED_CH_VERSION_YEAR         18
-#define EXPECTED_CH_VERSION_MONTH        2
-#define EXPECTED_CH_VERSION_PATCH        2
+#define EXPECTED_CH_VERSION_YEAR         19
+#define EXPECTED_CH_VERSION_MONTH        1
+#define EXPECTED_CH_VERSION_PATCH        3
 #define XSTR(x) STR(x)
 #define STR(x) #x
 

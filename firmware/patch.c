@@ -17,74 +17,98 @@
  */
 #include "ch.h"
 #include "hal.h"
+#include "chprintf.h"
 #include "patch.h"
 #include "sdcard.h"
 #include "string.h"
 #include "axoloti_board.h"
 #include "midi.h"
 #include "midi_usb.h"
-#include "watchdog.h"
+#include "exceptions.h"
 #include "pconnection.h"
 #include "sysmon.h"
 #include "spilink.h"
 #include "codec.h"
-#include "axoloti_memory.h"
+#include "axoloti_memory_impl.h"
 #include "menu_content/main_menu.h"
-#include "patch_name.h"
+#include "elfloader/loader.h"
+#include "exports.h"
+#include "patch_impl.h"
+#include "logging.h"
+#include "ff.h"
+#include "vfile_ops/vfile_fatfs.h"
+#include "vfile_ops/vfile_mem.h"
+#include "loader_userdata.h"
+#include "patch_wrapper.h"
+#include "midi_clock.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
-patchMeta_t patchMeta;
+static mutex_t mtxWorker;
+static THD_WORKING_AREA(waThreadWorker, 2000);
+static const char *err_msg;
+static char err_string[32];
 
-volatile patchStatus_t patchStatus;
+#define n_patch_slots 4
+static patch_t patchMeta1[n_patch_slots];
 
-void InitPatch0(void) {
-  patchStatus = STOPPED;
-  patchMeta.fptr_patch_init = 0;
-  patchMeta.fptr_patch_dispose = 0;
-  patchMeta.fptr_dsp_process = 0;
-  patchMeta.fptr_MidiInHandler = 0;
-  patchMeta.fptr_applyPreset = 0;
-  patchMeta.params = NULL;
-  patchMeta.nparams = 0;
-  patchMeta.pDisplayVector = 0;
-  patchMeta.initpreset_size = 0;
-  patchMeta.npresets = 0;
-  patchMeta.npreset_entries = 0;
-  patchMeta.pPresets = 0;
-  patchMeta.patchID = 0;
-  patchMeta.nobjects = 0;
+patch_t * patch_iter_first(void) {
+  return &patchMeta1[0];
+}
+int patch_iter_done(patch_t * cur) {
+  return cur<&patchMeta1[n_patch_slots];
+}
+patch_t * patch_iter_next(patch_t * cur) {
+  return cur+1;
+}
+
+static void patch_setError(char *format, ...) {
+  va_list args;
+  va_start (args, format);
+  chvsnprintf(err_string, sizeof(err_string),format,args);
+  va_end (args);
+  err_msg = err_string;
+}
+
+static void patch_setConstError(const char *err) {
+  err_msg = err;
+}
+
+const char * patch_getError() {
+  const char *r = err_msg;
+  err_msg = 0;
+  return r;
+}
+
+static int validatePatch(patch_t *patch) {
+  int r = (patch >= &patchMeta1[0]) && (patch <= &patchMeta1[n_patch_slots-1]);
+  if (!r) chSysHalt("invalid patch arg");
+  return r;
+}
+
+patch_t * getPatchMeta(int slot) {
+  return &patchMeta1[slot];
+}
+
+extern msg_t tx_patchList(void); // TODO: cleanup
+
+static void InitPatch0(patch_t * patch) {
+  if (!validatePatch(patch)) return;
+  patch->patchStatus = STOPPED;
+  patch->patchobject = 0;
 }
 
 int dspLoadPct; // DSP load in percent
-unsigned int DspTime;
-char loadFName[64] = "";
-loadPatchIndex_t loadPatchIndex = UNINITIALIZED;
 
 static int32_t inbuf[32];
 static int32_t *outbuf;
 
-static int nThreadsBeforePatch;
 #define STACKSPACE_MARGIN 32
 
-static THD_WORKING_AREA(waThreadDSP, 7200) CCM;
+static THD_WORKING_AREA(waThreadDSP, 7200) CCM_fw;
 static thread_t *pThreadDSP = 0;
-static const char *index_fn = "/index.axb";
 
 #define THREAD_DSP_EVT_MASK_COMPUTE ((eventmask_t)1)
-#define THREAD_DSP_EVT_MASK_LOAD ((eventmask_t)2)
-#define THREAD_DSP_EVT_MASK_START ((eventmask_t)4)
-#define THREAD_DSP_EVT_MASK_WRITE ((eventmask_t)8)
-
-static int GetNumberOfThreads(void){
-  int i=1;
-  thread_t *thd1 = chRegFirstThread();
-  while(thd1){
-    i++;
-    thd1 = chRegNextThread (thd1);
-  }
-  return i;
-}
 
 void CheckStackOverflow(void) {
 #if CH_DBG_FILL_THREADS
@@ -131,127 +155,136 @@ void CheckStackOverflow(void) {
 #endif
 }
 
-static void StopPatch1(void) {
-  *patch_name = 0;
-  if (patchMeta.fptr_patch_dispose != 0) {
-    CheckStackOverflow();
-    (patchMeta.fptr_patch_dispose)();
-    // check if the number of threads after patch disposal is the same as before
-    int j=20;
-    int i = GetNumberOfThreads();
-    // try sleeping up to 1 second so threads can terminate
-    while( (j--) && (i!=nThreadsBeforePatch)) {
-      chThdSleepMilliseconds(50);
-      i = GetNumberOfThreads();
-    }
-    if (i!=nThreadsBeforePatch) {
-       LogTextMessage("error: patch stopped but did not terminate its thread(s)");
-    }
-  }
-  ui_deinit_patch();
-  InitPatch0();
-  sysmon_enable_blinker();
-}
-
-static int StartPatch1(void) {
-  ui_deinit_patch();
-  sdcard_attemptMountIfUnmounted();
-  // reinit pin configuration for adc
-  adc_configpads();
-  int32_t *ccm; // clear ccmram area declared in ramlink.ld
-  for (ccm = (int32_t *)0x10000000; ccm < (int32_t *)(0x10000000 + 0x0000C000);
-      ccm++)
-    *ccm = 0;
-  patchMeta.fptr_dsp_process = 0;
-  nThreadsBeforePatch = GetNumberOfThreads();
-
-  fourcc_t signature = *(fourcc_t *)PATCHMAINLOC;
-  if (signature != FOURCC('a','x','x','2')) {
-	    report_patchLoadFail((const char *)&loadFName[0]);
-	    patchStatus = STARTFAILED;
-	    return -1;
-  }
-  chunk_header_t *patch_root_chunk = *(chunk_header_t * *)(PATCHMAINLOC+4);
-  readchunk_patch_root(patch_root_chunk);
-  if (patchMeta.fptr_patch_init == 0){
-	    report_patchLoadFail((const char *)&loadFName[0]);
-	    patchStatus = STARTFAILED;
-	    return -1;
-  }
-//  patchMeta.fptr_patch_init = (fptr_patch_init_t)(PATCHMAINLOC_ALIASED + 1);
-// PATCHMAINLOC_ALIASED + 1 for THUMB mode
-  (patchMeta.fptr_patch_init)(GetFirmwareID());
-  if (patchMeta.fptr_dsp_process == 0) {
-    report_patchLoadFail((const char *)&loadFName[0]);
-    patchStatus = STARTFAILED;
-    patchMeta.patchID = 0;
-    *patch_name = 0;
+int getPatchNameFromIndex(int patchIndex, char *patchName) {
+  static const char *index_fn = "/index.axb";
+  FRESULT err;
+  FIL f;
+  uint32_t bytes_read;
+  err = f_open(&f, index_fn, FA_READ | FA_OPEN_EXISTING);
+  if (err) {
+    patch_setError("can't open patchbank file %s",index_fn);
+    report_fatfs_error(err, index_fn);
     return -1;
   }
-  int32_t sdrem = sdram_get_free();
-  if (sdrem<0) {
-    StopPatch1();
-    patchStatus = STARTFAILED;
-    patchMeta.patchID = 0;
-    *patch_name = 0;
-    report_patchLoadSDRamOverflow((const char *)&loadFName[0],-sdrem);
-    return -1;
+  int pos = 0;
+  int index = 0;
+  uint8_t buf[64];
+  while(1) {
+    err = f_read(&f, &buf[0], sizeof(buf), (void *)&bytes_read);
+    if (err != FR_OK) {
+      report_fatfs_error(err, index_fn);
+      f_close(&f);
+      return -2;
+    }
+    int p = 0;
+    while((buf[p]!='\n') && (p<bytes_read)) {
+      p++;
+    }
+    if (p==bytes_read) {
+      patch_setError("index %d not in patchbank",patchIndex);
+      f_close(&f);
+      return -3;
+    }
+    if (index == patchIndex) {
+      buf[p]=0;
+      f_close(&f);
+      // modify extension into .elf
+      int l = strlen(&buf[0]);
+      if (buf[l-4] == '.') {
+        buf[l-3] = 'e';
+        buf[l-2] = 'l';
+        buf[l-1] = 'f';
+      }
+      strcpy(patchName, &buf[0]);
+      f_close(&f);
+      return 0;
+    }
+    index++;
+    pos += p+1;
+    f_lseek(&f, pos);
   }
-  patchStatus = RUNNING;
-  ui_init_patch();
-  tx_pckt_ack_v2.underruns = 0;
-  return 0;
+  f_close(&f);
+  return -4;
 }
 
 static THD_FUNCTION(ThreadDSP, arg) {
   (void)(arg);
   chRegSetThreadName("dsp");
   codec_clearbuffer();
+
   while (1) {
     // codec dsp cycle
     eventmask_t evt = chEvtWaitOne(
-    		THREAD_DSP_EVT_MASK_COMPUTE
-    		| THREAD_DSP_EVT_MASK_LOAD
-			| THREAD_DSP_EVT_MASK_START
-			| THREAD_DSP_EVT_MASK_WRITE);
+        THREAD_DSP_EVT_MASK_COMPUTE);
 
     if (evt == THREAD_DSP_EVT_MASK_COMPUTE) {
       static unsigned int tStart;
       tStart = port_rt_get_counter_value();
-      watchdog_feed();
-      if (patchStatus == RUNNING) { // running
-    	// audio payload
-        (patchMeta.fptr_dsp_process)(inbuf, outbuf);
-        // midi input
-        // perhaps throttle midi input processing when dsp_process took a lot of time
-        midi_message_t midi_in;
-        msg_t msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
-        while (msg == MSG_OK) {
-        	(patchMeta.fptr_MidiInHandler)(midi_in.fields.port, 0,
-        			midi_in.fields.b0,
-					midi_in.fields.b1,
-					midi_in.fields.b2);
-            msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
+      // prepare audio
+      int32_t inbuf_noninterleaved[BUFSIZE*2];
+      {
+        int i;
+        int32_t *pOutbuf = outbuf;
+        int32_t *pInbufNIL = &inbuf_noninterleaved[0];
+        int32_t *pInbufNIR = &inbuf_noninterleaved[BUFSIZE];
+        int32_t *pInbuf = &inbuf[0];
+        // clear outbuf
+        // and interleave input, shift for 4 bits of headroom
+        for(i=BUFSIZE;i-- > 0;) {
+          *pInbufNIL++ = (*pInbuf++)>>4;
+          *pInbufNIR++ = (*pInbuf++)>>4;
+          *pOutbuf++ = 0;
+          *pOutbuf++ = 0;
         }
-        // notify usbd output
-        midi_output_buffer_notify(&midi_output_usbd);
       }
-      else if (patchStatus == STOPPING) {
-        codec_clearbuffer();
-        StopPatch1();
-        patchStatus = STOPPED;
-        codec_clearbuffer();
+      // audio payload
+      patch_t * patch;
+      for(patch = patch_iter_first();patch_iter_done(patch);patch=patch_iter_next(patch)) {
+        if (patch->patchStatus == RUNNING) { // running
+          int32_t patch_out[32];
+          patch_dsp_process(patch, inbuf_noninterleaved, patch_out);
+          // sum and interleave
+          int i;
+          int32_t *pOutbuf = outbuf;
+          int32_t *pPatchOutL = &patch_out[0];
+          int32_t *pPatchOutR = &patch_out[BUFSIZE];
+          for(i=BUFSIZE;i-- > 0;) {
+            *pOutbuf++ += *pPatchOutL++;
+            *pOutbuf++ += *pPatchOutR++;
+          }
+        } else if (patch->patchStatus == STOPPING) {
+          patch->patchStatus = STOPPED;
+        }
       }
-      else if (patchStatus == STOPPED) {
-        codec_clearbuffer();
-        // flush midi input
-        midi_message_t midi_in;
-        msg_t msg;
-        do {
-        	msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
-        } while (msg == MSG_OK);
+      // saturate and shift audio output to full range
+      {
+        int i;
+        int32_t *pOutbuf = outbuf;
+        for(i=BUFSIZE;i-- > 0;){
+          *pOutbuf = __SSAT(*pOutbuf,28)<<4;
+          pOutbuf++;
+          *pOutbuf = __SSAT(*pOutbuf,28)<<4;
+          pOutbuf++;
+        }
       }
+      // midi input
+
+      // perhaps throttle midi input processing when dsp_process took a lot of time
+      midi_message_t midi_in;
+      msg_t msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
+      while (msg == MSG_OK) {
+        for(patch = patch_iter_first();patch_iter_done(patch);patch=patch_iter_next(patch)) {
+          if (patch->patchStatus == RUNNING) { // running
+            patch_midiInHandler(patch, midi_in.word);
+          }
+        }
+        msg = midi_input_buffer_get(&midi_input_buffer, &midi_in);
+      }
+      // notify usbd output
+      midi_output_buffer_notify(&midi_output_usbd);
+
       adc_convert();
+      unsigned int DspTime;
       DspTime = (port_rt_get_counter_value() - tStart);
       dspLoadPct = (DspTime) / (STM32_SYSCLK / 300000);
       if (dspLoadPct > 98) {
@@ -295,116 +328,6 @@ static THD_FUNCTION(ThreadDSP, arg) {
       }
       spilink_clear_audio_tx();
     }
-    else if (evt == THREAD_DSP_EVT_MASK_LOAD) {
-      // load patch event
-      codec_clearbuffer();
-      StopPatch1();
-      patchStatus = STOPPED;
-      if (loadFName[0]) {
-        int res = sdcard_loadPatch1(loadFName);
-        if (!res) StartPatch1();
-      }
-      else if (loadPatchIndex == START_FLASH) {
-    	*(uint32_t *)PATCHMAINLOC = 0;
-        bin_loader_flash((const void *)PATCHFLASHLOC, PATCHFLASHSIZE);
-        if ((*(uint32_t *)PATCHMAINLOC != 0xFFFFFFFF)
-            && (*(uint32_t *)PATCHMAINLOC != 0)) {
-          StartPatch1();
-        }
-      } else
-      if (loadPatchIndex == START_SD) {
-        strcpy(&loadFName[0], "/start.bin");
-        int res = sdcard_loadPatch1(loadFName);
-        if (!res) StartPatch1();
-      }
-      else {
-        FRESULT err;
-        FIL f;
-        uint32_t bytes_read;
-        err = f_open(&f, index_fn, FA_READ | FA_OPEN_EXISTING);
-        if (err)
-          report_fatfs_error(err, index_fn);
-        err = f_read(&f, (uint8_t *)PATCHMAINLOC, 0xE000, (void *)&bytes_read);
-        if (err != FR_OK) {
-          report_fatfs_error(err, index_fn);
-          continue;
-        }
-        err = f_close(&f);
-        if (err != FR_OK) {
-          report_fatfs_error(err, index_fn);
-          continue;
-        }
-        char *t;
-        t = (char *)PATCHMAINLOC;
-        int32_t cindex = 0;
-
-        //LogTextMessage("load %d %d %x",index, bytes_read, t);
-        while (bytes_read) {
-          //LogTextMessage("scan %d",*t);
-          if (cindex == loadPatchIndex) {
-            //LogTextMessage("match %d",index);
-            char *p, *e;
-            p = t;
-            e = t;
-            while ((*e != '\n') && bytes_read) {
-              e++;
-              bytes_read--;
-            }
-            if (bytes_read) {
-              e = e - 4;
-              *e++ = '/';
-              *e++ = 'p';
-              *e++ = 'a';
-              *e++ = 't';
-              *e++ = 'c';
-              *e++ = 'h';
-              *e++ = '.';
-              *e++ = 'b';
-              *e++ = 'i';
-              *e++ = 'n';
-              *e = 0;
-              loadFName[0] = '/';
-              strcpy(&loadFName[1], p);
-              int res = sdcard_loadPatch1(loadFName);
-              if (!res) {
-                StartPatch1();
-              }
-              if (patchStatus != RUNNING) {
-                loadPatchIndex = START_SD;
-                strcpy(&loadFName[0], "/start.bin");
-                res = sdcard_loadPatch1(loadFName);
-                if (!res) StartPatch1();
-              }
-            }
-            goto cont;
-          }
-          if (*t == '\n') {
-            cindex++;
-          }
-          t++;
-          bytes_read--;
-        }
-        if (!bytes_read) {
-          LogTextMessage("patch load out-of-range %d", loadPatchIndex);
-          loadPatchIndex = START_SD;
-          strcpy(&loadFName[0], "/start.bin");
-          int res = sdcard_loadPatch1(loadFName);
-          if (!res) StartPatch1();
-        }
-        cont: ;
-      }
-    }
-    else if (evt == THREAD_DSP_EVT_MASK_START) {
-      // start patch
-      codec_clearbuffer();
-      StartPatch1();
-    }
-    else if (evt == THREAD_DSP_EVT_MASK_WRITE) {
-    	// write patch
-        codec_clearbuffer();
-        StopPatch1();
-    	sdcard_bin_writer("written");
-    }
     pollProcessUIEvent();
 #ifdef DEBUG_INT_ON_GPIO
 	palClearPad(GPIOA, 2);
@@ -412,32 +335,14 @@ static THD_FUNCTION(ThreadDSP, arg) {
   }
 }
 
-void StopPatch(void) {
-  if (patchStatus != STOPPED) {
-    patchStatus = STOPPING;
-    while (1) {
-      chThdSleepMilliseconds(1);
-      if (patchStatus == STOPPED)
-        break;
-    }
-    StopPatch1();
-    patchStatus = STOPPED;
-  }
-}
-
-int StartPatch(void) {
-  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_START);
-  while ((patchStatus != RUNNING) && (patchStatus != STARTFAILED)) {
-    chThdSleepMilliseconds(1);
-  }
-  if (patchStatus == STARTFAILED) {
-    patchStatus = STOPPED;
-    LogTextMessage("patch start failed",patchStatus);
-  }
-  return 0;
-}
-
 void start_dsp_thread(void) {
+  chMtxObjectInit(&mtxWorker);
+
+  patch_t * patch;
+  for(patch = patch_iter_first();patch_iter_done(patch);patch=patch_iter_next(patch)) {
+    patch->patchStatus = STOPPED;
+  }
+
   if (!pThreadDSP)
     pThreadDSP = chThdCreateStatic(waThreadDSP, sizeof(waThreadDSP), HIGHPRIO-2,
                                    ThreadDSP, NULL);
@@ -480,44 +385,182 @@ void computebufI(int32_t *inp, int32_t *outp) {
   chSysUnlockFromISR();
 }
 
-// MidiByte0 is only to be used by patches, avoids queuing
-void MidiInMsgHandler(midi_device_t dev, uint8_t port, uint8_t status,
-                      uint8_t data1, uint8_t data2) {
-  if (patchStatus == RUNNING) {
-    (patchMeta.fptr_MidiInHandler)(dev, port, status, data1, data2);
+static patch_t * allocPatch(void) {
+  patch_t * patch;
+  for(patch = patch_iter_first();patch_iter_done(patch);patch=patch_iter_next(patch)) {
+    if ((patch->patchStatus == STOPPED)||(patch->patchStatus == STARTFAILED)) {
+      return patch;
+    }
+  }
+  return 0;
+}
+
+static void * addr_from_hexstring(const char *str) {
+  // eg. "C0000100" to 0xC0000100
+  uint32_t i,a=0;
+  for(i=0;i<8;i++) {
+    char c = *str++;
+    int v = ((c<'A')?c-'0':10+c-'A') & 0x0F;
+    a = (a<<4) | v;
+  }
+  return (void *)a;
+}
+
+static THD_FUNCTION(threadLoadPatch, arg) {
+  const char *name = (const char *)arg;
+  sdcard_attemptMountIfUnmounted();
+  char name2[32];
+  if (*name == 0) {
+    int index = (*(int*)arg)>>8;
+    int r = getPatchNameFromIndex(index,&name2[0]);
+    if (r) {
+      chThdExit(0);
+    }
+    name = &name2[0];
+  }
+  patch_t * patch = allocPatch();
+  if (!patch) {
+    patch_setConstError("can't allocate patch");
+    chThdExit(0);
+  }
+  ui_deinit_patch();
+  if (name[0] == '@') {
+    // name is assumed to be eg. "@12345678:patchname" where
+    // 0x12345678 is the memory address of a memory-mapped file
+    void * a = addr_from_hexstring(&name[1]);
+    name = &name[10];
+    if (((int)a >> 24) == 0x08) {
+        // addr 0x08?????? is in flash
+      userdata_t loader_env = {
+          .vfile_ops = &vfile_ops_flash
+      };
+      load_elf((const char *)a, loader_env, &patch->elf);
+    } else {
+        // addr not in flash
+      userdata_t loader_env = {
+          .vfile_ops = &vfile_ops_mem
+      };
+      load_elf((const char *)a, loader_env, &patch->elf);
+    }
+  } else {
+    userdata_t loader_env = {
+        .vfile_ops = &vfile_ops_fatfs
+    };
+    load_elf(name, loader_env, &patch->elf);
+  }
+  strncpy(patch->name, name, sizeof(patch->name)-1);
+  if (!patch->elf) {
+    patch_setConstError("failed to load patch");
+    chThdExit(0);
+  }
+  if (!validatePatch(patch)) {
+    chSysHalt("invalid patch?");
+  }
+  ui_deinit_patch();
+  sdcard_attemptMountIfUnmounted();
+  int (*getInstanceSize)(void);
+  getInstanceSize = get_func(patch->elf, "getInstanceSize");
+  if (getInstanceSize==0) {
+    patch_setConstError("patch missing getInstanceSize");
+    chThdExit(0);
+  }
+  int instanceSize = getInstanceSize();
+  patch->patchobject = ax_malloc(instanceSize,0);
+  if (!patch->patchobject) {
+    patch_setConstError("patch instance allocation: out of memory");
+    chThdExit(0);
+  }
+  memset(patch->patchobject,0,instanceSize);
+  int (*initInstance)(void *);
+  initInstance = get_func(patch->elf, "initInstance");
+  if (initInstance==0) {
+    ax_free(patch->patchobject);
+    patch_setConstError("patch missing initInstance");
+    chThdExit(0);
+  }
+  initInstance(patch->patchobject);
+
+  patch->patchStatus = RUNNING;
+  ui_init_patch();
+  tx_pckt_ack_v2.underruns = 0;
+  tx_patchList();
+  chThdExit((msg_t)patch);
+}
+
+static THD_FUNCTION(threadStopPatch, arg) {
+  patch_t * patch = (patch_t *)arg;
+  if (!validatePatch(patch)) return;
+  if (patch->patchStatus == RUNNING) {
+    patch->patchStatus = STOPPING;
+    while (1) {
+      chThdSleepMilliseconds(1);
+      if (patch->patchStatus == STOPPED)
+        break;
+    }
+    if (!validatePatch(patch)) return;
+    patch_dispose(patch);
+    ax_free(patch->patchobject);
+    ui_deinit_patch();
+    InitPatch0(patch);
+    sysmon_enable_blinker();
+    tx_patchList();
+    if (patch->elf) {
+      unload_elf(patch->elf);
+      patch->elf = 0;
+    }
+    patch->patchStatus = STOPPED;
   }
 }
 
-void LoadPatch(const char *name) {
-  strcpy(loadFName, name);
-  loadPatchIndex = BY_FILENAME;
-  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
+patch_t * patch_load(const char *name, patch_callback_t patch_callback) {
+  chMtxLock(&mtxWorker);
+  thread_t * job = chThdCreateStatic(waThreadWorker, sizeof(waThreadWorker), NORMALPRIO,
+      threadLoadPatch , (void *)name);
+  msg_t msg = chThdWait(job);
+  chMtxUnlock(&mtxWorker);
+  patch_t * patch = (patch_t *)msg;
+  if (patch) {
+    patch->patch_callback = patch_callback;
+  }
+  return patch;
 }
 
-void LoadPatchStartSD(void) {
-  if (!palReadPad(SW2_PORT, SW2_PIN)) {
-	  strcpy(loadFName, "/START.BIN");
-	  loadPatchIndex = START_SD;
-	  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
-	  chThdSleepMilliseconds(50);
+patch_t * patch_loadIndex(int index, patch_callback_t patch_callback) {
+  // passing the index value as string works
+  // as long as index >=0 and index < 2^24
+  if ((index<0)||(index>(1<<23))) {
+    chSysHalt("LoadPatchIndexed arg overflow");
+    return 0;
+  }
+  int idx8 = index<<8;
+  return patch_load((const char *)&idx8, patch_callback);
+}
+
+patch_t * patch_loadStartSD(patch_callback_t patch_callback) {
+  if (!fs_ready) return 0;
+  const char *fn = "/start.elf";
+  return patch_load(fn, patch_callback);
+}
+
+void patch_stop(patch_t *patch) {
+  if (!patch) {
+    // stop all patches...
+    for(patch = patch_iter_first();patch_iter_done(patch);patch=patch_iter_next(patch)) {
+      if (patch->patchStatus == RUNNING) {
+        patch_stop(patch);
+      }
+    }
+    return;
+  } else {
+    patch_callback_t patch_callback = patch->patch_callback;
+    chMtxLock(&mtxWorker);
+    thread_t * job = chThdCreateStatic(waThreadWorker, sizeof(waThreadWorker), NORMALPRIO,
+        threadStopPatch , (void *)patch);
+    msg_t msg = chThdWait(job);
+    chMtxUnlock(&mtxWorker);
+    if (patch_callback) {
+      patch_callback(patch, patch_callback_stop);
+    }
   }
 }
 
-void LoadPatchStartFlash(void) {
-  loadPatchIndex = START_FLASH;
-  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
-}
-
-void LoadPatchIndexed(uint32_t index) {
-  loadPatchIndex = index;
-  loadFName[0] = 0;
-  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_LOAD);
-}
-
-loadPatchIndex_t GetIndexOfCurrentPatch(void) {
-  return loadPatchIndex;
-}
-
-void WritePatch(void) {
-  chEvtSignal(pThreadDSP, THREAD_DSP_EVT_MASK_WRITE);
-}

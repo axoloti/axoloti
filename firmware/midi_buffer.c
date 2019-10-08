@@ -17,6 +17,7 @@
  */
 
 #include "ch.h"
+#include "midi.h"
 #include "midi_buffer.h"
 #include "exceptions.h"
 

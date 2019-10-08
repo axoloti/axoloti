@@ -25,28 +25,13 @@
  * MIDI input buffer
  */
 
-typedef union {
-	struct {
-		unsigned cin :4;
-		unsigned port :4;
-		uint8_t b0;
-		uint8_t b1;
-		uint8_t b2;
-	} fields;
-	struct {
-		uint8_t ph;
-		uint8_t b0;
-		uint8_t b1;
-		uint8_t b2;
-	} bytes;
-	int32_t word;
-} midi_message_t;
-
 typedef struct {
-	volatile int32_t read_index;
-	volatile int32_t write_index;
-	midi_message_t buf[MIDI_RING_BUFFER_SIZE];
+  volatile int32_t read_index;
+  volatile int32_t write_index;
+  midi_message_t buf[MIDI_RING_BUFFER_SIZE];
 } midi_input_buffer_t;
+
+extern midi_input_buffer_t midi_input_buffer;
 
 /* put method, non-blocking, discarding data when overflowing */
 msg_t midi_input_buffer_put(midi_input_buffer_t *obj, midi_message_t midi);

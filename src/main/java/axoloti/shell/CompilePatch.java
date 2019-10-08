@@ -1,13 +1,22 @@
 package axoloti.shell;
 
-import axoloti.utils.OSDetect;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import axoloti.job.IJobContext;
 import axoloti.job.JobContext;
+import axoloti.target.fs.SDFileReference;
+import axoloti.utils.MakeUtils;
+import axoloti.utils.OSDetect;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,61 +24,88 @@ import axoloti.job.JobContext;
  */
 public class CompilePatch {
 
-    private static String[] getEnvironment() {
-        ArrayList<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(ShellTask.getEnvironment()));
-        /*
-        Set<String> moduleSet = this.patchController.getModel().getModules();
-        if(moduleSet!=null) {
-            String modules = "";
-            String moduleDirs = "";
-            for(String m : moduleSet) {
-                modules += m + " ";
-                moduleDirs +=
-                    this.patchController.getModel().getModuleDir(m)
-                    + " ";
-            }
-            list.add("MODULES=" + modules);
-            list.add("MODULE_DIRS=" + moduleDirs);
-        }
-         */
-        String vars[] = new String[list.size()];
-        list.toArray(vars);
-        return vars;
-    }
-
     private static String getWorkingDir() {
-        return ShellTask.getFirmwareDir();
+        return ShellTask.getAPIDir();
     }
 
-    private static String getExec() {
+    private static String[] getExec() {
+        // TODO: check path inconsistency WIN/MAC/LINUX
+        String envDir = ShellTask.getEnvDir();
+        String makeCmd = ShellTask.getMake();
+        String platformEnvDir;
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return ShellTask.getFirmwareDir() + "/compile_patch_win.bat";
+            platformEnvDir = envDir + "/platform_win";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            return "/bin/sh ./compile_patch_osx.sh";
+            platformEnvDir = envDir + "/platform_osx";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            return "/bin/sh ./compile_patch_linux.sh";
+            platformEnvDir = envDir + "/platform_linux";
         } else {
             Logger.getLogger(CompilePatch.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
         }
+        return new String[]{
+            makeCmd,
+            "-I", platformEnvDir,
+            "-I", envDir,
+            "-f", envDir + "/patch.mk"
+        };
     }
 
-    public static void run() throws ExecutionFailedException {
+    public static CompilePatchResult run(String[] env, String patchSourceCode) throws ExecutionFailedException {
+        String buildDir = ShellTask.getBuildDir();
+        String fn = buildDir + "/xpatch.cpp";
+        File fd = new File(fn);
+        try (FileOutputStream f = new FileOutputStream(fd)) {
+            f.write(patchSourceCode.getBytes());
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(CompilePatch.class.getName()).log(Level.SEVERE, ex.toString());
+            throw new ExecutionFailedException();
+        } catch (IOException ex) {
+            Logger.getLogger(CompilePatch.class.getName()).log(Level.SEVERE, ex.toString());
+            throw new ExecutionFailedException();
+        }
+        List<String> _env = new LinkedList();
+        _env.addAll(Arrays.asList(ShellTask.getEnvironment()));
+        _env.addAll(Arrays.asList(env));
         ShellTask shellTask = new ShellTask(
                 getWorkingDir(),
                 getExec(),
-                ShellTask.getEnvironment());
-        println("Start compiling patch");
+                _env.toArray(new String[]{}));
         IJobContext ctx = new JobContext();
+        ctx.setNote("Start compiling patch");
         Thread t = new Thread(() -> {
-            Consumer<IJobContext> j = shellTask.getJob();
-            j.accept(ctx);
+            shellTask.doit(ctx);
         });
         t.start();
         boolean success = shellTask.isSuccess();
         if (success) {
             println("Done compiling patch");
+            String elffname = ShellTask.getBuildDir() + "/xpatch.elf";
+            String fdepsfname = ShellTask.getBuildDir() + "/filedeps.txt";
+            byte elfdata[];
+            try {
+                elfdata = Files.readAllBytes(new File(elffname).toPath());
+                BufferedReader br = new BufferedReader(new FileReader(fdepsfname));
+                String s1;
+                String s = "";
+                while ((s1 = br.readLine()) != null) {
+                    s += s1 + " ";
+                }
+                s = s.trim();
+                String[] filedeps = s.split("\\s");
+                int i;
+                SDFileReference sdfrs[] = new SDFileReference[filedeps.length / 2];
+                int n = filedeps.length / 2;
+                for (i = 0; i < n; i++) {
+                    String fnlocal = MakeUtils.qs(filedeps[2 * i]);
+                    String fntarget = MakeUtils.qs(filedeps[2 * i + 1]);
+                    sdfrs[i] = new SDFileReference(new File(fnlocal), fntarget);
+                }
+                // TODO: implement getting stdout and stderr result of compile...
+                return new CompilePatchResult(elfdata, sdfrs, "", "");
+            } catch (IOException ex) {
+                throw new ExecutionFailedException();
+            }
         } else {
             println("Compiling patch failed");
             throw new ExecutionFailedException();

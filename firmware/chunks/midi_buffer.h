@@ -2,6 +2,7 @@
 #define CHUNK_MIDI_BUFFER_H
 
 #include "fourcc.h"
+#include "midi.h"
 #include "../midi_buffer.h"
 
 #define fourcc_midi_buffer FOURCC('M','I','B','1')

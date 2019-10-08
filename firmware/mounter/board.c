@@ -1,6 +1,6 @@
+#include <stdio.h>
 #include "ch.h"
 #include "hal.h"
-#include <string.h>
 #include "stm32_gpio.h"
 #include "stm32_otg.h"
 
@@ -189,6 +189,7 @@ static void stm32_gpio_init(void) {
  * @details GPIO ports and system clocks are initialized before everything
  *          else.
  */
+
 void __early_init(void) {
   /* Reset of all peripherals.*/
   rccResetAHB1(~0);
@@ -206,6 +207,39 @@ void __early_init(void) {
   OTG_HS->GINTMSK = 0; // disable OTG_HS interrupts!
   stm32_gpio_init();
   stm32_clock_init();
+}
+
+
+/**
+ * @brief   Late initialization code.
+ * @details Loaded interrupt vector is not aligned,
+ *          copy into aligned space, and set VTOR
+ */
+
+// perhaps alternate approach for obtaining an aligned vector:
+// __attribute__ ((aligned (16)))
+
+enum {
+  vector_size=256
+};
+
+// avoid undefined reference when linking with nosys
+__attribute__((weak))
+void initialise_monitor_handles(void){
+}
+
+void __late_init(void) {
+  initialise_monitor_handles();
+#if 0
+  extern uint32_t _vectors[vector_size];
+  printf("VTOR = %08x\n", (unsigned int)SCB->VTOR);
+  printf("_vectors = %08x\n", (unsigned int)&_vectors);
+  printf("_vector[11] = %08x\n", (unsigned int)_vectors[11]);
+//  printf("aligned_vector[11] = %08x\n", (unsigned int)aligned_vector_fatamorgana[11]);
+  // ...and to test if interrupts are jumping fine
+  asm("BKPT 255");
+  //asm("SVC 0x0");
+#endif
 }
 
 #if HAL_USE_SDC || defined(__DOXYGEN__)

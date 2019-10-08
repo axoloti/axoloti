@@ -29,12 +29,12 @@ import axoloti.target.remote.VirtualInputEvent;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.beans.PropertyChangeEvent;
@@ -272,14 +272,14 @@ public class AxolotiRemoteControl extends TJFrame {
             refreshFB();
         };
 
-        addFocusListener(new FocusListener() {
+        addWindowFocusListener(new WindowFocusListener() {
             @Override
-            public void focusGained(FocusEvent e) {
+            public void windowGainedFocus(WindowEvent e) {
                 setPolling(true);
             }
 
             @Override
-            public void focusLost(FocusEvent e) {
+            public void windowLostFocus(WindowEvent e) {
                 setPolling(false);
             }
         });

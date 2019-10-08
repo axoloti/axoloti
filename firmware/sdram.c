@@ -16,9 +16,6 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#define STM32F427xx
-
 #include "sdram.h"
 #include "ch.h"
 #include "hal.h"

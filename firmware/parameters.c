@@ -65,7 +65,7 @@ void PExParameterChange(ParameterExchange_t *param, int32_t value,
 
 #if NEW_PARAMETER_SYSTEM
 
-void ParameterChange(Parameter_t *param, int32_t value, uint32_t signals) {
+void parameter_setVal(Parameter_t *param, int32_t value, uint32_t signals) {
 switch (param->type) {
 case param_type_frac_sq27:
 case param_type_frac_uq27:
@@ -93,37 +93,5 @@ default:
     param->d.frac.finalvalue = param->d.frac.modvalue;
 }
 
-void ModulationSourceChange(PExModulationTarget_t *modulation,
-                               int32_t nTargets,
-                               Parameter_t *parameters,
-                               int32_t *oldvalue,
-                               int32_t value) {
-  PExModulationTarget_t *s = modulation;
-  int t;
-  for (t = 0; t < nTargets; t++) {
-    PExModulationTarget_t *target = &s[t];
-    if (target->parameterIndex == -1)
-      continue;
-    Parameter_t *PEx = &parameters[target->parameterIndex];
-    int32_t v = PEx->d.frac.modvalue;
-    v -= ___SMMUL(*oldvalue, target->amount) << 5;
-    v += ___SMMUL(value, target->amount) << 5;
-    PEx->d.frac.modvalue = v;
-    if (PEx->pfunction) {
-      (PEx->pfunction)(PEx);
-      // TBC: modulation on root of polyphonic-subpatch-parameters
-    }
-    else {
-      PEx->d.frac.finalvalue = v;
-    }
-  }
-  *oldvalue = value;
-}
-
-
 #endif
 
-void ApplyPreset(unsigned int index) {
-  if (patchMeta.fptr_applyPreset != 0)
-    (patchMeta.fptr_applyPreset)(index);
-}

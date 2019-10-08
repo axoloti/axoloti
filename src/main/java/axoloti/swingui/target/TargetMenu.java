@@ -3,20 +3,34 @@ package axoloti.swingui.target;
 import axoloti.Axoloti;
 import axoloti.connection.CConnection;
 import axoloti.connection.ConnectionTest;
-import axoloti.connection.FirmwareUpgrade_1_0_12;
 import axoloti.connection.IConnection;
+import axoloti.connection.IPatchCB;
+import axoloti.connection.PatchLoadFailedException;
+import axoloti.job.GlobalJobProcessor;
+import axoloti.job.IJobContext;
 import axoloti.mvc.IView;
 import axoloti.preferences.Preferences;
 import axoloti.shell.CompileFirmware;
 import axoloti.shell.UploadFirmwareDFU;
+import axoloti.swingui.dialogs.USBPortSelectionDlg;
 import axoloti.target.TargetModel;
 import axoloti.usb.Usb;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 
 /**
@@ -38,6 +52,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private JMenuItem jMenuItemFlashUpgrade_v1_v2;
     private JMenuItem jMenuItemFlashSDR;
     private JMenuItem jMenuItemMount;
+    private JMenuItem jMenuItemEraseStart;
     private JMenuItem jMenuItemPing;
     private JMenuItem jMenuItemRefreshFWID;
     private JSeparator jDevSeparator;
@@ -50,6 +65,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private JMenuItem jMenuItemRemote;
     private JMenuItem jMenuItemMemoryViewer;
     private JMenuItem jMenuItemTestProtocol;
+    private JMenuItem jMenuItemTestExtra;
 
     public TargetMenu(TargetModel targetModel) {
         super("Board");
@@ -103,6 +119,15 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
             }
         });
         add(jMenuItemMount);
+
+        jMenuItemEraseStart = new JMenuItem("Erase startup patch in flash");
+        jMenuItemEraseStart.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEraseStartActionPerformed(evt);
+            }
+        });
+        add(jMenuItemEraseStart);
 
         jMenuFirmware = new javax.swing.JMenu();
         jMenuFirmware.setText("Firmware");
@@ -258,6 +283,25 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         });
         add(jMenuItemTestProtocol);
 
+        jMenuItemTestExtra = new JMenuItem("send \"extra\" command...");
+        jMenuItemTestExtra.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String arg = JOptionPane.showInputDialog(null, "Extra argument?");
+                if (arg == null) {
+                    return;
+                }
+                int iarg = Integer.parseInt(arg);
+                IConnection conn = CConnection.getConnection();
+                try {
+                    conn.transmitExtraCommand(iarg);
+                } catch (IOException ex) {
+                    Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        });
+        add(jMenuItemTestExtra);
     }
 
     private void jMenuItemFDisconnectActionPerformed(java.awt.event.ActionEvent evt) {
@@ -269,7 +313,8 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemSelectComActionPerformed(java.awt.event.ActionEvent evt) {
-        getDModel().getConnection().selectPort();
+        USBPortSelectionDlg spsDlg = new USBPortSelectionDlg(null, true);
+        spsDlg.setVisible(true);
     }
 
     private void jMenuItemPingActionPerformed(java.awt.event.ActionEvent evt) {
@@ -295,9 +340,12 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-        getDModel().flashUsingSDRam(fname, pname);
+        try {
+            getDModel().flashUsingSDRam(pname);
+        } catch (IOException ex) {
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,29 +375,88 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
             Preferences.getPreferences().savePrefs();
         }
 
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
         String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
-        getDModel().flashUsingSDRam(fname, pname);
+        try {
+            getDModel().flashUsingSDRam(pname);
+        } catch (IOException ex) {
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void jMenuItemFlashDowngradeActionPerformed(java.awt.event.ActionEvent evt) {
         String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/old_firmware/firmware-1.0.12/axoloti.bin";
-        String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/flasher/flasher_build/flasher";
-        getDModel().flashUsingSDRam(fname, pname);
+        try {
+            getDModel().flashUsingSDRam(pname);
+        } catch (IOException ex) {
+            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void jMenuItemFlashUpgrade_v1_v2_ActionPerformed(java.awt.event.ActionEvent evt) {
-        FirmwareUpgrade_1_0_12 firmwareUpgrade = new FirmwareUpgrade_1_0_12(IConnection.openDeviceHandle(null));
+        // TODO: flashing
+        // FirmwareUpgrade_1_0_12 firmwareUpgrade = new FirmwareUpgrade_1_0_12(IConnection.openDeviceHandle(null));
+    }
+
+    static void uploadFile(IConnection conn, File f, String targetFilename, IJobContext ctx) throws FileNotFoundException, IOException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(f.lastModified());
+        int size = (int) f.length();
+        FileInputStream inputStream = new FileInputStream(f);
+        conn.upload(targetFilename, inputStream, cal, size, ctx);
     }
 
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/mounter";
+        GlobalJobProcessor.getJobProcessor().exec(ctx -> {
+            String elfname = "mounter.elf";
+            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/" + elfname;
+            Path fileLocation = Paths.get(fname);
+            byte[] data;
+            try {
+                data = Files.readAllBytes(fileLocation);
+            } catch (IOException ex) {
+                Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
             IConnection conn = CConnection.getConnection();
-            conn.transmitStop();
-            TargetModel.getTargetModel().uploadPatchToMemory(fname);
-            conn.transmitStart();
-            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "SDCard mounter active, editor connection lost. Unmount/eject the sdcard volume in Explorer or Finder to enable editor connection again.");
+            try {
+                conn.transmitStartLive(data, "mounter", new IPatchCB() {
+                    @Override
+                    public void patchStopped() {
+                    }
+
+                    @Override
+                    public void setDspLoad(int dspLoad) {
+                    }
+
+                    @Override
+                    public void paramChange(int index, int value) {
+                    }
+
+                    @Override
+                    public void distributeDataToDisplays(ByteBuffer dispData) {
+                    }
+
+                    @Override
+                    public void openEditor() {
+                    }
+                }, ctx);
+            } catch (IOException ex) {
+                Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "SDCard mounter active, editor connection lost. Unmount/eject the sdcard volume in Explorer or Finder to enable editor connection again.");
+            } catch (PatchLoadFailedException ex) {
+                Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, ex.getMessage());
+            }
+        });
+    }
+
+    private void jMenuItemEraseStartActionPerformed(java.awt.event.ActionEvent evt) {
+        byte bb[] = new byte[4];
+        bb[0] = (byte) 0xFF;
+        bb[1] = (byte) 0xFF;
+        bb[2] = (byte) 0xFF;
+        bb[3] = (byte) 0xFF;
+        IConnection conn = CConnection.getConnection();
+        try {
+            conn.uploadPatchToFlash(bb, "flash patch x");
         } catch (IOException ex) {
             Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
         }

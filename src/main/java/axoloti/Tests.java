@@ -146,7 +146,7 @@ public class Tests {
             PatchController patchController = patchModel.getController();
             PatchViewCodegen pvcg = patchController.writeCode();
             Thread.sleep(1000); // TODO: fix testing without sleep()..
-            patchController.compile();
+            patchController.compile(pvcg.generateCode4());
             Thread.sleep(5000);
             return true;
         } catch (Exception ex) {

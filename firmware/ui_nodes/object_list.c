@@ -1,17 +1,22 @@
+#include "hal.h"
 #include "../ui.h"
 #include "ui_nodes_common.h"
 #include "patch.h"
+#include "patch_impl.h"
 #include "qgfx.h"
 #include "chprintf.h"
 #include "glcdfont.h"
+#include "patch_wrapper.h"
 
 static bool canNavigateUp(void) {
 	return (menu_stack[menu_stack_position].currentpos >= 4);
 }
 
 static bool canNavigateDown(void) {
+  patch_t *patch = patch_iter_first();
+  int nobjects = patch_getNObjects(patch);
 	return ((menu_stack[menu_stack_position].currentpos + 4)
-			< patchMeta.nobjects);
+			< nobjects);
 }
 
 static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
@@ -34,9 +39,11 @@ static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 			return 0;
 		int q = evt.fields.quadrant - quadrant_topleft;
 		int i = q + menu_stack[menu_stack_position].currentpos;
-		if (i < patchMeta.nobjects) {
+	  patch_t *patch = patch_iter_first();
+	  int nobjects = patch_getNObjects(patch);
+		if (i < nobjects) {
 			if (evt.fields.button == btn_up) {
-				ObjMenu.obj.obj = &patchMeta.objects[i];
+				ObjMenu.obj.obj = patch_getObject(patch,i);
 				// copy object name, need a null terminated string now
 				int i;
 				for (i = 0; i < MAX_PARAMETER_NAME_LENGTH; i++) {
@@ -44,10 +51,10 @@ static uint32_t fhandle_evt(const struct ui_node * node, input_event evt) {
 				}
 				((char *) ObjMenu.name)[i] = 0;
 				return ui_enter_node(&ObjMenu);
-			} else if (patchMeta.objects[i].nparams) {
+			} else if (patch_getObject(patch,i)->nparams) {
 				int v = getValuFromInputEvent(evt);
 				if (v) {
-					Parameter_t *p = &patchMeta.objects[i].params[0];
+					Parameter_t *p = &patch_getObject(patch,i)->params[0];
 					ProcessEncoderParameter(p, v);
 				}
 			}
@@ -98,9 +105,11 @@ void drawDispValue1(const gfxq *gfx, Display_meta_t *disp) {
 }
 
 static void paint_update_quadrant(int quadrant_index, int obj_index) {
-	if (obj_index >= patchMeta.nobjects)
+  patch_t *patch = patch_iter_first();
+  int nobjects = patch_getNObjects(patch);
+  if (obj_index >= nobjects)
 		return;
-	ui_object_t *obj = &patchMeta.objects[obj_index];
+	ui_object_t *obj = patch_getObject(patch,obj_index);
 	if (obj->nparams) {
 		Parameter_t *p = &obj->params[0];
 		drawParamValue1(&gfx_Q[quadrant_index], p);
@@ -124,20 +133,23 @@ static void paint_update_quadrant(int quadrant_index, int obj_index) {
 }
 
 static void fpaint_screen_update(const struct ui_node * node, uint32_t flag) {
-	int i = menu_stack[menu_stack_position].currentpos;
+  patch_t *patch = patch_iter_first();
+  int nobjects = patch_getNObjects(patch);
+  int i = menu_stack[menu_stack_position].currentpos;
 	switch (flag) {
 	case 0: { // idle
 		static int q1 = 0;
 		q1 = (q1 + 1) & 0x3; // 4 quadrants
 		i += q1;
-		if (i < patchMeta.nobjects) {
-			if (patchMeta.objects[i].nparams) {
-				Parameter_t *p = &patchMeta.objects[i].params[0];
+		if (i < nobjects) {
+		  ui_object_t *obj = patch_getObject(patch,i);
+			if (obj->nparams) {
+				Parameter_t *p = &obj->params[0];
 				if (p->signals & 0x00000004) {
 					p->signals &= ~0x00000004;
 					chEvtAddEvents(lcd_dirty_flag_usr1 << q1);
 				}
-			} else if (patchMeta.objects[i].ndisplays) {
+			} else if (obj->ndisplays) {
 				chEvtAddEvents(lcd_dirty_flag_usr1 << q1);
 			}
 		}
@@ -145,8 +157,8 @@ static void fpaint_screen_update(const struct ui_node * node, uint32_t flag) {
 		break;
 	case lcd_dirty_flag_initial: {
 		int q = 0;
-		while ((i < patchMeta.nobjects) && (q < 4)) {
-			ui_object_t *o = &patchMeta.objects[i++];
+		while ((i < nobjects) && (q < 4)) {
+			ui_object_t *o = patch_getObject(patch,i++);
 			gfx_Q[q].drawStringInvN(3, 0, (const char *) &o->name, 8);
 			if (o->nparams) {
 				gfx_Q[q].drawChar(0, 0, CHAR_ARROW_UP);

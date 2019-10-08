@@ -19,6 +19,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "usbcfg.h"
+#include "pconnection.h"
 
 /*
  * USB Driver structure.
@@ -256,7 +257,6 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
                                            uint8_t dtype,
                                            uint8_t dindex,
                                            uint16_t lang) {
-
   (void)usbp;
   (void)lang;
   switch (dtype) {
@@ -273,9 +273,9 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
     }
     if (dindex < 9)
       return &vcom_strings[dindex];
+    if (dindex == 0xEE)
+      return &vcid_descriptor;
     break;
-  case 0xEE:
-    return &vcid_descriptor;
   }
   return NULL;
 }
@@ -338,29 +338,40 @@ static const USBEndpointConfig ep2config = {
 static void usb_event(USBDriver *usbp, usbevent_t event) {
 
   switch (event) {
-  case USB_EVENT_RESET:
-    return;
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
     chSysLockFromISR();
+    if (usbp->state == USB_ACTIVE) {
 
     /* Enables the endpoints specified into the configuration.
        Note, this callback is invoked from an ISR so I-Class functions
        must be used.*/
     usbInitEndpointI(usbp, USBD1_DATA_REQUEST_EP, &ep1config);
     usbInitEndpointI(usbp, USBD2_DATA_REQUEST_EP, &ep2config);
-
+    } else if (usbp->state == USB_SELECTED) {
+      usbDisableEndpointsI(usbp);
+    }
     chSysUnlockFromISR();
     return;
+  case USB_EVENT_RESET:
+    /* Falls into.*/
+  case USB_EVENT_UNCONFIGURED:
+    /* Falls into.*/
   case USB_EVENT_SUSPEND:
+    chSysLockFromISR();
+    /* Disconnection event on suspend.*/
+    pconnection_suspend();
+    chSysUnlockFromISR();
     return;
   case USB_EVENT_WAKEUP:
+    chSysLockFromISR();
+    /* Connection event on wakeup.*/
+    pconnection_wakeup();
+    chSysUnlockFromISR();
     return;
   case USB_EVENT_STALLED:
     return;
-  case USB_EVENT_UNCONFIGURED:
-	  return;
   }
   return;
 }
@@ -458,6 +469,6 @@ const USBConfig usbcfg = {
   usb_event,
   get_descriptor,
   specialRequestsHook,
-  NULL
+  NULL /* sof_handler */
 };
 

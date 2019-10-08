@@ -26,16 +26,16 @@ which java >/dev/null || echo "java not found in path"
 
 marlin_jvmargs='-Xbootclasspath/a:lib/marlin-0.9.1-Unsafe.jar -Dsun.java2d.renderer=org.marlin.pisces.MarlinRenderingEngine'
 
-if [ -f $rootdir/dist/Axoloti.jar ]
+if [ -f "$rootdir/dist/Axoloti.jar" ]
 then
     case "$platform" in
         mac)
-                echo java $marlin_jvmargs -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $*
-                java $marlin_jvmargs -Xdock:name=Axoloti -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee "$axoloti_home/axoloti.log"
+                echo java $marlin_jvmargs -Xdock:name=Axoloti -jar "$rootdir/dist/Axoloti.jar" $*
+                java $marlin_jvmargs -Xdock:name=Axoloti -jar "$rootdir/dist/Axoloti.jar" $* 2>&1 | tee "$axoloti_home/axoloti.log"
         ;;
         linux)
                 echo java $marlin_jvmargs -jar $rootdir/dist/Axoloti.jar $*
-                java $marlin_jvmargs -jar $rootdir/dist/Axoloti.jar $* 2>&1 | tee "$axoloti_home/axoloti.log"
+                java $marlin_jvmargs -jar "$rootdir/dist/Axoloti.jar" $* 2>&1 | tee "$axoloti_home/axoloti.log"
         ;;
     esac
 else

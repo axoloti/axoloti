@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013 - 2019 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,6 +19,7 @@ package axoloti.swingui.target;
 
 import axoloti.connection.CConnection;
 import axoloti.connection.IConnection;
+import axoloti.connection.PatchLoadFailedException;
 import axoloti.job.GlobalJobProcessor;
 import axoloti.job.IJobContext;
 import axoloti.preferences.Preferences;
@@ -30,13 +31,16 @@ import axoloti.target.fs.SDCardInfo;
 import axoloti.target.fs.SDFileInfo;
 import axoloti.textdoc.TextController;
 import axoloti.textdoc.TextModel;
+import java.awt.Desktop;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,7 +48,11 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,6 +68,8 @@ import javax.swing.table.AbstractTableModel;
  * @author Johannes Taelman
  */
 public class FileManagerFrame extends TJFrame {
+
+    String path = "/";
 
     /**
      * Creates new form FileManagerFrame
@@ -172,17 +182,18 @@ public class FileManagerFrame extends TJFrame {
                             IJobContext ctxs[] = ctx.createSubContexts(n);
                             for (int i = 0; i < n; i++) {
                                 File f = droppedFiles.get(i);
-                                System.out.println(f.getName());
                                 try {
-                                    getDModel().upload(f.getName(), f, ctxs[i]);
+                                    uploadFile(CConnection.getConnection(), f, path + f.getName(), ctxs[i]);
                                 } catch (FileNotFoundException ex) {
                                     Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
                                 } catch (IOException ex) {
                                     Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
+                            ctx.doInSync(() -> {
+                                requestRefresh();
+                            });
                         });
-                        requestRefresh();
                     }
                 } catch (UnsupportedFlavorException ex) {
                     Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,29 +211,57 @@ public class FileManagerFrame extends TJFrame {
         });
     }
 
-    void updateButtons() {
+    void setPath(String p) {
+        if (p == null || p.isEmpty()) {
+            path = "/";
+        } else if (p.charAt(0) != '/') {
+            path = '/' + p;
+        } else {
+            path = p;
+        }
+        jLabelPath.setText(path);
+        jButtonDirUp.setEnabled(!path.equals("/"));
+    }
+
+    private int getSelectedRow() {
         int row = jFileTable.getSelectedRow();
+        if (row < 0) {
+            return row;
+        } else {
+            return jFileTable.convertRowIndexToModel(row);
+        }
+    }
+
+    void updateButtons() {
+        int row = getSelectedRow();
         if (row < 0) {
             jButtonDelete.setEnabled(false);
             jButtonOpen.setEnabled(false);
-            setButtonUploadDefaultName();
+            jButtonUpload.setText("Upload ...");
+            jButtonCreateDir.setText("Create directory ...");
+            jButtonOpen.setText("Open");
         } else {
             jButtonDelete.setEnabled(true);
-            SDFileInfo f = getSDCardInfo().getFiles().get(row);
-            if (f != null && f.isDirectory()) {
-                jButtonUpload.setText("Upload to " + f.getFilename() + " ...");
-                jButtonCreateDir.setText("Create directory in " + f.getFilename() + " ...");
-                jButtonOpen.setEnabled(false);
-            } else {
-                setButtonUploadDefaultName();
-                jButtonOpen.setEnabled(true);
+            jButtonOpen.setEnabled(true);
+            final SDFileInfo fileInfo = getSDCardInfo().getFiles().get(row);
+            jButtonOpen.setText("download");
+            // TODO: (low priority) multiple buttons if multiple actions are possible
+            for (FileExtensionHandler feh : fileExtensionHandlers) {
+                String btnName = feh.takesFile(fileInfo);
+                if (btnName != null) {
+                    jButtonOpen.setText(btnName);
+                    break;
+                }
             }
         }
     }
 
-    void setButtonUploadDefaultName() {
-        jButtonUpload.setText("Upload ...");
-        jButtonCreateDir.setText("Create directory ...");
+    static void uploadFile(IConnection conn, File f, String targetFilename, IJobContext ctx) throws FileNotFoundException, IOException {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(f.lastModified());
+        int size = (int) f.length();
+        FileInputStream inputStream = new FileInputStream(f);
+        conn.upload(targetFilename, inputStream, cal, size, ctx);
     }
 
     /**
@@ -234,24 +273,75 @@ public class FileManagerFrame extends TJFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabelPath = new javax.swing.JLabel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jButtonDirUp = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabelSDInfo = new javax.swing.JLabel();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jButtonRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jFileTable = new javax.swing.JTable();
-        jButton1Refresh = new javax.swing.JButton();
-        jLabelSDInfo = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jButtonOpen = new javax.swing.JButton();
         jButtonUpload = new javax.swing.JButton();
         jButtonDelete = new javax.swing.JButton();
         jButtonCreateDir = new javax.swing.JButton();
-        jButtonOpen = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
         });
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel1.setAlignmentX(0.0F);
+        jPanel1.setAlignmentY(0.0F);
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
+
+        jLabelPath.setText("/");
+        jLabelPath.setPreferredSize(new java.awt.Dimension(183, 16));
+        jPanel1.add(jLabelPath);
+        jPanel1.add(filler1);
+
+        jButtonDirUp.setText("Up");
+        jButtonDirUp.setAlignmentX(1.0F);
+        jButtonDirUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDirUpActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonDirUp);
+
+        getContentPane().add(jPanel1);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jPanel2.setAlignmentX(0.0F);
+        jPanel2.setAlignmentY(0.0F);
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
+
+        jLabelSDInfo.setText("card info");
+        jPanel2.add(jLabelSDInfo);
+        jPanel2.add(filler2);
+
+        jButtonRefresh.setText("Refresh");
+        jButtonRefresh.setAlignmentX(1.0F);
+        jButtonRefresh.setEnabled(false);
+        jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRefreshActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonRefresh);
+
+        getContentPane().add(jPanel2);
+
+        jFileTable.setAutoCreateRowSorter(true);
         jFileTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -275,111 +365,82 @@ public class FileManagerFrame extends TJFrame {
                 return canEdit [columnIndex];
             }
         });
+        jFileTable.setAlignmentX(0.0F);
         jFileTable.getTableHeader().setReorderingAllowed(false);
+        jFileTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fileTableMouseClickedHandler(evt);
+            }
+        });
         jScrollPane1.setViewportView(jFileTable);
         if (jFileTable.getColumnModel().getColumnCount() > 0) {
             jFileTable.getColumnModel().getColumn(2).setPreferredWidth(80);
         }
 
-        jButton1Refresh.setText("Refresh");
-        jButton1Refresh.setEnabled(false);
-        jButton1Refresh.addActionListener(new java.awt.event.ActionListener() {
+        getContentPane().add(jScrollPane1);
+
+        jPanel3.setAlignmentX(0.0F);
+        jPanel3.setAlignmentY(1.0F);
+
+        jButtonOpen.setText("Open");
+        jButtonOpen.setAlignmentX(0.5F);
+        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1RefreshActionPerformed(evt);
+                jButtonOpenActionPerformed(evt);
             }
         });
-
-        jLabelSDInfo.setText("jLabel1");
+        jPanel3.add(jButtonOpen);
 
         jButtonUpload.setText("Upload...");
+        jButtonUpload.setAlignmentX(0.5F);
         jButtonUpload.setEnabled(false);
         jButtonUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonUploadActionPerformed(evt);
             }
         });
+        jPanel3.add(jButtonUpload);
 
         jButtonDelete.setText("Delete");
+        jButtonDelete.setAlignmentX(0.5F);
         jButtonDelete.setEnabled(false);
         jButtonDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonDeleteActionPerformed(evt);
             }
         });
+        jPanel3.add(jButtonDelete);
 
         jButtonCreateDir.setText("Create directory...");
+        jButtonCreateDir.setAlignmentX(0.5F);
         jButtonCreateDir.setEnabled(false);
         jButtonCreateDir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCreateDirActionPerformed(evt);
             }
         });
+        jPanel3.add(jButtonCreateDir);
 
-        jButtonOpen.setText("Open");
-        jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOpenActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jButton1Refresh)
-                .addGap(29, 29, 29)
-                .addComponent(jLabelSDInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButtonOpen)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonDelete)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonUpload)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonCreateDir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelSDInfo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonDelete)
-                    .addComponent(jButtonUpload)
-                    .addComponent(jButtonCreateDir)
-                    .addComponent(jButtonOpen))
-                .addGap(5, 5, 5))
-        );
+        getContentPane().add(jPanel3);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     void requestRefresh() {
-        getDModel().refreshFiles();
+        IConnection conn = getDModel().getConnection();
+        try {
+            SDCardInfo sdcardinfo = conn.getFileList(path);
+            setSDCardInfo(sdcardinfo);
+        } catch (IOException ex) {
+            Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void jButton1RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1RefreshActionPerformed
+    private void jButtonRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefreshActionPerformed
         requestRefresh();
-    }//GEN-LAST:event_jButton1RefreshActionPerformed
+    }//GEN-LAST:event_jButtonRefreshActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-        String dir = "/";
-        int rowIndex = jFileTable.getSelectedRow();
-        if (rowIndex >= 0) {
-            SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
-            if (f != null && f.isDirectory()) {
-                dir = f.getFilename();
-            }
-        }
         IConnection conn = getDModel().getConnection();
         if (conn.isConnected()) {
             final JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
@@ -392,10 +453,9 @@ public class FileManagerFrame extends TJFrame {
                         Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, "Can't read file");
                         return;
                     }
-                    final String dir2 = dir;
                     GlobalJobProcessor.getJobProcessor().exec(ctx -> {
                         try {
-                            getDModel().upload(dir2 + f.getName(), f, ctx);
+                            uploadFile(conn, f, path + f.getName(), ctx);
                         } catch (FileNotFoundException ex) {
                             ctx.reportException(ex);
                         } catch (IOException ex) {
@@ -404,6 +464,7 @@ public class FileManagerFrame extends TJFrame {
                     });
                 }
             }
+            requestRefresh();
         }
     }//GEN-LAST:event_jButtonUploadActionPerformed
 
@@ -415,12 +476,13 @@ public class FileManagerFrame extends TJFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
-        int rowIndex = jFileTable.getSelectedRow();
+        int rowIndex = getSelectedRow();
         if (rowIndex >= 0) {
             SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
             if (!f.isDirectory()) {
                 try {
-                    getDModel().deleteFile(f.getFilename());
+                    IConnection conn = getDModel().getConnection();
+                    conn.deleteFile(path + f.getFilename());
                 } catch (IOException ex) {
                     Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -430,37 +492,35 @@ public class FileManagerFrame extends TJFrame {
                     ff = ff.substring(0, ff.length() - 1);
                 }
                 try {
-                    getDModel().deleteFile(ff);
+                    IConnection conn = getDModel().getConnection();
+                    conn.deleteFile(path + ff);
                 } catch (IOException ex) {
-                    Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    if ("FR_DENIED".equals(ex.getMessage())) {
+                        JOptionPane.showMessageDialog(this, "Failed to delete directory, not empty?");
+                    } else {
+                        Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
         jFileTable.clearSelection();
+        requestRefresh();
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jButtonCreateDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateDirActionPerformed
-        String dir = "/";
-        int rowIndex = jFileTable.getSelectedRow();
-        if (rowIndex >= 0) {
-            SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
-            if (f != null && f.isDirectory()) {
-                dir = f.getFilename();
-            }
-        }
         String fn = JOptionPane.showInputDialog(this, "Directory name?");
 
         if (fn != null && !fn.isEmpty()) {
-            final String fullFileName = dir + fn;
-            GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
-                try {
-                    getDModel().createDirectory(fullFileName, ctx);
-                } catch (IOException ex) {
-                    ctx.reportException(ex);
-                }
-            });
+            final String fullFileName = path + fn;
+            IConnection conn = getDModel().getConnection();
+            try {
+                conn.createDirectory(fullFileName, Calendar.getInstance());
+            } catch (IOException ex) {
+                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         updateButtons();
+        requestRefresh();
     }//GEN-LAST:event_jButtonCreateDirActionPerformed
 
     private static class ByteBufferBackedInputStream extends InputStream {
@@ -492,111 +552,308 @@ public class FileManagerFrame extends TJFrame {
         }
     }
 
-    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
-        int rowIndex = jFileTable.getSelectedRow();
-        if (rowIndex >= 0) {
-            final SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
-            final IConnection conn = getDModel().getConnection();
+    private interface FileExtensionHandler {
+        abstract String takesFile(SDFileInfo fileInfo);
+        abstract void open(SDFileInfo fileInfo);
+    }
+
+    private final class TextFileHandler implements FileExtensionHandler {
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (fileInfo.getExtension().equals("txt")) {
+                return "Open text";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
             GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
                 try {
-                    final ByteBuffer mem = conn.download(f.getFilename(), ctx);
-                    // TODO: change button label to reflect specific action...
+                    final IConnection conn = getDModel().getConnection();
+                    final ByteBuffer byteBuffer = conn.download(path + fileInfo.getFilename(), ctx);
+                    String s = StandardCharsets.UTF_8.decode(byteBuffer).toString();
                     ctx.doInSync(() -> {
-                        if (f.getExtension().equals("txt")) {
-                            String s = "";
-                            while (mem.remaining() > 0) {
-                                s += (char) mem.get();
-                            }
-                            TextModel textModel = new TextModel(s);
-                            TextController textController = new TextController(textModel);
-                            TextEditor textEditor = new TextEditor(TextModel.TEXT, textModel, null);
-                            textController.addView(textEditor);
-                            textEditor.setTitle(f.getFilename());
-                            textEditor.setVisible(true);
-                            textEditor.toFront();
-                        } else if (f.getExtension().equals("axb")) {
-                            String patchname = f.getFilename();
-                            if (patchname.charAt(0) == '/') {
-                                patchname = patchname.substring(1);
-                            }
-                            InputStream inputStream = new ByteBufferBackedInputStream(mem);
-                            PatchBank.openPatchBankEditor(inputStream, patchname);
-                        } else if (f.getFilename().endsWith("/patch.bin")) {
-                            String patchname = f.getFilename();
-                            try {
-                                conn.transmitStart(patchname);
-                            } catch (IOException ex) {
-                                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } else if (f.getFilename().endsWith("/patch.axp")) {
-                            // convert "/xyz/patch.axp" into "xyz.axp"
-                            String patchname = f.getFilename().substring(0, f.getFilename().length() - 10) + ".axp";
-                            if (patchname.charAt(0) == '/') {
-                                patchname = patchname.substring(1);
-                            }
-                            InputStream input = new ByteBufferBackedInputStream(mem);
-                            PatchViewSwing.openPatch(patchname, input);
-                        } else if (f.getExtension().equals("axr")) {
-                            System.out.println("midi routing file contents:");
-                            while (mem.remaining() > 0) {
-                                int i = mem.getInt();
-                                for (int j = 0; j < 32; j++) {
-                                    System.out.print((i & 1) == 1 ? "1" : "0");
-                                    i >>= 1;
-                                }
-                                System.out.println();
-                            }
-                            System.out.println();
-                        } else {
-                            // TODO: present file selection dialog, write to that folder...
-                            mem.rewind();
-                            System.out.println("file contents written to download.txt");
-                            File f1 = new File("download.txt");
-                            try (FileOutputStream fos = new FileOutputStream(f1)) {
-                                WritableByteChannel channel = Channels.newChannel(fos);
-                                channel.write(mem);
-                            } catch (IOException ex) {
-                                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            mem.rewind();
-                            System.out.println("file contents:");
-                            int i=0;
-                            while (mem.remaining() > 0) {
-                                System.out.print((char) mem.get());
-    //                            System.out.print(String.format("%02X\n", mem.get()));
-                                if (i > 100) {
-                                    System.out.println("...truncated");
-                                    break;
-                                }
-                            }
-                            System.out.println();
-                        }
+                        TextModel textModel = new TextModel(s);
+                        TextController textController = new TextController(textModel);
+                        TextEditor textEditor = new TextEditor(TextModel.TEXT, textModel, null);
+                        textController.addView(textEditor);
+                        textEditor.setTitle(fileInfo.getFilename());
+                        textEditor.setVisible(true);
+                        textEditor.toFront();
                     });
                 } catch (IOException ex) {
-                    ctx.reportException(ex);
+                    Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
         }
+    };
+
+    private final class PatchBankHandler implements FileExtensionHandler {
+
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (fileInfo.getExtension().equals("axb")) {
+                return "Open patch bank";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
+            GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+                try {
+                    final IConnection conn = getDModel().getConnection();
+                    final ByteBuffer byteBuffer = conn.download(path + fileInfo.getFilename(), ctx);
+                    InputStream inputStream = new ByteBufferBackedInputStream(byteBuffer);
+                    ctx.doInSync(() -> {
+                        PatchBank.openPatchBankEditor(inputStream, path + fileInfo.getFilenameNoExtension());
+                    });
+                } catch (IOException ex) {
+                    Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+    }
+
+    private final class PatchHandler implements FileExtensionHandler {
+
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (fileInfo.getExtension().equals("axp")) {
+                return "Open patch";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
+            GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+                try {
+                    final IConnection conn = getDModel().getConnection();
+                    final ByteBuffer byteBuffer = conn.download(path + fileInfo.getFilename(), null);
+                    InputStream inputStream = new ByteBufferBackedInputStream(byteBuffer);
+                    ctx.doInSync(() -> {
+                        PatchViewSwing.openPatch(fileInfo.getFilenameNoExtension(), inputStream);
+                    });
+                } catch (IOException ex) {
+                    Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+    }
+
+    private final class ElfHandler implements FileExtensionHandler {
+
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (fileInfo.getExtension().equals("elf")) {
+                return "Run patch";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
+            String patchname = fileInfo.getFilename();
+            try {
+                final IConnection conn = getDModel().getConnection();
+                conn.transmitStart(path + patchname, null);
+            } catch (IOException ex) {
+                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PatchLoadFailedException ex) {
+                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex.getMessage());
+            }
+
+        }
+
+    }
+
+    private final class MidiRoutingHandler implements FileExtensionHandler {
+
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (fileInfo.getExtension().equals("axr")) {
+                return "Open midi routing table";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
+            GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+                try {
+                    final IConnection conn = getDModel().getConnection();
+                    final ByteBuffer mem = conn.download(path + fileInfo.getFilename(), ctx);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("midi routing file contents:\n");
+                    while (mem.remaining() > 0) {
+                        int i = mem.getInt();
+                        for (int j = 0; j < 32; j++) {
+                            sb.append((i & 1) == 1 ? "1" : "0");
+                            i >>= 1;
+                        }
+                        sb.append("\n");
+                    }
+                    sb.append("\n");
+                    String s = sb.toString();
+                    ctx.doInSync(() -> {
+                        TextModel textModel = new TextModel(s);
+                        TextController textController = new TextController(textModel);
+                        TextEditor textEditor = new TextEditor(TextModel.TEXT, textModel, null);
+                        textController.addView(textEditor);
+                        textEditor.setTitle(fileInfo.getFilename());
+                        textEditor.setVisible(true);
+                        textEditor.toFront();
+                    });
+                } catch (IOException ex) {
+                    Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+    }
+
+    private final class DownloadHandler implements FileExtensionHandler {
+
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (!fileInfo.isDirectory()) {
+                return "Download";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
+            GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
+                try {
+                    final IConnection conn = getDModel().getConnection();
+                    final ByteBuffer mem = conn.download(path + fileInfo.getFilename(), ctx);
+                    mem.rewind();
+                    Path tempDirWithPrefix = Files.createTempDirectory("ax_");
+                    File f1 = new File(tempDirWithPrefix.toString() + "/" + fileInfo.getFilename());
+                    FileOutputStream fos = new FileOutputStream(f1);
+                    WritableByteChannel channel = Channels.newChannel(fos);
+                    channel.write(mem);
+                    // f1.deleteOnExit(); // TODO: (low priority) enable deleteOnExit - with care!
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop desktop = Desktop.getDesktop();
+                        desktop.open(tempDirWithPrefix.toFile());
+                        // TODO: (low priority) filemanager: watch folder with tmp downloads, auto-upload
+                        // WatchService watcher = FileSystems.getDefault().newWatchService();
+                        // tempDirWithPrefix.register(watcher, ENTRY_MODIFY);
+                    } else {
+                        System.out.println("desktop is not supported");
+                    }
+
+                } catch (IOException ex) {
+                    Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+    }
+
+    private final class DirHandler implements FileExtensionHandler {
+
+        @Override
+        public String takesFile(SDFileInfo fileInfo) {
+            if (fileInfo.isDirectory()) {
+                return "Open directory";
+            }
+            return null;
+        }
+
+        @Override
+        public void open(SDFileInfo fileInfo) {
+            String dirname = fileInfo.getFilename();
+            setPath(path + dirname);
+            requestRefresh();
+        }
+
+    }
+
+    private final FileExtensionHandler fileExtensionHandlers[] = {
+        new PatchBankHandler(),
+        new PatchHandler(),
+        new ElfHandler(),
+        new MidiRoutingHandler(),
+        new DirHandler(),
+        new TextFileHandler(),
+        new DownloadHandler()
+    };
+
+    private void open() {
+        int rowIndex = getSelectedRow();
+        if (rowIndex >= 0) {
+            final SDFileInfo f = getSDCardInfo().getFiles().get(rowIndex);
+            final IConnection conn = getDModel().getConnection();
+            for(FileExtensionHandler feh: fileExtensionHandlers) {
+                if (feh.takesFile(f) != null) {
+                    feh.open(f);
+                    return;
+                }
+            }
+        }
+    }
+
+
+    private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOpenActionPerformed
+        open();
     }//GEN-LAST:event_jButtonOpenActionPerformed
 
+    private void jButtonDirUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDirUpActionPerformed
+
+        String path1 = path;
+        if (path.charAt(path.length() - 1) == '/') {
+            path1 = path.substring(0, path.length() - 1);
+        }
+        int i = path1.lastIndexOf('/');
+        if (i > 0) {
+            setPath(path1.substring(0, i) + "/");
+        } else {
+            setPath("/");
+        }
+        requestRefresh();
+    }//GEN-LAST:event_jButtonDirUpActionPerformed
+
+    private void fileTableMouseClickedHandler(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fileTableMouseClickedHandler
+        if (evt.getClickCount() == 2 && getSelectedRow() != -1) {
+            jButtonOpenActionPerformed(new ActionEvent(ERROR, WIDTH, path));
+        }
+    }//GEN-LAST:event_fileTableMouseClickedHandler
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1Refresh;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
     private javax.swing.JButton jButtonCreateDir;
     private javax.swing.JButton jButtonDelete;
+    private javax.swing.JButton jButtonDirUp;
     private javax.swing.JButton jButtonOpen;
+    private javax.swing.JButton jButtonRefresh;
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JTable jFileTable;
+    private javax.swing.JLabel jLabelPath;
     private javax.swing.JLabel jLabelSDInfo;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     void showConnect(boolean status) {
-        jButton1Refresh.setEnabled(status);
+        jButtonRefresh.setEnabled(status);
         jButtonUpload.setEnabled(status);
         jFileTable.setEnabled(status);
         jLabelSDInfo.setText("");
         jButtonDelete.setEnabled(status);
         jButtonCreateDir.setEnabled(status);
+        jButtonDirUp.setEnabled(status);
+        if (status) {
+            path = "/";
+            requestRefresh();
+        } else {
+            setSDCardInfo(new SDCardInfo(0, 0, 0, Collections.emptyList()));
+        }
     }
 
     @Override
@@ -606,20 +863,24 @@ public class FileManagerFrame extends TJFrame {
         } else if (TargetModel.HAS_SDCARD.is(evt)) {
             Boolean b = (Boolean) evt.getNewValue();
             showConnect(b);
-        } else if (TargetModel.SDCARDINFO.is(evt)) {
-            SDCardInfo sdci = getSDCardInfo();
-            if (sdci != null) {
-                int clusters = sdci.getClusters();
-                int clustersize = sdci.getClustersize();
-                int sectorsize = sdci.getSectorsize();
-                jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
-            }
-            ((AbstractTableModel) jFileTable.getModel()).fireTableDataChanged();
         }
     }
 
+    SDCardInfo sdcardInfo;
+
     private SDCardInfo getSDCardInfo() {
-        return getDModel().getSDCardInfo();
+        return sdcardInfo;
+    }
+
+    private void setSDCardInfo(SDCardInfo sdcardInfo) {
+        this.sdcardInfo = sdcardInfo;
+        if (sdcardInfo != null) {
+            int clusters = sdcardInfo.getClusters();
+            int clustersize = sdcardInfo.getClustersize();
+            int sectorsize = sdcardInfo.getSectorsize();
+            jLabelSDInfo.setText("Free : " + ((long) clusters * (long) clustersize * (long) sectorsize / (1024 * 1024)) + "MB, Cluster size = " + clustersize * sectorsize);
+        }
+        ((AbstractTableModel) jFileTable.getModel()).fireTableDataChanged();
     }
 
 }

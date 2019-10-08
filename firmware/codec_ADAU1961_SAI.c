@@ -549,15 +549,16 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate, bool isMaster) {
       | STM32_DMA_CR_TEIE | STM32_DMA_CR_TCIE | STM32_DMA_CR_DBM | // double buffer mode
       STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD;
 
-  bool b;
   if  (isMaster){
-	  b = dmaStreamAllocate(sai_a_dma, STM32_SAI_A_IRQ_PRIORITY,
-	                               (stm32_dmaisr_t)dma_sai_a_interrupt_spilink_master,
-	                               (void *)0);
+    sai_a_dma = dmaStreamAlloc(STM32_SAI_A_DMA_STREAM,
+                               STM32_SAI_A_IRQ_PRIORITY,
+                               (stm32_dmaisr_t)dma_sai_a_interrupt_spilink_master,
+                               (void *)0);
   } else {
-	  b = dmaStreamAllocate(sai_a_dma, STM32_SAI_A_IRQ_PRIORITY,
-								   (stm32_dmaisr_t)dma_sai_a_interrupt_spilink_slave,
-								   (void *)0);
+    sai_a_dma = dmaStreamAlloc(STM32_SAI_A_DMA_STREAM,
+                               STM32_SAI_A_IRQ_PRIORITY,
+                               (stm32_dmaisr_t)dma_sai_a_interrupt_spilink_slave,
+                               (void *)0);
   }
   dmaStreamSetPeripheral(sai_a_dma, &(sai_a->DR));
   dmaStreamSetMemory0(sai_a_dma, buf);
@@ -567,15 +568,17 @@ void codec_ADAU1961_i2s_init(uint16_t sampleRate, bool isMaster) {
 
 
 #ifndef DEBUG_INT_ON_GPIO
-  b |= dmaStreamAllocate(sai_b_dma, STM32_SAI_B_IRQ_PRIORITY,
-                               (stm32_dmaisr_t)0,
-                               (void *)0);
+  sai_b_dma = dmaStreamAlloc(STM32_SAI_B_DMA_STREAM,
+                             STM32_SAI_B_IRQ_PRIORITY,
+                             (stm32_dmaisr_t)0,
+                             (void *)0);
 #else
-  b |= dmaStreamAllocate(sai_b_dma, STM32_SAI_B_IRQ_PRIORITY,
-		  	  	  	  	  	   dma_sai_b_interrupt,
-                               (void *)0);
+  sai_b_dma = dmaStreamAlloc(STM32_SAI_B_DMA_STREAM,
+                             STM32_SAI_B_IRQ_PRIORITY,
+                             dma_sai_b_interrupt,
+                             (void *)0);
 #endif
-  if (b){
+  if (!sai_b_dma){
     setErrorFlag(ERROR_CODEC_I2C);
   }
 

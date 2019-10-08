@@ -25,7 +25,6 @@ import axoloti.abstractui.PatchView;
 import axoloti.codegen.patch.PatchViewCodegen;
 import axoloti.connection.CConnection;
 import axoloti.connection.ConnectionStatusListener;
-import axoloti.connection.IConnection;
 import axoloti.job.GlobalJobProcessor;
 import axoloti.live.patch.PatchViewLive;
 import axoloti.mvc.IView;
@@ -41,7 +40,6 @@ import axoloti.swingui.components.PresetPanel;
 import axoloti.swingui.components.VisibleCablePanel;
 import axoloti.swingui.mvc.UndoListViewFrame;
 import axoloti.swingui.mvc.UndoUI;
-import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
@@ -278,9 +276,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (CConnection.getConnection().isConnected()) {
             showConnect();
         }
-
-        CConnection.getConnection().addConnectionStatusListener(this);
-        CConnection.getConnection().addSDCardMountStatusListener(this);
+        // TODO: ConnectionStatusListener
+//        CConnection.getConnection().addConnectionStatusListener(this);
+//        CConnection.getConnection().addSDCardMountStatusListener(this);
 
         getPatchView().getViewportView().getComponent().requestFocusInWindow();
 
@@ -417,8 +415,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     @Override
     public void close() {
         DocumentWindowList.unregisterWindow(this);
-        CConnection.getConnection().removeConnectionStatusListener(this);
-        CConnection.getConnection().removeSDCardMountStatusListener(this);
+        // TODO: ConnectionStatusListener
+//        CConnection.getConnection().removeConnectionStatusListener(this);
+//        CConnection.getConnection().removeSDCardMountStatusListener(this);
         getPatchView().dispose();
         dispose();
     }
@@ -838,11 +837,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         } else {
             patchController.setLocked(false);
-            try {
-                CConnection.getConnection().transmitStop();
-            } catch (IOException ex) {
-                Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }//GEN-LAST:event_jCheckBoxLiveActionPerformed
 
@@ -972,24 +966,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuGenerateCodeActionPerformed
 
     private void jMenuCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCompileCodeActionPerformed
-        try {
-            patchController.compile();
-        } catch (ExecutionFailedException ex) {
-            Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        throw new UnsupportedOperationException();
     }//GEN-LAST:event_jMenuCompileCodeActionPerformed
 
     private void jMenuUploadCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUploadCodeActionPerformed
-        try {
-            //patchController.GetQCmdProcessor().setPatchController(null);
-            IConnection conn = CConnection.getConnection();
-            conn.transmitStop();
-            TargetModel.getTargetModel().uploadPatchToMemory();
-//        patchController.GetQCmdProcessor().AppendToQueue(new QCmdStart(patchController));
-//patchController.GetQCmdProcessor().AppendToQueue(new QCmdLock(patchController));
-        } catch (IOException ex) {
-            Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        throw new UnsupportedOperationException();
     }//GEN-LAST:event_jMenuUploadCodeActionPerformed
 
     private void jMenuItemLockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLockActionPerformed
@@ -1054,13 +1035,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                 jCheckBoxMenuItemLive.setSelected(false);
             }
         } else {
-            try {
-                patchController.setLocked(false);
-                IConnection conn = CConnection.getConnection();
-                conn.transmitStop();
-            } catch (IOException ex) {
-                Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            patchController.setLocked(false);
         }
     }//GEN-LAST:event_jCheckBoxMenuItemLiveActionPerformed
 
@@ -1077,7 +1052,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuItemUploadSDStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUploadSDStartActionPerformed
         GlobalJobProcessor.getJobProcessor().exec((ctx) -> {
             try {
-                patchController.uploadToSDCard("/start.bin", ctx);
+                patchController.uploadToSDCard("/start.elf", ctx);
             } catch (IOException|ExecutionFailedException ex) {
                 ctx.reportException(ex);
             }
@@ -1121,12 +1096,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }//GEN-LAST:event_jMenuSaveCopyActionPerformed
 
     private void jMenuGenerateAndCompileCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGenerateAndCompileCodeActionPerformed
-        try {
-            patchController.writeCode();
-            patchController.compile();
-        } catch (ExecutionFailedException ex) {
-            Logger.getLogger(PatchFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        throw new UnsupportedOperationException();
     }//GEN-LAST:event_jMenuGenerateAndCompileCodeActionPerformed
 
     private void formWindowLostFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowLostFocus
@@ -1179,7 +1149,10 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             }
         }
         PatchViewCodegen pvcg = patchModel.getController().writeCode();
-        PatchViewLive pvl = new PatchViewLive(patchModel, pvcg);
+        Runnable openPatchEditor = ()->{
+            toFront();
+        };
+        PatchViewLive pvl = new PatchViewLive(patchModel, pvcg, openPatchEditor);
         pvl.goLive();
         return true;
     }

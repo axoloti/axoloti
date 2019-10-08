@@ -1,10 +1,13 @@
 This branch migrates from Chibios 2.6.x to 18.x
 This heavily impacts the usb device stack, moving from byte queues to the synchronous buffer API.
 
-* Note: the MIDI function call API changed from
-int8_t dev, int8_t port, ...
+* Note: the MIDI sending API changed from
+void MidiSend1(midi_device_t dev, int8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
 to 
-int8_t unused, int8_t virtual_port, ...
+void midiSend3(int port, uint8_t b0, uint8_t b1, uint8_t b2);
+where port is an index of the virtual port. Midi port routing can be edited via the menu "Board->MIDI Routing"
+
+* Note: the MIDI reception handler arguments changed:
 "OMNI" port/device works as before as long as only port 1 is used 
 of MIDI DIN, USB host and USB device, and if no input port mapping of any port 
 has multiple targets. Otherwise duplicated midi messages will be processed. 
@@ -20,3 +23,5 @@ for playing.
   objects/patches probably still need it.
 * USB MSC sdcard mounter: does not restart into normal mode, when ejecting disk on host.
 * TODO: midi clock: slaving, midi clock config in GUI
+
+* Known broken: table of parent patch accessed in subpatch

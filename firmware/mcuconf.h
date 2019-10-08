@@ -16,6 +16,9 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef MCUCONF_H
+#define MCUCONF_H
+
 /*
  * STM32F4xx drivers configuration.
  * The following settings override the default settings present in
@@ -31,7 +34,7 @@
  */
 
 #define STM32F4xx_MCUCONF
-#include "axoloti_defines.h"
+
 /*
  * HAL driver system settings.
  */
@@ -270,11 +273,10 @@
  */
 #include "mcuconf_community.h"
 
-#define SRAM1 __attribute__ ((section (".ram1")))
-#define SRAM2 __attribute__ ((section (".ram2")))
-#define SRAM3 __attribute__ ((section (".ram3")))
-#define CCM __attribute__ ((section (".ram4")))
-#define BKPSRAM __attribute__ ((section (".ram5")))
-#define DMA_MEM_FW __attribute__ ((section (".ram2")))
+#define SRAM3 __attribute__ ((section (".ram4")))
+#define CCM __attribute__ ((section (".ram5")))
+#define CCM_fw __attribute__ ((section (".ram6")))
+#define BKPSRAM __attribute__ ((section (".ram7")))
+#define DMA_MEM_FW __attribute__ ((section (".ram3")))
 
-
+#endif /* MCUCONF_H */

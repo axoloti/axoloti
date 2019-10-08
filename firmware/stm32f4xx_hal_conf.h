@@ -45,13 +45,9 @@
  extern "C" {
 #endif
 
-#undef __FPU_PRESENT
-#define STM32F427xx
 #include <stdint.h>
 #include <stm32f4xx.h>
-//#define __STM32F4xx_H
-//#include "stm32f427xx.h"
-//#include "stm32f4xxc.h"
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 

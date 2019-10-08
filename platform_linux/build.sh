@@ -87,55 +87,25 @@ mkdir -p "${PLATFORM_ROOT}/bin"
 mkdir -p "${PLATFORM_ROOT}/lib"
 mkdir -p "${PLATFORM_ROOT}/src"
 
+source ../platform_common/download_chibios.sh
 
-CH_VERSION=18.2.2
-if [ ! -d "${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}" ];
-then
-    cd "${PLATFORM_ROOT}/src"
-    ARDIR=ChibiOS_${CH_VERSION}
-    ARCHIVE=${ARDIR}.zip
-    if [ ! -f ${ARCHIVE} ];
-    then
-        echo "downloading ${ARCHIVE}"
-        curl -L https://sourceforge.net/projects/chibios/files/ChibiOS%20GPL3/Version%20${CH_VERSION}/${ARCHIVE} > ${ARCHIVE}
-    else
-        echo "${ARCHIVE} already downloaded"
-    fi
-    unzip -q -o ${ARCHIVE}
-    cd ${ARDIR}/ext
-    7z x ./fatfs-0.13_patched.7z
-    cd ../../
-    mv ${ARDIR} ../..
-
-
-    echo "fixing ChibiOS community from Axoloti/ChibiOS-Contrib"
-    cd ${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}
-    rm -rf community
-    git clone https://github.com/axoloti/ChibiOS-Contrib.git community
-    cd community
-    git checkout patch-2
-
-else
-    echo "chibios directory already present, skipping..."
-fi
-
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-8-2018-q4-major/bin/arm-none-eabi-gcc" ];
+if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc" ];
 then
     cd "${PLATFORM_ROOT}"
-    ARDIR=gcc-arm-none-eabi-8-2018q4
-    ARCHIVE_BASE="gcc-arm-none-eabi-8-2018-q4-major"
+    ARDIR=gcc-arm-none-eabi-7-2018q2
+    ARCHIVE_BASE="gcc-arm-none-eabi-7-2018-q2-update"
     ARCHIVE=${ARCHIVE_BASE}-linux.tar.bz2
     if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
-        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/8-2018q4/${ARCHIVE} > ${ARCHIVE}
+        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
     fi
     tar xfj ${ARCHIVE}
     rm ${ARCHIVE}
 else
-    echo "gcc-arm-none-eabi-8-2018-q4-major/bin/arm-none-eabi-gcc already present, skipping..."
+    echo "gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc already present, skipping..."
 fi
 
 if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ];

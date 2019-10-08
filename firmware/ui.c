@@ -291,19 +291,19 @@ void ProcessEncoderParameter(Parameter_t *p, int8_t v) {
 	case param_type_bin_1bit_momentary:
 	case param_type_bin_1bit_toggle:
 		if (v>0) {
-			ParameterChange(p,1,0xFFFFFFFF);
+		  parameter_setVal(p,1,0xFFFFFFFF);
 		} else {
-			ParameterChange(p,0,0xFFFFFFFF);
+		  parameter_setVal(p,0,0xFFFFFFFF);
 		}
 		break;
 	case param_type_int:
-		ParameterChange(p,p->d.intt.value + v,0xFFFFFFFF);
+	  parameter_setVal(p,p->d.intt.value + v,0xFFFFFFFF);
 		break;
 	case param_type_frac_sq27:
-		ParameterChange(p,__SSAT(p->d.frac.value + (v<<20),28),0xFFFFFFFF);
+	  parameter_setVal(p,__SSAT(p->d.frac.value + (v<<20),28),0xFFFFFFFF);
 		break;
 	case param_type_frac_uq27:
-		ParameterChange(p,__USAT(p->d.frac.value + (v<<20),27),0xFFFFFFFF);
+	  parameter_setVal(p,__USAT(p->d.frac.value + (v<<20),27),0xFFFFFFFF);
 		break;
 	default:
 		break;

@@ -23,23 +23,16 @@ public class ParameterInstanceLiveView extends View<ParameterInstance> {
 
     public byte[] TXData() {
         needsTransmit = false;
-        byte[] data = new byte[14];
-        data[0] = 'A';
-        data[1] = 'x';
-        data[2] = 'o';
-        data[3] = 'P';
-        int pid = model.getObjectInstance().getParent().getIID();
-        data[4] = (byte) pid;
-        data[5] = (byte) (pid >> 8);
-        data[6] = (byte) (pid >> 16);
-        data[7] = (byte) (pid >> 24);
+        byte[] data = new byte[8];
         int tvalue = getDModel().valToInt32(getDModel().getValue());
-        data[8] = (byte) tvalue;
-        data[9] = (byte) (tvalue >> 8);
-        data[10] = (byte) (tvalue >> 16);
-        data[11] = (byte) (tvalue >> 24);
-        data[12] = (byte) (index);
-        data[13] = (byte) (index >> 8);
+        data[0] = (byte) (index);
+        data[1] = (byte) (index >> 8);
+        data[2] = (byte) (index >> 16);
+        data[3] = (byte) (index >> 24);
+        data[4] = (byte) tvalue;
+        data[5] = (byte) (tvalue >> 8);
+        data[6] = (byte) (tvalue >> 16);
+        data[7] = (byte) (tvalue >> 24);
         return data;
     }
 

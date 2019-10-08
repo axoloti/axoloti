@@ -1,6 +1,7 @@
 #include "ch.h"
 #include "hal.h"
 #include "usbh_midi_class.h"
+#include "midi.h"
 #include "midi_buffer.h"
 #include "midi_usbh.h"
 #if HAL_USBH_USE_HID
