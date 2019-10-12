@@ -2,7 +2,7 @@ rem --- Builds bundle and runtime
 
 @echo off
 
-call build.bat
+rem call build.bat
 
 setlocal
 set JAVA_HOME=
@@ -38,10 +38,9 @@ if not exist "%ANT%" (
 
 cd %~dp0\..
 
-set PATH=%PATH%;%~dp0\bin;C:\Program Files (x86)\WiX Toolset v3.9\bin;C:\msys32\usr\bin
+set PATH=%PATH%;%~dp0\bin;C:\Program Files (x86)\WiX Toolset v3.11\bin;C:\msys32\usr\bin
 
 "%ANT%" -Dbuild.bundle=true bundle
-"%ANT%" -Dbuild.runtime=true runtime
 
 :end
 endlocal
