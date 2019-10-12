@@ -30,7 +30,7 @@ set ANT=%~dp0\apache-ant-1.9.4\bin\ant.bat
 
 echo ANT: %ANT%
 
-if not exist %ANT% (
+if not exist "%ANT%" (
    echo ANT not found, please run build.bat first
    pause
    goto :end
@@ -38,10 +38,10 @@ if not exist %ANT% (
 
 cd %~dp0\..
 
-set PATH=%PATH%;%~dp0\bin;C:\Program Files (x86)\WiX Toolset v3.9\bin
+set PATH=%PATH%;%~dp0\bin;C:\Program Files (x86)\WiX Toolset v3.9\bin;C:\msys32\usr\bin
 
-%ANT% -Dbuild.bundle=true bundle
-%ANT% -Dbuild.runtime=true runtime
+"%ANT%" -Dbuild.bundle=true bundle
+"%ANT%" -Dbuild.runtime=true runtime
 
 :end
 endlocal

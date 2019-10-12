@@ -2,7 +2,7 @@ null      :=
 SPACE     := $(null) $(null)
 
 ifeq ($(OS),Windows_NT)
-	include ${axoloti_env}/platform_win/path.mk
+	include $(subst $(SPACE),\ ,${axoloti_env}/platform_win/path.mk)
 else
 	UNAME_S = $(shell /bin/uname -s 2>/dev/null)
 	ifeq ($(UNAME_S),)
