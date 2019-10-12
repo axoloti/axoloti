@@ -137,20 +137,11 @@
 		<mkdir dir="build/runtime/tmp/axoloti_runtime" />
 
 		<!--Mac -->
+		<exec dir="." executable="mkdir" os="Mac OS X">
+			<arg line="-p build/runtime/tmp/axoloti_runtime/platform_osx/"/>
+		</exec>
 		<exec dir="." executable="cp" os="Mac OS X">
-			<arg line="-R platform_osx build/runtime/tmp/axoloti_runtime"/>
-		</exec>
-		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/share"/>
-		</exec>
-		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/src"/>
-		</exec>
-		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/arm-none-eabi/lib/armv6-m build/runtime/tmp/axoloti_runtime/platform_osx/arm-none-eabi/lib/armv7-ar build/runtime/tmp/axoloti_runtime/platform_osx/arm-none-eabi/lib/armv7-m "/>
-		</exec>
-		<exec dir="." executable="rm" os="Mac OS X">
-			<arg line="-rf build/runtime/tmp/axoloti_runtime/platform_osx/lib/gcc/arm-none-eabi/4.9.3/armv6-m build/runtime/tmp/axoloti_runtime/platform_osx/lib/gcc/arm-none-eabi/4.9.3/armv7-ar build/runtime/tmp/axoloti_runtime/platform_osx/lib/gcc/arm-none-eabi/4.9.3/armv7-m "/>
+			<arg line="-R platform_osx/gcc-arm-none-eabi-7-2018-q2-update build/runtime/tmp/axoloti_runtime/platform_osx/"/>
 		</exec>
 		<exec dir="." executable="hdiutil" os="Mac OS X">
 			<arg line="create -megabytes 512 build/runtime/macosx/axo_runtime_mac_${short.version}.dmg -volname 'Axoloti Runtime' -srcfolder build/runtime/tmp" />
@@ -246,8 +237,8 @@
       <fail message="firmware build does not exist?">
           <condition>
               <not>
-                  <resourcecount count="3">
-                      <fileset id="fs" dir="firmware" includes="build/axoloti.bin,mounter/mounter_build/mounter.elf,flasher/flasher_build/flasher.elf"/>
+                  <resourcecount count="2">
+                      <fileset id="fs" dir="firmware" includes="build/axoloti.bin,mounter/mounter_build/mounter.elf"/>
                   </resourcecount>
               </not>
           </condition>
@@ -284,6 +275,7 @@
              <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-osx-x86_64.jar"/>
              <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86.jar"/>
              <include name="usb4java-1.2.0/lib/libusb4java-1.2.0-windows-x86_64.jar"/>
+             <include name="usb4java-1.2.0/lib/commons-lang3-3.2.1.jar"/>
              <include name="piccolo2d-extras-3.1.jar"/>
              <include name="piccolo2d-core-3.1.jar"/>
              <include name="marlin-0.9.1-Unsafe.jar"/>
