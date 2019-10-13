@@ -7,28 +7,9 @@ PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
 mkdir -p "${PLATFORM_ROOT}/src"
 cd "${PLATFORM_ROOT}"
 
-git submodule update
+git submodule update --init --recursive
 
 source ../platform_common/download_chibios.sh
-
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2018q2/bin/arm-none-eabi-gcc" ];
-then
-    cd "${PLATFORM_ROOT}"
-    ARDIR=gcc-arm-none-eabi-7-2018q2
-    ARCHIVE_BASE="gcc-arm-none-eabi-7-2018-q2-update"
-    ARCHIVE=${ARCHIVE_BASE}-win32.zip
-    if [ ! -f ${ARCHIVE} ];
-    then
-        echo "downloading ${ARCHIVE}"
-		curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/${ARCHIVE} > ${ARCHIVE}
-    else
-        echo "${ARCHIVE} already downloaded"
-    fi
-    unzip -q -o ${ARCHIVE} -d ${ARDIR}
-    rm ${ARCHIVE}
-else
-    echo "gcc-arm-none-eabi-7-2018q2 present, skipping..."
-fi
 
 if [ ! -f "bin/make.exe" ];
 then
@@ -39,7 +20,6 @@ then
 else
     echo "make already present, skipping...."
 fi
-
 
 if [ ! -f "bin/libiconv2.dll" ];
 then

@@ -4,11 +4,12 @@ call :setfirmware "%axoloti_firmware%"
 call :sethome "%axoloti_home%"
 call :setrelease "%axoloti_release%"
 
-set PATH=%axoloti_runtime%\platform_win\gcc-arm-none-eabi-7-2018q2\bin;%axoloti_runtime%\platform_win\bin
-
-echo %PATH%
 arm-none-eabi-gcc --version
-
+IF %ERRORLEVEL% NEQ 0 (
+	echo ERROR: arm-none-eabi-gcc not in path
+	echo PATH=%PATH%
+	exit /b 1
+)
 echo "setup build dir"
 cd %axoloti_firmware%
 if not exist ".dep\" mkdir .dep
