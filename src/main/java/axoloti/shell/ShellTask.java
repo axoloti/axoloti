@@ -1,7 +1,9 @@
 package axoloti.shell;
 
+import axoloti.Axoloti;
 import axoloti.job.IJob;
 import axoloti.job.IJobContext;
+import axoloti.preferences.Preferences;
 import axoloti.utils.OSDetect;
 import java.io.BufferedReader;
 import java.io.File;
@@ -74,37 +76,10 @@ public class ShellTask {
         }
     }
 
-    public static String getRuntimeDir() {
-        return System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
-    }
-
-    public static String getHomeDir() {
-        return System.getProperty(axoloti.Axoloti.HOME_DIR);
-    }
-
-    public static String getBuildDir() {
-        return System.getProperty(axoloti.Axoloti.HOME_DIR) + "/build";
-    }
-
-    public static String getReleaseDir() {
-        return System.getProperty(axoloti.Axoloti.RELEASE_DIR);
-    }
-
-    public static String getFirmwareDir() {
-        return System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
-    }
-
-    public static String getAPIDir() {
-        return System.getProperty(axoloti.Axoloti.API_DIR);
-    }
-
-    public static String getEnvDir() {
-        return System.getProperty(axoloti.Axoloti.ENV_DIR);
-    }
 
     public static String getMake() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return getRuntimeDir() + "/platform_win/bin/make.exe";
+            return Axoloti.getReleaseDir() + "/platform_win/bin/make.exe";
         }
         return "make";
     }
@@ -124,24 +99,22 @@ public class ShellTask {
         }
         String axPath;
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            axPath = getRuntimeDir() + "/platform_win/bin";
+            axPath = Axoloti.getReleaseDir() + "/platform_win/bin;C:/Program Files (x86)/GNU Tools Arm Embedded/7 2018-q2-update/bin;" + Preferences.getPreferences().getPath();
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            axPath = getRuntimeDir() + "/platform_osx/bin";
+            axPath = Axoloti.getReleaseDir() + "/platform_osx/bin:/Applications/gcc-arm-none-eabi-7-2018-q2-update/bin:" + Preferences.getPreferences().getPath();
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
             // on linux we can use "make" etc from system path
-            axPath = getRuntimeDir() + "/platform_linux/bin:" + sysPath;
+            axPath = Axoloti.getReleaseDir() + "/platform_linux/bin:" + sysPath;
         } else {
-            Logger.getLogger(CompileFirmware.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
+            Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
         }
         list.add(("PATH=" + axPath));
         list.add(("Path=" + axPath));
-        list.add((axoloti.Axoloti.RUNTIME_DIR + "=" + getRuntimeDir()));
-        list.add((axoloti.Axoloti.HOME_DIR + "=" + getHomeDir()));
-        list.add((axoloti.Axoloti.RELEASE_DIR + "=" + getReleaseDir()));
-        list.add((axoloti.Axoloti.FIRMWARE_DIR + "=" + getFirmwareDir()));
-        list.add((axoloti.Axoloti.API_DIR + "=" + getAPIDir()));
-        list.add((axoloti.Axoloti.ENV_DIR + "=" + getEnvDir()));
+        list.add((axoloti.Axoloti.HOME_DIR + "=" + Axoloti.getHomeDir()));
+        list.add((axoloti.Axoloti.RELEASE_DIR + "=" + Axoloti.getReleaseDir()));
+        list.add((axoloti.Axoloti.API_DIR + "=" + Axoloti.getAPIDir()));
+        list.add((axoloti.Axoloti.ENV_DIR + "=" + Axoloti.getEnvDir()));
 
         String vars[] = list.toArray(new String[0]);
         return vars;

@@ -2,7 +2,7 @@
 # Compiler settings
 #
 
-TRGT = $(GCCBINPATH)/arm-none-eabi-
+TRGT = $(GCCBINPATH)arm-none-eabi-
 CC   = $(TRGT)gcc
 CPPC = $(TRGT)g++
 # Enable loading with g++ only if you need C++ runtime support.

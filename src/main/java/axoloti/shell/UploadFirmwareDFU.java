@@ -1,7 +1,9 @@
 package axoloti.shell;
 
+import axoloti.Axoloti;
 import axoloti.job.GlobalJobProcessor;
 import axoloti.utils.OSDetect;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,11 +19,11 @@ public class UploadFirmwareDFU {
     private static String[] getExec(String firmwareFilename) {
         String dfu_util_filename = "";
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            dfu_util_filename = ShellTask.getRuntimeDir() + "/platform_win/bin/dfu-util";
+            dfu_util_filename = Axoloti.getReleaseDir() + "/platform_win/bin/dfu-util";
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            dfu_util_filename = ShellTask.getRuntimeDir() + "/platform_osx/bin/dfu-util";
+            dfu_util_filename = Axoloti.getReleaseDir() + "/platform_osx/bin/dfu-util";
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
-            dfu_util_filename = ShellTask.getRuntimeDir() + "/platform_linux/bin/dfu-util";
+            dfu_util_filename = Axoloti.getReleaseDir() + "/platform_linux/bin/dfu-util";
         } else {
             Logger.getLogger(UploadFirmwareDFU.class.getName()).log(Level.SEVERE, "UPLOAD: OS UNKNOWN!");
             return null;
@@ -35,7 +37,7 @@ public class UploadFirmwareDFU {
     }
 
     private static String getWorkingDir() {
-        return System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
+        return System.getProperty(axoloti.Axoloti.RELEASE_DIR + File.separator + "firmware");
     }
 
     private static void run(String firmwareFilename) {
@@ -55,7 +57,7 @@ public class UploadFirmwareDFU {
     }
 
     public static void doit() {
-        String firmwareFilename = ShellTask.getFirmwareDir() + "/build/axoloti.bin";
+        String firmwareFilename = Axoloti.getFirmwareFilename();
         Thread thread = new Thread(() -> run(firmwareFilename));
         thread.start();
     }

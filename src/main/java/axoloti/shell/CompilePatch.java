@@ -1,5 +1,6 @@
 package axoloti.shell;
 
+import axoloti.Axoloti;
 import axoloti.job.IJobContext;
 import axoloti.job.JobContext;
 import axoloti.target.fs.SDFileReference;
@@ -25,12 +26,12 @@ import java.util.logging.Logger;
 public class CompilePatch {
 
     private static String getWorkingDir() {
-        return ShellTask.getAPIDir();
+        return Axoloti.getAPIDir();
     }
 
     private static String[] getExec() {
         // TODO: check path inconsistency WIN/MAC/LINUX
-        String envDir = ShellTask.getEnvDir();
+        String envDir = Axoloti.getEnvDir();
         String makeCmd = ShellTask.getMake();
         String platformEnvDir;
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
@@ -52,7 +53,7 @@ public class CompilePatch {
     }
 
     public static CompilePatchResult run(String[] env, String patchSourceCode) throws ExecutionFailedException {
-        String buildDir = ShellTask.getBuildDir();
+        String buildDir = Axoloti.getBuildDir();
         String fn = buildDir + "/xpatch.cpp";
         File fd = new File(fn);
         try (FileOutputStream f = new FileOutputStream(fd)) {
@@ -80,8 +81,8 @@ public class CompilePatch {
         boolean success = shellTask.isSuccess();
         if (success) {
             println("Done compiling patch");
-            String elffname = ShellTask.getBuildDir() + "/xpatch.elf";
-            String fdepsfname = ShellTask.getBuildDir() + "/filedeps.txt";
+            String elffname = Axoloti.getBuildDir() + "/xpatch.elf";
+            String fdepsfname = Axoloti.getBuildDir() + "/filedeps.txt";
             byte elfdata[];
             try {
                 elfdata = Files.readAllBytes(new File(elffname).toPath());

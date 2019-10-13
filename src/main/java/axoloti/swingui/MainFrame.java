@@ -18,10 +18,8 @@
 package axoloti.swingui;
 
 import axoloti.Axoloti;
-import static axoloti.Axoloti.FIRMWARE_DIR;
 import static axoloti.Axoloti.HOME_DIR;
 import static axoloti.Axoloti.RELEASE_DIR;
-import static axoloti.Axoloti.RUNTIME_DIR;
 import axoloti.Version;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.connection.CConnection;
@@ -237,13 +235,6 @@ public class MainFrame extends TJFrame implements ActionListener {
 
         if (!getTestDir(RELEASE_DIR, false)) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Release directory is invalid:{0}, does it exist?", System.getProperty(Axoloti.RELEASE_DIR));
-        }
-        if (!getTestDir(RUNTIME_DIR, false)) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Runtime directory is invalid:{0}, is the runtime installed? correctly?", System.getProperty(Axoloti.RUNTIME_DIR));
-        }
-
-        if (!getTestDir(FIRMWARE_DIR, false)) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware directory is invalid:{0}, does it exist?", System.getProperty(Axoloti.FIRMWARE_DIR));
         }
 
         // do NOT do any serious initialisation in constructor
@@ -845,7 +836,7 @@ public class MainFrame extends TJFrame implements ActionListener {
                 "Firmware update...",
                 JOptionPane.YES_NO_OPTION);
         if (s == 0) {
-            String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
+            String pname = Axoloti.getFirmwareFilename();
             try {
                 getDModel().flashUsingSDRam(pname);
             } catch (IOException ex) {

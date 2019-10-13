@@ -43,13 +43,10 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Axoloti {
 
-    public final static String RUNTIME_DIR = "axoloti_runtime";
     public final static String HOME_DIR = "axoloti_home";
     public final static String RELEASE_DIR = "axoloti_release";
-    public final static String FIRMWARE_DIR = "axoloti_firmware";
     public final static String API_DIR = "axoloti_api";
     public final static String ENV_DIR = "axoloti_env";
-    public final static String CHIBIOS_DIR = "axoloti_chibios";
 
     /**
      * @param args the command line arguments
@@ -122,33 +119,15 @@ public class Axoloti {
     }
 
     // cache this, as it linked to checks on the UI/menu
-    private static String cacheFWDir = null;
-    private static boolean cacheDeveloper = false;
+    private static Boolean cacheDeveloper = false;
 
     public static boolean isDeveloper() {
-        String fwEnv = System.getProperty(FIRMWARE_DIR);
-        if (cacheFWDir != null && fwEnv.equals(cacheFWDir)) {
+        if (cacheDeveloper != null) {
             return cacheDeveloper;
         }
-        cacheFWDir = fwEnv;
-        cacheDeveloper = false;
         String dirRelease = System.getProperty(RELEASE_DIR);
-        String fwRelease = dirRelease + File.separator + "firmware";
-        if (!fwRelease.equals(cacheFWDir)) {
-            File fR = new File(fwRelease);
-            File fE = new File(fwEnv);
-            try {
-                cacheDeveloper = !fR.getCanonicalPath().equals(fE.getCanonicalPath());
-            } catch (IOException ex) {
-                Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
-                cacheDeveloper = false;
-            }
-        } else {
-            File f = new File(dirRelease + File.separator + ".git");
-            if (f.exists()) {
-                cacheDeveloper = true;
-            }
-        }
+        File f = new File(dirRelease + File.separator + ".git");
+        cacheDeveloper = f.exists();
         return cacheDeveloper;
     }
 
@@ -172,6 +151,30 @@ public class Axoloti {
 
     public static boolean isFailSafeMode() {
         return failSafeMode;
+    }
+
+    public static String getFirmwareFilename() {
+        return System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/build/axoloti.bin";
+    }
+
+    public static String getHomeDir() {
+        return System.getProperty(axoloti.Axoloti.HOME_DIR);
+    }
+
+    public static String getBuildDir() {
+        return System.getProperty(axoloti.Axoloti.HOME_DIR) + "/build";
+    }
+
+    public static String getReleaseDir() {
+        return System.getProperty(axoloti.Axoloti.RELEASE_DIR);
+    }
+
+    public static String getAPIDir() {
+        return System.getProperty(axoloti.Axoloti.API_DIR);
+    }
+
+    public static String getEnvDir() {
+        return System.getProperty(axoloti.Axoloti.ENV_DIR);
     }
 
     public static void initProperties() throws URISyntaxException, IOException {
@@ -242,10 +245,6 @@ public class Axoloti {
         if (!getTestDir(RELEASE_DIR)) {
             System.err.println("Release directory is invalid");
         }
-        buildEnvironment(RUNTIME_DIR, defaultRuntime);
-        if (!getTestDir(RUNTIME_DIR)) {
-            System.err.println("Runtime directory is invalid");
-        }
         buildEnvironment(API_DIR, System.getProperty(RELEASE_DIR) + File.separator + "api");
         if (!getTestDir(API_DIR)) {
             System.err.println(API_DIR + ": directory is invalid");
@@ -254,23 +253,9 @@ public class Axoloti {
         if (!getTestDir(ENV_DIR)) {
             System.err.println(ENV_DIR + ": ENV directory is invalid");
         }
-        buildEnvironment(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
-        if (!getTestDir(FIRMWARE_DIR)) {
-            System.err.println("Firmware directory is invalid");
-        }
-        buildEnvironment(CHIBIOS_DIR, System.getProperty(RELEASE_DIR) + File.separator + "ChibiOS_19.1.3");
-        if (!getTestDir(CHIBIOS_DIR)) {
-            System.err.println("chibios directory is invalid");
-        }
 
         Preferences prefs = Preferences.getPreferences();
         if (versionedHome) {
-            String fwDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
-            if (!fwDir.startsWith(System.getProperty(RELEASE_DIR)) && !fwDir.startsWith(System.getProperty(HOME_DIR))) {
-                System.out.println("Using versioned home, will reset firmware");
-                prefs.setFirmwareDir(System.getProperty(RELEASE_DIR) + File.separator + "firmware");
-            }
-
             AxolotiLibrary lib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
             if (lib != null) {
                 File locdir = new File(lib.getLocalLocation());
@@ -286,10 +271,7 @@ public class Axoloti {
                 + "Current = " + curDir + "\n"
                 + "Jar = " + jarDir + "\n"
                 + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
-                + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
-                + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
                 + "AxolotiHome = " + System.getProperty(HOME_DIR) + "\n"
-                + "Chibios = " + System.getProperty(CHIBIOS_DIR) + "\n"
         );
     }
 

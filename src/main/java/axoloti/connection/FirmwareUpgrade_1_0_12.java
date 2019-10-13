@@ -234,8 +234,7 @@ public class FirmwareUpgrade_1_0_12 {
     public void uploadFWSDRam(File firmwareFile) {
         clearSync();
         if (firmwareFile == null) {
-            String buildDir = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build";
-            firmwareFile = new File(buildDir + "/axoloti.bin");
+            firmwareFile = new File(Axoloti.getFirmwareFilename());
         }
         Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.INFO, "firmware file path: {0}", firmwareFile.getAbsolutePath());
         int tlength = (int) firmwareFile.length();

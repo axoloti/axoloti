@@ -10,7 +10,6 @@ import axoloti.job.GlobalJobProcessor;
 import axoloti.job.IJobContext;
 import axoloti.mvc.IView;
 import axoloti.preferences.Preferences;
-import axoloti.shell.CompileFirmware;
 import axoloti.shell.UploadFirmwareDFU;
 import axoloti.swingui.dialogs.USBPortSelectionDlg;
 import axoloti.target.TargetModel;
@@ -43,7 +42,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
 
     private JMenuItem jMenuItemSelectCom;
     private JMenuItem jMenuItemEnterDFU;
-    private JMenuItem jMenuItemFCompile;
     private JMenuItem jMenuItemFConnect;
     private JMenuItem jMenuItemFDisconnect;
     private JMenuItem jMenuItemFlashDFU;
@@ -181,15 +179,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         jDevSeparator = new JSeparator();
         jMenuFirmware.add(jDevSeparator);
 
-        jMenuItemFCompile = new JMenuItem("Compile");
-        jMenuItemFCompile.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemFCompileActionPerformed(evt);
-            }
-        });
-        jMenuFirmware.add(jMenuItemFCompile);
-
         jMenuItemEnterDFU = new JMenuItem("Enter Rescue mode");
         jMenuItemEnterDFU.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -214,7 +203,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
 
         jMenuItemEnterDFU.setVisible(Axoloti.isDeveloper());
         jMenuItemFlashSDR.setVisible(Axoloti.isDeveloper());
-        jMenuItemFCompile.setVisible(Axoloti.isDeveloper());
         jDevSeparator.setVisible(Axoloti.isDeveloper());
 
         add(jMenuFirmware);
@@ -340,16 +328,12 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {
-        String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
+        String pname = Axoloti.getFirmwareFilename();
         try {
             getDModel().flashUsingSDRam(pname);
         } catch (IOException ex) {
             Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private void jMenuItemFCompileActionPerformed(java.awt.event.ActionEvent evt) {
-        CompileFirmware.doit();
     }
 
     private void jMenuItemEnterDFUActionPerformed(java.awt.event.ActionEvent evt) {
@@ -365,17 +349,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {
-        String curFirmwareDir = System.getProperty(Axoloti.FIRMWARE_DIR);
-        String sysFirmwareDir = System.getProperty(Axoloti.RELEASE_DIR) + "/firmware";
-
-        if (!curFirmwareDir.equals(sysFirmwareDir)) {
-            // if we are using the factory firmware, then we must switch back the firmware dir
-            // as this is where we pick up axoloti.elf from when building a patch
-            Preferences.getPreferences().setFirmwareDir(sysFirmwareDir);
-            Preferences.getPreferences().savePrefs();
-        }
-
-        String pname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin";
+        String pname = Axoloti.getFirmwareFilename();
         try {
             getDModel().flashUsingSDRam(pname);
         } catch (IOException ex) {
@@ -408,7 +382,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {
         GlobalJobProcessor.getJobProcessor().exec(ctx -> {
             String elfname = "mounter.elf";
-            String fname = System.getProperty(Axoloti.FIRMWARE_DIR) + "/mounter/mounter_build/" + elfname;
+            String fname = System.getProperty(Axoloti.RELEASE_DIR) + "firmware/mounter/mounter_build/" + elfname;
             Path fileLocation = Paths.get(fname);
             byte[] data;
             try {

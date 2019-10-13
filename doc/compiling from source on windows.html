@@ -9,15 +9,13 @@
         Download and install msys2-i686 from <a href="http://msys2.github.io/">http://msys2.github.io/</a>.
         Use the default settings. Follow the instructions on the webpage.
         <h2>Install JDK</h2>
-        Download and run the JDK installer from <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>
-        pick "jdk-8u...-windows-i586.exe"
-        For developers, I recommend downloading and installing the Netbeans with JDK package from <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html">http://www.oracle.com/technetwork/java/javase/downloads/jdk-netbeans-jsp-142931.html</a>
+        Download and run the JDK installer from <a href="https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/downloads-list.html">Amazon</a>
+        pick "amazon-corretto-8...-windows-x86.msi"
         <h2>Get Axoloti</h2>
         Clone the axoloti repository using the github windows client, or using the command line (the MSYS2 shell provides git command line tools).<p>
         <code>
             C:\Users\joe> <b>git clone https://github.com/axoloti/axoloti.git</b><br>
-            C:\Users\joe> <b>cd axoloti</b><br>       
-            C:\Users\joe\axoloti> <b>git submodule update --init --recursive</b><br>       
+            C:\Users\joe> <b>cd axoloti</b><br>
         </code>
         <h2>Compile Axoloti</h2>
         Run the "build.bat" script in the platform_win directory. This will download, extract, and compile all necessary tools.<p>
@@ -26,7 +24,6 @@
             C:\Users\joe\axoloti\platform_win> <b>build.bat</b><br>
             C:\Users\joe\axoloti\platform_win> <b>cd ..</b><br>
         </code>
-        Note: the dfu-util executable build with msys2 does not work properly... The <a href="https://github.com/axoloti/axoloti/releases/download/1.0.6/axo_runtime_win-1.0.6.zip">windows runtime</a> contains a working libusb + dfu-util.
         <h2>Launching Axoloti</h2>
         <code>
             C:\Users\joe\axoloti> <b>axoloti.bat</b><br>

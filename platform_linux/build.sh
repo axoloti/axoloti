@@ -87,6 +87,8 @@ mkdir -p "${PLATFORM_ROOT}/bin"
 mkdir -p "${PLATFORM_ROOT}/lib"
 mkdir -p "${PLATFORM_ROOT}/src"
 
+git submodule update --init --recursive
+
 source ../platform_common/download_chibios.sh
 
 if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc" ];

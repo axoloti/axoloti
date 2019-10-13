@@ -78,8 +78,11 @@ public class Preferences {
     @Deprecated
     @Element(required = false)
     private String MidiInputDevice;
+    @Deprecated
     @Element(required = false)
     private String RuntimeDir;
+    @Element(required = false)
+    private String path;
     @Element(required = false)
     private String FirmwareDir;
     @Element(required = false)
@@ -287,20 +290,6 @@ public class Preferences {
                     prefs = new Preferences();
                 }
                 singleton = prefs;
-                if (prefs.RuntimeDir
-                        == null) {
-                    prefs.RuntimeDir = System.getProperty(axoloti.Axoloti.RUNTIME_DIR);
-                    prefs.setDirty();
-                } else {
-                    System.setProperty(axoloti.Axoloti.RUNTIME_DIR, prefs.RuntimeDir);
-                }
-                if (prefs.FirmwareDir
-                        == null) {
-                    prefs.FirmwareDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
-                    prefs.setDirty();
-                } else {
-                    System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, prefs.FirmwareDir);
-                }
 
                 if (prefs.libraries.isEmpty()) {
                     prefs.resetLibraries(false);
@@ -401,14 +390,15 @@ public class Preferences {
         setDirty();
     }
 
-    public void setFirmwareDir(String dir) {
-        FirmwareDir = dir;
-        System.setProperty(axoloti.Axoloti.FIRMWARE_DIR, dir);
+    public String getPath() {
+        if (path == null) {
+            return "";
+        }
+        return path;
     }
 
-    public void setRuntimeDir(String dir) {
-        RuntimeDir = dir;
-        System.setProperty(axoloti.Axoloti.RUNTIME_DIR, dir);
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getBoardName(String cpu) {

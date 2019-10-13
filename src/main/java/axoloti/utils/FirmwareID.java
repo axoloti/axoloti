@@ -35,7 +35,7 @@ public class FirmwareID {
     }
 
     static public String getFirmwareID() {
-        File f = new File(System.getProperty(Axoloti.FIRMWARE_DIR) + "/build/axoloti.bin");
+        File f = new File(Axoloti.getFirmwareFilename());
         if (!f.canRead()) {
             return "Please compile the firmware first";
         }

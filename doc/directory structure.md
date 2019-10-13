@@ -1,4 +1,5 @@
 * api : all headers, no references to firmware
+* env : resolve the compiler environment
 * ChibiOS_x.y.z : real time operating system for firmware
 * firmware : the firmware running on the board
 * firmware/genapi : api generator (used for api/hal.h and api/ch.h)
