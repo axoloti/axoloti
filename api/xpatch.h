@@ -6,6 +6,7 @@
 #define FALSE 0
 #define TRUE  1
 
+#include <math.h>
 #include "axoloti_filters.h"
 #include "axoloti_math.h"
 #include "axoloti_memory.h"

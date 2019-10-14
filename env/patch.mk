@@ -112,7 +112,7 @@ all : .filedeps ${XPATCH}.elf  ${XPATCH}.dbg.lst  ${XPATCH}.read
 
 %.dbg.elf : %.o
 	$(info linking $(@:.o=))
-	@"$(LD)" $(LDFLAGS) "$<" ${ALLLIBS} -T"${LDSCRIPT}" -Wl,-Map="$(@:.elf=.map)",--cref -o "$@"
+	@"$(LD)" $(LDFLAGS) "$<" ${ALLLIBS} -T"${LDSCRIPT}" -Wl,-Map="$(@:.elf=.map)",--cref -o "$@" -lm
 
 %.elf : %.dbg.elf
 	@"$(STRP)" -g --strip-unneeded -o "$@" "$<"

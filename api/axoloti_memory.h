@@ -23,6 +23,9 @@ static inline void* ax_malloc(size_t size, mem_type_flags_t mem_type) {
 }
 void ax_free(void *ptr);
 
+// legacy wrapper
+#define sdram_malloc(X) ax_malloc(X, mem_type_hint_large)
+
 // for statically allocated memory, use these macros:
 #define SECTION_SDRAM_DATA __attribute__ ((section ( ".sdramdata" )))
 #define SECTION_SDRAM_BSS __attribute__ ((section ( ".sdram" )))

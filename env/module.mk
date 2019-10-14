@@ -43,5 +43,5 @@ LDFLAGS = \
 	-mthumb \
 	-mno-thumb-interwork
 
-LDSCRIPT = ${axoloti_env_}/elf.ld
+LDSCRIPT = ${axoloti_env}/elf.ld
 
