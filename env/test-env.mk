@@ -2,10 +2,10 @@ include path.mk
 include arm-none-eabi.mk
 
 CPPVER_REF = 7-2018-q2
-CPPVER = $(shell "$(CPPC)" --version)
+CPPVER = $(shell "$(CXX)" --version)
 
 ifeq "$(CPPVER)" ""
-$(info compiler not found at $(CPPC), path=$(PATH), not installed?)
+$(info compiler $(CXX) not found in path=$(PATH), not installed?)
 $(info Please download and install GNU Arm Embedded Toolchain 7-2018-q2-update)
 ifeq ($(OS),Windows_NT)
 $(info https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-win32-sha2.exe)
@@ -31,9 +31,38 @@ $(info axoloti_home = ${axoloti_home})
 $(info axoloti_api = ${axoloti_api})
 $(info axoloti_env = ${axoloti_env})
 $(info CPPCP = ${CPPC})
-$(error unexpected compiler version: $(CPPVER), expected $(CPPVER_REF))
+$(error Unexpected compiler version: $(CPPVER), expected $(CPPVER_REF))
 endif
+
+MAKE_VER_REF = GNU Make 4.2
+MAKE_VER = $(shell make --version)
+
+ifeq "$(MAKE_VER)" ""
+$(info "make" not found in path=$(PATH), not installed?)
+endif
+ifeq "$(findstring $(MAKE_VER_REF), $(MAKE_VER))" ""
+$(info Unexpected Make version, expected ${MAKE_VER_REF}, but found: ${MAKE_VER})
+endif
+
+# test for spaces
+space :=
+space +=
+ifneq (,$(findstring $(space),$(axoloti_api)))
+$(info There is space character in the path of axoloti_api=$(axoloti_api))
+$(info Please fix!)
+endif
+ifneq (,$(findstring $(space),$(axoloti_home)))
+$(info There is space character in the path of axoloti_home=$(axoloti_home))
+$(info Please fix!)
+endif
+ifneq (,$(findstring $(space),$(axoloti_env)))
+$(info There is space character in the path of axoloti_env=$(axoloti_env))
+$(info Please fix!)
+endif
+
+.SILENT:
 
 all: hello
 
 hello:
+	@
