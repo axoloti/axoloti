@@ -11,52 +11,17 @@ git submodule update --init --recursive
 
 source ../platform_common/download_chibios.sh
 
-if [ ! -f "bin/make.exe" ];
+if [ ! -f "bin/sh.exe" ];
 then
-    echo "downloading make"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/make-bin-zip.php > make-3.81-bin.zip
-    unzip -q -o make-3.81-bin.zip
-    rm make-3.81-bin.zip
+    build_tools_fn=gnu-mcu-eclipse-windows-build-tools-2.12-20190422-1053-win32.zip
+    echo "downloading ${build_tools_fn}"
+    curl -L https://github.com/gnu-mcu-eclipse/windows-build-tools/releases/download/v2.12-20190422/${build_tools_fn} > ${build_tools_fn}
+    unzip -q -o ${build_tools_fn}
+    mv GNU\ MCU\ Eclipse/Build\ Tools/2.12-20190422-1053/bin/* bin/
+    rm -r GNU\ MCU\ Eclipse/Build\ Tools/2.12-20190422-1053
+    rm ${build_tools_fn}
 else
     echo "make already present, skipping...."
-fi
-
-if [ ! -f "bin/libiconv2.dll" ];
-then
-    echo "downloading make-dep"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/make-dep-zip.php > make-3.81-dep.zip
-    unzip -q -o make-3.81-dep.zip
-    rm make-3.81-dep.zip
-fi
-
-if [ ! -f "bin/rm.exe" ];
-then
-    echo "downloading gnuwin32 coreutils"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php > coreutils-5.3.0-bin.zip
-    unzip -q -o coreutils-5.3.0-bin.zip
-    rm coreutils-5.3.0-bin.zip
-else
-    echo "gnuwin32 coreutils already present, skipping...."
-fi
-
-if [ ! -f "bin/egrep.exe" ];
-then
-    echo "downloading grep"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/grep-bin-zip.php > grep-2.5.3-bin.zip
-    unzip -q -o grep-2.5.3-bin.zip
-    rm grep-2.5.3-bin.zip
-else
-    echo "gnuwin32 grep already present, skipping...."
-fi
-
-if [ ! -f "bin/regex2.dll" ];
-then
-    echo "downloading grep-dependencies"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/grep-dep-zip.php > grep-2.5.3-dep.zip
-    unzip -q -o grep-2.5.3-dep.zip
-    rm grep-2.5.3-dep.zip
-else
-    echo "gnuwin32 grep-dependencies already present, skipping...."
 fi
 
 if [ ! -d "apache-ant-1.9.4" ];

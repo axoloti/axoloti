@@ -4,7 +4,7 @@
 
 TRGT = $(GCCBINPATH)arm-none-eabi-
 CC   = $(TRGT)gcc
-CPPC = $(TRGT)g++
+CXX  = $(TRGT)g++
 # Enable loading with g++ only if you need C++ runtime support.
 # NOTE: You can use C++ even without C++ support if you are careful. C++
 #       runtime support makes code size explode.

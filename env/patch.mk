@@ -1,26 +1,14 @@
 SPACE :=
 SPACE +=
-sq = $(subst $(SPACE),?,$1)
-qs = $(subst ?,$(SPACE),$1)
-qsb = $(subst ?,\ ,$1)
-
-axoloti_api_= $(call sq,${axoloti_api})
-#$(info axoloti_api_ = ${axoloti_api_})
-
-axoloti_env_=$(call sq,${axoloti_env})
-#$(info axoloti_env_ = ${axoloti_env_})
 
 axoloti_runtime ?= ..
 axoloti_home ?= ..
 
 include arm-none-eabi.mk
 include path.mk
-include $(subst $(SPACE),\ ,${axoloti_api}/api.mk)
+include ${axoloti_api}/api.mk
 
-BDIR=$(subst $(SPACE),\ ,${axoloti_home}/build)
-# theoretically should be this...., 
-# but CSRC expansion cannot cope with escape spaces [is this still an issue?]
-# FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
+BDIR=${axoloti_home}/build
 
 CCFLAGS = -ggdb3 \
 	-std=c++11 \
@@ -75,25 +63,34 @@ DEFS = \
 #$(info ALLINCDIR = ${ALLINCDIR})
 #$(info ALLINC = ${ALLINC})
 
-
 default: all
 
-#(info MODULEPATHS = ${MODULEPATHS})
-$(foreach _MODULE_SRC_DIR,$(MODULEPATHS), \
-  $(eval $(info processing module $(_MODULE_SRC_DIR)) \
-  $(eval MODULE_SRC_DIR := $(call qs,$(_MODULE_SRC_DIR))) \
-  $(eval MODULE = $(notdir ${_MODULE_SRC_DIR})) \
-  $(eval include $(call qsb,${_MODULE_SRC_DIR}/include.mk))) \
+#(info MODULE_PATHS = ${MODULE_PATHS})
+
+# substitute semicolons with spaces
+# on windows, spaces in paths are removed (using "short filenames")
+# on osx/linux, spaces in paths are not supposed to exist,
+# Make really can't deal with it
+
+MODULE_PATHS := $(subst ;,$(SPACE),$(MODULE_PATHS))
+
+$(foreach _MODULE_SRC_DIR,$(MODULE_PATHS), \
+  $(eval $(info processing module $(_MODULE_SRC_DIR))) \
+  $(eval MODULE_SRC_DIR := $(_MODULE_SRC_DIR)) \
+  $(eval MODULE := $(notdir ${_MODULE_SRC_DIR})) \
+  $(eval MODULE_BUILD_DIR := ${BDIR}/${MODULE}) \
+  $(eval MODULE_BUILD_ELF := ${MODULE_BUILD_DIR}/${MODULE}.elf) \
+  $(eval include ${_MODULE_SRC_DIR}/include.mk) \
 )
-$(info  MODULEDEPS ${MODULEDEPS})
-$(info  MODULEFILEDEPS ${MODULEFILEDEPS})
-$(info  MODULEFILEDEPSFILE ${BDIR}/filedeps.txt)
+#$(info  MODULE_DEPS ${MODULE_DEPS})
+#$(info  MODULE_FILEDEPS ${MODULE_FILEDEPS})
+#$(info  MODULE_FILEDEPSFILE ${BDIR}/filedeps.txt)
 
 # Paths
 #$(info ALLINC = ${ALLINC})
-IINCDIR   = $(call qs,$(patsubst %,-I"%",$(ALLINCDIR)))
-IINC   = $(call qs,$(patsubst %,--include "%",$(ALLINC)))
-LLIBDIR   = $(call qs,$(patsubst %,-L"%",$(DLIBDIR) $(ULIBDIR)))
+IINCDIR = $(patsubst %,-I"%",$(ALLINCDIR))
+IINC = $(patsubst %,--include "%",$(ALLINC))
+LLIBDIR = $(patsubst %,-L"%",$(DLIBDIR) $(ULIBDIR))
 
 #$(info IINC = ${IINC})
 
@@ -104,11 +101,11 @@ all : .filedeps ${XPATCH}.elf  ${XPATCH}.dbg.lst  ${XPATCH}.read
 .SECONDARY:
 
 .filedeps:
-	@echo "$(MODULEFILEDEPS)" > "${axoloti_home}/build/filedeps.txt"
+	@echo "$(MODULE_FILEDEPS)" > "${axoloti_home}/build/filedeps.txt"
 
-%.o: %.cpp ${MODULEDEPS}
+%.o: %.cpp ${MODULE_DEPS}
 	$(info  compiling ${<})
-	@"$(CPPC)" $(CCFLAGS) $(DEFS) $(IINCDIR) -MD -MP $(IINC) -c "$<" -o "$@"
+	@"$(CXX)" $(CCFLAGS) $(DEFS) $(IINCDIR) -MD -MP $(IINC) -c "$<" -o "$@"
 
 %.dbg.elf : %.o
 	$(info linking $(@:.o=))
@@ -134,7 +131,5 @@ all : .filedeps ${XPATCH}.elf  ${XPATCH}.dbg.lst  ${XPATCH}.read
 	@rm -f "${XPATCH}.dbg.lst"
 	@rm -f "${XPATCH}.map"
 
-
 clean: ${XPATCH}.clean
 	$(info CLEAN)
-

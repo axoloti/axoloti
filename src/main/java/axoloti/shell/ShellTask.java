@@ -79,7 +79,7 @@ public class ShellTask {
 
     public static String getMake() {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
-            return Axoloti.getReleaseDir() + "/platform_win/bin/make.exe";
+            return Axoloti.getEnvDir() + "/platform_win/make_wrapper.bat";
         }
         return "make";
     }

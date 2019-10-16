@@ -6,7 +6,6 @@ TODO: fix installer (build.xml) : building runtimes, cleanup paths for runtime, 
 		* runtimes: only large stuff (perhaps really only arm-none-eabi-gcc)
 		* installer: include small binaries (if installer does not prevent executing them...)
 
-TODO: cleanup dealing with spaces in paths - modules
 TODO: add api version to patch - how?
 TODO: fix libraries:
 	TODO: libs: midi input objects: vport selection - omni listening can be done via routing all inputs to a single vport (vport 1)

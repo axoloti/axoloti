@@ -34,7 +34,6 @@ import axoloti.target.TargetModel;
 import axoloti.target.fs.SDFileInfo;
 import axoloti.target.fs.SDFileReference;
 import axoloti.utils.Constants;
-import axoloti.utils.MakeUtils;
 import java.awt.Point;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -89,13 +88,12 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         String modulePaths = "";
         for (String module : getModel().getModules()) {
             String m = getModel().getModuleDir(module);
-            m = MakeUtils.sq(m);
-            modulePaths += m + " ";
+            modulePaths += m + ";";
         }
         if (modulePaths.length() > 0) {
             modulePaths = modulePaths.substring(0, modulePaths.length() - 1);
         }
-        return CompilePatch.run(new String[]{"MODULEPATHS=" + modulePaths}, patch);
+        return CompilePatch.run(new String[]{"MODULE_PATHS=" + modulePaths}, patch);
     }
 
     public void uploadDependentFiles(SDFileReference[] files, String sdpath, IJobContext ctx) {

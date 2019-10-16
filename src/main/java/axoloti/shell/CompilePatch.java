@@ -4,7 +4,6 @@ import axoloti.Axoloti;
 import axoloti.job.IJobContext;
 import axoloti.job.JobContext;
 import axoloti.target.fs.SDFileReference;
-import axoloti.utils.MakeUtils;
 import axoloti.utils.OSDetect;
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,8 +97,8 @@ public class CompilePatch {
                 SDFileReference sdfrs[] = new SDFileReference[filedeps.length / 2];
                 int n = filedeps.length / 2;
                 for (i = 0; i < n; i++) {
-                    String fnlocal = MakeUtils.qs(filedeps[2 * i]);
-                    String fntarget = MakeUtils.qs(filedeps[2 * i + 1]);
+                    String fnlocal = filedeps[2 * i];
+                    String fntarget = filedeps[2 * i + 1];
                     sdfrs[i] = new SDFileReference(new File(fnlocal), fntarget);
                 }
                 // TODO: implement getting stdout and stderr result of compile...
