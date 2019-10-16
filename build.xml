@@ -299,14 +299,10 @@
   </target>
 
     <target name="calc.short.version">
-        <exec executable="git" outputproperty="tag.short.version" failifexecutionfails="false">
-            <arg line = "describe --tags --always" />
+        <exec executable="git" outputproperty="short.version" failifexecutionfails="false">
+            <arg line = "describe --tags --always --abbrev=0" />
         </exec>
-        <property name="tag.short.version" value="(git missing)"/>
-        <exec executable="sed" inputstring="${tag.short.version}" outputproperty="short.version" failifexecutionfails="false">
-            <arg line = "'s/[a-zA-Z\-].*//'" />
-	</exec>
-        <property name="short.version" value="${tag.short.version}"/>
+        <property name="short.version" value="(git missing)"/>
 	<echo> calculated short ${short.version}</echo>
     </target>
 
