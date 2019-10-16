@@ -831,11 +831,10 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public void setLocked(Boolean locked) {
-        Boolean prev_val = this.locked;
         this.locked = locked;
         firePropertyChange(
                 PATCH_LOCKED,
-                prev_val, locked);
+                null, locked);
     }
 
     public Integer getDspLoad() {

@@ -182,10 +182,9 @@ public abstract class PatchView extends View<PatchModel> {
                 updateSize();
             }
         } else {
-            Logger.getLogger(PatchView.class.getName()).log(Level.INFO, "can't move: locked");
+            Logger.getLogger(PatchView.class.getName()).log(Level.INFO, "{0}", "can't move: locked");
         }
     }
-
 
     public Dimension getInitialSize() {
         int mx = 100; // min size

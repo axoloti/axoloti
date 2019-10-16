@@ -830,11 +830,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jCheckBoxLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxLiveActionPerformed
         if (jCheckBoxLive.isSelected()) {
-            if (goLive()) {
-                // success
-            } else {
-                jCheckBoxLive.setSelected(false);
-            }
+            goLive();
         } else {
             patchController.setLocked(false);
         }
@@ -1029,11 +1025,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jCheckBoxMenuItemLiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuItemLiveActionPerformed
         if (jCheckBoxMenuItemLive.isSelected()) {
-            if (goLive()) {
-                jCheckBoxMenuItemLive.setEnabled(false);
-            } else {
-                jCheckBoxMenuItemLive.setSelected(false);
-            }
+            goLive();
         } else {
             patchController.setLocked(false);
         }
@@ -1127,7 +1119,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         }
     }//GEN-LAST:event_jMenuItemDeleteActionPerformed
 
-    private boolean goLive() {
+    private void goLive() {
         if (getDModel().getFileNamePath().endsWith(".axs")
                 || (patchModel.getParent() != null)) {
             Object[] options = {"Yes",
@@ -1143,7 +1135,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
                     options[1]);
             switch (n) {
                 case JOptionPane.NO_OPTION:
-                    return false;
+                    getDModel().getController().setLocked(false);
+                    return;
                 case JOptionPane.YES_OPTION:
                     ; // fall thru
             }
@@ -1154,7 +1147,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         };
         PatchViewLive pvl = new PatchViewLive(patchModel, pvcg, openPatchEditor);
         pvl.goLive();
-        return true;
     }
 
     /* write to sdcard...

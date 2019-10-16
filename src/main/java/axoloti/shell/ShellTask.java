@@ -34,18 +34,16 @@ public class ShellTask {
     }
 
     public IJob getJob() {
-        return (ctx) -> doit(ctx);
+        return (ctx) -> {
+            doit(ctx);
+        };
     }
 
     public void doit(IJobContext ctx) {
-        try {
-            // Logger.getLogger(ShellTask.class.getName()).log(Level.INFO, "Working dir = {0}", workingDirectory);
-            // Logger.getLogger(ShellTask.class.getName()).log(Level.INFO, "cmdarray = {0}", cmdarray);
-            // Logger.getLogger(ShellTask.class.getName()).log(Level.INFO, "environment = {0}", environment);
-            run(workingDirectory, cmdarray, environment);
-        } catch (Exception ex) {
-            ctx.reportException(ex);
-        }
+        // Logger.getLogger(ShellTask.class.getName()).log(Level.INFO, "Working dir = {0}", workingDirectory);
+        // Logger.getLogger(ShellTask.class.getName()).log(Level.INFO, "cmdarray = {0}", cmdarray);
+        // Logger.getLogger(ShellTask.class.getName()).log(Level.INFO, "environment = {0}", environment);
+        run(workingDirectory, cmdarray, environment);
     }
 
     private static class StreamHandlerThread implements Runnable {
@@ -125,7 +123,7 @@ public class ShellTask {
     private void run(
             String workingDirectory,
             String[] cmdarray,
-            String[] environment) throws ExecutionFailedException {
+            String[] environment) {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process p1 = runtime.exec(cmdarray, environment, new File(workingDirectory));
@@ -137,10 +135,6 @@ public class ShellTask {
             thd_out.join();
             thd_err.join();
             success.complete(p1.exitValue() == 0);
-            if (p1.exitValue() != 0) {
-                Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, "shell task failed, exit value: {0}", p1.exitValue());
-                throw new ExecutionFailedException();
-            }
         } catch (InterruptedException | IOException ex) {
             Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, null, ex);
         }

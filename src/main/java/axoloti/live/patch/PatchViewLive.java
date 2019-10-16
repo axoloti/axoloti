@@ -160,8 +160,7 @@ public class PatchViewLive extends View<PatchModel> implements IPatchCB {
                 Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (PatchModel.PATCH_LOCKED.is(evt)) {
-            if ((evt.getNewValue() == Boolean.FALSE)
-                    && (evt.getOldValue() == Boolean.TRUE)) {
+            if (evt.getNewValue() == Boolean.FALSE) {
                 if (patch != null) {
                     try {
                         patch.transmitStop();
@@ -177,13 +176,12 @@ public class PatchViewLive extends View<PatchModel> implements IPatchCB {
                 // target disconnected
                 dispose();
             }
-        }
-        if (!auto_recompile) {
-            return;
-        }
-        if (PatchModel.PATCH_NETS.is(evt)
+        } else if (PatchModel.PATCH_NETS.is(evt)
                 || PatchModel.PATCH_OBJECTINSTANCES.is(evt)) {
-            scheduleRecompile();
+            getDModel().getController().setLocked(false);
+            if (auto_recompile) {
+                scheduleRecompile();
+            }
         }
     }
 
@@ -313,7 +311,11 @@ public class PatchViewLive extends View<PatchModel> implements IPatchCB {
 
                     TargetModel.getTargetModel().addPoller(pollHandler);
                 });
-            } catch (ExecutionFailedException | IOException ex) {
+            } catch (ExecutionFailedException ex) {
+                ctx.doInSync(() -> {
+                    getDModel().getController().setLocked(false);
+                });
+            } catch (IOException ex) {
                 ctx.doInSync(() -> {
                     getDModel().getController().setLocked(false);
                 });
