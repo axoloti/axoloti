@@ -99,7 +99,7 @@ public class ShellTask {
         if (OSDetect.getOS() == OSDetect.OS.WIN) {
             axPath = Axoloti.getReleaseDir() + "/platform_win/bin;C:/Program Files (x86)/GNU Tools Arm Embedded/7 2018-q2-update/bin;" + Preferences.getPreferences().getPath();
         } else if (OSDetect.getOS() == OSDetect.OS.MAC) {
-            axPath = Axoloti.getReleaseDir() + "/platform_osx/bin:/Applications/gcc-arm-none-eabi-7-2018-q2-update/bin:" + Preferences.getPreferences().getPath();
+            axPath = Axoloti.getReleaseDir() + "/platform_osx/bin:/Applications/gcc-arm-none-eabi-7-2018-q2-update/bin:/bin:" + Preferences.getPreferences().getPath();
         } else if (OSDetect.getOS() == OSDetect.OS.LINUX) {
             // on linux we can use "make" etc from system path
             axPath = Axoloti.getReleaseDir() + "/platform_linux/bin:" + sysPath;
