@@ -85,6 +85,9 @@ extern "C" {
 // note: port numbers are numbered 0..7
 // but all user interaction with port numbers should use 1..8
 
+// not recommend to use the fields in this union/struct
+// please, use the functions midiMessage(), midiMessageGetB0()...
+// to obtain data from from a midi_message_t
 typedef union {
   struct {
     unsigned cin :4;
@@ -105,34 +108,48 @@ typedef union {
 void midiSend(midi_message_t m);
 
 static inline uint8_t midi_calcPH(uint8_t port, uint8_t b0) {
-  // CIN for everyting except sysex
+  // CIN for everything except sysex
   uint8_t cin  = (b0 & 0xF0 ) >> 4;
   uint8_t ph = ((( port ) & 0x0F) << 4)  | cin;
   return ph;
 }
 
-static void midiSend1(int port, uint8_t b0) {
-  midi_message_t m;
-  m.bytes.b0 = b0;
-  m.bytes.ph = midi_calcPH(port,b0);
-  midiSend(m);
-}
-
-static void midiSend2(int port, uint8_t b0, uint8_t b1) {
-  midi_message_t m;
-  m.bytes.b0 = b0;
-  m.bytes.b1 = b1;
-  m.bytes.ph = midi_calcPH(port,b0);
-  midiSend(m);
-}
-
-static void midiSend3(int port, uint8_t b0, uint8_t b1, uint8_t b2) {
+// does not work for sysex
+static inline midi_message_t midiMessage(int port, uint8_t b0, uint8_t b1, uint8_t b2) {
   midi_message_t m;
   m.bytes.b0 = b0;
   m.bytes.b1 = b1;
   m.bytes.b2 = b2;
   m.bytes.ph = midi_calcPH(port,b0);
-  midiSend(m);
+  return m;
+}
+
+static inline uint8_t midiMessageGetPort(midi_message_t msg) {
+  return msg.fields.port;
+}
+
+static inline uint8_t midiMessageGetB0(midi_message_t msg) {
+  return msg.fields.b0;
+}
+
+static inline uint8_t midiMessageGetB1(midi_message_t msg) {
+  return msg.fields.b1;
+}
+
+static inline uint8_t midiMessageGetB2(midi_message_t msg) {
+  return msg.fields.b2;
+}
+
+static void midiSend1(int port, uint8_t b0) {
+  midiSend(midiMessage(port, b0, 0, 0));
+}
+
+static void midiSend2(int port, uint8_t b0, uint8_t b1) {
+  midiSend(midiMessage(port, b0, b1, 0));
+}
+
+static void midiSend3(int port, uint8_t b0, uint8_t b1, uint8_t b2) {
+  midiSend(midiMessage(port, b0, b1, b2));
 }
 
 #ifdef __cplusplus
