@@ -699,7 +699,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             c.append("//$MODULES=" + modules.toString() + "\n");
             c.append("//$MODULE_DIRS=" + moduleDirs.toString() + "\n");
         }
-        c.append("#include <new>");
+        c.append("#include <new>\n");
         c.append(generateIncludes());
         c.append("\n");
         // modules are included through makefile
