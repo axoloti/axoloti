@@ -49,9 +49,11 @@ public class ShellTask {
     private static class StreamHandlerThread implements Runnable {
 
         private final InputStream in;
+        private final StringBuffer sb;
 
-        StreamHandlerThread(InputStream in) {
+        StreamHandlerThread(InputStream in, StringBuffer sb) {
             this.in = in;
+            this.sb = sb;
         }
 
         @Override
@@ -61,6 +63,8 @@ public class ShellTask {
             try {
                 line = br.readLine();
                 while (line != null) {
+                    sb.append(line);
+                    sb.append("\n");
                     if (line.contains("error")) {
                         Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, "{0}", line);
                     } else {
@@ -119,6 +123,7 @@ public class ShellTask {
     }
 
     private final CompletableFuture<Boolean> success = new CompletableFuture<>();
+    private final CompletableFuture<String> output = new CompletableFuture<>();
 
     private void run(
             String workingDirectory,
@@ -127,14 +132,16 @@ public class ShellTask {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process p1 = runtime.exec(cmdarray, environment, new File(workingDirectory));
-            Thread thd_out = new Thread(new StreamHandlerThread(p1.getInputStream()));
+            StringBuffer sb_out = new StringBuffer();
+            Thread thd_out = new Thread(new StreamHandlerThread(p1.getInputStream(), sb_out));
             thd_out.start();
-            Thread thd_err = new Thread(new StreamHandlerThread(p1.getErrorStream()));
+            Thread thd_err = new Thread(new StreamHandlerThread(p1.getErrorStream(), sb_out));
             thd_err.start();
             p1.waitFor();
             thd_out.join();
             thd_err.join();
             success.complete(p1.exitValue() == 0);
+            output.complete(sb_out.toString());
         } catch (InterruptedException | IOException ex) {
             Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -143,6 +150,14 @@ public class ShellTask {
     public boolean isSuccess() {
         try {
             return success.get();
+        } catch (InterruptedException | ExecutionException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+    public String getOutput() {
+        try {
+            return output.get();
         } catch (InterruptedException | ExecutionException ex) {
             throw new IllegalStateException(ex);
         }

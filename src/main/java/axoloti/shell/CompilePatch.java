@@ -101,8 +101,7 @@ public class CompilePatch {
                     String fntarget = filedeps[2 * i + 1];
                     sdfrs[i] = new SDFileReference(new File(fnlocal), fntarget);
                 }
-                // TODO: implement getting stdout and stderr result of compile...
-                return new CompilePatchResult(elfdata, sdfrs, "", "");
+                return new CompilePatchResult(elfdata, sdfrs, shellTask.getOutput());
             } catch (IOException ex) {
                 throw new ExecutionFailedException();
             }

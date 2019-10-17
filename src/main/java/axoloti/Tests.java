@@ -6,11 +6,14 @@ import axoloti.objectlibrary.AxolotiLibrary;
 import axoloti.patch.PatchController;
 import axoloti.patch.PatchModel;
 import axoloti.preferences.Preferences;
+import axoloti.shell.CompilePatchResult;
 import axoloti.swingui.MainFrame;
 import axoloti.swingui.patch.PatchFrame;
 import axoloti.swingui.patch.PatchViewFactory;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,6 +140,8 @@ public class Tests {
         try {
             PatchModel patchModel = PatchModel.open(f);
             String basename = f.getName();
+            // strip extension
+            basename = basename.substring(0, basename.length() - 4);
             File testDirName = new File(destinationPath);
             if (!testDirName.isDirectory()) {
                 testDirName.mkdir();
@@ -145,9 +150,21 @@ public class Tests {
 //            PatchViewCodegen pvcg = patchController.writeCode(outFileName);
             PatchController patchController = patchModel.getController();
             PatchViewCodegen pvcg = patchController.writeCode();
-            Thread.sleep(1000); // TODO: fix testing without sleep()..
-            patchController.compile(pvcg.generateCode4());
-            Thread.sleep(5000);
+            Thread.sleep(10); // TODO: fix testing without sleep()..
+            CompilePatchResult cpr = patchController.compile(pvcg.generateCode4());
+            if (cpr.getElf() != null) {
+                File fElf = new File(destinationPath + "/" + basename + ".elf");
+                try (FileOutputStream fos = new FileOutputStream(fElf)) {
+                    fos.write(cpr.getElf());
+                    fos.close();
+                }
+            }
+            File fOut = new File(destinationPath + "/" + basename + ".txt");
+            try (PrintWriter pw = new PrintWriter(fOut)) {
+                pw.write(cpr.getOutput());
+                pw.close();
+            }
+            Thread.sleep(50);
             return true;
         } catch (Exception ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "PATCH FAILED: " + f.getPath(), ex);

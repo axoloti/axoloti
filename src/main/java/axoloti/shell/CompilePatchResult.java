@@ -10,14 +10,12 @@ public class CompilePatchResult {
 
     final byte elf[];
     final SDFileReference filedeps[];
-    final String stdout;
-    final String stderror;
+    final String output;
 
-    public CompilePatchResult(byte[] elf, SDFileReference filedeps[], String stdout, String stderror) {
+    public CompilePatchResult(byte[] elf, SDFileReference filedeps[], String output) {
         this.elf = elf;
         this.filedeps = filedeps;
-        this.stdout = stdout;
-        this.stderror = stderror;
+        this.output = output;
     }
 
     public byte[] getElf() {
@@ -28,12 +26,8 @@ public class CompilePatchResult {
         return filedeps;
     }
 
-    public String getStdout() {
-        return stdout;
-    }
-
-    public String getStderror() {
-        return stderror;
+    public String getOutput() {
+        return output;
     }
 
 }

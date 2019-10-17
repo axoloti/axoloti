@@ -147,7 +147,7 @@ public abstract class AxoObjectInstanceAbstract extends AbstractModel<ObjectInst
                 // last resort, resolve from sha tag
                 String tsha = typeSHA;
                 List<IAxoObject> objs = AxoObjects.getAxoObjects().objectList;
-                for (IAxoObject obj : objs) {
+                for (IAxoObject obj : objs.toArray(new IAxoObject[]{})) {
                     String sha = obj.getSHA();
                     if (sha != null && sha.equals(tsha)) {
                         type = obj;
