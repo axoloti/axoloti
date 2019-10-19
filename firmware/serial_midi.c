@@ -24,7 +24,7 @@
 #include "serial_midi.h"
 #include "patch.h"
 
-const unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80=note off, 3 bytes
+static const unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80=note off, 3 bytes
                                                3, // 0x90=note on, 3 bytes
                                                3, // 0xa0=poly pressure, 3 bytes
                                                3, // 0xb0=control change, 3 bytes
@@ -34,14 +34,14 @@ const unsigned char StatusLengthLookup[16] = {0, 0, 0, 0, 0, 0, 0, 0, 3, // 0x80
                                                -1 // 0xf0=other things. may vary.
     };
 
-const signed char SysMsgLengthLookup[16] = {-1, // 0xf0=sysex start. may vary
+static const signed char SysMsgLengthLookup[16] = {-1, // 0xf0=sysex start. may vary
     2, // 0xf1=MIDI Time Code. 2 bytes
     3, // 0xf2=MIDI Song position. 3 bytes
     2, // 0xf3=MIDI Song Select. 2 bytes.
     1, // 0xf4=undefined
     1, // 0xf5=undefined
     1, // 0xf6=TUNE Request
-    1, // 0xf7=sysex end.
+    -1, // 0xf7=sysex end.
     1, // 0xf8=timing clock. 1 byte
     1, // 0xf9=proposed measure end?
     1, // 0xfa=start. 1 byte
@@ -68,11 +68,12 @@ midi_routing_t midi_outputmap_din = {
 			}
 };
 
-static unsigned char MidiByte0;
-static unsigned char MidiByte1;
-static unsigned char MidiByte2;
-static unsigned char MidiCurData;
-static unsigned char MidiNumData;
+static unsigned char midiByte0;
+static unsigned char midiByte1;
+static unsigned char midiByte2;
+static unsigned char midiCurData;
+static unsigned char midiNumData;
+static unsigned char inSysEx = 0;
 
 // CIN for everyting except sysex
 inline uint8_t SMidi_calcCIN(uint8_t b0) {
@@ -98,54 +99,93 @@ static void serial_MidiInByteHandler(uint8_t data) {
     if (len == -1) {
       len = SysMsgLengthLookup[data - 0xF0];
       if (len == 1) {
-    	  // TODO: sysex handling...
     	  midi_message_t m;
     	  m.bytes.ph = SMidi_calcCIN(data);
     	  m.bytes.b0 = data;
     	  m.bytes.b1 = 0;
     	  m.bytes.b2 = 0;
     	  dispatch_midi_input(m);
+      } else if (data == MIDI_SYSEX_START) {
+        inSysEx = 1;
+        midiNumData = 0;
+        midiByte1 = data;
+        midiCurData = 1;
+      } else if (data == MIDI_SYSEX_END) {
+        inSysEx = 0;
+        switch (midiCurData) {
+          case 0: {
+            midi_message_t m;
+            m.bytes.ph = 0x5; // SysEx ends with following single byte.
+            m.bytes.b0 = MIDI_SYSEX_END;
+            m.bytes.b1 = 0;
+            m.bytes.b2 = 0;
+            dispatch_midi_input(m);
+          } break;
+          case 1: {
+            midi_message_t m;
+            m.bytes.ph = 0x6; // SysEx ends with following two bytes.
+            m.bytes.b0 = midiByte1;
+            m.bytes.b1 = MIDI_SYSEX_END;
+            m.bytes.b2 = 0;
+            dispatch_midi_input(m);
+          } break;
+          case 2: {
+            midi_message_t m;
+            m.bytes.ph = 0x7; // SysEx ends with following three bytes.
+            m.bytes.b0 = midiByte1;
+            m.bytes.b1 = midiByte2;
+            m.bytes.b2 = MIDI_SYSEX_END;
+            dispatch_midi_input(m);
+          } break;
+          default:
+            chSysHalt("MIDI SysEx invalid state");
+        }
+      } else {
+        midiByte0 = data;
+        midiNumData = len - 1;
+        midiCurData = 0;
       }
-      else {
-        MidiByte0 = data;
-        MidiNumData = len - 1;
-        MidiCurData = 0;
-      }
+    } else {
+      midiByte0 = data;
+      midiNumData = len - 1;
+      midiCurData = 0;
     }
-    else {
-      MidiByte0 = data;
-      MidiNumData = len - 1;
-      MidiCurData = 0;
-    }
-  }
-  else // not a status byte
-  {
-    if (MidiCurData == 0) {
-      MidiByte1 = data;
-      if (MidiNumData == 1) {
+  } else { // not a status byte
+    if (midiCurData == 0) {
+      midiByte1 = data;
+      if (midiNumData == 1) {
         // 2 byte message complete
-    	  midi_message_t m;
-    	  m.bytes.ph = SMidi_calcCIN(MidiByte0);
-    	  m.bytes.b0 = MidiByte0;
-    	  m.bytes.b1 = MidiByte1;
-    	  m.bytes.b2 = 0;
-    	  dispatch_midi_input(m);
-        MidiCurData = 0;
+        midi_message_t m;
+        m.bytes.ph = SMidi_calcCIN(midiByte0);
+        m.bytes.b0 = midiByte0;
+        m.bytes.b1 = midiByte1;
+        m.bytes.b2 = 0;
+        dispatch_midi_input(m);
+        midiCurData = 0;
+      } else {
+        midiCurData++;
       }
-      else
-        MidiCurData++;
-    }
-    else if (MidiCurData == 1) {
-      MidiByte2 = data;
-      if (MidiNumData == 2) {
+    } else if (midiCurData == 1) {
+      midiByte2 = data;
+      if (midiNumData == 2) {
     	  midi_message_t m;
-    	  m.bytes.ph = SMidi_calcCIN(MidiByte0);
-    	  m.bytes.b0 = MidiByte0;
-    	  m.bytes.b1 = MidiByte1;
-    	  m.bytes.b2 = MidiByte2;
+    	  m.bytes.ph = SMidi_calcCIN(midiByte0);
+    	  m.bytes.b0 = midiByte0;
+    	  m.bytes.b1 = midiByte1;
+    	  m.bytes.b2 = midiByte2;
     	  dispatch_midi_input(m);
-        MidiCurData = 0;
+        midiCurData = 0;
+      } else {
+        midiCurData++;
       }
+    } else if (midiCurData == 2) {
+      midi_message_t m;
+      m.bytes.ph = 0x04; // SysEx starts or continues
+      m.bytes.b0 = midiByte1;
+      m.bytes.b1 = midiByte2;
+      m.bytes.b2 = data;
+      dispatch_midi_input(m);
+      midiCurData = 0;
     }
   }
 }
@@ -153,39 +193,39 @@ static void serial_MidiInByteHandler(uint8_t data) {
 // Midi OUT
 
 void serial_MidiSend(midi_message_t midimsg) {
-	// TODO: running status
-	// TODO: skip other messages when sysex is in progress
+  // TODO: running status
+  // TODO: skip other messages when sysex is in progress
 	switch(midimsg.fields.cin){
-  case 0x4: // sysex start/continue
-    sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
-    break;
-  case 0x5: // end 1 byte
-    sdWrite(&SDMIDI, &midimsg.bytes.b0, 1);
-    break;
-  case 0x6: // end 2 byte
-    sdWrite(&SDMIDI, &midimsg.bytes.b0, 2);
-    break;
-  case 0x7: // end 3 byte
-    sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
-    break;
+    case 0x4: // sysex start/continue
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+      break;
+    case 0x5: // end 1 byte
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 1);
+       break;
+    case 0x6: // end 2 byte
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 2);
+      break;
+    case 0x7: // end 3 byte
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+      break;
 
-	case 0x8: // note-off
-	case 0x9: // note-on
-	case 0xA: // PolyKeyPress
-	case 0xB: // Control change
-		sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
-		break;
-	case 0xC: // program change
-	case 0xD: // channel pressure
-		sdWrite(&SDMIDI, &midimsg.bytes.b0, 2);
-		break;
-	case 0xE: // pitch bend
-		sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
-		break;
-	case 0xF: // single byte
-		sdWrite(&SDMIDI, &midimsg.bytes.b0, 1);
-		break;
-	}
+    case 0x8: // note-off
+    case 0x9: // note-on
+    case 0xA: // PolyKeyPress
+    case 0xB: // Control change
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+      break;
+    case 0xC: // program change
+    case 0xD: // channel pressure
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 2);
+      break;
+    case 0xE: // pitch bend
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 3);
+      break;
+    case 0xF: // single byte
+      sdWrite(&SDMIDI, &midimsg.bytes.b0, 1);
+      break;
+  }
 }
 
 
