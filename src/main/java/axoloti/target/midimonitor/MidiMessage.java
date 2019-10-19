@@ -147,15 +147,15 @@ public class MidiMessage {
                 return "Reserved";
             case CIN_2_2BYTE_SYSTEM_COMMON:
             case CIN_3_3BYTE_SYSTEM_COMMON:
-                return midiRTNames[((0xFF & b0) - 0xF0)];
+                return midiRTNames[0x0F & b0];
             case CIN_4_SYSEX_START_OR_CONTINUE:
                 return "SysEx start/cont";
             case CIN_5_SYSEX_END_1BYTE:
-                return "SysEx end";
+                return "SysEx end (1)";
             case CIN_6_SYSEX_END_2BYTE:
-                return "SysEx end";
+                return "SysEx end (2)";
             case CIN_7_SYSEX_END_3BYTE:
-                return "SysEx end";
+                return "SysEx end (3)";
             case CIN_8_NOTEOFF:
                 return String.format("NoteOff note=%3d velo=%3d", b1 & 0xFF, b2 & 0xFF);
             case CIN_9_NOTEON:
@@ -171,7 +171,7 @@ public class MidiMessage {
             case CIN_E_PITCHBEND:
                 return String.format("Bend     val= %5d", ((b1 & 0xFF) + ((b2 & 0xFF) << 7) - (1 << 13)));
             case CIN_F_SINGLE_BYTE:
-                return midiRTNames[((0xFF & b0) - 0xF0)];
+                return midiRTNames[0x0F & b0];
         }
         return "?";
     }
@@ -190,7 +190,7 @@ public class MidiMessage {
         } else if ((b0 & 0xF0) < 0xF0) {
             return midiData[((b0 & 0xF0) >> 4) - 8][1];
         } else {
-            return midiRTNames[((0xFF & b0) - 0xF0)];
+            return midiRTNames[0x0F & b0];
         }
     }
 
@@ -216,7 +216,7 @@ public class MidiMessage {
                 }
             }
         } else {
-            return midiRTNames[((0xFF & b0) - 0xF0)];
+            return midiRTNames[0x0F & b0];
         }
     }
 
