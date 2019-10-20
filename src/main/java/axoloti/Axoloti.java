@@ -119,7 +119,7 @@ public class Axoloti {
     }
 
     // cache this, as it linked to checks on the UI/menu
-    private static Boolean cacheDeveloper = false;
+    private static Boolean cacheDeveloper = null;
 
     public static boolean isDeveloper() {
         if (cacheDeveloper != null) {
