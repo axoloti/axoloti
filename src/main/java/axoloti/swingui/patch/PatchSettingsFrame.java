@@ -99,9 +99,10 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
         jComboBoxLicense = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jCheckBoxSaturate = new javax.swing.JCheckBox();
         jLabel10 = new javax.swing.JLabel();
         jTextFieldAttributions = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jSpinnerMidiPort = new javax.swing.JSpinner();
 
         setTitle("Patch settings");
 
@@ -187,13 +188,6 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
 
         jLabel9.setText("License");
 
-        jCheckBoxSaturate.setText("Saturate audio output");
-        jCheckBoxSaturate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBoxSaturateActionPerformed(evt);
-            }
-        });
-
         jLabel10.setText("Attributions");
 
         jTextFieldAttributions.setText("jTextField1");
@@ -203,61 +197,77 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
             }
         });
 
+        jLabel11.setText("MIDI Port");
+
+        jSpinnerMidiPort.setModel(new javax.swing.SpinnerNumberModel(1, 1, 16, 1));
+        jSpinnerMidiPort.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinnerMidiPortStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jCheckBoxSaturate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                                    .addComponent(jComboBoxLicense, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(22, 22, 22)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jComboBoxMode, 0, 1, Short.MAX_VALUE)
+                                    .addComponent(jCheckBoxHasChannelAttrib, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(0, 0, Short.MAX_VALUE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(jTextFieldAttributions, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel7))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(jSpinnerModulationSources, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jSpinnerNumPresets, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jSpinnerPresetEntries, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jSpinnerModulationTargets, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addGap(19, 19, 19)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jSpinnerMidiChannel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(jSpinnerMidiPort, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                            .addComponent(jComboBoxLicense, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(22, 22, 22)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBoxMode, 0, 1, Short.MAX_VALUE)
-                            .addComponent(jCheckBoxHasChannelAttrib, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jTextFieldAttributions, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jSpinnerModulationSources, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jSpinnerMidiChannel, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jSpinnerNumPresets, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jSpinnerPresetEntries, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jSpinnerModulationTargets, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(14, 14, 14))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,11 +284,15 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldAttributions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jSpinnerMidiChannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jSpinnerMidiPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jSpinnerNumPresets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -302,8 +316,7 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBoxHasChannelAttrib)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxSaturate))
+                .addGap(5, 5, 5))
         );
 
         pack();
@@ -393,22 +406,24 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
         patchController.generic_setModelUndoableProperty(PatchModel.PATCH_AUTHOR, jTextFieldAuthor.getText());
     }//GEN-LAST:event_jTextFieldAuthorFocusLost
 
-    private void jCheckBoxSaturateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSaturateActionPerformed
-        //settings.setSaturate(jCheckBoxSaturate.isSelected());
-    }//GEN-LAST:event_jCheckBoxSaturateActionPerformed
-
     private void jTextFieldAttributionsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldAttributionsFocusLost
         patchController.addMetaUndo("change attributions", new FocusEditComponent(jTextFieldAttributions));
         patchController.generic_setModelUndoableProperty(PatchModel.PATCH_ATTRIBUTIONS, jTextFieldAttributions.getText());
     }//GEN-LAST:event_jTextFieldAttributionsFocusLost
 
+    private void jSpinnerMidiPortStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerMidiPortStateChanged
+        SpinnerModel nModel = jSpinnerMidiPort.getModel();
+        patchController.addMetaUndo("change midiport", new FocusEditComponent(jSpinnerMidiPort));
+        patchController.generic_setModelUndoableProperty(PatchModel.PATCH_MIDIPORT, ((SpinnerNumberModel) nModel).getNumber().intValue());
+    }//GEN-LAST:event_jSpinnerMidiPortStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox jCheckBoxHasChannelAttrib;
-    private javax.swing.JCheckBox jCheckBoxSaturate;
     private javax.swing.JComboBox jComboBoxLicense;
     private javax.swing.JComboBox jComboBoxMode;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -418,6 +433,7 @@ public class PatchSettingsFrame extends AJFrame<PatchModel> {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSpinner jSpinnerMidiChannel;
+    private javax.swing.JSpinner jSpinnerMidiPort;
     private javax.swing.JSpinner jSpinnerModulationSources;
     private javax.swing.JSpinner jSpinnerModulationTargets;
     private javax.swing.JSpinner jSpinnerNumPresets;

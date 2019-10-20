@@ -335,7 +335,7 @@ typedef struct ui_object {
         s = s.replace("attr_legal_name", getDModel().getLegalName());
 
         if (s.length() > 0) {
-            return "{\n" + s + "}\n";
+            return "{\n" + s + "\n}\n";
         } else {
             return "";
         }

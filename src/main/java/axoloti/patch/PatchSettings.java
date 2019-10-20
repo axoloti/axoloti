@@ -30,6 +30,8 @@ public class PatchSettings {
     @Element(required = false)
     Integer MidiChannel;
     @Element(required = false)
+    Integer MidiPort;
+    @Element(required = false)
     Boolean HasMidiChannelSelector;
     @Element(required = false)
     Integer NPresets;

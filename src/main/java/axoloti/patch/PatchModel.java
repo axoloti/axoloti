@@ -752,13 +752,9 @@ public class PatchModel extends AbstractModel<PatchController> {
     AxoAttributeComboBox attrMidiChannel = new AxoAttributeComboBox("midichannel",
             new String[]{"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
             new String[]{"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"});
-    // use a cut down list of those currently supported
-    AxoAttributeComboBox attrMidiDevice = new AxoAttributeComboBox("mididevice",
-            new String[]{"omni", "din", "usb device", "usb host", "internal"},
-            new String[]{"0", "1", "2", "3", "15"});
     AxoAttributeComboBox attrMidiPort = new AxoAttributeComboBox("midiport",
-            new String[]{"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
-            new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
+            new String[]{"1", "2", "3", "4", "5", "6", "7", "8"},
+            new String[]{"0", "1", "2", "3", "4", "5", "6", "7"});
     AxoAttributeComboBox attrPoly = new AxoAttributeComboBox("poly",
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"},
             new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
@@ -779,6 +775,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     public final static Property PATCH_NMODULATIONSOURCES = new IntegerProperty("NModulationSources", PatchModel.class);
     public final static Property PATCH_NMODULATIONTARGETSPERSOURCE = new IntegerProperty("NModulationTargetsPerSource", PatchModel.class);
     public final static Property PATCH_MIDICHANNEL = new IntegerProperty("MidiChannel", PatchModel.class);
+    public final static Property PATCH_MIDIPORT = new IntegerProperty("MidiPort", PatchModel.class);
     public final static Property PATCH_MIDISELECTOR = new BooleanProperty("MidiSelector", PatchModel.class);
     public final static StringProperty PATCH_NOTES = new StringProperty("Notes", PatchModel.class);
     public final static StringProperty PATCH_HELP_PATCH = new StringProperty("HelpPatch", PatchModel.class);
@@ -998,6 +995,20 @@ public class PatchModel extends AbstractModel<PatchController> {
                 null, n);
     }
 
+    public Integer getMidiPort() {
+        if (settings.MidiPort == null) {
+            return 1;
+        }
+        return settings.MidiPort;
+    }
+
+    public void setMidiPort(Integer n) {
+        settings.MidiPort = n;
+        firePropertyChange(
+                PATCH_MIDIPORT,
+                null, n);
+    }
+
     public Boolean getMidiSelector() {
         if (settings.HasMidiChannelSelector == null) {
             return false;
@@ -1013,11 +1024,9 @@ public class PatchModel extends AbstractModel<PatchController> {
             if (b) {
                 aop.getController().addAttribute(attrMidiChannel);
                 aop.getController().addAttribute(attrMidiPort);
-                aop.getController().addAttribute(attrMidiDevice);
             } else {
                 aop.getController().removeAttribute(attrMidiChannel);
                 aop.getController().removeAttribute(attrMidiPort);
-                aop.getController().removeAttribute(attrMidiDevice);
             }
         }
         firePropertyChange(

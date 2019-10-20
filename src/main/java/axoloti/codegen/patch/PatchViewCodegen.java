@@ -211,20 +211,9 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  }\n"
                 + "\n"
                 + "  void midiInHandler(int32_t m) {\n"
-                + "    struct mfields {\n"
-                + "      unsigned cin :4;\n"
-                + "      unsigned port :4;\n"
-                + "      uint8_t b0;\n"
-                + "      uint8_t b1;\n"
-                + "      uint8_t b2;\n"
-                + "    };\n"
-                + "    struct mfields *mf = (mfields *)&m;\n"
-                + "    int dev = mf->port;\n"
-                + "    int port = 0;\n"
-                + "    uint8_t status = mf->b0;\n"
-                + "    uint8_t data1 = mf->b1;\n"
-                + "    uint8_t data2 = mf->b2;\n"
-                + "    midiInHandler(0, midiMessage(port, status, data1, data2));\n"
+                + "    midi_message_t m1;\n"
+                + "    m1.word = m;\n"
+                + "    midiInHandler(0, m1);\n"
                 + "  }\n"
                 + "\n"
                 + "  void* getProperty(ax_property_id_t id, int index) {\n"
@@ -767,12 +756,14 @@ public class PatchViewCodegen extends View<PatchModel> {
 
         String cs = c.toString();
         cs = cs.replace("attr_poly", "1")
-            .replace("attr_midichannel", Integer.toString(getDModel().getMidiChannel() - 1));
+                .replace("attr_midichannel", Integer.toString(getDModel().getMidiChannel() - 1))
+                .replace("attr_midiport", Integer.toString(getDModel().getMidiPort() - 1));
 
-        if (!getDModel().getMidiSelector()) {
-            cs = cs.replace("attr_mididevice", "0")
-                .replace("attr_midiport", "0");
-        }
+
+//        if (!getDModel().getMidiSelector()) {
+//            cs = cs.replace("attr_mididevice", "0")
+//                .replace("attr_midiport", "0");
+//        }
         return cs;
     }
 
@@ -839,12 +830,8 @@ public class PatchViewCodegen extends View<PatchModel> {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
-            // use a cut down list of those currently supported
-            String cdev[] = {"0", "1", "2", "3", "15"};
-            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
-            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
-            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
+            String uport[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
             ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
         generateNormalCode(ao);
@@ -890,8 +877,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         ao.sKRateCode = sKRateCode.toString();
 
         ao.sMidiCode = ""
-                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
-                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
+                + "if (attr_midiport != port) return;\n"
                 + generateMidiInCodePlusPlus();
     }
 
@@ -1038,8 +1024,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         ao.sKRateCode = sKRateCode.toString();
 
         ao.sMidiCode = ""
-                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
-                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
+                + "if (attr_midiport != port) return;\n"
                 + "if ((status == MIDI_NOTE_ON + attr_midichannel) && (data2)) {\n"
                 + "  int min = 1<<30;\n"
                 + "  int mini = 0;\n"
@@ -1095,8 +1080,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "   voiceChannel[vc]=0xFF;\n"
                 + "}\n";
         o.sMidiCode = ""
-                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
-                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
+                + "if (attr_midiport != port) return;\n"
                 + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
@@ -1183,8 +1167,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "lastRPN_LSB=0xFF;\n"
                 + "lastRPN_MSB=0xFF;\n";
         o.sMidiCode = ""
-                + "if ( attr_mididevice > 0 && dev > 0 && attr_mididevice != dev) return;\n"
-                + "if ( attr_midiport > 0 && port > 0 && attr_midiport != port) return;\n"
+                + "if (attr_midiport != port) return;\n"
                 + "int msg = (status & 0xF0);\n"
                 + "int channel = (status & 0x0F);\n"
                 + "if ((msg == MIDI_NOTE_ON) && (data2)) {\n"
@@ -1321,12 +1304,8 @@ public class PatchViewCodegen extends View<PatchModel> {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
             ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
-            // use a cut down list of those currently supported
-            String cdev[] = {"0", "1", "2", "3", "15"};
-            String udev[] = {"omni", "din", "usb device", "usb host", "internal"};
-            ao.attributes.add(new AxoAttributeComboBox("mididevice", udev, cdev));
-            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            String uport[] = {"omni", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
+            String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
+            String uport[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
             ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
 

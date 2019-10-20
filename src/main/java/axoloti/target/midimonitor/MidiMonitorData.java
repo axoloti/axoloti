@@ -5,7 +5,6 @@ import axoloti.chunks.FourCCs;
 import axoloti.connection.IConnection;
 import axoloti.target.TargetModel;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,15 +49,11 @@ public class MidiMonitorData {
                     msgs1[i] = new MidiMessage(mem);
                 }
                 MidiMonitorData midiMonitorData = new MidiMonitorData(msgs1, readIndex);
-                SwingUtilities.invokeAndWait(() -> {
+                SwingUtilities.invokeLater(() -> {
                     TargetModel.getTargetModel().setMidiMonitor(midiMonitorData);
                 });
             }
         } catch (IOException ex) {
-            Logger.getLogger(MidiMonitorData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MidiMonitorData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
             Logger.getLogger(MidiMonitorData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

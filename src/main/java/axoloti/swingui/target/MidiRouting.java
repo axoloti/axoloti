@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -255,7 +254,6 @@ public class MidiRouting extends TJFrame {
         JScrollPane scrollpane_out = new JScrollPane(table_midi_out_routing);
         JPanel vPane = new JPanel();
         vPane.setLayout(new BoxLayout(vPane, BoxLayout.PAGE_AXIS));
-        vPane.add(new JLabel("todo: deploy virtual midi ports..."));
         vPane.add(scrollpane_in);
         vPane.add(scrollpane_out);
         JPanel bPane = new JPanel();
