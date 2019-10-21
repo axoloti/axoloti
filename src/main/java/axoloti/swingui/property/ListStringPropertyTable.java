@@ -85,21 +85,38 @@ public class ListStringPropertyTable extends JTable implements IView {
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
             List<String> new_list = new ArrayList<>(data);
-            // handle inserting at end
-            if (rowIndex >= new_list.size()) {
-                new_list.add((String) aValue);
-            } else {
-                new_list.set(rowIndex, (String) aValue);
-            }
-            FocusEdit focusEdit = new FocusEdit() {
-                @Override
-                protected void focus() {
-                    ListStringPropertyTable.this.changeSelection(rowIndex, 0, false, false);
-                    ListStringPropertyTable.this.requestFocusInWindow();
+            String str = (String) aValue;
+            if ((str == null) || str.isEmpty()) {
+                if (rowIndex >= new_list.size()) {
+                    return;
                 }
-            };
-            model.getController().addMetaUndo("change " + property.getFriendlyName(), focusEdit);
-            model.getController().generic_setModelUndoableProperty(property, new_list);
+                new_list.remove(rowIndex);
+                FocusEdit focusEdit = new FocusEdit() {
+                    @Override
+                    protected void focus() {
+                        ListStringPropertyTable.this.changeSelection(rowIndex, 0, false, false);
+                        ListStringPropertyTable.this.requestFocusInWindow();
+                    }
+                };
+                model.getController().addMetaUndo("change " + property.getFriendlyName(), focusEdit);
+                model.getController().generic_setModelUndoableProperty(property, new_list);
+            } else {
+                // handle inserting at end
+                if (rowIndex >= new_list.size()) {
+                    new_list.add(str);
+                } else {
+                    new_list.set(rowIndex, str);
+                }
+                FocusEdit focusEdit = new FocusEdit() {
+                    @Override
+                    protected void focus() {
+                        ListStringPropertyTable.this.changeSelection(rowIndex, 0, false, false);
+                        ListStringPropertyTable.this.requestFocusInWindow();
+                    }
+                };
+                model.getController().addMetaUndo("change " + property.getFriendlyName(), focusEdit);
+                model.getController().generic_setModelUndoableProperty(property, new_list);
+            }
         }
 
         @Override
