@@ -143,7 +143,7 @@ typedef struct ui_object {
             }
             c.append(s + "\n");
         }
-        StringBuilder d = new StringBuilder("  public: void Init(" + classname + " * parent");
+        StringBuilder d = new StringBuilder("  public: int init(" + classname + " * parent");
         if (!displayInstances.isEmpty()) {
             for (DisplayInstanceView p : displayInstances) {
                 if (p.getDModel().getDModel().getLength() > 0) {
@@ -156,7 +156,10 @@ typedef struct ui_object {
                 }
             }
         }
-        d.append(") {\n" + c.toString() + "}\n");
+        d.append(") {\n");
+        d.append(c.toString());
+        d.append("\n return 0;\n");
+        d.append("}\n");
         return d.toString();
     }
 

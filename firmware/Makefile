@@ -134,6 +134,7 @@ CSRC = $(ALLCSRC) \
        ${FIRMWARE}/axoloti_oscs.c \
        ${FIRMWARE}/axoloti_board.c \
        ${FIRMWARE}/dlfcn.c \
+       ${FIRMWARE}/error_codes.c \
        ${FIRMWARE}/midi.c \
        ${FIRMWARE}/midi_routing.c \
        ${FIRMWARE}/midi_usb.c \

@@ -426,11 +426,11 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     public String generateObjInitCodePlusPlusSub(String className, String parentReference) {
         StringBuilder c = new StringBuilder();
-
+        c.append("  int r = 0;\n");
         for (IAxoObjectInstanceCodegenView o : objectInstanceViews) {
             String s = o.getDModel().getCInstanceName();
             if (!s.isEmpty()) {
-                c.append("   " + o.getDModel().getCInstanceName() + "_i.Init(" + parentReference);
+                c.append("  r =  " + o.getDModel().getCInstanceName() + "_i.init(" + parentReference);
                 for (DisplayInstanceView i : o.getDisplayInstanceViews()) {
                     if (i.getDModel().getDModel().getLength() > 0) {
                         c.append(", ");
@@ -438,8 +438,10 @@ public class PatchViewCodegen extends View<PatchModel> {
                     }
                 }
                 c.append(" );\n");
+                c.append("  if (r) return r;\n");
             }
         }
+        c.append("  return 0;\n");
         /* // no need for this?
            c.append("      int k;\n"
            + "      for (k = 0; k < nparams; k++) {"
@@ -481,9 +483,10 @@ public class PatchViewCodegen extends View<PatchModel> {
     String generateInitCodePlusPlus(String className) {
         StringBuilder c = new StringBuilder();
         c.append("/* init */\n");
-        c.append("void Init() {\n");
+        c.append("int init() {\n");
         c.append(generateObjInitCodePlusPlusSub("", "this"));
         c.append(generateParamInitCodePlusPlusSub("", "this"));
+        c.append("  return 0;\n");
         c.append("}\n\n");
         return c.toString();
     }
@@ -665,7 +668,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int initInstance(PatchInstance *instance /*,... args */) {\n"
                 + "    // placement new\n"
                 + "    rootc * _inst = new((void *)instance) rootc();\n"
-                + "    _inst->Init();\n"
+                + "    return _inst->init();\n"
                 + "  }\n"
                 + "}\n");
 
@@ -901,7 +904,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         sLocalData.append(generatePexchAndDisplayCodeV());
         sLocalData.append(generateObjectCode("voice", true, "parent->common->"));
         sLocalData.append("attr_parent *common;\n");
-        sLocalData.append("void Init(voice *parent) {\n");
+        sLocalData.append("int init(voice *parent) {\n");
         sLocalData.append(generateObjInitCodePlusPlusSub("voice", "parent"));
         sLocalData.append("}\n\n");
         sLocalData.append("void dsp(void) {\n int i;\n");
@@ -951,7 +954,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "   voice *v = &getVoices()[vi];\n"
                 + "   v->polyIndex = vi;\n"
                 + "   v->common = this;\n"
-                + "   v->Init(&getVoices()[vi]);\n"
+                + "   int r = v->init(v); if (r) return r;\n"
                 + "   notePlaying[vi]=0;\n"
                 + "   voicePriority[vi]=0;\n"
                 + "   for (j = 0; j < v->nparams; j++) {\n"
@@ -1078,6 +1081,8 @@ public class PatchViewCodegen extends View<PatchModel> {
                 += "int vc;\n"
                 + "for (vc=0;vc<attr_poly;vc++) {\n"
                 + "   voiceChannel[vc]=0xFF;\n"
+                + "   voice *v = &getVoices()[vc];\n"
+                + "   int r = v->init(v); if (r) return r;\n"
                 + "}\n";
         o.sMidiCode = ""
                 + "if (attr_midiport != port) return;\n"

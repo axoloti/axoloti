@@ -41,13 +41,14 @@
 #include "loader_userdata.h"
 #include "patch_wrapper.h"
 #include "midi_clock.h"
+#include "error_codes_impl.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
 static mutex_t mtxWorker;
 static THD_WORKING_AREA(waThreadWorker, 2000);
 static const char *err_msg;
-static char err_string[32];
+static char err_string[64];
 
 #define n_patch_slots 4
 static patch_t patchMeta1[n_patch_slots];
@@ -478,8 +479,17 @@ static THD_FUNCTION(threadLoadPatch, arg) {
     patch_setConstError("patch missing initInstance");
     chThdExit(0);
   }
-  initInstance(patch->patchobject);
-
+  int result = initInstance(patch->patchobject);
+  if (result != 0) {
+    const char *err_msg = errorCodeToString(result);
+    if (!err_msg) {
+        patch_setError("patch initialization failed, result = %d (0x%08x)", result, result);
+    } else {
+        patch_setError("patch initialization failed, reason: %s", err_msg);
+    }
+    ax_free(patch->patchobject);
+    chThdExit(0);
+  }
   patch->patchStatus = RUNNING;
   ui_init_patch();
   tx_pckt_ack_v2.underruns = 0;

@@ -14,6 +14,7 @@
 #include "axoloti.h"
 #include "codec_adau1961.h"
 #include "dlfcn.h"
+#include "error_codes.h"
 #include "gpio_adc.h"
 #include "logging.h"
 #include "midi.h"
