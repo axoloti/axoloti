@@ -72,12 +72,12 @@ public abstract class AJFrame<T extends IModel> extends JFrame implements Docume
     }
 
     @Override
-    public void toFront() {
+    public void bringToFront() {
         if (!isVisible()) {
             setVisible(true);
         }
         setState(java.awt.Frame.NORMAL);
-        super.toFront();
+        toFront();
     }
 
 }

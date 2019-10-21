@@ -20,6 +20,8 @@ package axoloti.swingui.objecteditor;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.abstractui.IAbstractEditor;
+import axoloti.job.IJobContext;
+import axoloti.job.JobContext;
 import axoloti.mvc.FocusEdit;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
@@ -56,8 +58,6 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-import axoloti.job.JobContext;
-import axoloti.job.IJobContext;
 
 /**
  *
@@ -953,9 +953,10 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
     }
 
     @Override
-    public void toFront() {
+    public void bringToFront() {
         setState(java.awt.Frame.NORMAL);
-        super.toFront();
+        setVisible(true);
+        toFront();
     }
 
 }

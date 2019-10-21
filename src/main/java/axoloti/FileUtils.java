@@ -159,7 +159,7 @@ public class FileUtils {
             File f = fc.getSelectedFile();
             for (DocumentWindow dw : DocumentWindowList.getList()) {
                 if (f.equals(dw.getFile())) {
-                    dw.toFront();
+                    dw.bringToFront();
                     return;
                 }
             }

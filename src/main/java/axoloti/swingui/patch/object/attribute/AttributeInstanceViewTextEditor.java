@@ -29,7 +29,7 @@ class AttributeInstanceViewTextEditor extends AttributeInstanceViewString {
             textEditor.setTitle(getDModel().getParent().getInstanceName() + "/" + getDModel().getDModel().getName());
             getDModel().setEditor(textEditor);
         }
-        getDModel().getEditor().toFront();
+        getDModel().getEditor().bringToFront();
     }
 
     private void initComponents() {

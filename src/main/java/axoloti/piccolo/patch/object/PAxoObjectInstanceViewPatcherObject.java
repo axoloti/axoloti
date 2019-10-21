@@ -55,7 +55,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
             @Override
             public void run() {
                 // aoe.setState(java.awt.Frame.NORMAL);
-                aoe.toFront();
+                aoe.bringToFront();
             }
         });
     }

@@ -452,7 +452,7 @@ public class AxoObjectInstanceView extends AxoObjectInstanceViewAbstract {
             editor = ObjectEditorFactory.createObjectEditor(getType());
             getType().setEditor(editor);
         }
-        editor.toFront();
+        editor.bringToFront();
     }
 
     @Override

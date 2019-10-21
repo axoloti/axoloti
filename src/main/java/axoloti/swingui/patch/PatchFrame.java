@@ -1002,7 +1002,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             patchSettingsEditor = new PatchSettingsFrame(this, patchModel);
             patchController.addView(patchSettingsEditor);
         }
-        patchSettingsEditor.toFront();
+        patchSettingsEditor.bringToFront();
 
         /*
         // Needs review: why should edit->settings give to access to the object editor???
@@ -1267,9 +1267,9 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     }
 
     @Override
-    public void toFront() {
+    public void bringToFront() {
         setState(java.awt.Frame.NORMAL);
-        super.toFront();
+        toFront();
     }
 
 

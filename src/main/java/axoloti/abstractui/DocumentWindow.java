@@ -26,7 +26,7 @@ import java.util.List;
  */
 public interface DocumentWindow {
 
-    void toFront();
+    void bringToFront();
 
     boolean isActive();
 

@@ -177,4 +177,9 @@ public class TextEditor extends AJFrame<IModel> implements IAbstractEditor {
         model.getController().removeView(this);
     }
 
+    @Override
+    public void bringToFront() {
+        toFront();
+    }
+
 }

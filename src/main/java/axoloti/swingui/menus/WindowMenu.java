@@ -69,7 +69,7 @@ public class WindowMenu extends JMenu {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((WindowMenuItem) e.getSource()).getDocumentWindow().toFront();
+                ((WindowMenuItem) e.getSource()).getDocumentWindow().bringToFront();
             }
 
         }

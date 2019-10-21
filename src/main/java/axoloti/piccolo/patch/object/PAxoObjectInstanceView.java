@@ -470,7 +470,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
             editor = ObjectEditorFactory.createObjectEditor(getType());
             getType().setEditor(editor);
         }
-        editor.toFront();
+        editor.bringToFront();
     }
 
     @Override

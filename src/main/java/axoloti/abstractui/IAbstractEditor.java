@@ -9,7 +9,7 @@ public interface IAbstractEditor {
     /**
      * Bring the window to front
      */
-    void toFront();
+    void bringToFront();
 
     /**
      * Close the window
