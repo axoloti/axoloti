@@ -24,6 +24,7 @@ import axoloti.object.ObjectController;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.property.ListProperty;
 import axoloti.property.Property;
+import axoloti.utils.ListUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -270,6 +271,9 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
             @Override
             public void setValueAt(Object value, int rowIndex, int columnIndex) {
                 List<T> list = (List<T>) getObjectController().getModelProperty(prop);
+                if (rowIndex >= list.size()) {
+                    return;
+                }
                 T atomDefinitionController = list.get(rowIndex);
                 if (atomDefinitionController == null) {
                     return;
@@ -557,7 +561,7 @@ abstract class AtomDefinitionsEditor<T extends AtomDefinition> implements IView<
             }
             atomViews.clear();
             List<T> list = (List<T>) evt.getNewValue();
-            for (T t : list) {
+            for (T t : ListUtils.export(list)) {
                 IView1 v = new IView1(t);
                 t.getController().addView(v);
                 atomViews.add(v);
