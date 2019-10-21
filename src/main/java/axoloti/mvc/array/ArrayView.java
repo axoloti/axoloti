@@ -3,6 +3,7 @@ package axoloti.mvc.array;
 import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,13 +14,16 @@ public abstract class ArrayView<T extends IView, M extends IModel> {
 
     public List<T> sync(List<T> existingViews, List models) {
         List<M> models1 = (List<M>) models;
+        if (models1 == null) {
+            models1 = Collections.emptyList();
+        }
         ArrayList<T> subviews2;
         if (existingViews == null) {
             subviews2 = new ArrayList<>();
         } else {
             subviews2 = new ArrayList<>(existingViews);
             for (T view : existingViews) {
-                if (!models.contains(view.getDModel())) {
+                if (!models1.contains(view.getDModel())) {
                     subviews2.remove(view);
                     view.dispose();
                     removeView(view);
@@ -45,7 +49,7 @@ public abstract class ArrayView<T extends IView, M extends IModel> {
         if (!subviews.equals(existingViews)) {
             updateUI(subviews);
         }
-        if (subviews.size() != models.size()) {
+        if (subviews.size() != models1.size()) {
             throw new Error("sync error");
         }
         return subviews;
