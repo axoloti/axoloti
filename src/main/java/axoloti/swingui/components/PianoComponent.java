@@ -106,11 +106,19 @@ public abstract class PianoComponent extends JComponent {
     }
 
     private int keyToX(int i) {
-        return (28 * (i / 12) + KEY_X[i % 12]) * QUARTER_KEY_WIDTH;
+        if (i >= 0) {
+            return (28 * (i / 12) + KEY_X[i % 12]) * QUARTER_KEY_WIDTH;
+        } else {
+            return 0;
+        }
     }
 
     private int keyToY(int i) {
-        return KEY_Y[i % 12];
+        if (i >= 0) {
+            return KEY_Y[i % 12];
+        } else {
+            return KEY_Y[0];
+        }
     }
 
     @Override

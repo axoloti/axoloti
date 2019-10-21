@@ -95,11 +95,19 @@ public class KeyboardFrame extends TJFrame {
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ACtrlComponent.PROP_VALUE)) {
                     try {
+                        int val = 0x2000 + (int) (0x2000 * (pbenddial.getValue() / 64.0));
+                        if (val < 0) {
+                            val = 0;
+                        }
+                        if (val > 0x3FFF) {
+                            val = 0x3FFF;
+                        }
+                        int lsb = val & 0x7F;
+                        int msb = val >> 7;
                         getDModel().getConnection().sendMidi(getCable(),
                                 (byte) (0xE0 + getChannel()),
-                                (byte) 0,
-                                (byte) (0x07F & (int) (pbenddial.getValue() - 64.0))
-                        );
+                                (byte) lsb,
+                                (byte) msb);
                     } catch (IOException ex) {
                         Logger.getLogger(KeyboardFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
