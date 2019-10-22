@@ -46,7 +46,7 @@ public abstract class ParameterInstanceView extends View<ParameterInstance> {
 
     String generateMidiCCCodeSub(String vprefix, String value) {
         Integer midicc = getDModel().getMidiCC();
-        if (midicc != null) {
+        if ((midicc != null) && (midicc != -1)) {
             return "        if ((status == attr_midichannel + MIDI_CONTROL_CHANGE)&&(data1 == " + midicc + ")) {\n"
                     + "            parameter_setVal(&parent->" + PExName(vprefix) + "," + value + ", 0xFFFD);\n"
                     + "        }\n";
