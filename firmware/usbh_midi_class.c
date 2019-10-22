@@ -33,15 +33,11 @@
  *
  */
 
-
 #include "hal.h"
 
 #if !HAL_USE_USBH
 #error "USBHMIDI needs USBH"
 #endif
-
-#warning "Needs ChibiOS community library from https://github.com/Axoloti/ChibiOS-Contrib patch-2"
-#warning "otherwise compilation will fail!"
 
 #include <string.h>
 #include "usbh_midi_class.h"

@@ -86,7 +86,7 @@
 #define HAL_USBH_PORT_DEBOUNCE_TIME                   200
 #define HAL_USBH_PORT_RESET_TIMEOUT                   500
 #define HAL_USBH_DEVICE_ADDRESS_STABILIZATION         20
-#define HAL_USBH_CONTROL_REQUEST_DEFAULT_TIMEOUT	  TIME_MS2I(1000)
+#define HAL_USBH_CONTROL_REQUEST_DEFAULT_TIMEOUT	  OSAL_MS2I(1000)
 
 #define HAL_USBH_USE_IAD                              TRUE
 
@@ -145,45 +145,51 @@
 
 
 /* debug */
-#define USBH_DEBUG_ENABLE                             0
-#define USBH_DEBUG_USBHD                              USBHD2
-#define USBH_DEBUG_SD                                 SD2
-#define USBH_DEBUG_BUFFER                             500 /* was 25000 */
+#define USBH_DEBUG_ENABLE                             FALSE
+#define USBH_DEBUG_MULTI_HOST                         FALSE
+#define USBH_DEBUG_SINGLE_HOST_SELECTION              USBHD2
+#define USBH_DEBUG_BUFFER                             25000
+#define USBH_DEBUG_OUTPUT_CALLBACK                    usbh_debug_output
 
-#define USBH_DEBUG_ENABLE_TRACE                       0
-#define USBH_DEBUG_ENABLE_INFO                        1
-#define USBH_DEBUG_ENABLE_WARNINGS                    1
-#define USBH_DEBUG_ENABLE_ERRORS                      1
+#define USBH_DEBUG_ENABLE_TRACE                       FALSE
+#define USBH_DEBUG_ENABLE_INFO                        TRUE
+#define USBH_DEBUG_ENABLE_WARNINGS                    TRUE
+#define USBH_DEBUG_ENABLE_ERRORS                      TRUE
 
-#define USBH_LLD_DEBUG_ENABLE_TRACE                   0
-#define USBH_LLD_DEBUG_ENABLE_INFO                    1
-#define USBH_LLD_DEBUG_ENABLE_WARNINGS                1
-#define USBH_LLD_DEBUG_ENABLE_ERRORS                  1
+#define USBH_LLD_DEBUG_ENABLE_TRACE                   FALSE
+#define USBH_LLD_DEBUG_ENABLE_INFO                    TRUE
+#define USBH_LLD_DEBUG_ENABLE_WARNINGS                TRUE
+#define USBH_LLD_DEBUG_ENABLE_ERRORS                  TRUE
 
-#define USBHHUB_DEBUG_ENABLE_TRACE                    0
-#define USBHHUB_DEBUG_ENABLE_INFO                     0
-#define USBHHUB_DEBUG_ENABLE_WARNINGS                 1
-#define USBHHUB_DEBUG_ENABLE_ERRORS                   1
+#define USBHHUB_DEBUG_ENABLE_TRACE                    FALSE
+#define USBHHUB_DEBUG_ENABLE_INFO                     TRUE
+#define USBHHUB_DEBUG_ENABLE_WARNINGS                 TRUE
+#define USBHHUB_DEBUG_ENABLE_ERRORS                   TRUE
 
-#define USBHHID_DEBUG_ENABLE_TRACE                    0
-#define USBHHID_DEBUG_ENABLE_INFO                     0
-#define USBHHID_DEBUG_ENABLE_WARNINGS                 1
-#define USBHHID_DEBUG_ENABLE_ERRORS                   1
+#define USBHMSD_DEBUG_ENABLE_TRACE                    FALSE
+#define USBHMSD_DEBUG_ENABLE_INFO                     TRUE
+#define USBHMSD_DEBUG_ENABLE_WARNINGS                 TRUE
+#define USBHMSD_DEBUG_ENABLE_ERRORS                   TRUE
 
-#define USBHMSD_DEBUG_ENABLE_TRACE                    0
-#define USBHMSD_DEBUG_ENABLE_INFO                     1
-#define USBHMSD_DEBUG_ENABLE_WARNINGS                 1
-#define USBHMSD_DEBUG_ENABLE_ERRORS                   1
+#define USBHUVC_DEBUG_ENABLE_TRACE                    FALSE
+#define USBHUVC_DEBUG_ENABLE_INFO                     TRUE
+#define USBHUVC_DEBUG_ENABLE_WARNINGS                 TRUE
+#define USBHUVC_DEBUG_ENABLE_ERRORS                   TRUE
 
-#define USBHUVC_DEBUG_ENABLE_TRACE                    0
-#define USBHUVC_DEBUG_ENABLE_INFO                     1
-#define USBHUVC_DEBUG_ENABLE_WARNINGS                 1
-#define USBHUVC_DEBUG_ENABLE_ERRORS                   1
+#define USBHFTDI_DEBUG_ENABLE_TRACE                   FALSE
+#define USBHFTDI_DEBUG_ENABLE_INFO                    TRUE
+#define USBHFTDI_DEBUG_ENABLE_WARNINGS                TRUE
+#define USBHFTDI_DEBUG_ENABLE_ERRORS                  TRUE
 
-#define USBHFTDI_DEBUG_ENABLE_TRACE                   0
-#define USBHFTDI_DEBUG_ENABLE_INFO                    1
-#define USBHFTDI_DEBUG_ENABLE_WARNINGS                1
-#define USBHFTDI_DEBUG_ENABLE_ERRORS                  1
+#define USBHAOA_DEBUG_ENABLE_TRACE                    FALSE
+#define USBHAOA_DEBUG_ENABLE_INFO                     TRUE
+#define USBHAOA_DEBUG_ENABLE_WARNINGS                 TRUE
+#define USBHAOA_DEBUG_ENABLE_ERRORS                   TRUE
+
+#define USBHHID_DEBUG_ENABLE_TRACE                    FALSE
+#define USBHHID_DEBUG_ENABLE_INFO                     TRUE
+#define USBHHID_DEBUG_ENABLE_WARNINGS                 TRUE
+#define USBHHID_DEBUG_ENABLE_ERRORS                   TRUE
 
 /*===========================================================================*/
 /* FSMCNAND driver related settings.                                         */

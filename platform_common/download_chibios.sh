@@ -20,12 +20,11 @@ then
     cd ../../
     mv ${CHIBIOS_ARDIR} ../..
 
-    echo "fixing ChibiOS community from Axoloti/ChibiOS-Contrib"
+    echo "fetching ChibiOS-community"
     cd ${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}
     rm -rf community
-    git clone https://github.com/axoloti/ChibiOS-Contrib.git community
-    cd community
-    git checkout patch-2
+    git clone https://github.com/ChibiOS/ChibiOS-Contrib community
+    git checkout dc72ea603311123964271f910f051fb2027351ef
 else
     echo "chibios directory already present, skipping..."
 fi
