@@ -173,7 +173,7 @@ typedef struct ui_object {
             }
             c += s + "\n";
         }
-        c = "  public: void Dispose() {\n" + c + "}\n";
+        c = "  public: void dispose() {\n" + c + "\n}\n";
         return c;
     }
 
@@ -276,7 +276,7 @@ typedef struct ui_object {
         return s.toString();
     }
 
-    public final static String MidiHandlerFunctionHeader = "void MidiInHandler(uint8_t port, midi_message_t midi_message) {\n";
+    public final static String MidiHandlerFunctionHeader = "void midiInHandler(uint8_t port, midi_message_t midi_message) {\n";
 
     public String generateInstanceDataDeclaration2() {
         String c = "";
@@ -309,7 +309,7 @@ typedef struct ui_object {
         {
             String d3 = generateCodeMidiHandler("");
             if (!d3.isEmpty()) {
-                s.append("void MidiInHandler(" + ClassName + "*parent, midi_message_t midi_message) {\n");
+                s.append("void midiInHandler(" + ClassName + "*parent, midi_message_t midi_message) {\n");
                 s.append("uint8_t dev = 0;\n");
                 s.append("uint8_t port = midiMessageGetPort(midi_message);\n");
                 s.append("uint8_t status = midiMessageGetB0(midi_message);\n");
@@ -347,11 +347,11 @@ typedef struct ui_object {
     @Override
     public String generateCallMidiHandler() {
         if ((getDModel().getDModel().getMidiCode() != null) && (!getDModel().getDModel().getMidiCode().isEmpty())) {
-            return getDModel().getCInstanceName() + "_i.MidiInHandler(this, midi_message);\n";
+            return getDModel().getCInstanceName() + "_i.midiInHandler(this, midi_message);\n";
         }
         for (ParameterInstanceView pi : parameterInstances) {
             if (!pi.generateCodeMidiHandler("").isEmpty()) {
-                return getDModel().getCInstanceName() + "_i.MidiInHandler(this, midi_message);\n";
+                return getDModel().getCInstanceName() + "_i.midiInHandler(this, midi_message);\n";
             }
         }
         return "";

@@ -500,7 +500,7 @@ public class PatchViewCodegen extends View<PatchModel> {
             IAxoObjectInstance o = getDModel().getObjectInstances().get(i);
             String s = o.getCInstanceName();
             if (!s.isEmpty()) {
-                c.append("   " + o.getCInstanceName() + "_i.Dispose();\n");
+                c.append("   " + o.getCInstanceName() + "_i.dispose();\n");
             }
         }
 
@@ -1102,7 +1102,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
-                + "  getVoices()[mini].MidiInHandler(this, midiMessage(port, status & 0xF0, data1, data2));\n"
+                + "  getVoices()[mini].midiInHandler(this, midiMessage(port, status & 0xF0, data1, data2));\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  int i;\n"
@@ -1112,14 +1112,14 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
+                + "         getVoices()[i].midiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2));\n"
+                + "      getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == 64) {\n"
@@ -1129,7 +1129,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0));\n"
+                + "          getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0));\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n"
@@ -1138,14 +1138,14 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++){\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "      getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_PITCH_BEND + attr_midichannel, data1, data2));\n"
+                + "      getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_PITCH_BEND + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {"
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel) {\n"
-                + "         getVoices()[i].MidiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
+                + "         getVoices()[i].midiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n";
@@ -1192,7 +1192,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  notePlaying[mini] = data1;\n"
                 + "  pressed[mini] = 1;\n"
                 + "  voiceChannel[mini] = status & 0x0F;\n"
-                + "  getVoices()[mini].MidiInHandler(this, midiMessage(port, status & 0xF0, data1, data2));\n"
+                + "  getVoices()[mini].midiInHandler(this, midiMessage(port, status & 0xF0, data1, data2));\n"
                 + "} else if (((msg == MIDI_NOTE_ON) && (!data2))||\n"
                 + "            (msg == MIDI_NOTE_OFF)) {\n"
                 + "  if (channel == attr_midichannel\n "
@@ -1205,7 +1205,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "      voiceChannel[i] = 0xFF;\n"
                 + "      pressed[i] = 0;\n"
                 + "      if (!sustain)\n"
-                + "         getVoices()[i].MidiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
+                + "         getVoices()[i].midiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
                 + "      }\n"
                 + "  }\n"
                 + "} else if (msg == MIDI_CONTROL_CHANGE) {\n"
@@ -1220,9 +1220,9 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "           lowChannel = highChannel + 1 - data2;\n"
                 + "         }\n"
                 + "         for(int i=0;i<attr_poly;i++) {\n"
-                + "           getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB));\n"
-                + "           getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB));\n"
-                + "           getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange));\n"
+                + "           getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB));\n"
+                + "           getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB));\n"
+                + "           getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange));\n"
                 + "         }\n" //for
                 + "      }\n" //if mainchannel
                 + "    } else {\n" // enable/disable
@@ -1236,7 +1236,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "      getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2));\n"
+                + "      getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "  if (data1 == MIDI_C_RPN_MSB || data1 == MIDI_C_RPN_LSB || data1 == MIDI_C_DATA_ENTRY) {\n"
@@ -1248,9 +1248,9 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "               for(i=0;i<attr_poly;i++) {\n"
                 + "                 if (voiceChannel[i] != channel) {\n" // because already sent above
                 + "                   pitchbendRange = data2;\n"
-                + "                   getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB));\n"
-                + "                   getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB));\n"
-                + "                   getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange));\n"
+                + "                   getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 100, lastRPN_LSB));\n"
+                + "                   getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 101, lastRPN_MSB));\n"
+                + "                   getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_CONTROL_CHANGE + attr_midichannel, 6, pitchbendRange));\n"
                 + "                 }\n" // if
                 + "               }\n" //for
                 + "             }\n" // if lsb/msb=0
@@ -1265,7 +1265,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "      sustain = 0;\n"
                 + "      for(i=0;i<attr_poly;i++){\n"
                 + "        if (pressed[i] == 0) {\n"
-                + "          getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0));\n"
+                + "          getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_NOTE_ON + attr_midichannel, notePlaying[i], 0));\n"
                 + "        }\n"
                 + "      }\n"
                 + "    }\n" //sus=1
@@ -1277,7 +1277,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "      getVoices()[i].MidiInHandler(this, midiMessage(port, MIDI_PITCH_BEND + attr_midichannel, data1, data2));\n"
+                + "      getVoices()[i].midiInHandler(this, midiMessage(port, MIDI_PITCH_BEND + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "} else {" // end pb, other midi
@@ -1287,7 +1287,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "         getVoices()[i].MidiInHandler(this, midiMessage((port, msg + attr_midichannel, data1, data2));\n"
+                + "         getVoices()[i].midiInHandler(this, midiMessage((port, msg + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n"; // other midi
