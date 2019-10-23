@@ -37,7 +37,7 @@ public class UploadFirmwareDFU {
     }
 
     private static String getWorkingDir() {
-        return System.getProperty(axoloti.Axoloti.RELEASE_DIR + File.separator + "firmware");
+        return new File(Axoloti.getFirmwareFilename()).getParent();
     }
 
     private static void run(String firmwareFilename) {
