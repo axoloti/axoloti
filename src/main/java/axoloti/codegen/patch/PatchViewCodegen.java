@@ -441,7 +441,6 @@ public class PatchViewCodegen extends View<PatchModel> {
                 c.append("  if (r) return r;\n");
             }
         }
-        c.append("  return 0;\n");
         /* // no need for this?
            c.append("      int k;\n"
            + "      for (k = 0; k < nparams; k++) {"
@@ -467,11 +466,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         c.append("   const int32_t *p;\n");
         c.append("   p = GetInitParams();\n");
         c.append("   for(j=0;j<" + parameterInstances.size() + ";j++){\n");
-        c.append("      Parameter_t *param = &PExch[j];\n");
-        c.append("      if (param->pfunction)\n");
-        c.append("         (param->pfunction)(param);\n");
-        c.append("      else\n");
-        c.append("         param->d.frac.finalvalue = param->d.frac.modvalue;\n");
+        c.append("      parameter_setVal(&PExch[j], p[j], 0xFFEE);\n");
         c.append("   }\n");
         c.append("   int32_t *pp = &PExModulationPrevVal[0][0];\n");
         c.append("   for(j=0;j<attr_poly*NMODULATIONSOURCES;j++){\n");
@@ -850,7 +845,7 @@ public class PatchViewCodegen extends View<PatchModel> {
         sLocalData.append(generateModulationCode3());
         ao.sLocalData = sLocalData.toString().replaceAll("attr_poly", "1");
 
-        ao.sInitCode = generateParamInitCodePlusPlusSub("attr_parent", "this") + generateObjInitCodePlusPlusSub("attr_parent", "this");
+        ao.sInitCode = generateObjInitCodePlusPlusSub("attr_parent", "this") + generateParamInitCodePlusPlusSub("attr_parent", "this") + "\nreturn 0; //(2)\n";
 
         ao.sDisposeCode = generateDisposeCodePlusPlusSub("attr_parent");
 
@@ -906,6 +901,12 @@ public class PatchViewCodegen extends View<PatchModel> {
         sLocalData.append("attr_parent *common;\n");
         sLocalData.append("int init(voice *parent) {\n");
         sLocalData.append(generateObjInitCodePlusPlusSub("voice", "parent"));
+        sLocalData.append("   int j;\n");
+        sLocalData.append("   const int32_t *p = GetInitParams();\n");
+        sLocalData.append("   for(j=0;j<" + parameterInstances.size() + ";j++){\n");
+        sLocalData.append("      parameter_setVal(&PExch[j], p[j], 0xFFEE);\n");
+        sLocalData.append("   }\n");
+        sLocalData.append("return 0;\n");
         sLocalData.append("}\n\n");
         sLocalData.append("void dsp(void) {\n int i;\n");
         sLocalData.append(generateDSPCodePlusPlusSub("", true));
