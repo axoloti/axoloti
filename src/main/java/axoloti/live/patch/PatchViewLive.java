@@ -292,25 +292,28 @@ public class PatchViewLive extends View<PatchModel> implements IPatchCB {
                 PatchViewCodegen codegen = new PatchViewCodegen(getDModel());
                 String c = codegen.generateCode4();
                 CompilePatchResult cpr = getDModel().getController().compile(c);
-                getDModel().getController().uploadDependentFiles(cpr.getFiledeps(), "", ctx);
-                final boolean use_sdcard_for_live = false;
-                final boolean use_sdram_for_live = true;
-                if (use_sdcard_for_live) {
-                    ByteArrayInputStream inputStreamElf = new ByteArrayInputStream(cpr.getElf());
-                    Calendar cal = Calendar.getInstance();
-                    String fn = "/xpatch.elf";
-                    conn.upload(fn, inputStreamElf, cal, cpr.getElf().length, ctx);
-                    patch = conn.transmitStart(fn, this);
-                } else if (use_sdram_for_live) {
-                    patch = conn.transmitStartLive(cpr.getElf(), getDModel().getController().getSDCardPath(), this, ctx);
-                } else
-                    throw new UnsupportedOperationException();
+                if (cpr.getElf() != null) {
+                    getDModel().getController().uploadDependentFiles(cpr.getFiledeps(), "", ctx);
+                    final boolean use_sdcard_for_live = false;
+                    final boolean use_sdram_for_live = true;
+                    if (use_sdcard_for_live) {
+                        ByteArrayInputStream inputStreamElf = new ByteArrayInputStream(cpr.getElf());
+                        Calendar cal = Calendar.getInstance();
+                        String fn = "/xpatch.elf";
+                        conn.upload(fn, inputStreamElf, cal, cpr.getElf().length, ctx);
+                        patch = conn.transmitStart(fn, this);
+                    } else if (use_sdram_for_live) {
+                        patch = conn.transmitStartLive(cpr.getElf(), getDModel().getController().getSDCardPath(), this, ctx);
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
 
-                ctx.doInSync(() -> {
-                    getDModel().getController().setLocked(true);
+                    ctx.doInSync(() -> {
+                        getDModel().getController().setLocked(true);
 
-                    TargetModel.getTargetModel().addPoller(pollHandler);
-                });
+                        TargetModel.getTargetModel().addPoller(pollHandler);
+                    });
+                }
             } catch (ExecutionFailedException ex) {
                 ctx.doInSync(() -> {
                     getDModel().getController().setLocked(false);

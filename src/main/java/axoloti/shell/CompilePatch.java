@@ -107,7 +107,7 @@ public class CompilePatch {
             }
         } else {
             println("Compiling patch failed");
-            throw new ExecutionFailedException();
+            return new CompilePatchResult(null, new SDFileReference[]{}, shellTask.getOutput());
         }
     }
 

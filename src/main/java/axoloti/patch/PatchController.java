@@ -170,8 +170,10 @@ public class PatchController extends AbstractController<PatchModel, IView> {
             PatchViewCodegen codegen = new PatchViewCodegen(getModel());
             String c = codegen.generateCode4();
             CompilePatchResult cpr = compile(c);
-            IConnection conn = CConnection.getConnection();
-            conn.uploadPatchToFlash(cpr.getElf(), "flash patch x");
+            if (cpr.getElf() != null) {
+                IConnection conn = CConnection.getConnection();
+                conn.uploadPatchToFlash(cpr.getElf(), "flash patch x");
+            }
         } catch (ExecutionFailedException ex) {
             Logger.getLogger(PatchController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -201,32 +203,34 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 }
             }
         }
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(cpr.getElf());
-        IConnection conn = CConnection.getConnection();
-        conn.upload(sdfilename, inputStream, cal, cpr.getElf().length, ctx);
+        if (cpr.getElf() != null) {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(cpr.getElf());
+            IConnection conn = CConnection.getConnection();
+            conn.upload(sdfilename, inputStream, cal, cpr.getElf().length, ctx);
 
-        if (false) {
-            Serializer serializer = new Persister();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
-            try {
-                serializer.write(getModel(), baos);
-            } catch (Exception ex) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+            if (false) {
+                Serializer serializer = new Persister();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream(256 * 1024);
+                try {
+                    serializer.write(getModel(), baos);
+                } catch (Exception ex) {
+                    Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                byte[] ba = baos.toByteArray();
+                ByteArrayInputStream bais = new ByteArrayInputStream(ba);
+                String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
+
+                conn.upload(sdfnPatch, bais, cal, ba.length, ctx);
+
+                String dir;
+                int i = sdfilename.lastIndexOf('/');
+                if (i > 0) {
+                    dir = sdfilename.substring(0, i);
+                } else {
+                    dir = "";
+                }
+                uploadDependentFiles(dir, ctx);
             }
-            byte[] ba = baos.toByteArray();
-            ByteArrayInputStream bais = new ByteArrayInputStream(ba);
-            String sdfnPatch = sdfilename.substring(0, sdfilename.length() - 3) + "axp";
-
-            conn.upload(sdfnPatch, bais, cal, ba.length, ctx);
-
-            String dir;
-            int i = sdfilename.lastIndexOf('/');
-            if (i > 0) {
-                dir = sdfilename.substring(0, i);
-            } else {
-                dir = "";
-            }
-            uploadDependentFiles(dir, ctx);
         }
     }
 
