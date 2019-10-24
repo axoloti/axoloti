@@ -153,11 +153,21 @@ CSRC = $(ALLCSRC) \
        ${FIRMWARE}/firmware_chunks.c \
        ${FIRMWARE}/midi_buffer.c \
        ${FIRMWARE}/midi_usbh.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_core.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_pipes.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_keybd.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_mouse.c \
+       ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Src/usbh_hid_parser.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
-       ${FIRMWARE}/usbh_midi_class.c \
-       ${FIRMWARE}/usbh_virus_class.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
+       ${FIRMWARE}/usbh_midi_core.c \
+       ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \
        ${FIRMWARE}/serial_midi.c \
        ${FIRMWARE}/spilink.c \
@@ -228,7 +238,10 @@ INCDIR = $(CONFDIR) $(ALLINC) $(TESTINC) \
          $(FATFSINC) \
          $(CHIBIOS) \
          ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc \
-         ${FIRMWARE}/../api
+         ${FIRMWARE}/../api \
+         ${FIRMWARE}/STM32_USB_Host_Library/Core/Inc \
+         ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Inc \
+         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc
 #
 # Project, target, sources and paths
 ##############################################################################

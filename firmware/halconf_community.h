@@ -71,9 +71,7 @@
  */
 #if !defined(HAL_USE_USBH) || defined(__DOXYGEN__)
 
-#ifndef __cplusplus // can't compile with C++...
-#define HAL_USE_USBH                 TRUE
-#endif
+#define HAL_USE_USBH                 FALSE
 
 #endif
 
@@ -136,7 +134,7 @@
 #define HAL_USBHHID_USE_INTERRUPT_OUT                 FALSE
 
 /* HUB */
-#define HAL_USBH_USE_HUB                              TRUE
+#define HAL_USBH_USE_HUB                              FALSE
 
 #define HAL_USBHHUB_MAX_INSTANCES                     1
 #define HAL_USBHHUB_MAX_PORTS                         4

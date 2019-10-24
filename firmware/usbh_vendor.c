@@ -2,14 +2,12 @@
 // https://lkml.org/lkml/2010/2/10/25
 
 
-#include "midi_usbh.h"
+#include "usbh_midi_core.h"
 
+#define _USB_H_
 #include "ch.h"
-#include "usbh_midi_class.h"
 
-#if 0 // this needs to be re-implemented for the chibios community usbh framework
-
-USB_Setup_TypeDef MIDI_Setup;
+//USB_Setup_TypeDef MIDI_Setup;
 
 #define MIDI_MIN_READ_POLL 1
 #define MIDI_MIN_WRITE_POLL 1
@@ -56,7 +54,7 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
 
     const uint8_t interface = 5;
 
-    usbh_midi_init(); 
+    // usbh_midi_init(); // TODO: usbh_vendor: check usbh_midi_init purpose
 
     if(interface<phost->device.CfgDesc.bNumInterfaces) {
         if( (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceClass == USB_VENDOR_CLASS_ID) &&
@@ -126,7 +124,7 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
                 USBH_BulkSendData(phost, seq, sizeof(seq), MIDI_Handle->OutPipe,false);
 
                 // prime output ring buffer for use
-                midi_output_buffer_reset(&midi_output_usbh);
+                // usbh_midi_reset_buffer(); // TODO: validate usbh_vendor...
             }
             
             if (isValidInput(MIDI_Handle)) {
@@ -154,6 +152,3 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
     
   return status;
 }
-
-#endif
-

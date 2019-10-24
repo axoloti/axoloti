@@ -1,226 +1,585 @@
+/**
+ ******************************************************************************
+ * @file    usbh_conf.c
+ * @author  MCD Application Team
+ * @version V1.1.0
+ * @date    26-June-2014
+ * @brief   USB Host configuration file.
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+ *
+ * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ *        http://www.st.com/software_license_agreement_liberty_v2
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ ******************************************************************************
+ */
+
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_hal.h"
+#include "usbh_core.h"
+
+HCD_HandleTypeDef hHCD;
+
+#define HOST_POWERSW_CLK_ENABLE()          __GPIOC_CLK_ENABLE()
+#define HOST_POWERSW_PORT                  GPIOD
+#define HOST_POWERSW_VBUS                  GPIO_PIN_7
+
+/* JT */
+#include "core_cm4.h"
+#include "usbh_hid.h"
+#include "usbh_hid_parser.h"
+#include "usbh_midi_core.h"
 #include "ch.h"
-#include "hal.h"
-#include "usbh_midi_class.h"
+#include "midi_usbh.h"
 #include "midi.h"
 #include "midi_buffer.h"
-#include "midi_usbh.h"
-#if HAL_USBH_USE_HID
-#include "usbh/dev/hid.h"
+
+USBH_HandleTypeDef hUSBHost; /* USB Host handle */
+static void USBH_UserProcess(USBH_HandleTypeDef *pHost, uint8_t vId);
+
+/*******************************************************************************
+ HCD BSP Routines
+ *******************************************************************************/
+/**
+ * @brief  Initializes the HCD MSP.
+ * @param  hHCD: HCD handle
+ * @retval None
+ */
+void HAL_HCD_MspInit(HCD_HandleTypeDef *hHCD) {
+  /* Note: On STM32F4-Discovery board only USB OTG FS core is supported. */
+  GPIO_InitTypeDef GPIO_InitStruct;
+#if (DEBUG_ON_GPIO)
+  // for debug
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
+  GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Alternate = 0;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 #endif
-#include "usbh_patch.h"
-#include "usbh_conf.h"
-#include "midi_routing.h"
 
-/* notes:
- * * debugging is active on SD2
- *   (ENABLE_SERIAL_DEBUG)
- * * midi output is not implemented yet
- * * compiled with ChibiOS-Contrib
- *   from https://github.com/ChibiOS/ChibiOS-Contrib
-*/
+  if (hHCD->Instance == USB_OTG_FS) {
+    /* Configure USB FS GPIOs */
+    __GPIOA_CLK_ENABLE();
+    HOST_POWERSW_CLK_ENABLE();
 
-static void usbhmidi_cb(USBHMIDIConfig *midic, uint32_t *buf, int len) {
-	USBHMIDIConfig_ext *midic_ext = (USBHMIDIConfig_ext *)midic;
-	int i;
-	for (i = 0; i < len; i ++) {
-		if (*buf) {
-			midi_message_t m;
-			m.word = *buf;
-			usbh_midi_dispatch(m, midic_ext->in_mapping->bmvports);
-			buf++;
-			//usbDbgPuts("cb!");
-		}
-	}
+    /* Configure DM DP Pins */
+    GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_12;
+
+    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    /* This for ID line debug */
+    GPIO_InitStruct.Pin = GPIO_PIN_10;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+    GPIO_InitStruct.Alternate = GPIO_AF10_OTG_FS;
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+    /* Configure Power Switch Vbus Pin */
+    GPIO_InitStruct.Pin = HOST_POWERSW_VBUS;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(HOST_POWERSW_PORT, &GPIO_InitStruct);
+
+    /* Enable USB FS Clocks */
+    __USB_OTG_FS_CLK_ENABLE();
+
+    /* Set USBFS Interrupt to the lowest priority */
+    HAL_NVIC_SetPriority(OTG_FS_IRQn, 6, 0);
+
+    /* Enable USBFS Interrupt */
+    HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
+  }
+  else if (hHCD->Instance == USB_OTG_HS) {
+    /* Configure USB FS GPIOs */
+    //__GPIOA_CLK_ENABLE();
+    //HOST_POWERSW_CLK_ENABLE();
+    RCC->AHB1RSTR |= RCC_AHB1RSTR_OTGHRST;
+    chThdSleepMilliseconds(1);
+    RCC->AHB1RSTR &= ~RCC_AHB1RSTR_OTGHRST;
+
+    /* Configure DM DP Pins */
+    GPIO_InitStruct.Pin = GPIO_PIN_14 | GPIO_PIN_15;
+
+    GPIO_InitStruct.Speed = GPIO_SPEED_HIGH;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Alternate = GPIO_AF12_OTG_HS_FS;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    /* This for ID line debug */
+    GPIO_InitStruct.Pin = GPIO_PIN_12;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+    GPIO_InitStruct.Alternate = GPIO_AF12_OTG_HS_FS;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+
+    /* Configure Power Switch Vbus Pin */
+    GPIO_InitStruct.Pin = HOST_POWERSW_VBUS;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FAST;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(HOST_POWERSW_PORT, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(HOST_POWERSW_PORT, HOST_POWERSW_VBUS, GPIO_PIN_RESET);
+
+    /* Enable USB FS Clocks */
+    __USB_OTG_HS_CLK_ENABLE();
+
+    /* Set USBHS Interrupt to the lowest priority */
+    HAL_NVIC_SetPriority(OTG_HS_IRQn, 6, 0);
+
+    /* Enable USBHS Interrupt */
+    HAL_NVIC_EnableIRQ(OTG_HS_IRQn);
+  }
 }
 
-static void usbmidi_disconnect(USBHMIDIConfig *midic) {
-	USBHMIDIConfig_ext *midic_ext = (USBHMIDIConfig_ext *)midic;
-	midic_ext->in_mapping->nports=0;
-	midic_ext->out_mapping->nports=0;
+/**
+ * @brief  DeInitializes the HCD MSP.
+ * @param  hHCD: HCD handle
+ * @retval None
+ */
+void HAL_HCD_MspDeInit(HCD_HandleTypeDef *hHCD) {
+  if (hHCD->Instance == USB_OTG_FS) {
+    /* Disable USB FS Clocks */
+    __USB_OTG_FS_CLK_DISABLE();
+  }
+  else if (hHCD->Instance == USB_OTG_HS) {
+    /* Disable USB HS Clocks */
+    __USB_OTG_HS_CLK_DISABLE();
+  }
+}
+/*******************************************************************************
+ LL Driver Callbacks (HCD -> USB Host Library)
+ *******************************************************************************/
+
+/**
+ * @brief  SOF callback.
+ * @param  hHCD: HCD handle
+ * @retval None
+ */
+void HAL_HCD_SOF_Callback(HCD_HandleTypeDef *hHCD) {
+  USBH_LL_IncTimer(hHCD->pData);
 }
 
-USBHMIDIConfig_ext USBHMIDIC[USBH_MIDI_CLASS_MAX_INSTANCES] = {
-		{.config = {usbhmidi_cb,usbmidi_disconnect}, .in_mapping = &midi_inputmap_usbh1, .out_mapping = &midi_outputmap_usbh1},
-		{.config = {usbhmidi_cb,usbmidi_disconnect}, .in_mapping = &midi_inputmap_usbh2, .out_mapping = &midi_outputmap_usbh2},
-};
+/**
+ * @brief  Connect callback.
+ * @param  hHCD: HCD handle
+ * @retval None
+ */
+void HAL_HCD_Connect_Callback(HCD_HandleTypeDef *hHCD) {
+  USBH_LL_Connect(hHCD->pData);
+}
+
+/**
+ * @brief  Disconnect callback.
+ * @param  hHCD: HCD handle
+ * @retval None
+ */
+void HAL_HCD_Disconnect_Callback(HCD_HandleTypeDef *hHCD) {
+  USBH_LL_Disconnect(hHCD->pData);
+}
+
+/**
+ * @brief  Notify URB state change callback.
+ * @param  hpcd: HCD handle
+ * @retval None
+ */
+void HAL_HCD_HC_NotifyURBChange_Callback(HCD_HandleTypeDef *hHCD, uint8_t chnum,
+                                         HCD_URBStateTypeDef urb_state) {
+  /* To be used with OS to sync URB state with the global state machine */
+  USBH_LL_NotifyURBChange(hHCD->pData);
+}
+
+/*******************************************************************************
+ LL Driver Interface (USB Host Library --> HCD)
+ *******************************************************************************/
+/**
+ * @brief  USBH_LL_Init
+ *         Initialize the Low Level portion of the Host driver.
+ * @param  phost: Host handle
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_Init(USBH_HandleTypeDef *phost) {
+  /* Change Systick prioity */
+  //HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+  RCC->AHB1ENR |= RCC_AHB1ENR_OTGHSEN;
+  RCC->AHB1LPENR |= RCC_AHB1LPENR_OTGHSLPEN;
+
+  /*Set LL Driver parameters */
+  hHCD.Instance = USB_OTG_HS;
+  hHCD.Init.Host_channels = 11;
+  hHCD.Init.dma_enable = 1;
+  hHCD.Init.low_power_enable = 0;
+  hHCD.Init.phy_itface = HCD_PHY_EMBEDDED;
+  hHCD.Init.Sof_enable = 0;
+  hHCD.Init.speed = HCD_SPEED_FULL;
+  hHCD.Init.vbus_sensing_enable = 0;
+  /* Link The driver to the stack */
+  hHCD.pData = phost;
+  phost->pData = &hHCD;
+  /*Initialize LL Driver */
+  HAL_HCD_Init(&hHCD);
+
+//  USB_OTG_HS->GUSBCFG |= USB_OTG_GUSBCFG_FHMOD;
+  USBH_LL_SetTimer(phost, HAL_HCD_GetCurrentFrame(&hHCD));
+
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_DeInit
+ *         De-Initialize the Low Level portion of the Host driver.
+ * @param  phost: Host handle
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_DeInit(USBH_HandleTypeDef *phost) {
+  HAL_HCD_DeInit(phost->pData);
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_Start
+ *         Start the Low Level portion of the Host driver.
+ * @param  phost: Host handle
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_Start(USBH_HandleTypeDef *phost) {
+  HAL_HCD_Start(phost->pData);
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_Stop
+ *         Stop the Low Level portion of the Host driver.
+ * @param  phost: Host handle
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_Stop(USBH_HandleTypeDef *phost) {
+  HAL_HCD_Stop(phost->pData);
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_GetSpeed
+ *         Return the USB Host Speed from the Low Level Driver.
+ * @param  phost: Host handle
+ * @retval USBH Speeds
+ */
+USBH_SpeedTypeDef USBH_LL_GetSpeed(USBH_HandleTypeDef *phost) {
+  USBH_SpeedTypeDef speed = USBH_SPEED_FULL;
+
+  switch (HAL_HCD_GetCurrentSpeed(phost->pData)) {
+  case 0:
+    speed = USBH_SPEED_HIGH;
+    break;
+
+  case 1:
+    speed = USBH_SPEED_FULL;
+    break;
+
+  case 2:
+    speed = USBH_SPEED_LOW;
+    break;
+
+  default:
+    speed = USBH_SPEED_FULL;
+    break;
+  }
+  return speed;
+}
+
+/**
+ * @brief  USBH_LL_ResetPort
+ *         Reset the Host Port of the Low Level Driver.
+ * @param  phost: Host handle
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_ResetPort(USBH_HandleTypeDef *phost) {
+  HAL_HCD_ResetPort(phost->pData);
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_GetLastXferSize
+ *         Return the last transfered packet size.
+ * @param  phost: Host handle
+ * @param  pipe: Pipe index
+ * @retval Packet Size
+ */
+uint32_t USBH_LL_GetLastXferSize(USBH_HandleTypeDef *phost, uint8_t pipe) {
+  return HAL_HCD_HC_GetXferCount(phost->pData, pipe);
+}
+
+/**
+ * @brief  USBH_LL_OpenPipe
+ *         Open a pipe of the Low Level Driver.
+ * @param  phost: Host handle
+ * @param  pipe_num: Pipe index
+ * @param  epnum: Endpoint Number
+ * @param  dev_address: Device USB address
+ * @param  speed: Device Speed
+ * @param  ep_type: Endpoint Type
+ * @param  mps: Endpoint Max Packet Size
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_OpenPipe(USBH_HandleTypeDef *phost, uint8_t pipe_num,
+                                    uint8_t epnum, uint8_t dev_address,
+                                    uint8_t speed, uint8_t ep_type,
+                                    uint16_t mps) {
+  HAL_HCD_HC_Init(phost->pData, pipe_num, epnum, dev_address, speed, ep_type,
+                  mps);
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_ClosePipe
+ *         Close a pipe of the Low Level Driver.
+ * @param  phost: Host handle
+ * @param  pipe_num: Pipe index
+ * @retval USBH Status
+ */
+USBH_StatusTypeDef USBH_LL_ClosePipe(USBH_HandleTypeDef *phost, uint8_t pipe) {
+  HAL_HCD_HC_Halt(phost->pData, pipe);
+  return USBH_OK;
+}
 
 
-#if HAL_USBH_USE_HID
+/**
+ * @brief  USBH_LL_DriverVBUS
+ *         Drive VBUS.
+ * @param  phost: Host handle
+ * @param  state : VBUS state
+ *          This parameter can be one of the these values:
+ *           0 : VBUS Active
+ *           1 : VBUS Inactive
+ * @retval Status
+ */
+USBH_StatusTypeDef USBH_LL_DriverVBUS(USBH_HandleTypeDef *phost, uint8_t state) {
+  /*
+   On-chip 5 V VBUS generation is not supported. For this reason, a charge pump
+   or, if 5 V are available on the application board, a basic power switch, must
+   be added externally to drive the 5 V VBUS line. The external charge pump can
+   be driven by any GPIO output. When the application decides to power on VBUS
+   using the chosen GPIO, it must also set the port power bit in the host port
+   control and status register (PPWR bit in OTG_FS_HPRT).
+
+   Bit 12 PPWR: Port power
+   The application uses this field to control power to this port, and the core
+   clears this bit on an overcurrent condition.
+   */
+  if (0 == state) {
+    /* DISABLE is needed on output of the Power Switch */
+    HAL_GPIO_WritePin(HOST_POWERSW_PORT, HOST_POWERSW_VBUS, GPIO_PIN_SET);
+  }
+  else {
+    /*ENABLE the Power Switch by driving the Enable LOW */
+    HAL_GPIO_WritePin(HOST_POWERSW_PORT, HOST_POWERSW_VBUS, GPIO_PIN_RESET);
+  }
+
+  HAL_Delay(200);
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_SetToggle
+ *         Set toggle for a pipe.
+ * @param  phost: Host handle
+ * @param  pipe: Pipe index
+ * @param  pipe_num: Pipe index
+ * @param  toggle: toggle (0/1)
+ * @retval Status
+ */
+USBH_StatusTypeDef USBH_LL_SetToggle(USBH_HandleTypeDef *phost, uint8_t pipe,
+                                     uint8_t toggle) {
+  if (hHCD.hc[pipe].ep_is_in) {
+    hHCD.hc[pipe].toggle_in = toggle;
+  }
+  else {
+    hHCD.hc[pipe].toggle_out = toggle;
+  }
+  return USBH_OK;
+}
+
+/**
+ * @brief  USBH_LL_GetToggle
+ *         Return the current toggle of a pipe.
+ * @param  phost: Host handle
+ * @param  pipe: Pipe index
+ * @retval toggle (0/1)
+ */
+uint8_t USBH_LL_GetToggle(USBH_HandleTypeDef *phost, uint8_t pipe) {
+  uint8_t toggle = 0;
+
+  if (hHCD.hc[pipe].ep_is_in) {
+    toggle = hHCD.hc[pipe].toggle_in;
+  }
+  else {
+    toggle = hHCD.hc[pipe].toggle_out;
+  }
+  return toggle;
+}
+
+/**
+ * @brief  USBH_Delay
+ *         Delay routine for the USB Host Library
+ * @param  Delay: Delay in ms
+ * @retval None
+ */
+void USBH_Delay(uint32_t Delay) {
+  HAL_Delay(Delay);
+  __NOP();
+}
+
+/**
+ * @brief  User Process
+ * @param  phost: Host Handle
+ * @param  id: Host Library user message ID
+ * @retval none
+ */
+static void USBH_UserProcess(USBH_HandleTypeDef *pHost, uint8_t vId) {
+  switch (vId) {
+  case HOST_USER_SELECT_CONFIGURATION:
+    break;
+
+  case HOST_USER_DISCONNECTION:
+    break;
+
+  case HOST_USER_CLASS_ACTIVE:
+    break;
+
+  case HOST_USER_CONNECTION:
+    break;
+
+  default:
+    break;
+  }
+}
+
+
+extern USBH_ClassTypeDef  Vendor_Class;
+#define USBH_VENDOR_CLASS  &Vendor_Class
+
+
+
+void MY_USBH_Init(void) {
+
+  /* Init Host Library */
+  USBH_Init(&hUSBHost, USBH_UserProcess, 0);
+
+  /* Add Supported Class */
+  /* highest priority first */
+  USBH_RegisterClass(&hUSBHost, USBH_VENDOR_CLASS);
+  USBH_RegisterClass(&hUSBHost, USBH_MIDI_CLASS);
+  USBH_RegisterClass(&hUSBHost, USBH_HID_CLASS);
+
+  /* Start Host Process */
+  USBH_Start(&hUSBHost);
+
+}
+
 int8_t hid_buttons[8];
 int8_t hid_mouse_x;
 int8_t hid_mouse_y;
 
-usbh_hid_custom_report_callback_t *usbh_hid_custom_report_callback = 0;
-
-void register_usbh_hid_custom_report_cb(usbh_hid_custom_report_callback_t *cb) {
-	usbh_hid_custom_report_callback = cb;
-}
-
-void unregister_usbh_hid_custom_report_cb(usbh_hid_custom_report_callback_t *cb) {
-	usbh_hid_custom_report_callback = 0;
-}
-
-static void _hid_report_callback(USBHHIDDriver *hidp, uint16_t len) {
-    uint8_t *report = (uint8_t *)hidp->config->report_buffer;
-
-    if (hidp->type == USBHHID_DEVTYPE_BOOT_MOUSE) {
-
-        hid_buttons[0] = report[0] & 1;
-        hid_buttons[1] = report[0] & 2;
-        hid_buttons[2] = report[0] & 4;
-        hid_mouse_x += (int8_t)report[1];
-        hid_mouse_y += (int8_t)report[2];
-
-    	/*
-        usbDbgPrintf("Mouse report: buttons=%02x, Dx=%d, Dy=%d",
-                report[0],
-                (int8_t)report[1],
-                (int8_t)report[2]);
-        */
-    } else if (hidp->type == USBHHID_DEVTYPE_BOOT_KEYBOARD) {
-    	/*
-        usbDbgPrintf("Keyboard report: modifier=%02x, keys=%02x %02x %02x %02x %02x %02x",
-                report[0],
-                report[2],
-                report[3],
-                report[4],
-                report[5],
-                report[6],
-                report[7]);
-                */
+void USBH_HID_EventCallback(USBH_HandleTypeDef *phost) {
+  if (USBH_HID_GetDeviceType(&hUSBHost) == HID_MOUSE) {
+    HID_MOUSE_Info_TypeDef *m_pinfo_mouse;
+    m_pinfo_mouse = USBH_HID_GetMouseInfo(phost);
+    if (m_pinfo_mouse) {
+//      USBH_DbgLog("btns:%u%u%u", m_pinfo_mouse->buttons[0],m_pinfo_mouse->buttons[1],m_pinfo_mouse->buttons[2]);
+      hid_buttons[0] = m_pinfo_mouse->buttons[0];
+      hid_buttons[1] = m_pinfo_mouse->buttons[1];
+      hid_buttons[2] = m_pinfo_mouse->buttons[2];
+      hid_mouse_x += m_pinfo_mouse->x;
+      hid_mouse_y += m_pinfo_mouse->y;
     } else {
-    	if (usbh_hid_custom_report_callback)
-    		usbh_hid_custom_report_callback(report, len);
-//        usbDbgPrintf("Generic report, %d bytes", len);
+      hid_buttons[0] = 0;
+      hid_buttons[1] = 0;
+      hid_buttons[2] = 0;
     }
-}
+    USBH_DbgLog("btns:%u%u%u", hid_buttons[0],hid_buttons[1],hid_buttons[2]);
+  }
+  else if (USBH_HID_GetDeviceType(&hUSBHost) == HID_KEYBOARD) {
+    HID_KEYBD_Info_TypeDef *m_pinfo_keyb;
+    m_pinfo_keyb = USBH_HID_GetKeybdInfo(phost);
+    if (m_pinfo_keyb) {
+      if (m_pinfo_keyb->lshift) {
+        USBH_DbgLog("ls");
 
-static USBH_DEFINE_BUFFER(uint8_t report[HAL_USBHHID_MAX_INSTANCES][8]);
-static USBHHIDConfig hidcfg[HAL_USBHHID_MAX_INSTANCES];
-
-#endif
-
-static thread_t * thd_midi_usbh_out;
-
-
-static THD_WORKING_AREA(waMidi_usbh_out, 200);
-static void midi_usbh_out(void *p) {
-	(void) p;
-	chRegSetThreadName("midi_usbh_out");
-	while (1) {
-		eventmask_t evt = chEvtWaitOne(3);
-		USBHMIDIDriver *dev = 0;
-		switch (evt) {
-		case 1: {
-			dev = &USBHMIDID[0];
-		}
-		break;
-		case 2: {
-			dev = &USBHMIDID[1];
-		}
-		break;
-		}
-		if (dev) {
-			static midi_message_t outbuf[4];
-			midi_message_t *m = &outbuf[0];
-			int s;
-			midi_output_buffer_t *b = &((USBHMIDIConfig_ext *)dev->config)->out_buffer;
-			for(s=0;s<4;s++) {
-				msg_t r = midi_output_buffer_get(b, m);
-				if (r!=0) break;
-				m++;
-			}
-			// buffer made, transmit
-			if (s>0) {
-				msg_t r = usbhmidi_sendbuffer(dev,  (uint8_t *)outbuf, s*4);
-				if (r!=MSG_OK) {
-					chThdSleepMilliseconds(1000);
-				}
-			}
-		}
-	}
-}
-
-static void notify_midi_usbh1(void *obj) {
-  chEvtSignal(thd_midi_usbh_out,1<<0);
-}
-
-static void notify_midi_usbh2(void *obj) {
-  chEvtSignal(thd_midi_usbh_out,1<<1);
-}
-
-static THD_WORKING_AREA(waUSBHPnP, 960	);
-static void ThreadUSBHPnP(void *p) {
-	(void) p;
-
-    chRegSetThreadName("USBHPnP");
-    uint8_t i;
-
-    for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
-		USBHMIDID[i].config = (USBHMIDIConfig *)&USBHMIDIC[i];
-    	USBHMIDIC[i].config.cb_report = usbhmidi_cb;
+      }
+      if (m_pinfo_keyb->rshift) {
+        USBH_DbgLog("rs");
+      }
     }
-	midi_output_buffer_objinit(&USBHMIDIC[0].out_buffer, notify_midi_usbh1);
-	midi_output_buffer_objinit(&USBHMIDIC[1].out_buffer, notify_midi_usbh2);
-#if HAL_USBH_USE_HID
-    static uint8_t kbd_led_states[HAL_USBHHID_MAX_INSTANCES];
-
-    for (i = 0; i < HAL_USBHHID_MAX_INSTANCES; i++) {
-        hidcfg[i].cb_report = _hid_report_callback;
-        hidcfg[i].protocol = USBHHID_PROTOCOL_BOOT;
-        hidcfg[i].report_buffer = report[i];
-        hidcfg[i].report_len = 8;
-    }
-#endif
-
-    for (;;) {
-        for (i = 0; i < USBH_MIDI_CLASS_MAX_INSTANCES; i++) {
-            if (USBHMIDID[i].state == USBHMIDI_STATE_ACTIVE) {
-//                usbDbgPrintf("MIDI: Connected, MIDI%d", i);
-                usbhmidiStart(&USBHMIDID[i]);
-                USBHMIDIC[i].in_mapping->name = USBHMIDID[i].name;
-				USBHMIDIC[i].in_mapping->nports = USBHMIDID[i].nInputPorts;
-                USBHMIDIC[i].out_mapping->name = USBHMIDID[i].name;
-				USBHMIDIC[i].out_mapping->nports = USBHMIDID[i].nOutputPorts;
-				load_midi_routing(USBHMIDIC[i].in_mapping, in);
-				load_midi_routing(USBHMIDIC[i].out_mapping, out);
-            }
-        }
-
-#if HAL_USBH_USE_HID
-		for (i = 0; i < HAL_USBHHID_MAX_INSTANCES; i++) {
-			if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_ACTIVE) {
-//				usbDbgPrintf("HID: Connected, HID%d", i);
-				usbhhidStart(&USBHHIDD[i], &hidcfg[i]);
-				if (usbhhidGetType(&USBHHIDD[i]) != USBHHID_DEVTYPE_GENERIC) {
-					usbhhidSetIdle(&USBHHIDD[i], 0, 0);
-				}
-				kbd_led_states[i] = 1;
-			} else if (usbhhidGetState(&USBHHIDD[i]) == USBHHID_STATE_READY) {
-				if (usbhhidGetType(&USBHHIDD[i]) == USBHHID_DEVTYPE_BOOT_KEYBOARD) {
-					USBH_DEFINE_BUFFER(uint8_t val);
-					val = kbd_led_states[i] << 1;
-					if (val == 0x08) {
-						val = 1;
-					}
-					usbhhidSetReport(&USBHHIDD[i], 0, USBHHID_REPORTTYPE_OUTPUT, &val, 1);
-					kbd_led_states[i] = val;
-				}
-			}
-		}
-#endif
-		chThdSleepMilliseconds(200);
-	}
+  }
 }
 
-void MY_USBH_Init(void) {
-	chThdCreateStatic(waUSBHPnP, sizeof(waUSBHPnP), NORMALPRIO, ThreadUSBHPnP,
-			0);
-	thd_midi_usbh_out = chThdCreateStatic(waMidi_usbh_out, sizeof(waMidi_usbh_out), NORMALPRIO, midi_usbh_out,
-			0);
 
-	usbhStart(&USBHD2);
-	// enable power...
-	palSetPadMode(GPIOD, 7, PAL_MODE_OUTPUT_PUSHPULL);
-	palClearPad(GPIOD, 7);
+#define PORT_IRQ_HANDLER(id) void id(void)
+#define CH_IRQ_HANDLER(id) PORT_IRQ_HANDLER(id)
+
+static char mem[256];
+bool memused=0;
+
+void* fakemalloc(size_t size){
+  if (size > sizeof(mem)){
+    USBH_ErrLog("fakemalloc: can't allocate...");
+  }
+  if (memused){
+    USBH_ErrLog("fakemalloc: already taken...");
+  }
+  memused = 1;
+  return (void*)mem;
+}
+
+void fakefree(void * p){
+  (void)p;
+  memused = 0;
+}
+
+//STM32_OTG2_HANDLER
+CH_IRQ_HANDLER(Vector174) {
+  CH_IRQ_PROLOGUE();
+  chSysLockFromISR();
+  HAL_HCD_IRQHandler(&hHCD);
+  chSysUnlockFromISR();
+#if (DEBUG_ON_GPIO)
+  HAL_GPIO_WritePin( GPIOA, GPIO_PIN_0 | GPIO_PIN_1, GPIO_PIN_RESET);
+#endif
+  CH_IRQ_EPILOGUE();
+}
+
+
+//#define STM32_OTG1_HANDLER          Vector14C
+//#define STM32_OTG2_HANDLER          Vector174
+//#define STM32_OTG2_EP1OUT_HANDLER   Vector168
+//#define STM32_OTG2_EP1IN_HANDLER    Vector16C
+
+CH_IRQ_HANDLER(Vector168) {
+  while (1) {
+  }
+}
+
+CH_IRQ_HANDLER(Vector16C) {
+  while (1) {
+  }
 }

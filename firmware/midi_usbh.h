@@ -17,6 +17,28 @@ extern midi_routing_t midi_outputmap_usbh2;
 int  usbh_MidiGetOutputBufferPending(void);
 int  usbh_MidiGetOutputBufferAvailable(void);
 
-extern void usbh_midi_dispatch(midi_message_t m, int32_t portmap[]);
+typedef struct USBHMIDIConfig USBHMIDIConfig;
+
+void usbmidi_disconnect(USBHMIDIConfig *midic);
+
+typedef void (*usbhmidi_report_callback)(struct USBHMIDIConfig *midic,  uint32_t *buf, int len);
+typedef void (*usbhmidi_disconnect_callback)(struct USBHMIDIConfig *midic);
+
+struct USBHMIDIConfig {
+       usbhmidi_report_callback cb_report;
+       usbhmidi_disconnect_callback cb_disconnect;
+};
+
+typedef struct {
+       USBHMIDIConfig config;
+       midi_routing_t *in_mapping;
+       midi_routing_t *out_mapping;
+       midi_output_buffer_t out_buffer;
+} USBHMIDIConfig_ext;
+
+#define USBH_MIDI_CLASS_MAX_INSTANCES 2
+
+extern USBHMIDIConfig_ext USBHMIDIC[USBH_MIDI_CLASS_MAX_INSTANCES];
+
 
 #endif

@@ -25,7 +25,6 @@
 #include "midi_usb.h"
 #include "patch.h"
 #include "midi_buffer.h"
-#include "usbh_conf.h"
 
 midi_input_buffer_t midi_input_buffer;
 

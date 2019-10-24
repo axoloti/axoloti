@@ -125,7 +125,6 @@ int main(void) {
     }
   }
 	while (1) {
-		usbhMainLoop(&USBHD2);
 		chThdSleepMilliseconds(1000);
 	}
 }
