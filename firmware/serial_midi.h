@@ -32,9 +32,4 @@ int  serial_MidiGetOutputBufferPending(void);
 extern midi_routing_t midi_inputmap_din;
 extern midi_routing_t midi_outputmap_din;
 
-// obsolete
-void serial_MidiSend1(uint8_t b0);
-void serial_MidiSend2(uint8_t b0, uint8_t b1);
-void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
-
 #endif

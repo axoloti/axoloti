@@ -228,31 +228,6 @@ void serial_MidiSend(midi_message_t midimsg) {
   }
 }
 
-
-void serial_MidiSend1(uint8_t b0) {
-	midi_message_t m;
-	m.bytes.b0 = b0;
-	m.fields.cin = b0>>4;
-	serial_MidiSend(m);
-}
-
-void serial_MidiSend2(uint8_t b0, uint8_t b1) {
-	midi_message_t m;
-	m.bytes.b0 = b0;
-	m.bytes.b1 = b1;
-	m.fields.cin = b0>>4;
-	serial_MidiSend(m);
-}
-
-void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2) {
-	midi_message_t m;
-	m.bytes.b0 = b0;
-	m.bytes.b1 = b1;
-	m.bytes.b2 = b2;
-	m.fields.cin = b0>>4;
-	serial_MidiSend(m);
-}
-
 int serial_MidiGetOutputBufferPending(void) {
 // todo: check references!
   return 0;//chOQGetFullI(&SDMIDI.oqueue);
