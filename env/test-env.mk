@@ -32,6 +32,7 @@ $(info axoloti_api = ${axoloti_api})
 $(info axoloti_env = ${axoloti_env})
 $(info CPPCP = ${CPPC})
 $(error Unexpected compiler version: $(CPPVER), expected $(CPPVER_REF))
+$(info in PATH=${PATH})
 endif
 
 MAKE_VER_REF = GNU Make 4.2
