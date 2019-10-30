@@ -31,8 +31,8 @@ $(info axoloti_home = ${axoloti_home})
 $(info axoloti_api = ${axoloti_api})
 $(info axoloti_env = ${axoloti_env})
 $(info CPPCP = ${CPPC})
+$(info PATH=${PATH})
 $(error Unexpected compiler version: $(CPPVER), expected $(CPPVER_REF))
-$(info in PATH=${PATH})
 endif
 
 MAKE_VER_REF = GNU Make 4.2
@@ -42,8 +42,8 @@ ifeq "$(MAKE_VER)" ""
 $(info "make" not found in path=$(PATH), not installed?)
 endif
 ifeq "$(findstring $(MAKE_VER_REF), $(MAKE_VER))" ""
+$(info PATH=${PATH})
 $(info Unexpected Make version, expected ${MAKE_VER_REF}, but found: ${MAKE_VER})
-$(info in PATH=${PATH})
 endif
 
 # test for spaces
