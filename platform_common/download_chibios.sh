@@ -24,6 +24,7 @@ then
     cd ${PLATFORM_ROOT}/../${CHIBIOS_ARDIR}
     rm -rf community
     git clone https://github.com/ChibiOS/ChibiOS-Contrib community
+    cd community
     git checkout dc72ea603311123964271f910f051fb2027351ef
 else
     echo "chibios directory already present, skipping..."

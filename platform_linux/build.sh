@@ -35,34 +35,20 @@ fi
 
 case $OS in
     Ubuntu|Debian|DebianJessie32bit)
-        echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0 p7zip-full"
+        echo "apt-get install -y libtool libudev-dev automake autoconf ant curl p7zip-full"
       if [ $OS==DebianJessie32bit ]; then
             sudo apt-get install -y build-essential libtool libudev-dev automake autoconf \
-               ant curl p7zip-full fakeroot unzip udev
+               ant curl p7zip-full unzip udev
       else
             sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl lib32z1 lib32ncurses5 p7zip-full fakeroot
+               ant curl p7zip-full
       fi
-
-        # On more recent versions of Ubuntu
-        # the libbz2 package is multi-arch
-        install_lib_bz2() {
-            sudo apt-get install -y lib32bz2-1.0
-        }
-        set +e
-        if ! install_lib_bz2; then
-            set -e
-            sudo dpkg --add-architecture i386
-            sudo apt-get update
-            sudo apt-get install -y libbz2-1.0:i386
-        fi
         ;;
     Archlinux|Arch|ManjaroLinux)
         echo "pacman -Syy"
         sudo pacman -Syy
-        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl lib32-ncurses lib32-bzip2"
-        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl \
-             lib32-ncurses lib32-bzip2
+        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl"
+        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl
         ;;
     Gentoo)
 	echo "detected Gentoo"
@@ -71,7 +57,7 @@ case $OS in
         echo "detected Fedora"
         sudo dnf group install "Development Tools"
         sudo dnf -y install libusb dfu-util libtool libudev-devel automake autoconf \
-        ant curl ncurses-libs bzip2
+        ant curl bzip2
         ;;
     *)
         echo "Cannot handle dist: $OS"
@@ -90,75 +76,6 @@ mkdir -p "${PLATFORM_ROOT}/src"
 git submodule update --init --recursive
 
 source ../platform_common/download_chibios.sh
-
-if [ ! -f "${PLATFORM_ROOT}/gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc" ];
-then
-    cd "${PLATFORM_ROOT}"
-    ARDIR=gcc-arm-none-eabi-7-2018q2
-    ARCHIVE_BASE="gcc-arm-none-eabi-7-2018-q2-update"
-    ARCHIVE=${ARCHIVE_BASE}-linux.tar.bz2
-    if [ ! -f ${ARCHIVE} ];
-    then
-        echo "downloading ${ARCHIVE}"
-        curl -L https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/${ARCHIVE} > ${ARCHIVE}
-    else
-        echo "${ARCHIVE} already downloaded"
-    fi
-    tar xfj ${ARCHIVE}
-    rm ${ARCHIVE}
-else
-    echo "gcc-arm-none-eabi-7-2018-q2-update/bin/arm-none-eabi-gcc already present, skipping..."
-fi
-
-if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ];
-then
-    cd "${PLATFORM_ROOT}/src"
-    ARDIR=libusb-1.0.19
-    ARCHIVE=${ARDIR}.tar.bz2
-    if [ ! -f ${ARCHIVE} ];
-    then
-        echo "##### downloading ${ARCHIVE} #####"
-        curl -L http://sourceforge.net/projects/libusb/files/libusb-1.0/$ARDIR/$ARCHIVE/download > $ARCHIVE
-    else
-        echo "##### ${ARCHIVE} already downloaded #####"
-    fi
-    tar xfj ${ARCHIVE}
-
-    cd "${PLATFORM_ROOT}/src/libusb-1.0.19"
-
-    patch -N -p1 < ../libusb.stdfu.patch
-
-    ./configure --prefix="${PLATFORM_ROOT}"
-    make
-    make install
-
-else
-    echo "##### libusb already present, skipping... #####"
-fi
-
-if [ ! -f "${PLATFORM_ROOT}/bin/dfu-util" ];
-then
-    cd "${PLATFORM_ROOT}/src"
-    ARDIR=dfu-util-0.8
-    ARCHIVE=${ARDIR}.tar.gz
-    if [ ! -f $ARCHIVE ];
-    then
-        echo "##### downloading ${ARCHIVE} #####"
-        curl -L http://dfu-util.sourceforge.net/releases/$ARCHIVE > $ARCHIVE
-    else
-        echo "##### ${ARCHIVE} already downloaded #####"
-    fi
-    tar xfz ${ARCHIVE}
-
-    cd "${PLATFORM_ROOT}/src/${ARDIR}"
-    ./configure --prefix="${PLATFORM_ROOT}" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.a -ludev -pthread" USB_CFLAGS="-I${PLATFORM_ROOT}/include/libusb-1.0/"
-    make
-    make install
-    make clean
-    ldd "${PLATFORM_ROOT}/bin/dfu-util"
-else
-    echo "##### dfu-util already present, skipping... #####"
-fi
 
 case $OS in
     Ubuntu|Debian)
