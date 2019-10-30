@@ -42,6 +42,7 @@ $(info "make" not found in path=$(PATH), not installed?)
 endif
 ifeq "$(findstring $(MAKE_VER_REF), $(MAKE_VER))" ""
 $(info Unexpected Make version, expected ${MAKE_VER_REF}, but found: ${MAKE_VER})
+$(info in PATH=${PATH})
 endif
 
 # test for spaces
