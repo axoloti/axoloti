@@ -4,7 +4,7 @@ CHIBIOS_ARDIR=ChibiOS_${CH_VERSION}
 CHIBIOS_ARCHIVE=${CHIBIOS_ARDIR}.7z
 CHIBIOS_DOWNLOAD_URL=https://osdn.net/projects/chibios/downloads/70739/${CHIBIOS_ARCHIVE}
 
-if [ ! -d "${PLATFORM_ROOT}/../chibios_${CH_VERSION}" ];
+if [ ! -d "${PLATFORM_ROOT}/../${CHIBIOS_ARDIR}" ];
 then
     cd "${PLATFORM_ROOT}/src"
     if [ ! -f ${CHIBIOS_ARCHIVE} ];
@@ -21,7 +21,7 @@ then
     mv ${CHIBIOS_ARDIR} ../..
 
     echo "fetching ChibiOS-community"
-    cd ${PLATFORM_ROOT}/../ChibiOS_${CH_VERSION}
+    cd ${PLATFORM_ROOT}/../${CHIBIOS_ARDIR}
     rm -rf community
     git clone https://github.com/ChibiOS/ChibiOS-Contrib community
     git checkout dc72ea603311123964271f910f051fb2027351ef
