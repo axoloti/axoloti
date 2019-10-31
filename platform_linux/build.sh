@@ -77,6 +77,56 @@ git submodule update --init --recursive
 
 source ../platform_common/download_chibios.sh
 
+if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ];
+then
+    cd "${PLATFORM_ROOT}/src"
+    ARDIR=libusb-1.0.19
+    ARCHIVE=${ARDIR}.tar.bz2
+    if [ ! -f ${ARCHIVE} ];
+    then
+        echo "##### downloading ${ARCHIVE} #####"
+        curl -L http://sourceforge.net/projects/libusb/files/libusb-1.0/$ARDIR/$ARCHIVE/download > $ARCHIVE
+    else
+        echo "##### ${ARCHIVE} already downloaded #####"
+    fi
+    tar xfj ${ARCHIVE}
+
+    cd "${PLATFORM_ROOT}/src/libusb-1.0.19"
+
+    patch -N -p1 < ../libusb.stdfu.patch
+
+    ./configure --prefix="${PLATFORM_ROOT}"
+    make
+    make install
+
+else
+    echo "##### libusb already present, skipping... #####"
+fi
+
+if [ ! -f "${PLATFORM_ROOT}/bin/dfu-util" ];
+then
+    cd "${PLATFORM_ROOT}/src"
+    ARDIR=dfu-util-0.8
+    ARCHIVE=${ARDIR}.tar.gz
+    if [ ! -f $ARCHIVE ];
+    then
+        echo "##### downloading ${ARCHIVE} #####"
+        curl -L http://dfu-util.sourceforge.net/releases/$ARCHIVE > $ARCHIVE
+    else
+        echo "##### ${ARCHIVE} already downloaded #####"
+    fi
+    tar xfz ${ARCHIVE}
+
+    cd "${PLATFORM_ROOT}/src/${ARDIR}"
+    ./configure --prefix="${PLATFORM_ROOT}" USB_LIBS="${PLATFORM_ROOT}/lib/libusb-1.0.a -ludev -pthread" USB_CFLAGS="-I${PLATFORM_ROOT}/include/libusb-1.0/"
+    make
+    make install
+    make clean
+    ldd "${PLATFORM_ROOT}/bin/dfu-util"
+else
+    echo "##### dfu-util already present, skipping... #####"
+fi
+
 case $OS in
     Ubuntu|Debian)
         echo "apt-get install openjdk-8-jdk"
