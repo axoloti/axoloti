@@ -478,7 +478,6 @@ public class MainFrame extends TJFrame implements ActionListener {
         jTablePatches = new javax.swing.JTable();
         jScrollPaneLog = new javax.swing.JScrollPane();
         jTextPaneLog = new javax.swing.JTextPane();
-        jPanelProgress = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new axoloti.swingui.menus.FileMenu();
@@ -610,17 +609,11 @@ public class MainFrame extends TJFrame implements ActionListener {
 
         getContentPane().add(jSplitPane1);
 
-        jPanelProgress.setAlignmentX(0.0F);
-        jPanelProgress.setMaximumSize(new java.awt.Dimension(605, 16));
-        jPanelProgress.setLayout(new javax.swing.BoxLayout(jPanelProgress, javax.swing.BoxLayout.LINE_AXIS));
-
         jProgressBar1.setAlignmentX(0.0F);
         jProgressBar1.setMaximumSize(new java.awt.Dimension(10000, 16));
         jProgressBar1.setMinimumSize(new java.awt.Dimension(100, 16));
         jProgressBar1.setPreferredSize(new java.awt.Dimension(100, 16));
-        jPanelProgress.add(jProgressBar1);
-
-        getContentPane().add(jPanelProgress);
+        getContentPane().add(jProgressBar1);
 
         fileMenu.setText("File");
         jMenuBar1.add(fileMenu);
@@ -728,7 +721,6 @@ public class MainFrame extends TJFrame implements ActionListener {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanelProgress;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPaneLog;
