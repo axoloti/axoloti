@@ -3,6 +3,9 @@ SPACE +=
 
 axoloti_runtime ?= ..
 axoloti_home ?= ..
+ALLINC :=
+MODULE_DEPS :=
+MODULE_FILEDEPS :=
 
 include arm-none-eabi.mk
 include path.mk
