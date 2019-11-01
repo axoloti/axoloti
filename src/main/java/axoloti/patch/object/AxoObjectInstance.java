@@ -18,6 +18,7 @@
 package axoloti.patch.object;
 
 import axoloti.Synonyms;
+import axoloti.mvc.AbstractDocumentRoot;
 import axoloti.mvc.array.ArrayView;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectPatcher;
@@ -617,4 +618,20 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
 
     }
+
+    @Override
+    public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
+        super.setDocumentRoot(documentRoot);
+        if (parameterInstances != null) {
+            for (ParameterInstance paramInst : parameterInstances) {
+                paramInst.setDocumentRoot(documentRoot);
+            }
+        }
+        if (attributeInstances != null) {
+            for (AttributeInstance attrInst : attributeInstances) {
+                attrInst.setDocumentRoot(documentRoot);
+            }
+        }
+    }
+
 }

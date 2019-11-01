@@ -1058,4 +1058,19 @@ public class PatchModel extends AbstractModel<PatchController> {
         setMidiSelector(getMidiSelector());
     }
 
+    @Override
+    public void setDocumentRoot(AbstractDocumentRoot documentRoot) {
+        super.setDocumentRoot(documentRoot);
+        if (objectinstances != null) {
+            for (IAxoObjectInstance objInst : objectinstances) {
+                objInst.setDocumentRoot(documentRoot);
+            }
+        }
+        if (nets != null) {
+            for (Net net : nets) {
+                net.setDocumentRoot(documentRoot);
+            }
+        }
+    }
+
 }
