@@ -47,7 +47,6 @@
 static uint32_t fwid;
 static thread_t * thd_bulk_Reader;
 static thread_t * thd_log_consumer;
-static int isConnected = 0;
 static uint32_t fbuff[256];
 static FIL file;
 static int file_is_open = 0;
@@ -56,6 +55,7 @@ enum {fileRef = 0xf113};
 #define MAX_FNAME_LENGTH 64
 
 static mutex_t mtxTransmit;
+static void log_resume(void);
 
 /*
  * in_stream
@@ -300,10 +300,8 @@ static msg_t rcv_getfwid(in_stream_t *in_stream) {
     .fw_crc =  fwid,
     .fw_chunkaddr = (uint32_t)chunk_fw_root_data
   };
-  chMtxLock(&mtxTransmit);
-  msg_t msg = BulkUsbTransmit((const unsigned char* )(&pckt), sizeof(pckt));
-  chMtxUnlock(&mtxTransmit);
-
+  msg_t msg = BulkUsbTransmitPacket1((const unsigned char* )(&pckt), sizeof(pckt));
+  log_resume();
   if (in_stream->remaining == 0) {
     LogTextMessage("Firmware is newer than the software release,");
     LogTextMessage("firmware update will fail,");
@@ -411,6 +409,8 @@ static THD_FUNCTION(LogConsumer, arg) {
       chMtxLock(&mtxTransmit);
       error = BulkUsbTransmitPacket(log_tx_buf, nread + 4);
       chMtxUnlock(&mtxTransmit);
+    } else if (logstream.pipe.reset) {
+      chThdSleep(10);
     }
   }
 }
@@ -418,7 +418,15 @@ static THD_FUNCTION(LogConsumer, arg) {
 static void logObjectInit(LogStream *msp) {
   msp->vmt    = &vmt;
   chPipeObjectInit(&msp->pipe, &msp->buffer[0], PIPE_SIZE);
-// TODO: make suspended true initially
+  chPipeReset(&msp->pipe);
+}
+
+static void log_suspend(void) {
+  chPipeReset(&logstream.pipe);
+}
+
+static void log_resume(void) {
+  chPipeResume(&logstream.pipe);
 }
 
 static msg_t bulk_tx_patch_paramchange1(patch_t * patch) {
@@ -492,7 +500,6 @@ static msg_t tx_fresult(FRESULT err, int fref) {
 }
 
 static msg_t rcv_ping(in_stream_t *in_stream) {
-  isConnected = 1;
   handleUsbErr(tx_ack());
   exception_checkandreport();
   handleUsbErr(tx_patch_paramchange());
@@ -1148,8 +1155,8 @@ static THD_FUNCTION(BulkReader, arg) {
     msg_t msg = usbReceive(&USBD1, USBD2_DATA_AVAILABLE_EP,
     		bulk_rxbuf, sizeof (bulk_rxbuf));
     if (msg == MSG_RESET) {
-      isConnected = 0;
-      chThdSleepMilliseconds(500);
+      log_suspend();
+      chThdSleepMilliseconds(50);
     } else {
       in_stream_t in_stream;
       in_stream.buf = bulk_rxbuf;
@@ -1182,13 +1189,5 @@ void InitPConnection(void) {
 }
 
 void log_vprintf(const char * format, va_list arg ) {
-  if (isConnected) {
-    chvprintf((BaseSequentialStream *)&logstream, format, arg);
-  }
-}
-
-void pconnection_suspend(void) {
-}
-
-void pconnection_wakeup(void) {
+  chvprintf((BaseSequentialStream *)&logstream, format, arg);
 }

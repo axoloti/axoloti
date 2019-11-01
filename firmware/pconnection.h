@@ -39,9 +39,6 @@ typedef struct {
 
 extern tx_pckt_ack_v2_t tx_pckt_ack_v2;
 
-void pconnection_suspend(void);
-void pconnection_wakeup(void);
-
 void InitPConnection(void);
 
 #endif
