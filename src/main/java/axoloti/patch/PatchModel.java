@@ -46,6 +46,7 @@ import axoloti.property.Property;
 import axoloti.property.StringProperty;
 import axoloti.property.StringPropertyNull;
 import axoloti.target.fs.SDFileReference;
+import axoloti.utils.ListUtils;
 import axoloti.utils.StringUtils;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -91,10 +92,10 @@ public class PatchModel extends AbstractModel<PatchController> {
         @ElementList(entry = "comment", type = AxoObjectInstanceComment.class, inline = true, required = false),
         @ElementList(entry = "hyperlink", type = AxoObjectInstanceHyperlink.class, inline = true, required = false),
         @ElementList(entry = "zombie", type = AxoObjectInstanceZombie.class, inline = true, required = false)})
-    List<IAxoObjectInstance> objectinstances = new ArrayList<>();
+    List<IAxoObjectInstance> objectinstances;
     @Path("nets")
     @ElementList(inline=true, required=false)
-    public List<Net> nets = new ArrayList<>();
+    public List<Net> nets;
     @Element(required = false)
     PatchSettings settings;
     @Element(required = false, data = true)
@@ -129,7 +130,7 @@ public class PatchModel extends AbstractModel<PatchController> {
         for(Net o: nets) {
             o.setParent(this);
         }
-        for(IAxoObjectInstance o: objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             o.setParent(this);
         }
     }
@@ -280,7 +281,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public IAxoObjectInstance findObjectInstance(String n) {
-        for (IAxoObjectInstance o : objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             if (n.equals(o.getInstanceName())) {
                 return o;
             }
@@ -289,7 +290,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public IAxoObjectInstance findObjectInstance(Point p) {
-        for (IAxoObjectInstance o : objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             if (p.equals(o.getLocation())) {
                 return o;
             }
@@ -341,7 +342,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     public void sortByPosition() {
         ArrayList<IAxoObjectInstance> clone = new ArrayList<>();
-        clone.addAll(objectinstances);
+        clone.addAll(getObjectInstances());
         Collections.sort(clone);
         setObjectInstances(clone);
         refreshIndexes();
@@ -417,7 +418,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     private List<IAxoObject> getUsedAxoObjects() {
         ArrayList<IAxoObject> aos = new ArrayList<>();
-        for (IAxoObjectInstance o : objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             if (!aos.contains(o.getDModel())) {
                 aos.add(o.getDModel());
             }
@@ -427,7 +428,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     public List<String> getIncludes() {
         List<String> includes = new LinkedList<>();
-        for (IAxoObjectInstance o : objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             List<String> i = o.getDModel().getProcessedIncludes();
             if (i != null) {
                 includes.addAll(i);
@@ -438,7 +439,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     public List<String> getDepends() {
         List<String> depends = new LinkedList<>();
-        for (IAxoObjectInstance o : objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             List<String> i = o.getDModel().getDepends();
             if (i != null) {
                 depends.addAll(i);
@@ -449,7 +450,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     public List<String> getModules() {
         List<String> modules = new LinkedList<>();
-        for (IAxoObjectInstance o : objectinstances) {
+        for (IAxoObjectInstance o : getObjectInstances()) {
             List<String> i = o.getDModel().getModules();
             if (i != null) {
                 modules.addAll(i);
@@ -697,7 +698,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public List<SDFileReference> getDependendSDFiles() {
-        ArrayList<SDFileReference> files = new ArrayList<>();
+        LinkedList<SDFileReference> files = new LinkedList<>();
         for (IAxoObjectInstance o : objectinstances) {
             List<SDFileReference> f2 = o.getFileDepends();
             if (f2 != null) {
@@ -714,7 +715,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public List<IAxoObjectInstance> getSelectedObjects() {
-        ArrayList<IAxoObjectInstance> selected = new ArrayList<>();
+        LinkedList<IAxoObjectInstance> selected = new LinkedList<>();
         for (IAxoObjectInstance o : getObjectInstances()) {
             if (o.getSelected()) {
                 selected.add(o);
@@ -847,7 +848,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public List<IAxoObjectInstance> getObjectInstances() {
-        return Collections.unmodifiableList(objectinstances);
+        return ListUtils.export(objectinstances);
     }
 
     public void setObjectInstances(List<IAxoObjectInstance> objectinstances) {
@@ -859,7 +860,7 @@ public class PatchModel extends AbstractModel<PatchController> {
     }
 
     public List<Net> getNets() {
-        return Collections.unmodifiableList(nets);
+        return ListUtils.export(nets);
     }
 
     public void setNets(List<Net> nets) {

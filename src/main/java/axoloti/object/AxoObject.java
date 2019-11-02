@@ -128,6 +128,7 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.AnnotationStrategy;
 import org.simpleframework.xml.core.Commit;
+import org.simpleframework.xml.core.Persist;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.strategy.Strategy;
 
@@ -162,7 +163,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = InletFrac32BufferPos.TYPE_NAME, type = InletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = InletFrac32BufferBipolar.TYPE_NAME, type = InletFrac32BufferBipolar.class, inline = true, required = false)
     })
-    public List<Inlet> inlets = new ArrayList<>();
+    public List<Inlet> inlets;
     @Path("outlets")
     @ElementListUnion({
         @ElementList(entry = OutletBool32.TYPE_NAME, type = OutletBool32.class, inline = true, required = false),
@@ -178,7 +179,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = OutletFrac32BufferPos.TYPE_NAME, type = OutletFrac32BufferPos.class, inline = true, required = false),
         @ElementList(entry = OutletFrac32BufferBipolar.TYPE_NAME, type = OutletFrac32BufferBipolar.class, inline = true, required = false)
     })
-    public List<Outlet> outlets = new ArrayList<>();
+    public List<Outlet> outlets;
     @Path("displays")
     @ElementListUnion({
         @ElementList(entry = DisplayBool32.TYPE_NAME, type = DisplayBool32.class, inline = true, required = false),
@@ -201,7 +202,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = DisplayFrac8U128VBar.TYPE_NAME, type = DisplayFrac8U128VBar.class, inline = true, required = false),
         @ElementList(entry = DisplayNoteLabel.TYPE_NAME, type = DisplayNoteLabel.class, inline = true, required = false)
     })
-    public List<Display> displays = new ArrayList<>(); // readouts
+    public List<Display> displays; // readouts
     @Path("params")
     @ElementListUnion({
         @ElementList(entry = ParameterFrac32UMap.TYPE_NAME, type = ParameterFrac32UMap.class, inline = true, required = false),
@@ -235,7 +236,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = ParameterBin1.TYPE_NAME, type = ParameterBin1.class, inline = true, required = false),
         @ElementList(entry = ParameterBin1Momentary.TYPE_NAME, type = ParameterBin1Momentary.class, inline = true, required = false)
     })
-    public List<Parameter> params  = new ArrayList<>(); // variables
+    public List<Parameter> params; // variables
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = AxoAttributeObjRef.TYPE_NAME, type = AxoAttributeObjRef.class, inline = true, required = false),
@@ -245,7 +246,7 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeSpinner.TYPE_NAME, type = AxoAttributeSpinner.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeSDFile.TYPE_NAME, type = AxoAttributeSDFile.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeTextEditor.TYPE_NAME, type = AxoAttributeTextEditor.class, inline = true, required = false)})
-    public List<AxoAttribute> attributes = new ArrayList<>(); // literal constants
+    public List<AxoAttribute> attributes; // literal constants
 
     @Path("file-depends")
     @ElementList(entry = "file-depend", type = SDFileReference.class, inline = true, required = false)
@@ -307,20 +308,40 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Commit
     void commit() {
-        for(Inlet o: inlets) {
-            o.setParent(this);
+        if (inlets != null) {
+            for (Inlet o : inlets) {
+                o.setParent(this);
+            }
         }
-        for(Outlet o: outlets) {
-            o.setParent(this);
+        if (outlets != null) {
+            for (Outlet o : outlets) {
+                o.setParent(this);
+            }
         }
-        for(AxoAttribute o: attributes) {
-            o.setParent(this);
+        if (attributes != null) {
+            for (AxoAttribute o : attributes) {
+                o.setParent(this);
+            }
         }
-        for(Parameter o: params) {
-            o.setParent(this);
+        if (params != null) {
+            for (Parameter o : params) {
+                o.setParent(this);
+            }
         }
-        for(Display o: displays) {
-            o.setParent(this);
+        if (displays != null) {
+            for (Display o : displays) {
+                o.setParent(this);
+            }
+        }
+    }
+
+    @Persist
+    public void presist() {
+        if (providesModulationSource != null && providesModulationSource == false) {
+            providesModulationSource = null;
+        }
+        if (rotatedParams != null && rotatedParams == false) {
+            rotatedParams = null;
         }
     }
 
@@ -452,7 +473,7 @@ public class AxoObject extends AxoObjectAbstract {
 
     @Override
     public void setIncludes(List<String> includes) {
-        this.includes = includes;
+        this.includes = ListUtils.importList(includes);
         firePropertyChange(OBJ_INCLUDES, null, includes);
     }
 
@@ -462,7 +483,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     public void setDepends(List<String> depends) {
-        this.depends = depends;
+        this.depends = ListUtils.importList(depends);
         firePropertyChange(OBJ_DEPENDS, null, depends);
     }
 
@@ -472,7 +493,7 @@ public class AxoObject extends AxoObjectAbstract {
     }
 
     public void setModules(List<String> modules) {
-        this.modules = modules;
+        this.modules = ListUtils.importList(modules);
         firePropertyChange(OBJ_MODULES, null, modules);
     }
 

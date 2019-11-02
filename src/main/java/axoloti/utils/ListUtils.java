@@ -44,4 +44,13 @@ public class ListUtils<T> {
         }
     }
 
+    public static <T> List<T> importList(List<? extends T> list) {
+        if (list == null) {
+            return null;
+        } else if (list.isEmpty()) {
+            return null;
+        } else {
+            return Collections.unmodifiableList(list);
+        }
+    }
 }

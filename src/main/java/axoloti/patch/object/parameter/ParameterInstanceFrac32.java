@@ -49,7 +49,7 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     @ElementListUnion({
         @ElementList(entry = "preset", type = PresetDouble.class, inline = true, required = false)
     })
-    List<Preset> presets = new ArrayList<>();
+    List<Preset> presets;
 
     Double value = 0.0;
 
@@ -96,8 +96,8 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     @Override
     public void setPresets(List<Preset> presets) {
         List<Preset> prevValue = getPresets();
-        this.presets = presets;
-        firePropertyChange(PRESETS, prevValue, this.presets);
+        this.presets = ListUtils.importList(presets);
+        firePropertyChange(PRESETS, prevValue, presets);
     }
 
     @Override

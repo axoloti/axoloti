@@ -115,7 +115,7 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "bool32.tgl", type = ParameterInstanceBin1.class, inline = true, required = false),
         @ElementList(entry = "bool32.mom", type = ParameterInstanceBin1Momentary.class, inline = true, required = false)
     })
-    List<ParameterInstance> parameterInstances = new ArrayList<>();
+    List<ParameterInstance> parameterInstances;
     @Path("attribs")
     @ElementListUnion({
         @ElementList(entry = "objref", type = AttributeInstanceObjRef.class, inline = true, required = false),
@@ -125,8 +125,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
         @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),
         @ElementList(entry = "text", type = AttributeInstanceTextEditor.class, inline = true, required = false)})
-    List<AttributeInstance> attributeInstances = new ArrayList<>();
-    List<DisplayInstance> displayInstances = new ArrayList<>();
+    List<AttributeInstance> attributeInstances;
+    List<DisplayInstance> displayInstances;
 
     private List<Modulator> modulators;
 
@@ -391,18 +391,18 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
     public void applyValues(IAxoObjectInstance sourceObject) {
         if (sourceObject instanceof AxoObjectInstance) {
             AxoObjectInstance sourceObject2 = (AxoObjectInstance) sourceObject;
-            for (ParameterInstance p : parameterInstances) {
+            for (ParameterInstance p : getParameterInstances()) {
                 // find matching parameter in source
-                for (ParameterInstance p2 : sourceObject2.parameterInstances) {
+                for (ParameterInstance p2 : sourceObject2.getParameterInstances()) {
                     if (p.getName().equals(p2.getName())) {
                         p.copyValueFrom(p2);
                         break;
                     }
                 }
             }
-            for (AttributeInstance a : attributeInstances) {
+            for (AttributeInstance a : getAttributeInstances()) {
                 // find matching parameter in source
-                for (AttributeInstance a2 : sourceObject2.attributeInstances) {
+                for (AttributeInstance a2 : sourceObject2.getAttributeInstances()) {
                     if (a.getName().equals(a2.getName())) {
                         a.copyValueFrom(a2);
                         break;

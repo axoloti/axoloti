@@ -6,6 +6,7 @@ import axoloti.property.Property;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
@@ -14,7 +15,7 @@ import javax.swing.undo.UndoableEdit;
 
 public abstract class AbstractController<Model extends IModel, View extends IView> implements PropertyChangeListener {
 
-    private final ArrayList<View> registeredViews = new ArrayList<>();
+    private final List<View> registeredViews = new LinkedList<>();
     protected final Model model;
 
     protected AbstractController(Model model) {
@@ -84,7 +85,7 @@ public abstract class AbstractController<Model extends IModel, View extends IVie
         }
         // a copy of the views is made
         // so a view can unregister itself in response to a propertychange
-        List<View> v = new ArrayList<>(registeredViews);
+        List<View> v = new LinkedList<>(registeredViews);
         for (View view : v) {
             view.modelPropertyChange(evt);
         }

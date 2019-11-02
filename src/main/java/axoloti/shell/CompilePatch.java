@@ -76,11 +76,15 @@ public class CompilePatch {
         Thread t = new Thread(() -> {
             shellTask.doit(ctx);
         });
+        String elffname = Axoloti.getBuildDir() + "/xpatch.elf";
+        File f = new File(elffname);
+        if (f.exists()) {
+            f.delete();
+        }
         t.start();
         boolean success = shellTask.isSuccess();
         if (success) {
             println("Done compiling patch");
-            String elffname = Axoloti.getBuildDir() + "/xpatch.elf";
             String fdepsfname = Axoloti.getBuildDir() + "/filedeps.txt";
             byte elfdata[];
             try {

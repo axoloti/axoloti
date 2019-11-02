@@ -8,7 +8,6 @@ import axoloti.object.parameter.Parameter;
 import axoloti.property.Property;
 import axoloti.target.fs.SDFileReference;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,9 +27,7 @@ public abstract class AxoObjectAbstract0 extends AxoObjectAbstract {
 
     @Override
     public List<Property> getProperties() {
-        List<Property> l = new ArrayList<>();
-//        l.add()
-        return l;
+        return Collections.emptyList();
     }
 
     @Override

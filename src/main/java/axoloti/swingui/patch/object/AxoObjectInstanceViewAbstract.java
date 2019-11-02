@@ -32,6 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -281,17 +282,17 @@ public class AxoObjectInstanceViewAbstract extends ViewPanel<IAxoObjectInstance>
 
     @Override
     public List<IInletInstanceView> getInletInstanceViews() {
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public List<IOutletInstanceView> getOutletInstanceViews() {
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public List<IParameterInstanceView> getParameterInstanceViews() {
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
     void handleInstanceNameEditorAction() {

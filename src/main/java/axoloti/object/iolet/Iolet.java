@@ -22,7 +22,7 @@ import axoloti.datatypes.SignalMetaData;
 import axoloti.object.atom.AtomDefinition;
 import axoloti.property.Property;
 import java.security.MessageDigest;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 
@@ -62,7 +62,7 @@ public abstract class Iolet extends AtomDefinition {
 
     @Override
     public List<Property> getEditableFields() {
-        return new ArrayList<>();
+        return Collections.EMPTY_LIST;
     }
 
 }

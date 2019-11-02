@@ -26,10 +26,10 @@ import axoloti.patch.object.outlet.OutletInstance;
 import axoloti.preferences.Theme;
 import axoloti.property.ListProperty;
 import axoloti.property.Property;
+import axoloti.utils.ListUtils;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,9 +44,9 @@ import org.simpleframework.xml.Root;
 public class Net extends AbstractModel<NetController> {
 
     @ElementList(inline = true, required = false)
-    private List<OutletInstance> source = new ArrayList<>();
+    private List<OutletInstance> source;
     @ElementList(inline = true, required = false)
-    private List<InletInstance> dest = new ArrayList<>();
+    private List<InletInstance> dest;
 
     private PatchModel parent;
 
@@ -208,7 +208,7 @@ public class Net extends AbstractModel<NetController> {
     public final static ListProperty NET_DESTINATIONS = new ListProperty("Destinations", Net.class);
 
     public List<OutletInstance> getSources() {
-        return Collections.unmodifiableList(source);
+        return ListUtils.export(source);
     }
 
     public void setSources(List<OutletInstance> source) {
@@ -220,7 +220,7 @@ public class Net extends AbstractModel<NetController> {
     }
 
     public List<InletInstance> getDestinations() {
-        return Collections.unmodifiableList(dest);
+        return ListUtils.export(dest);
     }
 
     public void setDestinations(List<InletInstance> dest) {

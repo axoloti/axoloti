@@ -42,6 +42,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,8 +65,8 @@ public class PatchController extends AbstractController<PatchModel, IView> {
     private void init() {
 
         // Now it is the time to cleanup the model, replace object instances with linked objects
-        ArrayList<IAxoObjectInstance> unlinked_object_instances = new ArrayList<>(getModel().objectinstances);
-        getModel().objectinstances.clear();
+        ArrayList<IAxoObjectInstance> unlinked_object_instances = new ArrayList<>(getModel().getObjectInstances());
+        getModel().setObjectInstances(Collections.EMPTY_LIST);
         for (IAxoObjectInstance unlinked_object_instance : unlinked_object_instances) {
             add_unlinked_objectinstance(unlinked_object_instance);
         }
@@ -78,7 +79,7 @@ public class PatchController extends AbstractController<PatchModel, IView> {
                 }
             }
         }
-        for (Net n : model.getNets()) {
+        for (Net n : model.getNets().toArray(new Net[]{})) {
             n.createController();
         }
         promoteOverloading(true);

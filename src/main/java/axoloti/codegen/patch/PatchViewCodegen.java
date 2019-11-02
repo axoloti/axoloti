@@ -7,6 +7,7 @@ import axoloti.codegen.patch.object.display.DisplayInstanceView;
 import axoloti.codegen.patch.object.parameter.ParameterInstanceView;
 import axoloti.mvc.View;
 import axoloti.object.AxoObject;
+import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.inlet.Inlet;
 import axoloti.object.inlet.InletBool32;
@@ -20,6 +21,7 @@ import axoloti.object.outlet.OutletCharPtr32;
 import axoloti.object.outlet.OutletFrac32;
 import axoloti.object.outlet.OutletFrac32Buffer;
 import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.Parameter;
 import axoloti.patch.Modulation;
 import axoloti.patch.Modulator;
 import axoloti.patch.PatchModel;
@@ -32,6 +34,7 @@ import axoloti.patch.object.parameter.ParameterInstance;
 import axoloti.patch.object.parameter.preset.Preset;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -768,69 +771,77 @@ public class PatchViewCodegen extends View<PatchModel> {
 
     public AxoObject generateAxoObjNormal(AxoObject template) {
         AxoObject ao = template;
+        List<Inlet> inlets = new LinkedList<>(ao.getInlets());
+        List<Outlet> outlets = new LinkedList<>(ao.getOutlets());
+        List<Parameter> parentParams = new LinkedList<>(ao.getParameters());
         for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f")) {
                 Inlet i = new InletFrac32(o.getInstanceName(), o.getInstanceName());
                 i.setParent(ao);
-                ao.inlets.add(i);
+                inlets.add(i);
             } else if (typeName.equals("patch/inlet i")) {
                 Inlet i = new InletInt32(o.getInstanceName(), o.getInstanceName());
                 i.setParent(ao);
-                ao.inlets.add(i);
+                inlets.add(i);
             } else if (typeName.equals("patch/inlet b")) {
                 Inlet i = new InletBool32(o.getInstanceName(), o.getInstanceName());
                 i.setParent(ao);
-                ao.inlets.add(i);
+                inlets.add(i);
             } else if (typeName.equals("patch/inlet a")) {
                 Inlet i = new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName());
                 i.setParent(ao);
-                ao.inlets.add(i);
+                inlets.add(i);
             } else if (typeName.equals("patch/inlet string")) {
                 Inlet i = new InletCharPtr32(o.getInstanceName(), o.getInstanceName());
                 i.setParent(ao);
-                ao.inlets.add(i);
+                inlets.add(i);
             } else if (typeName.equals("patch/outlet f")) {
                 Outlet outlet = new OutletFrac32(o.getInstanceName(), o.getInstanceName());
                 outlet.setParent(ao);
-                ao.outlets.add(outlet);
+                outlets.add(outlet);
             } else if (typeName.equals("patch/outlet i")) {
                 Outlet outlet = new OutletInt32(o.getInstanceName(), o.getInstanceName());
                 outlet.setParent(ao);
-                ao.outlets.add(outlet);
+                outlets.add(outlet);
             } else if (typeName.equals("patch/outlet b")) {
                 Outlet outlet = new OutletBool32(o.getInstanceName(), o.getInstanceName());
                 outlet.setParent(ao);
-                ao.outlets.add(outlet);
+                outlets.add(outlet);
             } else if (typeName.equals("patch/outlet a")) {
                 Outlet outlet = new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName());
                 outlet.setParent(ao);
-                ao.outlets.add(outlet);
+                outlets.add(outlet);
             } else if (typeName.equals("patch/outlet string")) {
                 Outlet outlet = new OutletCharPtr32(o.getInstanceName(), o.getInstanceName());
                 outlet.setParent(ao);
-                ao.outlets.add(outlet);
+                outlets.add(outlet);
             }
             for (ParameterInstance p : o.getParameterInstances()) {
                 Boolean op = p.getOnParent();
-                if (op!=null && op == true) {
-                    ao.params.add(p.createParameterForParent());
+                if (op != null && op == true) {
+                    parentParams.add(p.createParameterForParent());
                 }
             }
+            ao.setInlets(inlets);
+            ao.setOutlets(outlets);
+            ao.setParameters(parentParams);
         }
         /* object structures */
 //         ao.sCName = fnNoExtension;
-        ao.includes = getDModel().getIncludes();
-        ao.depends = getDModel().getDepends();
-        ao.modules = getDModel().getModules();
+        ao.setIncludes(getDModel().getIncludes());
+        ao.setDepends(getDModel().getDepends());
+        ao.setModules(getDModel().getModules());
 
         if (getDModel().getMidiSelector()) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
+            AxoAttribute attr_midichannel = new AxoAttributeComboBox("midichannel", uch, cch);
             String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
             String uport[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
-            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
+            AxoAttribute attr_midiport = new AxoAttributeComboBox("midiport", uport, cport);
+            AxoAttribute attrs[] = new AxoAttribute[]{attr_midichannel, attr_midiport};
+            ao.setAttributes(Arrays.asList(attrs));
         }
         generateNormalCode(ao);
         return ao;
@@ -1301,49 +1312,57 @@ public class PatchViewCodegen extends View<PatchModel> {
     private AxoObject generateAxoObjPoly(AxoObject template) {
         AxoObject ao = template;
         ao.id = "unnamedobject";
-        ao.includes = getDModel().getIncludes();
-        ao.depends = getDModel().getDepends();
-        ao.modules = getDModel().getModules();
+        ao.setIncludes(getDModel().getIncludes());
+        ao.setDepends(getDModel().getDepends());
+        ao.setModules(getDModel().getModules());
+        List<AxoAttribute> attrs = new LinkedList<>();
         String centries[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-        ao.attributes.add(new AxoAttributeComboBox("poly", centries, centries));
+        attrs.add(new AxoAttributeComboBox("poly", centries, centries));
         if (getDModel().getMidiSelector()) {
             String cch[] = {"attr_midichannel", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
             String uch[] = {"inherit", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"};
-            ao.attributes.add(new AxoAttributeComboBox("midichannel", uch, cch));
+            attrs.add(new AxoAttributeComboBox("midichannel", uch, cch));
             String cport[] = {"0", "1", "2", "3", "4", "5", "6", "7"};
             String uport[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
-            ao.attributes.add(new AxoAttributeComboBox("midiport", uport, cport));
+            attrs.add(new AxoAttributeComboBox("midiport", uport, cport));
         }
+        ao.setAttributes(attrs);
 
+        List<Inlet> inlets = new LinkedList<>(ao.getInlets());
+        List<Outlet> outlets = new LinkedList<>(ao.getOutlets());
+        List<Parameter> params = new LinkedList<>(ao.getParameters());
         for (IAxoObjectInstance o : getDModel().getObjectInstances()) {
             String typeName = o.getDModel().getId();
             if (typeName.equals("patch/inlet f")) {
-                ao.inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
+                inlets.add(new InletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet i")) {
-                ao.inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
+                inlets.add(new InletInt32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet b")) {
-                ao.inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
+                inlets.add(new InletBool32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet a")) {
-                ao.inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+                inlets.add(new InletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/inlet string")) {
-                ao.inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
+                inlets.add(new InletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/outlet f")) {
-                ao.outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
+                outlets.add(new OutletFrac32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/outlet i")) {
-                ao.outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
+                outlets.add(new OutletInt32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/outlet b")) {
-                ao.outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
+                outlets.add(new OutletBool32(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/outlet a")) {
-                ao.outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
+                outlets.add(new OutletFrac32Buffer(o.getInstanceName(), o.getInstanceName()));
             } else if (typeName.equals("patch/outlet string")) {
                 Logger.getLogger(PatchModel.class.getName()).log(Level.SEVERE, "string outlet impossible in poly subpatches!");
                 // ao.outlets.add(new OutletCharPtr32(o.getInstanceName(), o.getInstanceName()));
             }
             for (ParameterInstance p : o.getParameterInstances()) {
                 if (p.getOnParent()) {
-                    ao.params.add(p.createParameterForParent());
+                    params.add(p.createParameterForParent());
                 }
             }
+            ao.setOutlets(outlets);
+            ao.setInlets(inlets);
+            ao.setParameters(params);
         }
         generatePolyCode(ao);
         return ao;

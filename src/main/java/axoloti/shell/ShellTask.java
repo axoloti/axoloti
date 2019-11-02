@@ -27,6 +27,8 @@ public class ShellTask {
     final private String[] cmdarray;
     final private String[] environment;
 
+    static final Object excl = new Object();
+
     public ShellTask(String workingDirectory, String[] cmdarray, String[] environment) {
         this.workingDirectory = workingDirectory;
         this.cmdarray = cmdarray;
@@ -46,7 +48,7 @@ public class ShellTask {
         run(workingDirectory, cmdarray, environment);
     }
 
-    private static class StreamHandlerThread implements Runnable {
+    private class StreamHandlerThread implements Runnable {
 
         private final InputStream in;
         private final StringBuffer sb;
@@ -129,21 +131,23 @@ public class ShellTask {
             String workingDirectory,
             String[] cmdarray,
             String[] environment) {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process p1 = runtime.exec(cmdarray, environment, new File(workingDirectory));
-            StringBuffer sb_out = new StringBuffer();
-            Thread thd_out = new Thread(new StreamHandlerThread(p1.getInputStream(), sb_out));
-            thd_out.start();
-            Thread thd_err = new Thread(new StreamHandlerThread(p1.getErrorStream(), sb_out));
-            thd_err.start();
-            p1.waitFor();
-            thd_out.join();
-            thd_err.join();
-            success.complete(p1.exitValue() == 0);
-            output.complete(sb_out.toString());
-        } catch (InterruptedException | IOException ex) {
-            Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, null, ex);
+        synchronized (excl) {
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process p1 = runtime.exec(cmdarray, environment, new File(workingDirectory));
+                StringBuffer sb_out = new StringBuffer();
+                Thread thd_out = new Thread(new StreamHandlerThread(p1.getInputStream(), sb_out));
+                thd_out.start();
+                Thread thd_err = new Thread(new StreamHandlerThread(p1.getErrorStream(), sb_out));
+                thd_err.start();
+                p1.waitFor();
+                thd_out.join();
+                thd_err.join();
+                success.complete(p1.exitValue() == 0);
+                output.complete(sb_out.toString());
+            } catch (InterruptedException | IOException ex) {
+                Logger.getLogger(ShellTask.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

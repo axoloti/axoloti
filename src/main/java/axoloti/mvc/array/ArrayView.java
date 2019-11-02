@@ -2,8 +2,8 @@ package axoloti.mvc.array;
 
 import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,11 +17,11 @@ public abstract class ArrayView<T extends IView, M extends IModel> {
         if (models1 == null) {
             models1 = Collections.emptyList();
         }
-        ArrayList<T> subviews2;
+        List<T> subviews2;
         if (existingViews == null) {
-            subviews2 = new ArrayList<>();
+            subviews2 = Collections.emptyList();
         } else {
-            subviews2 = new ArrayList<>(existingViews);
+            subviews2 = new LinkedList<>(existingViews);
             for (T view : existingViews) {
                 if (!models1.contains(view.getDModel())) {
                     subviews2.remove(view);
@@ -30,7 +30,7 @@ public abstract class ArrayView<T extends IView, M extends IModel> {
                 }
             }
         }
-        ArrayList<T> subviews = new ArrayList<>();
+        List<T> subviews = new LinkedList<>();
         for (M model : models1) {
             // do we have a view already?
             T view = null;

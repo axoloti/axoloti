@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Persist;
 
 /**
  *
@@ -364,4 +365,13 @@ public abstract class ParameterInstance<T extends Parameter, DT> extends AtomIns
         return (ParameterInstanceController) super.getController();
     }
 
+    @Persist
+    public void persist() {
+        if (onParent != null && onParent == false) {
+            onParent = null;
+        }
+        if (MidiCC != null && MidiCC == -1) {
+            MidiCC = null;
+        }
+    }
 }

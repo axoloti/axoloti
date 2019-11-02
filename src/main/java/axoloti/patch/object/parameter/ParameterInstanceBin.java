@@ -5,7 +5,6 @@ import axoloti.patch.object.AxoObjectInstance;
 import axoloti.patch.object.parameter.preset.Preset;
 import axoloti.patch.object.parameter.preset.PresetInt;
 import axoloti.utils.ListUtils;
-import java.util.ArrayList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -29,7 +28,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     @ElementListUnion({
         @ElementList(entry = "preset", type = PresetInt.class, inline = true, required = false)
     })
-    List<Preset> presets = new ArrayList<>();
+    List<Preset> presets;
 
     public ParameterInstanceBin() {
         super();
@@ -66,8 +65,8 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     @Override
     public void setPresets(List<Preset> presets) {
         List<Preset> prevValue = getPresets();
-        this.presets = presets;
-        firePropertyChange(ParameterInstance.PRESETS, prevValue, this.presets);
+        this.presets = ListUtils.importList(presets);
+        firePropertyChange(ParameterInstance.PRESETS, prevValue, presets);
     }
 
     @Override
