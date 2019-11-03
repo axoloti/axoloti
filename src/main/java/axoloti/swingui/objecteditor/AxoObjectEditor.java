@@ -560,7 +560,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(286, 284));
-        setPreferredSize(new java.awt.Dimension(640, 400));
+        setPreferredSize(new java.awt.Dimension(640, 480));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -618,10 +618,10 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
 
         jTextDesc.setColumns(20);
         jTextDesc.setLineWrap(true);
-        jTextDesc.setRows(5);
+        jTextDesc.setRows(1);
         jTextDesc.setWrapStyleWord(true);
         jScrollPane13.setViewportView(jTextDesc);
-
+        jScrollPane13.setPreferredSize(new java.awt.Dimension(200, 100));
         jPanel3.add(jScrollPane13);
 
         jLabel5.setText("Includes");
