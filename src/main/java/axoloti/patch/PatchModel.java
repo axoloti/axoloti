@@ -127,7 +127,7 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     @Commit
     void commit() {
-        for(Net o: nets) {
+        for (Net o : getNets()) {
             o.setParent(this);
         }
         for (IAxoObjectInstance o : getObjectInstances()) {
@@ -1067,10 +1067,8 @@ public class PatchModel extends AbstractModel<PatchController> {
                 objInst.setDocumentRoot(documentRoot);
             }
         }
-        if (nets != null) {
-            for (Net net : nets) {
-                net.setDocumentRoot(documentRoot);
-            }
+        for (Net net : getNets()) {
+            net.setDocumentRoot(documentRoot);
         }
     }
 
