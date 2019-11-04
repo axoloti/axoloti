@@ -70,7 +70,7 @@
       <Dimension value="[286, 284]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[640, 400]"/>
+      <Dimension value="[640, 480]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -205,6 +205,12 @@
                       </Properties>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane13">
+                      <Properties>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[200, 100]"/>
+                        </Property>
+                      </Properties>
+
                       <AuxValues>
                         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                       </AuxValues>
@@ -215,7 +221,7 @@
                           <Properties>
                             <Property name="columns" type="int" value="20"/>
                             <Property name="lineWrap" type="boolean" value="true"/>
-                            <Property name="rows" type="int" value="5"/>
+                            <Property name="rows" type="int" value="1"/>
                             <Property name="wrapStyleWord" type="boolean" value="true"/>
                           </Properties>
                         </Component>
