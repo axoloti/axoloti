@@ -1,6 +1,8 @@
 
 FORCE_GROUP_ALLOCATION
 
+INCLUDE axoloti_api_version.ld
+
 SECTIONS
 {
 	.text 0 :

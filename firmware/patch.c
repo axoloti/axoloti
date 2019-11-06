@@ -42,6 +42,7 @@
 #include "patch_wrapper.h"
 #include "midi_clock.h"
 #include "error_codes_impl.h"
+#include "axoloti_api_version.h"
 
 //#define DEBUG_INT_ON_GPIO 1
 
@@ -457,6 +458,14 @@ static THD_FUNCTION(threadLoadPatch, arg) {
   if (!validatePatch(patch)) {
     chSysHalt("invalid patch?");
   }
+  int patch_api_version = (int)get_sym(patch->elf, "axoloti_api_version", 0);
+  if (!patch_api_version)
+	  LogTextMessage("No API version found in patch.");
+  else if (patch_api_version > axoloti_api_version)
+	  LogTextMessage("Patch uses newer API version (%8X) than the firmware provides (%8X).", patch_api_version, axoloti_api_version);
+  else if (patch_api_version != axoloti_api_version)
+	  LogTextMessage("Patch uses different API version (%8X) than the firmware provides (%8X).", patch_api_version, axoloti_api_version);
+
   ui_deinit_patch();
   sdcard_attemptMountIfUnmounted();
   int (*getInstanceSize)(void);
