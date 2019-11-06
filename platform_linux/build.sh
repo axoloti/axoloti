@@ -2,12 +2,11 @@
 
 set -e
 
-echo -e "\n\nAxoloti Install script for Linux"
-echo -e "This will install Axoloti"
-echo -e "Use at your own risk\n"
-echo -e "Some packages will be installed with apt-get,"
-echo -e "and all users will be granted permission to access some USB devices"
-echo -e "For this you'll require sudo rights and need to enter your password...\n"
+echo -e "\nAxoloti build script for Linux"
+echo -e "Downloads and builds all the required dependencies and toolchain executables"
+echo -e "and all users will be granted permission to access Axoloti USB devices"
+echo -e "Items already present are skipped."
+echo -e "Use at your own risk.\n"
 # echo -e "Press RETURN to continue\nCTRL-C if you are unsure!\n"
 # read
 
@@ -33,26 +32,33 @@ else
     OS=$(uname -s)
 fi
 
+echo -e "The script can install the required packages using your package manager,"
+echo -e "For this you'll require sudo rights and need to enter your password..."
+read -p "Install required packages? [N/y] " input
+if [[ $input == "Y" || $input == "y" ]]; then
 case $OS in
     Ubuntu|Debian|DebianJessie32bit)
-        echo "apt-get install -y libtool libudev-dev automake autoconf ant curl p7zip-full"
-      if [ $OS==DebianJessie32bit ]; then
+        if [ $OS==DebianJessie32bit ]; then
+            echo "apt-get install -y build-essential libtool libudev-dev automake autoconf ant curl p7zip-full unzip udev openjdk-8-jdk"
             sudo apt-get install -y build-essential libtool libudev-dev automake autoconf \
-               ant curl p7zip-full unzip udev
-      else
+               ant curl p7zip-full unzip udev openjdk-8-jdk
+        else
+            echo "apt-get install -y libtool libudev-dev automake autoconf ant curl p7zip-full openjdk-8-jdk"
             sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl p7zip-full
-      fi
+               ant curl p7zip-full openjdk-8-jdk
+        fi
         ;;
     Archlinux|Arch|ManjaroLinux)
         echo "pacman -Syy"
         sudo pacman -Syy
-        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl"
-        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl
+        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl openjdk-8-jdk"
+        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl openjdk-8-jdk
         ;;
     Gentoo)
-	echo "detected Gentoo"
-	;;
+        echo "detected Gentoo"
+        echo "emerge --update jdk:1.8 ant"
+        sudo emerge --update jdk:1.8 ant
+        ;;
     Fedora)
         echo "detected Fedora"
         sudo dnf group install "Development Tools"
@@ -64,6 +70,7 @@ case $OS in
         exit
         ;;
 esac
+fi
 
 cd "$PLATFORM_ROOT"
 
@@ -126,22 +133,6 @@ then
 else
     echo "##### dfu-util already present, skipping... #####"
 fi
-
-case $OS in
-    Ubuntu|Debian)
-        echo "apt-get install openjdk-8-jdk"
-        sudo apt-get install openjdk-8-jdk
-        ;;
-    Archlinux)
-        echo "pacman -Syy jdk8-openjdk"
-        sudo pacman -S --noconfirm jdk8-openjdk
-        ;;
-    Gentoo)
-	echo "emerge --update jdk:1.8 ant"
-	sudo emerge --update jdk:1.8 ant
-	;;
-esac
-
 
 echo "##### compiling firmware... #####"
 cd "${PLATFORM_ROOT}"
