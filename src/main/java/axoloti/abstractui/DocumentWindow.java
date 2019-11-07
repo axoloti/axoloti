@@ -40,4 +40,10 @@ public interface DocumentWindow {
     File getFile();
 
     List<DocumentWindow> getChildDocuments();
+
+    void addChildDocument(DocumentWindow dw);
+
+    void removeChildDocument(DocumentWindow dw);
+
+    public void dispose();
 }

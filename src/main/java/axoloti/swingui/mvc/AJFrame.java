@@ -5,6 +5,8 @@ import axoloti.abstractui.DocumentWindowList;
 import axoloti.mvc.IModel;
 import axoloti.mvc.IView;
 import java.awt.HeadlessException;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -28,15 +30,15 @@ public abstract class AJFrame<T extends IModel> extends JFrame implements Docume
     private void initComponent() {
         setIconImage(new ImageIcon(getClass().getResource("/resources/axoloti_icon.png")).getImage());
 
-        addComponentListener(new java.awt.event.ComponentAdapter() {
+        addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                unregisterDocumentWindow();
+            public void componentShown(ComponentEvent e) {
+                registerDocumentWindow();
             }
 
             @Override
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                registerDocumentWindow();
+            public void componentHidden(ComponentEvent e) {
+                unregisterDocumentWindow();
             }
         });
 
@@ -52,7 +54,7 @@ public abstract class AJFrame<T extends IModel> extends JFrame implements Docume
         if (parent == null) {
             DocumentWindowList.registerWindow(this);
         } else if (!parent.getChildDocuments().contains(this)) {
-            parent.getChildDocuments().add(this);
+            parent.addChildDocument(this);
         }
     }
 
@@ -60,7 +62,7 @@ public abstract class AJFrame<T extends IModel> extends JFrame implements Docume
         if (parent == null) {
             DocumentWindowList.unregisterWindow(this);
         } else {
-            parent.getChildDocuments().remove(this);
+            parent.removeChildDocument(this);
         }
     }
 
@@ -80,4 +82,13 @@ public abstract class AJFrame<T extends IModel> extends JFrame implements Docume
         toFront();
     }
 
+    @Override
+    public void addChildDocument(DocumentWindow dw) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public void removeChildDocument(DocumentWindow dw) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
 }

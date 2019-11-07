@@ -14,6 +14,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -425,6 +426,15 @@ public abstract class PatchView extends View<PatchModel> {
     public void scrollTo(Component c) {
         Rectangle rect = SwingUtilities.convertRectangle(c.getParent(), c.getBounds(), getViewportView().getComponent());
         getViewportView().getComponent().scrollRectToVisible(rect);
+    }
+
+    public PatchFrame getPatchFrame() {
+        PatchFrame pf = null;
+        Window w = SwingUtilities.getWindowAncestor(getViewportView().getComponent());
+        if (w != null && w instanceof PatchFrame) {
+            return (PatchFrame) w;
+        }
+        return null;
     }
 
 }

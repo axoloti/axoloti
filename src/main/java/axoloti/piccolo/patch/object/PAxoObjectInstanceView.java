@@ -467,7 +467,7 @@ public class PAxoObjectInstanceView extends PAxoObjectInstanceViewAbstract {
     public void openEditor() {
         IAbstractEditor editor = getType().getEditor();
         if (editor == null) {
-            editor = ObjectEditorFactory.createObjectEditor(getType());
+            editor = ObjectEditorFactory.createObjectEditor(getType(), null);
             getType().setEditor(editor);
         }
         editor.bringToFront();

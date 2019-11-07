@@ -210,7 +210,6 @@
                           <Dimension value="[200, 100]"/>
                         </Property>
                       </Properties>
-
                       <AuxValues>
                         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
                       </AuxValues>

@@ -65,6 +65,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,11 +101,18 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private JScrollPane jScrollPane1;
 
+    private final DocumentWindow parentWindow;
+
     public PatchFrame(final PatchModel patchModel) {
-        this(patchModel, false);
+        this(patchModel, null, false);
     }
 
-    public PatchFrame(final PatchModel patchModel, boolean usePiccolo) {
+    public PatchFrame(final PatchModel patchModel, DocumentWindow parentWindow) {
+        this(patchModel, parentWindow, false);
+    }
+
+    public PatchFrame(final PatchModel patchModel, DocumentWindow parentWindow, boolean usePiccolo) {
+        this.parentWindow = parentWindow;
         this.patchModel = patchModel;
         this.patchController = patchModel.getController();
         patchView = PatchViewFactory.patchViewFactory(patchModel);
@@ -144,7 +152,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             public void actionPerformed(ActionEvent e) {
                 PatchViewType save = Preferences.getPreferences().getPatchViewType();
                 Preferences.getPreferences().setPatchViewType(PatchViewType.PICCOLO);
-                PatchFrame pf = new PatchFrame(patchModel, true);
+                PatchFrame pf = new PatchFrame(patchModel, null, true);
                 patchController.addView(pf);
                 pf.setVisible(true);
                 Preferences.getPreferences().setPatchViewType(save);
@@ -315,6 +323,36 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         patchController.addView(this);
         patchController.addView(patchView);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                registerDocumentWindow();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                unregisterDocumentWindow();
+            }
+        });
+
+        registerDocumentWindow();
+    }
+
+    private void registerDocumentWindow() {
+        if (parentWindow == null) {
+            DocumentWindowList.registerWindow(this);
+        } else if (!parentWindow.getChildDocuments().contains(this)) {
+            parentWindow.addChildDocument(this);
+        }
+    }
+
+    private void unregisterDocumentWindow() {
+        if (parentWindow == null) {
+            DocumentWindowList.unregisterWindow(this);
+        } else {
+            parentWindow.removeChildDocument(this);
+        }
     }
 
     private void initializeZoomMenuItems() {
@@ -414,7 +452,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public void close() {
-        DocumentWindowList.unregisterWindow(this);
+        unregisterDocumentWindow();
         // TODO: ConnectionStatusListener
 //        CConnection.getConnection().removeConnectionStatusListener(this);
 //        CConnection.getConnection().removeSDCardMountStatusListener(this);
@@ -525,24 +563,11 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         helpMenu1 = new axoloti.swingui.menus.HelpMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
-            }
-            public void componentHidden(java.awt.event.ComponentEvent evt) {
-                formComponentHidden(evt);
-            }
-        });
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             public void windowGainedFocus(java.awt.event.WindowEvent evt) {
             }
             public void windowLostFocus(java.awt.event.WindowEvent evt) {
                 formWindowLostFocus(evt);
-            }
-        });
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
             }
         });
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
@@ -989,9 +1014,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         getDModel().differenceToPreset();
     }//GEN-LAST:event_jMenuItemDifferenceToPresetActionPerformed
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-    }//GEN-LAST:event_formWindowClosing
-
     private void jMenuItemNotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotesActionPerformed
         showNotesFrame();
     }//GEN-LAST:event_jMenuItemNotesActionPerformed
@@ -1070,14 +1092,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private void jMenuCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCloseActionPerformed
         askClose();
     }//GEN-LAST:event_jMenuCloseActionPerformed
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        DocumentWindowList.registerWindow(this);
-    }//GEN-LAST:event_formComponentShown
-
-    private void formComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentHidden
-        DocumentWindowList.unregisterWindow(this);
-    }//GEN-LAST:event_formComponentHidden
 
     private void jMenuSaveCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveCopyActionPerformed
         File fileToBeSaved = askFileToSave();
@@ -1222,7 +1236,17 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     @Override
     public List<DocumentWindow> getChildDocuments() {
-        return dwl;
+        return Collections.unmodifiableList(dwl);
+    }
+
+    @Override
+    public void addChildDocument(DocumentWindow dw) {
+        dwl.add(dw);
+    }
+
+    @Override
+    public void removeChildDocument(DocumentWindow dw) {
+        dwl.remove(dw);
     }
 
     @Override
@@ -1258,11 +1282,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     @Override
     public void dispose() {
         super.dispose();
-        if (patchSettingsEditor != null) {
-            patchSettingsEditor.dispose();
-        }
-        if (notesEditor != null) {
-            notesEditor.dispose();
+        for (DocumentWindow dw : getChildDocuments().toArray(new DocumentWindow[]{})) {
+            dw.dispose();
         }
     }
 

@@ -64,7 +64,6 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.TransferHandler;
-import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -72,7 +71,6 @@ import org.simpleframework.xml.core.Persister;
  *
  * @author Johannes Taelman
  */
-@Root(name = "patch-1.0")
 public class PatchViewSwing extends PatchView {
 
     private static class JPanelAbsoluteLayout extends JPanel {

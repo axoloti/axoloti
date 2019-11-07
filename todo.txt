@@ -13,7 +13,6 @@ TODO: fix libraries:
 	TODO: fix Mutable Instruments objects
 TODO: shared library: versions?
 TODO: live-edit modulations
-TODO: close orphaned object editors
 TODO: patchbank editor: local base path, show resolved patches...
 TODO: check: connect without board attached results in a lockup?
 TODO: rand(): test

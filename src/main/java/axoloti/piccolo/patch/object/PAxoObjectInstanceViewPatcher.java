@@ -27,7 +27,7 @@ public class PAxoObjectInstanceViewPatcher extends PAxoObjectInstanceView {
     public void initSubpatchFrame() {
         if (pf == null) {
             PatchModel subpatch = getDModel().getSubPatchModel();
-            pf = new PatchFrame(subpatch, true);
+            pf = new PatchFrame(subpatch, getPatchView().getPatchFrame(), true);
             subpatch.getController().addView(pf);
         }
     }

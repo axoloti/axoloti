@@ -48,7 +48,7 @@ public class PAxoObjectInstanceViewPatcherObject extends PAxoObjectInstanceView 
 
     public void edit() {
         if (aoe == null) {
-            aoe = ObjectEditorFactory.createObjectEditor((AxoObject) getDModel().getDModel());
+            aoe = ObjectEditorFactory.createObjectEditor((AxoObject) getDModel().getDModel(), getPatchView().getPatchFrame());
         }
         // TODO: piccolo: Review, invokeLater should not be needed:
         SwingUtilities.invokeLater(new Runnable() {

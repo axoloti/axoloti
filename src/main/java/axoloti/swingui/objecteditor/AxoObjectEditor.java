@@ -36,6 +36,8 @@ import axoloti.swingui.property.ListStringPropertyTable;
 import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
@@ -207,8 +209,11 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
     private ParamDefinitionsEditorPanel params;
     private DisplayDefinitionsEditorPanel disps;
 
-    AxoObjectEditor(AxoObject obj) {
+    private DocumentWindow parentWindow;
+
+    AxoObjectEditor(AxoObject obj, DocumentWindow parentWindow) {
         this.obj = obj;
+        this.parentWindow = parentWindow;
         initComponents();
         initComponents2();
     }
@@ -221,7 +226,6 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         ObjectController ctrl = getObjectController();
 
         fileMenu1.initComponents();
-        DocumentWindowList.registerWindow(this);
         jTextAreaLocalData = initCodeEditor(jPanelLocalData);
         jTextAreaInitCode = initCodeEditor(jPanelInitCode);
         jTextAreaKRateCode = initCodeEditor(jPanelKRateCode2);
@@ -369,6 +373,36 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
 
         obj.getController().addView(this);
         setVisible(true);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                registerDocumentWindow();
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                unregisterDocumentWindow();
+            }
+        });
+
+        registerDocumentWindow();
+    }
+
+    private void registerDocumentWindow() {
+        if (parentWindow == null) {
+            DocumentWindowList.registerWindow(this);
+        } else if (!parentWindow.getChildDocuments().contains(this)) {
+            parentWindow.addChildDocument(this);
+        }
+    }
+
+    private void unregisterDocumentWindow() {
+        if (parentWindow == null) {
+            DocumentWindowList.unregisterWindow(this);
+        } else {
+            parentWindow.removeChildDocument(this);
+        }
     }
 
     boolean isEmbeddedObj() {
@@ -462,7 +496,11 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         if (getDModel().getEditor() == this) {
             getDModel().setEditor(null);
         }
-        DocumentWindowList.unregisterWindow(this);
+        if (parentWindow != null) {
+            parentWindow.removeChildDocument(this);
+        } else {
+            DocumentWindowList.unregisterWindow(this);
+        }
         dispose();
     }
 
@@ -616,12 +654,14 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jLabel10.setText("Description:");
         jPanel3.add(jLabel10);
 
+        jScrollPane13.setPreferredSize(new java.awt.Dimension(200, 100));
+
         jTextDesc.setColumns(20);
         jTextDesc.setLineWrap(true);
         jTextDesc.setRows(1);
         jTextDesc.setWrapStyleWord(true);
         jScrollPane13.setViewportView(jTextDesc);
-        jScrollPane13.setPreferredSize(new java.awt.Dimension(200, 100));
+
         jPanel3.add(jScrollPane13);
 
         jLabel5.setText("Includes");
@@ -957,6 +997,16 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         setState(java.awt.Frame.NORMAL);
         setVisible(true);
         toFront();
+    }
+
+    @Override
+    public void addChildDocument(DocumentWindow dw) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public void removeChildDocument(DocumentWindow dw) {
+        throw new UnsupportedOperationException("Not supported.");
     }
 
 }

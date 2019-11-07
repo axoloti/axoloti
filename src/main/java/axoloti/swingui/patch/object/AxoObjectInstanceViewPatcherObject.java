@@ -33,7 +33,7 @@ class AxoObjectInstanceViewPatcherObject extends AxoObjectInstanceView {
     @Override
     public void openEditor() {
         if (editor == null) {
-            editor = ObjectEditorFactory.createObjectEditor(model.getDModel());
+            editor = ObjectEditorFactory.createObjectEditor(model.getDModel(), getPatchView().getPatchFrame());
         }
         editor.bringToFront();
     }

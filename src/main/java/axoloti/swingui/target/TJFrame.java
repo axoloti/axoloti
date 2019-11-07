@@ -42,4 +42,14 @@ public abstract class TJFrame extends AJFrame<TargetModel> {
         return Collections.emptyList();
     }
 
+    @Override
+    public void addChildDocument(DocumentWindow dw) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public void removeChildDocument(DocumentWindow dw) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
 }

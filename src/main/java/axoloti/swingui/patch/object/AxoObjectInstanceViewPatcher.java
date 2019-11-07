@@ -23,7 +23,7 @@ class AxoObjectInstanceViewPatcher extends AxoObjectInstanceView {
     private void initSubpatchFrame() {
         if (pf == null) {
             PatchModel subpatch = getDModel().getSubPatchModel();
-            pf = new PatchFrame(subpatch);
+            pf = new PatchFrame(subpatch, getPatchView().getPatchFrame());
             subpatch.getController().addView(pf);
         }
     }
