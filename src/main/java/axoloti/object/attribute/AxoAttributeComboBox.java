@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Path;
 
 /**
  *
@@ -31,9 +32,11 @@ import org.simpleframework.xml.ElementList;
  */
 public class AxoAttributeComboBox extends AxoAttribute {
 
-    @ElementList(required = false)
+    @Path("MenuEntries")
+    @ElementList(required = false, inline = true)
     public List<String> MenuEntries = new ArrayList<>();
-    @ElementList(required = false)
+    @Path("CEntries")
+    @ElementList(required = false, inline = true)
     public List<String> CEntries = new ArrayList<>();
 
     public static final Property ATOM_MENUENTRIES = new StringListProperty("MenuEntries", AxoAttributeComboBox.class, "Menu entries");

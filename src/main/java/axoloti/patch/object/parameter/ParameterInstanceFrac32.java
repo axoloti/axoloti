@@ -29,7 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Path;
 
 /**
@@ -42,13 +41,12 @@ public abstract class ParameterInstanceFrac32<Tx extends ParameterFrac32> extend
     public double getValuex() {
         return value;
     }
-    @ElementList(required = false)
-    ArrayList<Modulation> modulators;
+    @Path("modulators")
+    @ElementList(required = false, inline = true)
+    List<Modulation> modulators;
 
     @Path("presets")
-    @ElementListUnion({
-        @ElementList(entry = "preset", type = PresetDouble.class, inline = true, required = false)
-    })
+    @ElementList(entry = "preset", type = PresetDouble.class, inline = true, required = false)
     List<Preset> presets;
 
     Double value = 0.0;

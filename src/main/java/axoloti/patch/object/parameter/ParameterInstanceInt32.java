@@ -26,7 +26,6 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Path;
 
 /**
@@ -39,9 +38,7 @@ public abstract class ParameterInstanceInt32<T extends ParameterInt32> extends P
     Integer value = 0;
 
     @Path("presets")
-    @ElementListUnion({
-        @ElementList(entry = "preset", type = PresetInt.class, inline = true, required = false)
-    })
+    @ElementList(entry = "preset", type = PresetInt.class, inline = true, required = false)
     List<Preset> presets;
 
     public ParameterInstanceInt32() {

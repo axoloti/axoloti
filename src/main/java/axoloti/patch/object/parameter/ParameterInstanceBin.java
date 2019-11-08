@@ -8,7 +8,6 @@ import axoloti.utils.ListUtils;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.ElementListUnion;
 import org.simpleframework.xml.Path;
 
 /**
@@ -25,9 +24,7 @@ public abstract class ParameterInstanceBin<T extends ParameterBin> extends Param
     }
 
     @Path("presets")
-    @ElementListUnion({
-        @ElementList(entry = "preset", type = PresetInt.class, inline = true, required = false)
-    })
+    @ElementList(entry = "preset", type = PresetInt.class, inline = true, required = false)
     List<Preset> presets;
 
     public ParameterInstanceBin() {
