@@ -57,7 +57,7 @@ public class HWSignature {
     }
 
     static PublicKey readPublicKey(String publicKeyResourceName) throws Exception {
-        InputStream fis = ClassLoader.class.getResourceAsStream(publicKeyResourceName);
+        InputStream fis = HWSignature.class.getResourceAsStream(publicKeyResourceName);
         byte[] keyBytes = convertSteamToByteArray(fis,1024);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyBytes);
         return KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec);
