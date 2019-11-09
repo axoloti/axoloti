@@ -107,8 +107,6 @@ public class PatchModel extends AbstractModel<PatchController> {
     @Element(required = false)
     private String helpPatch;
 
-    Integer dspLoad = 0;
-
     public boolean presetUpdatePending = false;
 
     boolean locked = false;
@@ -764,7 +762,6 @@ public class PatchModel extends AbstractModel<PatchController> {
 
     public final static Property PATCH_LOCKED = new BooleanProperty("Locked", PatchModel.class);
     public final static Property PATCH_FILENAME = new StringPropertyNull("FileNamePath", PatchModel.class);
-    public final static Property PATCH_DSPLOAD = new IntegerProperty("DspLoad", PatchModel.class);
     public final static ListProperty PATCH_OBJECTINSTANCES = new ListProperty("ObjectInstances", PatchModel.class);
     public final static ListProperty PATCH_NETS = new ListProperty("Nets", PatchModel.class);
     public final static Property PATCH_AUTHOR = new StringPropertyNull("Author", PatchModel.class);
@@ -787,7 +784,6 @@ public class PatchModel extends AbstractModel<PatchController> {
     private final static Property[] PROPERTIES = {
         PATCH_LOCKED,
         PATCH_FILENAME,
-        PATCH_DSPLOAD,
         PATCH_OBJECTINSTANCES,
         PATCH_NETS,
         PATCH_AUTHOR,
@@ -833,18 +829,6 @@ public class PatchModel extends AbstractModel<PatchController> {
         firePropertyChange(
                 PATCH_LOCKED,
                 null, locked);
-    }
-
-    public Integer getDspLoad() {
-        return dspLoad;
-    }
-
-    public void setDspLoad(Integer dspLoad) {
-        Integer oldvalue = this.dspLoad;
-        this.dspLoad = dspLoad;
-        firePropertyChange(
-                PATCH_DSPLOAD,
-                oldvalue, dspLoad);
     }
 
     public List<IAxoObjectInstance> getObjectInstances() {

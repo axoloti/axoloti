@@ -624,10 +624,6 @@ public class PatchController extends AbstractController<PatchModel, IView> {
         setModelProperty(PatchModel.PATCH_LOCKED, (Boolean) locked);
     }
 
-    public void setDspLoad(int DSPLoad) {
-        setModelProperty(PatchModel.PATCH_DSPLOAD, (Integer) DSPLoad);
-    }
-
     public void recallPreset(int presetIndex) {
         setModelProperty(PatchModel.PATCH_RECALLPRESET, (Integer) presetIndex);
     }

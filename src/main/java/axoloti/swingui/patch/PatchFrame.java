@@ -520,8 +520,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         jToolbarPanel = new javax.swing.JPanel();
         jCheckBoxLive = new javax.swing.JCheckBox();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
-        jLabel1 = new javax.swing.JLabel();
-        jProgressBarDSPLoad = new javax.swing.JProgressBar();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0), new java.awt.Dimension(5, 0));
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu1 = new axoloti.swingui.menus.FileMenu();
@@ -593,17 +591,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
         filler2.setAlignmentX(0.0F);
         jToolbarPanel.add(filler2);
-
-        jLabel1.setText("DSP load ");
-        jToolbarPanel.add(jLabel1);
-
-        jProgressBarDSPLoad.setAlignmentX(0.0F);
-        jProgressBarDSPLoad.setMaximumSize(new java.awt.Dimension(100, 16));
-        jProgressBarDSPLoad.setMinimumSize(new java.awt.Dimension(60, 16));
-        jProgressBarDSPLoad.setName(""); // NOI18N
-        jProgressBarDSPLoad.setPreferredSize(new java.awt.Dimension(100, 16));
-        jProgressBarDSPLoad.setStringPainted(true);
-        jToolbarPanel.add(jProgressBarDSPLoad);
 
         filler3.setAlignmentX(0.0F);
         jToolbarPanel.add(filler3);
@@ -1173,7 +1160,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JCheckBox jCheckBoxLive;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemCordsInBackground;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemLive;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuClose;
     private javax.swing.JMenuItem jMenuCompileCode;
@@ -1201,7 +1187,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenuItem jMenuSaveCopy;
     private javax.swing.JMenuItem jMenuUploadCode;
     private javax.swing.JMenu jMenuView;
-    private javax.swing.JProgressBar jProgressBarDSPLoad;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
@@ -1211,17 +1196,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     private javax.swing.JMenu targetMenu;
     private axoloti.swingui.menus.WindowMenu windowMenu1;
     // End of variables declaration//GEN-END:variables
-
-    void showDSPLoad(int pct) {
-        int pv = jProgressBarDSPLoad.getValue();
-        if (pct == pv) {
-            return;
-        }
-        if (pct == (pv - 1)) {
-            return;
-        }
-        jProgressBarDSPLoad.setValue(pct);
-    }
 
     @Override
     public File getFile() {
@@ -1269,8 +1243,6 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
             } else {
                 setLive(true);
             }
-        } else if (PatchModel.PATCH_DSPLOAD.is(evt)) {
-            showDSPLoad((Integer) evt.getNewValue());
         } else if (PatchModel.PATCH_FILENAME.is(evt)) {
             this.setTitle((String)evt.getNewValue());
         } else if (PatchModel.PATCH_WINDOWPOS.is(evt)) {
