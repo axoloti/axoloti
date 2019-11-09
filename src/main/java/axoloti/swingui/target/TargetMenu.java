@@ -358,7 +358,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemFlashDowngradeActionPerformed(java.awt.event.ActionEvent evt) {
-        String pname = System.getProperty(Axoloti.RELEASE_DIR) + "/old_firmware/firmware-1.0.12/axoloti.bin";
+        String pname = Axoloti.getReleaseDir() + "/old_firmware/firmware-1.0.12/axoloti.bin";
         try {
             getDModel().flashUsingSDRam(pname);
         } catch (IOException ex) {
@@ -382,7 +382,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private void jMenuItemMountActionPerformed(java.awt.event.ActionEvent evt) {
         GlobalJobProcessor.getJobProcessor().exec(ctx -> {
             String elfname = "mounter.elf";
-            String fname = System.getProperty(Axoloti.RELEASE_DIR) + "firmware/mounter/mounter_build/" + elfname;
+            String fname = Axoloti.getReleaseDir() + "/firmware/mounter/mounter_build/" + elfname;
             Path fileLocation = Paths.get(fname);
             byte[] data;
             try {
