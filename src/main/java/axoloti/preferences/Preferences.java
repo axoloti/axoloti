@@ -506,7 +506,7 @@ public class Preferences {
 
     public Boolean getMouseWheelPan() {
         if (mouseWheelPanEnabled == null) {
-            mouseWheelPanEnabled = false;
+            mouseWheelPanEnabled = true;
         }
         return mouseWheelPanEnabled;
     }
