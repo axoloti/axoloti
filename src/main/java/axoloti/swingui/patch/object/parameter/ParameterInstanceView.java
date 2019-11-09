@@ -23,6 +23,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -57,7 +58,7 @@ public abstract class ParameterInstanceView extends ViewPanel<ParameterInstance>
     final void initCtrlComponent(ACtrlComponent ctrl) {
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-
+        add(Box.createHorizontalGlue());
         JPanel lbls = new JPanel();
         lbls.setOpaque(false);
         lbls.setLayout(new BoxLayout(lbls, BoxLayout.Y_AXIS));

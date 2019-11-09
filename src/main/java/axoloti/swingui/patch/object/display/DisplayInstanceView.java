@@ -5,6 +5,7 @@ import axoloti.patch.object.display.DisplayInstance;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.mvc.ViewPanel;
 import java.beans.PropertyChangeEvent;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 public abstract class DisplayInstanceView extends ViewPanel<DisplayInstance> implements IDisplayInstanceView {
@@ -18,6 +19,7 @@ public abstract class DisplayInstanceView extends ViewPanel<DisplayInstance> imp
 
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        add(Box.createHorizontalGlue());
         label = new LabelComponent("");
         add(label);
         setSize(getPreferredSize());
