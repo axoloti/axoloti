@@ -850,7 +850,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
 
     private void jMenuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveActionPerformed
         String fn = getDModel().getFileNamePath();
-        if ((fn != null) && (!fn.equals("untitled"))) {
+        if ((fn != null) && (!fn.isEmpty()) && (!fn.equals("untitled"))) {
             File f = new File(fn);
             patchController.setFileNamePath(f.getPath());
             getPatchView().save(f);
