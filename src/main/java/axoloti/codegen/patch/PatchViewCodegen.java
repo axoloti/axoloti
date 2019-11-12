@@ -1299,7 +1299,7 @@ public class PatchViewCodegen extends View<PatchModel> {
                 + "  int i;\n"
                 + "  for(i=0;i<attr_poly;i++) {\n"
                 + "    if (voiceChannel[i] == channel || channel == attr_midichannel) {\n"
-                + "         getVoices()[i].midiInHandler(this, midiMessage((port, msg + attr_midichannel, data1, data2));\n"
+                + "         getVoices()[i].midiInHandler(this, midiMessage(port, msg + attr_midichannel, data1, data2));\n"
                 + "    }\n"
                 + "  }\n"
                 + "}\n"; // other midi
