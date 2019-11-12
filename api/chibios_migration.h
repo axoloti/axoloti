@@ -9,7 +9,7 @@
 #define WORKING_AREA THD_WORKING_AREA
 #define chSysLockFromIsr chSysLockFromISR
 #define chSysUnlockFromIsr 	chSysUnlockFromISR
-#define chTimeNow 	chVTGetSystemTime
+#define chTimeNow 	chVTGetSystemTimeX
 #define chTimeElapsedSince 	chVTTimeElapsedSinceX
 #define chTimeIsWithin 	chVTIsTimeWithinX
 #define chThdSelf 	chThdGetSelfX
