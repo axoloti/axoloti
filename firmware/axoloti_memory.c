@@ -68,7 +68,8 @@ void* ax_malloc_align(size_t size, mem_type_flags_t mem_type, unsigned align) {
     return chHeapAllocAligned(&sram2_heap, size, align);
   }
   if (mem_type & mem_type_hint_no_dma) {
-    return chHeapAllocAligned(&ccm_heap, size, align);
+	void * r = chHeapAllocAligned(&ccm_heap, size, align);
+    if (r) return r;
   }
   return chHeapAllocAligned(&sram3_heap, size, align);
 }
