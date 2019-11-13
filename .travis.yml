@@ -16,7 +16,7 @@ before_install:
       curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2 -o gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
       tar xfj gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2 -C ~/
       rm gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
-      env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./build.sh
+      env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./platform_linux/build.sh
       ;;
     osx)
       brew install ant p7zip
