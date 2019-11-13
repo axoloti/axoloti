@@ -32,10 +32,19 @@ else
     OS=$(uname -s)
 fi
 
-echo -e "The script can install the required packages using your package manager,"
-echo -e "For this you'll require sudo rights and need to enter your password..."
-read -p "Install required packages? [N/y] " input
-if [[ $input == "Y" || $input == "y" ]]; then
+if [[ "$1" == "--noninteractive" ]]; then
+    noninteractive=true
+else
+    noninteractive=false
+fi
+
+if [[ $noninteractive != "true" ]]; then
+    echo -e "The script can install the required packages using your package manager,"
+    echo -e "For this you'll require sudo rights and need to enter your password..."
+    read -p "Install required packages? [N/y] " input
+fi
+
+if [[ $noninteractive == "true" || $input == "Y" || $input == "y" ]]; then
 case $OS in
     Ubuntu|Debian|DebianJessie32bit)
         if [ $OS==DebianJessie32bit ]; then

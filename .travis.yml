@@ -13,10 +13,16 @@ before_install:
     linux)
       sudo apt-get update -qq
       sudo apt-get install -qq fakeroot
-      ./platform_linux/build.sh
+      curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2 -o gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
+      tar xfj gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2 -C ~/
+      rm gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
+      env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./build.sh
       ;;
     osx)
       brew install ant p7zip
+      curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2 -o gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
+      tar xfj gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2 -C /Applications/
+      rm gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
       ./platform_osx/build.sh
       ;;
     esac;
