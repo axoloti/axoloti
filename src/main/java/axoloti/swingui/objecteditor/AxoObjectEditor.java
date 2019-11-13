@@ -20,8 +20,6 @@ package axoloti.swingui.objecteditor;
 import axoloti.abstractui.DocumentWindow;
 import axoloti.abstractui.DocumentWindowList;
 import axoloti.abstractui.IAbstractEditor;
-import axoloti.job.IJobContext;
-import axoloti.job.JobContext;
 import axoloti.mvc.FocusEdit;
 import axoloti.mvc.IView;
 import axoloti.object.AxoObject;
@@ -151,21 +149,6 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         rSyntaxTextAreaXML.setText(origXML);
     }
 
-    void revert() {
-        // needs review
-        /*
-        try {
-            Serializer serializer = new Persister();
-            AxoObject objrev = serializer.read(AxoObject.class, origXML);
-            editObj.copy(objrev);
-            close();
-
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjectEditor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         */
-    }
-
     private void setUndoablePropString(Property prop, JTextComponent component) {
         String orig = (String) getObjectController().getModelProperty(prop);
         String new_string = cleanString(component.getText());
@@ -209,7 +192,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
     private ParamDefinitionsEditorPanel params;
     private DisplayDefinitionsEditorPanel disps;
 
-    private DocumentWindow parentWindow;
+    private final DocumentWindow parentWindow;
 
     AxoObjectEditor(AxoObject obj, DocumentWindow parentWindow) {
         this.obj = obj;
@@ -458,7 +441,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         // warn if changes, and its not an embedded object
         if (hasChanged()) {
             if (!readonly) {
-                Object[] options = {"Yes", "Revert changes", "Cancel"};
+                Object[] options = {"Yes", "No"};
                 int n = JOptionPane.showOptionDialog(this,
                         "Unsaved changes, do you want to save?",
                         "Axoloti asks:",
@@ -472,11 +455,9 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
                         jMenuItemSaveActionPerformed(null);
                         close();
                         return false;
-                    case 1: // revert
-                        revert();
+                    case 1: // no
                         close();
                         return false;
-                    case 2: // cancel
                     default: // closed
                         return true;
                 }
@@ -904,8 +885,6 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         if (!isCompositeObject()) {
             AxoObjects.getAxoObjects().writeAxoObject(getDModel().getPath(), getDModel());
             updateReferenceXML();
-            IJobContext progress = new JobContext();
-            AxoObjects.getAxoObjects().loadAxoObjects1(progress);
         } else {
             JOptionPane.showMessageDialog(null, "The original object file " + getDModel().getPath() + " contains multiple objects, the object editor does not support this.\n"
                     + "Your changes are NOT saved!");
