@@ -40,6 +40,7 @@ import axoloti.swingui.components.PresetPanel;
 import axoloti.swingui.components.VisibleCablePanel;
 import axoloti.swingui.mvc.UndoListViewFrame;
 import axoloti.swingui.mvc.UndoUI;
+import axoloti.target.TargetModel;
 import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.utils.Constants;
 import axoloti.utils.KeyUtils;
@@ -284,9 +285,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         if (CConnection.getConnection().isConnected()) {
             showConnect();
         }
-        // TODO: ConnectionStatusListener
-//        CConnection.getConnection().addConnectionStatusListener(this);
-//        CConnection.getConnection().addSDCardMountStatusListener(this);
+        TargetModel.getTargetModel().addConnectionStatusListener(this);
+        TargetModel.getTargetModel().addSDCardMountStatusListener(this);
 
         getPatchView().getViewportView().getComponent().requestFocusInWindow();
 
@@ -453,9 +453,8 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
     @Override
     public void close() {
         unregisterDocumentWindow();
-        // TODO: ConnectionStatusListener
-//        CConnection.getConnection().removeConnectionStatusListener(this);
-//        CConnection.getConnection().removeSDCardMountStatusListener(this);
+        TargetModel.getTargetModel().removeConnectionStatusListener(this);
+        TargetModel.getTargetModel().removeSDCardMountStatusListener(this);
         getPatchView().dispose();
         dispose();
     }

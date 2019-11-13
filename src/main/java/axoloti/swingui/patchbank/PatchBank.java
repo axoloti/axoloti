@@ -90,8 +90,7 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         });
         menuBar.addMenuItemToFileMenu(jMenuItemSaveAs);
         setJMenuBar(menuBar);
-        // TODO: ConnectionStatusListener
-//        CConnection.getConnection().addConnectionStatusListener(this);
+        TargetModel.getTargetModel().addConnectionStatusListener(this);
         jTable1.setModel(new AbstractTableModel() {
             private final String[] columnNames = {"Index", "File", "on sdcard"};
 
@@ -318,8 +317,7 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
 
     public void close() {
         DocumentWindowList.unregisterWindow(this);
-        // TODO: ConnectionStatusListener
-//        CConnection.getConnection().removeConnectionStatusListener(this);
+        TargetModel.getTargetModel().removeConnectionStatusListener(this);
         dispose();
     }
 

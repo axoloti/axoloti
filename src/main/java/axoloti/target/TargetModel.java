@@ -2,6 +2,7 @@ package axoloti.target;
 
 import axoloti.chunks.ChunkData;
 import axoloti.chunks.FourCCs;
+import axoloti.connection.ConnectionStatusListener;
 import axoloti.connection.IConnection;
 import axoloti.connection.ILivePatch;
 import axoloti.mvc.AbstractModel;
@@ -11,6 +12,7 @@ import axoloti.property.ListProperty;
 import axoloti.property.ObjectProperty;
 import axoloti.property.Property;
 import axoloti.property.StringProperty;
+import axoloti.target.fs.SDCardMountStatusListener;
 import axoloti.target.midimonitor.MidiMonitorData;
 import axoloti.target.midirouting.MidiInputRoutingTable;
 import axoloti.target.midirouting.MidiOutputRoutingTable;
@@ -184,6 +186,15 @@ public class TargetModel extends AbstractModel {
         this.sDCardMounted = SDCardMounted;
         firePropertyChange(HAS_SDCARD,
                 null, SDCardMounted);
+        if (SDCardMounted) {
+            for (SDCardMountStatusListener sdcml : sdcmls) {
+                sdcml.showSDCardMounted();
+            }
+        } else {
+            for (SDCardMountStatusListener sdcml : sdcmls) {
+                sdcml.showSDCardUnmounted();
+            }
+        }
     }
 
     public TargetRTInfo getRTInfo() {
@@ -256,5 +267,50 @@ public class TargetModel extends AbstractModel {
         return null;
     }
 
+    private final List<ConnectionStatusListener> csls = new LinkedList<>();
+
+    public void addConnectionStatusListener(ConnectionStatusListener csl) {
+        if ((connection != null) && connection.isConnected()) {
+            csl.showConnect();
+        } else {
+            csl.showDisconnect();
+        }
+        csls.add(csl);
+    }
+
+    public void removeConnectionStatusListener(ConnectionStatusListener csl) {
+        csls.remove(csl);
+    }
+
+    public void showDisconnect() {
+        for (ConnectionStatusListener csl : csls) {
+            csl.showDisconnect();
+        }
+        setConnection(null);
+        setWarnedAboutFWCRCMismatch(false);
+    }
+
+    public void showConnect(IConnection connection) {
+        this.connection = connection;
+        for (ConnectionStatusListener csl : csls) {
+            csl.showConnect();
+        }
+        setConnection(connection);
+    }
+
+    private final List<SDCardMountStatusListener> sdcmls = new LinkedList<>();
+
+    public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
+        if ((connection != null) && connection.getSDCardPresent()) {
+            sdcml.showSDCardMounted();
+        } else {
+            sdcml.showSDCardUnmounted();
+        }
+        sdcmls.add(sdcml);
+    }
+
+    public void removeSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
+        sdcmls.remove(sdcml);
+    }
 
 }

@@ -3,10 +3,8 @@ package axoloti.connection;
 import axoloti.mvc.View;
 import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
-import axoloti.target.fs.SDCardMountStatusListener;
 import java.awt.Component;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,63 +37,23 @@ public class ConnectionCB extends View<TargetModel> implements IConnectionCB {
     public void dispose() {
     }
 
-    private final ArrayList<ConnectionStatusListener> csls = new ArrayList<>();
-
-    public void addConnectionStatusListener(ConnectionStatusListener csl) {
-        if (connection.isConnected()) {
-            csl.showConnect();
-        } else {
-            csl.showDisconnect();
-        }
-        csls.add(csl);
-    }
-
-    public void removeConnectionStatusListener(ConnectionStatusListener csl) {
-        csls.remove(csl);
-    }
-
     @Override
     public void showDisconnect() {
         SwingUtilities.invokeLater(() -> {
-            for (ConnectionStatusListener csl : csls) {
-                csl.showDisconnect();
-            }
-            getDModel().setConnection(null);
-            getDModel().setWarnedAboutFWCRCMismatch(false);
+            getDModel().showDisconnect();
         });
     }
 
     @Override
     public void showConnect() {
         SwingUtilities.invokeLater(() -> {
-            for (ConnectionStatusListener csl : csls) {
-                csl.showConnect();
-            }
-            getDModel().setConnection(connection);
+            getDModel().showConnect(connection);
         });
-    }
-
-    private final ArrayList<SDCardMountStatusListener> sdcmls = new ArrayList<>();
-
-    public void addSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
-        if (connection.getSDCardPresent()) {
-            sdcml.showSDCardMounted();
-        } else {
-            sdcml.showSDCardUnmounted();
-        }
-        sdcmls.add(sdcml);
-    }
-
-    public void removeSDCardMountStatusListener(SDCardMountStatusListener sdcml) {
-        sdcmls.remove(sdcml);
     }
 
     @Override
     public void showSDCardMounted() {
         SwingUtilities.invokeLater(() -> {
-            for (SDCardMountStatusListener sdcml : sdcmls) {
-                sdcml.showSDCardMounted();
-            }
             getDModel().setSDCardMounted(true);
         });
     }
@@ -103,9 +61,6 @@ public class ConnectionCB extends View<TargetModel> implements IConnectionCB {
     @Override
     public void showSDCardUnmounted() {
         SwingUtilities.invokeLater(() -> {
-            for (SDCardMountStatusListener sdcml : sdcmls) {
-                sdcml.showSDCardUnmounted();
-            }
             getDModel().setSDCardMounted(false);
         });
     }
