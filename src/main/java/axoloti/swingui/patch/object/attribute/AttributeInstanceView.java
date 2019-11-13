@@ -9,6 +9,7 @@ import axoloti.preferences.Theme;
 import axoloti.swingui.components.LabelComponent;
 import axoloti.swingui.mvc.ViewPanel;
 import java.beans.PropertyChangeEvent;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 public abstract class AttributeInstanceView extends ViewPanel<AttributeInstance> implements IAttributeInstanceView {
@@ -25,6 +26,7 @@ public abstract class AttributeInstanceView extends ViewPanel<AttributeInstance>
 
     private void initComponents() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        add(Box.createHorizontalGlue());
         setBackground(Theme.getCurrentTheme().Object_Default_Background);
         label = new LabelComponent("");
         add(label);
