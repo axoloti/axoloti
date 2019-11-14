@@ -17,17 +17,19 @@ before_install:
       ls ~/gcc-arm-none-eabi-7-2018-q2-update/bin
       curl https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb > java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
       sudo dpkg -i java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
-      export JAVA_HOME="/usr/lib/jvm/java-1.8.0-amazon-corretto"
       rm java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
-      env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./platform_linux/build.sh --noninteractive
+      export JAVA_HOME="/usr/lib/jvm/java-1.8.0-amazon-corretto"
+      export PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin"
+      ./platform_linux/build.sh --noninteractive
       ;;
     osx)
+      brew update
       brew install ant p7zip
       curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2 -o gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
       tar xfj gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2 -C /Applications/
       rm gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
       curl https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/amazon-corretto-8.232.09.1-macosx-x64.pkg > amazon-corretto-8.232.09.1-macosx-x64.pkg
-      installer -pkg amazon-corretto-8.232.09.1-macosx-x64.pkg -target /
+      sudo installer -pkg amazon-corretto-8.232.09.1-macosx-x64.pkg -target /
       rm amazon-corretto-8.232.09.1-macosx-x64.pkg
       ./platform_osx/build.sh
       ;;
