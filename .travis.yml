@@ -6,7 +6,7 @@ matrix:
     - os: linux
       dist: trusty
     - os: osx
-      osx_image: xcode8.3
+      osx_image: xcode9.4
 before_install:
   - >
     case "${TRAVIS_OS_NAME:-linux}" in
@@ -16,13 +16,16 @@ before_install:
       curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2 -o gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
       tar xfj gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2 -C ~/
       rm gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
-      env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./platform_linux/build.sh
+      env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./platform_linux/build.sh --noninteractive
       ;;
     osx)
       brew install ant p7zip
       curl https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2 -o gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
       tar xfj gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2 -C /Applications/
       rm gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
+      curl https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/amazon-corretto-8.232.09.1-macosx-x64.pkg > amazon-corretto-8.232.09.1-macosx-x64.pkg
+      installer -pkg amazon-corretto-8.232.09.1-macosx-x64.pkg -target /
+      rm amazon-corretto-8.232.09.1-macosx-x64.pkg
       ./platform_osx/build.sh
       ;;
     esac;
