@@ -30,6 +30,7 @@ before_install:
       rm gcc-arm-none-eabi-7-2018-q2-update-mac.tar.bz2
       curl https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/amazon-corretto-8.232.09.1-macosx-x64.pkg > amazon-corretto-8.232.09.1-macosx-x64.pkg
       sudo installer -pkg amazon-corretto-8.232.09.1-macosx-x64.pkg -target /
+      export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home
       rm amazon-corretto-8.232.09.1-macosx-x64.pkg
       ./platform_osx/build.sh
       ;;
