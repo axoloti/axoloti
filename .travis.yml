@@ -16,7 +16,7 @@ before_install:
       rm gcc-arm-none-eabi-7-2018-q2-update-linux.tar.bz2
       ls ~/gcc-arm-none-eabi-7-2018-q2-update/bin
       curl https://d3pxv6yz143wms.cloudfront.net/8.232.09.1/java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb > java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
-      dpkg -i java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
+      sudo dpkg -i java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
       export JAVA_HOME="/usr/lib/jvm/java-1.8.0-amazon-corretto"
       rm java-1.8.0-amazon-corretto-jdk_8.232.09-1_amd64.deb
       env PATH="$PATH:~/gcc-arm-none-eabi-7-2018-q2-update/bin" ./platform_linux/build.sh --noninteractive
