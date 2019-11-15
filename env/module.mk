@@ -29,6 +29,7 @@ LDFLAGS = \
 	-mfloat-abi=hard \
 	-mfpu=fpv4-sp-d16 \
 	-mthumb \
-	-mno-thumb-interwork
+	-mno-thumb-interwork \
+	-L${axoloti_api}
 
 LDSCRIPT = ${axoloti_env}/elf.ld
