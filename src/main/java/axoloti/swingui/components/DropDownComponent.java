@@ -77,7 +77,7 @@ public class DropDownComponent extends JComponent {
                 maxWidth = (int) r.getWidth();
             }
         }
-        Dimension d = new Dimension(maxWidth + 10, 15);
+        Dimension d = new Dimension(maxWidth + 19, 15);
         setSize(d);
         setPreferredSize(d);
         setMinimumSize(d);
