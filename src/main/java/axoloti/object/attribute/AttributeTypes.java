@@ -37,8 +37,8 @@ public class AttributeTypes {
         new AxoAttributeTablename(),
         new AxoAttributeSDFile(),
         new AxoAttributeTextEditor(),
-        new AxoAttributeMidiInPort()
-        new AxoAttributeMidiOutPort(),
+        new AxoAttributeMidiInPort(),
+        new AxoAttributeMidiOutPort()
     };
 
     final public static List<AxoAttribute> getTypes() {
