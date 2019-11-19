@@ -4,6 +4,8 @@ import axoloti.object.atom.AtomDefinitionController;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeInt32;
+import axoloti.object.attribute.AxoAttributeMidiInPort;
+import axoloti.object.attribute.AxoAttributeMidiOutPort;
 import axoloti.object.attribute.AxoAttributeObjRef;
 import axoloti.object.attribute.AxoAttributeSDFile;
 import axoloti.object.attribute.AxoAttributeSpinner;
@@ -25,6 +27,10 @@ public class AttributeInstanceFactory {
         AttributeInstance view;
         if (model instanceof AxoAttributeComboBox) {
             view = new AttributeInstanceComboBox((AxoAttributeComboBox) model, obj);
+        } else if (model instanceof AxoAttributeMidiInPort) {
+            view = new AttributeInstanceMidiInPort((AxoAttributeMidiInPort) model, obj);
+        } else if (model instanceof AxoAttributeMidiOutPort) {
+            view = new AttributeInstanceMidiOutPort((AxoAttributeMidiOutPort) model, obj);
         } else if (model instanceof AxoAttributeInt32) {
             view = new AttributeInstanceInt32((AxoAttributeInt32) model, obj);
         } else if (model instanceof AxoAttributeObjRef) {

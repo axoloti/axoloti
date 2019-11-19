@@ -20,6 +20,8 @@ package axoloti.object;
 import axoloti.object.attribute.AxoAttribute;
 import axoloti.object.attribute.AxoAttributeComboBox;
 import axoloti.object.attribute.AxoAttributeInt32;
+import axoloti.object.attribute.AxoAttributeMidiInPort;
+import axoloti.object.attribute.AxoAttributeMidiOutPort;
 import axoloti.object.attribute.AxoAttributeObjRef;
 import axoloti.object.attribute.AxoAttributeSDFile;
 import axoloti.object.attribute.AxoAttributeSpinner;
@@ -242,6 +244,8 @@ public class AxoObject extends AxoObjectAbstract {
         @ElementList(entry = AxoAttributeObjRef.TYPE_NAME, type = AxoAttributeObjRef.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeTablename.TYPE_NAME, type = AxoAttributeTablename.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeComboBox.TYPE_NAME, type = AxoAttributeComboBox.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeMidiInPort.TYPE_NAME, type = AxoAttributeMidiInPort.class, inline = true, required = false),
+        @ElementList(entry = AxoAttributeMidiOutPort.TYPE_NAME, type = AxoAttributeMidiOutPort.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeInt32.TYPE_NAME, type = AxoAttributeInt32.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeSpinner.TYPE_NAME, type = AxoAttributeSpinner.class, inline = true, required = false),
         @ElementList(entry = AxoAttributeSDFile.TYPE_NAME, type = AxoAttributeSDFile.class, inline = true, required = false),

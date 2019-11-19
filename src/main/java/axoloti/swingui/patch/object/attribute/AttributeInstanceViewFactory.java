@@ -3,6 +3,8 @@ package axoloti.swingui.patch.object.attribute;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceInt32;
+import axoloti.patch.object.attribute.AttributeInstanceMidiInPort;
+import axoloti.patch.object.attribute.AttributeInstanceMidiOutPort;
 import axoloti.patch.object.attribute.AttributeInstanceObjRef;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
 import axoloti.patch.object.attribute.AttributeInstanceSpinner;
@@ -23,6 +25,10 @@ public class AttributeInstanceViewFactory {
         AttributeInstanceView view;
         if (model instanceof AttributeInstanceComboBox) {
             view = new AttributeInstanceViewComboBox((AttributeInstanceComboBox) model, obj);
+        } else if (model instanceof AttributeInstanceMidiInPort) {
+            view = new AttributeInstanceViewMidiInPort((AttributeInstanceMidiInPort) model, obj);
+        } else if (model instanceof AttributeInstanceMidiOutPort) {
+            view = new AttributeInstanceViewMidiOutPort((AttributeInstanceMidiOutPort) model, obj);
         } else if (model instanceof AttributeInstanceInt32) {
             view = new AttributeInstanceViewInt32(model, obj);
         } else if (model instanceof AttributeInstanceObjRef) {

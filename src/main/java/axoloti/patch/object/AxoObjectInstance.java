@@ -44,6 +44,8 @@ import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.attribute.AttributeInstanceComboBox;
 import axoloti.patch.object.attribute.AttributeInstanceFactory;
 import axoloti.patch.object.attribute.AttributeInstanceInt32;
+import axoloti.patch.object.attribute.AttributeInstanceMidiInPort;
+import axoloti.patch.object.attribute.AttributeInstanceMidiOutPort;
 import axoloti.patch.object.attribute.AttributeInstanceObjRef;
 import axoloti.patch.object.attribute.AttributeInstanceSDFile;
 import axoloti.patch.object.attribute.AttributeInstanceSpinner;
@@ -121,6 +123,8 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         @ElementList(entry = "objref", type = AttributeInstanceObjRef.class, inline = true, required = false),
         @ElementList(entry = "table", type = AttributeInstanceTablename.class, inline = true, required = false),
         @ElementList(entry = "combo", type = AttributeInstanceComboBox.class, inline = true, required = false),
+        @ElementList(entry = "midiInPort", type = AttributeInstanceMidiInPort.class, inline = true, required = false),
+        @ElementList(entry = "midiOutPort", type = AttributeInstanceMidiOutPort.class, inline = true, required = false),
         @ElementList(entry = "int", type = AttributeInstanceInt32.class, inline = true, required = false),
         @ElementList(entry = "spinner", type = AttributeInstanceSpinner.class, inline = true, required = false),
         @ElementList(entry = "file", type = AttributeInstanceSDFile.class, inline = true, required = false),

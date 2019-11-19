@@ -36,7 +36,9 @@ public class AttributeTypes {
         new AxoAttributeSpinner(),
         new AxoAttributeTablename(),
         new AxoAttributeSDFile(),
-        new AxoAttributeTextEditor()
+        new AxoAttributeTextEditor(),
+        new AxoAttributeMidiInPort()
+        new AxoAttributeMidiOutPort(),
     };
 
     final public static List<AxoAttribute> getTypes() {
