@@ -50,7 +50,7 @@ public abstract class AttributeInstanceInt<T extends AxoAttribute> extends Attri
     public void copyValueFrom(AttributeInstance a) {
         if (a instanceof AttributeInstanceInt) {
             AttributeInstanceInt a1 = (AttributeInstanceInt) a;
-            value = a1.value;
+            setValue(a1.getValueInteger());
         }
     }
 
