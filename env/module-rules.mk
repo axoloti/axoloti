@@ -17,7 +17,7 @@ Makefile.uptodate: Makefile
 
 %.dbg.elf : $(objs)
 	$(info linking $(@:.o=))
-	@"$(LD)" $(LDFLAGS) -T"${LDSCRIPT}" "$<" -Wl,-Map="$(@:.elf=.map)",--cref -o "$@"
+	@"$(LD)" $(LDFLAGS) -T"${LDSCRIPT}" $+ -Wl,-Map="$(@:.elf=.map)",--cref -o "$@"
 
 %.elf : %.dbg.elf
 	@"$(STRP)" -g --strip-unneeded -o "$@" "$<"
