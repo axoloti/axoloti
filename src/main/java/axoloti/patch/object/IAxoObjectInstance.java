@@ -1,8 +1,8 @@
 package axoloti.patch.object;
 
-import axoloti.patch.Modulator;
 import axoloti.mvc.IModel;
 import axoloti.object.IAxoObject;
+import axoloti.patch.Modulator;
 import axoloti.patch.PatchModel;
 import axoloti.patch.object.attribute.AttributeInstance;
 import axoloti.patch.object.display.DisplayInstance;
@@ -69,6 +69,10 @@ public interface IAxoObjectInstance extends Comparable<IAxoObjectInstance>, IMod
     IAxoObject resolveType(String directory);
 
     void setParent(PatchModel patchModel);
+
+    List<String> getModules();
+
+    List<String> getIncludes();
 
     @Override
     ObjectInstanceController getController();

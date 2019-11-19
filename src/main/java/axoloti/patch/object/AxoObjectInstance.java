@@ -634,4 +634,13 @@ public class AxoObjectInstance extends AxoObjectInstanceAbstract {
         }
     }
 
+    @Override
+    public List<String> getModules() {
+        return getDModel().getModules();
+    }
+
+    @Override
+    public List<String> getIncludes() {
+        return getDModel().getProcessedIncludes();
+    }
 }

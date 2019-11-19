@@ -20,6 +20,8 @@ package axoloti.patch.object;
 import axoloti.object.IAxoObject;
 import axoloti.patch.PatchModel;
 import java.awt.Point;
+import java.util.Collections;
+import java.util.List;
 import org.simpleframework.xml.Element;
 
 /**
@@ -36,7 +38,7 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
 
     public AxoObjectInstancePatcher(IAxoObject obj, PatchModel patch1, String InstanceName1, Point location) {
         super(obj, patch1, InstanceName1, location);
-        //subPatchModel.setFileNamePath(InstanceName1); // TODO: review
+        setInstanceName(InstanceName1);
     }
 
     public void setSubPatchModel(PatchModel subPatchModel) {
@@ -70,7 +72,9 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Override
     public boolean setInstanceName(String s) {
         boolean b = super.setInstanceName(s);
-        subPatchModel.setFileNamePath(s);
+        if (subPatchModel != null) {
+            subPatchModel.setFileNamePath(s);
+        }
         return b;
     }
 
@@ -82,6 +86,24 @@ public class AxoObjectInstancePatcher extends AxoObjectInstance {
     @Override
     public ObjectInstancePatcherController getController() {
         return (ObjectInstancePatcherController) super.getController();
+    }
+
+    @Override
+    public List<String> getModules() {
+        if (subPatchModel == null) {
+            return Collections.emptyList();
+        } else {
+            return subPatchModel.getModules();
+        }
+    }
+
+    @Override
+    public List<String> getIncludes() {
+        if (subPatchModel == null) {
+            return Collections.emptyList();
+        } else {
+            return subPatchModel.getIncludes();
+        }
     }
 
 }
