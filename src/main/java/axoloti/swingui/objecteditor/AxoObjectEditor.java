@@ -31,6 +31,7 @@ import axoloti.preferences.Preferences;
 import axoloti.property.Property;
 import axoloti.swingui.mvc.UndoUI;
 import axoloti.swingui.property.ListStringPropertyTable;
+import axoloti.utils.KeyUtils;
 import axoloti.utils.OSDetect;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -38,6 +39,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,6 +53,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -851,34 +854,36 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         fileMenu1.setText("File");
         fileMenu1.add(jSeparator1);
 
-        jMenuItemSave.setText("Save");
-        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemSaveActionPerformed(evt);
-            }
-        });
-        fileMenu1.add(jMenuItemSave);
+        jMenuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+            KeyUtils.CONTROL_OR_CMD_MASK));
+    jMenuItemSave.setText("Save");
+    jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemSaveActionPerformed(evt);
+        }
+    });
+    fileMenu1.add(jMenuItemSave);
 
-        jMenuItemCopyToLibrary.setText("Copy to Library...");
-        jMenuItemCopyToLibrary.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemCopyToLibraryActionPerformed(evt);
-            }
-        });
-        fileMenu1.add(jMenuItemCopyToLibrary);
+    jMenuItemCopyToLibrary.setText("Copy to Library...");
+    jMenuItemCopyToLibrary.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            jMenuItemCopyToLibraryActionPerformed(evt);
+        }
+    });
+    fileMenu1.add(jMenuItemCopyToLibrary);
 
-        jMenuBar1.add(fileMenu1);
+    jMenuBar1.add(fileMenu1);
 
-        jMenuEdit.setText("Edit");
-        jMenuBar1.add(jMenuEdit);
-        jMenuBar1.add(windowMenu1);
+    jMenuEdit.setText("Edit");
+    jMenuBar1.add(jMenuEdit);
+    jMenuBar1.add(windowMenu1);
 
-        helpMenu1.setText("Help");
-        jMenuBar1.add(helpMenu1);
+    helpMenu1.setText("Help");
+    jMenuBar1.add(helpMenu1);
 
-        setJMenuBar(jMenuBar1);
+    setJMenuBar(jMenuBar1);
 
-        pack();
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
