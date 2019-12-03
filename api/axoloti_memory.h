@@ -27,8 +27,8 @@ void ax_free(void *ptr);
 #define sdram_malloc(X) ax_malloc(X, mem_type_hint_large)
 
 // for statically allocated memory, use these macros:
-#define SECTION_SDRAM_DATA __attribute__ ((section ( ".sdramdata" )))
-#define SECTION_SDRAM_BSS __attribute__ ((section ( ".sdram" )))
+#define SECTION_SDRAM_DATA __attribute__ ((section ( ".sdram_data" )))
+#define SECTION_SDRAM_BSS __attribute__ ((section ( ".sdram_bss" )))
 #define SECTION_DMADATA __attribute__ ((section ( ".sram2" )))
 
 #ifdef __cplusplus

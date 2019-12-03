@@ -75,5 +75,7 @@ void* ax_malloc_align(size_t size, mem_type_flags_t mem_type, unsigned align) {
 }
 
 void ax_free(void *ptr) {
+  if (ptr) {
     chHeapFree(ptr);
+  }
 }
