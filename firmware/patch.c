@@ -47,7 +47,7 @@
 //#define DEBUG_INT_ON_GPIO 1
 
 static mutex_t mtxWorker;
-static THD_WORKING_AREA(waThreadWorker, 2000);
+static THD_WORKING_AREA(waThreadWorker, 3000);
 static const char *err_msg;
 static char err_string[64];
 
@@ -496,6 +496,7 @@ static THD_FUNCTION(threadLoadPatch, arg) {
     } else {
         patch_setError("patch initialization failed, reason: %s", err_msg);
     }
+//    patch_dispose(patch);
     ax_free(patch->patchobject);
     chThdExit(0);
   }
