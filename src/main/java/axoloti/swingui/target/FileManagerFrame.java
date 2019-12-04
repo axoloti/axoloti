@@ -428,11 +428,13 @@ public class FileManagerFrame extends TJFrame {
 
     void requestRefresh() {
         IConnection conn = getDModel().getConnection();
-        try {
-            SDCardInfo sdcardinfo = conn.getFileList(path);
-            setSDCardInfo(sdcardinfo);
-        } catch (IOException ex) {
-            Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+        if (conn != null) {
+            try {
+                SDCardInfo sdcardinfo = conn.getFileList(path);
+                setSDCardInfo(sdcardinfo);
+            } catch (IOException ex) {
+                Logger.getLogger(FileManagerFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
