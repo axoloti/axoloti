@@ -173,7 +173,9 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
                             IConnection conn = CConnection.getConnection();
                             SDFileInfo sdfi = null;
                             try {
-                                sdfi = conn.getFileInfo("/" + fn + "/patch.bin");
+                                if (conn != null) {
+                                    sdfi = conn.getFileInfo("/" + fn + ".elf");
+                                }
                             } catch (IOException ex) {
                                 // mute exceptions
                             }
