@@ -677,7 +677,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         inletDefinitionsEditor1.setLayout(inletDefinitionsEditor1Layout);
         inletDefinitionsEditor1Layout.setHorizontalGroup(
             inletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         inletDefinitionsEditor1Layout.setVerticalGroup(
             inletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -690,7 +690,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         outletDefinitionsEditor1.setLayout(outletDefinitionsEditor1Layout);
         outletDefinitionsEditor1Layout.setHorizontalGroup(
             outletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         outletDefinitionsEditor1Layout.setVerticalGroup(
             outletDefinitionsEditor1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -703,7 +703,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         attributeDefinitionsEditorPanel1.setLayout(attributeDefinitionsEditorPanel1Layout);
         attributeDefinitionsEditorPanel1Layout.setHorizontalGroup(
             attributeDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         attributeDefinitionsEditorPanel1Layout.setVerticalGroup(
             attributeDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -716,7 +716,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         paramDefinitionsEditorPanel1.setLayout(paramDefinitionsEditorPanel1Layout);
         paramDefinitionsEditorPanel1Layout.setHorizontalGroup(
             paramDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         paramDefinitionsEditorPanel1Layout.setVerticalGroup(
             paramDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -729,7 +729,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         displayDefinitionsEditorPanel1.setLayout(displayDefinitionsEditorPanel1Layout);
         displayDefinitionsEditorPanel1Layout.setHorizontalGroup(
             displayDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         displayDefinitionsEditorPanel1Layout.setVerticalGroup(
             displayDefinitionsEditorPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -742,7 +742,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jPanelLocalData.setLayout(jPanelLocalDataLayout);
         jPanelLocalDataLayout.setHorizontalGroup(
             jPanelLocalDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanelLocalDataLayout.setVerticalGroup(
             jPanelLocalDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,7 +755,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jPanelInitCode.setLayout(jPanelInitCodeLayout);
         jPanelInitCodeLayout.setHorizontalGroup(
             jPanelInitCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanelInitCodeLayout.setVerticalGroup(
             jPanelInitCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -770,7 +770,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jPanelKRateCode2.setLayout(jPanelKRateCode2Layout);
         jPanelKRateCode2Layout.setHorizontalGroup(
             jPanelKRateCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanelKRateCode2Layout.setVerticalGroup(
             jPanelKRateCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -785,7 +785,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jPanelSRateCode.setLayout(jPanelSRateCodeLayout);
         jPanelSRateCodeLayout.setHorizontalGroup(
             jPanelSRateCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanelSRateCodeLayout.setVerticalGroup(
             jPanelSRateCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -798,7 +798,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jPanelDisposeCode.setLayout(jPanelDisposeCodeLayout);
         jPanelDisposeCodeLayout.setHorizontalGroup(
             jPanelDisposeCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanelDisposeCodeLayout.setVerticalGroup(
             jPanelDisposeCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -809,14 +809,14 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
 
         jPanelMidiCode.setLayout(new javax.swing.BoxLayout(jPanelMidiCode, javax.swing.BoxLayout.Y_AXIS));
 
-        jLabelMidiPrototype.setText("jLabel11");
+        jLabelMidiPrototype.setText("midi_message_t midi_message, uint8_t port, uint8_t status, uint8_t data1, uint8_t data2");
         jPanelMidiCode.add(jLabelMidiPrototype);
 
         javax.swing.GroupLayout jPanelMidiCode2Layout = new javax.swing.GroupLayout(jPanelMidiCode2);
         jPanelMidiCode2.setLayout(jPanelMidiCode2Layout);
         jPanelMidiCode2Layout.setHorizontalGroup(
             jPanelMidiCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 555, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanelMidiCode2Layout.setVerticalGroup(
             jPanelMidiCode2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -835,7 +835,7 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         jPanelXML.setLayout(jPanelXMLLayout);
         jPanelXMLLayout.setHorizontalGroup(
             jPanelXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 701, Short.MAX_VALUE)
         );
         jPanelXMLLayout.setVerticalGroup(
             jPanelXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -854,36 +854,35 @@ class AxoObjectEditor extends JFrame implements DocumentWindow, IView<AxoObject>
         fileMenu1.setText("File");
         fileMenu1.add(jSeparator1);
 
-        jMenuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-            KeyUtils.CONTROL_OR_CMD_MASK));
-    jMenuItemSave.setText("Save");
-    jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemSaveActionPerformed(evt);
-        }
-    });
-    fileMenu1.add(jMenuItemSave);
+        jMenuItemSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,KeyUtils.CONTROL_OR_CMD_MASK));
+        jMenuItemSave.setText("Save");
+        jMenuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveActionPerformed(evt);
+            }
+        });
+        fileMenu1.add(jMenuItemSave);
 
-    jMenuItemCopyToLibrary.setText("Copy to Library...");
-    jMenuItemCopyToLibrary.addActionListener(new java.awt.event.ActionListener() {
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            jMenuItemCopyToLibraryActionPerformed(evt);
-        }
-    });
-    fileMenu1.add(jMenuItemCopyToLibrary);
+        jMenuItemCopyToLibrary.setText("Copy to Library...");
+        jMenuItemCopyToLibrary.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCopyToLibraryActionPerformed(evt);
+            }
+        });
+        fileMenu1.add(jMenuItemCopyToLibrary);
 
-    jMenuBar1.add(fileMenu1);
+        jMenuBar1.add(fileMenu1);
 
-    jMenuEdit.setText("Edit");
-    jMenuBar1.add(jMenuEdit);
-    jMenuBar1.add(windowMenu1);
+        jMenuEdit.setText("Edit");
+        jMenuBar1.add(jMenuEdit);
+        jMenuBar1.add(windowMenu1);
 
-    helpMenu1.setText("Help");
-    jMenuBar1.add(helpMenu1);
+        helpMenu1.setText("Help");
+        jMenuBar1.add(helpMenu1);
 
-    setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar1);
 
-    pack();
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
