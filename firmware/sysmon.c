@@ -156,6 +156,29 @@ void sysmon_enable_blinker(void) {
   isEnabled = true;
 }
 
+void enableUserLeds(bool enable) {
+  isEnabled = !enable;
+  palClearPad(LED1_PORT, LED1_PIN);
+  palClearPad(LED2_PORT, LED2_PIN);
+}
+
+void writeLed(int index, bool value) {
+  if (index == 1) {
+    palWritePad(LED1_PORT, LED1_PIN, value);
+  } else if (index == 2) {
+    palWritePad(LED2_PORT, LED2_PIN, value);
+  }
+}
+
+bool readButton(int index) {
+  if (index == 1) {
+    return palReadPad(SW1_PORT,SW1_PIN);
+  } else if (index == 2) {
+    return palReadPad(SW2_PORT,SW2_PIN);
+  }
+  return 0;
+}
+
 void sysmon_blink_pattern(uint32_t pat) {
   pattern = pat;
   pattern_index = 0;

@@ -26,6 +26,7 @@
 #include "stm32f4xx.h"
 #include "ch.h"
 #include "hal.h"
+#include "leds_buttons.h"
 #include "fatfs/ff.h"
 #include "arm_intrinsics.hpp"
 #include "chibios_migration.h"

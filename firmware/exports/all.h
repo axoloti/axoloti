@@ -11,6 +11,7 @@
 #include "exports/fatfs.h"
 #include "exports/gpio_adc.h"
 #include "exports/hal_exports.h"
+#include "exports/leds_buttons.h"
 #include "exports/libc.h"
 #include "exports/logging.h"
 #include "exports/midi.h"
@@ -28,6 +29,7 @@
   EXPORTS_FATFS_SYMBOLS, \
   EXPORTS_GPIO_ADC_SYMBOLS, \
   EXPORTS_HAL_SYMBOLS, \
+  EXPORTS_LEDS_BUTTONS_SYMBOLS, \
   EXPORTS_LIBC_SYMBOLS, \
   EXPORTS_LOGGING_SYMBOLS, \
   EXPORTS_MIDI_SYMBOLS, \
