@@ -614,8 +614,8 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             List<String> files = new LinkedList<>(getDModel().getFiles());
-            // TODO: PatchBank add file
             files.add(fc.getSelectedFile().getName());
+            Preferences.getPreferences().setCurrentFileDirectory(fc.getSelectedFile().getParent());
             model.getController().addMetaUndo("Add");
             model.getController().changePatchBankFiles(files);
         }
