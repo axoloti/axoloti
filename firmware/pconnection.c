@@ -501,7 +501,9 @@ static msg_t tx_fresult(FRESULT err, int fref) {
 
 static msg_t rcv_ping(in_stream_t *in_stream) {
   handleUsbErr(tx_ack());
-  exception_checkandreport();
+  if (!logstream.pipe.reset) {
+	  exception_checkandreport();
+  }
   handleUsbErr(tx_patch_paramchange());
   return MSG_OK;
 }
