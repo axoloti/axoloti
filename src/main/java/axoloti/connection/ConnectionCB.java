@@ -1,5 +1,6 @@
 package axoloti.connection;
 
+import axoloti.Version;
 import axoloti.mvc.View;
 import axoloti.target.TargetModel;
 import axoloti.target.TargetRTInfo;
@@ -96,7 +97,7 @@ public class ConnectionCB extends View<TargetModel> implements IConnectionCB {
 
     @Override
     public void fwupgrade_from_1012(DeviceHandle handle) {
-        int r = JOptionPane.showConfirmDialog((Component) null, "Firmware version 1.0.12 detected, upgrade to experimental firmware?",
+        int r = JOptionPane.showConfirmDialog((Component) null, "Firmware version 1.0.12 detected, upgrade to firmware version " + Version.AXOLOTI_VERSION + " ?",
                 "alert", JOptionPane.OK_CANCEL_OPTION);
         if (r == JOptionPane.OK_OPTION) {
             FirmwareUpgrade_1_0_12 fwUpgrade = new FirmwareUpgrade_1_0_12(handle);
