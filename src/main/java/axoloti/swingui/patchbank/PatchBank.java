@@ -372,7 +372,6 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
 
         jPanel1 = new javax.swing.JPanel();
         jButtonUploadBank = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jUploadAll = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -400,8 +399,6 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
             }
         });
 
-        jLabel1.setText("Not (fully) implemented yet!");
-
         jUploadAll.setText("Upload Patch Bank");
         jUploadAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -414,20 +411,16 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonUploadBank)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jUploadAll)
-                .addContainerGap())
+                .addContainerGap(302, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonUploadBank)
                     .addComponent(jUploadAll))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -662,7 +655,6 @@ public class PatchBank extends AJFrame<PatchBankModel> implements ConnectionStat
     private javax.swing.JButton jButtonUp;
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JButton jButtonUploadBank;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
