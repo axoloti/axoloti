@@ -15,8 +15,10 @@ static memory_heap_t sram3_heap;
 static memory_heap_t ccm_heap;
 
 void axoloti_mem_init(void) {
-//  chHeapObjectInit(&sram1_heap, (void *)(0x0FFFFFFF /*aliased*/ & (int)sram1_heap_data), sizeof(sram1_heap_data));
-  chHeapObjectInit(&sram1_heap, (void *)sram1_heap_data, sizeof(sram1_heap_data));
+//  chHeapObjectInit(&sram1_heap, (void *)sram1_heap_data, sizeof(sram1_heap_data));
+// Code execution from sram1 is faster when using its aliased address at 0x00000000
+// however, the first word can't be used since it is a null pointer :
+  chHeapObjectInit(&sram1_heap, (void *)(0x0FFFFFFF & (int)&sram1_heap_data[4]), sizeof(sram1_heap_data)-4);
   chHeapObjectInit(&sram2_heap, (void *)sram2_heap_data, sizeof(sram2_heap_data));
   chHeapObjectInit(&sram3_heap, (void *)sram3_heap_data, sizeof(sram3_heap_data));
   chHeapObjectInit(&sdram_heap, (void *)SDRAM_BANK_ADDR, 8*1024*1024);

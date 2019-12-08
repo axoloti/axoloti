@@ -2,9 +2,10 @@
 #include "vfile_fatfs.h"
 #include "ff.h"
 #include "axoloti_memory.h"
+#include "fatfs_dmafix.h"
 
 static filehandle ff_fopen(const char * path) {
-  FIL *f = ax_malloc(sizeof(FIL), 0);
+  FIL *f = (void *)((int)ax_malloc(sizeof(FIL), 0));
   if (!f) return 0;
   FRESULT ferr = f_open(f, path, FA_READ);
   if (ferr != FR_OK) {
@@ -25,7 +26,7 @@ static void ff_fclose(filehandle f) {
 static int ff_fread(filehandle f, void * buf, int size) {
   FIL *fd = (FIL *)f;
   UINT br;
-  f_read(fd, buf, size, &br);
+  f_read1(fd, buf, size, &br);
   return br;
 }
 

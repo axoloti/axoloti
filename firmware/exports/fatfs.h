@@ -2,12 +2,13 @@
 #define EXPORTS_FATFS_H
 
 #include "ff.h"
+#include "fatfs_dmafix.h"
 
 #define EXPORTS_FATFS_SYMBOLS \
     SYM(f_open), \
     SYM(f_close), \
-    SYM(f_read), \
-    SYM(f_write), \
+    SYM2("f_read",f_read1), \
+    SYM2("f_write",f_write1), \
     SYM(f_lseek), \
     SYM(f_truncate), \
     SYM(f_sync), \
