@@ -5,7 +5,7 @@ CPPVER_REF = 7-2018-q2
 CPPVER = $(shell "$(CXX)" --version)
 
 ifeq "$(CPPVER)" ""
-$(info compiler $(CXX) not found in path=$(PATH), not installed?)
+$(info error: compiler $(CXX) not found in path=$(PATH), not installed?)
 $(info Please download and install GNU Arm Embedded Toolchain 7-2018-q2-update)
 ifeq ($(OS),Windows_NT)
 $(info https://developer.arm.com/-/media/Files/downloads/gnu-rm/7-2018q2/gcc-arm-none-eabi-7-2018-q2-update-win32-sha2.exe)
