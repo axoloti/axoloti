@@ -257,10 +257,18 @@ public class PatchViewLive extends View<PatchModel> implements IPatchCB {
     }
 
     private final Runnable pollHandler = () -> {
-        if (patch != null) {
-            pollParameters();
-            patch.pollDisplays();
-            pollPresetUpdates();
+        try {
+            if (patch != null) {
+                pollParameters();
+            }
+            if (patch != null) {
+                patch.pollDisplays();
+            }
+            if (patch != null) {
+                pollPresetUpdates();
+            }
+        } catch (java.lang.NullPointerException ex) {
+            Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, null, ex);
         }
     };
 
