@@ -2,6 +2,7 @@ package axoloti.swingui.target;
 
 import axoloti.mvc.IView;
 import axoloti.target.TargetModel;
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -161,6 +162,11 @@ public class TargetRTInfo extends javax.swing.JPanel implements IView<TargetMode
                 jLabelVuOut2.setText(outLevel2dB > mininf ? String.format("%7.1f dB", outLevel2dB) : "   -inf dB");
                 jLabelUnderruns.setText(String.format("%7d", rtinfo.underruns));
                 jLabelDsp.setText(String.format("%7.0f %%", rtinfo.dsp));
+                if (rtinfo.dsp > 98) {
+                    jLabelDsp.setForeground(Color.red);
+                } else {
+                    jLabelDsp.setForeground(Color.black);
+                }
                 jLabelSram1.setText(String.format("%7d", rtinfo.sram1_free));
                 jLabelSram3.setText(String.format("%7d", rtinfo.sram3_free));
                 jLabelCcmsram.setText(String.format("%7d", rtinfo.ccmsram_free));
