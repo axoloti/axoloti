@@ -1,10 +1,10 @@
 package axoloti.swingui.dialogs;
 
 import axoloti.Axoloti;
-import axoloti.preferences.Preferences;
 import axoloti.objectlibrary.AxoFileLibrary;
 import axoloti.objectlibrary.AxoGitLibrary;
 import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.preferences.Preferences;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class AxolotiLibraryEditor extends javax.swing.JDialog {
         initComponents();
         library = lib;
         populate();
-        jId.setEnabled(false);
+//        jId.setEnabled(false);
         initComponent();
     }
 
