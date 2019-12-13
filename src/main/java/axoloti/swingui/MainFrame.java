@@ -105,6 +105,9 @@ public class MainFrame extends TJFrame implements ActionListener {
     public MainFrame(String args[], TargetModel targetModel) {
         super(targetModel);
         initComponents();
+
+        checkSpaceInPath();
+
         jLabelVolt50.setSize(jLabelVolt50.getPreferredSize());
         fileMenu.initComponents();
 
@@ -353,6 +356,28 @@ public class MainFrame extends TJFrame implements ActionListener {
         );
         init();
         USBDeviceLister.getInstance().registerHotplugCallback(hotplugCallback);
+    }
+
+    private boolean hasSpaceInPath(String p) {
+        return p.indexOf(' ') != -1;
+    }
+
+    private void checkSpaceInPath() {
+        if (hasSpaceInPath(Axoloti.getAPIDir())) {
+            JOptionPane.showMessageDialog(null,
+                    "Error: There is space character in the API path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getAPIDir());
+            Runtime.getRuntime().exit(-1);
+        }
+        if (hasSpaceInPath(Axoloti.getEnvDir())) {
+            JOptionPane.showMessageDialog(null,
+                    "Error: There is space character in the Env path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getEnvDir());
+            Runtime.getRuntime().exit(-1);
+        }
+        if (hasSpaceInPath(Axoloti.getHomeDir())) {
+            JOptionPane.showMessageDialog(null,
+                    "Error: There is space character in the Axoloti home path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getHomeDir());
+            Runtime.getRuntime().exit(-1);
+        }
     }
 
     private void init() {
@@ -771,13 +796,6 @@ public class MainFrame extends TJFrame implements ActionListener {
             if (!TargetModel.getTargetModel().getWarnedAboutFWCRCMismatch()) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Firmware CRC mismatch! Please flash the firmware first! " + "Hardware firmware CRC = {0} <> Software CRC = {1}", new Object[]{firmwareId, linkFwId});
                 TargetModel.getTargetModel().setWarnedAboutFWCRCMismatch(true);
-                // TODO: fix flasher
-//                SwingUtilities.invokeLater(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        interactiveFirmwareUpdate();
-//                    }
-//                });
             }
         }
     }
