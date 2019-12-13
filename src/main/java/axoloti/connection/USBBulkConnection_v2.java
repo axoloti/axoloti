@@ -70,13 +70,11 @@ import org.usb4java.*;
 public class USBBulkConnection_v2 implements IConnection {
 
     private final Map<Integer, ILivePatch> patchMap;
-    private boolean disconnectRequested;
     private boolean connected;
     private Receiver receiver;
-    private Thread receiverThread;
     private axoloti_core targetProfile;
     private DeviceHandle handle;
-    private final int interfaceNumber = 2;
+    static final int interfaceNumber = 2;
     private String firmwareID;
     private boolean old_protocol = false;
     private final IConnectionCB callbacks;
@@ -85,20 +83,21 @@ public class USBBulkConnection_v2 implements IConnection {
         super();
         this.callbacks = callbacks;
         this.patchMap = new HashMap<>();
-        disconnectRequested = false;
         connected = false;
     }
 
     @Override
     public boolean isConnected() {
-        return connected && (!disconnectRequested);
+        return connected;
     }
 
-    private void disconnect1() {
+    private void disconnect1(boolean do_not_close_usb) {
         TargetModel.getTargetModel().removeAllPollers();
+        rcvPacketConsumer = null;
         if (connected) {
-            disconnectRequested = true;
-            connected = false;
+            if (!do_not_close_usb) {
+                connected = false;
+            }
             isSDCardPresent = null;
             Collection<ILivePatch> patches = patchMap.values();
             for (ILivePatch patch : patches) {
@@ -109,33 +108,26 @@ public class USBBulkConnection_v2 implements IConnection {
             callbacks.showDisconnect();
             callbacks.patchListChanged(Collections.emptyList());
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "Disconnect request");
-
-            receiver.terminate();
-            if (receiverThread.isAlive()) {
-                receiverThread.interrupt();
-                try {
-                    receiverThread.join();
-                } catch (InterruptedException ex) {
-                    //Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
-            int result = LibUsb.releaseInterface(handle, interfaceNumber);
-            if (result != LibUsb.SUCCESS) {
-                throw new LibUsbException("Unable to release interface", result);
-            }
-
-            LibUsb.close(handle);
-            handle = null;
             if (pinger != null) {
                 pinger.terminate();
+            }
+            receiver.terminate();
+            if (handle != null) {
+                int result = LibUsb.releaseInterface(handle, interfaceNumber);
+                if (result != LibUsb.SUCCESS) {
+                    throw new LibUsbException("Unable to release interface", result);
+                }
+            }
+            if (!do_not_close_usb) {
+                LibUsb.close(handle);
+                handle = null;
             }
         }
     }
 
     @Override
     public void disconnect() {
-        disconnect1();
+        disconnect1(false);
     }
 
     private static byte[] bb2ba(ByteBuffer bb) {
@@ -161,7 +153,7 @@ public class USBBulkConnection_v2 implements IConnection {
     public boolean connect(IDevice connectable) {
         disconnect();
         old_protocol = false;
-        disconnectRequested = false;
+        rcvPacketConsumer = null;
         targetProfile = new axoloti_core();
 
         if (connectable == null) {
@@ -185,9 +177,7 @@ public class USBBulkConnection_v2 implements IConnection {
 
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "creating rx and tx thread...");
             receiver = new Receiver();
-            receiverThread = new Thread(receiver);
-            receiverThread.setName("Receiver");
-            receiverThread.start();
+            receiver.start();
             connected = true;
             transmitPing();
             transmitPing();
@@ -198,16 +188,11 @@ public class USBBulkConnection_v2 implements IConnection {
             }
             if (old_protocol) {
                 Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, "old protocol...");
-                disconnect1();
-                connectable = USBDeviceLister.getInstance().getDefaultDevice();
-                if (connectable == null) {
-                    callbacks.showDisconnect();
-                    return false;
-                }
-                DeviceHandle handle1 = ((AxolotiDevice) connectable).getDeviceHandle();
-                if (handle1 != null) {
-                    callbacks.fwupgrade_from_1012(handle1);
-                }
+                disconnect1(true);
+                callbacks.fwupgrade_from_1012(handle);
+                LibUsb.close(handle);
+                handle = null;
+                connected = false;
                 return false;
             }
             Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, "connected");
@@ -316,9 +301,7 @@ public class USBBulkConnection_v2 implements IConnection {
             callbacks.showConnect();
 
             pinger = new PeriodicPinger();
-            pingerThread = new Thread(pinger);
-            pingerThread.setName("PingerThread");
-            pingerThread.start();
+            pinger.start();
             return true;
 
         } catch (Exception ex) {
@@ -1064,6 +1047,7 @@ public class USBBulkConnection_v2 implements IConnection {
     }
 
     private class Receiver implements Runnable {
+        private Thread receiverThread;
 
         final static int MAX_RX_SIZE = 4096;
         // larger than 4096 will give "WARN Event TRB for slot 1 ep 4 with no TDs queued" in linux kernel log
@@ -1072,6 +1056,14 @@ public class USBBulkConnection_v2 implements IConnection {
 
         public void terminate() {
             terminating = true;
+            if (receiverThread.isAlive()) {
+                receiverThread.interrupt();
+                try {
+                    receiverThread.join();
+                } catch (InterruptedException ex) {
+                    //Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
         @Override
@@ -1165,14 +1157,21 @@ public class USBBulkConnection_v2 implements IConnection {
                     default:
                         String err = LibUsb.errorName(result);
                         Logger.getLogger(USBBulkConnection_v2.class.getName()).log(Level.INFO, "receive error: {0}", err);
-                        disconnectRequested = true;
-                        terminate();
+                        terminating = true;
                         disconnect();
                         break;
                 }
             }
             //Logger.getLogger(USBBulkConnection.class.getName()).log(Level.INFO, "receiver: thread stopped");
-            disconnect();
+            if (!old_protocol) {
+                disconnect();
+            }
+        }
+
+        private void start() {
+            receiverThread = new Thread(receiver);
+            receiverThread.setName("Receiver");
+            receiverThread.start();
         }
     }
 
@@ -1490,7 +1489,6 @@ public class USBBulkConnection_v2 implements IConnection {
                         diagnostic_println(String.format("   fw 1.x data %02x (%c)", b, (char) b));
                     }
                     old_protocol = true;
-                    disconnectRequested = true;
                 }
                 break;
                 default: {
@@ -1506,14 +1504,15 @@ public class USBBulkConnection_v2 implements IConnection {
     }
 
     private PeriodicPinger pinger;
-    private Thread pingerThread;
 
     private class PeriodicPinger implements Runnable {
 
+        private Thread pingerThread;
         private boolean terminating = false;
 
         public void terminate() {
             terminating = true;
+            pingerThread.interrupt();
         }
 
         @Override
@@ -1537,6 +1536,12 @@ public class USBBulkConnection_v2 implements IConnection {
                     throw new IllegalStateException(ex);
                 }
             }
+        }
+
+        private void start() {
+            pingerThread = new Thread(pinger);
+            pingerThread.setName("PingerThread");
+            pingerThread.start();
         }
     }
 

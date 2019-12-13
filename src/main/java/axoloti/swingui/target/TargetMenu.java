@@ -9,7 +9,6 @@ import axoloti.connection.PatchLoadFailedException;
 import axoloti.job.GlobalJobProcessor;
 import axoloti.job.IJobContext;
 import axoloti.mvc.IView;
-import axoloti.preferences.Preferences;
 import axoloti.shell.UploadFirmwareDFU;
 import axoloti.swingui.dialogs.USBPortSelectionDlg;
 import axoloti.target.TargetModel;
@@ -47,12 +46,9 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     private JMenuItem jMenuItemFlashDFU;
     private JMenuItem jMenuItemFlashDefault;
     private JMenuItem jMenuItemFlashDowngrade;
-    private JMenuItem jMenuItemFlashUpgrade_v1_v2;
-    private JMenuItem jMenuItemFlashSDR;
     private JMenuItem jMenuItemMount;
     private JMenuItem jMenuItemEraseStart;
     private JMenuItem jMenuItemPing;
-    private JMenuItem jMenuItemRefreshFWID;
     private JSeparator jDevSeparator;
     private JMenu jMenuFirmware;
     private JSeparator jSeparator1;
@@ -148,16 +144,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         });
         jMenuFirmware.add(jMenuItemFlashDowngrade);
 
-        jMenuItemFlashUpgrade_v1_v2 = new JMenuItem("Flash upgrade 1.x to 2.0");
-        jMenuItemFlashUpgrade_v1_v2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemFlashUpgrade_v1_v2_ActionPerformed(evt);
-            }
-        });
-        // auto-detected, we do not need to access this manually
-        //jMenuFirmware.add(jMenuItemFlashUpgrade_v1_v2);
-
         jMenuItemFlashDFU = new JMenuItem("Flash (Rescue)");
         jMenuItemFlashDFU.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -166,15 +152,6 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
             }
         });
         jMenuFirmware.add(jMenuItemFlashDFU);
-
-        jMenuItemRefreshFWID = new JMenuItem("Refresh Firmware ID");
-        jMenuItemRefreshFWID.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemRefreshFWIDActionPerformed(evt);
-            }
-        });
-        jMenuFirmware.add(jMenuItemRefreshFWID);
 
         jDevSeparator = new JSeparator();
         jMenuFirmware.add(jDevSeparator);
@@ -188,22 +165,8 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         });
         jMenuFirmware.add(jMenuItemEnterDFU);
 
-        jMenuItemFlashSDR = new JMenuItem("Flash (User)");
-        jMenuItemFlashSDR.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemFlashSDRActionPerformed(evt);
-            }
-        });
-        jMenuFirmware.add(jMenuItemFlashSDR);
-
-        if (!Preferences.getPreferences().getExpertMode()) {
-            jMenuItemRefreshFWID.setVisible(false);
-        }
-
-        jMenuItemEnterDFU.setVisible(Axoloti.isDeveloper());
-        jMenuItemFlashSDR.setVisible(Axoloti.isDeveloper());
-        jDevSeparator.setVisible(Axoloti.isDeveloper());
+        jMenuItemEnterDFU.setVisible(true);
+        jDevSeparator.setVisible(true);
 
         add(jMenuFirmware);
 
@@ -314,25 +277,12 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
         }
     }
 
-    private void jMenuItemRefreshFWIDActionPerformed(java.awt.event.ActionEvent evt) {
-        getDModel().updateLinkFirmwareID();
-    }
-
     private void jMenuItemFlashDFUActionPerformed(java.awt.event.ActionEvent evt) {
         if (Usb.isDFUDeviceAvailable()) {
             getDModel().updateLinkFirmwareID();
             UploadFirmwareDFU.doit();
         } else {
             Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, "No devices in DFU mode detected. To bring Axoloti Core in DFU mode, remove power from Axoloti Core, and then connect the micro-USB port to your computer while holding button S1. The LEDs will stay off when in DFU mode.");
-        }
-    }
-
-    private void jMenuItemFlashSDRActionPerformed(java.awt.event.ActionEvent evt) {
-        String pname = Axoloti.getFirmwareFilename();
-        try {
-            getDModel().flashUsingSDRam(pname);
-        } catch (IOException ex) {
-            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -349,26 +299,43 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
     }
 
     private void jMenuItemFlashDefaultActionPerformed(java.awt.event.ActionEvent evt) {
-        String pname = Axoloti.getFirmwareFilename();
-        try {
-            getDModel().flashUsingSDRam(pname);
-        } catch (IOException ex) {
-            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        int s = JOptionPane.showConfirmDialog(this,
+                "Do you want to flash the firmware?\n"
+                + "This process will cause a disconnect, "
+                + "the leds will blink for a minute, "
+                + "do not interrupt until the leds "
+                + "stop blinking.\n"
+                + "When the leds stop blinking, you can connect again.\n",
+                "Firmware update...",
+                JOptionPane.YES_NO_OPTION);
+        if (s == 0) {
+            String pname = Axoloti.getFirmwareFilename();
+            try {
+                getDModel().flashUsingSDRam(pname);
+            } catch (IOException ex) {
+                Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
     private void jMenuItemFlashDowngradeActionPerformed(java.awt.event.ActionEvent evt) {
-        String pname = Axoloti.getReleaseDir() + "/old_firmware/firmware-1.0.12/axoloti.bin";
-        try {
-            getDModel().flashUsingSDRam(pname);
-        } catch (IOException ex) {
-            Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+        int s = JOptionPane.showConfirmDialog(this,
+                "Do you want to downgrade the firmware to version 1.0.12?\n"
+                + "This process will cause a disconnect, "
+                + "the leds will blink for a minute, "
+                + "do not interrupt until the leds "
+                + "stop blinking.\n"
+                + "When the leds stop blinking, you can connect again.\n",
+                "Firmware update...",
+                JOptionPane.YES_NO_OPTION);
+        if (s == 0) {
+            String pname = Axoloti.getReleaseDir() + "/old_firmware/firmware-1.0.12/axoloti.bin";
+            try {
+                getDModel().flashUsingSDRam(pname);
+            } catch (IOException ex) {
+                Logger.getLogger(TargetMenu.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-    }
-
-    private void jMenuItemFlashUpgrade_v1_v2_ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO: flashing
-        // FirmwareUpgrade_1_0_12 firmwareUpgrade = new FirmwareUpgrade_1_0_12(IConnection.openDeviceHandle(null));
     }
 
     static void uploadFile(IConnection conn, File f, String targetFilename, IJobContext ctx) throws FileNotFoundException, IOException {
@@ -450,7 +417,7 @@ public class TargetMenu extends JMenu implements IView<TargetModel> {
             jMenuItemFlashDefault.setEnabled(
                     (connection != null)
                     && connection.getTargetProfile().hasSDRAM());
-            jMenuItemFlashSDR.setEnabled(
+            jMenuItemFlashDowngrade.setEnabled(
                     (connection != null)
                     && connection.getTargetProfile().hasSDRAM());
         } else if (TargetModel.HAS_SDCARD.is(evt)) {

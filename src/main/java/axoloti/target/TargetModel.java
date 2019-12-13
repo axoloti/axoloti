@@ -172,6 +172,7 @@ public class TargetModel extends AbstractModel {
     }
 
     public void flashUsingSDRam(String fname_fw) throws IOException {
+        Logger.getLogger(TargetModel.class.getName()).log(Level.SEVERE, "Firmware flashing in progress, do not unplug the board until the leds stop blinking! You can connect again after the leds stop blinking.");
         updateLinkFirmwareID();
         File p = new File(fname_fw);
         byte[] fwImage = Files.readAllBytes(p.toPath());

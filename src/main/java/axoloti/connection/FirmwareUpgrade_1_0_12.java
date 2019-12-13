@@ -77,7 +77,10 @@ public class FirmwareUpgrade_1_0_12 {
             transmitterThread = new Thread(new Transmitter());
             transmitterThread.setName("Transmitter");
             transmitterThread.start();
+            transmitterThread.join();
         } catch (LibUsbException ex) {
+            Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -367,8 +370,6 @@ public class FirmwareUpgrade_1_0_12 {
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to release interface", result);
             }
-
-            LibUsb.close(handle);
 
             Logger.getLogger(FirmwareUpgrade_1_0_12.class.getName()).log(Level.SEVERE, "Firmware flashing in progress, do not unplug the board until the leds stop blinking! You can connect again after the leds stop blinking.");
         }

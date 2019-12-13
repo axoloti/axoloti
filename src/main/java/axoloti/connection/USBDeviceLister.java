@@ -63,12 +63,11 @@ public class USBDeviceLister {
             // Register the hotplug callback
             HotplugCallbackHandle callbackHandle = new HotplugCallbackHandle();
             result = LibUsb.hotplugRegisterCallback(null,
-                    LibUsb.HOTPLUG_EVENT_DEVICE_ARRIVED
-                    | LibUsb.HOTPLUG_EVENT_DEVICE_LEFT,
+                    LibUsb.HOTPLUG_EVENT_DEVICE_ARRIVED,
                     LibUsb.HOTPLUG_ENUMERATE,
-                    LibUsb.HOTPLUG_MATCH_ANY,
-                    LibUsb.HOTPLUG_MATCH_ANY,
-                    LibUsb.HOTPLUG_MATCH_ANY,
+                    VID_AXOLOTI,
+                    PID_AXOLOTI,
+                    LibUsb.CLASS_VENDOR_SPEC,
                     new Callback(), null, callbackHandle);
             if (result != LibUsb.SUCCESS) {
                 throw new LibUsbException("Unable to register hotplug callback",
