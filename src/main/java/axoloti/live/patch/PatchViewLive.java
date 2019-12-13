@@ -335,7 +335,7 @@ public class PatchViewLive extends View<PatchModel> implements IPatchCB {
                 ctx.doInSync(() -> {
                     getDModel().getController().setLocked(false);
                 });
-                Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, ex.getMessage());
+                Logger.getLogger(PatchViewLive.class.getName()).log(Level.SEVERE, "{0}", ex.getMessage());
             }
         };
         GlobalJobProcessor.getJobProcessor().exec(j);
