@@ -363,21 +363,25 @@ public class MainFrame extends TJFrame implements ActionListener {
     }
 
     private void checkSpaceInPath() {
-        if (hasSpaceInPath(Axoloti.getAPIDir())) {
-            JOptionPane.showMessageDialog(null,
-                    "Error: There is space character in the API path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getAPIDir());
-            Runtime.getRuntime().exit(-1);
+        if ((axoloti.utils.OSDetect.getOS() == axoloti.utils.OSDetect.OS.MAC)
+                || (axoloti.utils.OSDetect.getOS() == axoloti.utils.OSDetect.OS.LINUX)) {
+            if (hasSpaceInPath(Axoloti.getAPIDir())) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: There is space character in the API path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getAPIDir());
+                Runtime.getRuntime().exit(-1);
+            }
+            if (hasSpaceInPath(Axoloti.getEnvDir())) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: There is space character in the Env path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getEnvDir());
+                Runtime.getRuntime().exit(-1);
+            }
+            if (hasSpaceInPath(Axoloti.getHomeDir())) {
+                JOptionPane.showMessageDialog(null,
+                        "Error: There is space character in the Axoloti home path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getHomeDir());
+                Runtime.getRuntime().exit(-1);
+            }
         }
-        if (hasSpaceInPath(Axoloti.getEnvDir())) {
-            JOptionPane.showMessageDialog(null,
-                    "Error: There is space character in the Env path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getEnvDir());
-            Runtime.getRuntime().exit(-1);
-        }
-        if (hasSpaceInPath(Axoloti.getHomeDir())) {
-            JOptionPane.showMessageDialog(null,
-                    "Error: There is space character in the Axoloti home path.\nPlease move/rename the path to one without space characters. Exiting...\n" + Axoloti.getHomeDir());
-            Runtime.getRuntime().exit(-1);
-        }
+        // on Windows it's be fine, paths can be "shortened" to 8.3 dos format.
     }
 
     private void init() {
