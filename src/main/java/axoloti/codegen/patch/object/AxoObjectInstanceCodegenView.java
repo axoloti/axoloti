@@ -116,7 +116,7 @@ typedef struct ui_object {
 //            c = new StringBuilder("  void " + GenerateInitFunctionName() + "(" + GenerateStructName() + " * x ) {\n");
 //        else
 //        if (!classname.equals("one"))
-//        c.append("parent = _parent;\n");
+        c.append("parent = _parent;\n");
         for (ParameterInstanceView p : parameterInstances) {
             if (p.getDModel().getDModel().PropagateToChild != null) {
                 c.append("// on Parent: propagate " + p.getDModel().getName() + " " + enableOnParent + " " + getDModel().getLegalName() + "" + p.getDModel().getDModel().PropagateToChild + "\n");
@@ -143,7 +143,7 @@ typedef struct ui_object {
             }
             c.append(s + "\n");
         }
-        StringBuilder d = new StringBuilder("  public: int init(" + classname + " * parent");
+        StringBuilder d = new StringBuilder("  public: int init(" + classname + " * _parent");
         if (!displayInstances.isEmpty()) {
             for (DisplayInstanceView p : displayInstances) {
                 if (p.getDModel().getDModel().getLength() > 0) {
@@ -302,6 +302,7 @@ typedef struct ui_object {
         StringBuilder s = new StringBuilder();
         s.append("class " + getDModel().getCInstanceName() + "{\n");
         s.append("  public: // v1\n");
+        s.append("  " + ClassName + " *parent;\n");
         s.append(generateInstanceCodePlusPlus(ClassName, enableOnParent));
         s.append(generateInitCodePlusPlus(ClassName, enableOnParent));
         s.append(generateDisposeCodePlusPlus(ClassName));
