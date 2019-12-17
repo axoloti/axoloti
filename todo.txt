@@ -1,21 +1,5 @@
-TODO: fix installer (build.xml) : building runtimes, cleanup paths for runtime, api, env
-	goal:
-		* test-env.mk should trap installation issues
-		* a fat directory containing all could run on all platforms without installing
-	strategy: 
-		* runtimes: only large stuff (perhaps really only arm-none-eabi-gcc)
-		* installer: include small binaries (if installer does not prevent executing them...)
 
-TODO: fix libraries:
-	TODO: libs: midi input objects: vport selection - omni listening can be done via routing all inputs to a single vport (vport 1)
-	TODO: libs: midi output objects port selection to vport number
-	TODO: fix Mutable Instruments objects
-TODO: shared library: versions?
 TODO: live-edit modulations
-TODO: patchbank editor: local base path, show resolved patches...
-TODO: check: connect without board attached results in a lockup?
-TODO: rand(): test
-TODO: check param change consistency
 
 TODO: (next release): enhancement: show dsp load per patch
 TODO: (next release): vfile_ops/pconnection : implement virtual file ops for data on host computer.
