@@ -18,9 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -32,7 +32,7 @@ public class DecayTime implements NativeToReal {
      */
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double t = Math.log(2.0) * (1.0 / (64 - v.getDouble())) * (16 / 48000.0) * 4096;
         if (t > 1.0) {
             return (String.format("%.2f s", t));
@@ -44,7 +44,7 @@ public class DecayTime implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[mM]?)[sS]");
         Matcher matcher = pattern.matcher(s);
 
@@ -58,8 +58,9 @@ public class DecayTime implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
+            }
 
             double t = num * mul;
             return -(((Math.log(2.0)  * (16 / 48000.0) * 4096) / t) - 64);

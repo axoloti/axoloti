@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//NetBeans//DTD Tool Configuration 1.0//EN" "http://www.netbeans.org/dtds/ToolConfiguration-1_0.dtd">
+<configuration>
+    <tool kind="hints" type="text/x-java">
+        <node name="error-in-javadoc">
+            <attribute name="enabled" value="false"/>
+        </node>
+        <node name="create-javadoc">
+            <attribute name="enabled" value="false"/>
+        </node>
+        <node name="org.netbeans.modules.java.hints.jdk.mapreduce.ForLoopToFunctionalHint">
+            <attribute name="enabled" value="false"/>
+        </node>
+        <node name="Javac_canUseLambda">
+            <attribute name="prefer-member-references" value="true"/>
+            <attribute name="enabled" value="false"/>
+        </node>
+        <node name="org.netbeans.modules.java.hints.jdk.JoinCatches">
+            <attribute name="enabled" value="false"/>
+        </node>
+        <node name="org.netbeans.modules.java.hints.suggestions.ConstantNameHint">
+            <attribute name="immutableClasses" value=""/>
+            <attribute name="namePattern" value="[A-Z]([A-Z\d_]*[A-Z\d])?"/>
+            <attribute name="minLength" value="0"/>
+            <attribute name="onlyCheckImmutables" value="true"/>
+            <attribute name="maxLength" value="35"/>
+            <attribute name="enabled" value="false"/>
+        </node>
+    </tool>
+</configuration>

@@ -23,7 +23,7 @@ package axoloti.datatypes;
  */
 public abstract class DataTypeBuffer implements DataType {
 
-    public String GetIndex(String index) {
+    public String getIndex(String index) {
         return "[" + index + "]";
     }
 }

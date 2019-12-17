@@ -1,4 +1,4 @@
-#############################################################################
+##############################################################################
 # Build global options
 # NOTE: Can be overridden externally.
 #
@@ -6,11 +6,11 @@
 # Compiler options here.
 ifeq ($(USE_OPT),)
   USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
-endif 
+endif
 
 # C specific options here (added to USE_OPT).
 ifeq ($(USE_COPT),)
-  USE_COPT = 
+  USE_COPT = -mlong-calls
 endif
 
 # C++ specific options here (added to USE_OPT).
@@ -18,19 +18,33 @@ ifeq ($(USE_CPPOPT),)
   USE_CPPOPT = -fno-rtti
 endif
 
-# Enable this if you want the linker to remove unused code and data
+# Enable this if you want the linker to remove unused code and data.
 ifeq ($(USE_LINK_GC),)
   USE_LINK_GC = yes
 endif
 
-# If enabled, this option allows to compile the application in THUMB mode.
-ifeq ($(USE_THUMB),)
-  USE_THUMB = yes
+# Linker extra options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = --print-memory-usage \
+              -Wl,-Ur \
+              -Wl,-e_crt0_entry \
+              -Wl,--require-defined=getInstanceSize
+endif
+
+# Enable this if you want link time optimizations (LTO)
+ifeq ($(USE_LTO),)
+  USE_LTO = no
 endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = yes
+  USE_VERBOSE_COMPILE = no
+endif
+
+# If enabled, this option makes the build process faster by not compiling
+# modules not used in the current configuration.
+ifeq ($(USE_SMART_BUILD),)
+  USE_SMART_BUILD = no
 endif
 
 #
@@ -41,15 +55,26 @@ endif
 # Architecture or project specific options
 #
 
-# Enables the use of FPU on Cortex-M4.
-# Enable this if you really want to use the STM FWLib.
+# Stack size to be allocated to the Cortex-M process stack. This stack is
+# the stack used by the main() thread.
+ifeq ($(USE_PROCESS_STACKSIZE),)
+  USE_PROCESS_STACKSIZE = 0x400
+endif
+
+# Stack size to the allocated to the Cortex-M main/exceptions stack. This
+# stack is used for processing interrupts and exceptions.
+ifeq ($(USE_EXCEPTIONS_STACKSIZE),)
+  USE_EXCEPTIONS_STACKSIZE = 0x400
+endif
+
+# Enables the use of FPU (no, softfp, hard).
 ifeq ($(USE_FPU),)
   USE_FPU = hard
 endif
 
-# Enable this if you really want to use the STM FWLib.
-ifeq ($(USE_FWLIB),)
-  USE_FWLIB = no
+# FPU-related options.
+ifeq ($(USE_FPU_OPT),)
+  USE_FPU_OPT = -mfloat-abi=$(USE_FPU) -mfpu=fpv4-sp-d16
 endif
 
 #
@@ -57,139 +82,68 @@ endif
 ##############################################################################
 
 ##############################################################################
-# Project, sources and paths
+# Project, target, sources and paths
 #
 
 # Define project name here
-PROJECT = mounter
+PROJECT = mounter.dbg
+
+# Target settings.
+MCU  = cortex-m4
+
 BUILDDIR = mounter_build
+DEPDIR = $(BUILDDIR)/.dep
 
 # Imported source files and paths
-CHIBIOS = ${axoloti_release}/chibios
+include ../ch_version.mk
 
+# Licensing files.
+include $(CHIBIOS)/os/license/license.mk
+# Startup files.
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
 include board.mk
-include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
-include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
-include $(CHIBIOS)/os/kernel/kernel.mk
-#include $(CHIBIOS)/test/test.mk
-	
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
+include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+# RTOS files (optional).
+include $(CHIBIOS)/os/rt/rt.mk
+include $(CHIBIOS)/os/hal/lib/streams/streams.mk
+
 # Define linker script file here
-LDSCRIPT= STM32F407xG.ld
+LDSCRIPT = link-ch-in-patch.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CSRC = $(PORTSRC) \
-       $(KERNSRC) \
-       $(HALSRC) \
-       $(PLATFORMSRC) \
-       $(BOARDSRC) \
-       $(CHIBIOS)/os/various/shell.c \
-       $(CHIBIOS)/os/various/chprintf.c \
-       $(CHIBIOS)/os/various/memstreams.c \
-       ../glcdfont.c \
-       ../axoloti_control.c \
+CSRC = $(ALLCSRC) \
        ../axoloti_board.c \
-       ../watchdog.c \
-	   mass_storage/usb_msd.c \
-       main.c  
+       $(CHIBIOS_CONTRIB)/os/various/lib_scsi.c \
+       usbcfg.c \
+       main.c
 
-       
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC =
+CPPSRC = $(ALLCPPSRC)
 
-# C sources to be compiled in ARM mode regardless of the global setting.
-# NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
-#       option that results in lower performance and larger code size.
-ACSRC =
+# List ASM source files here.
+ASMSRC = $(ALLASMSRC)
 
-# C++ sources to be compiled in ARM mode regardless of the global setting.
-# NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
-#       option that results in lower performance and larger code size.
-ACPPSRC =
+# List ASM with preprocessor source files here.
+ASMXSRC = $(ALLXASMSRC)
 
-# C sources to be compiled in THUMB mode regardless of the global setting.
-# NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
-#       option that results in lower performance and larger code size.
-TCSRC =
+# Inclusion directories.
+INCDIR = $(CONFDIR) $(ALLINC) $(TESTINC) \
+         $(CHIBIOS)/community/os/various/ \
+         ../
 
-# C sources to be compiled in THUMB mode regardless of the global setting.
-# NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
-#       option that results in lower performance and larger code size.
-TCPPSRC =
+# Define C warning options here.
+CWARN = -Wall -Wextra -Wundef -Wstrict-prototypes
 
-# List ASM source files here
-ASMSRC = $(PORTASM)
-
-INCDIR = ../ \
-		 $(PORTINC) $(KERNINC) $(TESTINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) \
-         $(FATFSINC) \
-         $(CHIBIOS)/os/various \
-		 ./mass_storage
+# Define C++ warning options here.
+CPPWARN = -Wall -Wextra -Wundef
 
 #
 # Project, sources and paths
-##############################################################################
-
-##############################################################################
-# Compiler settings
-#
-
-MCU  = cortex-m4
-
-TRGT = arm-none-eabi-
-CC   = $(TRGT)gcc
-CPPC = $(TRGT)g++
-# Enable loading with g++ only if you need C++ runtime support.
-# NOTE: You can use C++ even without C++ support if you are careful. C++
-#       runtime support makes code size explode.
-LD   = $(TRGT)gcc 
-#LD   = $(TRGT)g++ 
-CP   = $(TRGT)objcopy
-AS   = $(TRGT)gcc -x assembler-with-cpp
-OD   = $(TRGT)objdump
-HEX  = $(CP) -O ihex
-BIN  = $(CP) -O binary
-
-# ARM-specific options here
-AOPT =
-
-# THUMB-specific options here
-TOPT = -mthumb -DTHUMB
-
-# Define C warning options here
-CWARN = -Wall -Wextra -Wstrict-prototypes
-
-# Define C++ warning options here
-CPPWARN = -Wall -Wextra
-
-#
-# Compiler settings
-##############################################################################
-
-##############################################################################
-# Start of default section
-#
-
-# List all default C defines here, like -D_DEBUG=1
-DDEFS =
-
-# List all default ASM defines here, like -D_DEBUG=1
-DADEFS =
-
-# List all default directories to look for include files here
-DINCDIR =
-
-# List the default directory to look for the libraries here
-DLIBDIR =
-
-# List all default libraries here
-DLIBS = 
-
-#
-# End of default section
 ##############################################################################
 
 ##############################################################################
@@ -197,10 +151,15 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -DSTM32F427xx -D__FPU_PRESENT=1U
 
 # Define ASM defines here
-UADEFS =
+UADEFS = \
+  -DCRT0_INIT_DATA=0 \
+  -DCRT0_INIT_BSS=0 \
+  -DCRT0_INIT_RAM_AREAS=0 \
+  -DCRT0_CALL_CONSTRUCTORS=0 \
+  -DCRT0_CALL_DESTRUCTORS=0
 
 # List all user directories here
 UINCDIR = 
@@ -209,13 +168,43 @@ UINCDIR =
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS =
-
+ULIBS = --specs=nosys.specs
 
 VPATH = .
+
 #
 # End of user defines
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/ports/GCC/ARMCMx
+##############################################################################
+# Common rules
+#
+
+RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk
+include $(RULESPATH)/arm-none-eabi.mk
 include $(RULESPATH)/rules.mk
+
+#
+# Common rules
+##############################################################################
+
+##############################################################################
+# Custom rules
+#
+%.elf: %.dbg.elf
+	$(TRGT)strip -g --strip-unneeded -o $@ $<
+
+%.lst: %.elf
+	@$(OD) -hpxdSsrt $< > $@
+
+%.read: %.elf
+	@$(TRGT)readelf -atSln $< > $@
+
+POST_MAKE_ALL_RULE_HOOK: \
+	$(BUILDDIR)/mounter.elf \
+	$(BUILDDIR)/mounter.lst \
+	$(BUILDDIR)/mounter.read
+
+#
+# Custom rules
+##############################################################################

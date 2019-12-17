@@ -14,19 +14,17 @@ if not exist %PACMAN% (
   echo and then re-run this script
   echo launching a browser for you...
   start /max http://msys2.github.io/
-  pause
-  goto :end
+  exit /b 1
 )
 
-%PACMAN% pacman -S --needed git gcc autoconf libtool make wget unzip diffutils patch pkg-config mingw-w64-i686-gcc
+%PACMAN% pacman -S --needed git gcc autoconf libtool make wget unzip diffutils patch pkg-config mingw-w64-i686-gcc p7zip
 
 set PATH=%PATH%;%MSYS32%\usr\bin
 set HOME=.
-%MSYS32%\usr\bin\bash.exe build.sh
+%MSYS32%\usr\bin\bash.exe build.sh || exit /b 1
 
-call build_gui.bat
-
-call compile_firmware.bat
+call compile_firmware.bat || exit /b 1
+call build_gui.bat || exit /b 1
 
 echo READY
 echo Launch Axoloti by double clicking Axoloti\axoloti.bat

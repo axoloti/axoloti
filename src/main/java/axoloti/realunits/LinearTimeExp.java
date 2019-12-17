@@ -18,9 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -29,7 +29,7 @@ import java.text.ParseException;
 public class LinearTimeExp implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double hz = 440.0 * Math.pow(2.0, (-v.getDouble() + 64 - 69) / 12.0) / 32;
         double t = 1.0 / hz;
         if (t > 1) {
@@ -42,7 +42,7 @@ public class LinearTimeExp implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[mM]?)[sS]");
         Matcher matcher = pattern.matcher(s);
 
@@ -56,8 +56,9 @@ public class LinearTimeExp implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
+            }
 
             double hz = 1.0 / (num * mul);
             return -(((Math.log((hz * 32) / 440.0) / Math.log(2)) * 12.0) - 64 + 69);

@@ -19,13 +19,11 @@
 #include "ch.h"
 #include "hal.h"
 #include "usbcfg.h"
-
+#include "pconnection.h"
 
 /*
- * Serial over USB Driver structure.
+ * USB Driver structure.
  */
-MidiUSBDriver MDU1;
-BulkUSBDriver BDU1;
 
 /*
  * USB Device Descriptor.
@@ -259,7 +257,6 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
                                            uint8_t dtype,
                                            uint8_t dindex,
                                            uint16_t lang) {
-
   (void)usbp;
   (void)lang;
   switch (dtype) {
@@ -276,8 +273,9 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
     }
     if (dindex < 9)
       return &vcom_strings[dindex];
-  case 0xEE:
-    return &vcid_descriptor;
+    if (dindex == 0xEE)
+      return &vcid_descriptor;
+    break;
   }
   return NULL;
 }
@@ -298,8 +296,8 @@ static USBOutEndpointState ep1outstate;
 static const USBEndpointConfig ep1config = {
   USB_EP_MODE_TYPE_BULK,
   NULL,
-  mduDataTransmitted,
-  mduDataReceived,
+  NULL,
+  NULL,
   0x0040,
   0x0040,
   &ep1instate,
@@ -324,8 +322,8 @@ static USBOutEndpointState ep2outstate;
 static const USBEndpointConfig ep2config = {
   USB_EP_MODE_TYPE_BULK,
   NULL,
-  bduDataTransmitted,
-  bduDataReceived,
+  NULL,
+  NULL,
   0x0040,
   0x0040,
   &ep2instate,
@@ -340,28 +338,35 @@ static const USBEndpointConfig ep2config = {
 static void usb_event(USBDriver *usbp, usbevent_t event) {
 
   switch (event) {
-  case USB_EVENT_RESET:
-    return;
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
-    chSysLockFromIsr();
+    chSysLockFromISR();
+    if (usbp->state == USB_ACTIVE) {
 
     /* Enables the endpoints specified into the configuration.
        Note, this callback is invoked from an ISR so I-Class functions
        must be used.*/
     usbInitEndpointI(usbp, USBD1_DATA_REQUEST_EP, &ep1config);
     usbInitEndpointI(usbp, USBD2_DATA_REQUEST_EP, &ep2config);
-
-    /* Resetting the state of the Bulk driver subsystem.*/
-    bduConfigureHookI(&BDU1);
-    mduConfigureHookI(&MDU1);
-
-    chSysUnlockFromIsr();
+    } else if (usbp->state == USB_SELECTED) {
+      usbDisableEndpointsI(usbp);
+    }
+    chSysUnlockFromISR();
     return;
+  case USB_EVENT_RESET:
+    /* Falls into.*/
+  case USB_EVENT_UNCONFIGURED:
+    /* Falls into.*/
   case USB_EVENT_SUSPEND:
+    chSysLockFromISR();
+    /* Disconnection event on suspend.*/
+    chSysUnlockFromISR();
     return;
   case USB_EVENT_WAKEUP:
+    chSysLockFromISR();
+    /* Connection event on wakeup.*/
+    chSysUnlockFromISR();
     return;
   case USB_EVENT_STALLED:
     return;
@@ -422,7 +427,7 @@ static const uint8_t msdescriptor1[] = {
 /* double NUL-terminated Unicode String (LE) Property name "{88BAE032-5A81-49f0-BC3D-A4FF138216D6}" */
 };
 
-static bool_t specialRequestsHook(USBDriver *usbp) {
+static bool specialRequestsHook(USBDriver *usbp) {
   if (
       (usbp->setup[0] == 0xC0) &&
       (usbp->setup[1] == 0x14) &&
@@ -462,24 +467,6 @@ const USBConfig usbcfg = {
   usb_event,
   get_descriptor,
   specialRequestsHook,
-  NULL
-};
-
-/*
- * Midi USB driver configuration.
- */
-const MidiUSBConfig midiusbcfg = {
-  &USBD1,
-  USBD1_DATA_REQUEST_EP,
-  USBD1_DATA_AVAILABLE_EP
-};
-
-/*
- * Bulk USB driver configuration.
- */
-const BulkUSBConfig bulkusbcfg = {
-  &USBD1,
-  USBD2_DATA_REQUEST_EP,
-  USBD2_DATA_AVAILABLE_EP
+  NULL /* sof_handler */
 };
 

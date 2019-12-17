@@ -18,9 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -29,66 +29,66 @@ import java.text.ParseException;
 public class PitchToNote implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
-        String s;
+    public String convertToReal(Value v) {
+        StringBuilder s = new StringBuilder();
         int n;
         double f;
         n = (int) Math.round(v.getDouble());
         f = v.getDouble() - n;
         switch ((n + 64) % 12) {
             case 0:
-                s = "C";
+                s.append("C");
                 break;
             case 1:
-                s = "C#";
+                s.append("C#");
                 break;
             case 2:
-                s = "D";
+                s.append("D");
                 break;
             case 3:
-                s = "D#";
+                s.append("D#");
                 break;
             case 4:
-                s = "E";
+                s.append("E");
                 break;
             case 5:
-                s = "F";
+                s.append("F");
                 break;
             case 6:
-                s = "F#";
+                s.append("F#");
                 break;
             case 7:
-                s = "G";
+                s.append("G");
                 break;
             case 8:
-                s = "G#";
+                s.append("G#");
                 break;
             case 9:
-                s = "A";
+                s.append("A");
                 break;
             case 10:
-                s = "A#";
+                s.append("A#");
                 break;
             case 11:
-                s = "B";
+                s.append("B");
                 break;
             default:
-                s = "error";
+                s.append("error");
         }
         int i = (n + 52) / 12;
-        s += Integer.toString(i);
+        s.append(Integer.toString(i));
         if (f > 0) {
-            s += String.format("+%02d", Math.round(f * 100));
+            s.append(String.format("+%02d", Math.round(f * 100)));
         } else if (f < 0) {
-            s += String.format("-%02d", -Math.round(f * 100));
+            s.append(String.format("-%02d", -Math.round(f * 100)));
         } else {
-            s += "   ";
+            s.append("   ");
         }
-        return s;
+        return s.toString();
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<note>[a-gA-G])\\p{Space}*(?<sharp>[#bB]?)\\p{Space}*(?<oct>\\d+)\\p{Space}*(?<sign>[-\\+]?)\\p{Space}*(?<delta>\\d*)");
         Matcher matcher = pattern.matcher(s);
 
@@ -98,14 +98,17 @@ public class PitchToNote implements NativeToReal {
             int incidental = 0, oct, delta = 0;
 
             note = matcher.group("note").toLowerCase().charAt(0);
-            if (matcher.group("sharp").length() != 0)
+            if (matcher.group("sharp").length() != 0) {
                 sharp = matcher.group("sharp").toLowerCase().charAt(0);
-            if (matcher.group("sign").length() != 0)
+            }
+            if (matcher.group("sign").length() != 0) {
                 sign = matcher.group("sign").toLowerCase().charAt(0);
+            }
             try {
                 oct = Integer.parseInt(matcher.group("oct"));
-                if (matcher.group("delta").length() != 0)
+                if (matcher.group("delta").length() != 0) {
                     delta = Integer.parseInt(matcher.group("delta"));
+                }
             } catch (java.lang.NumberFormatException ex) {
                 throw new ParseException("Not PitchToNote", 0);
             }
@@ -116,10 +119,11 @@ public class PitchToNote implements NativeToReal {
             }
             else if (sharp == 'b')
             {
-                if (note == 'a')
+                if (note == 'a') {
                     note = 'g';
-                else
+                } else {
                     note--;
+                }
                 incidental = 1;
             }
 

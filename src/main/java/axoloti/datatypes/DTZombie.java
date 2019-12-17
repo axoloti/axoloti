@@ -17,7 +17,7 @@
  */
 package axoloti.datatypes;
 
-import axoloti.Theme;
+import axoloti.preferences.Theme;
 import java.awt.Color;
 
 /**
@@ -27,22 +27,22 @@ import java.awt.Color;
 public class DTZombie implements DataType {
 
     @Override
-    public boolean IsConvertableToType(DataType dest) {
+    public boolean isConvertableToType(DataType dest) {
         return false;
     }
 
     @Override
-    public boolean HasDefaultValue() {
+    public boolean hasDefaultValue() {
         return false;
     }
 
     @Override
-    public String GenerateSetDefaultValueCode() {
+    public String generateSetDefaultValueCode() {
         return "";
     }
 
     @Override
-    public String GenerateConversionToType(DataType dest, String in) {
+    public String generateConversionToType(DataType dest, String in) {
         return "";
     }
 
@@ -52,12 +52,12 @@ public class DTZombie implements DataType {
     }
 
     @Override
-    public Color GetColor() {
+    public Color getColor() {
         return Theme.getCurrentTheme().Cable_Zombie;
     }
 
     @Override
-    public String GenerateCopyCode(String dest, String source) {
+    public String generateCopyCode(String dest, String source) {
         return "";
     }
 
@@ -67,7 +67,7 @@ public class DTZombie implements DataType {
     }
 
     @Override
-    public String UnconnectedSink() {
+    public String unconnectedSink() {
         return "";
     }
 }

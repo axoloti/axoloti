@@ -23,12 +23,15 @@ package axoloti.utils;
  */
 public class MidiControllerNames {
 
-    static String[] ccnames = {
+    private MidiControllerNames() {
+    }
+
+    private final static String[] ccnames = {
         "Bank select", // 0
         "Modulation",
-        "Breath",
+        "Breath controller",
         "",
-        "Foot",
+        "Foot controller",
         "Portamento time",
         "Data entry",
         "Main volume",
@@ -154,7 +157,7 @@ public class MidiControllerNames {
         "Polyphonic"
     };
 
-    public static String GetNameFromCC(int cc) {
+    public static String getNameFromCC(int cc) {
         if ((cc > 0) && (cc < 128)) {
             return ccnames[cc];
         } else {

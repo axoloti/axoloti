@@ -17,26 +17,26 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMapRatio;
-import axoloti.parameters.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMapRatio;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Reverb extends gentools {
+class Reverb extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "filter";
-        WriteAxoObject(catName, Create_Allpass());
-        WriteAxoObject(catName, Create_FeedbackComb());
+        writeAxoObject(catName, Create_Allpass());
+        writeAxoObject(catName, Create_FeedbackComb());
         catName = "reverb";
-        WriteAxoObject(catName, Create_FDN4());
+        writeAxoObject(catName, Create_FDN4());
     }
 
     static AxoObject Create_Allpass() {
@@ -66,7 +66,7 @@ public class Reverb extends gentools {
          + "d[dpos++]=din>>14;\n"
          + "%out% = ___SMMLS(g2,din<<2,dout);\n"
          + "if (dpos == %delay%) dpos = 0;\n";
-    
+
          */
         return o;
     }

@@ -17,14 +17,19 @@
  */
 package axoloti.object;
 
-import axoloti.Modulator;
-import axoloti.Patch;
-import axoloti.inlets.Inlet;
-import axoloti.outlets.Outlet;
-import java.awt.Point;
-import java.util.ArrayList;
+import axoloti.abstractui.IAbstractEditor;
+import axoloti.mvc.AbstractModel;
+import axoloti.mvc.IModel;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.parameter.Parameter;
+import axoloti.property.ListProperty;
+import axoloti.utils.StringUtils;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
@@ -38,17 +43,17 @@ import org.simpleframework.xml.core.Persist;
  * @author Johannes Taelman
  */
 @Root(name = "objdef")
-public abstract class AxoObjectAbstract implements Comparable, Cloneable {
+public abstract class AxoObjectAbstract extends AbstractModel<ObjectController> implements Comparable, IAxoObject {
 
     @Attribute
     public String id;
 
     @Attribute(required = false)
-    String uuid;
+    private String uuid;
 
     @Deprecated
     @Attribute(required = false)
-    String sha;
+    private String sha;
 
     @Deprecated
     @ElementListUnion({
@@ -56,27 +61,27 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
     HashSet<String> upgradeSha;
 
     @Element(name = "sDescription", required = false)
-    public String sDescription;
+    private String sDescription;
 
     public String shortId;
 
     public boolean createdFromRelativePath = false;
 
     @Element(name = "author", required = false)
-    public String sAuthor;
+    private String sAuthor;
     @Element(name = "license", required = false)
-    public String sLicense;
-    public String sPath;
+    private String sLicense;
+    private String sPath;
 
     @Commit
-    public void Commit() {
+    void commit1() {
         // called after deserialializtion
         this.sha = null;
         this.upgradeSha = null;
     }
 
     @Persist
-    public void Persist() {
+    public void persist() {
         // called prior to serialization
         this.sha = null;
         this.upgradeSha = null;
@@ -94,29 +99,6 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         this.upgradeSha = null;
     }
 
-    Inlet GetInlet(String n) {
-        return null;
-    }
-
-    Outlet GetOutlet(String n) {
-        return null;
-    }
-
-    public ArrayList<Inlet> GetInlets() {
-        return null;
-    }
-
-    public ArrayList<Outlet> GetOutlets() {
-        return null;
-    }
-
-    public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
-        return null;
-    }
-
-    public void DeleteInstance(AxoObjectInstanceAbstract o) {
-    }
-
     @Override
     public String toString() {
         return id;
@@ -124,7 +106,7 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
 
     @Override
     public int compareTo(Object t) {
-        String tn = ((AxoObject) t).id;
+        String tn = ((AxoObjectAbstract) t).id;
         if (id.startsWith(tn)) {
             return 1;
         }
@@ -134,32 +116,43 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         return id.compareTo(tn);
     }
 
-    public boolean providesModulationSource() {
-        return false;
-    }
-
     public String getCName() {
         return "noname";
     }
 
+    @Override
     public String getUUID() {
         if (uuid == null) {
-            uuid = GenerateUUID();
+            uuid = generateUUID();
         }
         return uuid;
     }
 
-    public HashSet<String> GetIncludes() {
-        return null;
+    @Override
+    public List<String> getProcessedIncludes() {
+        return Collections.emptyList();
     }
 
-    public void SetIncludes(HashSet<String> includes) {
+    @Override
+    public List<String> getIncludes() {
+        return Collections.emptyList();
     }
 
-    public Set<String> GetDepends() {
-        return null;
+    @Override
+    public void setIncludes(List<String> includes) {
     }
 
+    @Override
+    public List<String> getDepends() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<String> getModules() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public String getDefaultInstanceName() {
         if (shortId == null) {
             return "obj";
@@ -171,23 +164,151 @@ public abstract class AxoObjectAbstract implements Comparable, Cloneable {
         return shortId;
     }
 
-    public Modulator[] getModulators() {
-        return null;
+    @Override
+    public List<String> getModulators() {
+        return Collections.emptyList();
     }
 
-    public abstract String GenerateUUID();
+    public abstract String generateUUID();
 
     public void setUUID(String uuid) {
         this.uuid = uuid;
     }
 
-    public void FireObjectModified(Object src) {
+    private IAbstractEditor editor;
+
+    @Override
+    public IAbstractEditor getEditor() {
+        return editor;
     }
 
-    public void addObjectModifiedListener(ObjectModifiedListener oml) {
+    @Override
+    public void setEditor(IAbstractEditor editor) {
+        this.editor = editor;
     }
 
-    public void removeObjectModifiedListener(ObjectModifiedListener oml) {
+
+/* MVC clean methods below... */
+    public static final ListProperty OBJ_INLETS = new ListProperty("Inlets", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_OUTLETS = new ListProperty("Outlets", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_ATTRIBUTES = new ListProperty("Attributes", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_PARAMETERS = new ListProperty("Parameters", AxoObjectAbstract.class);
+    public static final ListProperty OBJ_DISPLAYS = new ListProperty("Displays", AxoObjectAbstract.class);
+
+    @Override
+    public abstract List<Inlet> getInlets();
+
+    @Override
+    public abstract List<Outlet> getOutlets();
+
+    @Override
+    public abstract List<AxoAttribute> getAttributes();
+
+    @Override
+    public abstract List<Parameter> getParameters();
+
+    @Override
+    public abstract List<Display> getDisplays();
+
+    public void setInlets(List<Inlet> inlets) {
+    }
+
+    public void setOutlets(List<Outlet> outlets) {
+    }
+
+    public void setAttributes(List<AxoAttribute> attributes) {
+    }
+
+    public void setParameters(List<Parameter> parameters) {
+    }
+
+    public void setDisplays(List<Display> displays) {
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        String oldvalue = this.id;
+        this.id = id;
+        firePropertyChange(
+                AxoObject.OBJ_ID,
+                oldvalue, id);
+    }
+
+    @Override
+    public String getSHA() {
+        return sha;
+    }
+
+    @Override
+    public String getDescription() {
+        return StringUtils.denullString(sDescription);
+    }
+
+    public void setDescription(String sDescription) {
+        String oldvalue = this.sDescription;
+        this.sDescription = sDescription;
+        firePropertyChange(
+                AxoObject.OBJ_DESCRIPTION,
+                oldvalue, sDescription);
+    }
+
+    @Override
+    public String getLicense() {
+        return StringUtils.denullString(sLicense);
+    }
+
+    public void setLicense(String sLicense) {
+        String oldvalue = this.sLicense;
+        this.sLicense = sLicense;
+        firePropertyChange(
+                AxoObject.OBJ_LICENSE,
+                oldvalue, sLicense);
+    }
+
+    @Override
+    public String getPath() {
+        return StringUtils.denullString(sPath);
+    }
+
+    public final void setPath(String sPath) {
+        String oldvalue = this.sPath;
+        this.sPath = sPath;
+        firePropertyChange(
+                AxoObject.OBJ_PATH,
+                oldvalue, sPath);
+    }
+
+    @Override
+    public String getAuthor() {
+        return StringUtils.denullString(sAuthor);
+    }
+
+    public void setAuthor(String sAuthor) {
+        String oldvalue = this.sAuthor;
+        this.sAuthor = sAuthor;
+        firePropertyChange(
+                AxoObject.OBJ_AUTHOR,
+                oldvalue, sAuthor);
+    }
+
+    @Override
+    protected ObjectController createController() {
+        ObjectController controller = new ObjectController(this);
+        return controller;
+    }
+
+    @Override
+    public boolean isCreatedFromRelativePath() {
+        return createdFromRelativePath;
+    }
+
+    @Override
+    public IModel getParent() {
+        return null;
     }
 
 }

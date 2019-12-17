@@ -1,4 +1,4 @@
-/// basdd on the quirk added to te ALSA linux kernel
+// based on the quirk added to the ALSA linux kernel
 // https://lkml.org/lkml/2010/2/10/25
 
 
@@ -7,7 +7,7 @@
 #define _USB_H_
 #include "ch.h"
 
-USB_Setup_TypeDef MIDI_Setup;
+//USB_Setup_TypeDef MIDI_Setup;
 
 #define MIDI_MIN_READ_POLL 1
 #define MIDI_MIN_WRITE_POLL 1
@@ -54,7 +54,7 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
 
     const uint8_t interface = 5;
 
-    usbh_midi_init(); 
+    // usbh_midi_init(); // TODO: usbh_vendor: check usbh_midi_init purpose
 
     if(interface<phost->device.CfgDesc.bNumInterfaces) {
         if( (phost->device.CfgDesc.Itf_Desc[interface].bInterfaceClass == USB_VENDOR_CLASS_ID) &&
@@ -124,7 +124,7 @@ static USBH_StatusTypeDef USBH_Virus_InterfaceInit(USBH_HandleTypeDef *phost) {
                 USBH_BulkSendData(phost, seq, sizeof(seq), MIDI_Handle->OutPipe,false);
 
                 // prime output ring buffer for use
-                usbh_midi_reset_buffer();
+                // usbh_midi_reset_buffer(); // TODO: validate usbh_vendor...
             }
             
             if (isValidInput(MIDI_Handle)) {

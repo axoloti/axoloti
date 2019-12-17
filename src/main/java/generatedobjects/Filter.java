@@ -17,77 +17,77 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.ParameterFrac32SMap;
-import axoloti.parameters.ParameterFrac32SMapKPitch;
-import axoloti.parameters.ParameterFrac32SMapLFOPitch;
-import axoloti.parameters.ParameterFrac32SMapPitch;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapFilterQ;
-import axoloti.parameters.ParameterInt32Box;
-import static generatedobjects.gentools.WriteAxoObject;
-import java.util.HashSet;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.object.parameter.ParameterFrac32SMapKPitch;
+import axoloti.object.parameter.ParameterFrac32SMapLFOPitch;
+import axoloti.object.parameter.ParameterFrac32SMapPitch;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapFilterQ;
+import axoloti.object.parameter.ParameterInt32Box;
+import static generatedobjects.GenTools.writeAxoObject;
+import java.util.LinkedList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Filter extends gentools {
+class Filter extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "filter";
-        WriteAxoObject(catName, CreateVCF());
-        WriteAxoObject(catName, CreateVCF2());
-        WriteAxoObject(catName, CreateVCF3());
+        writeAxoObject(catName, createVCF());
+        writeAxoObject(catName, createVCF2());
+        writeAxoObject(catName, createVCF3());
 
-        WriteAxoObject(catName, CreateLPF());
-        WriteAxoObject(catName, CreateHPF());
-        WriteAxoObject(catName, CreateBPF());
+        writeAxoObject(catName, createLPF());
+        writeAxoObject(catName, createHPF());
+        writeAxoObject(catName, createBPF());
 
-        WriteAxoObject(catName, CreateLPFM());
-        WriteAxoObject(catName, CreateHPFM());
-        WriteAxoObject(catName, CreateBPFM());
+        writeAxoObject(catName, createLPFM());
+        writeAxoObject(catName, createHPFM());
+        writeAxoObject(catName, createBPFM());
 
-//        WriteAxoObject(catName, CreateNF());
-//        WriteAxoObject(catName, CreateAPF());
-        WriteAxoObject(catName, Create_lowpassTilde());
-        WriteAxoObject(catName, Create_hipassTilde());
-        WriteAxoObject(catName, Create_lowpassMTilde());
-        WriteAxoObject(catName, Create_hipassMTilde());
+//        WriteAxoObject(catName, createNF());
+//        WriteAxoObject(catName, createAPF());
+        writeAxoObject(catName, create_lowpassTilde());
+        writeAxoObject(catName, create_hipassTilde());
+        writeAxoObject(catName, create_lowpassMTilde());
+        writeAxoObject(catName, create_hipassMTilde());
 
-        WriteAxoObject(catName, Create_Fir16());
-        WriteAxoObject(catName, Create_EQ5hq());
-        WriteAxoObject(catName, Create_EQ4());
+        writeAxoObject(catName, create_Fir16());
+        writeAxoObject(catName, create_EQ5hq());
+        writeAxoObject(catName, create_EQ4());
 
-        WriteAxoObject(catName, new AxoObject[]{CreateDelta(), CreateDeltaTilde(), CreateDeltaI()});
-        WriteAxoObject(catName, new AxoObject[]{CreateIntegrator(), CreateIntegratorTilde()});
-        WriteAxoObject(catName, new AxoObject[]{CreateIntegratorLeaky(), CreateIntegratorLeakyTilde()});
+        writeAxoObject(catName, new AxoObject[]{createDelta(), createDeltaTilde(), createDeltaI()});
+        writeAxoObject(catName, new AxoObject[]{createIntegrator(), createIntegratorTilde()});
+        writeAxoObject(catName, new AxoObject[]{createIntegratorLeaky(), createIntegratorLeakyTilde()});
 
-        WriteAxoObject(catName, Create_lpfsvf_tilde());
-        WriteAxoObject(catName, Create_hpfsvf_tilde());
-        WriteAxoObject(catName, Create_bpfsvf_tilde());
-        WriteAxoObject(catName, Create_notchfsvf_tilde());
-        WriteAxoObject(catName, Create_svf_multimode_tilde());
+        writeAxoObject(catName, create_lpfsvf_tilde());
+        writeAxoObject(catName, create_hpfsvf_tilde());
+        writeAxoObject(catName, create_bpfsvf_tilde());
+        writeAxoObject(catName, create_notchfsvf_tilde());
+        writeAxoObject(catName, create_svf_multimode_tilde());
 
-//UNRELEASED        WriteAxoObject(catName, Create_lpfsvf_drive());
-        WriteAxoObject(catName, Create_bp_svf_m());
+//UNRELEASED        WriteAxoObject(catName, create_lpfsvf_drive());
+        writeAxoObject(catName, create_bp_svf_m());
 
-//        WriteAxoObject(catName, Create_lpfsvf2_tilde());
+//        WriteAxoObject(catName, create_lpfsvf2_tilde());
         catName = "kfilter";
-        WriteAxoObject(catName, Create_K_lpfsvf());
-        WriteAxoObject(catName, Create_K_hpfsvf());
-        WriteAxoObject(catName, Create_K_bpfsvf());
-        WriteAxoObject(catName, Create_k_bpfsvf_m());
-        WriteAxoObject(catName, Create_K_lowpass());
+        writeAxoObject(catName, create_K_lpfsvf());
+        writeAxoObject(catName, create_K_hpfsvf());
+        writeAxoObject(catName, create_K_bpfsvf());
+        writeAxoObject(catName, create_k_bpfsvf_m());
+        writeAxoObject(catName, create_K_lowpass());
     }
 
-    static AxoObject CreateVCF() {
+    static AxoObject createVCF() {
         AxoObject o = new AxoObject("vcf", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("frequency", "cutoff frequency"));
@@ -102,7 +102,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateVCF2() {
+    static AxoObject createVCF2() {
         AxoObject o = new AxoObject("vcf2", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -119,7 +119,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateVCF3() {
+    static AxoObject createVCF3() {
         AxoObject o = new AxoObject("vcf3", "2-pole resonant low-pass filter (biquad), filter updated at k-rate");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -137,7 +137,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateLPF() {
+    static AxoObject createLPF() {
         AxoObject o = new AxoObject("lp", "2-pole resonant low-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -153,7 +153,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateLPFM() {
+    static AxoObject createLPFM() {
         AxoObject o = new AxoObject("lp m", "2-pole resonant low-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -171,7 +171,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateBPF() {
+    static AxoObject createBPF() {
         AxoObject o = new AxoObject("bp", "2-pole resonant band-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -187,7 +187,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateBPFM() {
+    static AxoObject createBPFM() {
         AxoObject o = new AxoObject("bp m", "2-pole resonant band-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -205,7 +205,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateHPF() {
+    static AxoObject createHPF() {
         AxoObject o = new AxoObject("hp", "2-pole resonant band-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -221,7 +221,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateHPFM() {
+    static AxoObject createHPFM() {
         AxoObject o = new AxoObject("hp m", "2-pole resonant high-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -239,7 +239,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateAPF() {
+    static AxoObject createAPF() {
         AxoObject o = new AxoObject("ap", "2-pole resonant all-pass filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -249,7 +249,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateNF() {
+    static AxoObject createNF() {
         AxoObject o = new AxoObject("notch", "2-pole resonant notch filter (biquad)");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -259,7 +259,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_lowpassTilde() {
+    static AxoObject create_lowpassTilde() {
         AxoObject o = new AxoObject("lp1", "1st order lowpass filter");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
@@ -273,7 +273,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_K_lowpass() {
+    static AxoObject create_K_lowpass() {
         AxoObject o = new AxoObject("lowpass", "1st order lowpass filter, control rate");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32("out", "output"));
@@ -287,7 +287,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_hipassTilde() {
+    static AxoObject create_hipassTilde() {
         AxoObject o = new AxoObject("hp1", "1st order hipass filter");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
@@ -301,7 +301,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_lowpassMTilde() {
+    static AxoObject create_lowpassMTilde() {
         AxoObject o = new AxoObject("lp1 m", "1st order lowpass filter, modulation input");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.inlets.add(new InletFrac32("freq", "cutoff frequency"));
@@ -316,7 +316,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_hipassMTilde() {
+    static AxoObject create_hipassMTilde() {
         AxoObject o = new AxoObject("hp1 m", "1st order hipass filter, modulation input");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.inlets.add(new InletFrac32("freq", "cutoff frequency"));
@@ -331,7 +331,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateDelta() {
+    static AxoObject createDelta() {
         AxoObject o = new AxoObject("delta", "pseudo derivative, difference between previous and current value");
         o.outlets.add(new OutletFrac32("d", "a(t) - a(t-1)"));
         o.inlets.add(new InletFrac32("a", "a"));
@@ -342,7 +342,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateDeltaTilde() {
+    static AxoObject createDeltaTilde() {
         AxoObject o = new AxoObject("delta", "pseudo derivative, difference between previous and current value");
         o.outlets.add(new OutletFrac32Buffer("d", "a(t) - a(t-1)"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));
@@ -353,7 +353,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateDeltaI() {
+    static AxoObject createDeltaI() {
         AxoObject o = new AxoObject("delta", "pseudo derivative, difference between previous and current value");
         o.outlets.add(new OutletInt32("d", "a(t) - a(t-1)"));
         o.inlets.add(new InletInt32("a", "a"));
@@ -364,7 +364,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateIntegrator() {
+    static AxoObject createIntegrator() {
         AxoObject o = new AxoObject("integrator", "cumulative sum, saturating to +-64 units");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32("out", "output"));
@@ -376,7 +376,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateIntegratorTilde() {
+    static AxoObject createIntegratorTilde() {
         AxoObject o = new AxoObject("integrator", "cumulative sum, saturating to +-64 units");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
@@ -388,7 +388,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateIntegratorLeaky() {
+    static AxoObject createIntegratorLeaky() {
         AxoObject o = new AxoObject("integrator leaky", "cumulative sum, saturating to +-64 units");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32("out", "output"));
@@ -401,7 +401,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject CreateIntegratorLeakyTilde() {
+    static AxoObject createIntegratorLeakyTilde() {
         AxoObject o = new AxoObject("integrator leaky", "cumulative sum, saturating to +-64 units");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
@@ -414,7 +414,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_Fir16() {
+    static AxoObject create_Fir16() {
         AxoObject o = new AxoObject("fir16", "finite impulse response filter, with 16 coefficients");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.inlets.add(new InletFrac32Buffer("coefs", "input"));
@@ -436,7 +436,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_EQ5hq() {
+    static AxoObject create_EQ5hq() {
         AxoObject o = new AxoObject("eq5hq", "Five-band equalizer. The transition frequencies are 100, 500, 2000, and 6000 Hz. High quality version. Unstable behavior when changing the low gain live.");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.params.add(new ParameterInt32Box("low", -9, 9));
@@ -445,7 +445,7 @@ public class Filter extends gentools {
         o.params.add(new ParameterInt32Box("highmid", -9, 9));
         o.params.add(new ParameterInt32Box("high", -9, 9));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.includes.add("./eq5coefs.h");
         o.sLocalData = "q63_t biquadStateBand1Q31[4 * 2];\n"
                 + "q63_t biquadStateBand2Q31[4 * 2];\n"
@@ -491,7 +491,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_EQ4() {
+    static AxoObject create_EQ4() {
         AxoObject o = new AxoObject("eq4", "Four-band equalizer. The transition frequencies are 100, 500, 2000, and 6000 Hz. Lower quality version. The low band is ommitted.");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.params.add(new ParameterInt32Box("lowmid", -9, 9));
@@ -499,7 +499,7 @@ public class Filter extends gentools {
         o.params.add(new ParameterInt32Box("highmid", -9, 9));
         o.params.add(new ParameterInt32Box("high", -9, 9));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.includes.add("./eq5coefs.h");
         o.sLocalData = "q31_t biquadStateBand2Q31[4 * 2];\n"
                 + "q31_t biquadStateBand3Q31[4 * 2];\n"
@@ -537,7 +537,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_lpfsvf_tilde() {
+    static AxoObject create_lpfsvf_tilde() {
         AxoObject o = new AxoObject("lp svf", "Low pass filter, state-variable type");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -577,7 +577,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_hpfsvf_tilde() {
+    static AxoObject create_hpfsvf_tilde() {
         AxoObject o = new AxoObject("hp svf", "Highpass filter, state-variable type");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -603,7 +603,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_bpfsvf_tilde() {
+    static AxoObject create_bpfsvf_tilde() {
         AxoObject o = new AxoObject("bp svf", "Bandpass filter, state-variable type");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -629,7 +629,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_notchfsvf_tilde() {
+    static AxoObject create_notchfsvf_tilde() {
         AxoObject o = new AxoObject("notch svf", "Notch (band reject) filter, state-variable type");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -654,7 +654,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_svf_multimode_tilde() {
+    static AxoObject create_svf_multimode_tilde() {
         AxoObject o = new AxoObject("multimode svf m", "multimode filter, state-variable type, modulation inputs");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -686,7 +686,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_bp_svf_m() {
+    static AxoObject create_bp_svf_m() {
         AxoObject o = new AxoObject("bp svf m", "Bandpass filter, state-variable type, modulation inputs");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -714,7 +714,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_lpfsvf2_tilde() {
+    static AxoObject create_lpfsvf2_tilde() {
         AxoObject o = new AxoObject("lp svf2", "Low pass filter, state-variable type, double pumped");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -754,17 +754,17 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_bpfsvf2_tilde() {
+    static AxoObject create_bpfsvf2_tilde() {
         AxoObject o = new AxoObject("bp svf2", "Band pass filter, state-variable type, double pumped");
         return o;
     }
 
-    static AxoObject Create_hpfsvf2_tilde() {
+    static AxoObject create_hpfsvf2_tilde() {
         AxoObject o = new AxoObject("hp svf2", "High pass filter, state-variable type, double pumped");
         return o;
     }
 
-    static AxoObject Create_K_lpfsvf() {
+    static AxoObject create_K_lpfsvf() {
         AxoObject o = new AxoObject("lp svf", "Low pass filter, state-variable type, control rate");
         o.inlets.add(new InletFrac32("in", "filter input"));
         o.params.add(new ParameterFrac32SMapKPitch("pitch"));
@@ -790,7 +790,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_lpfsvf_drive() {
+    static AxoObject create_lpfsvf_drive() {
         AxoObject o = new AxoObject("lp svf drive", "Low pass filter, state-variable type");
         o.inlets.add(new InletFrac32Buffer("in", "filter input"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
@@ -817,7 +817,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_K_hpfsvf() {
+    static AxoObject create_K_hpfsvf() {
         AxoObject o = new AxoObject("hp svf", "Highpass filter, state-variable type, control rate");
         o.inlets.add(new InletFrac32("in", "filter input"));
         o.params.add(new ParameterFrac32SMapKPitch("pitch"));
@@ -843,7 +843,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_K_bpfsvf() {
+    static AxoObject create_K_bpfsvf() {
         AxoObject o = new AxoObject("bp svf", "Bandpass filter, state-variable type, control rate");
         o.inlets.add(new InletFrac32("in", "filter input"));
         o.params.add(new ParameterFrac32SMapKPitch("pitch"));
@@ -869,7 +869,7 @@ public class Filter extends gentools {
         return o;
     }
 
-    static AxoObject Create_k_bpfsvf_m() {
+    static AxoObject create_k_bpfsvf_m() {
         AxoObject o = new AxoObject("bp svf m", "Bandpass filter, state-variable type, control rate");
         o.inlets.add(new InletFrac32("in", "filter input"));
         o.inlets.add(new InletFrac32("pitch", "pitch input"));

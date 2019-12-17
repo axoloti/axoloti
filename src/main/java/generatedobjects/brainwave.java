@@ -17,17 +17,17 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeTextEditor;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
+import axoloti.object.attribute.AxoAttributeTextEditor;
+import axoloti.object.outlet.OutletFrac32;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class brainwave extends gentools {
+class Brainwave extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "brainwave";
 //UNRELEASED                WriteAxoObject(catName, Create_brainwave());
     }

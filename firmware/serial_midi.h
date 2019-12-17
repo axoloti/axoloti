@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014, 2015 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,12 +19,17 @@
 #define __SERIAL_MIDI_H
 
 #include <stdint.h>
+#include "midi.h"
+#include "midi_buffer.h"
 
 void serial_midi_init(void);
-void serial_MidiSend1(uint8_t b0);
-void serial_MidiSend2(uint8_t b0, uint8_t b1);
-void serial_MidiSend3(uint8_t b0, uint8_t b1, uint8_t b2);
 
+extern midi_output_buffer_t midi_output_din;
+
+// report the number of bytes pending for transmission
 int  serial_MidiGetOutputBufferPending(void);
+
+extern midi_routing_t midi_inputmap_din;
+extern midi_routing_t midi_outputmap_din;
 
 #endif

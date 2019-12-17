@@ -17,9 +17,8 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
-import java.awt.Point;
 import java.io.File;
+import java.io.FileNotFoundException;
 import org.simpleframework.xml.Root;
 
 /**
@@ -27,9 +26,9 @@ import org.simpleframework.xml.Root;
  * @author Johannes Taelman
  */
 @Root
-public class AxoObjectUnloaded extends AxoObjectAbstract {
+public class AxoObjectUnloaded extends AxoObjectAbstract0 {
 
-    File f;
+    private File f;
 
     public AxoObjectUnloaded() {
         super();
@@ -40,9 +39,9 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
         this.f = f;
     }
 
-    AxoObjectFromPatch loadedObject;
+    private AxoObjectFromPatch loadedObject;
 
-    public AxoObjectFromPatch Load() {
+    public AxoObjectFromPatch load() throws FileNotFoundException {
         if (loadedObject == null) {
             loadedObject = new AxoObjectFromPatch(f);
             loadedObject.id = id;
@@ -51,19 +50,12 @@ public class AxoObjectUnloaded extends AxoObjectAbstract {
     }
 
     @Override
-    public AxoObjectInstanceAbstract CreateInstance(Patch patch, String InstanceName1, Point location) {
-        Load();
-        AxoObjectInstance oi = new AxoObjectInstance(loadedObject, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(oi);
-        }
-        oi.PostConstructor();
-        return oi;
-    }
-
-    @Override
-    public String GenerateUUID() {
+    public String generateUUID() {
         return "unloaded";
     }
 
+    @Override
+    public String getSHA() {
+        return null;
+    }
 }

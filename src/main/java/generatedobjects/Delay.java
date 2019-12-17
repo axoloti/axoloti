@@ -17,38 +17,38 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.attributedefinition.AxoAttributeObjRef;
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMapPitch;
-import axoloti.parameters.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.attribute.AxoAttributeObjRef;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMapPitch;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Delay extends gentools {
+class Delay extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "delay";
-        WriteAxoObject(catName, CreateDelwriteTilde());
-        WriteAxoObject(catName, CreateDelwriteTilde_SDRAM());
-        WriteAxoObject(catName, new AxoObject[]{CreateDelreadTilde(), CreateDelreadTildeTilde()});
-        WriteAxoObject(catName, CreateDelread2TildeTilde());
-        WriteAxoObject(catName, CreatePitchToDelaytime());
-        WriteAxoObject(catName, CreateSDelay());
-        WriteAxoObject(catName, CreateSDelayFdbk());
-        WriteAxoObject(catName, CreateSDelayFdbkMix());
-        WriteAxoObject(catName, CreateSDelay());
+        writeAxoObject(catName, createDelwriteTilde());
+        writeAxoObject(catName, createDelwriteTilde_SDRAM());
+        writeAxoObject(catName, new AxoObject[]{createDelreadTilde(), createDelreadTildeTilde()});
+        writeAxoObject(catName, createDelread2TildeTilde());
+        writeAxoObject(catName, createPitchToDelaytime());
+        writeAxoObject(catName, createSDelay());
+        writeAxoObject(catName, createSDelayFdbk());
+        writeAxoObject(catName, createSDelayFdbkMix());
+        writeAxoObject(catName, createSDelay());
     }
 
-    static AxoObject CreateSDelayFdbkMix() {
+    static AxoObject createSDelayFdbkMix() {
         AxoObject o = new AxoObject("echo fdbk mix", "Audio delay with feedback and mix, fixed delay time");
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -74,7 +74,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateSDelayFdbk() {
+    static AxoObject createSDelayFdbk() {
         AxoObject o = new AxoObject("echo fdbk", "Audio delay with feedback, fixed delay time");
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -95,7 +95,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateSDelay() {
+    static AxoObject createSDelay() {
         AxoObject o = new AxoObject("echo", "Audio delay line, fixed delay time");
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -115,7 +115,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateDelwriteTilde() {
+    static AxoObject createDelwriteTilde() {
         AxoObject o = new AxoObject("write", "delayline definition, read with delread~");
         String mentries[] = {"256 (5.33ms)",
             "512 (10.66ms)",
@@ -141,7 +141,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateDelwriteTilde_SDRAM() {
+    static AxoObject createDelwriteTilde_SDRAM() {
         AxoObject o = new AxoObject("write sdram", "delayline definition, read it with \"delay/read\" objects referencing the instance name of this object");
         String mentries[] = {"256 (5.33ms)",
             "512 (10.66ms)",
@@ -175,7 +175,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateDelreadTilde() {
+    static AxoObject createDelreadTilde() {
         AxoObject o = new AxoObject("read", "delay read, non-interpolated");
         o.inlets.add(new InletFrac32("time", "delay time (fraction of total delayline size)"));
         o.outlets.add(new OutletFrac32Buffer("out", "wave"));
@@ -186,7 +186,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateDelreadTildeTilde() {
+    static AxoObject createDelreadTildeTilde() {
         AxoObject o = new AxoObject("read", "delay read, non-interpolated");
         o.inlets.add(new InletFrac32Buffer("time", "delay time (fraction of total delayline size)"));
         o.outlets.add(new OutletFrac32Buffer("out", "wave"));
@@ -198,7 +198,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreateDelread2TildeTilde() {
+    static AxoObject createDelread2TildeTilde() {
         AxoObject o = new AxoObject("read interp", "delay read, linear interpolated");
         o.inlets.add(new InletFrac32Buffer("time", "delay time (fraction of total delayline size)"));
         o.outlets.add(new OutletFrac32Buffer("out", "wave"));
@@ -217,7 +217,7 @@ public class Delay extends gentools {
         return o;
     }
 
-    static AxoObject CreatePitchToDelaytime() {
+    static AxoObject createPitchToDelaytime() {
         AxoObject o = new AxoObject("mtod", "Pitch (note index) to period time");
         o.outlets.add(new OutletFrac32("delay", "delay time"));
         o.inlets.add(new InletFrac32("pitch", "phase increment"));

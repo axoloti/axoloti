@@ -18,9 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -29,7 +29,7 @@ import java.text.ParseException;
 public class LinearTimeReverse implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         double t = (1.0 / v.getDouble()) * (16 / 48000.0) * 8192;
         if (t > 1.0) {
             return (String.format("%.2f s", t));
@@ -41,7 +41,7 @@ public class LinearTimeReverse implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit>[mM]?)[sS]");
         Matcher matcher = pattern.matcher(s);
 
@@ -55,8 +55,9 @@ public class LinearTimeReverse implements NativeToReal {
             }
 
             String units = matcher.group("unit");
-            if (units.contains("m") || units.contains("M"))
+            if (units.contains("m") || units.contains("M")) {
                 mul = 0.001;
+            }
 
             double t = num * mul;
             return 1.0 / (t / ((16 / 48000.0) * 8192));

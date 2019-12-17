@@ -1,6 +1,7 @@
 package axoloti;
 
-import axoloti.utils.AxolotiLibrary;
+import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.preferences.Preferences;
 import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -41,14 +42,14 @@ public class Synonyms {
     static void load() {
         Serializer serializer = new Persister();
         try {
-            AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+            AxolotiLibrary lib = Preferences.getPreferences().getLibrary(AxolotiLibrary.FACTORY_ID);
             if(lib != null) {
-                instance = serializer.read(Synonyms.class, new File(lib.getLocalLocation() + filename));
+                instance = serializer.read(Synonyms.class, new File(lib.getLocalLocation() + FILENAME));
             } else {
                 Logger.getLogger(Synonyms.class.getName()).log(Level.WARNING,"not loading synonyms cannot find factory library");
             }
 
-            
+
         } catch (Exception ex) {
             Logger.getLogger(Synonyms.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -57,22 +58,22 @@ public class Synonyms {
     static void save() {
         Serializer serializer = new Persister();
         try {
-            serializer.write(instance, new File(filename));
+            serializer.write(instance, new File(FILENAME));
         } catch (Exception ex) {
             Logger.getLogger(Synonyms.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    static Synonyms instance = null;
-    static String filename = "objects/synonyms.xml";
+    private static Synonyms instance = null;
+    private static final String FILENAME = "objects/synonyms.xml";
 
     protected Synonyms() {
-        inlets = new HashMap<String, String>();
-        outlets= new HashMap<String, String>();
+        inlets = new HashMap<>();
+        outlets= new HashMap<>();
     }
 
     @ElementMap(entry = "inlet", key = "a", value = "b", attribute=true ,inline = false)
-    HashMap<String, String> inlets;
+    private HashMap<String, String> inlets;
     @ElementMap(entry = "outlet", key = "a", value = "b", attribute=true ,inline = false)
-    HashMap<String, String> outlets;
+    private HashMap<String, String> outlets;
 }

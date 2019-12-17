@@ -17,24 +17,23 @@
  */
 package generatedobjects;
 
-import axoloti.MainFrame;
-import axoloti.attributedefinition.AxoAttribute;
-import axoloti.inlets.Inlet;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
 import axoloti.object.AxoObjectFile;
-import axoloti.outlets.Outlet;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.Parameter;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.utils.AxolotiLibrary;
-import axoloti.utils.Preferences;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.Parameter;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.preferences.Preferences;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,7 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.Serializer;
@@ -55,12 +54,12 @@ import org.simpleframework.xml.core.Persister;
  * @author Johannes Taelman
  */
 @Deprecated
-public class gentools {
+class GenTools {
 
     static protected Serializer serializer = new Persister();
     static String unstable = "unstable";
 
-    static String ConvertToLegalFilename(String s) {
+    static String convertToLegalFilename(String s) {
         s = s.replaceAll("<", "LT");
         s = s.replaceAll(">", "GT");
         s = s.replaceAll("\\*", "STAR");
@@ -68,12 +67,12 @@ public class gentools {
         s = s.replaceAll("\\+", "PLUS");
         s = s.replaceAll("-", "MINUS");
         s = s.replaceAll("/", "SLASH");
-        //if (!cn.equals(o.id)) o.sCName = cn;        
+        //if (!cn.equals(o.id)) o.sCName = cn;
         return s;
     }
 
     @Deprecated
-    static void CheckString(AxoObject o, String s) {
+    static void checkString(AxoObject o, String s) {
         for (Parameter p : o.params) {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
@@ -86,7 +85,7 @@ public class gentools {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
         }
-        for (axoloti.displays.Display p : o.displays) {
+        for (axoloti.object.display.Display p : o.displays) {
             s = s.replaceAll("%" + p.getName() + "%", "");
             s = s.replaceAll("_" + p.getName(), "");
         }
@@ -101,23 +100,23 @@ public class gentools {
         s = s.replaceAll("default", "");
         for (Parameter p : o.params) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object {0}: contains unmarked string {1}\n{2}", new Object[]{o.id, p.getName(), s});
             }
         }
         for (Inlet p : o.inlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object {0}: contains unmarked string {1}\n{2}", new Object[]{o.id, p.getName(), s});
             }
         }
         for (Outlet p : o.outlets) {
             if (s.contains(p.getName())) {
-                Logger.getLogger(axoloti.Patch.class.getName()).log(Level.SEVERE, "Object " + o.id + ": contains unmarked string " + p.getName() + "\n" + s);
+                Logger.getLogger(axoloti.patch.PatchModel.class.getName()).log(Level.SEVERE, "Object {0}: contains unmarked string {1}\n{2}", new Object[]{o.id, p.getName(), s});
             }
         }
 
     }
 
-    static void PostProcessObject(AxoObjectAbstract o, String catname, String fn) {
+    static void postProcessObject(AxoObjectAbstract o, String catname, String fn) {
         String relativeID = o.id;
         if (o instanceof AxoObject) {
             // remove labels when there's only a single parameter
@@ -129,7 +128,7 @@ public class gentools {
                 oo.displays.get(0).noLabel = true;
             }
             if (oo.depends == null) {
-                oo.depends = new HashSet<String>();
+                oo.depends = new LinkedList<>();
             }
             String c = oo.sSRateCode + oo.sKRateCode + oo.sInitCode + oo.sLocalData;
             if (c.contains("f_open")) {
@@ -198,20 +197,20 @@ public class gentools {
              if (oo.sKRateCode!=null)
              CheckString(oo,oo.sKRateCode);
              if (oo.sSRateCode!=null)
-             CheckString(oo,oo.sSRateCode);            
+             CheckString(oo,oo.sSRateCode);
              */
         }
-        if (o.sAuthor == null) {
-            o.sAuthor = "Johannes Taelman";
+        if (o.getAuthor().isEmpty()) {
+            o.setAuthor("Johannes Taelman");
         }
-        if (o.sLicense == null) {
-            o.sLicense = "BSD";
+        if (o.getLicense().isEmpty()) {
+            o.setLicense("BSD");
         }
-        if (o.GetIncludes() == null) {
-            o.SetIncludes(null);
+        if (o.getIncludes() == null) {
+            o.setIncludes(null);
         }
-        if ((o.GetIncludes() != null) && o.GetIncludes().isEmpty()) {
-            o.SetIncludes(null);
+        if ((o.getIncludes() != null) && o.getIncludes().isEmpty()) {
+            o.setIncludes(null);
         }
         o.id = catname + "/" + relativeID; // uuid based on full name
 //        String upgradeSha = o.GenerateSHA();
@@ -222,54 +221,54 @@ public class gentools {
             AxoObject oo = (AxoObject) o;
             for (Parameter p : oo.params) {
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.name + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
             }
             for (AxoAttribute p : oo.attributes) {
                 if (oo.sInitCode != null) {
-                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sDisposeCode != null) {
-                    oo.sDisposeCode = oo.sDisposeCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sDisposeCode = oo.sDisposeCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sLocalData != null) {
-                    oo.sLocalData = oo.sLocalData.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sLocalData = oo.sLocalData.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sMidiCode != null) {
-                    oo.sMidiCode = oo.sMidiCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sMidiCode = oo.sMidiCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
             }
             for (Inlet p : oo.inlets) {
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
             }
             for (Outlet p : oo.outlets) {
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sSRateCode != null) {
-                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sSRateCode = oo.sSRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
             }
-            for (axoloti.displays.Display p : oo.displays) {
+            for (axoloti.object.display.Display p : oo.displays) {
                 if (oo.sInitCode != null) {
-                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sInitCode = oo.sInitCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
                 if (oo.sKRateCode != null) {
-                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.GetCName());
+                    oo.sKRateCode = oo.sKRateCode.replaceAll("%" + p.getName() + "%", p.getCName());
                 }
             }
             if (oo.sInitCode != null) {
@@ -309,11 +308,11 @@ public class gentools {
 //        }
     }
 
-    static public void WriteAxoObject(String path, AxoObjectAbstract o) {
+    static public void writeAxoObject(String path, AxoObjectAbstract o) {
         File f;
         String fn;
         if (!path.endsWith(".axo")) {
-            fn = ConvertToLegalFilename(o.id);
+            fn = convertToLegalFilename(o.id);
 
             int i = fn.lastIndexOf('.');
             if (i > 0) {
@@ -338,7 +337,7 @@ public class gentools {
             f = new File(path);
             fn = f.getName();
             String objPath = null;
-            for (String s : Preferences.LoadPreferences().getObjectSearchPath()) {
+            for (String s : Preferences.getPreferences().getObjectSearchPath()) {
                 if (path.startsWith(s)) {
                     objPath = path.substring(s.length() + 1);
                     break;
@@ -360,16 +359,16 @@ public class gentools {
                 objPath = objPath.replace('\\', '/');
                 //System.out.printf("1 path %s objPath %s\n", path, objPath);
                 path = objPath.substring(0, objPath.lastIndexOf('/'));
-                //fn = objPath.substring(0,fn.length()-4);                
-                System.out.printf("2 path %s objPath %s fn %s\n", path, objPath, fn);
+                //fn = objPath.substring(0,fn.length()-4);
+                System.out.printf("2 path %s objPath %s fn %s%n", path, objPath, fn);
                 o.id = o.id.substring(o.id.lastIndexOf('/') + 1);
             }
         }
         AxoObjectFile a = new AxoObjectFile();
-        a.objs = new ArrayList<AxoObjectAbstract>();
+        a.objs = new ArrayList<>();
         a.objs.add(o);
         for (AxoObjectAbstract oa : a.objs) {
-            PostProcessObject(oa, path, fn);
+            postProcessObject(oa, path, fn);
         }
         if (f.exists()) {
             ByteArrayOutputStream os = new ByteArrayOutputStream(2048);
@@ -380,8 +379,7 @@ public class gentools {
             }
 
             boolean identical = false;
-            try {
-                InputStream is1 = new FileInputStream(f);
+            try (InputStream is1 = new FileInputStream(f)) {
                 byte[] bo = os.toByteArray();
                 InputStream is2 = new ByteArrayInputStream(bo);
                 while (true) {
@@ -402,9 +400,9 @@ public class gentools {
                     }
                 }
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(gentools.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenTools.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(gentools.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenTools.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (!identical) {
                 // overwrite with new
@@ -429,14 +427,14 @@ public class gentools {
         }
     }
 
-    static public void WriteAxoObject(String path, AxoObjectAbstract o[]) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static public void writeAxoObject(String path, AxoObjectAbstract o[]) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         Collections.addAll(a, o);
-        WriteAxoObject(path, a);
+        GenTools.writeAxoObject(path, a);
     }
 
-    static void WriteAxoObject(String path, ArrayList<AxoObjectAbstract> o) {
-        String fn = ConvertToLegalFilename(o.get(0).id);
+    static void writeAxoObject(String path, ArrayList<AxoObjectAbstract> o) {
+        String fn = convertToLegalFilename(o.get(0).id);
         int i = fn.lastIndexOf('.');
         if (i > 0) {
             path = path + "." + fn.substring(0, i);
@@ -458,7 +456,7 @@ public class gentools {
             if (i > 0) {
                 oa.id = oa.id.substring(i + 1);
             }
-            PostProcessObject(oa, path, fn);
+            postProcessObject(oa, path, fn);
         }
 
         if (f.exists()) {
@@ -470,8 +468,7 @@ public class gentools {
             }
 
             boolean identical = false;
-            try {
-                InputStream is1 = new FileInputStream(f);
+            try (InputStream is1 = new FileInputStream(f)) {
                 byte[] bo = os.toByteArray();
                 InputStream is2 = new ByteArrayInputStream(bo);
                 while (true) {
@@ -492,9 +489,9 @@ public class gentools {
                     }
                 }
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(gentools.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenTools.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(gentools.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenTools.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (!identical) {
                 // overwrite with new
@@ -519,7 +516,7 @@ public class gentools {
         }
     }
 
-    static AxoObject CreateKRateBinaryOpI32Object(String name, String op) {
+    static AxoObject createKRateBinaryOpI32Object(String name, String op) {
         AxoObject o = new AxoObject(name, name + "s two k-rate signals");
         o.outlets.add(new OutletFrac32("result", "a " + op + " b"));
         o.inlets.add(new InletFrac32("a", "a"));
@@ -528,7 +525,7 @@ public class gentools {
         return o;
     }
 
-    static AxoObject CreateSRateBinaryOpI32Object(String name, String op) {
+    static AxoObject createSRateBinaryOpI32Object(String name, String op) {
         AxoObject o = new AxoObject(name, name + "s two s-rate signals");
         o.outlets.add(new OutletFrac32Buffer("result", "a " + op + " b"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));
@@ -537,7 +534,7 @@ public class gentools {
         return o;
     }
 
-    static AxoObject CreateSKBinaryOpI32Object(String name, String op) {
+    static AxoObject createSKBinaryOpI32Object(String name, String op) {
         AxoObject o = new AxoObject(name + "~", name + "s a s-rate and a k-rate signal, the k-rate signal is not smoothed or interpolated");
         o.outlets.add(new OutletFrac32Buffer("result", "a " + op + " b"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));
@@ -546,8 +543,8 @@ public class gentools {
         return o;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateKIFracTwoOpLogicOut(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createKIFracTwoOpLogicOut(String name, String description, String expr) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_i = new AxoObject(name, description);
         o_i.outlets.add(new OutletBool32("out", "out"));
         o_i.inlets.add(new InletInt32("in1", "in1"));
@@ -563,12 +560,12 @@ public class gentools {
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateKFracTwoOpLogicOut(String name, String description, String op_prefix, String op_midfix, String op_suffix) {
-        return CreateKIFracTwoOpLogicOut(name, description, "%out%= " + op_prefix + "%in1%" + op_midfix + "%in2% " + op_suffix + ";");
+    static ArrayList<AxoObjectAbstract> createKFracTwoOpLogicOut(String name, String description, String op_prefix, String op_midfix, String op_suffix) {
+        return createKIFracTwoOpLogicOut(name, description, "%out%= " + op_prefix + "%in1%" + op_midfix + "%in2% " + op_suffix + ";");
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKFracTwoOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createSKFracTwoOp(String name, String description, String expr) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in1", "in1"));
@@ -584,11 +581,11 @@ public class gentools {
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKFracTwoOp(String name, String description, String op_prefix, String op_midfix, String op_suffix) {
-        return CreateSKFracTwoOp(name, description, "%out%= " + op_prefix + "%in1%" + op_midfix + "%in2% " + op_suffix + ";");
+    static ArrayList<AxoObjectAbstract> createSKFracTwoOp(String name, String description, String op_prefix, String op_midfix, String op_suffix) {
+        return GenTools.createSKFracTwoOp(name, description, "%out%= " + op_prefix + "%in1%" + op_midfix + "%in2% " + op_suffix + ";");
     }
 
-    static AxoObjectAbstract CreateKFracTwoOp(String name, String description, String expr) {
+    static AxoObjectAbstract createKFracTwoOp(String name, String description, String expr) {
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in1", "in1"));
@@ -597,7 +594,7 @@ public class gentools {
         return o_k;
     }
 
-    static AxoObjectAbstract CreateSFracTwoOp(String name, String description, String expr) {
+    static AxoObjectAbstract createSFracTwoOp(String name, String description, String expr) {
         AxoObject o_s = new AxoObject(name, description);
         o_s.outlets.add(new OutletFrac32Buffer("out", "out"));
         o_s.inlets.add(new InletFrac32Buffer("in1", "in2"));
@@ -606,7 +603,7 @@ public class gentools {
         return o_s;
     }
 
-    static AxoObjectAbstract CreateIFracTwoOp(String name, String description, String expr) {
+    static AxoObjectAbstract createIFracTwoOp(String name, String description, String expr) {
         AxoObject o_i = new AxoObject(name, description);
         o_i.outlets.add(new OutletInt32("out", "out"));
         o_i.inlets.add(new InletInt32("in1", "in1"));
@@ -615,20 +612,20 @@ public class gentools {
         return o_i;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKIFracTwoOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
-        a.add(CreateKFracTwoOp(name, description, expr));
-        a.add(CreateSFracTwoOp(name, description, expr));
-        a.add(CreateIFracTwoOp(name, description, expr));
+    static ArrayList<AxoObjectAbstract> createSKIFracTwoOp(String name, String description, String expr) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
+        a.add(createKFracTwoOp(name, description, expr));
+        a.add(createSFracTwoOp(name, description, expr));
+        a.add(createIFracTwoOp(name, description, expr));
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKIFracTwoOp(String name, String description, String op_prefix, String op_midfix, String op_suffix) {
-        return CreateSKIFracTwoOp(name, description, "%out%= " + op_prefix + "%in1%" + op_midfix + "%in2% " + op_suffix + ";");
+    static ArrayList<AxoObjectAbstract> createSKIFracTwoOp(String name, String description, String op_prefix, String op_midfix, String op_suffix) {
+        return GenTools.createSKIFracTwoOp(name, description, "%out%= " + op_prefix + "%in1%" + op_midfix + "%in2% " + op_suffix + ";");
     }
 
-    static ArrayList<AxoObjectAbstract> CreateIKFracOneOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createIKFracOneOp(String name, String description, String expr) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in", "in"));
@@ -642,8 +639,8 @@ public class gentools {
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKFracOneOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createSKFracOneOp(String name, String description, String expr) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in", "in"));
@@ -657,8 +654,8 @@ public class gentools {
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKIFracOneOp(String name, String description, String expr) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createSKIFracOneOp(String name, String description, String expr) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.outlets.add(new OutletFrac32("out", "out"));
         o_k.inlets.add(new InletFrac32("in", "in"));
@@ -677,16 +674,16 @@ public class gentools {
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKFracOneOp(String name, String description, String op_prefix, String op_suffix) {
-        return CreateSKFracOneOp(name, description, "%out%= " + op_prefix + "%in%" + op_suffix + ";");
+    static ArrayList<AxoObjectAbstract> createSKFracOneOp(String name, String description, String op_prefix, String op_suffix) {
+        return GenTools.createSKFracOneOp(name, description, "%out%= " + op_prefix + "%in%" + op_suffix + ";");
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKIFracOneOp(String name, String description, String op_prefix, String op_suffix) {
-        return CreateSKIFracOneOp(name, description, "%out%= " + op_prefix + "%in%" + op_suffix + ";");
+    static ArrayList<AxoObjectAbstract> createSKIFracOneOp(String name, String description, String op_prefix, String op_suffix) {
+        return createSKIFracOneOp(name, description, "%out%= " + op_prefix + "%in%" + op_suffix + ";");
     }
 
-    static ArrayList<AxoObjectAbstract> CreateKFracOneOpFracCLogicOut(String name, String description, String op_prefix, String op_suffix) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createKFracOneOpFracCLogicOut(String name, String description, String op_prefix, String op_suffix) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.params.add(new ParameterFrac32UMap("c"));
         o_k.outlets.add(new OutletBool32("out", "out"));
@@ -696,8 +693,8 @@ public class gentools {
         return a;
     }
 
-    static ArrayList<AxoObjectAbstract> CreateSKFracOneOpFracC(String name, String description, String op_prefix, String op_suffix) {
-        ArrayList<AxoObjectAbstract> a = new ArrayList<AxoObjectAbstract>();
+    static ArrayList<AxoObjectAbstract> createSKFracOneOpFracC(String name, String description, String op_prefix, String op_suffix) {
+        ArrayList<AxoObjectAbstract> a = new ArrayList<>();
         AxoObject o_k = new AxoObject(name, description);
         o_k.params.add(new ParameterFrac32UMap("c"));
         o_k.outlets.add(new OutletFrac32("out", "out"));
@@ -714,7 +711,7 @@ public class gentools {
     }
 
     static String getObjDir() {
-        AxolotiLibrary lib = MainFrame.prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
+        AxolotiLibrary lib = Preferences.getPreferences().getLibrary(AxolotiLibrary.FACTORY_ID);
         String objdir = "objects/";
         if (lib != null) {
             objdir = lib.getLocalLocation() + objdir;

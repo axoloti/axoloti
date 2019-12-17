@@ -18,9 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -35,7 +35,7 @@ public class SquareDB implements NativeToReal {
     }
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         if (v.getDouble() != 0) {
             return (String.format("%.1fdB", maxGain + 40 * Math.log10(Math.abs(v.getDouble() / 64.0))));
         } else {
@@ -44,7 +44,7 @@ public class SquareDB implements NativeToReal {
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<num>[\\d\\.\\-\\+]*)\\p{Space}*[dD][bB]?");
         Matcher matcher = pattern.matcher(s);
 

@@ -16,49 +16,22 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ch.h"
 #include "codec.h"
 
 #include "axoloti_defines.h"
-
-#if (BOARD_STM32F4DISCOVERY)
-#include "codec_CS43L22.h"
-#elif (BOARD_AXOLOTI_V05)
 #include "codec_ADAU1961.h"
-#elif (BOARD_AXOLOTI_V03)
-#include "codec_ADAU1961.h"
-#elif (BOARD_AXOLOTI_V01)
-#include "codec_WM8731.h"
-#endif
 
-int32_t buf[BUFSIZE*2] __attribute__ ((section (".sram2")));
-int32_t buf2[BUFSIZE*2] __attribute__ ((section (".sram2")));
-int32_t rbuf[BUFSIZE*2] __attribute__ ((section (".sram2")));
-int32_t rbuf2[BUFSIZE*2] __attribute__ ((section (".sram2")));
+int32_t buf[BUFSIZE*2] DMA_MEM_FW;
+int32_t buf2[BUFSIZE*2] DMA_MEM_FW;
+int32_t rbuf[BUFSIZE*2] DMA_MEM_FW;
+int32_t rbuf2[BUFSIZE*2] DMA_MEM_FW;
 
-void codec_init(void) {
-#if (BOARD_STM32F4DISCOVERY)
-  codec_CS43L22_i2s_init_48k();
-  codec_CS43L22_hw_init();
-  codec_CS43L22_pwrCtl(1);
-/*
-  while(1){
-//    chThdSleepMilliseconds(100);
-    codec_CS43L22_sendBeep();
-    chThdSleepMilliseconds(100);
-  }
-*/
-#elif ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-  codec_ADAU1961_i2s_init(SAMPLERATE);
-  codec_ADAU1961_hw_init(SAMPLERATE);
-#else
-#error "BOARD_ not defined"
-#endif
+void codec_init(bool isMaster) {
+  codec_ADAU1961_i2s_init(SAMPLERATE,isMaster);
 }
 
 void codecStop(void) {
-#if (BOARD_AXOLOTI_V03)
-  codec_ADAU1961_Stop();
-#endif
 }
 
 void codec_clearbuffer(void) {
@@ -69,10 +42,4 @@ void codec_clearbuffer(void) {
   }
 }
 
-#if (BOARD_STM32F4DISCOVERY)
-#include "codec_CS43L22.c"
-#elif (BOARD_AXOLOTI_V03)
-#include "codec_ADAU1961.c"
-#elif (BOARD_AXOLOTI_V05)
 #include "codec_ADAU1961_SAI.c"
-#endif

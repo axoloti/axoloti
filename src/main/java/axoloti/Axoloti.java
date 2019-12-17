@@ -17,15 +17,21 @@
  */
 package axoloti;
 
-import axoloti.object.AxoObjects;
-import axoloti.utils.AxolotiLibrary;
+import axoloti.job.IJobContext;
+import axoloti.job.JobContext;
+import axoloti.objectlibrary.AxoObjects;
+import axoloti.objectlibrary.AxolotiLibrary;
+import axoloti.preferences.Preferences;
+import axoloti.shell.TestEnv;
+import axoloti.swingui.MainFrame;
+import axoloti.target.TargetModel;
 import axoloti.utils.OSDetect;
-import axoloti.utils.Preferences;
 import java.awt.EventQueue;
 import java.awt.SplashScreen;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -37,11 +43,11 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Axoloti {
 
-    public final static String RUNTIME_DIR = "axoloti_runtime";
     public final static String HOME_DIR = "axoloti_home";
     public final static String RELEASE_DIR = "axoloti_release";
-    public final static String FIRMWARE_DIR = "axoloti_firmware";
-    
+    public final static String API_DIR = "axoloti_api";
+    public final static String ENV_DIR = "axoloti_env";
+
     /**
      * @param args the command line arguments
      */
@@ -51,7 +57,14 @@ public class Axoloti {
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").contains("OS X")) {
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                //System.setProperty("apple.laf.useScreenMenuBar", "true");
+                //
+                // TODO: OSX: useScreenMenuBar
+                // Unfortunately, dynamically populated menus
+                // (like the Window or recent files menu)
+                // do not work with useScreenMenuBar...
+                // They show up but no ActionListener is called.
+                // useScreenMenuBar is disabled until a fix is found
             }
         } catch (URISyntaxException e) {
             throw new Error(e);
@@ -72,7 +85,7 @@ public class Axoloti {
         handleCommandLine(args);
     }
 
-    static void BuildEnv(String var, String def) {
+    static void buildEnvironment(String var, String def) {
         String ev = System.getProperty(var);
         if (ev == null) {
             ev = System.getenv(var);
@@ -91,7 +104,7 @@ public class Axoloti {
         System.setProperty(var, ev);
     }
 
-    static boolean TestDir(String var) {
+    static boolean getTestDir(String var) {
         String ev = System.getProperty(var);
         File f = new File(ev);
         if (!f.exists()) {
@@ -106,33 +119,15 @@ public class Axoloti {
     }
 
     // cache this, as it linked to checks on the UI/menu
-    private static String cacheFWDir = null;
-    private static boolean cacheDeveloper = false;
+    private static Boolean cacheDeveloper = null;
 
     public static boolean isDeveloper() {
-        String fwEnv = System.getProperty(FIRMWARE_DIR);
-        if (cacheFWDir != null && fwEnv.equals(cacheFWDir)) {
+        if (cacheDeveloper != null) {
             return cacheDeveloper;
         }
-        cacheFWDir = fwEnv;
-        cacheDeveloper = false;
         String dirRelease = System.getProperty(RELEASE_DIR);
-        String fwRelease = dirRelease + File.separator + "firmware";
-        if (!fwRelease.equals(cacheFWDir)) {
-            File fR = new File(fwRelease);
-            File fE = new File(fwEnv);
-            try {
-                cacheDeveloper = !fR.getCanonicalPath().equals(fE.getCanonicalPath());
-            } catch (IOException ex) {
-                Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
-                cacheDeveloper = false;
-            }
-        } else {
-            File f = new File(dirRelease + File.separator + ".git");
-            if (f.exists()) {
-                cacheDeveloper = true;
-            }
-        }
+        File f = new File(dirRelease + File.separator + ".git");
+        cacheDeveloper = f.exists();
         return cacheDeveloper;
     }
 
@@ -158,14 +153,38 @@ public class Axoloti {
         return failSafeMode;
     }
 
-    private static void initProperties() throws URISyntaxException, IOException {
+    public static String getFirmwareFilename() {
+        return System.getProperty(Axoloti.RELEASE_DIR) + "/firmware/build/axoloti.bin";
+    }
+
+    public static String getHomeDir() {
+        return System.getProperty(axoloti.Axoloti.HOME_DIR);
+    }
+
+    public static String getBuildDir() {
+        return System.getProperty(axoloti.Axoloti.HOME_DIR) + "/build";
+    }
+
+    public static String getReleaseDir() {
+        return System.getProperty(axoloti.Axoloti.RELEASE_DIR);
+    }
+
+    public static String getAPIDir() {
+        return System.getProperty(axoloti.Axoloti.API_DIR);
+    }
+
+    public static String getEnvDir() {
+        return System.getProperty(axoloti.Axoloti.ENV_DIR);
+    }
+
+    public static void initProperties() throws URISyntaxException, IOException {
         String curDir = System.getProperty("user.dir");
         File jarFile = new File(Axoloti.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         String jarDir = jarFile.getParentFile().getCanonicalPath();
         String defaultHome = curDir;
         String defaultRuntime = curDir;
         String defaultRelease = curDir;
-        boolean versionedHome = false;
+        boolean versionedHome = true;
 
         File git = new File("." + File.separator + ".git");
         if (git.exists()) {
@@ -175,38 +194,39 @@ public class Axoloti {
             defaultRuntime = ".";
         } else {
             String docDir;
-            if (null != OSDetect.getOS()) 
+            if (null != OSDetect.getOS()) {
                 switch (OSDetect.getOS()) {
-                case WIN:
-                    // not sure which versions of windows this is valid for, good for 8!
-                    docDir = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator;
-                    defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
-                    break;
-                case MAC:
-                    docDir = System.getenv("HOME") + "/Documents/";
-                    defaultRuntime = "/Applications/axoloti_runtime";
-                    break;
-                case LINUX:
-                default:
-                    docDir = System.getenv("HOME") + "/";
-                    defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
-                    break;
+                    case WIN:
+                        // not sure which versions of windows this is valid for, good for 8!
+                        docDir = System.getenv("HOMEPATH") + File.separator + "Documents" + File.separator;
+                        defaultRuntime = System.getenv("ProgramFiles") + File.separator + "axoloti_runtime";
+                        break;
+                    case MAC:
+                        docDir = System.getenv("HOME") + "/Documents/";
+                        defaultRuntime = "/Applications/axoloti_runtime";
+                        break;
+                    case LINUX:
+                    default:
+                        docDir = System.getenv("HOME") + "/";
+                        defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+                        break;
+                }
             } else {
-                    docDir = System.getenv("HOME") + "/";
-                    defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
+                docDir = System.getenv("HOME") + "/";
+                defaultRuntime = System.getenv("HOME") + "/axoloti_runtime";
             }
-            
-            String ver = Version.AXOLOTI_SHORT_VERSION.replace(".", "_");
-            File versionHome= new File(docDir + "axoloti_"+ver);
-            if(versionHome.exists()) {
-                defaultHome = docDir + "axoloti_"+ver;
+
+            String verHomeDirname = "axoloti-" + Version.AXOLOTI_SHORT_VERSION;
+            File versionHome = new File(docDir + verHomeDirname);
+            if (versionHome.exists() | versionedHome) {
+                defaultHome = docDir + verHomeDirname;
                 versionedHome = true;
             } else {
                 defaultHome = docDir + "axoloti";
             }
         }
 
-        BuildEnv(HOME_DIR, defaultHome);
+        buildEnvironment(HOME_DIR, defaultHome);
         File homedir = new File(System.getProperty(HOME_DIR));
         if (!homedir.exists()) {
             homedir.mkdir();
@@ -216,40 +236,33 @@ public class Axoloti {
         if (!buildir.exists()) {
             buildir.mkdir();
         }
-        if (!TestDir(HOME_DIR)) {
+        if (!getTestDir(HOME_DIR)) {
             System.err.println("Home directory is invalid");
         }
         checkFailSafeModeActive(); // do this as as possible after home dir setup
 
-        BuildEnv(RELEASE_DIR, defaultRelease);
-        if (!TestDir(RELEASE_DIR)) {
+        buildEnvironment(RELEASE_DIR, defaultRelease);
+        if (!getTestDir(RELEASE_DIR)) {
             System.err.println("Release directory is invalid");
         }
-        BuildEnv(RUNTIME_DIR, defaultRuntime);
-        if (!TestDir(RUNTIME_DIR)) {
-            System.err.println("Runtime directory is invalid");
+        buildEnvironment(API_DIR, System.getProperty(RELEASE_DIR) + File.separator + "api");
+        if (!getTestDir(API_DIR)) {
+            System.err.println(API_DIR + ": directory is invalid");
+        }
+        buildEnvironment(ENV_DIR, System.getProperty(RELEASE_DIR) + File.separator + "env");
+        if (!getTestDir(ENV_DIR)) {
+            System.err.println(ENV_DIR + ": ENV directory is invalid");
         }
 
-        BuildEnv(FIRMWARE_DIR, System.getProperty(RELEASE_DIR) + File.separator + "firmware");
-        if (!TestDir(FIRMWARE_DIR)) {
-            System.err.println("Firmware directory is invalid");
-        }
-
-        Preferences prefs = Preferences.LoadPreferences();
+        Preferences prefs = Preferences.getPreferences();
         if (versionedHome) {
-            String fwDir = System.getProperty(axoloti.Axoloti.FIRMWARE_DIR);
-            if(! fwDir.startsWith(System.getProperty(RELEASE_DIR)) && !fwDir.startsWith(System.getProperty(HOME_DIR))) {
-                System.out.println("Using versioned home, will reset firmware");
-                prefs.SetFirmwareDir(System.getProperty(RELEASE_DIR) + File.separator + "firmware");
-            }
-
             AxolotiLibrary lib = prefs.getLibrary(AxolotiLibrary.FACTORY_ID);
-            if(lib != null) {
+            if (lib != null) {
                 File locdir = new File(lib.getLocalLocation());
-                File verdir = new File(System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory"+File.separator);
-                if(! locdir.getCanonicalPath().equals(verdir.getCanonicalPath())) {
+                File verdir = new File(System.getProperty(axoloti.Axoloti.HOME_DIR) + File.separator + "axoloti-factory" + File.separator);
+                if (!locdir.getCanonicalPath().equals(verdir.getCanonicalPath())) {
                     System.out.println("Using versioned home, will reset libraries");
-                    prefs.ResetLibraries(true);
+                    prefs.resetLibraries(true);
                 }
             }
         }
@@ -258,9 +271,7 @@ public class Axoloti {
                 + "Current = " + curDir + "\n"
                 + "Jar = " + jarDir + "\n"
                 + "Release = " + System.getProperty(RELEASE_DIR) + "\n"
-                + "Runtime = " + System.getProperty(RUNTIME_DIR) + "\n"
-                + "Firmware = " + System.getProperty(FIRMWARE_DIR) + "\n"
-                + "AxolotiHome = " + System.getProperty(HOME_DIR)
+                + "AxolotiHome = " + System.getProperty(HOME_DIR) + "\n"
         );
     }
 
@@ -271,11 +282,12 @@ public class Axoloti {
         boolean cmdRunObjectTest = false;
         boolean cmdRunFileTest = false;
         boolean cmdRunUpgrade = false;
+        boolean stopOnFirstFail = false;
         String cmdFile = null;
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.equalsIgnoreCase("-exitOnFirstFail")) {
-                MainFrame.stopOnFirstFail = true;
+                stopOnFirstFail = true;
             }
 
             // exclusive options
@@ -318,31 +330,40 @@ public class Axoloti {
 
         if (cmdLineOnly) {
             try {
-                MainFrame frame = new MainFrame(args);
+                MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
+                Tests tests = new Tests();
                 AxoObjects objs = new AxoObjects();
-                objs.LoadAxoObjects();
+                IJobContext progress = new JobContext();
+                AxoObjects.loadAxoObjects(progress);
                 if (SplashScreen.getSplashScreen() != null) {
                     SplashScreen.getSplashScreen().close();
-                }
-                try {
-                    objs.LoaderThread.join();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Axoloti.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
                 System.out.println("Axoloti cmd line initialised");
                 int exitCode = 0;
+                List<String> failedPatches = null;
                 if (cmdRunAllTest) {
-                    exitCode = frame.runAllTests() ? 0 : -1;
+                    failedPatches = tests.runAllTests(stopOnFirstFail);
+                    exitCode = failedPatches.isEmpty() ? 0 : -1;
                 } else if (cmdRunPatchTest) {
-                    exitCode = frame.runPatchTests() ? 0 : -1;
+                    failedPatches = tests.runPatchTests(stopOnFirstFail);
+                    exitCode = failedPatches.isEmpty() ? 0 : -1;
                 } else if (cmdRunObjectTest) {
-                    exitCode = frame.runObjectTests() ? 0 : -1;
+                    failedPatches = tests.runObjectTests(stopOnFirstFail);
+                    exitCode = failedPatches.isEmpty() ? 0 : -1;
                 } else if (cmdRunFileTest) {
-                    exitCode = frame.runFileTest(cmdFile) ? 0 : -1;
+                    exitCode = tests.runFileTest(cmdFile) ? 0 : -1;
                 } else if (cmdRunUpgrade) {
-                    exitCode = frame.runFileUpgrade(cmdFile) ? 0 : -1;
+                    exitCode = tests.runFileUpgrade(cmdFile) ? 0 : -1;
                 }
+
+                if (failedPatches != null && !failedPatches.isEmpty()) {
+                    System.out.println("List of failing patches:");
+                    for (String patchname : failedPatches) {
+                        System.out.println(patchname);
+                    }
+                }
+
                 System.out.println("Axoloti cmd line complete");
                 System.exit(exitCode);
             } catch (Exception e) {
@@ -350,15 +371,13 @@ public class Axoloti {
                 System.exit(-2);
             }
         } else {
-            EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        MainFrame frame = new MainFrame(args);
-                        frame.setVisible(true);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            EventQueue.invokeLater(() -> {
+                try {
+                    MainFrame frame = new MainFrame(args, TargetModel.getTargetModel());
+                    frame.setVisible(true);
+                    TestEnv.test_env();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }

@@ -17,7 +17,7 @@
  */
 package axoloti.datatypes;
 
-import axoloti.Theme;
+import axoloti.preferences.Theme;
 import java.awt.Color;
 
 /**
@@ -29,7 +29,7 @@ public class Frac32buffer extends DataTypeBuffer {
     public static final Frac32buffer d = new Frac32buffer();
 
     @Override
-    public boolean IsConvertableToType(DataType dest) {
+    public boolean isConvertableToType(DataType dest) {
         if (equals(dest)) {
             return true;
         }
@@ -46,7 +46,7 @@ public class Frac32buffer extends DataTypeBuffer {
     }
 
     @Override
-    public String GenerateConversionToType(DataType dest, String in) {
+    public String generateConversionToType(DataType dest, String in) {
         if (equals(dest)) {
             return in;
         }
@@ -68,7 +68,7 @@ public class Frac32buffer extends DataTypeBuffer {
     }
 
     @Override
-    public Color GetColor() {
+    public Color getColor() {
         return Theme.getCurrentTheme().Cable_Frac32Buffer;
     }
 
@@ -78,18 +78,18 @@ public class Frac32buffer extends DataTypeBuffer {
     }
 
     @Override
-    public String GenerateCopyCode(String dest, String source) {
+    public String generateCopyCode(String dest, String source) {
         return "   for(i=0;i<BUFSIZE;i++)\n"
                 + "      " + dest + "[i]=" + source + "[i];\n";
     }
 
     @Override
-    public boolean HasDefaultValue() {
+    public boolean hasDefaultValue() {
         return false;
     }
 
     @Override
-    public String GenerateSetDefaultValueCode() {
+    public String generateSetDefaultValueCode() {
         return "zerobuffer";
     }
 
@@ -105,7 +105,7 @@ public class Frac32buffer extends DataTypeBuffer {
     }
 
     @Override
-    public String UnconnectedSink() {
+    public String unconnectedSink() {
         return "UNCONNECTED_OUTPUT_BUFFER";
     }
 }

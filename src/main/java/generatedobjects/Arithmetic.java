@@ -17,162 +17,162 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferPos;
-import axoloti.inlets.InletFrac32Pos;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.ParameterFrac32UMapGain;
-import axoloti.parameters.ParameterFrac32UMapGain16;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferPos;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.ParameterFrac32UMapGain;
+import axoloti.object.parameter.ParameterFrac32UMapGain16;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Arithmetic extends gentools {
+class Arithmetic extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "math";
-        WriteAxoObject(catName, CreateSKIFracOneOp("inv", "negate, negative, y = -x", "-", ""));
-        WriteAxoObject(catName, CreateSKIFracOneOp("half", "divide by two", "", ">>1"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 2", "divide by 2", "", " >>1"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 4", "divide by 4", "", ">>2"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 8", "divide by 8", "", ">>3"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 16", "divide by 16", "", ">>4"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 32", "divide by 32", "", ">>5"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 64", "divide by 64", "", ">>6"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 128", "divide by 128", "", ">>7"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("div 256", "divide by 256", "", ">>8"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 2", "saturated multiply by 2", "%out%= __SSAT(%in%,27)<<1;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 4", "saturated multiply by 4", "%out%= __SSAT(%in%,26)<<2;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 8", "saturated multiply by 8", "%out%= __SSAT(%in%,25)<<3;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 16", "saturated multiply by 16", "%out%= __SSAT(%in%,24)<<4;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 32", "saturated multiply by 32", "%out%= __SSAT(%in%,23)<<5;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 64", "saturated multiply by 64", "%out%= __SSAT(%in%,22)<<6;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 128", "saturated multiply by 128", "%out%= __SSAT(%in%,21)<<7;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("muls 256", "saturated multiply by 256", "%out%= __SSAT(%in%,20)<<8;"));
+        writeAxoObject(catName, createSKIFracOneOp("inv", "negate, negative, y = -x", "-", ""));
+        writeAxoObject(catName, createSKIFracOneOp("half", "divide by two", "", ">>1"));
+        writeAxoObject(catName, createSKIFracOneOp("div 2", "divide by 2", "", " >>1"));
+        writeAxoObject(catName, createSKIFracOneOp("div 4", "divide by 4", "", ">>2"));
+        writeAxoObject(catName, createSKIFracOneOp("div 8", "divide by 8", "", ">>3"));
+        writeAxoObject(catName, createSKIFracOneOp("div 16", "divide by 16", "", ">>4"));
+        writeAxoObject(catName, createSKIFracOneOp("div 32", "divide by 32", "", ">>5"));
+        writeAxoObject(catName, createSKIFracOneOp("div 64", "divide by 64", "", ">>6"));
+        writeAxoObject(catName, createSKIFracOneOp("div 128", "divide by 128", "", ">>7"));
+        writeAxoObject(catName, createSKIFracOneOp("div 256", "divide by 256", "", ">>8"));
+        writeAxoObject(catName, createSKFracOneOp("muls 2", "saturated multiply by 2", "%out%= __SSAT(%in%,27)<<1;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 4", "saturated multiply by 4", "%out%= __SSAT(%in%,26)<<2;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 8", "saturated multiply by 8", "%out%= __SSAT(%in%,25)<<3;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 16", "saturated multiply by 16", "%out%= __SSAT(%in%,24)<<4;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 32", "saturated multiply by 32", "%out%= __SSAT(%in%,23)<<5;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 64", "saturated multiply by 64", "%out%= __SSAT(%in%,22)<<6;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 128", "saturated multiply by 128", "%out%= __SSAT(%in%,21)<<7;"));
+        writeAxoObject(catName, createSKFracOneOp("muls 256", "saturated multiply by 256", "%out%= __SSAT(%in%,20)<<8;"));
 
-        WriteAxoObject(catName, CreateSKIFracOneOp("double", "multiply by two", "", "<<1"));
-        WriteAxoObject(catName, CreateSKIFracOneOp("abs", "absolute value", "%out%= %in%>0?%in%:-%in%;"));
+        writeAxoObject(catName, createSKIFracOneOp("double", "multiply by two", "", "<<1"));
+        writeAxoObject(catName, createSKIFracOneOp("abs", "absolute value", "%out%= %in%>0?%in%:-%in%;"));
 
-        WriteAxoObject(catName, CreateSKFracOneOp("sat", "saturate to normal range", "%out%= __SSAT(%in%,28);"));
-        WriteAxoObject(catName, CreateSKFracOneOp("satp", "saturate to normal positive range", "%out%= __USAT(%in%,27);"));
+        writeAxoObject(catName, createSKFracOneOp("sat", "saturate to normal range", "%out%= __SSAT(%in%,28);"));
+        writeAxoObject(catName, createSKFracOneOp("satp", "saturate to normal positive range", "%out%= __USAT(%in%,27);"));
 
-        WriteAxoObject(catName, CreateSKIFracTwoOp("+", "add", "", "+", ""));
-        WriteAxoObject(catName, CreateSKIFracTwoOp("-", "subtract", "", "-", ""));
-        WriteAxoObject(catName, CreateKFracTwoOpLogicOut("<", "less than", "", "<", ""));
-        WriteAxoObject(catName, CreateKFracTwoOpLogicOut(">", "greater than", "", ">", ""));
-        WriteAxoObject(catName, CreateKFracTwoOpLogicOut("==", "equal", "", "==", ""));
+        writeAxoObject(catName, createSKIFracTwoOp("+", "add", "", "+", ""));
+        writeAxoObject(catName, createSKIFracTwoOp("-", "subtract", "", "-", ""));
+        writeAxoObject(catName, createKFracTwoOpLogicOut("<", "less than", "", "<", ""));
+        writeAxoObject(catName, createKFracTwoOpLogicOut(">", "greater than", "", ">", ""));
+        writeAxoObject(catName, createKFracTwoOpLogicOut("==", "equal", "", "==", ""));
 
-        WriteAxoObject(catName, CreateSKFracOneOpFracC("+c", "add constant", "", "+ %c%"));
-        WriteAxoObject(catName, CreateSKFracOneOpFracC("-c", "subtract constant", "", "- %c%"));
-        WriteAxoObject(catName, CreateKFracOneOpFracCLogicOut("<c", "less than constant", "", "< %c%"));
-        WriteAxoObject(catName, CreateKFracOneOpFracCLogicOut(">c", "greater than constant", "", "> %c%"));
+        writeAxoObject(catName, createSKFracOneOpFracC("+c", "add constant", "", "+ %c%"));
+        writeAxoObject(catName, createSKFracOneOpFracC("-c", "subtract constant", "", "- %c%"));
+        writeAxoObject(catName, createKFracOneOpFracCLogicOut("<c", "less than constant", "", "< %c%"));
+        writeAxoObject(catName, createKFracOneOpFracCLogicOut(">c", "greater than constant", "", "> %c%"));
 
-        WriteAxoObject(catName, CreateSKIFracTwoOp("min", "minimum", "%out%= (%in1%<%in2%)?%in1%:%in2%;"));
-        WriteAxoObject(catName, CreateSKIFracTwoOp("max", "maximum", "%out%= (%in1%>%in2%)?%in1%:%in2%;"));
+        writeAxoObject(catName, createSKIFracTwoOp("min", "minimum", "%out%= (%in1%<%in2%)?%in1%:%in2%;"));
+        writeAxoObject(catName, createSKIFracTwoOp("max", "maximum", "%out%= (%in1%>%in2%)?%in1%:%in2%;"));
 
-        WriteAxoObject(catName, CreateSKFracOneOp("round", "round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0", "%out%= (%in% + 0x100000)&0xFFE00000;"));
-        WriteAxoObject(catName, CreateSKFracOneOp("sqrt", "square root (of absolute value), y = 8*sqrt(x)",
+        writeAxoObject(catName, createSKFracOneOp("round", "round to whole unit with positive bias: 0.49 becomes 0, 0.51 becomes 1, -0.49 becomes 0", "%out%= (%in% + 0x100000)&0xFFE00000;"));
+        writeAxoObject(catName, createSKFracOneOp("sqrt", "square root (of absolute value), y = 8*sqrt(x)",
                 "int32_t ai = %in%>0?%in%:-%in%;\n"
                 + "float aif = ai;\n"
                 + "aif *= (1<<27);\n"
                 + "aif = _VSQRTF(aif);\n"
                 + "%out%= (int)aif;\n"));
 
-        WriteAxoObject(catName, CreateSKFracOneOp("reciprocal", "reciprocal, y = 64/x",
+        writeAxoObject(catName, createSKFracOneOp("reciprocal", "reciprocal, y = 64/x",
                 "if (%in%) {\n"
                 + "      float inf = %in%;\n"
                 + "      %out% = (int)(281474976710656.f/inf);\n"
                 + "    } else\n"
                 + "        %out% = 1<<27;\n"));
 
-        WriteAxoObject(catName, CreateC64());
-        WriteAxoObject(catName, CreateC32());
-        WriteAxoObject(catName, CreateC16());
-        WriteAxoObject(catName, CreateC8());
-        WriteAxoObject(catName, CreateC4());
-        WriteAxoObject(catName, CreateC2());
-        WriteAxoObject(catName, CreateC1());
+        writeAxoObject(catName, createC64());
+        writeAxoObject(catName, createC32());
+        writeAxoObject(catName, createC16());
+        writeAxoObject(catName, createC8());
+        writeAxoObject(catName, createC4());
+        writeAxoObject(catName, createC2());
+        writeAxoObject(catName, createC1());
 
-        WriteAxoObject(catName, CreateIFracTwoOp("bitand", "bitwise binary and operator", "%out% = %in1%&%in2%;"));
-        WriteAxoObject(catName, CreateIFracTwoOp("bitor", "bitwise binary and operator", "%out% = %in1%|%in2%;"));
-        WriteAxoObject(catName, CreateIFracTwoOp("bitxor", "bitwise binary and operator", "%out% = %in1%^%in2%;"));
+        writeAxoObject(catName, createIFracTwoOp("bitand", "bitwise binary and operator", "%out% = %in1%&%in2%;"));
+        writeAxoObject(catName, createIFracTwoOp("bitor", "bitwise binary and operator", "%out% = %in1%|%in2%;"));
+        writeAxoObject(catName, createIFracTwoOp("bitxor", "bitwise binary and operator", "%out% = %in1%^%in2%;"));
 
-        WriteAxoObject(catName, CreateIDivideRemainder());
+        writeAxoObject(catName, createIDivideRemainder());
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKAmp());
-            c.add(CreateSAmp());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKAmp());
+            c.add(createSAmp());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKGain());
-            c.add(CreateSGain());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKGain());
+            c.add(createSGain());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKRateLeftShift());
-            c.add(CreateSRateLeftShift());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKRateLeftShift());
+            c.add(createSRateLeftShift());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKRateRightShift());
-            c.add(CreateSRateRightShift());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKRateRightShift());
+            c.add(createSRateRightShift());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(Create_Plus1());
-            c.add(Create_Plus1i());
-            c.add(Create_Plus1Tilde());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(create_Plus1());
+            c.add(create_Plus1i());
+            c.add(create_Plus1Tilde());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(Create_Minus1());
-            c.add(Create_Minus1i());
-            c.add(Create_Minus1Tilde());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(create_Minus1());
+            c.add(create_Minus1i());
+            c.add(create_Minus1Tilde());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateStarF());
-            c.add(CreateStarFS());
-            c.add(CreateStarSF());
-            c.add(CreateStarFI());
-            c.add(CreateStarIF());
-            c.add(CreateStarI());
-            c.add(CreateStarS());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createStarF());
+            c.add(createStarFS());
+            c.add(createStarSF());
+            c.add(createStarFI());
+            c.add(createStarIF());
+            c.add(createStarI());
+            c.add(createStarS());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKLog());
-            c.add(CreateSLog());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKLog());
+            c.add(createSLog());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKExp());
-            c.add(CreateSExp());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKExp());
+            c.add(createSExp());
+            writeAxoObject(catName, c);
         }
     }
 
-    static AxoObject CreateSRateLeftShift() {
+    static AxoObject createSRateLeftShift() {
         AxoObject o = new AxoObject("<<", "Left shift. Doubles the value \"shift\" times, with overflow. If overflow is not desireable, use \"muls\".");
         o.outlets.add(new OutletFrac32Buffer("result", "a amplified with i 6dB steps"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));
@@ -181,7 +181,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateSRateRightShift() {
+    static AxoObject createSRateRightShift() {
         AxoObject o = new AxoObject(">>", "attenuates a s-rate signal with \"shift\" times 6dB");
         o.outlets.add(new OutletFrac32Buffer("result", "a attenuated with i 6dB steps"));
         o.inlets.add(new InletFrac32Buffer("a", "a"));
@@ -190,7 +190,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateKRateRightShift() {
+    static AxoObject createKRateRightShift() {
         AxoObject o = new AxoObject(">>", "attenuates a k-rate signal with \"shift\" times 6dB");
         o.outlets.add(new OutletFrac32("result", "a attenuated in 6dB steps"));
         o.inlets.add(new InletFrac32("a", "a"));
@@ -199,7 +199,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateKRateLeftShift() {
+    static AxoObject createKRateLeftShift() {
         AxoObject o = new AxoObject("<<", "Left shift. Doubles the value \"shift\" times, with overflow. If overflow is not desireable, use \"muls\".");
         o.outlets.add(new OutletFrac32("result", "a amplified in 6dB steps"));
         o.inlets.add(new InletFrac32("a", "a"));
@@ -208,7 +208,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject Create_Plus1() {
+    static AxoObject create_Plus1() {
         AxoObject o = new AxoObject("+1", "adds one unit");
         o.inlets.add(new InletFrac32("a", "a"));
         o.outlets.add(new OutletFrac32("result", "a+1"));
@@ -216,7 +216,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject Create_Plus1i() {
+    static AxoObject create_Plus1i() {
         AxoObject o = new AxoObject("+1", "adds one unit");
         o.inlets.add(new InletInt32("a", "a"));
         o.outlets.add(new OutletInt32("result", "a+1"));
@@ -224,7 +224,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject Create_Plus1Tilde() {
+    static AxoObject create_Plus1Tilde() {
         AxoObject o = new AxoObject("+1", "adds one unit");
         o.inlets.add(new InletFrac32Buffer("a", "a"));
         o.outlets.add(new OutletFrac32Buffer("result", "a+1"));
@@ -232,7 +232,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject Create_Minus1() {
+    static AxoObject create_Minus1() {
         AxoObject o = new AxoObject("-1", "subtracts one unit");
         o.inlets.add(new InletFrac32("a", "a"));
         o.outlets.add(new OutletFrac32("result", "a-1"));
@@ -240,7 +240,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject Create_Minus1i() {
+    static AxoObject create_Minus1i() {
         AxoObject o = new AxoObject("-1", "subtracts one unit");
         o.inlets.add(new InletInt32("a", "a"));
         o.outlets.add(new OutletInt32("result", "a-1"));
@@ -248,7 +248,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject Create_Minus1Tilde() {
+    static AxoObject create_Minus1Tilde() {
         AxoObject o = new AxoObject("-1", "subtracts one unit");
         o.inlets.add(new InletFrac32Buffer("a", "a"));
         o.outlets.add(new OutletFrac32Buffer("result", "a-1"));
@@ -256,7 +256,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateKAmp() {
+    static AxoObject createKAmp() {
         AxoObject o = new AxoObject("*c", "Multiply (attenuate) with a constant value");
         o.outlets.add(new OutletFrac32("out", "output"));
         o.inlets.add(new InletFrac32("in", "input"));
@@ -265,7 +265,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateSAmp() {
+    static AxoObject createSAmp() {
         AxoObject o = new AxoObject("*c", "Multiply (attenuate) with a constant value");
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -274,7 +274,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateKGain() {
+    static AxoObject createKGain() {
         AxoObject o = new AxoObject("gain", "amplify up to 16 times (saturated)");
         o.outlets.add(new OutletFrac32("out", "output"));
         o.inlets.add(new InletFrac32("in", "input"));
@@ -283,7 +283,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateSGain() {
+    static AxoObject createSGain() {
         AxoObject o = new AxoObject("gain", "amplify up to 16 times (saturated)");
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
         o.inlets.add(new InletFrac32Buffer("in", "input"));
@@ -292,7 +292,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarS() {
+    static AxoObject createStarS() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletFrac32Buffer("a", "input"));
         o.inlets.add(new InletFrac32Buffer("b", "input"));
@@ -301,7 +301,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarSF() {
+    static AxoObject createStarSF() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletFrac32Buffer("a", "input"));
         o.inlets.add(new InletFrac32("b", "input"));
@@ -310,7 +310,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarFS() {
+    static AxoObject createStarFS() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletFrac32("a", "input"));
         o.inlets.add(new InletFrac32Buffer("b", "input"));
@@ -319,7 +319,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarF() {
+    static AxoObject createStarF() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletFrac32("a", "input"));
         o.inlets.add(new InletFrac32("b", "input"));
@@ -328,7 +328,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarFI() {
+    static AxoObject createStarFI() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletFrac32("a", "input"));
         o.inlets.add(new InletInt32("b", "input"));
@@ -337,7 +337,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarIF() {
+    static AxoObject createStarIF() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletInt32("a", "input"));
         o.inlets.add(new InletFrac32("b", "input"));
@@ -346,7 +346,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateStarI() {
+    static AxoObject createStarI() {
         AxoObject o = new AxoObject("*", "multiply");
         o.inlets.add(new InletInt32("a", "input"));
         o.inlets.add(new InletInt32("b", "input"));
@@ -355,56 +355,56 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateC64() {
+    static AxoObject createC64() {
         AxoObject o = new AxoObject("c 64", "constant value: 64");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 64;\n";
         return o;
     }
 
-    static AxoObject CreateC32() {
+    static AxoObject createC32() {
         AxoObject o = new AxoObject("c 32", "constant value: 32");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 32;\n";
         return o;
     }
 
-    static AxoObject CreateC16() {
+    static AxoObject createC16() {
         AxoObject o = new AxoObject("c 16", "constant value: 16");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 16;\n";
         return o;
     }
 
-    static AxoObject CreateC8() {
+    static AxoObject createC8() {
         AxoObject o = new AxoObject("c 8", "constant value: 8");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 8;\n";
         return o;
     }
 
-    static AxoObject CreateC4() {
+    static AxoObject createC4() {
         AxoObject o = new AxoObject("c 4", "constant value: 4");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 4;\n";
         return o;
     }
 
-    static AxoObject CreateC2() {
+    static AxoObject createC2() {
         AxoObject o = new AxoObject("c 2", "constant value: 2");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 2;\n";
         return o;
     }
 
-    static AxoObject CreateC1() {
+    static AxoObject createC1() {
         AxoObject o = new AxoObject("c 1", "constant value: 1");
         o.outlets.add(new OutletInt32("o", "output"));
         o.sKRateCode = "%o%= 1;\n";
         return o;
     }
 
-    static AxoObject CreateIDivideRemainder() {
+    static AxoObject createIDivideRemainder() {
         AxoObject o = new AxoObject("divremc", "divide integer with constant, also outputs remainder (modulo)");
         o.outlets.add(new OutletInt32("div", "a divided by denominator"));
         o.outlets.add(new OutletInt32("rem", "remainder of division by denominator"));
@@ -420,7 +420,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateKLog() {
+    static AxoObject createKLog() {
         AxoObject o = new AxoObject("log", "logarithm, y=16+8*log2(x)");
         o.inlets.add(new InletFrac32Pos("a", "input"));
         o.outlets.add(new OutletFrac32("result", "output"));
@@ -441,7 +441,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateSLog() {
+    static AxoObject createSLog() {
         AxoObject o = new AxoObject("log", "logarithm, y=16+8*log2(x)");
         o.inlets.add(new InletFrac32BufferPos("a", "input"));
         o.outlets.add(new OutletFrac32Buffer("result", "output"));
@@ -453,7 +453,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateKExp() {
+    static AxoObject createKExp() {
         AxoObject o = new AxoObject("exp", "exponent function, y=pow(2,(x/8)-2)");
         o.inlets.add(new InletFrac32Pos("a", "input"));
         o.outlets.add(new OutletFrac32("result", "output"));
@@ -465,7 +465,7 @@ public class Arithmetic extends gentools {
         return o;
     }
 
-    static AxoObject CreateSExp() {
+    static AxoObject createSExp() {
         AxoObject o = new AxoObject("exp", "exponent function, y=pow(2,(x/8)-2)");
         o.inlets.add(new InletFrac32BufferPos("a", "input"));
         o.outlets.add(new OutletFrac32Buffer("result", "output"));

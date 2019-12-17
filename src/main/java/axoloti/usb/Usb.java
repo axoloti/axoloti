@@ -20,7 +20,14 @@ package axoloti.usb;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.usb4java.*;
+import org.usb4java.Context;
+import org.usb4java.Device;
+import org.usb4java.DeviceDescriptor;
+import org.usb4java.DeviceHandle;
+import org.usb4java.DeviceList;
+import org.usb4java.LibUsb;
+import org.usb4java.LibUsbException;
+
 
 /**
  *
@@ -36,10 +43,10 @@ public class Usb {
     static final public short PID_AXOLOTI = (short) 0x0442;
     static final public short PID_AXOLOTI_SDCARD = (short) 0x0443;
 
-    public Usb() {
+    private Usb() {
     }
 
-    static Context context;
+    private static Context context = null;
 
     public static void initialize() {
         if (context == null) {
@@ -51,14 +58,15 @@ public class Usb {
         }
     }
 
-    public static String DeviceToPath(Device device) {
+    public static String deviceToPath(Device device) {
         ByteBuffer path = ByteBuffer.allocateDirect(10);
         int n = LibUsb.getPortNumbers(device, path);
-        String paths = "";
+        StringBuilder paths = new StringBuilder();
         for (int i = 0; i < n; i++) {
-            paths += ":" + path.get(i);
+            paths.append(":");
+            paths.append(path.get(i));
         }
-        return paths;
+        return paths.toString();
     }
 
     public static void listDevices() {
@@ -109,7 +117,7 @@ public class Usb {
                             Logger.getLogger(Usb.class.getName()).log(Level.INFO, "* Axoloti USB device, serial #{0}", LibUsb.getStringDescriptor(handle, descriptor.iSerialNumber()));
                             LibUsb.close(handle);
                         }
-                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: {0}", DeviceToPath(device));
+                        Logger.getLogger(Usb.class.getName()).log(Level.INFO, "  location: {0}", deviceToPath(device));
                     }
                 } else {
                     throw new LibUsbException("Unable to read device descriptor", result);
@@ -151,7 +159,8 @@ public class Usb {
                             case WIN:
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Please install the WinUSB driver for the \"STM32 Bootloader\":");
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Launch Zadig (http://zadig.akeo.ie/) , " +
-									"select \"Options->List all devices\", select \"STM32 BOOTLOADER\", and \"replace\" the STTub30 driver with the WinUSB driver");                                break;
+									"select \"Options->List all devices\", select \"STM32 BOOTLOADER\", and \"replace\" the STTub30 driver with the WinUSB driver");
+                                break;
                             case LINUX:
                                 Logger.getLogger(Usb.class.getName()).log(Level.SEVERE, "Probably need to add a udev rule.");
                                 break;

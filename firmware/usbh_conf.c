@@ -41,18 +41,9 @@ HCD_HandleTypeDef hHCD;
 #include "usbh_hid_parser.h"
 #include "usbh_midi_core.h"
 #include "ch.h"
-
-
+#include "midi_usbh.h"
 #include "midi.h"
-
-//extern void MidiInMsgHandler(uint8_t status, uint8_t data1, uint8_t data2);
-
-//TODO: need incoming port number
-void MIDI_CB(uint8_t a,uint8_t b,uint8_t c,uint8_t d){
-    USBH_DbgLog("M %x - %x %x %x\r\n",a,b,c,d);
-    //  a= pkt header 0xF0 = cable number 0x0F=CIN
-    MidiInMsgHandler(MIDI_DEVICE_USB_HOST, ((a & 0xF0) >> 4)+ 1 ,b,c,d);
-}
+#include "midi_buffer.h"
 
 USBH_HandleTypeDef hUSBHost; /* USB Host handle */
 static void USBH_UserProcess(USBH_HandleTypeDef *pHost, uint8_t vId);
@@ -546,11 +537,11 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost) {
 #define PORT_IRQ_HANDLER(id) void id(void)
 #define CH_IRQ_HANDLER(id) PORT_IRQ_HANDLER(id)
 
-char mem[256];
+static char mem[256];
 bool memused=0;
 
 void* fakemalloc(size_t size){
-  if (size > 256){
+  if (size > sizeof(mem)){
     USBH_ErrLog("fakemalloc: can't allocate...");
   }
   if (memused){
@@ -568,9 +559,9 @@ void fakefree(void * p){
 //STM32_OTG2_HANDLER
 CH_IRQ_HANDLER(Vector174) {
   CH_IRQ_PROLOGUE();
-  chSysLockFromIsr();
+  chSysLockFromISR();
   HAL_HCD_IRQHandler(&hHCD);
-  chSysUnlockFromIsr();
+  chSysUnlockFromISR();
 #if (DEBUG_ON_GPIO)
   HAL_GPIO_WritePin( GPIOA, GPIO_PIN_0 | GPIO_PIN_1, GPIO_PIN_RESET);
 #endif

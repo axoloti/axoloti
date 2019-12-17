@@ -17,8 +17,11 @@
  */
 package axoloti;
 
-import static axoloti.MainFrame.prefs;
-import axoloti.dialogs.PatchBank;
+import axoloti.abstractui.DocumentWindow;
+import axoloti.abstractui.DocumentWindowList;
+import axoloti.preferences.Preferences;
+import axoloti.swingui.patch.PatchViewSwing;
+import axoloti.swingui.patchbank.PatchBank;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -30,6 +33,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author jtaelman
  */
 public class FileUtils {
+
+    private FileUtils() {
+    }
 
     public final static FileFilter axpFileFilter = new FileFilter() {
         @Override
@@ -115,7 +121,7 @@ public class FileUtils {
             return "Axoloti Object";
         }
     };
-    
+
     public final static FileFilter axtFileFilter = new FileFilter() {
         @Override
         public boolean accept(File file) {
@@ -133,8 +139,8 @@ public class FileUtils {
         }
     };
 
-    public static JFileChooser GetFileChooser() {
-        JFileChooser fc = new JFileChooser(prefs.getCurrentFileDirectory());
+    public static JFileChooser getFileChooser() {
+        JFileChooser fc = new JFileChooser(Preferences.getPreferences().getCurrentFileDirectory());
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(new FileNameExtensionFilter("Axoloti Files", "axp", "axh", "axs", "axb"));
         fc.addChoosableFileFilter(axpFileFilter);
@@ -144,30 +150,27 @@ public class FileUtils {
         return fc;
     }
 
-    public static void Open(JFrame frame) {
-        JFileChooser fc = GetFileChooser();
+    public static void open(JFrame frame) {
+        JFileChooser fc = getFileChooser();
         int returnVal = fc.showOpenDialog(frame);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-            prefs.setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
-            prefs.SavePrefs();
+            Preferences.getPreferences().setCurrentFileDirectory(fc.getCurrentDirectory().getPath());
+            Preferences.getPreferences().savePrefs();
             File f = fc.getSelectedFile();
-            for (DocumentWindow dw : DocumentWindowList.GetList()) {
+            for (DocumentWindow dw : DocumentWindowList.getList()) {
                 if (f.equals(dw.getFile())) {
-                    JFrame frame1 = dw.GetFrame();
-                    frame1.setVisible(true);
-                    frame1.setState(java.awt.Frame.NORMAL);
-                    frame1.toFront();
+                    dw.bringToFront();
                     return;
                 }
             }
             if (axpFileFilter.accept(f)
                     || axsFileFilter.accept(f)
                     || axhFileFilter.accept(f)) {
-                PatchGUI.OpenPatch(f);
-                MainFrame.prefs.addRecentFile(f.getAbsolutePath());
+                PatchViewSwing.openPatch(f);
+                Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             } else if (axbFileFilter.accept(f)) {
-                PatchBank.OpenBank(f);
-                MainFrame.prefs.addRecentFile(f.getAbsolutePath());
+                PatchBank.openPatchBankEditor(f);
+                Preferences.getPreferences().addRecentFile(f.getAbsolutePath());
             }
         }
     }

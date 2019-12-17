@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -18,163 +18,117 @@
 
 #include "axoloti_defines.h"
 
-#if (BOARD_AXOLOTI_V05)
-#include "sdram.h"
-#include "stm32f4xx_fmc.h"
-#endif
-
 #include "ch.h"
 #include "hal.h"
+#include "sdram.h"
 #include "chprintf.h"
-#include "shell.h"
 #include "string.h"
-#include <stdio.h>
-
 #include "codec.h"
 #include "ui.h"
-#include "midi.h"
+#include "midi_usb.h"
 #include "sdcard.h"
 #include "patch.h"
+#include "patch_impl.h"
 #include "pconnection.h"
 #include "axoloti_control.h"
 #include "axoloti_math.h"
 #include "axoloti_board.h"
+#include "axoloti_memory_impl.h"
 #include "exceptions.h"
-#include "watchdog.h"
-
-#include "chprintf.h"
 #include "usbcfg.h"
+#include "usbh.h"
 #include "sysmon.h"
+#include "spilink.h"
+#include "dbg_stream.h"
+#include "sys/fcntl.h"
 
-#if (BOARD_AXOLOTI_V05)
-#include "sdram.c"
-#include "stm32f4xx_fmc.c"
-#define ENABLE_USB_HOST
-#endif
 /*===========================================================================*/
 /* Initialization and main thread.                                           */
 /*===========================================================================*/
 
-
-//#define ENABLE_SERIAL_DEBUG 1
-
-#ifdef ENABLE_USB_HOST
-#if (BOARD_AXOLOTI_V03)
-#error conflicting pins: USB_OTG_HS and I2S
-#endif
-extern void MY_USBH_Init(void);
-#endif
-
-#if (BOARD_STM32F4DISCOVERY)
-void ToggleGreen(void) {
-  palSetPadMode(GPIOD, 12, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 12);
-}
-void ToggleOrange(void) {
-  palSetPadMode(GPIOD, 13, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 13);
-}
-void ToggleRed(void) {
-  palSetPadMode(GPIOD, 14, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 14);
-}
-void ToggleBlue(void) {
-  palSetPadMode(GPIOD, 15, PAL_MODE_OUTPUT_PUSHPULL); palTogglePad(GPIOD, 15);
-}
-#endif
-
 int main(void) {
-  // copy vector table to SRAM1!
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wnonnull"
-  memcpy((char *)0x20000000, (const char)0x00000000, 0x200);
-#pragma GCC diagnostic pop
   // remap SRAM1 to 0x00000000
+  // VTOR is already pointing to FLASH (in chconf.h)
   SYSCFG->MEMRMP |= 0x03;
 
   halInit();
   chSysInit();
 
+  configSDRAM();
+  axoloti_mem_init();
+
+  pThreadSpilink = 0;
+
   sdcard_init();
   sysmon_init();
 
-#if ENABLE_SERIAL_DEBUG
-// SD2 for serial debug output
-  palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7) | PAL_MODE_INPUT); // RX
-  palSetPadMode(GPIOA, 2, PAL_MODE_OUTPUT_PUSHPULL); // TX
-  palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7)); // TX
-// 115200 baud
-  static const SerialConfig sd2Cfg = {115200,
-        0, 0, 0};
-  sdStart(&SD2, &sd2Cfg);
-  chprintf((BaseSequentialStream * )&SD2,"Hello world!\r\n");
-#endif
+  dbg_stream_init();
+//  chprintf(dbg_stream,"Hello world!\r\n");
+
+  // semihosting test
+//  int fid = _open("test.txt", O_RDONLY|O_CREAT);
+//  _write(fid,"xxxx",3);
+//  _close(fid);
+
 
   exception_init();
 
-  InitPatch0();
-
   InitPConnection();
+  midi_usb_init();
 
   // display SPI CS?
   palSetPadMode(GPIOC, 1, PAL_MODE_OUTPUT_PUSHPULL);
   palSetPad(GPIOC, 1);
 
-  chThdSleepMilliseconds(10);
+  chThdSleepMilliseconds(200);
 
   palSetPadMode(SW2_PORT, SW2_PIN, PAL_MODE_INPUT_PULLDOWN);
 
   axoloti_board_init();
+
+// connect PB10 to ground to enable slave mode
+  bool is_master = palReadPad(GPIOB, GPIOB_PIN10);
   adc_init();
   axoloti_math_init();
+  extern void midi_init(); // TODO: cleanup
   midi_init();
-  start_dsp_thread();
-  codec_init();
+
   if (!palReadPad(SW2_PORT, SW2_PIN)) { // button S2 not pressed
-//    watchdog_init();
     chThdSleepMilliseconds(1);
   }
 
-#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
   axoloti_control_init();
-#endif
+  spilink_init(is_master);
   ui_init();
 
-#if (BOARD_AXOLOTI_V05)
-  configSDRAM();
   //memTest();
-#endif
 
-#ifdef ENABLE_USB_HOST
   MY_USBH_Init();
-#endif
 
-  if (!exception_check()) {
+  sdcard_attemptMountIfUnmounted();
+
+  start_dsp_thread();
+  codec_init(is_master);
+
+  if (!exception_check() && !palReadPad(SW2_PORT, SW2_PIN))  {
     // only try booting a patch when no exception is to be reported
-
-#if ((BOARD_AXOLOTI_V03)||(BOARD_AXOLOTI_V05))
-    sdcard_attemptMountIfUnmounted();
-    if (fs_ready && !palReadPad(SW2_PORT, SW2_PIN)){
-      // button S2 not pressed
-      LoadPatchStartSD();
+    // and button S2 is not pressed
+    patch_t * patch = 0;
+    if (fs_ready) {
+      patch = patch_loadStartSD(0);
     }
-#endif
-
     // if no patch booting or running yet
     // try loading from flash
-    if (patchStatus == STOPPED) {
-      if (!palReadPad(SW2_PORT, SW2_PIN)) // button S2 not pressed
-        LoadPatchStartFlash();
+    if (!patch) {
+      // load patch in flash
+      patch = patch_load("@08080000:flash",0);
     }
   }
-
-  while (1) {
-    chThdSleepMilliseconds(1000);
-  }
+	while (1) {
+		chThdSleepMilliseconds(1000);
+	}
 }
 
 void HAL_Delay(unsigned int n) {
   chThdSleepMilliseconds(n);
-}
-
-void _sbrk(void) {
-  while (1) {
-  }
 }

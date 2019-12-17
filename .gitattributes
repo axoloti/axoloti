@@ -12,7 +12,7 @@ Makefile eol=lf
 *.pdf binary
 *.exe binary
 *.tar binary
+*.a binary
 
 *.axp   text diff=html
 *.axo   text diff=html
- 

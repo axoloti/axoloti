@@ -17,79 +17,79 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.attributedefinition.AxoAttributeSpinner;
-import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletFrac32Bipolar;
-import axoloti.inlets.InletFrac32Pos;
-import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.outlets.OutletInt32;
-import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.attribute.AxoAttributeTextEditor;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Midi extends gentools {
+class Midi extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "midi/in";
-        WriteAxoObject(catName, Create_ctlin3());
-        WriteAxoObject(catName, Create_ctlin_any());
-        WriteAxoObject(catName, Create_ctlini_any());
-        WriteAxoObject(catName, Create_ctlin3i());
-        WriteAxoObject(catName, Create_ctlin4i());
-        WriteAxoObject(catName, Create_ctlin4ii());
-        WriteAxoObject(catName, Create_keyb());
-        WriteAxoObject(catName, Create_keyb_mod());
-        WriteAxoObject(catName, Create_keyb_touch());
-        WriteAxoObject(catName, Create_keybzone());
-        WriteAxoObject(catName, Create_keybzone_touch());
-        WriteAxoObject(catName, Create_keybzoneLRU());
-        WriteAxoObject(catName, Create_keybnote());
-        WriteAxoObject(catName, Create_bendin());
-        WriteAxoObject(catName, Create_bendin2());
-        WriteAxoObject(catName, Create_bendin_ch());
-        WriteAxoObject(catName, Create_touchin());
-        WriteAxoObject(catName, Create_midiscript());
-        WriteAxoObject(catName, Create_clockin());
-        WriteAxoObject(catName, Create_pgmin());
+        writeAxoObject(catName, Create_ctlin3());
+        writeAxoObject(catName, Create_ctlin_any());
+        writeAxoObject(catName, Create_ctlini_any());
+        writeAxoObject(catName, Create_ctlin3i());
+        writeAxoObject(catName, Create_ctlin4i());
+        writeAxoObject(catName, Create_ctlin4ii());
+        writeAxoObject(catName, Create_keyb());
+        writeAxoObject(catName, Create_keyb_mod());
+        writeAxoObject(catName, Create_keyb_touch());
+        writeAxoObject(catName, Create_keybzone());
+        writeAxoObject(catName, Create_keybzone_touch());
+        writeAxoObject(catName, Create_keybzoneLRU());
+        writeAxoObject(catName, Create_keybnote());
+        writeAxoObject(catName, Create_bendin());
+        writeAxoObject(catName, Create_bendin2());
+        writeAxoObject(catName, Create_bendin_ch());
+        writeAxoObject(catName, Create_touchin());
+        writeAxoObject(catName, Create_midiscript());
+        writeAxoObject(catName, Create_clockin());
+        writeAxoObject(catName, Create_pgmin());
 
         catName = "midi/out";
-        WriteAxoObject(catName, Create_noteout());
-        WriteAxoObject(catName, Create_ctlout());
-        WriteAxoObject(catName, Create_ctloutauto());
-        WriteAxoObject(catName, Create_ctlout_any());
-        WriteAxoObject(catName, Create_bendout());
-        WriteAxoObject(catName, Create_pgmout());
-        WriteAxoObject(catName, Create_clockgen());
-        WriteAxoObject(catName, Create_queuestate());
-        WriteAxoObject(catName, Create_polytouchout());
-        WriteAxoObject(catName, Create_channeltouchout());
+        writeAxoObject(catName, Create_noteout());
+        writeAxoObject(catName, Create_ctlout());
+        writeAxoObject(catName, Create_ctloutauto());
+        writeAxoObject(catName, Create_ctlout_any());
+        writeAxoObject(catName, Create_bendout());
+        writeAxoObject(catName, Create_pgmout());
+        writeAxoObject(catName, Create_clockgen());
+        writeAxoObject(catName, Create_queuestate());
+        writeAxoObject(catName, Create_polytouchout());
+        writeAxoObject(catName, Create_channeltouchout());
 
         catName = "midi/intern";
-        WriteAxoObject(catName, Create_intern_noteout());
-        WriteAxoObject(catName, Create_intern_ctlout());
-        WriteAxoObject(catName, Create_intern_ctloutauto());
-        WriteAxoObject(catName, Create_intern_ctlout_any());
-        WriteAxoObject(catName, Create_intern_bendout());
-        WriteAxoObject(catName, Create_intern_clockgen());
-        WriteAxoObject(catName, Create_intern_polytouchout());
-        WriteAxoObject(catName, Create_intern_channeltouchout());
+        writeAxoObject(catName, Create_intern_noteout());
+        writeAxoObject(catName, Create_intern_ctlout());
+        writeAxoObject(catName, Create_intern_ctloutauto());
+        writeAxoObject(catName, Create_intern_ctlout_any());
+        writeAxoObject(catName, Create_intern_bendout());
+        writeAxoObject(catName, Create_intern_clockgen());
+        writeAxoObject(catName, Create_intern_polytouchout());
+        writeAxoObject(catName, Create_intern_channeltouchout());
 
         catName = "midi/ctrl";
-        WriteAxoObject(catName, Create_mpe());
+        writeAxoObject(catName, Create_mpe());
     }
     /*
      static AxoObject Create_ctlin() {
@@ -246,7 +246,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctlin4i() {
         AxoObject o = new AxoObject("cc hr i", "Receives Midi Continuous Controller messages, 14 bit, float output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Pos("midiCC", "midi CC 0.0-64.0"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
@@ -270,7 +270,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_ctlin4ii() {
         AxoObject o = new AxoObject("cc hr ii", "Receives Midi Continuous Controller messages, 14 bit, float output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Pos("midiCC", "midi CC 0.0-64.0"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("cc", 0, 127, 0));
@@ -337,7 +337,7 @@ public class Midi extends gentools {
         o.outlets.add(new OutletBool32("gate2", "key pressed, retrigger on legato"));
         o.outlets.add(new OutletFrac32Pos("velocity", "note-on velocity"));
         o.outlets.add(new OutletFrac32Pos("releaseVelocity", "note-off velocity"));
-        o.ModulationSources = new ArrayList<String>();
+        o.ModulationSources = new ArrayList<>();
         o.ModulationSources.add("note");
         o.ModulationSources.add("velocity");
         o.ModulationSources.add("releasevelocity");
@@ -619,7 +619,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_bendin2() {
         AxoObject o = new AxoObject("bend hr", "Midi pitch bend input hi res");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Bipolar("bend", "pitch bend, -64..64"));
         o.outlets.add(new OutletBool32Pulse("trig", "trigger output"));
         o.attributes.add(new AxoAttributeSpinner("ccl", 0, 127, 85));
@@ -726,7 +726,7 @@ public class Midi extends gentools {
         return o;
     }
 
-    static String cdev[] = {"MIDI_DEVICE_DIN, 1",
+    private final static String cdev[] = {"MIDI_DEVICE_DIN, 1",
         "MIDI_DEVICE_USB_HOST, 1",
         "MIDI_DEVICE_USB_HOST, 2",
         "MIDI_DEVICE_USB_HOST, 3",
@@ -734,7 +734,7 @@ public class Midi extends gentools {
         "MIDI_DEVICE_INTERNAL, 1",
         "MIDI_DEVICE_INTERNAL, 2",
         "MIDI_DEVICE_USB_DEVICE, 1"};
-    static String udev[] = {
+    private final static String udev[] = {
         "din",
         "usb host port 1",
         "usb host port 2",
@@ -889,7 +889,7 @@ public class Midi extends gentools {
     static AxoObject Create_polytouchout() {
         AxoObject o = new AxoObject("poly touch", "Midi poly pressure output");
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
@@ -910,7 +910,7 @@ public class Midi extends gentools {
     static AxoObject Create_channeltouchout() {
         AxoObject o = new AxoObject("channel touch", "Midi channel pressure output");
         o.attributes.add(new AxoAttributeComboBox("device", udev, cdev));
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
@@ -1067,7 +1067,7 @@ public class Midi extends gentools {
     }
     static AxoObject Create_intern_polytouchout() {
         AxoObject o = new AxoObject("poly touch", "Midi poly pressure output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Bipolar("note", "note (-64..63)"));
@@ -1087,7 +1087,7 @@ public class Midi extends gentools {
 
     static AxoObject Create_intern_channeltouchout() {
         AxoObject o = new AxoObject("channel touch", "Midi channel pressure output");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
 
         o.attributes.add(new AxoAttributeSpinner("channel", 1, 16, 0));
         o.inlets.add(new InletFrac32Pos("pressure", "pressure"));
@@ -1102,10 +1102,10 @@ public class Midi extends gentools {
                 + "if (!(%trig%>0) && ntrig) {ntrig=0;}\n";
         return o;
     }
-    
+
     static AxoObject Create_mpe() {
         AxoObject o = new AxoObject("mpe", "Controller input for MIDI Polyphonic Expression");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.outlets.add(new OutletFrac32Bipolar("note", "midi note number (-64..63)"));
         o.outlets.add(new OutletBool32("gate", "key pressed, no retrigger legato"));
         o.outlets.add(new OutletBool32("gate2", "key pressed, retrigger on legato"));

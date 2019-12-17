@@ -18,9 +18,9 @@
 package axoloti.realunits;
 
 import axoloti.datatypes.Value;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -29,12 +29,12 @@ import java.text.ParseException;
 public class PitchToRatio implements NativeToReal {
 
     @Override
-    public String ToReal(Value v) {
+    public String convertToReal(Value v) {
         return (String.format("x%.3f", Math.pow(2.0, (v.getDouble()) / 12.0)));
     }
 
     @Override
-    public double FromReal(String s) throws ParseException {
+    public double convertFromReal(String s) throws ParseException {
         Pattern pattern = Pattern.compile("(?<unit1>[xX\\*]?)\\p{Space}*(?<num>[\\d\\.\\-\\+]*)\\p{Space}*(?<unit2>[xX\\*]?)");
         Matcher matcher = pattern.matcher(s);
         if (matcher.matches()) {
@@ -48,8 +48,9 @@ public class PitchToRatio implements NativeToReal {
 
             String units1 = matcher.group("unit1");
             String units2 = matcher.group("unit2");
-            if (!(units1.contains("x") || units1.contains("X") || units1.contains("*") || units2.contains("x") || units2.contains("X") || units2.contains("*")))
+            if (!(units1.contains("x") || units1.contains("X") || units1.contains("*") || units2.contains("x") || units2.contains("X") || units2.contains("*"))) {
                 throw new ParseException("Not PitchToRatio", 0);
+            }
 
             return (Math.log(num) / Math.log(2)) * 12.0;
         }

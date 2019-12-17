@@ -22,7 +22,10 @@
 int flash_Erase_sector(int sector);
 int flash_ProgramWord(uint32_t Address, uint32_t Data);
 void flash_unlock(void);
+void flash_lock(void);
+int flash_write(uint32_t pdest, uint32_t psrc, uint32_t psize);
 
-#define FLASH_BASE_ADDR 0x08000000
+#define FLASH_BASE_ADDR   0x08000000
+#define FLASH_PATCH_ADDR  0x08080000
 
 #endif

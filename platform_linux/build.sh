@@ -2,12 +2,11 @@
 
 set -e
 
-echo -e "\n\nAxoloti Install script for Linux"
-echo -e "This will install Axoloti"
-echo -e "Use at your own risk\n"
-echo -e "Some packages will be installed with apt-get,"
-echo -e "and all users will be granted permission to access some USB devices"
-echo -e "For this you'll require sudo rights and need to enter your password...\n"
+echo -e "\nAxoloti build script for Linux"
+echo -e "Downloads and builds all the required dependencies and toolchain executables"
+echo -e "and all users will be granted permission to access Axoloti USB devices"
+echo -e "Items already present are skipped."
+echo -e "Use at your own risk.\n"
 # echo -e "Press RETURN to continue\nCTRL-C if you are unsure!\n"
 # read
 
@@ -22,7 +21,7 @@ elif [ -f /etc/debian_version ]; then
     if [ -n "`grep 8.6 /etc/debian_version`" ] && [ -z "`uname -m | grep x86_64`" ]; then
       OS=DebianJessie32bit
     fi
-    
+
 elif [ -f /etc/arch-release ]; then
     OS=Archlinux
 elif [ -f /etc/gentoo-release ]; then
@@ -33,49 +32,54 @@ else
     OS=$(uname -s)
 fi
 
+if [[ "$1" == "--noninteractive" ]]; then
+    noninteractive=true
+else
+    noninteractive=false
+fi
+
+if [[ $noninteractive != "true" ]]; then
+    echo -e "The script can install the required packages using your package manager,"
+    echo -e "For this you'll require sudo rights and need to enter your password..."
+    read -p "Install required packages? [N/y] " input
+fi
+
+if [[ $noninteractive == "true" || $input == "Y" || $input == "y" ]]; then
 case $OS in
     Ubuntu|Debian|DebianJessie32bit)
-        echo "apt-get install -y libtool libudev-dev automake autoconf ant curl lib32z1 lib32ncurses5 lib32bz2-1.0"
-      if [ $OS==DebianJessie32bit ]; then
+        if [ $OS==DebianJessie32bit ]; then
+            echo "apt-get install -y build-essential libtool libudev-dev automake autoconf ant curl p7zip-full unzip udev openjdk-8-jdk"
+            sudo apt-get install -y build-essential libtool libudev-dev automake autoconf \
+               ant curl p7zip-full unzip udev openjdk-8-jdk
+        else
+            echo "apt-get install -y libtool libudev-dev automake autoconf ant curl p7zip-full openjdk-8-jdk"
             sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl
-      else
-            sudo apt-get install -y libtool libudev-dev automake autoconf \
-               ant curl lib32z1 lib32ncurses5
-      fi
-
-        # On more recent versions of Ubuntu
-        # the libbz2 package is multi-arch
-        install_lib_bz2() {
-            sudo apt-get install -y lib32bz2-1.0
-        }
-        set +e
-        if ! install_lib_bz2; then
-            set -e
-            sudo apt-get install -y libbz2-1.0:i386
+               ant curl p7zip-full openjdk-8-jdk
         fi
         ;;
     Archlinux|Arch|ManjaroLinux)
         echo "pacman -Syy"
         sudo pacman -Syy
-        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl lib32-ncurses lib32-bzip2"
-        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl \
-             lib32-ncurses lib32-bzip2
+        echo "pacman -S --noconfirm apache-ant libtool automake autoconf curl openjdk-8-jdk"
+        sudo pacman -S --noconfirm apache-ant libtool automake autoconf curl openjdk-8-jdk
         ;;
     Gentoo)
-	echo "detected Gentoo"
-	;;
+        echo "detected Gentoo"
+        echo "emerge --update jdk:1.8 ant"
+        sudo emerge --update jdk:1.8 ant
+        ;;
     Fedora)
         echo "detected Fedora"
         sudo dnf group install "Development Tools"
         sudo dnf -y install libusb dfu-util libtool libudev-devel automake autoconf \
-        ant curl ncurses-libs bzip2
+        ant curl bzip2
         ;;
     *)
         echo "Cannot handle dist: $OS"
         exit
         ;;
 esac
+fi
 
 cd "$PLATFORM_ROOT"
 
@@ -85,48 +89,9 @@ mkdir -p "${PLATFORM_ROOT}/bin"
 mkdir -p "${PLATFORM_ROOT}/lib"
 mkdir -p "${PLATFORM_ROOT}/src"
 
+git submodule update --init --recursive
 
-if [ ! -d "${PLATFORM_ROOT}/../chibios" ];
-then
-    cd "${PLATFORM_ROOT}/src"
-    CH_VERSION=2.6.9
-    ARDIR=ChibiOS_${CH_VERSION}
-    ARCHIVE=${ARDIR}.zip
-    if [ ! -f ${ARCHIVE} ];
-    then
-        echo "##### downloading ${ARCHIVE} #####"
-        curl -L https://sourceforge.net/projects/chibios/files/ChibiOS%20GPL3/Version%20${CH_VERSION}/${ARCHIVE} > ${ARCHIVE}
-    else
-        echo "##### ${ARCHIVE} already downloaded #####"
-    fi
-    unzip -q -o ${ARCHIVE}
-    mv ${ARDIR} chibios
-    cd chibios/ext
-    unzip -q -o ./fatfs-0.9-patched.zip
-    cd ../../
-    mv chibios ../..
-else
-    echo "##### chibios directory already present, skipping... #####"
-fi
-
-
-if [ ! -f "$PLATFORM_ROOT/bin/arm-none-eabi-gcc" ];
-then
-    cd "${PLATFORM_ROOT}/src"
-    ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-linux.tar.bz2
-    if [ ! -f ${ARCHIVE} ];
-    then
-        echo "downloading ${ARCHIVE}"
-        curl -L https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/$ARCHIVE > $ARCHIVE
-    else
-        echo "${ARCHIVE} already downloaded"
-    fi
-    tar xfj ${ARCHIVE}
-    cp -rv gcc-arm-none-eabi-4_9-2015q2/* ..
-    rm -r gcc-arm-none-eabi-4_9-2015q2
-else
-    echo "bin/arm-none-eabi-gcc already present, skipping..."
-fi
+source ../platform_common/download_chibios.sh
 
 if [ ! -f "$PLATFORM_ROOT/lib/libusb-1.0.a" ];
 then
@@ -177,22 +142,6 @@ then
 else
     echo "##### dfu-util already present, skipping... #####"
 fi
-
-case $OS in
-    Ubuntu|Debian)
-        echo "apt-get install openjdk-7-jdk"
-        sudo apt-get install openjdk-7-jdk
-        ;;
-    Archlinux)
-        echo "pacman -Syy jdk7-openjdk"
-        sudo pacman -S --noconfirm jdk7-openjdk
-        ;;
-    Gentoo)
-	echo "emerge --update jdk:1.7 ant"
-	sudo emerge --update jdk:1.7 ant
-	;;
-esac
-
 
 echo "##### compiling firmware... #####"
 cd "${PLATFORM_ROOT}"

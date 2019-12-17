@@ -17,57 +17,57 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.attributedefinition.AxoAttributeObjRef;
-import axoloti.attributedefinition.AxoAttributeSDFile;
-import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletCharPtr32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferPos;
-import axoloti.inlets.InletFrac32Pos;
-import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMapPitch;
-import axoloti.parameters.ParameterFrac32SMapVSlider;
-import axoloti.parameters.ParameterInt32Box;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.attribute.AxoAttributeObjRef;
+import axoloti.object.attribute.AxoAttributeSDFile;
+import axoloti.object.attribute.AxoAttributeTextEditor;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletCharPtr32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferPos;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMapPitch;
+import axoloti.object.parameter.ParameterFrac32SMapVSlider;
+import axoloti.object.parameter.ParameterInt32Box;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Table extends gentools {
+class Table extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "table";
-        WriteAxoObject(catName, CreateRamTable8());
-        WriteAxoObject(catName, CreateRamTable16());
-        WriteAxoObject(catName, CreateRamTable32());
+        writeAxoObject(catName, createRamTable8());
+        writeAxoObject(catName, createRamTable16());
+        writeAxoObject(catName, createRamTable32());
 
-        WriteAxoObject(catName, CreateSdRamTable8());
-        WriteAxoObject(catName, CreateSdRamTable16());
-        WriteAxoObject(catName, CreateSdRamTable32());
-        
-        WriteAxoObject(catName, CreateSdRamTable16Load());
+        writeAxoObject(catName, createSdRamTable8());
+        writeAxoObject(catName, createSdRamTable16());
+        writeAxoObject(catName, createSdRamTable32());
 
-        WriteAxoObject(catName, CreateRamTable32Slider16());
-        WriteAxoObject(catName, new AxoObject[]{CreateTableReadI(), CreateTableRead(), CreateTableReadTilde()});
-        WriteAxoObject(catName, new AxoObject[]{CreateTableRead2(), CreateTableRead2T()});
-        WriteAxoObject(catName, new AxoObject[]{CreateTableWrite(), CreateTableWriteI()});
-        WriteAxoObject(catName, CreateTableRecord());
-        WriteAxoObject(catName, CreateTablePlay());
-        WriteAxoObject(catName, CreateTablePlayPitch());
-        WriteAxoObject(catName, CreateTablePlayPitchLoop());
-        WriteAxoObject(catName, SaveTable());
-        WriteAxoObject(catName, LoadTable());
+        writeAxoObject(catName, createSdRamTable16Load());
+
+        writeAxoObject(catName, createRamTable32Slider16());
+        writeAxoObject(catName, new AxoObject[]{createTableReadI(), createTableRead(), createTableReadTilde()});
+        writeAxoObject(catName, new AxoObject[]{createTableRead2(), createTableRead2T()});
+        writeAxoObject(catName, new AxoObject[]{createTableWrite(), createTableWriteI()});
+        writeAxoObject(catName, createTableRecord());
+        writeAxoObject(catName, createTablePlay());
+        writeAxoObject(catName, createTablePlayPitch());
+        writeAxoObject(catName, createTablePlayPitchLoop());
+        writeAxoObject(catName, createSaveTable());
+        writeAxoObject(catName, createLoadTable());
     }
 
-    static AxoObject CreateRamTable8() {
+    static AxoObject createRamTable8() {
         AxoObject o = new AxoObject("alloc 8b", "allocate table in RAM memory, -128..127");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768"};
@@ -88,7 +88,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateRamTable16() {
+    static AxoObject createRamTable16() {
         AxoObject o = new AxoObject("alloc 16b", "allocate 16bit table in RAM memory, -128.00 .. 127.99");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768"};
@@ -109,7 +109,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateRamTable32() {
+    static AxoObject createRamTable32() {
         AxoObject o = new AxoObject("alloc 32b", "allocate 32bit table in RAM memory");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384"};
@@ -130,7 +130,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateSdRamTable8() {
+    static AxoObject createSdRamTable8() {
         AxoObject o = new AxoObject("alloc 8b sdram", "allocate table in SDRAM memory, -128..127");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768",
@@ -155,7 +155,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateSdRamTable16() {
+    static AxoObject createSdRamTable16() {
         AxoObject o = new AxoObject("alloc 16b sdram", "allocate 16bit table in SDRAM memory, -128.00 .. 127.99");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768",
@@ -180,7 +180,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateSdRamTable16Load() {
+    static AxoObject createSdRamTable16Load() {
         AxoObject o = new AxoObject("alloc 16b sdram load", "allocate 16bit table in SDRAM memory, -128.00 .. 127.99");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768",
@@ -225,7 +225,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateSdRamTable32() {
+    static AxoObject createSdRamTable32() {
         AxoObject o = new AxoObject("alloc 32b sdram", "allocate 32bit table in SDRAM memory");
         String mentries[] = {"2", "4", "8", "16", "32", "64", "128", "256", "512",
             "1024", "2048", "4096", "8192", "16384", "32768",
@@ -250,7 +250,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateRamTable32Slider16() {
+    static AxoObject createRamTable32Slider16() {
         AxoObject o = new AxoObject("allocate 32b 16sliders", "table in RAM memory, direct from sliders");
         for (int i = 0; i < 16; i++) {
             ParameterFrac32SMapVSlider p = new ParameterFrac32SMapVSlider("b" + i);
@@ -275,7 +275,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableReadI() {
+    static AxoObject createTableReadI() {
         AxoObject o = new AxoObject("read", "read from table, nearest neighbour");
         o.outlets.add(new OutletFrac32("o", "table[a]"));
         o.inlets.add(new InletInt32Pos("a", "index"));
@@ -284,7 +284,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableRead() {
+    static AxoObject createTableRead() {
         AxoObject o = new AxoObject("read", "read from table, nearest neighbour");
         o.outlets.add(new OutletFrac32("o", "table[a]"));
         o.inlets.add(new InletFrac32Pos("a", "index in fraction of table size"));
@@ -293,7 +293,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableReadTilde() {
+    static AxoObject createTableReadTilde() {
         AxoObject o = new AxoObject("read", "read from table, nearest neighbour");
         o.outlets.add(new OutletFrac32Buffer("o", "table[a]"));
         o.inlets.add(new InletFrac32BufferPos("a", "index in fraction of table size"));
@@ -302,7 +302,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableRead2() {
+    static AxoObject createTableRead2() {
         AxoObject o = new AxoObject("read interp", "read from table, linear interpolated");
         o.outlets.add(new OutletFrac32("o", "table[a]"));
         o.inlets.add(new InletFrac32Pos("a", "index in fraction of table size"));
@@ -319,7 +319,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableRead2T() {
+    static AxoObject createTableRead2T() {
         AxoObject o = new AxoObject("read interp", "read from table, linear interpolated");
         o.outlets.add(new OutletFrac32Buffer("o", "table[a]"));
         o.inlets.add(new InletFrac32BufferPos("a", "index in fraction of table size"));
@@ -336,7 +336,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableWrite() {
+    static AxoObject createTableWrite() {
         AxoObject o = new AxoObject("write", "write to table");
         o.inlets.add(new InletFrac32Pos("a", "index in fraction of table size"));
         o.inlets.add(new InletFrac32("v", "value"));
@@ -352,7 +352,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableWriteI() {
+    static AxoObject createTableWriteI() {
         AxoObject o = new AxoObject("write", "write to table");
         o.inlets.add(new InletInt32Pos("a", "index (integer, not fraction)"));
         o.inlets.add(new InletFrac32("v", "value"));
@@ -369,7 +369,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTableRecord() {
+    static AxoObject createTableRecord() {
         AxoObject o = new AxoObject("record", "record audio into table, starting from position");
         o.inlets.add(new InletFrac32Buffer("wave", "wave"));
         o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
@@ -401,7 +401,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTablePlay() {
+    static AxoObject createTablePlay() {
         AxoObject o = new AxoObject("play", "play audio from table (non-transposed), starting from position");
         o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
         o.inlets.add(new InletFrac32Pos("pos", "start position in table"));
@@ -435,7 +435,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTablePlayPitch() {
+    static AxoObject createTablePlayPitch() {
         AxoObject o = new AxoObject("play pitch", "play audio sample from table with pitch control, starting from position");
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.outlets.add(new OutletFrac32Buffer("wave", "wave"));
@@ -476,7 +476,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject CreateTablePlayPitchLoop() {
+    static AxoObject createTablePlayPitchLoop() {
         AxoObject o = new AxoObject("play pitch loop", "play audio sample from table with pitch control, starting from position");
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterInt32Box("loopstart", 0, 1 << 30));
@@ -519,7 +519,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject SaveTable() {
+    static AxoObject createSaveTable() {
         AxoObject o = new AxoObject("save", "save table to sdcard");
         o.attributes.add(new AxoAttributeObjRef("table"));
         o.inlets.add(new InletCharPtr32("filename", "file name"));
@@ -556,7 +556,7 @@ public class Table extends gentools {
         return o;
     }
 
-    static AxoObject LoadTable() {
+    static AxoObject createLoadTable() {
         AxoObject o = new AxoObject("load", "load table from sdcard");
         o.attributes.add(new AxoAttributeObjRef("table"));
         o.inlets.add(new InletCharPtr32("filename", "file name"));

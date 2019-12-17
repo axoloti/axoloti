@@ -17,7 +17,6 @@
  */
 package axoloti.targetprofile;
 
-import axoloti.MainFrame;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.logging.Level;
@@ -29,7 +28,7 @@ import java.util.logging.Logger;
  */
 public class axoloti_core {
 
-    enum cputype_e {
+    private enum cputype_e {
 
         STM32F40xxx,
         STM32F42xxx
@@ -37,11 +36,11 @@ public class axoloti_core {
 
     cputype_e cputype;
 
-    public ByteBuffer CreateOTPInfo() {
-        return CreateOTPInfo(1, 1, 0, 8);
+    public ByteBuffer createOTPInfo() {
+        return createOTPInfo(1, 1, 0, 8);
     }
 
-    public ByteBuffer CreateOTPInfo(
+    public ByteBuffer createOTPInfo(
             int boardtype,
             int boardmajorversion,
             int boardminorversion,
@@ -53,7 +52,7 @@ public class axoloti_core {
             bb.rewind();
             bb.put(header.getBytes("UTF8"));
             while (bb.position() < 16) {
-                bb.put((byte)0);
+                bb.put((byte) 0);
             }
             bb.putInt(boardtype);
             bb.putInt(boardmajorversion);
@@ -69,7 +68,11 @@ public class axoloti_core {
 
     public int getPatchAddr() {
         // SRAM1 - must match with patch.ld
-        return 0x20011000;
+        return 0x20000000;
+    }
+
+    public int getSRAM3Addr() {
+        return 0x20020000;
     }
 
     public int getSDRAMAddr() {
@@ -98,7 +101,7 @@ public class axoloti_core {
 
     public void setCPUIDCode(int i) {
         //System.out.println(String.format("idcode = %8X", i));
-        if (i==0 || (i & 0x0FFF) == 0x0419) {
+        if (i == 0 || (i & 0x0FFF) == 0x0419) {
             cputype = cputype_e.STM32F42xxx;
         } else {
             cputype = cputype_e.STM32F40xxx;
@@ -117,24 +120,6 @@ public class axoloti_core {
         }
     }
 
-    public void setVoltages(int i) {
-        //System.out.println(String.format("v%08X", i));
-        int vref = i & 0xFFFF;
-        int v50i = (i >> 16) & 0xFFFF;
-        if (vref != 0) {
-            float vdd = 1.21f * (float) (4096) / (float) (vref);
-            float v50 = 2.0f * vdd * (float) (v50i + 1) / 4096.0f;
-            boolean alert = false;
-            if ((vdd < 3.0) || (vdd > 3.6)) {
-                alert = true;
-            }
-            if ((v50 > 5.5) || (v50 < 4.5)) {
-                alert = true;
-            }
-            MainFrame.mainframe.setVoltages(v50, vdd, alert);
-        }
-    }
-
     public int getCPUSerialLength() {
         return 12;
     }
@@ -147,10 +132,10 @@ public class axoloti_core {
         return 0x1000;
     }
 
-    ByteBuffer OTP0Data;
-    ByteBuffer OTP1Data;
-    ByteBuffer CPUIDData;
-    ByteBuffer BKPSRAMData;
+    private ByteBuffer OTP0Data;
+    private ByteBuffer OTP1Data;
+    private ByteBuffer CPUIDData;
+    private ByteBuffer BKPSRAMData;
 
     public void setOTP0Data(ByteBuffer b) {
         OTP0Data = b;
@@ -166,17 +151,28 @@ public class axoloti_core {
             String s = "";
             b.rewind();
             while (b.remaining() > 0) {
-                s = s + String.format("%08X", b.getInt());
+                s += String.format("%08X", b.getInt());
             }
-            MainFrame.mainframe.setCpuID(s);
         } else {
-            Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number, invalid protocol?, update firmware",new Object());
-            MainFrame.mainframe.setCpuID("CFCFCFCF");
+            Logger.getLogger(axoloti_core.class.getName()).log(Level.SEVERE, "invalid CPU serial number, invalid protocol?, update firmware", new Object());
         }
     }
 
     public ByteBuffer getCPUSerial() {
         return CPUIDData;
+    }
+
+    public String getCPUSerialString() {
+        String s = "";
+        if (CPUIDData != null) {
+            CPUIDData.rewind();
+            while (CPUIDData.remaining() > 0) {
+                s += String.format("%08X", CPUIDData.getInt());
+            }
+            return s;
+        } else {
+            return "not connected";
+        }
     }
 
     public ByteBuffer getBKPSRAMData() {

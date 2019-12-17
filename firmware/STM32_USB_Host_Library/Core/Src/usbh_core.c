@@ -31,8 +31,6 @@
 
 #define _USB_H_
 #include "ch.h"
-#define HAL_USE_PAL 1
-#include "pal.h"
 
 
 

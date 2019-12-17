@@ -20,14 +20,13 @@ package axoloti.datatypes;
 /**
  *
  * @author Johannes Taelman
- * @param <dt> data type
  */
-public abstract class Value<dt extends DataType> implements Comparable<dt> {
+public abstract class Value {
 
     public Value() {
     }
 
-    public Value(Value<dt> v) {
+    public Value(Value v) {
     }
 
     public abstract int getInt();
@@ -36,13 +35,6 @@ public abstract class Value<dt extends DataType> implements Comparable<dt> {
 
     public abstract double getDouble();
 
-    public abstract void setInt(int i);
-
-    public abstract void setFrac(int frac);
-
-    public abstract void setDouble(double d);
-
     public abstract int getRaw();
 
-    public abstract void setRaw(int i);
 }

@@ -17,24 +17,24 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeSpinner;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletInt32;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.outlet.OutletInt32;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author jtaelman
  */
-public class Constant extends gentools {
+class Constant extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "const";
-        WriteAxoObject(catName, CreateConstI());
+        writeAxoObject(catName, createConstI());
     }
 
-    private static AxoObjectAbstract CreateConstI() {
+    private static AxoObjectAbstract createConstI() {
         AxoObject o = new AxoObject("i", "constant");
         o.outlets.add(new OutletInt32("out", "output"));
         o.attributes.add(new AxoAttributeSpinner("value", -(1 << 31), (1 << 31) - 1, 0));

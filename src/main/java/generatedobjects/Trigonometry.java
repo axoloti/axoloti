@@ -17,26 +17,26 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Trigonometry extends gentools {
+class Trigonometry extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "math";
-        WriteAxoObject(catName, new AxoObject[]{CreateSin(), CreateSinTilde()});
-        WriteAxoObject(catName, new AxoObject[]{CreateCos(), CreateCosTilde()});
+        writeAxoObject(catName, new AxoObject[]{createSin(), createSinTilde()});
+        writeAxoObject(catName, new AxoObject[]{createCos(), createCosTilde()});
     }
 
-    static AxoObject CreateSin() {
+    static AxoObject createSin() {
         AxoObject o = new AxoObject("sin", "sine function, -64..64 phase corresponds to -180 to 180 degrees");
         o.inlets.add(new InletFrac32("phase", "phase"));
         o.outlets.add(new OutletFrac32("out", "sin(phase)"));
@@ -46,7 +46,7 @@ public class Trigonometry extends gentools {
         return o;
     }
 
-    static AxoObject CreateSinTilde() {
+    static AxoObject createSinTilde() {
         AxoObject o = new AxoObject("sin", "sine function, -64..64 corresponds to -360 to 360 degrees");
         o.inlets.add(new InletFrac32Buffer("phase", "phase"));
         o.outlets.add(new OutletFrac32Buffer("out", "sin(phase)"));
@@ -56,7 +56,7 @@ public class Trigonometry extends gentools {
         return o;
     }
 
-    static AxoObject CreateCos() {
+    static AxoObject createCos() {
         AxoObject o = new AxoObject("cos", "cosine function, -64..64 phase corresponds to -360 to 360 degrees");
         o.inlets.add(new InletFrac32("phase", "phase"));
         o.outlets.add(new OutletFrac32("out", "cos(phase)"));
@@ -66,7 +66,7 @@ public class Trigonometry extends gentools {
         return o;
     }
 
-    static AxoObject CreateCosTilde() {
+    static AxoObject createCosTilde() {
         AxoObject o = new AxoObject("cos", "cosine function, -64..64 corresponds to -360 to 360 degrees");
         o.inlets.add(new InletFrac32Buffer("phase", "phase"));
         o.outlets.add(new OutletFrac32Buffer("out", "cos(phase)"));

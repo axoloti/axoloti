@@ -17,13 +17,36 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.*;
-import axoloti.inlets.*;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.*;
-import axoloti.parameters.*;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.attribute.AxoAttributeSpinner;
+import axoloti.object.attribute.AxoAttributeTablename;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletBool32RisingFalling;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferBipolar;
+import axoloti.object.inlet.InletFrac32BufferPos;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.inlet.InletInt32Bipolar;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32BufferBipolar;
+import axoloti.object.outlet.OutletFrac32BufferPos;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.outlet.OutletInt32Bipolar;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterInt32Box;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
@@ -31,96 +54,96 @@ import java.util.ArrayList;
  * @author Johannes Taelman
  */
 @Deprecated
-public class GeneratedObjects extends gentools {
+public class GeneratedObjects extends GenTools {
 
-    static public void WriteAxoObjects() {
+    static public void writeAxoObjects() {
 
-        Arithmetic.GenerateAll();
-        Demux.GenerateAll();
-        Constant.GenerateAll();
-        Control.GenerateAll();
-        Convert.GenerateAll();
-        Delay.GenerateAll();
-        Display.GenerateAll();
-        Distortion.GenerateAll();
-        Dynamics.GenerateAll();
-        Env.GenerateAll();
-        Filter.GenerateAll();
-        Io.GenerateAll();
-        Lfo.GenerateAll();
-        Logic.GenerateAll();
-        Math.GenerateAll();
-        Midi.GenerateAll();
-        Mixer.GenerateAll();
-        Mux.GenerateAll();
-        Osc.GenerateAll();
-        Patch.GenerateAll();
-        Script.GenerateAll();
-        Sequencer.GenerateAll();
-        Spectral.GenerateAll();
-        Stochastics.GenerateAll();
-        Table.GenerateAll();
-        Trigonometry.GenerateAll();
-        Wave.GenerateAll();
-        Strings.GenerateAll();
-        Impulses.GenerateAll();
-        Timer.GenerateAll();
-        Reverb.GenerateAll();
-        brainwave.GenerateAll();
-        LTC.GenerateAll();
-        Spat.GenerateAll();
-        USB.GenerateAll();
-        Harmony.GenerateAll();
-
-        {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(Create_latch());
-            c.add(Create_latchi());
-            WriteAxoObject("logic", c);
-        }
-
-        WriteAxoObject("logic", Create_counter());
-        WriteAxoObject("logic", Create_counter2());
-        WriteAxoObject("logic", Create_countersat2());
+        Arithmetic.generateAll();
+        Demux.generateAll();
+        Constant.generateAll();
+        Control.generateAll();
+        Convert.generateAll();
+        Delay.generateAll();
+        Display.generateAll();
+        Distortion.generateAll();
+        Dynamics.generateAll();
+        Env.generateAll();
+        Filter.generateAll();
+        Io.generateAll();
+        Lfo.generateAll();
+        Logic.generateAll();
+        Math.generateAll();
+        Midi.generateAll();
+        Mixer.generateAll();
+        Mux.generateAll();
+        Osc.generateAll();
+        Patch.generateAll();
+        Script.generateAll();
+        Sequencer.generateAll();
+        Spectral.generateAll();
+        Stochastics.generateAll();
+        Table.generateAll();
+        Trigonometry.generateAll();
+        Wave.generateAll();
+        Strings.generateAll();
+        Impulses.generateAll();
+        Timer.generateAll();
+        Reverb.generateAll();
+        Brainwave.generateAll();
+        LTC.generateAll();
+        Spat.generateAll();
+        USB.generateAll();
+        Harmony.generateAll();
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateWindow());
-            c.add(CreateWindowTilde());
-            WriteAxoObject("math", c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(create_latch());
+            c.add(create_latchi());
+            writeAxoObject("logic", c);
+        }
+
+        writeAxoObject("logic", create_counter());
+        writeAxoObject("logic", create_counter2());
+        writeAxoObject("logic", create_countersat2());
+
+        {
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createWindow());
+            c.add(createWindowTilde());
+            writeAxoObject("math", c);
         }
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(Create_accu_sat());
-            WriteAxoObject("math", c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(create_accu_sat());
+            writeAxoObject("math", c);
         }
 
-        WriteAxoObject("gain", CreateVCA());
+        writeAxoObject("gain", createVCA());
 
-        WriteAxoObject("math", Create_smooth());
-        WriteAxoObject("math", Create_smooth2());
+        writeAxoObject("math", create_smooth());
+        writeAxoObject("math", create_smooth2());
 
-        WriteAxoObject("math", Create_glide());
+        writeAxoObject("math", create_glide());
 
-//        WriteAxoObject(unstable, Create_testanno());
+//        WriteAxoObject(unstable, create_testanno());
 
 //        objs.add(Create_FlashTableGranularPlay());
         //WriteAxoObject("util",modsource());
 
-        /*        
+        /*
          for(AxoObject o:objs){
          String cn = o.id;
          }
          //        Objects.add(CreateSScope2());
 
          for(AxoObject o:objs){
- 
+
          }
          */
     }
 
-    static AxoObject CreateWindow() {
+    static AxoObject createWindow() {
         AxoObject o = new AxoObject("window", "hanning window function, input 0..64");
         o.inlets.add(new InletFrac32Pos("phase", "phase"));
         o.outlets.add(new OutletFrac32Pos("win", "w(phase)"));
@@ -132,7 +155,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject CreateWindowTilde() {
+    static AxoObject createWindowTilde() {
         AxoObject o = new AxoObject("window", "hanning window function, input 0..64");
         o.inlets.add(new InletFrac32Buffer("phase", "phase"));
         o.outlets.add(new OutletFrac32Buffer("win", "w(phase)"));
@@ -144,7 +167,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_smooth() {
+    static AxoObject create_smooth() {
         AxoObject o = new AxoObject("smooth", "exponential smooth");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32("out", "output"));
@@ -156,7 +179,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_smooth2() {
+    static AxoObject create_smooth2() {
         AxoObject o = new AxoObject("smooth2", "exponential smooth, separate rise and fall time");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32("out", "output"));
@@ -171,7 +194,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_glide() {
+    static AxoObject create_glide() {
         AxoObject o = new AxoObject("glide", "exponential smooth with enable");
         o.inlets.add(new InletFrac32("in", "input"));
         o.inlets.add(new InletBool32("en", "enable"));
@@ -186,7 +209,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_counter() {
+    static AxoObject create_counter() {
         AxoObject o = new AxoObject("counter", "cyclic up counter");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.inlets.add(new InletBool32Rising("r", "reset"));
@@ -211,7 +234,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_counter2() {
+    static AxoObject create_counter2() {
         AxoObject o = new AxoObject("counter2", "cyclic up/down counter");
         o.inlets.add(new InletBool32Rising("inc", "increment trigger"));
         o.inlets.add(new InletBool32Rising("dec", "decrement trigger"));
@@ -244,7 +267,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_countersat2() {
+    static AxoObject create_countersat2() {
         AxoObject o = new AxoObject("countersat2", "saturating up/down counter");
         o.inlets.add(new InletBool32Rising("inc", "increment trigger"));
         o.inlets.add(new InletBool32Rising("dec", "decrement trigger"));
@@ -275,7 +298,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_accu_sat() {
+    static AxoObject create_accu_sat() {
         AxoObject o = new AxoObject("accu_sat", "Saturating accumulator. Adds input to accumulator on trigger. Reset clears the accumulator to zero.");
         o.inlets.add(new InletFrac32("i", "input"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
@@ -295,7 +318,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_latch() {
+    static AxoObject create_latch() {
         AxoObject o = new AxoObject("latch", "Copies the input to the output at the rising edge of the trigger input. Keeps the output otherwise.");
         o.inlets.add(new InletFrac32("i", "input"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
@@ -308,7 +331,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_latchi() {
+    static AxoObject create_latchi() {
         AxoObject o = new AxoObject("latch", "Copies the input to the output at the rising edge of the trigger input. Keeps the output otherwise.");
         o.inlets.add(new InletInt32("i", "input"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
@@ -321,7 +344,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject CreateVCA() {
+    static AxoObject createVCA() {
         AxoObject o = new AxoObject("vca", "\"voltage controlled amplifier\", multiplies v and a inputs, with linear interpolation from k- to s-rate");
         o.inlets.add(new InletFrac32("v", "gain input"));
         o.inlets.add(new InletFrac32Buffer("a", "audio input"));
@@ -336,7 +359,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_FlashTableGranularPlay() {
+    static AxoObject create_FlashTableGranularPlay() {
         AxoObject o = new AxoObject("flashtable_granular~", "granular playback of a sound sample in flash memory, UNSTABLE, pspread input unused!");
         o.inlets.add(new InletFrac32("position", "grain start position"));
         o.inlets.add(new InletFrac32("pspread", "grain start position spread"));
@@ -372,7 +395,7 @@ public class GeneratedObjects extends gentools {
         return o;
     }
 
-    static AxoObject Create_testanno() {
+    static AxoObject create_testanno() {
         AxoObject o = new AxoObject("test_annotations", "shows various annotations on inputs and outputs");
         o.inlets.add(new InletFrac32Pos("pos", "positive fractional"));
         o.inlets.add(new InletFrac32Bipolar("bip", "bipolar fractional"));

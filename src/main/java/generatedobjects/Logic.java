@@ -17,64 +17,64 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterFrac32UMapKLineTimeReverse;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterFrac32UMapKLineTimeReverse;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Logic extends gentools {
+class Logic extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "logic";
-        WriteAxoObject(catName, Create_toggle());
-        WriteAxoObject(catName, Create_flipflop());
-        WriteAxoObject(catName, Create_flipflop_toggle());
-        WriteAxoObject(catName, Create_until());
-        WriteAxoObject(catName, Create_and2());
-        WriteAxoObject(catName, Create_xor2());
-        WriteAxoObject(catName, Create_or2());
-        WriteAxoObject(catName, Create_not());
-        WriteAxoObject(catName + "/decode", Create_decode_bin8());
-        WriteAxoObject(catName + "/decode", Create_decode_int4());
-        WriteAxoObject(catName + "/decode", Create_decode_int8());
+        writeAxoObject(catName, create_toggle());
+        writeAxoObject(catName, create_flipflop());
+        writeAxoObject(catName, create_flipflop_toggle());
+        writeAxoObject(catName, create_until());
+        writeAxoObject(catName, create_and2());
+        writeAxoObject(catName, create_xor2());
+        writeAxoObject(catName, create_or2());
+        writeAxoObject(catName, create_not());
+        writeAxoObject(catName + "/decode", create_decode_bin8());
+        writeAxoObject(catName + "/decode", create_decode_int4());
+        writeAxoObject(catName + "/decode", create_decode_int8());
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateChangeI());
-            c.add(CreateChangeF());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createChangeI());
+            c.add(createChangeF());
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateChangeSpeedlimI());
-            c.add(CreateChangeSpeedlimF());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createChangeSpeedlimI());
+            c.add(createChangeSpeedlimF());
+            writeAxoObject(catName, c);
         }
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(Create_SampleHoldK());
-            c.add(Create_SampleHoldS());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(create_SampleHoldK());
+            c.add(create_SampleHoldS());
+            writeAxoObject(catName, c);
         }
     }
 
-    static AxoObject Create_toggle() {
+    static AxoObject create_toggle() {
         AxoObject o = new AxoObject("toggle", "toggle");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletBool32("o", "output"));
@@ -88,7 +88,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_flipflop() {
+    static AxoObject create_flipflop() {
         AxoObject o = new AxoObject("flipflop", "flipflop");
         o.inlets.add(new InletBool32Rising("set", "set"));
         o.inlets.add(new InletBool32Rising("reset", "reset"));
@@ -107,7 +107,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_flipflop_toggle() {
+    static AxoObject create_flipflop_toggle() {
         AxoObject o = new AxoObject("flipflop toggle", "toggle flipflop");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.inlets.add(new InletBool32Rising("set", "set"));
@@ -130,7 +130,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_until() {
+    static AxoObject create_until() {
         AxoObject o = new AxoObject("until", "rapid trigger pulses until rising edge on stop");
         o.inlets.add(new InletBool32Rising("start", "start"));
         o.inlets.add(new InletBool32Rising("stop", "stop"));
@@ -161,7 +161,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_and2() {
+    static AxoObject create_and2() {
         AxoObject o = new AxoObject("and 2", "logic AND with 2 inputs");
         o.inlets.add(new InletBool32("i1", "input 1"));
         o.inlets.add(new InletBool32("i2", "input 2"));
@@ -170,7 +170,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_or2() {
+    static AxoObject create_or2() {
         AxoObject o = new AxoObject("or 2", "logic OR with 2 inputs");
         o.inlets.add(new InletBool32("i1", "input 1"));
         o.inlets.add(new InletBool32("i2", "input 2"));
@@ -179,7 +179,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_xor2() {
+    static AxoObject create_xor2() {
         AxoObject o = new AxoObject("xor 2", "logic XOR with 2 inputs");
         o.inlets.add(new InletBool32("i1", "input 1"));
         o.inlets.add(new InletBool32("i2", "input 2"));
@@ -188,7 +188,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_not() {
+    static AxoObject create_not() {
         AxoObject o = new AxoObject("inv", "invert");
         o.inlets.add(new InletBool32("i", "input"));
         o.outlets.add(new OutletBool32("o", "output"));
@@ -196,7 +196,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_decode_bin4() {
+    static AxoObject create_decode_bin4() {
         AxoObject o = new AxoObject("decode.bin 4", "binary decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
@@ -212,7 +212,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_decode_bin8() {
+    static AxoObject create_decode_bin8() {
         AxoObject o = new AxoObject("bin 8", "binary decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
@@ -236,7 +236,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_decode_int4() {
+    static AxoObject create_decode_int4() {
         AxoObject o = new AxoObject("int 4", "integer decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
@@ -252,7 +252,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_decode_int8() {
+    static AxoObject create_decode_int8() {
         AxoObject o = new AxoObject("int 8", "integer decoder");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.outlets.add(new OutletBool32("o0", "output 0"));
@@ -276,7 +276,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject CreateChangeI() {
+    static AxoObject createChangeI() {
         AxoObject o = new AxoObject("change", "Generates a trigger pulse when current input value is different from previous value.");
         o.inlets.add(new InletInt32("in", "in"));
         o.outlets.add(new OutletBool32("trig", "trigger pulse"));
@@ -295,7 +295,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject CreateChangeF() {
+    static AxoObject createChangeF() {
         AxoObject o = new AxoObject("change", "Generates a trigger pulse when current input value is different from previous value.");
         o.inlets.add(new InletFrac32("in", "in"));
         o.outlets.add(new OutletBool32("trig", "trigger pulse"));
@@ -314,7 +314,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject CreateChangeSpeedlimI() {
+    static AxoObject createChangeSpeedlimI() {
         AxoObject o = new AxoObject("change speedlim", "Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.");
         o.inlets.add(new InletInt32("in", "in"));
         o.outlets.add(new OutletBool32("trig", "trigger pulse"));
@@ -336,7 +336,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject CreateChangeSpeedlimF() {
+    static AxoObject createChangeSpeedlimF() {
         AxoObject o = new AxoObject("change speedlim", "Generates a trigger pulse when current input value is different from previous value, with a minimum time interval between pulses.");
         o.inlets.add(new InletFrac32("in", "in"));
         o.outlets.add(new OutletBool32("trig", "trigger pulse"));
@@ -358,7 +358,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_SampleHoldK() {
+    static AxoObject create_SampleHoldK() {
         AxoObject o = new AxoObject("samplehold", "Pass through when s_h input is less or equal than zero or hold when positive.");
         o.inlets.add(new InletFrac32("in", "input"));
         o.inlets.add(new InletFrac32("s_h", "pass through when less or equal than zero or hold when positive"));
@@ -371,7 +371,7 @@ public class Logic extends gentools {
         return o;
     }
 
-    static AxoObject Create_SampleHoldS() {
+    static AxoObject create_SampleHoldS() {
         AxoObject o = new AxoObject("samplehold", "Pass through when s_h input is less or equal than zero or hold when positive.");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.inlets.add(new InletFrac32Buffer("s_h", "pass through when less or equal than zero or hold when positive"));

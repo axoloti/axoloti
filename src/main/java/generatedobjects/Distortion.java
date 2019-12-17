@@ -17,39 +17,39 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletFrac32BufferBipolar;
-import axoloti.parameters.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
-import java.util.HashSet;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32BufferBipolar;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import static generatedobjects.GenTools.writeAxoObject;
+import java.util.LinkedList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Distortion extends gentools {
+class Distortion extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "dist";
-        WriteAxoObject(catName, new AxoObject[]{Create_Softsat(), Create_SoftsatTilde()});
-        WriteAxoObject(catName, Create_InfGain());
-        WriteAxoObject(catName, Create_SchmittTriggerTilde());
-        WriteAxoObject(catName, Create_SampleHoldBL());
-        WriteAxoObject(catName, Create_SampleHold_Cheap());
-        WriteAxoObject(catName, new AxoObject[]{Create_Slew(), Create_SlewTilde()});
-        WriteAxoObject(catName, Create_Rectify());
-        WriteAxoObject(catName, Create_Rectify_full());
-//UNRELEASED        WriteAxoObject(catName, Create_Rectify_lab());
+        writeAxoObject(catName, new AxoObject[]{create_Softsat(), create_SoftsatTilde()});
+        writeAxoObject(catName, create_InfGain());
+        writeAxoObject(catName, create_SchmittTriggerTilde());
+        writeAxoObject(catName, create_SampleHoldBL());
+        writeAxoObject(catName, create_SampleHold_Cheap());
+        writeAxoObject(catName, new AxoObject[]{create_Slew(), create_SlewTilde()});
+        writeAxoObject(catName, create_Rectify());
+        writeAxoObject(catName, create_Rectify_full());
+//UNRELEASED        WriteAxoObject(catName, create_Rectify_lab());
 
     }
 
-    static AxoObject Create_Softsat() {
+    static AxoObject create_Softsat() {
         AxoObject o = new AxoObject("soft", "symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&lt;x&lt;1, y=-1 for x&lt;-1, y=1 for x&gt;1, no oversampling or anti-aliasing");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32Bipolar("out", "output"));
@@ -60,7 +60,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_SoftsatTilde() {
+    static AxoObject create_SoftsatTilde() {
         AxoObject o = new AxoObject("soft", "symetrical soft saturation distortion: y=1.5*x-0.5*x^3 for -1&lt;x&lt;1, y=-1 for x&lt;-1, y=1 for x&gt;1, no oversampling or anti-aliasing");
         o.inlets.add(new InletFrac32Buffer("in", "audio input"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
@@ -71,7 +71,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_InfGain() {
+    static AxoObject create_InfGain() {
         /*
          zero-crossing interpolation
          f(x) = f(0) + x*(f(1)-f(0))
@@ -85,7 +85,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -134,7 +134,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_SchmittTriggerTilde() {
+    static AxoObject create_SchmittTriggerTilde() {
         /*
          zero-crossing interpolation
          f(x) = f(0) + x*(f(1)-f(0))
@@ -148,7 +148,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -199,7 +199,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_SampleHoldBL() {
+    static AxoObject create_SampleHoldBL() {
         /*
          zero-crossing interpolation
          f(x) = f(0) + x*(f(1)-f(0))
@@ -213,7 +213,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -272,7 +272,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_SampleHold_Cheap() {
+    static AxoObject create_SampleHold_Cheap() {
         AxoObject o = new AxoObject("samplehold cheap", "low-quality audio rate sample and hold using blit synthesis (not bandwidth limited)");
         o.inlets.add(new InletFrac32Buffer("in", "level input"));
         o.inlets.add(new InletFrac32Buffer("trig", "trigger input, triggers on rising zero-crossing"));
@@ -290,7 +290,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_Slew() {
+    static AxoObject create_Slew() {
         AxoObject o = new AxoObject("slew", "symetric slew rate limiter (not bandwidth limited)");
         o.inlets.add(new InletFrac32("in", "input"));
         o.outlets.add(new OutletFrac32("out", "output"));
@@ -313,7 +313,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_SlewTilde() {
+    static AxoObject create_SlewTilde() {
         AxoObject o = new AxoObject("slew", "symetric slew rate limiter (not bandwidth limited)");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.outlets.add(new OutletFrac32Buffer("out", "output"));
@@ -336,11 +336,11 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_Rectify_full() {
+    static AxoObject create_Rectify_full() {
         AxoObject o = new AxoObject("rectifier full", "full-wave rectifier distortion, bandlimited");
         o.inlets.add(new InletFrac32Buffer("in", "audio input"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData
                 = "  static const int blepvoices = 8;\n"
@@ -392,11 +392,11 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_Rectify() {
+    static AxoObject create_Rectify() {
         AxoObject o = new AxoObject("rectifier", "half-wave rectifier distortion, bandlimited");
         o.inlets.add(new InletFrac32Buffer("in", "audio input"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData
                 = "  static const int blepvoices = 8;\n"
@@ -448,7 +448,7 @@ public class Distortion extends gentools {
         return o;
     }
 
-    static AxoObject Create_Rectify_lab() {
+    static AxoObject create_Rectify_lab() {
         /*
          zero-crossing interpolation
          f(x) = f(0) + x*(f(1)-f(0))
@@ -462,7 +462,7 @@ public class Distortion extends gentools {
          f(1) = 15
          x = -5/(-5-15)
          = 0.25
-        
+
          f(0) = 15
          f(1) = -5
          x = 15/(15+5)
@@ -480,7 +480,7 @@ public class Distortion extends gentools {
         o.outlets.add(new OutletFrac32BufferBipolar("out", "audio output"));
         o.outlets.add(new OutletFrac32BufferBipolar("test1", "audio output"));
         o.outlets.add(new OutletFrac32BufferBipolar("test2", "audio output"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData
                 = "  static const int blepvoices = 8;\n"
@@ -575,9 +575,9 @@ public class Distortion extends gentools {
  int32_t x = ((-i0<<6)/(i1-i0));
  if (%p1%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
- if (!%inv1%) 
+ if (!%inv1%)
  amp[nextvoice] = i1>>16;
- else 
+ else
  amp[nextvoice] = -i1>>16;
 
  } else if (%enable2%&&(i1<0)&&!(i0<0)){   // dispatch
@@ -587,9 +587,9 @@ public class Distortion extends gentools {
  if (%p2%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
 
- if (!%inv2%) 
+ if (!%inv2%)
  amp[nextvoice] = i1>>16;
- else 
+ else
  amp[nextvoice] = -i1>>16;
 
  }
@@ -626,9 +626,9 @@ public class Distortion extends gentools {
  int32_t x = ((-i0<<6)/(i1-i0));
  if (%p1%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
- if (!%inv1%) 
+ if (!%inv1%)
  amp[nextvoice] = (i0-i1)>>16;
- else 
+ else
  amp[nextvoice] = -(i0-i1)>>16;
  } else if (%enable2%&&(i1<0)&&(i0>0)){   // dispatch
 
@@ -637,9 +637,9 @@ public class Distortion extends gentools {
  if (%p2%) x = 64-x;
  oscp[nextvoice] = &bltri[x];
  //	i1 = 0;
- if (!%inv2%) 
+ if (!%inv2%)
  amp[nextvoice] = (i0-i1)>>16;
- else 
+ else
  amp[nextvoice] = -(i0-i1)>>16;
 
  }

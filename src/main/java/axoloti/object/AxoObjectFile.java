@@ -34,7 +34,7 @@ import org.simpleframework.xml.core.Validate;
 public class AxoObjectFile {
 
     @Attribute(required = false)
-    String appVersion;
+    private String appVersion;
 
     @ElementListUnion({
         @ElementList(entry = "obj.normal", type = AxoObject.class, inline = true, required = false),
@@ -61,7 +61,7 @@ public class AxoObjectFile {
             if (i > 0) {
                 String v = vS.substring(0, i);
                 try {
-                    return Integer.valueOf(v);
+                    return Integer.parseInt(v);
                 } catch (NumberFormatException e) {
                 }
             }
@@ -77,7 +77,7 @@ public class AxoObjectFile {
                 if (j > 0) {
                     String v = vS.substring(i + 1, j);
                     try {
-                        return Integer.valueOf(v);
+                        return Integer.parseInt(v);
                     } catch (NumberFormatException e) {
 
                     }
@@ -95,7 +95,7 @@ public class AxoObjectFile {
                 if (j > 0) {
                     String v = vS.substring(j + 1);
                     try {
-                        return Integer.valueOf(v);
+                        return Integer.parseInt(v);
                     } catch (NumberFormatException e) {
 
                     }
@@ -106,11 +106,11 @@ public class AxoObjectFile {
     }
 
     public AxoObjectFile() {
-        objs = new ArrayList<AxoObjectAbstract>();
+        objs = new ArrayList<>();
     }
 
     @Validate
-    public void Validate() {
+    public void validate() {
         // called after deserialializtion, stops validation
         if (appVersion != null
                 && !appVersion.equals(Version.AXOLOTI_SHORT_VERSION)) {
@@ -141,7 +141,7 @@ public class AxoObjectFile {
 
 
     @Persist
-    public void Persist() {
+    public void persist() {
         // called prior to serialization
         appVersion = Version.AXOLOTI_SHORT_VERSION;
     }

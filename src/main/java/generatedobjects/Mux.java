@@ -17,36 +17,36 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletCharPtr32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
-import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletCharPtr32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletCharPtr32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletCharPtr32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Mux extends gentools {
+class Mux extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "mux";
-        WriteAxoObject(catName, new AxoObject[]{Create_inmux2(), Create_inmux2Tilde(), Create_inmux2I(), Create_inmux2b(), Create_inmux2s()});
+        writeAxoObject(catName, new AxoObject[]{create_inmux2(), create_inmux2Tilde(), create_inmux2I(), create_inmux2b(), create_inmux2s()});
 
         for (int i = 3; i < 9; i++) {
-            WriteAxoObject(catName, new AxoObject[]{Create_inmuxn(i), Create_inmuxni(i), Create_inmuxntilde(i), Create_inmuxnb(i), Create_inmuxns(i)});
+            writeAxoObject(catName, new AxoObject[]{create_inmuxn(i), create_inmuxni(i), create_inmuxntilde(i), create_inmuxnb(i), create_inmuxns(i)});
         }
     }
 
-    static AxoObject Create_inmux2() {
+    static AxoObject create_inmux2() {
         AxoObject o = new AxoObject("mux 2", "input multiplexer. Output is i1 when s is false, i2 otherwise.");
         o.inlets.add(new InletFrac32("i1", "input 1"));
         o.inlets.add(new InletFrac32("i2", "input 2"));
@@ -56,7 +56,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmux2Tilde() {
+    static AxoObject create_inmux2Tilde() {
         AxoObject o = new AxoObject("mux 2", "input multiplexer. Output is i1 when s is false, i2 otherwise.");
         o.inlets.add(new InletFrac32Buffer("i1", "input 1"));
         o.inlets.add(new InletFrac32Buffer("i2", "input 2"));
@@ -66,7 +66,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmux2I() {
+    static AxoObject create_inmux2I() {
         AxoObject o = new AxoObject("mux 2", "input multiplexer. Output is i1 when s is false, i2 otherwise.");
         o.inlets.add(new InletInt32("i1", "input 1"));
         o.inlets.add(new InletInt32("i2", "input 2"));
@@ -76,7 +76,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmux2b() {
+    static AxoObject create_inmux2b() {
         AxoObject o = new AxoObject("mux 2", "input multiplexer. Output is i1 when s is false, i2 otherwise.");
         o.inlets.add(new InletBool32("i1", "input 1"));
         o.inlets.add(new InletBool32("i2", "input 2"));
@@ -86,7 +86,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmux2s() {
+    static AxoObject create_inmux2s() {
         AxoObject o = new AxoObject("mux 2", "input multiplexer. Output is i1 when s is false, i2 otherwise.");
         o.inlets.add(new InletCharPtr32("i1", "input 1"));
         o.inlets.add(new InletCharPtr32("i2", "input 2"));
@@ -94,9 +94,9 @@ public class Mux extends gentools {
         o.outlets.add(new OutletCharPtr32("o", "output"));
         o.sKRateCode = "   %o%= (%s%)?(char *)%i2%:(char *)%i1%;\n";
         return o;
-    }    
-    
-    static AxoObject Create_inmuxn(int n) {
+    }
+
+    static AxoObject create_inmuxn(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletFrac32("i" + i, "input " + i));
@@ -112,7 +112,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmuxntilde(int n) {
+    static AxoObject create_inmuxntilde(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletFrac32Buffer("i" + i, "input " + i));
@@ -128,7 +128,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmuxni(int n) {
+    static AxoObject create_inmuxni(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletInt32("i" + i, "input " + i));
@@ -144,7 +144,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmuxnb(int n) {
+    static AxoObject create_inmuxnb(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletBool32("i" + i, "input " + i));
@@ -160,7 +160,7 @@ public class Mux extends gentools {
         return o;
     }
 
-    static AxoObject Create_inmuxns(int n) {
+    static AxoObject create_inmuxns(int n) {
         AxoObject o = new AxoObject("mux " + n, "input multiplexer. Output is i1 when s < 1, i[i] when....");
         for (int i = 0; i < n; i++) {
             o.inlets.add(new InletCharPtr32("i" + i, "input " + i));

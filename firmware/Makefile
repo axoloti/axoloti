@@ -1,36 +1,47 @@
-#############################################################################
+##############################################################################
 # Build global options
 # NOTE: Can be overridden externally.
 #
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-math-errno -Wno-unused-parameter
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-math-errno
 endif
 
 # C specific options here (added to USE_OPT).
 ifeq ($(USE_COPT),)
   USE_COPT = 
 endif
- 
+
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
   USE_CPPOPT = -fno-rtti
 endif
 
-# Enable this if you want the linker to remove unused code and data
+# Enable this if you want the linker to remove unused code and data.
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = no
+  USE_LINK_GC = yes
 endif
 
-# If enabled, this option allows to compile the application in THUMB mode.
-ifeq ($(USE_THUMB),)
-  USE_THUMB = yes
+# Linker extra options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = --print-memory-usage
+endif
+
+# Enable this if you want link time optimizations (LTO).
+ifeq ($(USE_LTO),)
+  USE_LTO = yes
 endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = yes
+  USE_VERBOSE_COMPILE = no
+endif
+
+# If enabled, this option makes the build process faster by not compiling
+# modules not used in the current configuration.
+ifeq ($(USE_SMART_BUILD),)
+  USE_SMART_BUILD = no
 endif
 
 #
@@ -41,27 +52,36 @@ endif
 # Architecture or project specific options
 #
 
-# Enables the use of FPU on Cortex-M4 (no, softfp, hard).
+# Stack size to be allocated to the Cortex-M process stack. This stack is
+# the stack used by the main() thread.
+ifeq ($(USE_PROCESS_STACKSIZE),)
+  USE_PROCESS_STACKSIZE = 0x450
+endif
+
+# Stack size to the allocated to the Cortex-M main/exceptions stack. This
+# stack is used for processing interrupts and exceptions.
+ifeq ($(USE_EXCEPTIONS_STACKSIZE),)
+  USE_EXCEPTIONS_STACKSIZE = 0x400
+endif
+
+# Enables the use of FPU (no, softfp, hard).
 ifeq ($(USE_FPU),)
   USE_FPU = hard
 endif
-
-#Axoloti optional modules, here we define defaults if none supplied
-ifeq ($(AXO_OPT_MODULES),)
-	AXO_OPT_MODULES = BRAIDS RINGS CLOUDS STREAMS ELEMENTS WARPS
-endif
-
 
 #
 # Architecture or project specific options
 ##############################################################################
 
 ##############################################################################
-# Project, sources and paths
+# Project, target, sources and paths
 #
 
 # Define project name here
 PROJECT = axoloti
+
+# Target settings.
+MCU  = cortex-m4
 
 # Imported source files and paths
 axoloti_runtime ?= ..
@@ -69,8 +89,7 @@ axoloti_release ?= ..
 axoloti_home ?= ..
 axoloti_firmware ?= ../firmware
 
-CHIBIOS = ${axoloti_release}/chibios
-
+include $(axoloti_firmware)/ch_version.mk
 
 # theoretically should be this...., but CSRC expansion cannot cope with escape spaces
 #SPACE :=
@@ -78,110 +97,63 @@ CHIBIOS = ${axoloti_release}/chibios
 #FIRMWARE=$(subst $(SPACE),\ ,${axoloti_firmware})
 FIRMWARE=.
 
-MUTABLE_INSTRUMENTS = ${FIRMWARE}/mutable_instruments
-
-
+# Licensing files.
+include $(CHIBIOS)/os/license/license.mk
+# Startup files.
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f4xx.mk
+# HAL-OSAL files (optional).
+include $(CHIBIOS_CONTRIB)/os/hal/hal.mk
+include $(CHIBIOS_CONTRIB)/os/hal/ports/STM32/STM32F4xx/platform.mk
 include board.mk
-include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
-include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
-include $(CHIBIOS)/os/kernel/kernel.mk
-	
+include $(CHIBIOS)/os/hal/osal/rt/osal.mk
+# RTOS files (optional).
+include $(CHIBIOS)/os/rt/rt.mk
+include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
+# FATFS
 include $(CHIBIOS)/os/various/fatfs_bindings/fatfs.mk
+# streams
+include $(CHIBIOS)/os/hal/lib/streams/streams.mk
 
-CMSIS = ${axoloti_release}/CMSIS/
+# get the same binary as openOCD flashes from elf
+override BIN = $(CP) -O binary --gap-fill 0xff
+override HEX = $(CP) -O ihex --gap-fill 0xff
 
+CMSIS = ${FIRMWARE}/../api/CMSIS/
 
 # Define linker script file here
-LDSCRIPT= STM32F407xG.ld
-
+LDSCRIPT= STM32F427xG.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CSRC = $(PORTSRC) \
-       $(KERNSRC) \
-       $(HALSRC) \
-       $(PLATFORMSRC) \
-       $(BOARDSRC) \
-       $(FATFSSRC) \
-       $(CHIBIOS)/os/various/chprintf.c \
-       $(CHIBIOS)/os/various/memstreams.c \
+CSRC = $(ALLCSRC) \
+       ${FIRMWARE}/elfloader/loader.c \
+       ${FIRMWARE}/ch_version_check.c \
        ${FIRMWARE}/axoloti_control.c \
        ${FIRMWARE}/codec.c \
-       ${FIRMWARE}/axoloti.c \
-       ${FIRMWARE}/axoloti_filters.c \
        ${FIRMWARE}/axoloti_math.c \
        ${FIRMWARE}/axoloti_oscs.c \
        ${FIRMWARE}/axoloti_board.c \
+       ${FIRMWARE}/dlfcn.c \
+       ${FIRMWARE}/error_codes.c \
+       ${FIRMWARE}/fatfs_dmafix.c \
        ${FIRMWARE}/midi.c \
+       ${FIRMWARE}/midi_routing.c \
+       ${FIRMWARE}/midi_usb.c \
        ${FIRMWARE}/ui.c \
        ${FIRMWARE}/glcdfont.c \
        ${FIRMWARE}/usbcfg.c \
        ${FIRMWARE}/sdcard.c \
+       ${FIRMWARE}/sdram.c \
        ${FIRMWARE}/pconnection.c \
+       ${FIRMWARE}/pconn_extra.c \
        ${FIRMWARE}/parameters.c \
+       ${FIRMWARE}/exports.c \
        ${FIRMWARE}/main.c \
        ${FIRMWARE}/patch.c \
        ${FIRMWARE}/flash.c \
-       ${FIRMWARE}/virtual_control.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_init_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_init_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix2_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_cfft_radix8_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_fast_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_fast_init_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_f32.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q15.c \
-       ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_rfft_q31.c \
-       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_q31.c \
-       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_q15.c \
-       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_mult_f32.c \
-       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_shift_q31.c \
-       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_shift_q15.c \
-       ${CMSIS}/DSP_Lib/Source/BasicMathFunctions/arm_scale_f32.c \
-       ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q31.c \
-	   ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_f32.c \
-       ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q31.c \
-       ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mult_cmplx_q15.c \
-       ${CMSIS}/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_q15.c \
-       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_cos_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sin_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FastMathFunctions/arm_sqrt_q15.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_fast_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_32x64_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_fast_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_biquad_cascade_df1_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_interpolate_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_interpolate_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_decimate_init_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_decimate_q31.c \
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_decimate_fast_q31.c\
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_lattice_init_q31.c\
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_fir_lattice_q31.c\
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_init_q31.c\
-       ${CMSIS}/DSP_Lib/Source/FilteringFunctions/arm_iir_lattice_q31.c\
-       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_common_tables.c \
-       ${CMSIS}/DSP_Lib/Source/CommonTables/arm_const_structs.c \
+       ${FIRMWARE}/firmware_chunks.c \
+       ${FIRMWARE}/midi_buffer.c \
+       ${FIRMWARE}/midi_usbh.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_core.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ioreq.c \
@@ -193,103 +165,49 @@ CSRC = $(PORTSRC) \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usb.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
+       ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
        ${FIRMWARE}/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_hcd.c \
        ${FIRMWARE}/usbh_midi_core.c \
        ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \
        ${FIRMWARE}/serial_midi.c \
-       ${FIRMWARE}/bulk_usb.c \
-       ${FIRMWARE}/midi_usb.c \
+       ${FIRMWARE}/spilink.c \
+       ${FIRMWARE}/spidb.c \
        ${FIRMWARE}/crc32.c \
        ${FIRMWARE}/exceptions.c \
-       ${FIRMWARE}/watchdog.c \
        ${FIRMWARE}/sysmon.c \
-       ${FIRMWARE}/axoloti_memory.c
-
-#optional modules
-ifneq (,$(findstring BRAIDS,$(AXO_OPT_MODULES)))
-#$(info including BRAIDS)
-BRAIDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/braids/braids_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/analog_oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/digital_oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/braids/macro_oscillator.cpp 
-endif
-
-ifneq (,$(findstring WARPS,$(AXO_OPT_MODULES)))
-#$(info including WARPS)
-WARPS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/warps/warps_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/filter_bank.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/modulator.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/oscillator.cpp \
-       ${MUTABLE_INSTRUMENTS}/warps/dsp/vocoder.cpp 
-endif
-
-ifneq (,$(findstring ELEMENTS,$(AXO_OPT_MODULES)))
-#$(info including ELEMENTS)
-ELEMENTS_SRC = \
-       ${FIRMWARE}/axoloti_mi.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/multistage_envelope.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/ominous_voice.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/resonator.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/string.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/tube.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/dsp/exciter.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/elements_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/part.cpp \
-       ${MUTABLE_INSTRUMENTS}/elements/voice.cpp 
-endif
-
-ifneq (,$(findstring CLOUDS,$(AXO_OPT_MODULES)))
-#$(info including CLOUDS)
-CLOUDS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/clouds/clouds_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/correlator.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/mu_law.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/granular_processor.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/frame_transformation.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/phase_vocoder.cpp \
-       ${MUTABLE_INSTRUMENTS}/clouds/dsp/pvoc/stft.cpp 
-endif
-
-ifneq (,$(findstring RINGS,$(AXO_OPT_MODULES)))
-#$(info  including RINGS)
-RINGS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/rings/rings_resources.cpp 
-endif
-
-ifneq (,$(findstring STREAMS,$(AXO_OPT_MODULES)))
-#$(info including STREAMS)
-STREAMS_SRC = \
-       ${MUTABLE_INSTRUMENTS}/streams/streams_resources.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/compressor.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/envelope.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/follower.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/lorenz_generator.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/processor.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/svf.cpp \
-       ${MUTABLE_INSTRUMENTS}/streams/vactrol.cpp 
-endif
-
-#$(info including base MI)
+       ${FIRMWARE}/axoloti_memory.c \
+       ${FIRMWARE}/semihosting_stream.c \
+       ${FIRMWARE}/dbg_stream.c \
+       ${FIRMWARE}/null_stream.c \
+       ${FIRMWARE}/qgfx.c \
+       ${FIRMWARE}/ui_nodes/action_function.c \
+       ${FIRMWARE}/ui_nodes/int_value.c \
+       ${FIRMWARE}/ui_nodes/node_list.c \
+       ${FIRMWARE}/ui_nodes/object_list.c \
+       ${FIRMWARE}/ui_nodes/object.c \
+       ${FIRMWARE}/ui_nodes/param_list.c \
+       ${FIRMWARE}/ui_nodes/param.c \
+       ${FIRMWARE}/ui_nodes/short_value.c \
+       ${FIRMWARE}/ui_nodes/ui_nodes/ui_nodes_common.c \
+       ${FIRMWARE}/menu_content/adc_menu.c \
+       ${FIRMWARE}/menu_content/food_menu.c \
+       ${FIRMWARE}/menu_content/loadpatch_menu.c \
+       ${FIRMWARE}/menu_content/main_menu.c \
+       ${FIRMWARE}/menu_content/midi_clock_menu.c \
+       ${FIRMWARE}/menu_content/midi_controller.c \
+       ${FIRMWARE}/menu_content/midi_monitor.c \
+       ${FIRMWARE}/menu_content/sdcard_menu.c \
+       ${FIRMWARE}/menu_content/processes_menu.c \
+       ${FIRMWARE}/ui_nodes/test_menu.c \
+       ${FIRMWARE}/vfile_ops/vfile_fatfs.c \
+       ${FIRMWARE}/vfile_ops/vfile_mem.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CPPSRC = \
-       ${MUTABLE_INSTRUMENTS}/stmlib/dsp/units.cpp \
-       ${MUTABLE_INSTRUMENTS}/stmlib/dsp/atan.cpp \
-       ${MUTABLE_INSTRUMENTS}/stmlib/utils/random.cpp \
-       ${MUTABLE_INSTRUMENTS}/mutable_resources.cpp \
-       ${BRAIDS_SRC} \
-       ${WARPSS_SRC} \
-       ${ELEMENTS_SRC} \
-       ${CLOUDS_SRC} \
-       ${RINGS_SRC} \
-       ${STREAMS_SRC}
+      ${FIRMWARE}/patch_wrapper.cpp
 
- 
-	   
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
 #       option that results in lower performance and larger code size.
@@ -311,88 +229,22 @@ TCSRC =
 TCPPSRC =
 
 # List ASM source files here
-ASMSRC = $(PORTASM) \
-         ${CMSIS}/DSP_Lib/Source/TransformFunctions/arm_bitreversal2.s
+ASMSRC =
 
-INCDIR = ${CMSIS}/Include \
-         ${CMSIS}/DSP_Lib/Include \
-		 $(PORTINC) $(KERNINC) $(TESTINC) \
-         $(HALINC) $(PLATFORMINC) $(BOARDINC) \
+ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
+
+INCDIR = $(CONFDIR) $(ALLINC) $(TESTINC) \
+         $(CMSIS)/Core/Include \
+         ${CMSIS}/DSP/Include \
          $(FATFSINC) \
-         $(CHIBIOS)/os/various \
+         $(CHIBIOS) \
+         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc \
+         ${FIRMWARE}/../api \
          ${FIRMWARE}/STM32_USB_Host_Library/Core/Inc \
          ${FIRMWARE}/STM32_USB_Host_Library/Class/HID/Inc \
-         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc \
-         ${MUTABLE_INSTRUMENTS} \
-         ${MUTABLE_INSTRUMENTS}/warps \
-         ${MUTABLE_INSTRUMENTS}/braids \
-         ${MUTABLE_INSTRUMENTS}/rings \
-         ${MUTABLE_INSTRUMENTS}/elements \
-         ${MUTABLE_INSTRUMENTS}/stmlib
-
+         ${FIRMWARE}/STM32F4xx_HAL_Driver/Inc
 #
-# Project, sources and paths
-##############################################################################
-
-##############################################################################
-# Compiler settings
-#
-
-MCU  = cortex-m4
-
-#TRGT = arm-elf-
-TRGT = arm-none-eabi-
-CC   = $(TRGT)gcc
-CPPC = $(TRGT)g++
-# Enable loading with g++ only if you need C++ runtime support.
-# NOTE: You can use C++ even without C++ support if you are careful. C++
-#       runtime support makes code size explode.
-LD   = $(TRGT)gcc 
-#LD   = $(TRGT)g++ 
-CP   = $(TRGT)objcopy
-AS   = $(TRGT)gcc -x assembler-with-cpp
-OD   = $(TRGT)objdump
-SZ   = $(TRGT)size
-HEX  = $(CP) -O ihex
-BIN  = $(CP) -O binary
-
-# ARM-specific options here
-AOPT =
-
-# THUMB-specific options here
-TOPT = -mthumb -DTHUMB
-
-# Define C warning options here
-CWARN = -Wall -Wextra -Wstrict-prototypes
-
-# Define C++ warning options here
-CPPWARN = -Wall -Wextra
-
-#
-# Compiler settings
-##############################################################################
-
-##############################################################################
-# Start of default section
-#
-
-# List all default C defines here, like -D_DEBUG=1
-DDEFS =
-
-# List all default ASM defines here, like -D_DEBUG=1
-DADEFS =
-
-# List all default directories to look for include files here
-DINCDIR =
-
-# List the default directory to look for the libraries here
-DLIBDIR =
-
-# List all default libraries here
-DLIBS = 
-
-#
-# End of default section
+# Project, target, sources and paths
 ##############################################################################
 
 ##############################################################################
@@ -400,23 +252,86 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DARM_MATH_CM4 -D__FPU_PRESENT
+UDEFS = -DARM_MATH_CM4 -DSTM32F427xx -D__FPU_PRESENT=1U
 
 # Define ASM defines here
 UADEFS =
 
 # List all user directories here
-UINCDIR = 
+UINCDIR = api
 
 # List the user directory to look for the libraries here
 ULIBDIR = .
 
 # List all user libraries here
-ULIBS = -lm 
+ULIBS = --specs=nosys.specs -lm $(CMSIS)/DSP/Lib/GCC/libarm_cortexM4lf_math.a
+# to enable semihosting, use --specs=rdimon.specs
 
 #
-# End of user defines
+# End of user section
 ##############################################################################
 
-RULESPATH = $(CHIBIOS)/os/ports/GCC/ARMCMx
+##############################################################################
+# Common rules
+#
+
+RULESPATH = $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk
+include $(RULESPATH)/arm-none-eabi.mk
 include $(RULESPATH)/rules.mk
+
+#
+# Common rules
+##############################################################################
+
+##############################################################################
+# Custom rules
+#
+DEVICE = "unknown_device"
+# TODO: DEVICE should probably not be in DEFS
+
+API = ${FIRMWARE}/../api
+API_FATFS = $(API)/fatfs
+API_STM32f4XX = $(API)/stm32f4xx
+
+ch_header:
+	@echo Merging headers
+	@$(CC) -I./genapi/dummy $(IINCDIR) -D$(DEVICE) $(DEFS) -nostdinc -include cmparams.h -include _delimiter.h -fdirectives-only -dD -E -P $(CHIBIOS)/os/rt/include/ch.h -o tmpch1.h
+	@$(CC) -fpreprocessed -dD -E -P tmpch1.h -o tmpch2.h
+	@sed -e '1,/___HEADER_BEGIN___/d' tmpch2.h > tmpch3.h
+	@echo "#ifndef _CHIBIOS_RT_" > api/ch.h
+	@cat ./genapi/dummy/_header.h >> api/ch.h
+	@cat tmpch3.h >> api/ch.h
+	@cat ./genapi/dummy/_footer.h >> api/ch.h
+	@rm tmpch*.h
+	@echo Done
+
+hal_header:
+	@echo Merging headers
+	@$(CC) -I./genapi -I./genapi/dummy $(IINCDIR) -D$(DEVICE) $(DEFS) -nostdinc -include cmparams.h -include _delimiter.h -fdirectives-only -dD -E -P genapi/hal_exports.h -o tmphal1.h
+	@$(CC) -fpreprocessed -dD -E -P tmphal1.h -o tmphal2.h
+	@sed -e '1,/___HEADER_BEGIN___/d' tmphal2.h > tmphal3.h
+	@echo "#ifndef _CHIBIOS_HAL_" > $(API)/hal.h
+	@cat ./genapi/dummy/_header.h >> $(API)/hal.h
+	@cat tmphal3.h >> $(API)/hal.h
+	@cat ./genapi/dummy/_footer.h >> $(API)/hal.h
+	@rm tmphal*.h
+	@echo Done
+
+fatfs_api:
+	@echo "copying fatfs api"
+	@cp $(CHIBIOS)/ext/fatfs/src/ff.h $(API_FATFS)
+	@cp $(CHIBIOS)/ext/fatfs/src/integer.h $(API_FATFS)
+	@cp ${FIRMWARE}/ffconf.h $(API_FATFS)
+
+stm32f4xx_api:
+	@echo "copying stm32f4xx api"
+	@cp $(CHIBIOS)/os/common/ext/ST/STM32F4xx/stm32f427xx.h $(API_STM32f4XX)
+	@cp $(CHIBIOS)/os/common/ext/ST/STM32F4xx/system_stm32f4xx.h $(API_STM32f4XX)
+	@cp $(CHIBIOS)/os/common/ext/ST/STM32F4xx/stm32f4xx.h $(API_STM32f4XX)
+	@cp $(CHIBIOS)/os/common/startup/ARMCMx/devices/STM32F4xx/cmparams.h $(API_STM32f4XX)
+
+api: ch_header hal_header fatfs_api stm32f4xx_api
+
+#
+# Custom rules
+##############################################################################

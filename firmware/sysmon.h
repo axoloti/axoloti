@@ -30,6 +30,8 @@ void sysmon_blink_pattern(uint32_t pattern);
 #define BLINK_OVERLOAD 0b11111111111111111111111111111111
 // green + red slow blink
 #define BLINK_ERROR 0b11110101111101011111010111110101
+// green/red overlapping alternate slow blink
+#define SLAVE_ERROR 0b10110100101101001011010010110100
 
 typedef enum
 {

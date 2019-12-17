@@ -79,7 +79,10 @@ void axoloti_math_init(void) {
   RCC->AHB2RSTR |= RCC_AHB2RSTR_RNGRST;
   RCC->AHB2RSTR &= ~RCC_AHB2RSTR_RNGRST;
   RCC->AHB2ENR |= RCC_AHB2ENR_RNGEN;
-  chThdSleepMilliseconds(1);
+  asm("nop");
+  asm("nop");
+  asm("nop");
+  asm("nop");
   RNG->CR = RNG_CR_RNGEN;
   while(!(RNG->SR & RNG_SR_DRDY)) {
   }

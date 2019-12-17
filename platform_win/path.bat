@@ -16,8 +16,16 @@ call :setrelease "%axoloti_release%"
 if not defined axoloti_home (
    set axoloti_home=%platformdir%..
 )
-set PATH=%platformdir%bin
 
+call :setgccpath "C:/Program Files (x86)/GNU Tools Arm Embedded/7 2018-q2-update/bin"
+
+set PATH=%gcc_path%;%platformdir%bin;%windir%\system32
+echo PATH=%PATH%
+
+goto :eof
+
+:setgccpath
+set gcc_path=%~s1
 goto :eof
 
 :setfirmware

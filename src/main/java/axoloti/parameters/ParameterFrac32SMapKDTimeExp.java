@@ -15,10 +15,16 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
+/* Oops, this class is hard-referenced in .axo files... */
 package axoloti.parameters;
 
+import axoloti.object.parameter.ParameterFrac32SMap;
 import axoloti.realunits.LinearTimeExp;
 import axoloti.realunits.NativeToReal;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -35,18 +41,22 @@ public class ParameterFrac32SMapKDTimeExp extends ParameterFrac32SMap {
     }
 
     @Override
-    public ParameterInstanceFrac32SMap InstanceFactory() {
-        ParameterInstanceFrac32SMap p = super.InstanceFactory();
-        p.SetPFunction("pfun_kexpdtime");
-        NativeToReal convs[] = {new LinearTimeExp()};
-        p.convs = convs;
-        return p;
+    public String getPFunction() {
+        return "parameter_function::pf_kexpdtime";
     }
 
-    static public final String TypeName = "frac32.s.map.kdecaytime.exp";
+    private static final NativeToReal convs[] = {new LinearTimeExp()};
+    private static final List<NativeToReal> listConvs = Collections.unmodifiableList(Arrays.asList(convs));
+
+    @Override
+    public List<NativeToReal> getConversions() {
+        return listConvs;
+    }
+
+    static public final String TYPE_NAME = "frac32.s.map.kdecaytime.exp";
 
     @Override
     public String getTypeName() {
-        return TypeName;
+        return TYPE_NAME;
     }
 }

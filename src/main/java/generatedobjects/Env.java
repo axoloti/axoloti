@@ -17,60 +17,60 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletBool32RisingFalling;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterFrac32SMap;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletBool32RisingFalling;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.object.parameter.ParameterFrac32SMapKLineTimeExp;
+import axoloti.object.parameter.ParameterFrac32SMapKLineTimeExp2;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapKDecayTime;
 import axoloti.parameters.ParameterFrac32SMapKDTimeExp;
-import axoloti.parameters.ParameterFrac32SMapKLineTimeExp;
-import axoloti.parameters.ParameterFrac32SMapKLineTimeExp2;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapKDecayTime;
-import static generatedobjects.gentools.WriteAxoObject;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Env extends gentools {
+class Env extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName;
 
         catName = "env";
-        WriteAxoObject(catName, Create_envadsr());
-        WriteAxoObject(catName, Create_envadsrm());
-        WriteAxoObject(catName, Create_envad());
-        WriteAxoObject(catName, Create_envd_new());
-        WriteAxoObject(catName, Create_envd_m_new());
+        writeAxoObject(catName, create_envadsr());
+        writeAxoObject(catName, create_envadsrm());
+        writeAxoObject(catName, create_envad());
+        writeAxoObject(catName, create_envd_new());
+        writeAxoObject(catName, create_envd_m_new());
 
-        WriteAxoObject(catName, Create_envhd());
-        WriteAxoObject(catName, Create_envahd());
-        WriteAxoObject(catName, Create_envahd2());
-        WriteAxoObject(catName, CreateEnvFollower());
+        writeAxoObject(catName, create_envhd());
+        writeAxoObject(catName, create_envahd());
+        writeAxoObject(catName, create_envahd2());
+        writeAxoObject(catName, createEnvFollower());
 
-        WriteAxoObject(catName, Create_envdlinx());
-        WriteAxoObject(catName, Create_envhdlinx());
-        WriteAxoObject(catName, Create_envahdlinx());
+        writeAxoObject(catName, create_envdlinx());
+        writeAxoObject(catName, create_envhdlinx());
+        writeAxoObject(catName, create_envahdlinx());
 
-        WriteAxoObject(catName, Create_envdlinmx());
-        WriteAxoObject(catName, Create_envhdlinmx());
-        WriteAxoObject(catName, Create_envahdlinmx());
+        writeAxoObject(catName, create_envdlinmx());
+        writeAxoObject(catName, create_envhdlinmx());
+        writeAxoObject(catName, create_envahdlinmx());
 
-        WriteAxoObject(catName, Create_line2x());
-        WriteAxoObject(catName, Create_line3x());
+        writeAxoObject(catName, create_line2x());
+        writeAxoObject(catName, create_line3x());
 
-        WriteAxoObject(catName, Create_line2mx());
-        WriteAxoObject(catName, Create_line3mx());
+        writeAxoObject(catName, create_line2mx());
+        writeAxoObject(catName, create_line3mx());
     }
 
-    static AxoObject Create_envd_new() {
+    static AxoObject create_envd_new() {
         AxoObject o = new AxoObject("d", "decay envelope");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
@@ -85,7 +85,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envd_m_new() {
+    static AxoObject create_envd_m_new() {
         AxoObject o = new AxoObject("d m", "decay envelope with modulation input");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.inlets.add(new InletFrac32("d", "decay time"));
@@ -108,7 +108,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envhd() {
+    static AxoObject create_envhd() {
         AxoObject o = new AxoObject("hd", "hold/decay envelope");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
@@ -121,7 +121,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envahd() {
+    static AxoObject create_envahd() {
         AxoObject o = new AxoObject("ahd", "attack hold decay envelope");
         o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
@@ -135,7 +135,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envahd2() {
+    static AxoObject create_envahd2() {
         AxoObject o = new AxoObject("ahd m", "attack hold decay envelope with modulation inputs");
         o.inlets.add(new InletFrac32("a", "attack time"));
         o.inlets.add(new InletFrac32("d", "decay time"));
@@ -151,7 +151,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envadsr() {
+    static AxoObject create_envadsr() {
         AxoObject o = new AxoObject("adsr", "Attack/decay/sustain/release envelope");
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
@@ -189,7 +189,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envadsrm() {
+    static AxoObject create_envadsrm() {
         AxoObject o = new AxoObject("adsr m", "Attack/decay/sustain/release envelope with modulation inputs");
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
@@ -241,7 +241,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envad() {
+    static AxoObject create_envad() {
         AxoObject o = new AxoObject("ad", "Attack/decay envelope, linear attack, exponential decay");
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
@@ -273,7 +273,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envdlinx() {
+    static AxoObject create_envdlinx() {
         AxoObject o = new AxoObject("d lin", "decay envelope, linear ramp");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
@@ -299,7 +299,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envdlinmx() {
+    static AxoObject create_envdlinmx() {
         AxoObject o = new AxoObject("d lin m", "decay envelope, linear ramp, modulation input");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.inlets.add(new InletFrac32Bipolar("d", "decay time"));
@@ -327,7 +327,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envhdlinx() {
+    static AxoObject create_envhdlinx() {
         AxoObject o = new AxoObject("hd lin", "hold/decay envelope, linear ramp, extended range");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
@@ -348,7 +348,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envhdlinmx() {
+    static AxoObject create_envhdlinmx() {
         AxoObject o = new AxoObject("hd lin m", "hold/decay envelope, linear ramp, modulation input extended range");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.inlets.add(new InletFrac32Bipolar("d", "decay time"));
@@ -371,7 +371,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envahdlinx() {
+    static AxoObject create_envahdlinx() {
         AxoObject o = new AxoObject("ahd lin", "attack/hold/decay envelope, linear ramps");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("env", "envelope output"));
@@ -394,7 +394,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_envahdlinmx() {
+    static AxoObject create_envahdlinmx() {
         AxoObject o = new AxoObject("ahd lin m", "attack/hold/decay envelope, linear ramps, modulation inputs, extended range");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.inlets.add(new InletFrac32Bipolar("a", "attack time"));
@@ -421,7 +421,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_line2x() {
+    static AxoObject create_line2x() {
         AxoObject o = new AxoObject("line 2", "two piecewise linear ramps, extended range");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("out", "output"));
@@ -473,7 +473,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_line2mx() {
+    static AxoObject create_line2mx() {
         AxoObject o = new AxoObject("line 2 m", "two piecewise linear ramps, extended range, time modulation inputs");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.inlets.add(new InletFrac32Bipolar("tA", "time A (v0..v1)"));
@@ -529,7 +529,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_line3x() {
+    static AxoObject create_line3x() {
         AxoObject o = new AxoObject("line 3", "Three piecewise linear ramps, extended range");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32Pos("out", "output"));
@@ -595,7 +595,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject Create_line3mx() {
+    static AxoObject create_line3mx() {
         AxoObject o = new AxoObject("line 3 m", "Three piecewise linear ramps, time modulation inputs");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.inlets.add(new InletFrac32Bipolar("tA", "time A (v0..v1)"));
@@ -667,7 +667,7 @@ public class Env extends gentools {
         return o;
     }
 
-    static AxoObject CreateEnvFollower() {
+    static AxoObject createEnvFollower() {
         AxoObject o = new AxoObject("follower", "envelope follower, linear output");
         o.outlets.add(new OutletFrac32Pos("amp", "amplitude"));
         o.inlets.add(new InletFrac32Buffer("in", "input wave"));

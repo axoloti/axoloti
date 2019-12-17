@@ -17,45 +17,45 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletBool32RisingFalling;
-import axoloti.inlets.InletFrac32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32BufferBipolar;
-import axoloti.outlets.OutletFrac32BufferPos;
-import axoloti.parameters.ParameterFrac32UMap;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletBool32RisingFalling;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.outlet.OutletFrac32BufferBipolar;
+import axoloti.object.outlet.OutletFrac32BufferPos;
+import axoloti.object.parameter.ParameterFrac32UMap;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Impulses extends gentools {
+class Impulses extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "pulse";
-        WriteAxoObject(catName, Create_envd());
-        WriteAxoObject(catName, Create_envd2());
-        WriteAxoObject(catName, Create_envhd());
-        WriteAxoObject(catName, Create_envhd2());
-        WriteAxoObject(catName, Create_envahd());
-        WriteAxoObject(catName, Create_envahd2());
-        WriteAxoObject(catName, Create_lfsrburst4());
-        WriteAxoObject(catName, Create_lfsrburst5());
-        WriteAxoObject(catName, Create_lfsrburst6());
-        WriteAxoObject(catName, Create_lfsrburst7());
-        WriteAxoObject(catName, Create_lfsrburst8());
-        WriteAxoObject(catName, Create_lfsrburst9());
-        WriteAxoObject(catName, Create_lfsrburst4bp());
-        WriteAxoObject(catName, Create_lfsrburst5bp());
-        WriteAxoObject(catName, Create_lfsrburst6bp());
-        WriteAxoObject(catName, Create_lfsrburst7bp());
-        WriteAxoObject(catName, Create_lfsrburst8bp());
-        WriteAxoObject(catName, Create_lfsrburst9bp());
-        WriteAxoObject(catName, Create_dirac());
+        writeAxoObject(catName, create_envd());
+        writeAxoObject(catName, create_envd2());
+        writeAxoObject(catName, create_envhd());
+        writeAxoObject(catName, create_envhd2());
+        writeAxoObject(catName, create_envahd());
+        writeAxoObject(catName, create_envahd2());
+        writeAxoObject(catName, create_lfsrburst4());
+        writeAxoObject(catName, create_lfsrburst5());
+        writeAxoObject(catName, create_lfsrburst6());
+        writeAxoObject(catName, create_lfsrburst7());
+        writeAxoObject(catName, create_lfsrburst8());
+        writeAxoObject(catName, create_lfsrburst9());
+        writeAxoObject(catName, create_lfsrburst4bp());
+        writeAxoObject(catName, create_lfsrburst5bp());
+        writeAxoObject(catName, create_lfsrburst6bp());
+        writeAxoObject(catName, create_lfsrburst7bp());
+        writeAxoObject(catName, create_lfsrburst8bp());
+        writeAxoObject(catName, create_lfsrburst9bp());
+        writeAxoObject(catName, create_dirac());
     }
 
-    static AxoObject Create_envd() {
+    static AxoObject create_envd() {
         AxoObject o = new AxoObject("d", "decay envelope, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("env", "envelope output"));
@@ -71,7 +71,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_envd2() {
+    static AxoObject create_envd2() {
         AxoObject o = new AxoObject("d m", "decay envelope with decay time modulation input, audio rate");
         o.inlets.add(new InletFrac32("d", "decay time"));
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
@@ -88,7 +88,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_envhd() {
+    static AxoObject create_envhd() {
         AxoObject o = new AxoObject("hd", "hold/decay envelope, audio rate");
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("env", "envelope output"));
@@ -101,7 +101,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_envhd2() {
+    static AxoObject create_envhd2() {
         AxoObject o = new AxoObject("hd m", "hold/decay envelope with decay time modulation input, audio rate");
         o.inlets.add(new InletFrac32("d", "decay time"));
         o.inlets.add(new InletBool32RisingFalling("trig", "trigger"));
@@ -115,7 +115,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_envahd() {
+    static AxoObject create_envahd() {
         AxoObject o = new AxoObject("ahd", "attack hold decay envelope, audio rate");
         o.inlets.add(new InletBool32RisingFalling("gate", "gate"));
         o.outlets.add(new OutletFrac32BufferPos("env", "envelope output"));
@@ -129,7 +129,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_envahd2() {
+    static AxoObject create_envahd2() {
         AxoObject o = new AxoObject("ahd m", "attack hold decay envelope with modulation inputs, audio rate");
         o.inlets.add(new InletFrac32("a", "attack time"));
         o.inlets.add(new InletFrac32("d", "decay time"));
@@ -145,7 +145,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst4() {
+    static AxoObject create_lfsrburst4() {
         AxoObject o = new AxoObject("lfsrburst 4", "lfsr burst, 4bit = 15 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs burst"));
@@ -172,7 +172,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst5() {
+    static AxoObject create_lfsrburst5() {
         AxoObject o = new AxoObject("lfsrburst 5", "lfsr burst, 5bit = 31 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs burst"));
@@ -204,7 +204,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst6() {
+    static AxoObject create_lfsrburst6() {
         AxoObject o = new AxoObject("lfsrburst 6", "lfsr burst, 6bit = 63 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs burst"));
@@ -236,7 +236,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst7() {
+    static AxoObject create_lfsrburst7() {
         AxoObject o = new AxoObject("lfsrburst 7", "lfsr burst, 7bit = 127 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs burst"));
@@ -281,7 +281,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst8() {
+    static AxoObject create_lfsrburst8() {
         AxoObject o = new AxoObject("lfsrburst 8", "lfsr burst, 8bit = 255 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs burst"));
@@ -323,7 +323,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst9() {
+    static AxoObject create_lfsrburst9() {
         AxoObject o = new AxoObject("lfsrburst 9", "lfsr burst, 9bit = 511 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs burst"));
@@ -397,7 +397,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst4bp() {
+    static AxoObject create_lfsrburst4bp() {
         AxoObject o = new AxoObject("lfsrburst 4 b", "lfsr burst, 4bit = 15 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs burst"));
@@ -424,7 +424,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst5bp() {
+    static AxoObject create_lfsrburst5bp() {
         AxoObject o = new AxoObject("lfsrburst 5 b", "lfsr burst, 5bit = 31 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs burst"));
@@ -456,7 +456,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst6bp() {
+    static AxoObject create_lfsrburst6bp() {
         AxoObject o = new AxoObject("lfsrburst 6 b", "lfsr burst, 6bit = 63 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs burst"));
@@ -488,7 +488,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst7bp() {
+    static AxoObject create_lfsrburst7bp() {
         AxoObject o = new AxoObject("lfsrburst 7 b", "lfsr burst, 7bit = 127 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs burst"));
@@ -533,7 +533,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst8bp() {
+    static AxoObject create_lfsrburst8bp() {
         AxoObject o = new AxoObject("lfsrburst 8 b", "lfsr burst, 8bit = 255 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs burst"));
@@ -575,7 +575,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsrburst9bp() {
+    static AxoObject create_lfsrburst9bp() {
         AxoObject o = new AxoObject("lfsrburst 9 b", "lfsr burst, 9bit = 511 samples, audio rate");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs burst"));
@@ -649,7 +649,7 @@ public class Impulses extends gentools {
         return o;
     }
 
-    static AxoObject Create_dirac() {
+    static AxoObject create_dirac() {
         AxoObject o = new AxoObject("dirac", "generates a single sample impulse (dirac) by triggering");
         o.inlets.add(new InletBool32Rising("trig", "trigger"));
         o.outlets.add(new OutletFrac32BufferPos("out", "dirac impulse"));

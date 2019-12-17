@@ -17,18 +17,16 @@
  */
 package axoloti.object;
 
-import axoloti.MainFrame;
-import axoloti.Patch;
-import axoloti.PatchFrame;
-import axoloti.PatchGUI;
-import java.awt.Rectangle;
+import axoloti.codegen.patch.PatchViewCodegen;
+import axoloti.object.attribute.AxoAttribute;
+import axoloti.object.display.Display;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.outlet.Outlet;
+import axoloti.object.parameter.Parameter;
+import axoloti.objectlibrary.AxoObjects;
+import axoloti.patch.PatchModel;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
-import org.simpleframework.xml.strategy.Strategy;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -36,79 +34,66 @@ import org.simpleframework.xml.strategy.Strategy;
  */
 public class AxoObjectFromPatch extends AxoObject {
 
-    Patch p;
-    PatchGUI pg;
-    PatchFrame pf;
-    File f;
+    private PatchModel patchModel;
+    private final File f;
 
-    public AxoObjectFromPatch(File f) {
+    public AxoObjectFromPatch(File f) throws FileNotFoundException {
         this.f = f;
-        Serializer serializer = new Persister();
-        try {
-            p = serializer.read(Patch.class, f);
-            p.setFileNamePath(f.getAbsolutePath());
-            p.PostContructor();
-        } catch (Exception ex) {
-            Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        shortId = f.getName().substring(0, f.getName().lastIndexOf("."));
-        sPath = f.getAbsolutePath();
-        UpdateObject();
-        MainFrame.axoObjects.ObjectList.add(this);
+        patchModel = PatchModel.open(f);
+        shortId = f.getName().substring(0, f.getName().lastIndexOf('.'));
+        setPath(f.getAbsolutePath());
+        updateObject();
+        init1();
+    }
+
+    private void init1() {
+        // TODO: review, perhaps source of multiple entries of eg. fx/flanger in objectselector
+        AxoObjects.getAxoObjects().objectList.add(this);
         // strip file extension
     }
 
-    final public void UpdateObject() {
-        AxoObject o;
-        if (pg == null) {
-            o = p.GenerateAxoObj(new AxoObject());
-        } else {
-            o = pg.GenerateAxoObj(new AxoObject());
-        }
-        attributes = o.attributes;
+    final public void updateObject() {
+        PatchViewCodegen codegen = new PatchViewCodegen(patchModel);
+        AxoObject o = codegen.generateAxoObj(new AxoObject());
+        attributes = o.getAttributes();
         depends = o.depends;
-        displays = o.displays;
+        displays = o.getDisplays();
         id = f.getName().substring(0, f.getName().length() - 4);
         includes = o.includes;
-        inlets = o.inlets;
-        outlets = o.outlets;
-        params = o.params;
-        sAuthor = o.sAuthor;
-        sDescription = o.sDescription;
+        inlets = o.getInlets();
+        outlets = o.getOutlets();
+        params = o.getParameters();
+
+        for (AxoAttribute a : attributes) {
+            a.setParent(this);
+        }
+        for (Inlet i : inlets) {
+            i.setParent(this);
+        }
+        for (Outlet i : outlets) {
+            i.setParent(this);
+        }
+        for (Parameter i : params) {
+            i.setParent(this);
+        }
+        for (Display i : displays) {
+            i.setParent(this);
+        }
+
+        setAuthor(o.getAuthor());
+        setDescription(o.getDescription());
         sDisposeCode = o.sDisposeCode;
         sInitCode = o.sInitCode;
         sKRateCode = o.sKRateCode;
-        sLicense = o.sLicense;
+        setLicense(o.getLicense());
         sLocalData = o.sLocalData;
         sMidiCode = o.sMidiCode;
         sSRateCode = o.sSRateCode;
         helpPatch = o.helpPatch;
-
-        FireObjectModified(this);
     }
 
-    @Override
-    public void OpenEditor(Rectangle editorBounds, Integer editorActiveTabIndex) {
-        if (pg == null) {
-            Strategy strategy = new AnnotationStrategy();
-            Serializer serializer = new Persister(strategy);
-            try {
-                pg = serializer.read(PatchGUI.class, f);
-                pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());
-                pg.setFileNamePath(f.getPath());
-                pg.PostContructor();
-                pg.ObjEditor = this;
-            } catch (Exception ex) {
-                Logger.getLogger(AxoObjects.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if (pf == null) {
-            pf = new PatchFrame((PatchGUI) pg, MainFrame.mainframe.getQcmdprocessor());
-            pg.setFileNamePath(id);
-            pg.PostContructor();
-        }
-        pf.setState(java.awt.Frame.NORMAL);
-        pf.setVisible(true);
+    public PatchModel getPatchModel() {
+        return patchModel;
     }
 
 }

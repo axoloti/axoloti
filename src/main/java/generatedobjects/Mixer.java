@@ -18,58 +18,58 @@
 package generatedobjects;
 
 import axoloti.datatypes.ValueFrac32;
-import axoloti.inlets.Inlet;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferPos;
-import axoloti.inlets.InletFrac32Pos;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapGain;
-import axoloti.parameters.ParameterFrac32UMapGainSquare;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.Inlet;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferPos;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapGain;
+import axoloti.object.parameter.ParameterFrac32UMapGainSquare;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Mixer extends gentools {
+class Mixer extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "mix";
         for (int i = 1; i < 9; i++) {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKMixer(i));
-            c.add(CreateSMixer(i));
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKMixer(i));
+            c.add(createSMixer(i));
+            writeAxoObject(catName, c);
         }
         for (int i = 1; i < 9; i++) {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKMixerL(i));
-            c.add(CreateSMixerL(i));
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKMixerL(i));
+            c.add(createSMixerL(i));
+            writeAxoObject(catName, c);
         }
         for (int i = 1; i < 9; i++) {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateKMixerSQ(i));
-            c.add(CreateSMixerSQ(i));
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createKMixerSQ(i));
+            c.add(createSMixerSQ(i));
+            writeAxoObject(catName, c);
         }
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(Create_xfade());
-            c.add(Create_xfade2());
-            c.add(Create_xfadeTilde());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(create_xfade());
+            c.add(create_xfade2());
+            c.add(create_xfadeTilde());
+            writeAxoObject(catName, c);
         }
     }
 
-    static AxoObject CreateKMixer(int n) {
+    static AxoObject createKMixer(int n) {
         AxoObject o = new AxoObject("mix " + n, "" + n + " input k-rate mixer");
         o.inlets.add(new InletFrac32("bus_in", "input with unity gain"));
         o.outlets.add(new OutletFrac32("out", "mix out"));
@@ -87,7 +87,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject CreateSMixer(int n) {
+    static AxoObject createSMixer(int n) {
         AxoObject o = new AxoObject("mix " + n, "" + n + " input s-rate mixer");
         o.outlets.add(new OutletFrac32Buffer("out", "mix out"));
         o.inlets.add(new InletFrac32Buffer("bus_in", "input with unity gain"));
@@ -106,7 +106,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject CreateSMixerL(int n) {
+    static AxoObject createSMixerL(int n) {
         AxoObject o = new AxoObject("mix " + n + " g", "" + n + " input s-rate mixer, shows gain units");
         o.outlets.add(new OutletFrac32Buffer("out", "mix out"));
         o.inlets.add(new InletFrac32Buffer("bus_in", "input with unity gain"));
@@ -123,7 +123,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject CreateKMixerL(int n) {
+    static AxoObject createKMixerL(int n) {
         AxoObject o = new AxoObject("mix " + n + " g", "" + n + " input k-rate mixer, shows gain units");
         o.inlets.add(new InletFrac32("bus_in", "input with unity gain"));
         o.outlets.add(new OutletFrac32("out", "mix out"));
@@ -139,7 +139,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject CreateSMixerSQ(int n) {
+    static AxoObject createSMixerSQ(int n) {
         AxoObject o = new AxoObject("mix " + n + " sq", "" + n + " input s-rate mixer, square gain scale");
         o.outlets.add(new OutletFrac32Buffer("out", "mix out"));
         o.inlets.add(new InletFrac32Buffer("bus_in", "input with unity gain"));
@@ -156,7 +156,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject CreateKMixerSQ(int n) {
+    static AxoObject createKMixerSQ(int n) {
         AxoObject o = new AxoObject("mix " + n + " sq", "" + n + " input k-rate mixer, square gain scale");
         o.inlets.add(new InletFrac32("bus_in", "input with unity gain"));
         o.outlets.add(new OutletFrac32("out", "mix out"));
@@ -172,7 +172,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject Create_xfade() {
+    static AxoObject create_xfade() {
         AxoObject o = new AxoObject("xfade", "crossfade between two inputs");
         o.inlets.add(new InletFrac32("i1", "input"));
         o.inlets.add(new InletFrac32("i2", "input"));
@@ -186,7 +186,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject Create_xfade2() {
+    static AxoObject create_xfade2() {
         AxoObject o = new AxoObject("xfade", "crossfade between two inputs");
         o.inlets.add(new InletFrac32Buffer("i1", "input"));
         o.inlets.add(new InletFrac32Buffer("i2", "input"));
@@ -200,7 +200,7 @@ public class Mixer extends gentools {
         return o;
     }
 
-    static AxoObject Create_xfadeTilde() {
+    static AxoObject create_xfadeTilde() {
         AxoObject o = new AxoObject("xfade", "crossfade between two inputs");
         o.inlets.add(new InletFrac32Buffer("i1", "input"));
         o.inlets.add(new InletFrac32Buffer("i2", "input"));

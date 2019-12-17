@@ -17,29 +17,29 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
-import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
 
 /**
  *
  * @author jtaelman
  */
-public class Demux extends gentools {
+class Demux extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "demux";
-        WriteAxoObject(catName, new AxoObject[]{Create_demux2(), Create_demux2Tilde(), Create_demux2I(), Create_demux2b()});
+        writeAxoObject(catName, new AxoObject[]{create_demux2(), create_demux2Tilde(), create_demux2I(), create_demux2b()});
 
         for (int i = 3; i < 9; i++) {
-            WriteAxoObject(catName, new AxoObject[]{Create_demuxn(i), Create_demuxni(i), Create_demuxntilde(i), Create_demuxnb(i)});
+            writeAxoObject(catName, new AxoObject[]{create_demuxn(i), create_demuxni(i), create_demuxntilde(i), create_demuxnb(i)});
         }
     }
 
@@ -48,7 +48,7 @@ public class Demux extends gentools {
     private static final String demux2code = "   %o0%= (%s%)?%d0%:%i%;\n"
             + "   %o1%= (%s%)?%i%:%d1%;\n";
 
-    static AxoObject Create_demux2() {
+    static AxoObject create_demux2() {
         AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletFrac32("i", "input"));
         o.inlets.add(new InletFrac32("d0", "default 0"));
@@ -61,7 +61,7 @@ public class Demux extends gentools {
         return o;
     }
 
-    static AxoObject Create_demux2Tilde() {
+    static AxoObject create_demux2Tilde() {
         AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletFrac32Buffer("i", "input"));
         o.inlets.add(new InletFrac32Buffer("d0", "default 0"));
@@ -74,7 +74,7 @@ public class Demux extends gentools {
         return o;
     }
 
-    static AxoObject Create_demux2I() {
+    static AxoObject create_demux2I() {
         AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletInt32("i", "input"));
         o.inlets.add(new InletInt32("d0", "default 0"));
@@ -87,7 +87,7 @@ public class Demux extends gentools {
         return o;
     }
 
-    static AxoObject Create_demux2b() {
+    static AxoObject create_demux2b() {
         AxoObject o = new AxoObject("demux 2", descriptionDemux2);
         o.inlets.add(new InletBool32("i", "input"));
         o.inlets.add(new InletBool32("d0", "default 0"));
@@ -100,7 +100,7 @@ public class Demux extends gentools {
         return o;
     }
 
-    private static String GenerateDemuxCode(int n) {
+    private static String generateDemuxCode(int n) {
         String o;
         o = "   switch(%s%>0?%s%:0){\n";
         for (int i = 0; i < n; i++) {
@@ -122,7 +122,7 @@ public class Demux extends gentools {
         return o;
     }
 
-    static AxoObject Create_demuxn(int n) {
+    static AxoObject create_demuxn(int n) {
         AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletFrac32("i", "input"));
         for (int i = 0; i < n; i++) {
@@ -132,12 +132,12 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletFrac32("o" + i, "output " + i));
         }
-        o.sKRateCode = GenerateDemuxCode(n);
+        o.sKRateCode = generateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
 
-    static AxoObject Create_demuxntilde(int n) {
+    static AxoObject create_demuxntilde(int n) {
         AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletFrac32Buffer("i", "input"));
         for (int i = 0; i < n; i++) {
@@ -147,12 +147,12 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletFrac32Buffer("o" + i, "output " + i));
         }
-        o.sSRateCode = GenerateDemuxCode(n);
+        o.sSRateCode = generateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
 
-    static AxoObject Create_demuxni(int n) {
+    static AxoObject create_demuxni(int n) {
         AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletInt32("i", "input"));
         for (int i = 0; i < n; i++) {
@@ -162,12 +162,12 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletInt32("o" + i, "output " + i));
         }
-        o.sKRateCode = GenerateDemuxCode(n);
+        o.sKRateCode = generateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }
 
-    static AxoObject Create_demuxnb(int n) {
+    static AxoObject create_demuxnb(int n) {
         AxoObject o = new AxoObject("demux " + n, descriptionDemuxN);
         o.inlets.add(new InletBool32("i", "input"));
         for (int i = 0; i < n; i++) {
@@ -177,7 +177,7 @@ public class Demux extends gentools {
         for (int i = 0; i < n; i++) {
             o.outlets.add(new OutletBool32("o" + i, "output " + i));
         }
-        o.sKRateCode = GenerateDemuxCode(n);
+        o.sKRateCode = generateDemuxCode(n);
         o.helpPatch = "demux 3.axh";
         return o;
     }

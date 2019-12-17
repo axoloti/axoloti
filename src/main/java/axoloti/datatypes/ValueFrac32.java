@@ -24,15 +24,16 @@ import org.simpleframework.xml.Attribute;
  * @author Johannes Taelman
  */
 //@Root(name="value")
-public class ValueFrac32 extends Value<Frac32> {
+public class ValueFrac32 extends Value {
 
     @Attribute
     private double v;
 
     public ValueFrac32() {
+        v = 0.0;
     }
 
-    public ValueFrac32(Value<Frac32> vv) {
+    public ValueFrac32(Value vv) {
         v = ((ValueFrac32) vv).v;
     }
 
@@ -41,18 +42,8 @@ public class ValueFrac32 extends Value<Frac32> {
     }
 
     @Override
-    public void setInt(int i) {
-        this.v = i;
-    }
-
-    @Override
     public int getFrac() {
         return (int) (v * (1 << 21));
-    }
-
-    @Override
-    public int compareTo(Frac32 o) {
-        return 0;
     }
 
     @Override
@@ -61,18 +52,8 @@ public class ValueFrac32 extends Value<Frac32> {
     }
 
     @Override
-    public void setFrac(int i) {
-        v = ((double) i) / (double) (1 << 21);
-    }
-
-    @Override
     public double getDouble() {
         return v;
-    }
-
-    @Override
-    public void setDouble(double d) {
-        v = d;
     }
 
     @Override
@@ -81,7 +62,8 @@ public class ValueFrac32 extends Value<Frac32> {
     }
 
     @Override
-    public void setRaw(int i) {
-        setFrac(i);
+    public String toString() {
+        return Double.toString(v);
     }
+
 }

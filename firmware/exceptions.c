@@ -20,13 +20,12 @@
 #include "hal.h"
 #include "ff.h"
 #include "codec.h"
-#include "chprintf.h"
-#include "pconnection.h"
 #include "axoloti_board.h"
 #include "exceptions.h"
+#include "logging.h"
 
 __attribute__ ((naked))
-void report_exception(void) {
+static void report_exception(void) {
 
   __asm volatile
   (
@@ -52,9 +51,11 @@ typedef enum {
   fatfs_error,
   patch_load_crc_fail,
   patch_load_sdram_overflow,
-  usbh_midi_ringbuffer_overflow
+  usbh_midi_ringbuffer_overflow,
+  halt
 } faulttype;
 
+// TODO: attach patch name or index to report!
 typedef struct {
   volatile uint32_t magicnumber;
   volatile faulttype type;
@@ -88,7 +89,7 @@ void BootLoaderInit() {
   psp = 0;
   asm volatile ("cpsie   i");
   asm volatile ("msr     PSP, %0" : : "r" (psp));
-  SCB_FPCCR = 0;
+  FPU->FPCCR = 0;
   asm volatile ("LDR     R0, =0x40023844 ;");
   // RCC_APB2ENR (+0x18)
   asm volatile ("LDR     R1, =0x4000 ;");
@@ -196,7 +197,6 @@ void exception_initiate_dfu(void) {
       volatile int k = 1 << 8;
       while (k--) {
       }
-      watchdog_feed();
     }
   }
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
@@ -229,6 +229,8 @@ const char * const fs_err_name[] = {
 
 void exception_checkandreport(void) {
   if (exception_check()) {
+	// clear first, so in case reporting causes another exception we're not stuck
+	exception_clear();
     bool report_registers = 0;
     if (exceptiondump->type == fault) {
       LogTextMessage("exception report:");
@@ -248,16 +250,18 @@ void exception_checkandreport(void) {
       LogTextMessage("file error: %s, filename:\"%s\"",fs_err_name[exceptiondump->r0],(char *)(BKPSRAM_BASE)+12);
     }
     else if (exceptiondump->type == patch_load_crc_fail) {
-      LogTextMessage("failed to load patch, firmware version mismatch? filename:\"%s\"",(char *)(BKPSRAM_BASE)+12);
+      LogTextMessage("failed to load patch, firmware mismatch? \"%s\"",(char *)(BKPSRAM_BASE)+12);
     }
     else if (exceptiondump->type == patch_load_sdram_overflow) {
       LogTextMessage("sdram overflow by %d bytes",exceptiondump->r0);
     }
     else if (exceptiondump->type == usbh_midi_ringbuffer_overflow) {
-      LogTextMessage("usb host midi output ringbuffer overflow");
+      LogTextMessage("midi output overflow");
     }
-    else
-    {
+    else if (exceptiondump->type == halt) {
+      LogTextMessage("Rebooted after fatal error: %s",exceptiondump->r0);
+    }
+    else {
       LogTextMessage("unknown exception?");
     }
 
@@ -278,12 +282,16 @@ void exception_checkandreport(void) {
         LogTextMessage("mmfar=0x%x",exceptiondump->mmfar);
       }
     }
-    exception_clear();
   }
 }
 
 void report_fatfs_error(int errno, const char *fn) {
-  if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
+	if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+		// software breakpoint
+		asm("BKPT 255");
+	}
+
+	if (exceptiondump->magicnumber == ERROR_MAGIC_NUMBER)
     return;
 
   char *p;
@@ -363,11 +371,7 @@ void dbg_set_i(int i) {
   exceptiondump->i = i;
 }
 
-void terminator(void) {
-#ifdef INFINITE_LOOP_ON_FAULTS
-  for (;;)
-  ;
-#else
+static void terminator(void) {
   // float usb inputs, hope the host notices detach...
   palSetPadMode(GPIOA, 11, PAL_MODE_INPUT);
   palSetPadMode(GPIOA, 12, PAL_MODE_INPUT);
@@ -379,14 +383,18 @@ void terminator(void) {
       volatile int k = 1 << 8;
       while (k--) {
       }
-      watchdog_feed();
     }
   }
 
+  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+	  // software breakpoint
+	  asm("BKPT 255");
+  }
+
   NVIC_SystemReset();
-#endif
 }
 
+__attribute__ ((externally_visible))
 void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   volatile uint32_t r0;
   volatile uint32_t r1;
@@ -408,10 +416,7 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   psr = pulFaultStackAddress[7];
 
   exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
-  if (WWDG->SR & WWDG_SR_EWIF)
-    exceptiondump->type = watchdog_soft;
-  else
-    exceptiondump->type = fault;
+  exceptiondump->type = fault;
   exceptiondump->r0 = r0;
   exceptiondump->r1 = r1;
   exceptiondump->r2 = r2;
@@ -426,10 +431,6 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   exceptiondump->mmfar = SCB->MMFAR;
   exceptiondump->bfar = SCB->BFAR;
 
-#if WATCHDOG_ENABLED
-  WWDG->CR = WWDG_CR_T;
-#endif
-
   palClearPad(LED1_PORT, LED1_PIN);
 
   codec_clearbuffer();
@@ -437,11 +438,12 @@ void prvGetRegistersFromStack(uint32_t *pulFaultStackAddress) {
   terminator();
 }
 
-void HardFaultVector(void) __attribute__((alias("report_exception")));
-void MemManageVector(void) __attribute__((alias("report_exception")));
-void BusFaultVector(void) __attribute__((alias("report_exception")));
-void UsageFaultVector(void) __attribute__((alias("report_exception")));
+void HardFault_Handler(void) __attribute__((alias("report_exception")));
+void MemManage_Handler(void) __attribute__((alias("report_exception")));
+void BusFault_Handler(void) __attribute__((alias("report_exception")));
+void UsageFault_Handler(void) __attribute__((alias("report_exception")));
 
+#if 0
 __attribute__ ((naked))
 CH_IRQ_HANDLER(WWDG_IRQHandler){
 __asm volatile
@@ -454,4 +456,21 @@ __asm volatile
     " ldr r2, handler2_address_const                            \n"
     " bx r2                                                     \n"
 );
+}
+#endif
+
+void report_halt(const char *reason) {
+  /* Pointing to the passed message.*/
+  ch.dbg.panic_msg = reason;
+
+  exceptiondump->magicnumber = ERROR_MAGIC_NUMBER;
+  exceptiondump->type = halt;
+  exceptiondump->r0 = (uint32_t)reason;
+
+  if (CoreDebug->DHCSR&CoreDebug_DHCSR_C_DEBUGEN_Msk) {
+    // debugger connected, software breakpoint
+    asm("BKPT 255");
+  }
+  // no debugger connected, do system reset
+  NVIC_SystemReset();
 }

@@ -2,77 +2,38 @@
 
 set -e
 
-if [ ! -d "../chibios" ]; 
+PLATFORM_ROOT="$(cd $(dirname $0); pwd -P)"
+
+mkdir -p "${PLATFORM_ROOT}/src"
+cd "${PLATFORM_ROOT}"
+
+git submodule update --init --recursive
+
+source ../platform_common/download_chibios.sh
+
+if [ ! -f "bin/sh.exe" ];
 then
-    CH_VERSION=2.6.9
-    ARDIR=ChibiOS_${CH_VERSION}
-    ARCHIVE=${ARDIR}.zip
-    if [ ! -f ${ARCHIVE} ]; 
-    then
-        echo "downloading ${ARCHIVE}"
-        curl -L https://sourceforge.net/projects/chibios/files/ChibiOS%20GPL3/Version%20${CH_VERSION}/${ARCHIVE} > ${ARCHIVE}
-    else
-        echo "${ARCHIVE} already downloaded"
-    fi
-
-    unzip -q -o ${ARCHIVE}
-    rm ${ARCHIVE}
-    mv ${ARDIR} chibios
-    cd chibios/ext
-    unzip -q -o ./fatfs-0.9-patched.zip
-    cd ../../
-    mv chibios ..
-fi
-
-if [ ! -f "bin/arm-none-eabi-gcc.exe" ];
-then
-    ARCHIVE=gcc-arm-none-eabi-4_9-2015q2-20150609-win32.zip
-    if [ ! -f ${ARCHIVE} ]; 
-    then
-        echo "downloading ${ARCHIVE}"
-        curl -L https://launchpad.net/gcc-arm-embedded/4.9/4.9-2015-q2-update/+download/${ARCHIVE} > ${ARCHIVE}
-    else
-        echo "${ARCHIVE} already downloaded"
-    fi    
-    unzip -q -o ${ARCHIVE}
-    rm ${ARCHIVE}
-fi
-
-if [ ! -f "bin/make.exe" ];
-then
-    echo "downloading make"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/make-bin-zip.php > make-3.81-bin.zip
-    unzip -q -o make-3.81-bin.zip 
-    rm make-3.81-bin.zip
-fi
-
-
-if [ ! -f "bin/libiconv2.dll" ];
-then
-    echo "downloading make-dep"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/make-dep-zip.php > make-3.81-dep.zip
-    unzip -q -o make-3.81-dep.zip
-    rm make-3.81-dep.zip
-fi
-
-if [ ! -f "bin/rm.exe" ];
-then
-    echo "downloading rm"
-    curl -L http://gnuwin32.sourceforge.net/downlinks/coreutils-bin-zip.php > coreutils-5.3.0-bin.zip
-    unzip -q -o coreutils-5.3.0-bin.zip
-    rm coreutils-5.3.0-bin.zip
+    build_tools_fn=gnu-mcu-eclipse-windows-build-tools-2.12-20190422-1053-win32.zip
+    echo "downloading ${build_tools_fn}"
+    curl -L https://github.com/gnu-mcu-eclipse/windows-build-tools/releases/download/v2.12-20190422/${build_tools_fn} > ${build_tools_fn}
+    unzip -q -o ${build_tools_fn}
+    mv GNU\ MCU\ Eclipse/Build\ Tools/2.12-20190422-1053/bin/* bin/
+    rm -r GNU\ MCU\ Eclipse/Build\ Tools/2.12-20190422-1053
+    rm ${build_tools_fn}
+else
+    echo "make already present, skipping...."
 fi
 
 if [ ! -d "apache-ant-1.9.4" ];
 then
     ARCHIVE=apache-ant-1.9.4-bin.zip
-    if [ ! -f ${ARCHIVE} ]; 
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://archive.apache.org/dist/ant/binaries/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
-    fi    
+    fi
 
     unzip -q ${ARCHIVE}
     rm ${ARCHIVE}
@@ -81,13 +42,13 @@ fi
 if [ ! -f "zadig_2.3.exe" ];
 then
     ARCHIVE=zadig_2.3.exe
-    if [ ! -f ${ARCHIVE} ]; 
+    if [ ! -f ${ARCHIVE} ];
     then
         echo "downloading ${ARCHIVE}"
         curl -L http://zadig.akeo.ie/downloads/${ARCHIVE} > ${ARCHIVE}
     else
         echo "${ARCHIVE} already downloaded"
-    fi        
+    fi
 fi
 
 if [ ! -f "bin/dfu-util-static.exe" ];
@@ -103,4 +64,4 @@ then
 	unzip -q -j -d bin dfu-util-0.9-win64.zip
 fi
 
-echo "DONE!"
+echo "done fetching sources..."

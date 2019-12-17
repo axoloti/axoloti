@@ -1,0 +1,348 @@
+<patch-1.0 appVersion="1.0.10">
+   <obj type="ctrl/i" uuid="a3786816db6ea5bc6ac4193a5cccdb2c83b83496" name="i_1" x="266" y="0">
+      <params>
+         <int32 name="value" value="5938"/>
+      </params>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="71c179bd-456c-4990-925b-b8e1ab15eb12" name="object_2" x="350" y="0">
+      <params/>
+      <attribs/>
+      <object id="patch/object" uuid="71c179bd-456c-4990-925b-b8e1ab15eb12">
+         <sDescription>description</sDescription>
+         <inlets>
+            <int32 name="count"/>
+         </inlets>
+         <outlets/>
+         <displays/>
+         <params/>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[volatile int i = inlet_count;
+while(i--){
+}
+]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_1" x="42" y="56">
+      <params>
+         <frac32.s.map name="pitch" value="27.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_1" x="140" y="56">
+      <params>
+         <frac32.u.map name="amp" value="6.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="patch/cyclecounter" uuid="6b9e9c2187a0e07fb56029aef6ccaaf1f9621e35" name="cyclecounter_1" x="308" y="56">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7" name="object_5" x="308" y="126">
+      <params>
+         <bool32.mom name="clear" value="0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7">
+         <sDescription>spilink timing jitter check</sDescription>
+         <author>Johannes Taelman</author>
+         <license>BSD</license>
+         <inlets/>
+         <outlets/>
+         <displays>
+            <int32.label name="tdelta"/>
+            <int32.label name="tdelta_min"/>
+            <int32.label name="tdelta_max"/>
+         </displays>
+         <params>
+            <bool32.mom name="clear"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t tdelta_min = INT32_MAX;
+int32_t tdelta_max = INT32_MIN;
+]]></code.declaration>
+         <code.krate><![CDATA[extern unsigned int spidb_interrupt_timestamp;
+extern unsigned int codec_interrupt_timestamp;
+int tdelta = spidb_interrupt_timestamp-codec_interrupt_timestamp;
+if (param_clear) {
+	tdelta_min = INT32_MAX;
+	tdelta_max = INT32_MIN;
+}
+if (tdelta>tdelta_max) tdelta_max = tdelta;
+if (tdelta<tdelta_min) tdelta_min = tdelta;
+disp_tdelta_min = tdelta_min;
+disp_tdelta_max = tdelta_max;
+disp_tdelta=spidb_interrupt_timestamp-codec_interrupt_timestamp;
+]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="420" y="126" text="-848"/>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_3" x="42" y="182">
+      <params>
+         <frac32.s.map name="pitch" value="-2.3999996185302734"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_3" x="140" y="182">
+      <params>
+         <frac32.u.map name="amp" value="23.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_1" x="70" y="336">
+      <params>
+         <frac32.u.map name="value" value="10.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="conv/nointerp" uuid="5e7389d61f8cd8945790bb71f1670b3a0904c15b" name="nointerp_1" x="154" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="675c9cb5-3e4e-49a3-bd4f-d0dd95ed746b" name="object_1" x="266" y="336">
+      <params>
+         <frac32.s.map name="c" value="45.0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="675c9cb5-3e4e-49a3-bd4f-d0dd95ed746b">
+         <sDescription>description</sDescription>
+         <inlets>
+            <frac32buffer name="ch1" description="channel 1"/>
+            <frac32buffer name="ch2" description="channel 2"/>
+            <frac32buffer name="ch3" description="channel 3"/>
+            <frac32buffer name="ch4" description="channel 4"/>
+         </inlets>
+         <outlets>
+            <frac32buffer name="ch1"/>
+            <frac32buffer name="ch2"/>
+            <frac32buffer name="ch3"/>
+            <frac32buffer name="ch4"/>
+         </outlets>
+         <displays/>
+         <params>
+            <frac32.s.map name="c"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[int i;
+for(i=0;i<BUFSIZE;i++){
+	outlet_ch1[i] = spilink_rx_samples->channel[0].samples[i];
+	outlet_ch2[i] = spilink_rx_samples->channel[1].samples[i];
+	outlet_ch3[i] = spilink_rx_samples->channel[2].samples[i];
+	outlet_ch4[i] = spilink_rx_samples->channel[3].samples[i];
+	spilink_tx_samples->channel[0].samples[i] = inlet_ch1[i];
+	spilink_tx_samples->channel[1].samples[i] = inlet_ch2[i];
+	spilink_tx_samples->channel[2].samples[i] = inlet_ch3[i];
+	spilink_tx_samples->channel[3].samples[i] = inlet_ch4[i];
+	if (spilink_rx_samples->channel[3].samples[i]>param_c) {
+		LogTextMessage("%08x %08x",&(spilink_rx_samples->channel[3].samples[i]),spilink_rx_samples->channel[3].samples[i]);
+	}
+}
+
+]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="ctrl/dial p" uuid="cc5d2846c3d50e425f450c4b9851371b54f4d674" name="dial_2" x="378" y="336">
+      <params>
+         <frac32.u.map name="value" value="47.5"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/hex" uuid="87617898f70d90033f8add921438bf0d11721fdd" name="hex_1" x="462" y="336">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/button" uuid="ef3d13774349df85aa9bfecf30dbc91ab8488b3f" name="button_1" x="0" y="434">
+      <params>
+         <bool32.mom name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_4" x="378" y="434">
+      <params>
+         <frac32.u.map name="amp" value="24.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b" uuid="2b69f51a714fc276503ef10c349d6d253d1ae5e2" name="scope_2" x="84" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope 128 b trig" uuid="11747dcd1dc9afe4919f537c861fb18b80b4e4e" name="scope_1" x="224" y="476">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="ctrl/toggle" uuid="42b8134fa729d54bfc8d62d6ef3fa99498c1de99" name="toggle_1" x="0" y="490">
+      <params>
+         <bool32.tgl name="b" value="0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_5" x="378" y="518">
+      <params>
+         <frac32.u.map name="amp" value="30.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_1" x="504" y="532">
+      <params/>
+      <attribs/>
+   </obj>
+   <obj type="disp/scope buffer" uuid="1dbd5d726cb1050408b496f306fc9e0603067c16" name="scope_3" x="28" y="644">
+      <params/>
+      <attribs/>
+   </obj>
+   <patchobj type="patch/object" uuid="6055a57a-cb13-40ea-a129-629c61e6ecbd" name="object_3" x="574" y="644">
+      <params>
+         <frac32.s.map name="c" value="47.0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="6055a57a-cb13-40ea-a129-629c61e6ecbd">
+         <sDescription>description</sDescription>
+         <inlets>
+            <frac32buffer name="inlet1"/>
+         </inlets>
+         <outlets/>
+         <displays/>
+         <params>
+            <frac32.s.map name="c"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.krate><![CDATA[int i;
+bool t = 0;
+for(i=0;i<BUFSIZE;i++){
+	if (inlet_inlet1[i]>param_c) t = 1;
+}
+if (t) {
+	for(i=0;i<BUFSIZE;i++){
+		LogTextMessage("%d %08x",i,inlet_inlet1);
+	}
+}
+]]></code.krate>
+      </object>
+   </patchobj>
+   <patchobj type="patch/object" uuid="a49faaf9-9623-4a30-87fe-c7c48b69fb17" name="object_4" x="686" y="658">
+      <params>
+         <bool32.mom name="parameter1" value="0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="a49faaf9-9623-4a30-87fe-c7c48b69fb17">
+         <sDescription>description</sDescription>
+         <inlets/>
+         <outlets/>
+         <displays/>
+         <params>
+            <bool32.mom name="parameter1"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[bool p;]]></code.declaration>
+         <code.krate><![CDATA[if ((!p)&&param_parameter1){
+	p=1;
+	LogTextMessage("p %08x", spilink_rx_samples);
+} else if (!param_parameter1){
+	p=0;
+}
+]]></code.krate>
+      </object>
+   </patchobj>
+   <obj type="osc/sine" uuid="6e094045cca76a9dbf7ebfa72e44e4700d2b3ba" name="sine_2" x="140" y="686">
+      <params>
+         <frac32.s.map name="pitch" value="-20.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="math/*c" uuid="7a66f52a9594e7e9eb31328ea725cb3641a80b55" name="*c_2" x="238" y="686">
+      <params>
+         <frac32.u.map name="amp" value="25.0"/>
+      </params>
+      <attribs/>
+   </obj>
+   <obj type="audio/out stereo" uuid="a1ca7a567f535acc21055669829101d3ee7f0189" name="out_2" x="420" y="700">
+      <params/>
+      <attribs/>
+   </obj>
+   <nets>
+      <net>
+         <source obj="dial_1" outlet="out"/>
+         <dest obj="nointerp_1" inlet="i"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="ch1"/>
+         <dest obj="hex_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="nointerp_1" outlet="o"/>
+         <dest obj="object_1" inlet="ch1"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="ch3"/>
+         <dest obj="scope_1" inlet="in"/>
+         <dest obj="*c_4" inlet="in"/>
+      </net>
+      <net>
+         <source obj="sine_1" outlet="wave"/>
+         <dest obj="*c_1" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_1" outlet="out"/>
+         <dest obj="object_1" inlet="ch3"/>
+      </net>
+      <net>
+         <source obj="sine_2" outlet="wave"/>
+         <dest obj="*c_2" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_2" outlet="out"/>
+         <dest obj="out_2" inlet="right"/>
+      </net>
+      <net>
+         <source obj="i_1" outlet="out"/>
+         <dest obj="object_2" inlet="count"/>
+      </net>
+      <net>
+         <source obj="sine_3" outlet="wave"/>
+         <dest obj="*c_3" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_3" outlet="out"/>
+         <dest obj="object_1" inlet="ch4"/>
+      </net>
+      <net>
+         <source obj="*c_4" outlet="out"/>
+         <dest obj="out_1" inlet="left"/>
+      </net>
+      <net>
+         <source obj="object_1" outlet="ch4"/>
+         <dest obj="scope_3" inlet="in"/>
+         <dest obj="scope_2" inlet="in"/>
+         <dest obj="*c_5" inlet="in"/>
+      </net>
+      <net>
+         <source obj="*c_5" outlet="out"/>
+         <dest obj="out_1" inlet="right"/>
+      </net>
+      <net>
+         <source obj="toggle_1" outlet="o"/>
+         <dest obj="scope_3" inlet="hold"/>
+      </net>
+      <net>
+         <source obj="button_1" outlet="o"/>
+         <dest obj="scope_2" inlet="hold"/>
+      </net>
+   </nets>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>350</x>
+      <y>23</y>
+      <width>524</width>
+      <height>674</height>
+   </windowPos>
+</patch-1.0>

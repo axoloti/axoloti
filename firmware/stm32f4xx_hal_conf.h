@@ -45,12 +45,9 @@
  extern "C" {
 #endif
 
-#define STM32F427xx 1
 #include <stdint.h>
-//#include <stm32f4xx.h>
-//#define __STM32F4xx_H
-//#include "stm32f427xx.h"
-#include "stm32f4xxc.h"
+#include <stm32f4xx.h>
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
@@ -64,6 +61,7 @@
 #define HAL_CORTEX_MODULE_ENABLED
    //#define HAL_PCD_MODULE_ENABLED
 #define HAL_HCD_MODULE_ENABLED
+#define HAL_I2C_MODULE_ENABLED
 
 
 /* ########################## HSE/HSI Values adaptation ##################### */
@@ -126,6 +124,8 @@
 #define  PREFETCH_ENABLE              1
 #define  INSTRUCTION_CACHE_ENABLE     1
 #define  DATA_CACHE_ENABLE            1
+
+#define SystemCoreClock 168000000
 
 /* ########################## Assert Selection ############################## */
 /**

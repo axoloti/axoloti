@@ -17,11 +17,6 @@
  */
 package axoloti.object;
 
-import axoloti.Patch;
-import java.awt.Point;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Johannes Taelman
@@ -29,30 +24,11 @@ import java.util.logging.Logger;
 public class AxoObjectPatcherObject extends AxoObject {
 
     public AxoObjectPatcherObject() {
+        id = "patch/object";
     }
 
     public AxoObjectPatcherObject(String id, String sDescription) {
         super(id, sDescription);
     }
 
-    @Override
-    public AxoObjectInstancePatcherObject CreateInstance(Patch patch, String InstanceName1, Point location) {
-        if ((sMidiCCCode != null)
-                || (sMidiAllNotesOffCode != null)
-                || (sMidiCCCode != null)
-                || (sMidiChannelPressure != null)
-                || (sMidiNoteOffCode != null)
-                || (sMidiNoteOnCode != null)
-                || (sMidiPBendCode != null)
-                || (sMidiResetControllersCode != null)) {
-            Logger.getLogger(AxoObject.class.getName()).log(Level.SEVERE, "Object {0} uses obsolete midi handling. If it is a subpatch-generated object, open and save the original patch again!", InstanceName1);
-        }
-
-        AxoObjectInstancePatcherObject o = new AxoObjectInstancePatcherObject(this, patch, InstanceName1, location);
-        if (patch != null) {
-            patch.objectinstances.add(o);
-        }
-        o.PostConstructor();
-        return o;
-    }
 }

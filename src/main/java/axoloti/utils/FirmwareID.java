@@ -31,18 +31,20 @@ import java.util.zip.CRC32;
  */
 public class FirmwareID {
 
+    private FirmwareID() {
+    }
+
     static public String getFirmwareID() {
-        try {
-            File f = new File(System.getProperty(Axoloti.FIRMWARE_DIR) +"/build/axoloti.bin");
-            if (!f.canRead()) {
-                return "Please compile the firmware first";
-            }
-            int tlength = (int) f.length();
-            FileInputStream inputStream = new FileInputStream(f);
+        File f = new File(Axoloti.getFirmwareFilename());
+        if (!f.canRead()) {
+            return "Please compile the firmware first";
+        }
+        int tlength = (int) f.length();
+        try (FileInputStream inputStream = new FileInputStream(f)) {
             byte[] bb = new byte[tlength];
             int nRead = inputStream.read(bb, 0, tlength);
             if (nRead != tlength) {
-                Logger.getLogger(FirmwareID.class.getName()).log(Level.SEVERE, "file size wrong?" + nRead);
+                Logger.getLogger(FirmwareID.class.getName()).log(Level.SEVERE, "file size wrong?{0}", nRead);
             }
             CRC32 zcrc = new CRC32();
             zcrc.update(bb);

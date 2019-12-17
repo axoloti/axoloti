@@ -17,37 +17,37 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.parameters.ParameterFrac32SMapLFOPitch;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.parameter.ParameterFrac32SMapLFOPitch;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Lfo extends gentools {
+class Lfo extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "lfo";
-        WriteAxoObject(catName, CreateSineLFO());
-        WriteAxoObject(catName, CreateKRateSineOsc1());
-        WriteAxoObject(catName, CreateKRateSineOscReset());
-        WriteAxoObject(catName, CreateSquare());
-        WriteAxoObject(catName, CreateSaw());
-        WriteAxoObject(catName, CreateSaw2());
-        WriteAxoObject(catName, CreateSaw3());
-        WriteAxoObject(catName, CreateSawDown());
-        WriteAxoObject(catName, CreateSawDown2());
-        //WriteAxoObject(catName, CreateTaptempo());
+        writeAxoObject(catName, createSineLFO());
+        writeAxoObject(catName, createKRateSineOsc1());
+        writeAxoObject(catName, createKRateSineOscReset());
+        writeAxoObject(catName, createSquare());
+        writeAxoObject(catName, createSaw());
+        writeAxoObject(catName, createSaw2());
+        writeAxoObject(catName, createSaw3());
+        writeAxoObject(catName, createSawDown());
+        writeAxoObject(catName, createSawDown2());
+        //WriteAxoObject(catName, createTaptempo());
     }
 
-    static AxoObject CreateSineLFO() {
+    static AxoObject createSineLFO() {
         AxoObject o = new AxoObject("sine lin", "Cheapest sine wave LFO, non-interpolated table");
         o.outlets.add(new OutletFrac32Bipolar("out", "sine wave LFO, cheap and bad quality"));
         o.inlets.add(new InletFrac32("freq", "phase increment"));
@@ -58,7 +58,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateKRateSineOsc1() {
+    static AxoObject createKRateSineOsc1() {
         AxoObject o = new AxoObject("sine", "sine wave LFO, linear interpolated table, pitch input");
         o.outlets.add(new OutletFrac32Bipolar("wave", "sine wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -76,7 +76,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateKRateSineOscReset() {
+    static AxoObject createKRateSineOscReset() {
         AxoObject o = new AxoObject("sine r", "sine wave LFO, linear interpolated table, pitch input, reset input");
         o.outlets.add(new OutletFrac32Bipolar("wave", "sine wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -103,7 +103,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquare() {
+    static AxoObject createSquare() {
         AxoObject o = new AxoObject("square", "square wave LFO, boolean output, frequency input");
         o.outlets.add(new OutletBool32("wave", "square wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -128,7 +128,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateSaw() {
+    static AxoObject createSaw() {
         AxoObject o = new AxoObject("saw lin", "saw wave LFO, rising slope, frequency input");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
         o.inlets.add(new InletFrac32("freq", "frequency"));
@@ -150,7 +150,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateSaw2() {
+    static AxoObject createSaw2() {
         AxoObject o = new AxoObject("saw", "saw wave LFO, rising slope, pitch input");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -175,7 +175,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateSaw3() {
+    static AxoObject createSaw3() {
         AxoObject o = new AxoObject("saw r", "saw wave LFO, rising slope, pitch input, phase reset");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
         o.outlets.add(new OutletBool32Pulse("sync", "sync output"));
@@ -205,7 +205,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateSawDown() {
+    static AxoObject createSawDown() {
         AxoObject o = new AxoObject("saw down lin", "saw wave LFO, falling slope, frequency input");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
         o.inlets.add(new InletFrac32("freq", "frequency"));
@@ -227,7 +227,7 @@ public class Lfo extends gentools {
         return o;
     }
 
-    static AxoObject CreateSawDown2() {
+    static AxoObject createSawDown2() {
         AxoObject o = new AxoObject("saw down", "saw wave LFO, falling slope, pitch input");
         o.outlets.add(new OutletFrac32Pos("wave", "saw wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -253,7 +253,7 @@ public class Lfo extends gentools {
     }
 
     //broken
-    static AxoObject CreateTaptempo() {
+    static AxoObject createTaptempo() {
         AxoObject o = new AxoObject("taptempo", "taptempo follower");
         o.inlets.add(new InletBool32Rising("tap", "tap tap tap"));
         o.outlets.add(new OutletFrac32Pos("phasor", "phasor"));

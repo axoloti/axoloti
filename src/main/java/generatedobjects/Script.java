@@ -17,27 +17,27 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeTablename;
-import axoloti.attributedefinition.AxoAttributeTextEditor;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMap;
+import axoloti.object.attribute.AxoAttributeTablename;
+import axoloti.object.attribute.AxoAttributeTextEditor;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMap;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Script extends gentools {
+class Script extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "script";
-        WriteAxoObject(catName, Create_KOneliner());
-        WriteAxoObject(catName, Create_SOneliner());
-        WriteAxoObject(catName, Create_Script());
-        WriteAxoObject(catName, Create_Script2());
+        writeAxoObject(catName, Create_KOneliner());
+        writeAxoObject(catName, Create_SOneliner());
+        writeAxoObject(catName, Create_Script());
+        writeAxoObject(catName, Create_Script2());
     }
 
     static AxoObject Create_KOneliner() {

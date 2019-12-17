@@ -1,0 +1,51 @@
+<patch-1.0 appVersion="1.0.10">
+   <patchobj type="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7" name="object_1" x="28" y="28">
+      <params>
+         <bool32.mom name="clear" value="0"/>
+      </params>
+      <attribs/>
+      <object id="patch/object" uuid="cb86abc4-9642-4351-83ab-582bc28cdfe7">
+         <sDescription>description</sDescription>
+         <inlets/>
+         <outlets/>
+         <displays>
+            <int32.label name="tdelta"/>
+            <int32.label name="tdelta_min"/>
+            <int32.label name="tdelta_max"/>
+         </displays>
+         <params>
+            <bool32.mom name="clear"/>
+         </params>
+         <attribs/>
+         <includes/>
+         <code.declaration><![CDATA[int32_t tdelta_min = INT32_MAX;
+int32_t tdelta_max = INT32_MIN;
+]]></code.declaration>
+         <code.krate><![CDATA[extern unsigned int spidb_interrupt_timestamp;
+extern unsigned int codec_interrupt_timestamp;
+int tdelta = spidb_interrupt_timestamp-codec_interrupt_timestamp;
+if (param_clear) {
+	tdelta_min = INT32_MAX;
+	tdelta_max = INT32_MIN;
+}
+if (tdelta>tdelta_max) tdelta_max = tdelta;
+if (tdelta<tdelta_min) tdelta_min = tdelta;
+disp_tdelta_min = tdelta_min;
+disp_tdelta_max = tdelta_max;
+disp_tdelta=spidb_interrupt_timestamp-codec_interrupt_timestamp;
+]]></code.krate>
+      </object>
+   </patchobj>
+   <comment type="patch/comment" x="140" y="28" text="-848"/>
+   <nets/>
+   <settings>
+      <subpatchmode>no</subpatchmode>
+   </settings>
+   <notes><![CDATA[]]></notes>
+   <windowPos>
+      <x>473</x>
+      <y>50</y>
+      <width>677</width>
+      <height>492</height>
+   </windowPos>
+</patch-1.0>

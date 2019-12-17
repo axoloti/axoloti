@@ -17,85 +17,84 @@
  */
 package generatedobjects;
 
-import axoloti.displays.DisplayBool32;
-import axoloti.displays.DisplayFrac32SChart;
-import axoloti.displays.DisplayFrac32SDial;
-import axoloti.displays.DisplayFrac32UChart;
-import axoloti.displays.DisplayFrac32UDial;
-import axoloti.displays.DisplayFrac32VBar;
-import axoloti.displays.DisplayFrac32VU;
-import axoloti.displays.DisplayFrac4ByteVBar;
-import axoloti.displays.DisplayFrac8S128VBar;
-import axoloti.displays.DisplayFrac8U128VBar;
-import axoloti.displays.DisplayInt32Bar16;
-import axoloti.displays.DisplayInt32Bar32;
-import axoloti.displays.DisplayInt32HexLabel;
-import axoloti.displays.DisplayInt32Label;
-import axoloti.displays.DisplayNoteLabel;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletCharPtr32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferBipolar;
-import axoloti.inlets.InletFrac32Pos;
-import axoloti.inlets.InletInt32;
-import axoloti.inlets.InletInt32Pos;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.display.DisplayFrac32SChart;
+import axoloti.object.display.DisplayFrac32SDial;
+import axoloti.object.display.DisplayFrac32UChart;
+import axoloti.object.display.DisplayFrac32UDial;
+import axoloti.object.display.DisplayFrac32VBar;
+import axoloti.object.display.DisplayFrac32VU;
+import axoloti.object.display.DisplayFrac4ByteVBar;
+import axoloti.object.display.DisplayFrac8S128VBar;
+import axoloti.object.display.DisplayFrac8U128VBar;
+import axoloti.object.display.DisplayInt32Bar16;
+import axoloti.object.display.DisplayInt32Bar32;
+import axoloti.object.display.DisplayInt32HexLabel;
+import axoloti.object.display.DisplayInt32Label;
+import axoloti.object.display.DisplayNoteLabel;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletCharPtr32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferBipolar;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.inlet.InletInt32Pos;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import static generatedobjects.GenTools.writeAxoObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Display extends gentools {
+class Display extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "disp";
-//        WriteAxoObject(catName, CreateKScope());
-//        WriteAxoObject(catName, CreateKScope2());
-//        WriteAxoObject(catName, CreateSScope());
-//        WriteAxoObject(catName, CreateIntDisplay());
-//        Objects.add(CreatePitchDisplay());
-//        WriteAxoObject(catName, CreateFractDisplay());
-//        WriteAxoObject(catName, CreateFreqDisplay());
-        WriteAxoObject(catName, CreateU7Display());
-        WriteAxoObject(catName, CreateS8Display());
-        WriteAxoObject(catName, CreateU7VBar());
-        WriteAxoObject(catName, CreateU7Scope());
-        WriteAxoObject(catName, CreateS8Scope());
-        WriteAxoObject(catName, CreateAScope());
-        //WriteAxoObject(catName, CreateBScope());
-        WriteAxoObject(catName, CreateBScope_v2());
-        //WriteAxoObject(catName, CreateCScope());
-        WriteAxoObject(catName, CreateCScope_v2());
-        WriteAxoObject(catName, CreateDScope_v2());
-        WriteAxoObject(catName, CreateEScope_v2());
-        WriteAxoObject(catName, CreateFScope_v2());
-        WriteAxoObject(catName, CreateGScope_v2());
-        WriteAxoObject(catName, CreateDisplayI());
-        WriteAxoObject(catName, CreateDisplayIBar16());
-        WriteAxoObject(catName, CreateDisplayIBar32());
-        WriteAxoObject(catName, CreateDisplayIBar64());
-        WriteAxoObject(catName, CreateDisplayVU());
-        WriteAxoObject(catName, CreateDisplayBool32());
-        WriteAxoObject(catName, CreateDisplayNote());
+//        WriteAxoObject(catName, createKScope());
+//        WriteAxoObject(catName, createKScope2());
+//        WriteAxoObject(catName, createSScope());
+//        WriteAxoObject(catName, createIntDisplay());
+//        Objects.add(createPitchDisplay());
+//        WriteAxoObject(catName, createFractDisplay());
+//        WriteAxoObject(catName, createFreqDisplay());
+        writeAxoObject(catName, createU7Display());
+        writeAxoObject(catName, createS8Display());
+        writeAxoObject(catName, createU7VBar());
+        writeAxoObject(catName, createU7Scope());
+        writeAxoObject(catName, createS8Scope());
+        writeAxoObject(catName, createAScope());
+        //WriteAxoObject(catName, createBScope());
+        writeAxoObject(catName, createBScope_v2());
+        //WriteAxoObject(catName, createCScope());
+        writeAxoObject(catName, createCScope_v2());
+        writeAxoObject(catName, createDScope_v2());
+        writeAxoObject(catName, createEScope_v2());
+        writeAxoObject(catName, createFScope_v2());
+        writeAxoObject(catName, createGScope_v2());
+        writeAxoObject(catName, createDisplayI());
+        writeAxoObject(catName, createDisplayIBar16());
+        writeAxoObject(catName, createDisplayIBar32());
+        writeAxoObject(catName, createDisplayIBar64());
+        writeAxoObject(catName, createDisplayVU());
+        writeAxoObject(catName, createDisplayBool32());
+        writeAxoObject(catName, createDisplayNote());
 
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
-            c.add(CreateHexDisplayFrac());
-            c.add(CreateHexDisplayInt());
-            c.add(CreateHexDisplayString());
-            WriteAxoObject(catName, c);
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
+            c.add(createHexDisplayFrac());
+            c.add(createHexDisplayInt());
+            c.add(createHexDisplayString());
+            writeAxoObject(catName, c);
         }
 
     }
 
-    static AxoObject CreateKScope() {
+    static AxoObject createKScope() {
         AxoObject o = new AxoObject("scope0", "simple k-rate oscilloscope, displays one sample-per-pixel");
         o.inlets.add(new InletFrac32("in", "input"));
         /*
@@ -127,7 +126,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateKScope2() {
+    static AxoObject createKScope2() {
         AxoObject o = new AxoObject("scope1", "k-rate oscilloscope, displays minimum/maximum of n samples perpixel");
         o.inlets.add(new InletFrac32("in", "input"));
         o.params.add(new ParameterFrac32UMap("timescale"));
@@ -170,7 +169,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateSScope() {
+    static AxoObject createSScope() {
         AxoObject o = new AxoObject("scope~", "simple audio oscilloscope, displays one sample per pixel");
         o.inlets.add(new InletFrac32BufferBipolar("in", "input"));
         /*
@@ -204,7 +203,7 @@ public class Display extends gentools {
         return o;
     }
     /*
-     static AxoObject CreateIntDisplay() {
+     static AxoObject createIntDisplay() {
      AxoObject o = new AxoObject("displayint", "k-rate display, value as ////broken////");
      o.inlets.add(new InletFrac32("in", "input"));
      o.sLocalData = "KeyValuePair kvp; \n"
@@ -220,15 +219,15 @@ public class Display extends gentools {
      return o;
      }*/
     /*
-     static AxoObject CreatePitchDisplay(){
-        
+     static AxoObject createPitchDisplay(){
+
      }
-     static AxoObject CreateFractDisplay(){
-        
+     static AxoObject createFractDisplay(){
+
      }
      */
     /*
-     static AxoObject CreateFreqDisplay() {
+     static AxoObject createFreqDisplay() {
      AxoObject o = new AxoObject("displayfreq", "displays k-rate signals, value in Hertz");
      o.inlets.add(new InletFrac32("in", "input"));
      o.sLocalData = "KeyValuePair kvp; \n"
@@ -244,7 +243,7 @@ public class Display extends gentools {
      return o;
      }*/
     /*
-     static AxoObject CreateFractDisplay() {
+     static AxoObject createFractDisplay() {
      AxoObject o = new AxoObject("displayfract", "displays k-rate signals, value as fraction");
      o.inlets.add(new InletFrac32("in", "input"));
      o.sLocalData = "KeyValuePair kvp; \n"
@@ -261,7 +260,7 @@ public class Display extends gentools {
      }
      */
 
-    static AxoObject CreateU7Display() {
+    static AxoObject createU7Display() {
         AxoObject o = new AxoObject("dial p", "displays positive k-rate signals");
         o.inlets.add(new InletFrac32Pos("in", "input"));
         o.displays.add(new DisplayFrac32UDial("v"));
@@ -269,7 +268,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateS8Display() {
+    static AxoObject createS8Display() {
         AxoObject o = new AxoObject("dial b", "displays bipolar k-rate signals");
         o.inlets.add(new InletFrac32Bipolar("in", "input"));
         o.displays.add(new DisplayFrac32SDial("v"));
@@ -277,7 +276,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateU7VBar() {
+    static AxoObject createU7VBar() {
         AxoObject o = new AxoObject("vbar", "displays positive k-rate signals");
         o.inlets.add(new InletFrac32("in", "input"));
         o.displays.add(new DisplayFrac32VBar("v"));
@@ -285,7 +284,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateU7Scope() {
+    static AxoObject createU7Scope() {
         AxoObject o = new AxoObject("chart p", "positive k-rate signal chart plotter");
         o.inlets.add(new InletFrac32Pos("in", "input"));
         o.displays.add(new DisplayFrac32UChart("v"));
@@ -293,7 +292,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateS8Scope() {
+    static AxoObject createS8Scope() {
         AxoObject o = new AxoObject("chart b", "bipolar k-rate signal chart plotter");
         o.inlets.add(new InletFrac32Bipolar("in", "input"));
         o.displays.add(new DisplayFrac32SChart("v"));
@@ -301,7 +300,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateAScope() {
+    static AxoObject createAScope() {
         AxoObject o = new AxoObject("scope buffer", "bipolar audio rate signal oscilloscope (time domain), showing 1 sample buffer of 16 samples");
         o.inlets.add(new InletFrac32BufferBipolar("in", "input"));
         o.inlets.add(new InletBool32("hold", "hold"));
@@ -325,7 +324,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateBScope_v2() {
+    static AxoObject createBScope_v2() {
         AxoObject o = new AxoObject("scope 128 b", "bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples");
         int n = 128;
         o.inlets.add(new InletFrac32BufferBipolar("in", "input"));
@@ -351,7 +350,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateDScope_v2() {
+    static AxoObject createDScope_v2() {
         AxoObject o = new AxoObject("kscope 128 b", "bipolar control rate signal oscilloscope (time domain), showing 128 consecutive samples");
         int n = 128;
         o.inlets.add(new InletFrac32Bipolar("in", "input"));
@@ -376,7 +375,7 @@ public class Display extends gentools {
         return o;
     }
     /*
-     static AxoObject CreateCScope() {
+     static AxoObject createCScope() {
      AxoObject o = new AxoObject("scope 128 b trig", "bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples after rising through zero-crossing");
      int n = 128;
      o.inlets.add(new InletFrac32BufferBipolar("in", "input"));
@@ -427,7 +426,7 @@ public class Display extends gentools {
      }
      */
 
-    static AxoObject CreateCScope_v2() {
+    static AxoObject createCScope_v2() {
         AxoObject o = new AxoObject("scope 128 b trig", "bipolar audio rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.");
         int n = 128;
         o.inlets.add(new InletFrac32BufferBipolar("in", "input"));
@@ -478,7 +477,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateFScope_v2() {
+    static AxoObject createFScope_v2() {
         AxoObject o = new AxoObject("kscope 128 p", "positive control rate signal oscilloscope (time domain), showing 128 consecutive samples");
         int n = 128;
         o.inlets.add(new InletFrac32Pos("in", "input"));
@@ -503,7 +502,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateEScope_v2() {
+    static AxoObject createEScope_v2() {
         AxoObject o = new AxoObject("kscope 128 b trig", "bipolar control rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.");
         int n = 128;
         o.inlets.add(new InletFrac32Bipolar("in", "input"));
@@ -548,7 +547,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateGScope_v2() {
+    static AxoObject createGScope_v2() {
         AxoObject o = new AxoObject("kscope 128 p trig", "positive control rate signal oscilloscope (time domain), showing 128 consecutive samples after the signal becomes positive.");
         int n = 128;
         o.inlets.add(new InletFrac32Pos("in", "input"));
@@ -593,7 +592,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateDisplayI() {
+    static AxoObject createDisplayI() {
         AxoObject o = new AxoObject("i", "display integer");
         o.inlets.add(new InletInt32("in", "input"));
         o.displays.add(new DisplayInt32Label("v"));
@@ -601,7 +600,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateDisplayIBar16() {
+    static AxoObject createDisplayIBar16() {
         AxoObject o = new AxoObject("ibar 16", "display integer bar");
         o.inlets.add(new InletInt32Pos("in", "input"));
         o.outlets.add(new OutletInt32Pos("chain_out", "chain output"));
@@ -611,7 +610,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateDisplayIBar32() {
+    static AxoObject createDisplayIBar32() {
         AxoObject o = new AxoObject("ibar 32", "display integer bar");
         o.inlets.add(new InletInt32Pos("in", "input"));
         o.outlets.add(new OutletInt32Pos("chain_out", "chain output"));
@@ -621,7 +620,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateDisplayIBar64() {
+    static AxoObject createDisplayIBar64() {
         AxoObject o = new AxoObject("ibar 64", "display integer bar");
         o.inlets.add(new InletInt32Pos("in", "input"));
         o.outlets.add(new OutletInt32Pos("chain_out", "chain output"));
@@ -645,24 +644,24 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateDisplayBool32() {
+    static AxoObject createDisplayBool32() {
         AxoObject o = new AxoObject("bool", "display boolean");
         o.inlets.add(new InletBool32("in", "input"));
-        o.displays.add(new DisplayBool32("v"));
+        //o.displays.add(new DisplayBool32("v"));
         o.sKRateCode = "%v%=%in%;\n";
         return o;
     }
 
-    static AxoObject CreateDisplayNote() {
+    static AxoObject createDisplayNote() {
         AxoObject o = new AxoObject("note", "display note");
-        o.sAuthor = "Mark Harris";
+        o.setAuthor("Mark Harris");
         o.inlets.add(new InletFrac32Bipolar("in", "input"));
         o.displays.add(new DisplayNoteLabel("v"));
         o.sKRateCode = "%v%=%in%;\n";
         return o;
     }
-    
-    static AxoObject CreateDisplayVU() {
+
+    static AxoObject createDisplayVU() {
         AxoObject o = new AxoObject("vu", "cheap vu meter display");
         o.inlets.add(new InletFrac32Buffer("in", "input"));
         o.displays.add(new DisplayFrac32VU("v"));
@@ -670,7 +669,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateHexDisplayFrac() {
+    static AxoObject createHexDisplayFrac() {
         AxoObject o = new AxoObject("hex", "hexadecimal display (for developers)");
         o.inlets.add(new InletFrac32("in", "input"));
         o.displays.add(new DisplayInt32HexLabel("v"));
@@ -678,7 +677,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateHexDisplayInt() {
+    static AxoObject createHexDisplayInt() {
         AxoObject o = new AxoObject("hex", "hexadecimal display (for developers)");
         o.inlets.add(new InletInt32("in", "input"));
         o.displays.add(new DisplayInt32HexLabel("v"));
@@ -686,7 +685,7 @@ public class Display extends gentools {
         return o;
     }
 
-    static AxoObject CreateHexDisplayString() {
+    static AxoObject createHexDisplayString() {
         AxoObject o = new AxoObject("hex", "hexadecimal display (for developers): char pointer");
         o.inlets.add(new InletCharPtr32("in", "input"));
         o.displays.add(new DisplayInt32HexLabel("v"));

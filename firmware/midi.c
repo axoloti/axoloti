@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -19,128 +19,101 @@
 #include "hal.h"
 #include "axoloti_board.h"
 #include "midi.h"
+#include "midi_routing.h"
 #include "serial_midi.h"
-#include "usbh_midi_core.h"
+#include "midi_usbh.h"
 #include "midi_usb.h"
 #include "patch.h"
+#include "midi_buffer.h"
 
+midi_input_buffer_t midi_input_buffer;
 
-void MidiSend1(midi_device_t dev, uint8_t   port, uint8_t b0) {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            serial_MidiSend1(b0);
-            break;
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend1(port, b0);
-            break;
-        }
-        case MIDI_DEVICE_INTERNAL: {
-            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, 0, 0);
-            break;
-        }
-        case MIDI_DEVICE_USB_DEVICE: {
-            midi_usb_MidiSend1(port, b0);
-            break;
-        }
-        default: {
-            // nop
-        }
+void midiSend(midi_message_t m) {
+  int vport = m.fields.port;
+  if (vport<8) {
+    int vportmask = 1<<vport;
+    if (midi_outputmap_din.bmvports[0] & vportmask) {
+      midi_output_buffer_put(&midi_output_din, m);
     }
+    int i;
+    for (i=0;i<midi_outputmap_usbh1.nports;i++)
+      if (midi_outputmap_usbh1.bmvports[i] & vportmask) {
+        m.fields.port = i;
+        midi_output_buffer_put(&USBHMIDIC[0].out_buffer, m);
+      }
+    for (i=0;i<midi_outputmap_usbh2.nports;i++)
+      if (midi_outputmap_usbh2.bmvports[i] & vportmask) {
+        m.fields.port = i;
+        midi_output_buffer_put(&USBHMIDIC[1].out_buffer, m);
+      }
+    if (midi_outputmap_usbd.bmvports[0] & vportmask) {
+      m.fields.port = 0;
+      midi_output_buffer_put(&midi_output_usbd, m);
+    }
+  } else {
+    // to input virtual port
+    m.fields.port = vport - 8;
+    midi_input_buffer_put(&midi_input_buffer, m);
+  }
 }
 
-void MidiSend2(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1) {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            serial_MidiSend2(b0,b1);
-            break;
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend2(port, b0,b1);
-            break;
-        }
-        case MIDI_DEVICE_INTERNAL: {
-            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, 0);
-            break;
-        }
-        case MIDI_DEVICE_USB_DEVICE: {
-            midi_usb_MidiSend2(port, b0, b1);
-            break;
-        }
-        default: {
-            // nop
-        }
-    }
-}
+#define CIN_SYSEX_START_CONTINUE 0x04
+#define CIN_SYSEX_END_1 0x05
+#define CIN_SYSEX_END_2 0x06
+#define CIN_SYSEX_END_3 0x07
 
-void MidiSend3(midi_device_t dev, uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2) {
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            serial_MidiSend3(b0,b1,b2);
-            break;
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSend3(port,b0,b1,b2);
-            break;
-        }
-        case MIDI_DEVICE_INTERNAL: {
-            MidiInMsgHandler(MIDI_DEVICE_INTERNAL, port, b0, b1, b2);
-            break;
-        }
-        case MIDI_DEVICE_USB_DEVICE: {
-            midi_usb_MidiSend3(port, b0, b1, b2);
-            break;
-        }
-        default: {
-            // nop
-        }
+void midiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
+    uint8_t cn = ((port & 0x0F) << 4);
+    uint8_t cin = CIN_SYSEX_START_CONTINUE;
+    uint8_t ph = cin | cn;
+    int i = 0;
+    for(i = 0; i < (len - 3); i += 3) {
+		midi_message_t contm;
+		contm.bytes.ph = ph;
+		contm.bytes.b0 = bytes[i];
+		contm.bytes.b1 = bytes[i + 1];
+		contm.bytes.b2 = bytes[i + 2];
+		midiSend(contm);
     }
-}
 
-void MidiSendSysEx(midi_device_t dev, uint8_t port, uint8_t bytes[], uint8_t len) {
-    switch (dev) {
-        case MIDI_DEVICE_USB_HOST: {
-            usbh_MidiSendSysEx(port,bytes,len);
-            break;
-        }
-        default: {
-            // nop
-        }
-    }
+    int res = len - i;
+
+	midi_message_t endm;
+    // end the sysex message, with 1, 2 or 3 bytes
+    switch (res)  {
+	    case 1 : {
+	        cin = CIN_SYSEX_END_1;
+	        ph = cin | cn;
+			endm.bytes.ph = ph;
+			endm.bytes.b0 = bytes[i];
+			endm.bytes.b1 = 0;
+			endm.bytes.b2 = 0;
+			break;
+		}
+	    case 2 :  {
+	        cin = CIN_SYSEX_END_2;
+	        ph = cin | cn;
+			endm.bytes.ph = ph;
+			endm.bytes.b0 = bytes[i];
+			endm.bytes.b1 = bytes[i + 1];
+			endm.bytes.b2 = 0;
+			break;
+		}
+	    case 3 :  {
+	        cin = CIN_SYSEX_END_3;
+	        ph = cin | cn;
+			endm.bytes.ph = ph;
+			endm.bytes.b0 = bytes[i];
+			endm.bytes.b1 = bytes[i + 1];
+			endm.bytes.b2 = bytes[i + 2];
+			break;
+		}
+	}
+
+	midiSend(endm);
 }
 
 void midi_init(void) {
+    midi_input_buffer_objinit(&midi_input_buffer);
     serial_midi_init();
-    usbh_midi_init();
 }
-
-
-int  MidiGetOutputBufferPending(midi_device_t dev)
-{
-    switch (dev) {
-        case MIDI_DEVICE_DIN: {
-            return serial_MidiGetOutputBufferPending();
-        }
-        case MIDI_DEVICE_USB_HOST: {
-            return usbh_MidiGetOutputBufferPending();
-        }
-        default: {
-            // not implemented 
-            return 0;
-        }
-    }
-}
-
-int  MidiGetOutputBufferAvailable(midi_device_t dev)
-{
-    switch (dev) {
-        case MIDI_DEVICE_USB_HOST: {
-            return usbh_MidiGetOutputBufferAvailable();
-        }
-        default: {
-            // not implemented 
-            return 0;
-        }
-    }
-}
-

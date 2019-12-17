@@ -17,37 +17,37 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.outlets.OutletInt32;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.outlet.OutletInt32;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Convert extends gentools {
+class Convert extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "conv";
-        WriteAxoObject(catName, Create_interp());
-        WriteAxoObject(catName, Create_nointerp());
-        WriteAxoObject(catName, CreateNoteToPitch());
-        WriteAxoObject(catName, new AxoObjectAbstract[]{Create_unipolar2bipolar(), Create_unipolar2bipolarTilde()});
-        WriteAxoObject(catName, new AxoObjectAbstract[]{Create_bipolar2unipolar(), Create_bipolar2unipolarTilde()});
-        WriteAxoObject(catName, toFrac32());
-        WriteAxoObject(catName, toBool32());
-        WriteAxoObject(catName, toInt32());
+        writeAxoObject(catName, create_interp());
+        writeAxoObject(catName, create_nointerp());
+        writeAxoObject(catName, createNoteToPitch());
+        writeAxoObject(catName, new AxoObjectAbstract[]{create_unipolar2bipolar(), create_unipolar2bipolarTilde()});
+        writeAxoObject(catName, new AxoObjectAbstract[]{create_bipolar2unipolar(), create_bipolar2unipolarTilde()});
+        writeAxoObject(catName, toFrac32());
+        writeAxoObject(catName, toBool32());
+        writeAxoObject(catName, toInt32());
     }
 
-    static AxoObject Create_interp() {
+    static AxoObject create_interp() {
         AxoObject o = new AxoObject("interp", "linear interpolation from k- to s-rate");
         o.inlets.add(new InletFrac32("i", "input"));
         o.outlets.add(new OutletFrac32Buffer("o", "output"));
@@ -61,7 +61,7 @@ public class Convert extends gentools {
         return o;
     }
 
-    static AxoObject Create_nointerp() {
+    static AxoObject create_nointerp() {
         AxoObject o = new AxoObject("nointerp", "k- to s-rate without interpolation");
         o.inlets.add(new InletFrac32("i", "input"));
         o.outlets.add(new OutletFrac32Buffer("o", "output"));
@@ -69,7 +69,7 @@ public class Convert extends gentools {
         return o;
     }
 
-    static AxoObject CreateNoteToPitch() {
+    static AxoObject createNoteToPitch() {
         AxoObject o = new AxoObject("mtof", "Midi note number to frequency, equal tempered tuning, A=440Hz");
         o.outlets.add(new OutletFrac32("frequency", "frequency"));
         o.inlets.add(new InletFrac32("pitch", "chromatic note"));
@@ -79,7 +79,7 @@ public class Convert extends gentools {
         return o;
     }
 
-    static AxoObject Create_unipolar2bipolar() {
+    static AxoObject create_unipolar2bipolar() {
         AxoObject o = new AxoObject("unipolar2bipolar", "unipolar to bipolar");
         o.inlets.add(new InletFrac32("i", "input"));
         o.outlets.add(new OutletFrac32("o", "output"));
@@ -87,7 +87,7 @@ public class Convert extends gentools {
         return o;
     }
 
-    static AxoObject Create_unipolar2bipolarTilde() {
+    static AxoObject create_unipolar2bipolarTilde() {
         AxoObject o = new AxoObject("unipolar2bipolar", "unipolar to bipolar");
         o.inlets.add(new InletFrac32Buffer("i", "input"));
         o.outlets.add(new OutletFrac32Buffer("o", "output"));
@@ -95,7 +95,7 @@ public class Convert extends gentools {
         return o;
     }
 
-    static AxoObject Create_bipolar2unipolar() {
+    static AxoObject create_bipolar2unipolar() {
         AxoObject o = new AxoObject("bipolar2unipolar", "bipolar to unipolar");
         o.inlets.add(new InletFrac32("i", "input"));
         o.outlets.add(new OutletFrac32("o", "output"));
@@ -103,7 +103,7 @@ public class Convert extends gentools {
         return o;
     }
 
-    static AxoObject Create_bipolar2unipolarTilde() {
+    static AxoObject create_bipolar2unipolarTilde() {
         AxoObject o = new AxoObject("bipolar2unipolar", "bipolar to unipolar");
         o.inlets.add(new InletFrac32Buffer("i", "input"));
         o.outlets.add(new OutletFrac32Buffer("o", "output"));

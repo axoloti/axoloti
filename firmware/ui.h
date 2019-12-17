@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013, 2014 Johannes Taelman
+ * Copyright (C) 2013 - 2017 Johannes Taelman
  *
  * This file is part of Axoloti.
  *
@@ -15,203 +15,196 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef __UI_H
 #define __UI_H
 
 #include "parameters.h"
+#include "stdbool.h"
+#include "input_evt.h"
+#include "patch.h"
 
-void ui_init(void);
-
-typedef union {
-  struct {
-    int btn_nav_Up :1;
-    int btn_nav_Down :1;
-    int btn_nav_Left :1;
-    int btn_nav_Right :1;
-    int btn_nav_Enter :1;
-    int btn_nav_Shift :1;
-    int btn_nav_Back :1;
-    int unused :9;
-    int btn_1 :1;
-    int btn_2 :1;
-    int btn_3 :1;
-    int btn_4 :1;
-    int btn_5 :1;
-    int btn_6 :1;
-    int btn_7 :1;
-    int btn_8 :1;
-    int btn_9 :1;
-    int btn_10 :1;
-    int btn_11 :1;
-    int btn_12 :1;
-    int btn_13 :1;
-    int btn_14 :1;
-    int btn_15 :1;
-    int btn_16 :1;
-  } fields;
-  int word;
-} Btn_Nav_States_struct;
-
-extern Btn_Nav_States_struct Btn_Nav_Or;
-extern Btn_Nav_States_struct Btn_Nav_And;
 extern int8_t EncBuffer[4];
 
-extern Btn_Nav_States_struct Btn_Nav_CurStates;
-extern Btn_Nav_States_struct Btn_Nav_PrevStates;
-
-#define IF_BTN_NAV_DOWN(x) \
-  if (Btn_Nav_CurStates.fields.x && !Btn_Nav_PrevStates.fields.x)
-
 typedef struct {
-  int *value;
+  int *pvalue;
   int minvalue;
   int maxvalue;
-} iValuePair;
+} ui_node_integer_adjustable;
 
 typedef struct {
-  float value;
-  float minvalue;
-  float maxvalue;
-} fValuePair;
-
-typedef struct {
-  void *array; // pointer to KeyValuePair array
+  const void *array; // pointer to ui_node_t array
   int length;
-  int current;
-} arrayValuePair;
+} ui_node_node_list_t;
 
 typedef struct {
-  int32_t *value;
-} intDbgValuePairBar;
+  int16_t *pvalue;
+  int16_t minvalue;
+  int16_t scale;
+} ui_node_short_value_t;
+
+
+struct ui_node;
+
+typedef uint32_t (*nodeFunctionHandleEvent)(const struct ui_node * node, input_event evt);
+typedef void (*nodeFunctionPaintScreen)(const struct ui_node * node, uint32_t dirtyflags);
+typedef void (*nodeFunctionPaintLine)(const struct ui_node * node, int line, uint32_t dirtyflags);
 
 typedef struct {
-  int16_t *value;
-} sValuePair;
+	nodeFunctionHandleEvent handle_evt;
+	nodeFunctionPaintScreen paint_screen_update;
+	nodeFunctionPaintLine paint_line_update;
+	nodeFunctionPaintLine paint_line_update_inv;
+} nodeFunctionTable;
 
-typedef struct {
-  int *array; // pointer to array of KeyValuePair pointers
-  int length;
-  int current;
-} arrayPtrValuePair;
-
-typedef void (*DisplayFunction)(int);
-typedef void (*ButtonFunction)(int, int);
+extern nodeFunctionTable nodeFunctionTable_custom;
 
 typedef void (*VoidFunction)(void);
 
 typedef struct {
-  DisplayFunction displayFunction; // function pointer
-  ButtonFunction buttonFunction;
-  void * userdata;
-} customUIFunctions;
-
-typedef struct {
-  int *value;
-} intDisplayValue;
-
-typedef struct {
-  int *value;
-} pitchDisplayValue;
-
-typedef struct {
-  int *value;
-} freqDisplayValue;
-
-typedef struct {
-  int *value;
-} fractDisplayValue;
-
-typedef struct {
-  ParameterExchange_t *PEx;
-  int minvalue;
-  int maxvalue;
-} ipValuePair;
-
-typedef struct {
-  uint8_t *value;
-  int minvalue;
-  int maxvalue;
-} u7ValuePair;
-
-typedef struct {
   VoidFunction fnctn;
-} fnctnValuePair;
+} ui_node_action_function_t;
 
-typedef enum {
-  KVP_TYPE_IVP,
-  KVP_TYPE_FVP,
-  KVP_TYPE_SVP,
-  KVP_TYPE_AVP,
-  KVP_TYPE_IDVP,
-  KVP_TYPE_APVP,
-  KVP_TYPE_CUSTOM,
-  KVP_TYPE_INTDISPLAY,
-  KVP_TYPE_PITCHDISPLAY,
-  KVP_TYPE_FREQDISPLAY,
-  KVP_TYPE_FRACTDISPLAY,
-  KVP_TYPE_IPVP,
-  KVP_TYPE_U7VP,
-  KVP_TYPE_FNCTN,
-} KVP_type;
+typedef struct {
+  patch_t *patch;
+  int32_t nparams;
+} ui_node_param_list_t;
 
-typedef struct KeyValuePair {
-  KVP_type kvptype;
-  struct KeyValuePair *parent;
-  const char *keyname;
+typedef struct {
+	Parameter_t *param;
+	Parameter_name_t *param_name;
+} ui_node_param_t;
+
+typedef struct {
+	ui_object_t *obj;
+} ui_node_object_t;
+
+typedef struct node_object_list {
+	ui_object_t *objs;
+	int32_t nobjs;
+} ui_node_object_list_t;
+
+typedef struct ui_node {
+  const nodeFunctionTable *functions;
+  const char *name;
   union {
-    iValuePair ivp;
-    fValuePair fvp;
-    sValuePair svp;
-    arrayValuePair avp;
-    intDbgValuePairBar idvp;
-    arrayPtrValuePair apvp;
-    customUIFunctions custom;
-    intDisplayValue idv;
-    pitchDisplayValue pdv;
-    freqDisplayValue freqdv;
-    fractDisplayValue fractdv;
-    ipValuePair ipvp;
-    u7ValuePair u7vp;
-    fnctnValuePair fnctnvp;
+    ui_node_integer_adjustable intValue;
+    ui_node_short_value_t shortValue;
+    ui_node_action_function_t fnctn;
+    ui_node_node_list_t nodeList;
+    ui_node_param_list_t paramList;
+    ui_node_param_t param;
+    ui_node_object_list_t objList;
+    ui_node_object_t obj;
   };
-} KeyValuePair_s;
+} ui_node_t;
 
-//typedef struct KeyValuePair KeyValuePair_s;
+extern const nodeFunctionTable nodeFunctionTable_integer_value;
+extern const nodeFunctionTable nodeFunctionTable_short_value;
+extern const nodeFunctionTable nodeFunctionTable_node_list;
+extern const nodeFunctionTable nodeFunctionTable_action_function;
+extern const nodeFunctionTable nodeFunctionTable_param_list;
+extern const nodeFunctionTable nodeFunctionTable_param;
+extern const nodeFunctionTable nodeFunctionTable_object_list;
+extern const nodeFunctionTable nodeFunctionTable_object;
 
-extern struct KeyValuePair *kvps;
-extern struct KeyValuePair *ObjectKvpRoot;
+#if 0
+// OBSOLETE
+void UINode_Draw(int x, int y, const ui_node_t *node);
+void UINode_Increment(const ui_node_t *node);
+void UINode_Decrement(const ui_node_t *node);
 
-void KVP_Display(int x, int y, struct KeyValuePair *kvp);
-void KVP_Increment(struct KeyValuePair *kvp);
-void KVP_Decrement(struct KeyValuePair *kvp);
+void node_SendMetaDataUSB(ui_node_t *node);
+void node_SendDataUSB(ui_node_t *node);
+void node_ReceiveDataUSB(char *data);
 
-void KVP_SendMetaDataUSB(struct KeyValuePair *kvp);
-void KVP_SendDataUSB(struct KeyValuePair *kvp);
-void KVP_ReceiveDataUSB(char *data);
+void node_ClearObjects(void);
+#endif
 
-void KVP_ClearObjects(void);
-void KVP_RegisterObject(struct KeyValuePair *kvp);
+#if 1
+// OBSOLETE API!
+void KVP_RegisterObject(ui_node_t *node) __attribute__ ((deprecated));
 
-void k_scope_DisplayFunction(void * userdata);
-void k_scope_DisplayFunction2(void * userdata);
-void k_scope_DisplayFunction3(void * userdata);
-void k_scope_DisplayFunction4(void * userdata);
+void SetKVP_APVP(ui_node_t *node, ui_node_t *parent,
+                 const char *keyName, int length, ui_node_t **array) __attribute__ ((deprecated));
+void SetKVP_AVP(ui_node_t *node, const ui_node_t *parent,
+                const char *keyName, int length, const ui_node_t *array) __attribute__ ((deprecated));
+void SetKVP_IVP(ui_node_t *node, ui_node_t *parent,
+                const char *keyName, int *value, int min, int max) __attribute__ ((deprecated));
+void SetKVP_IPVP(ui_node_t *node, ui_node_t *parent,
+                 const char *keyName, Parameter_t *PEx, int min,
+                 int max) __attribute__ ((deprecated));
+void SetKVP_FNCTN(ui_node_t *node, ui_node_t *parent,
+                  const char *keyName, VoidFunction fnctn) __attribute__ ((deprecated));
+#endif
 
-void SetKVP_APVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                 const char *keyName, int length, struct KeyValuePair *array);
-void SetKVP_AVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                const char *keyName, int length, struct KeyValuePair *array);
-void SetKVP_IVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                const char *keyName, int *value, int min, int max);
-void SetKVP_IPVP(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                 const char *keyName, ParameterExchange_t *PEx, int min,
-                 int max);
-void SetKVP_FNCTN(struct KeyValuePair *kvp, struct KeyValuePair *parent,
-                  const char *keyName, VoidFunction fnctn);
+//void UISetUserDisplay(DisplayFunction dispfnctn, ButtonFunction btnfnctn, void* userdata);
+//void AxolotiControlUpdate(void);
+//extern void (*pControlUpdate)(void);
 
-void UIGoSafe(void);
+void ui_init(void);
+void ui_go_home(void);
+uint32_t ui_enter_node(const ui_node_t *node);
 
-void AxolotiControlUpdate(void);
-extern void (*pControlUpdate)(void);
+#define LCD_COL_EQ 45
+#define LCD_COL_EQ_LENGTH 6
+#define LCD_COL_VAL 45
+
+// last line on the screen is for status
+#define STATUSROW 7
+
+// normal content has a indent to allow indicators on first column:
+#define LCD_COL_INDENT 3
+
+// the last column to write a character on:
+#define LCD_COL_RIGHT 61
+
+#define LCD_COL_ENTER 48
+
+#define LCD_VALUE_POSITION 36
+
+
+typedef struct {
+	const ui_node_t *parent;
+	int currentpos;
+} menu_stack_t;
+
+#define menu_stack_size 10
+extern menu_stack_t menu_stack[menu_stack_size];
+extern int menu_stack_position;
+
+// ------ LCD dirty flags ------
+// for selective repainting
+// in high to low priority order:
+#define lcd_dirty_flag_clearscreen  (1<<0)
+#define lcd_dirty_flag_header  (1<<1)
+#define lcd_dirty_flag_initial (1<<2)
+#define lcd_dirty_flag_listnav (1<<3)
+#define lcd_dirty_flag_usr0 (1<<4)
+#define lcd_dirty_flag_usr1 (1<<5)
+#define lcd_dirty_flag_usr2 (1<<6)
+#define lcd_dirty_flag_usr3 (1<<7)
+#define lcd_dirty_flag_usr4 (1<<8)
+#define lcd_dirty_flag_usr5 (1<<9)
+#define lcd_dirty_flag_usr6 (1<<10)
+#define lcd_dirty_flag_usr7 (1<<11)
+#define lcd_dirty_flag_input (1<<30)
+
+extern uint32_t list_nav_down(const ui_node_t *node, int maxposition);
+extern uint32_t list_nav_up(const ui_node_t *node);
+extern void update_list_nav(int current_menu_length);
+
+extern ui_node_t ObjMenu;
+extern ui_node_t ParamMenu;
+
+typedef struct led_array led_array_t;
+
+void ShowParameterOnEncoderLEDRing(led_array_t *led_array, Parameter_t *p);
+void ShowParameterOnButtonArrayLEDs(led_array_t *led_array, Parameter_t *p);
+
+void ProcessEncoderParameter(Parameter_t *p, int8_t v);
+void ProcessStepButtonsParameter(Parameter_t *p);
+
+void pollProcessUIEvent(void);
 
 #endif

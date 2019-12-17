@@ -17,24 +17,24 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32;
-import axoloti.parameters.ParameterFrac32UMap;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Dynamics extends gentools {
+class Dynamics extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "dyn";
-        WriteAxoObject(catName, CreateCompressor());
+        writeAxoObject(catName, createCompressor());
     }
 
-    static AxoObject CreateCompressor() {
+    static AxoObject createCompressor() {
         AxoObject o = new AxoObject("comp", "Dynamic range compressor. Gain calculation only. Envelope follower, attack, decay and VCA are not included.");
         o.params.add(new ParameterFrac32UMap("tresh"));
         o.params.add(new ParameterFrac32UMap("ratio"));

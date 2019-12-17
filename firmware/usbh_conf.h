@@ -31,13 +31,13 @@
 
 #define STM32F40_41xxx
 
-#include "stm32f4xx.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal_hcd.h"
 #include "ch.h"
-#include "chprintf.h"
+#include "logging.h"
 
 
 /* Includes ------------------------------------------------------------------*/
@@ -78,12 +78,13 @@
 extern void* fakemalloc(size_t size);
 extern void fakefree(void * p);
 
-#define osThreadId Thread *
+#define osThreadId thread_t *
 
 #define osThreadDef(name, fn, prio, instances, stacksz) \
-  static WORKING_AREA(wa##name, 640); \
-  Thread *name = chThdCreateStatic(wa##name, sizeof(wa##name), HIGHPRIO, fn, phost); \
-  phost->os_event = name;
+  static THD_WORKING_AREA(wa##name, 840); \
+  osThreadId name = chThdCreateStatic(wa##name, sizeof(wa##name), HIGHPRIO, (tfunc_t)fn, phost); \
+  phost->os_event = name; \
+  chRegSetThreadName("usbhost");
 #define osThreadCreate(x,y) x
 #define osThread(x) x
 
@@ -95,21 +96,21 @@ extern void fakefree(void * p);
    (osEvent)chIQGetTimeout(q, TIME_INFINITE)
 
 #else
-#define osMessageQId Thread *
+#define osMessageQId thread_t *
 #define osMessagePutI(q,val,time) chEvtSignalI (q,1<<val);
 #define osMessagePut(q,val,time) chEvtSignal (q,1<<val);
-#define osMessageGet(q,to) chEvtWaitOneTimeout(0xFF, MS2ST(to))
+#define osMessageGet(q,to) chEvtWaitOne(0xFF)
 #endif
 
 // osThreadId
 #define osMessageQDef(name, queue_sz, type) \
-  static type buf[queue_sz]; \
-  INPUTQUEUE_DECL(name, &buf, sizeof(buf), NULL, NULL)
-#define osMessageCreate(queue_def, thread_id)  &queue_def
+  static int buf[queue_sz]; \
+  MAILBOX_DECL(name, &buf, queue_sz)
+#define osMessageCreate(queue_def, thread_id)  thread_id /*&queue_def*/
 #define osMessageQ(x) x
 #define osWaitForever TIME_INFINITE
 #define osEventMessage 1
-typedef uint8_t osEvent;
+typedef int osEvent;
 
 //#define DEBUG_ON_GPIO
 

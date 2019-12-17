@@ -37,23 +37,27 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class HWSignature {
 
-    public static final String PRIVATE_KEY_FILE = "private_key.der";
-    public static final String PUBLIC_KEY_FILE = "/resources/public_key.der";
-    public static final int length = 256;
+    private HWSignature() {
+    }
 
-    static PrivateKey ReadPrivateKey(String privateKeyPath) throws Exception {
+    private static final String PRIVATE_KEY_FILE = "private_key.der";
+    private static final String PUBLIC_KEY_FILE = "/resources/public_key.der";
+    public static final int KEY_LENGTH = 256;
+
+    static PrivateKey readPrivateKey(String privateKeyPath) throws Exception {
         File f = new File(privateKeyPath);
         FileInputStream fis = new FileInputStream(f);
-        DataInputStream dis = new DataInputStream(fis);
-        byte[] keyBytes = new byte[(int) f.length()];
-        dis.readFully(keyBytes);
-        dis.close();
+        byte[] keyBytes;
+        try (DataInputStream dis = new DataInputStream(fis)) {
+            keyBytes = new byte[(int) f.length()];
+            dis.readFully(keyBytes);
+        }
         PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
         return KeyFactory.getInstance("RSA").generatePrivate(pkcs8EncodedKeySpec);
     }
 
-    static PublicKey ReadPublicKey(String publicKeyResourceName) throws Exception {
-        InputStream fis = ClassLoader.class.getResourceAsStream(publicKeyResourceName);
+    static PublicKey readPublicKey(String publicKeyResourceName) throws Exception {
+        InputStream fis = HWSignature.class.getResourceAsStream(publicKeyResourceName);
         byte[] keyBytes = convertSteamToByteArray(fis,1024);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyBytes);
         return KeyFactory.getInstance("RSA").generatePublic(x509EncodedKeySpec);
@@ -63,7 +67,7 @@ public class HWSignature {
         byte[] buffer = new byte[(int) size];
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-        int line = 0;
+        int line;
         // read bytes from stream, and store them in buffer
         while ((line = stream.read(buffer)) != -1) {
             // Writes bytes from byte array (buffer) into output stream.
@@ -85,7 +89,7 @@ public class HWSignature {
         System.out.println();
     }
 
-    public static byte[] Sign(ByteBuffer cpuserial, ByteBuffer otpinfo) throws Exception {
+    public static byte[] sign(ByteBuffer cpuserial, ByteBuffer otpinfo) throws Exception {
         if (cpuserial.limit() != 12) {
             throw new Exception("cpuserial has wrong length");
         }
@@ -100,13 +104,13 @@ public class HWSignature {
             sdata[i + 12] = otpinfo.get(i);
         }
         Signature sig = Signature.getInstance("SHA256withRSA");
-        sig.initSign(ReadPrivateKey(PRIVATE_KEY_FILE));
+        sig.initSign(readPrivateKey(PRIVATE_KEY_FILE));
         sig.update(sdata);
         byte[] signature = sig.sign();
         return signature;
     }
 
-    public static boolean Verify(ByteBuffer cpuserial, ByteBuffer otpinfo, byte[] signature) throws Exception {
+    public static boolean verify(ByteBuffer cpuserial, ByteBuffer otpinfo, byte[] signature) throws Exception {
         if (cpuserial.limit() != 12) {
             throw new Exception("cpuserial has wrong length");
         }
@@ -121,7 +125,7 @@ public class HWSignature {
             sdata[i + 12] = otpinfo.get(i);
         }
         Signature sig = Signature.getInstance("SHA256withRSA");
-        sig.initVerify(ReadPublicKey(PUBLIC_KEY_FILE));
+        sig.initVerify(readPublicKey(PUBLIC_KEY_FILE));
         sig.update(sdata);
         return sig.verify(signature);
     }

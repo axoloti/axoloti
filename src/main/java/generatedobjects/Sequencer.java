@@ -17,70 +17,70 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.inlets.InletBool32;
-import axoloti.inlets.InletBool32Rising;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletBool32Pulse;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.outlets.OutletInt32;
-import axoloti.parameters.Parameter4LevelX16;
-import axoloti.parameters.ParameterBin16;
-import axoloti.parameters.ParameterBin32;
-import axoloti.parameters.ParameterFrac32SMapVSlider;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapVSlider;
-import axoloti.parameters.ParameterInt32BoxSmall;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.InletBool32;
+import axoloti.object.inlet.InletBool32Rising;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletBool32Pulse;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32;
+import axoloti.object.parameter.Parameter4LevelX16;
+import axoloti.object.parameter.ParameterBin16;
+import axoloti.object.parameter.ParameterBin32;
+import axoloti.object.parameter.ParameterFrac32SMapVSlider;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapVSlider;
+import axoloti.object.parameter.ParameterInt32BoxSmall;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Sequencer extends gentools {
+class Sequencer extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "sel";
-        WriteAxoObject(catName, Create_SelectBool16());
-        WriteAxoObject(catName, Create_SelectBool16v2());
-        WriteAxoObject(catName, Create_SelectBool16v2x2());
-        WriteAxoObject(catName, Create_SelectBool16v2x4());
-        WriteAxoObject(catName, Create_SelectBool16v2x8());
+        writeAxoObject(catName, Create_SelectBool16());
+        writeAxoObject(catName, Create_SelectBool16v2());
+        writeAxoObject(catName, Create_SelectBool16v2x2());
+        writeAxoObject(catName, Create_SelectBool16v2x4());
+        writeAxoObject(catName, Create_SelectBool16v2x8());
 
-        WriteAxoObject(catName, Create_SelectBool16v2_pulse());
-        WriteAxoObject(catName, Create_SelectBool16v2x2_pulse());
-        WriteAxoObject(catName, Create_SelectBool16v2x4_pulse());
-        WriteAxoObject(catName, Create_SelectBool16v2x8_pulse());
+        writeAxoObject(catName, Create_SelectBool16v2_pulse());
+        writeAxoObject(catName, Create_SelectBool16v2x2_pulse());
+        writeAxoObject(catName, Create_SelectBool16v2x4_pulse());
+        writeAxoObject(catName, Create_SelectBool16v2x8_pulse());
 
-        WriteAxoObject(catName, Create_SelectBool32());
-        WriteAxoObject(catName, Create_SelectBool32x2());
-        WriteAxoObject(catName, Create_SelectBool32x4());
-        WriteAxoObject(catName, Create_SelectBool32x8());
+        writeAxoObject(catName, Create_SelectBool32());
+        writeAxoObject(catName, Create_SelectBool32x2());
+        writeAxoObject(catName, Create_SelectBool32x4());
+        writeAxoObject(catName, Create_SelectBool32x8());
 
-        WriteAxoObject(catName, Create_SelectInt16());
-        WriteAxoObject(catName, Create_SelectInt32());
+        writeAxoObject(catName, Create_SelectInt16());
+        writeAxoObject(catName, Create_SelectInt32());
 
-        WriteAxoObject(catName, Create_Select4L16());
-        WriteAxoObject(catName, Create_Select4L16_2track());
-        WriteAxoObject(catName, Create_Select4L16_4track());
-        WriteAxoObject(catName, Create_Select4L16_8track());
-        WriteAxoObject(catName, Create_Select4L16_8track_s());
+        writeAxoObject(catName, Create_Select4L16());
+        writeAxoObject(catName, Create_Select4L16_2track());
+        writeAxoObject(catName, Create_Select4L16_4track());
+        writeAxoObject(catName, Create_Select4L16_8track());
+        writeAxoObject(catName, Create_Select4L16_8track_s());
 
-        WriteAxoObject(catName, Create_SelectUFrac16b());
-        WriteAxoObject(catName, Create_SelectSFrac16b());
-        WriteAxoObject(catName, Create_SelectUFrac32b());
-        WriteAxoObject(catName, Create_SelectSFrac32b());
+        writeAxoObject(catName, Create_SelectUFrac16b());
+        writeAxoObject(catName, Create_SelectSFrac16b());
+        writeAxoObject(catName, Create_SelectUFrac32b());
+        writeAxoObject(catName, Create_SelectSFrac32b());
 
-        WriteAxoObject(catName, Create_selectc2());
-        WriteAxoObject(catName, Create_selectc4());
-        WriteAxoObject(catName, Create_selectc8());
-        WriteAxoObject(catName, Create_selectc16());
+        writeAxoObject(catName, Create_selectc2());
+        writeAxoObject(catName, Create_selectc4());
+        writeAxoObject(catName, Create_selectc8());
+        writeAxoObject(catName, Create_selectc16());
 
         catName = "seq";
-        WriteAxoObject(catName, Create_LfsrSeq());
+        writeAxoObject(catName, Create_LfsrSeq());
     }
 
     static AxoObject Create_SelectBool16() {

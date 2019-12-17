@@ -17,77 +17,77 @@
  */
 package generatedobjects;
 
-import axoloti.attributedefinition.AxoAttributeComboBox;
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Bipolar;
-import axoloti.inlets.InletFrac32Buffer;
-import axoloti.inlets.InletFrac32BufferBipolar;
-import axoloti.inlets.InletFrac32Pos;
-import axoloti.inlets.InletInt32;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32BufferBipolar;
-import axoloti.outlets.OutletFrac32BufferPos;
-import axoloti.parameters.ParameterFrac32SMapPitch;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterFrac32UMapFreq;
-import axoloti.parameters.ParameterFrac32UMapGain;
-import static generatedobjects.gentools.WriteAxoObject;
-import java.util.HashSet;
+import axoloti.object.attribute.AxoAttributeComboBox;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Bipolar;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.inlet.InletFrac32BufferBipolar;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.inlet.InletInt32;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32BufferBipolar;
+import axoloti.object.outlet.OutletFrac32BufferPos;
+import axoloti.object.parameter.ParameterFrac32SMapPitch;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterFrac32UMapFreq;
+import axoloti.object.parameter.ParameterFrac32UMapGain;
+import static generatedobjects.GenTools.writeAxoObject;
+import java.util.LinkedList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Osc extends gentools {
+class Osc extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "osc";
-//        WriteAxoObject("osc",CreateSRateSineOsc());
-//        WriteAxoObject("osc",CreateSRateSineOsc2());
-//        WriteAxoObject("osc",CreateSRateSineOsc3());
-        WriteAxoObject(catName, CreateSRateSineOsc4());
-//        WriteAxoObject(unstable + "osc", CreateSRateSineOsc5());
-        WriteAxoObject(catName, CreateSRateSineOsc5());
-//        WriteAxoObject(catName, CreateSineAdd8());
-//        WriteAxoObject("osc",CreateSawTilde());
-//        WriteAxoObject("osc", CreateSaw2Tilde());
-        WriteAxoObject(catName, CreateSaw3Tilde());
-        WriteAxoObject(catName, CreateSawSyncTilde());
-        WriteAxoObject(catName, CreateSawTilde_cheap());
-        WriteAxoObject(catName, CreateSawTilde_medium());
-        WriteAxoObject(catName, CreateSaw7());
-        WriteAxoObject(catName, CreateSquare7());
-        WriteAxoObject(catName, CreateTriTilde());
-        WriteAxoObject(catName, CreateTriTilde_cheap());
-        WriteAxoObject(catName, CreateSquareTilde());
-        WriteAxoObject(catName, CreateSquareTilde_Cheap());
-        WriteAxoObject(catName, CreateSquareTilde_Medium());
-        WriteAxoObject(catName, CreateSquareSyncTilde());
-//        WriteAxoObject(catName, CreateSquare2Tilde());
-//        WriteAxoObject(catName, CreateSquare3Tilde());
-        WriteAxoObject(catName, CreatePWMTilde());
-//        WriteAxoObject(catName, CreatePWM2Tilde());
-        WriteAxoObject(catName, CreateSRatePhasorOsc4());
-        WriteAxoObject(catName, CreateSRatePhasor0());
-        WriteAxoObject(catName, CreateSRatePhasor3q());
+//        WriteAxoObject("osc", createSRateSineOsc());
+//        WriteAxoObject("osc", createSRateSineOsc2());
+//        WriteAxoObject("osc", createSRateSineOsc3());
+        writeAxoObject(catName, createSRateSineOsc4());
+//        WriteAxoObject(unstable + "osc", createSRateSineOsc5());
+        writeAxoObject(catName, createSRateSineOsc5());
+//        WriteAxoObject(catName, createSineAdd8());
+//        WriteAxoObject("osc", createSawTilde());
+//        WriteAxoObject("osc", createSaw2Tilde());
+        writeAxoObject(catName, createSaw3Tilde());
+        writeAxoObject(catName, createSawSyncTilde());
+        writeAxoObject(catName, createSawTilde_cheap());
+        writeAxoObject(catName, createSawTilde_medium());
+        writeAxoObject(catName, createSaw7());
+        writeAxoObject(catName, createSquare7());
+        writeAxoObject(catName, createTriTilde());
+        writeAxoObject(catName, createTriTilde_cheap());
+        writeAxoObject(catName, createSquareTilde());
+        writeAxoObject(catName, createSquareTilde_Cheap());
+        writeAxoObject(catName, createSquareTilde_Medium());
+        writeAxoObject(catName, createSquareSyncTilde());
+//        WriteAxoObject(catName, createSquare2Tilde());
+//        WriteAxoObject(catName, createSquare3Tilde());
+        writeAxoObject(catName, createPWMTilde());
+//        WriteAxoObject(catName, createPWM2Tilde());
+        writeAxoObject(catName, createSRatePhasorOsc4());
+        writeAxoObject(catName, createSRatePhasor0());
+        writeAxoObject(catName, createSRatePhasor3q());
 
         catName = "noise";
-        WriteAxoObject(catName, CreateRandTilde());
-        WriteAxoObject(catName, CreateGaussTilde());
-        WriteAxoObject(catName, CreatePinkNoiseTilde());
-        WriteAxoObject(catName, CreatePinkNoise2Tilde());
+        writeAxoObject(catName, createRandTilde());
+        writeAxoObject(catName, createGaussTilde());
+        writeAxoObject(catName, createPinkNoiseTilde());
+        writeAxoObject(catName, createPinkNoise2Tilde());
 
         catName = "rand";
-        WriteAxoObject(catName, CreatePinkNoise());
-        WriteAxoObject(catName, CreatePinkNoise2());
+        writeAxoObject(catName, createPinkNoise());
+        writeAxoObject(catName, createPinkNoise2());
 
         catName = "other";
-        WriteAxoObject(catName, Create_lfsr());
-        WriteAxoObject(catName, Create_bufindex());
+        writeAxoObject(catName, create_lfsr());
+        writeAxoObject(catName, create_bufindex());
     }
 
-    static AxoObject CreateSRateSineOsc4() {
+    static AxoObject createSRateSineOsc4() {
         AxoObject o = new AxoObject("sine", "sine wave oscillator");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -107,7 +107,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSineAdd8() {
+    static AxoObject createSineAdd8() {
         AxoObject o = new AxoObject("sine 8", "sine wave oscillator");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -141,7 +141,7 @@ public class Osc extends gentools {
 
     }
 
-    static AxoObject CreateSRateSineOsc5() {
+    static AxoObject createSRateSineOsc5() {
         AxoObject o = new AxoObject("sine lin", "sine wave oscillator\nlinear frequency input (goes all the way to 0)");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "sine wave"));
         o.inlets.add(new InletFrac32Bipolar("freq", "frequency"));
@@ -158,7 +158,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSaw3Tilde() {
+    static AxoObject createSaw3Tilde() {
         AxoObject o = new AxoObject("saw", "saw wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -201,7 +201,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSawSyncTilde() {
+    static AxoObject createSawSyncTilde() {
         AxoObject o = new AxoObject("saw sync", "Saw wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -256,12 +256,12 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSawTilde_cheap() {
+    static AxoObject createSawTilde_cheap() {
         AxoObject o = new AxoObject("saw cheap", "saw wave oscillator\nNon-bandwith limited, cheap sound");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -274,12 +274,12 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSawTilde_medium() {
+    static AxoObject createSawTilde_medium() {
         AxoObject o = new AxoObject("saw medium", "saw wave oscillator\nNon-bandwith limited, medium quality");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "saw wave, non-anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -299,7 +299,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSaw7() {
+    static AxoObject createSaw7() {
         AxoObject o = new AxoObject("supersaw", "seven detuned saw wave oscillators\nNon-bandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "supersaw wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -307,7 +307,7 @@ public class Osc extends gentools {
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
         o.params.add(new ParameterFrac32UMap("detune"));
         //o.params.add(new ParameterFrac32UMap("amt"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p[7];\n";
         o.sInitCode = "int i;\n"
                 + "for(i=0;i<7;i++)\n"
@@ -368,12 +368,12 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquare7() {
+    static AxoObject createSquare7() {
         AxoObject o = new AxoObject("supersquare", "seven detuned square wave oscillators\nNon-bandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "supersaw wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p[7];\n";
         o.sInitCode = "int i;\n"
                 + "for(i=0;i<7;i++)\n"
@@ -400,13 +400,13 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateTriTilde() {
+    static AxoObject createTriTilde() {
         AxoObject o = new AxoObject("tri", "triangle oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "triangle wave, anti-aliased"));
 //        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.includes.add("./bltable.h");
         o.sLocalData = "  uint32_t osc_p;\n"
                 + "  static const int blepvoices = 4;\n"
@@ -456,13 +456,13 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateTriTilde_cheap() {
+    static AxoObject createTriTilde_cheap() {
         AxoObject o = new AxoObject("tri cheap", "triangle wave oscillator\nNon-bandwith limited, cheap sound");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "triangle wave, non-anti-aliased"));
 //        o.outlets.add(new OutletFrac32BufferBipolar("test", "triangle wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -479,7 +479,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquareTilde() {
+    static AxoObject createSquareTilde() {
         AxoObject o = new AxoObject("square", "square wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -520,12 +520,12 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquareTilde_Cheap() {
+    static AxoObject createSquareTilde_Cheap() {
         AxoObject o = new AxoObject("square cheap", "square wave oscillator\nNon-bandwith limited, cheap sound");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, non-anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -542,12 +542,12 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquareTilde_Medium() {
+    static AxoObject createSquareTilde_Medium() {
         AxoObject o = new AxoObject("square medium", "square wave oscillator\nNon-bandwith limited, medium quality");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
         o.params.add(new ParameterFrac32SMapPitch("pitch"));
-        o.includes = new HashSet<String>();
+        o.includes = new LinkedList<>();
         o.sLocalData = "  int32_t osc_p;\n";
         o.sInitCode = "    osc_p=0;\n";
         o.sKRateCode = "  uint32_t freq;\n"
@@ -568,7 +568,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquareSyncTilde() {
+    static AxoObject createSquareSyncTilde() {
         AxoObject o = new AxoObject("square sync", "square wave oscillator\nBandwith limited with sync input.\nSync resets oscillator phase on rising zero-crossing");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -621,7 +621,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquare2Tilde() {
+    static AxoObject createSquare2Tilde() {
         AxoObject o = new AxoObject("square2", "square wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
         o.outlets.add(new OutletFrac32BufferBipolar("wave2", "square wave, anti-aliased"));
@@ -664,7 +664,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSquare3Tilde() {
+    static AxoObject createSquare3Tilde() {
         AxoObject o = new AxoObject("square3", "square wave oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "square wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -705,7 +705,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreatePWMTilde() {
+    static AxoObject createPWMTilde() {
         AxoObject o = new AxoObject("pwm", "pulse width modulation oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "pwm wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -784,7 +784,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreatePWM2Tilde() {
+    static AxoObject createPWM2Tilde() {
         AxoObject o = new AxoObject("pwm2", "pulse width modulation oscillator\nBandwith limited");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "pwm wave, anti-aliased"));
         o.inlets.add(new InletFrac32Bipolar("pitch", "pitch"));
@@ -835,7 +835,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSRatePhasorOsc4() {
+    static AxoObject createSRatePhasorOsc4() {
         AxoObject o = new AxoObject("phasor", "phasor\nsaw wave like oscillator");
         o.outlets.add(new OutletFrac32BufferPos("phasor", "phasor wave"));
         o.inlets.add(new InletFrac32("pitch", "pitch"));
@@ -851,7 +851,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSRatePhasor0() {
+    static AxoObject createSRatePhasor0() {
         AxoObject o = new AxoObject("phasor lin", "phasor\nsaw like wave with linear frequency input(goes all the way to 0)");
         o.outlets.add(new OutletFrac32BufferPos("phasor", "phasor wave"));
         o.inlets.add(new InletFrac32Bipolar("freq", "frequency"));
@@ -867,7 +867,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateSRatePhasor3q() {
+    static AxoObject createSRatePhasor3q() {
         AxoObject o = new AxoObject("phasor compl", "FM phasor\n 0 and 180 degree outputs");
         o.outlets.add(new OutletFrac32BufferPos("phasor0", "phasor wave"));
         o.outlets.add(new OutletFrac32BufferPos("phasor180", "phasor wave, 180 degrees shifted"));
@@ -885,14 +885,14 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreateRandTilde() {
+    static AxoObject createRandTilde() {
         AxoObject o = new AxoObject("uniform", "uniform distributed (white) noise\nRange -64..64");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "white noise"));
         o.sSRateCode = "outlet_wave= (int32_t)(GenerateRandomNumber())>>4;";
         return o;
     }
 
-    static AxoObject CreateGaussTilde() {
+    static AxoObject createGaussTilde() {
         AxoObject o = new AxoObject("gaussian", "pseudo gaussian distributed (white) noise\nRange -64..64");
         o.outlets.add(new OutletFrac32BufferBipolar("wave", "white noise"));
         o.sLocalData = "uint32_t seeds[8];\n";
@@ -925,7 +925,7 @@ public class Osc extends gentools {
      5                                                               5
      6
      */
-    static AxoObject CreatePinkNoiseTilde() {
+    static AxoObject createPinkNoiseTilde() {
         AxoObject o = new AxoObject("pink", "Cheap almost pink noise\nover 7 octaves. Range -64..64");
         o.outlets.add(new OutletFrac32BufferBipolar("out", "pink noise"));
         o.sLocalData = "static const int noct = 7;\n"
@@ -961,7 +961,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreatePinkNoise2Tilde() {
+    static AxoObject createPinkNoise2Tilde() {
         AxoObject o = new AxoObject("pink oct", "Cheap almost pink noise\nRange -64..64. Configureable number of octaves.");
         String mentries[] = {
             "1",
@@ -1006,7 +1006,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreatePinkNoise() {
+    static AxoObject createPinkNoise() {
         AxoObject o = new AxoObject("pink", "Cheap almost pink noise\nover 7 octaves. Range -64..64");
         o.outlets.add(new OutletFrac32Bipolar("out", "pink noise"));
         o.sLocalData = "static const int noct = 7;\n"
@@ -1042,7 +1042,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject CreatePinkNoise2() {
+    static AxoObject createPinkNoise2() {
         AxoObject o = new AxoObject("pink oct", "Cheap almost pink noise\nRange -64..64. Configureable number of octaves.");
         String mentries[] = {
             "1",
@@ -1087,7 +1087,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject Create_lfsr() {
+    static AxoObject create_lfsr() {
         AxoObject o = new AxoObject("lfsr", "linear feedback shift register cyclic pattern\naudio rate");
         o.outlets.add(new OutletFrac32BufferBipolar("out", "lfs pattern"));
         String mentries[] = {"0x9", "0xC", "0x12",
@@ -1257,7 +1257,7 @@ public class Osc extends gentools {
         return o;
     }
 
-    static AxoObject Create_bufindex() {
+    static AxoObject create_bufindex() {
         AxoObject o = new AxoObject("bufferindex", "outputs a constant buffer containing [0,4,8,12,...].");
         o.outlets.add(new OutletFrac32BufferPos("out", "lfs pattern"));
         o.sKRateCode = "int i;\n"

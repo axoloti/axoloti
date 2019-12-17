@@ -17,34 +17,34 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32;
-import axoloti.inlets.InletFrac32Buffer;
 import axoloti.object.AxoObject;
 import axoloti.object.AxoObjectAbstract;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Buffer;
-import axoloti.parameters.ParameterFrac32SMapRatio;
+import axoloti.object.inlet.InletFrac32;
+import axoloti.object.inlet.InletFrac32Buffer;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Buffer;
+import axoloti.object.parameter.ParameterFrac32SMapRatio;
 import java.util.ArrayList;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Spat extends gentools {
+class Spat extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "spat";
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_pan());
             c.add(Create_pantilde());
-            WriteAxoObject(catName, c);
+            writeAxoObject(catName, c);
         }
         {
-            ArrayList<AxoObjectAbstract> c = new ArrayList<AxoObjectAbstract>();
+            ArrayList<AxoObjectAbstract> c = new ArrayList<>();
             c.add(Create_panm());
             c.add(Create_panmtilde());
-            WriteAxoObject(catName, c);
+            writeAxoObject(catName, c);
         }
     }
 

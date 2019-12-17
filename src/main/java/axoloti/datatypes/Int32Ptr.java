@@ -16,7 +16,7 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */package axoloti.datatypes;
 
-import axoloti.Theme;
+import axoloti.preferences.Theme;
 import java.awt.Color;
 
 /**
@@ -28,7 +28,7 @@ public class Int32Ptr implements DataType {
     public static final Int32Ptr d = new Int32Ptr();
 
     @Override
-    public boolean IsConvertableToType(DataType dest) {
+    public boolean isConvertableToType(DataType dest) {
         return false;
     }
 
@@ -38,12 +38,12 @@ public class Int32Ptr implements DataType {
     }
 
     @Override
-    public String GenerateConversionToType(DataType dest, String in) {
+    public String generateConversionToType(DataType dest, String in) {
         throw new Error("no conversion for " + dest);
     }
 
     @Override
-    public Color GetColor() {
+    public Color getColor() {
         return Theme.getCurrentTheme().Cable_Int32Pointer;
     }
 
@@ -53,17 +53,17 @@ public class Int32Ptr implements DataType {
     }
 
     @Override
-    public String GenerateCopyCode(String dest, String source) {
+    public String generateCopyCode(String dest, String source) {
         return null;
     }
 
     @Override
-    public boolean HasDefaultValue() {
+    public boolean hasDefaultValue() {
         return false;
     }
 
     @Override
-    public String GenerateSetDefaultValueCode() {
+    public String generateSetDefaultValueCode() {
         return null;
     }
 
@@ -79,7 +79,7 @@ public class Int32Ptr implements DataType {
     }
 
     @Override
-    public String UnconnectedSink() {
+    public String unconnectedSink() {
         return "";
     }
 }

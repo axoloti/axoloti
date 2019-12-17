@@ -17,49 +17,49 @@
  */
 package generatedobjects;
 
-import axoloti.inlets.InletFrac32Pos;
 import axoloti.object.AxoObject;
-import axoloti.outlets.OutletBool32;
-import axoloti.outlets.OutletFrac32;
-import axoloti.outlets.OutletFrac32Bipolar;
-import axoloti.outlets.OutletFrac32Pos;
-import axoloti.outlets.OutletInt32Pos;
-import axoloti.parameters.ParameterBin1;
-import axoloti.parameters.ParameterBin16;
-import axoloti.parameters.ParameterBin1Momentary;
-import axoloti.parameters.ParameterFrac32SMap;
-import axoloti.parameters.ParameterFrac32UMap;
-import axoloti.parameters.ParameterInt32Box;
-import axoloti.parameters.ParameterInt32HRadio;
-import axoloti.parameters.ParameterInt32VRadio;
-import static generatedobjects.gentools.WriteAxoObject;
+import axoloti.object.inlet.InletFrac32Pos;
+import axoloti.object.outlet.OutletBool32;
+import axoloti.object.outlet.OutletFrac32;
+import axoloti.object.outlet.OutletFrac32Bipolar;
+import axoloti.object.outlet.OutletFrac32Pos;
+import axoloti.object.outlet.OutletInt32Pos;
+import axoloti.object.parameter.ParameterBin1;
+import axoloti.object.parameter.ParameterBin16;
+import axoloti.object.parameter.ParameterBin1Momentary;
+import axoloti.object.parameter.ParameterFrac32SMap;
+import axoloti.object.parameter.ParameterFrac32UMap;
+import axoloti.object.parameter.ParameterInt32Box;
+import axoloti.object.parameter.ParameterInt32HRadio;
+import axoloti.object.parameter.ParameterInt32VRadio;
+import static generatedobjects.GenTools.writeAxoObject;
 
 /**
  *
  * @author Johannes Taelman
  */
-public class Control extends gentools {
+class Control extends GenTools {
 
-    static void GenerateAll() {
+    static void generateAll() {
         String catName = "ctrl";
-        WriteAxoObject(catName, CreateKConstBP());
-        WriteAxoObject(catName, CreateKConstPos());
-        WriteAxoObject(catName, CreateB1());
-        WriteAxoObject(catName, CreateB1Mom());
-        WriteAxoObject(catName, CreateCB16());
-        WriteAxoObject(catName, CreateI());
-        WriteAxoObject(catName, CreateHook());
-        WriteAxoObject(catName, CreateIRadioH(2));
-        WriteAxoObject(catName, CreateIRadioH(4));
-        WriteAxoObject(catName, CreateIRadioH(8));
-        WriteAxoObject(catName, CreateIRadioH(16));
-        WriteAxoObject(catName, CreateIRadioV(2));
-        WriteAxoObject(catName, CreateIRadioV(4));
-        WriteAxoObject(catName, CreateIRadioV(8));
-        WriteAxoObject(catName, CreateIRadioV(16));
+        writeAxoObject(catName, createKConstBP());
+        writeAxoObject(catName, createKConstPos());
+        writeAxoObject(catName, createB1());
+        writeAxoObject(catName, createB1Mom());
+        writeAxoObject(catName, createCB16());
+        writeAxoObject(catName, createI());
+        writeAxoObject(catName, createHook());
+        writeAxoObject(catName, createIRadioH(2));
+        writeAxoObject(catName, createIRadioH(4));
+        writeAxoObject(catName, createIRadioH(8));
+        writeAxoObject(catName, createIRadioH(16));
+        writeAxoObject(catName, createIRadioV(2));
+        writeAxoObject(catName, createIRadioV(4));
+        writeAxoObject(catName, createIRadioV(8));
+        writeAxoObject(catName, createIRadioV(16));
     }
 
-    static AxoObject CreateKConstPos() {
+    static AxoObject createKConstPos() {
         AxoObject o = new AxoObject("dial p", "positive constant value dial");
         o.outlets.add(new OutletFrac32Pos("out", "output"));
         o.params.add(new ParameterFrac32UMap("value"));
@@ -67,7 +67,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateKConstBP() {
+    static AxoObject createKConstBP() {
         AxoObject o = new AxoObject("dial b", "bipolar constant value dial");
         o.outlets.add(new OutletFrac32Bipolar("out", "output"));
         o.params.add(new ParameterFrac32SMap("value"));
@@ -75,7 +75,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateB1() {
+    static AxoObject createB1() {
         AxoObject o = new AxoObject("toggle", "constant boolean, toggle control");
 //        o.params.add(new ParameterBin16("b16"));
         o.params.add(new ParameterBin1("b"));
@@ -84,7 +84,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateB1Mom() {
+    static AxoObject createB1Mom() {
         AxoObject o = new AxoObject("button", "constant boolean, momentary control");
 //        o.params.add(new ParameterBin16("b16"));
         o.params.add(new ParameterBin1Momentary("b"));
@@ -93,7 +93,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateCB16() {
+    static AxoObject createCB16() {
         AxoObject o = new AxoObject("cb16", "constant from 16 flags");
         o.params.add(new ParameterBin16("b16"));
         o.outlets.add(new OutletFrac32("o", "output"));
@@ -101,7 +101,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateI() {
+    static AxoObject createI() {
         AxoObject o = new AxoObject("i", "positive integer control");
         o.outlets.add(new OutletInt32Pos("out", "output"));
         o.params.add(new ParameterInt32Box("value", 0, 65536));
@@ -109,7 +109,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateHook() {
+    static AxoObject createHook() {
         AxoObject o = new AxoObject("hook", "inlet value passed through after hitting control value");
         o.inlets.add(new InletFrac32Pos("in", "input"));
         o.outlets.add(new OutletFrac32Pos("out", "output"));
@@ -145,7 +145,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateIRadioH(int i) {
+    static AxoObject createIRadioH(int i) {
         AxoObject o = new AxoObject("i radio " + i + " h", "positive integer control, horizontal radio buttons");
         o.outlets.add(new OutletInt32Pos("out", "output"));
         o.params.add(new ParameterInt32HRadio("value", 0, i));
@@ -153,7 +153,7 @@ public class Control extends gentools {
         return o;
     }
 
-    static AxoObject CreateIRadioV(int i) {
+    static AxoObject createIRadioV(int i) {
         AxoObject o = new AxoObject("i radio " + i + " v", "positive integer control, vertical radio buttons");
         o.outlets.add(new OutletInt32Pos("out", "output"));
         o.params.add(new ParameterInt32VRadio("value", 0, i));

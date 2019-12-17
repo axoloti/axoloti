@@ -33,18 +33,8 @@
 //#include "usbh_hcs.h"
 //#include "usbh_usr.h"
 //#include "midi_interface.h"
-
-
-// external midi interface
-void usbh_midi_init(void);
-void usbh_midi_reset_buffer(void);
-void usbh_MidiSend1(uint8_t port, uint8_t b0);
-void usbh_MidiSend2(uint8_t port, uint8_t b0, uint8_t b1);
-void usbh_MidiSend3(uint8_t port, uint8_t b0, uint8_t b1, uint8_t b2);
-void usbh_MidiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len);
-
-int  usbh_MidiGetOutputBufferPending(void);
-int  usbh_MidiGetOutputBufferAvailable(void);
+#include "midi.h"
+#include "midi_buffer.h"
 
 //#define MIDI_MIN_POLL          10
 #define USBH_MIDI_EPS_IN_SIZE  64
@@ -54,7 +44,6 @@ int  usbh_MidiGetOutputBufferAvailable(void);
 
 extern USBH_ClassTypeDef  MIDI_Class;
 #define USBH_MIDI_CLASS    &MIDI_Class
-
 
 /******************************************************************************/
 /* States for MIDI State Machine */
@@ -87,20 +76,14 @@ typedef struct _MIDIDescriptor {
   uint16_t wItemLength; /* is used to specify the polling interval of certain transfers. */
 } USBH_MIDIDesc_t;
 
-/******************************************************************************/
-/** \brief MIDI Class Driver Event Packet.
- *
- *  Type define for a USB MIDI event packet, used to encapsulate sent and received MIDI messages from a USB MIDI interface.
- *
- *  \note Regardless of CPU architecture, these values should be stored as little endian.
- */
-typedef struct {
-  uint8_t Event; /**< MIDI event type, constructed with the \ref MIDI_EVENT() macro. */
 
-  uint8_t Data1; /**< First byte of data in the MIDI event. */
-  uint8_t Data2; /**< Second byte of data in the MIDI event. */
-  uint8_t Data3; /**< Third byte of data in the MIDI event. */
-} MIDI_EventPacket_t;
+typedef struct {
+    uint8_t bLength;
+    uint8_t bDescriptorType;
+    uint8_t bDescriptorSubType;
+    uint8_t bNumEmbMIDIJack;
+    uint8_t baAssocJackID[0];
+} __attribute__((packed)) ms_bulk_data_endpoint_descriptor_t;
 
 /******************************************************************************/
 /* Structure for MIDI process */
@@ -115,6 +98,7 @@ typedef struct _MIDI_Process {
   MIDI_State_t state_out;
   bool input_valid;
   bool output_valid;
+  char name[64];
 
   uint8_t buff_in[USBH_MIDI_EPS_IN_SIZE];
   uint8_t buff_out[USBH_MIDI_EPS_OUT_SIZE];
@@ -131,14 +115,6 @@ typedef struct _MIDI_Process {
 } MIDI_HandleTypeDef;
 
 /******************************************************************************/
-
-typedef void (*USBH_Class_cb_TypeDef)(uint8_t, uint8_t, uint8_t);
-
-extern USBH_Class_cb_TypeDef MIDI_cb;
-
-extern void MIDI_CB(uint8_t a,uint8_t b,uint8_t c,uint8_t d);
-
-//uint8_t MIDI_RcvData(uint8_t *outBuf);
 
 typedef USBH_HandleTypeDef USB_OTG_CORE_HANDLE;
 

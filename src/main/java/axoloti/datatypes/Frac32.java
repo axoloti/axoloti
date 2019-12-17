@@ -17,7 +17,7 @@
  */
 package axoloti.datatypes;
 
-import axoloti.Theme;
+import axoloti.preferences.Theme;
 import java.awt.Color;
 
 /**
@@ -29,7 +29,7 @@ public class Frac32 implements DataType {
     public static final Frac32 d = new Frac32();
 
     @Override
-    public boolean IsConvertableToType(DataType dest) {
+    public boolean isConvertableToType(DataType dest) {
         if (equals(dest)) {
             return true;
         }
@@ -45,7 +45,7 @@ public class Frac32 implements DataType {
     }
 
     @Override
-    public String GenerateConversionToType(DataType dest, String in) {
+    public String generateConversionToType(DataType dest, String in) {
         if (equals(dest)) {
             return in;
         }
@@ -59,7 +59,7 @@ public class Frac32 implements DataType {
     }
 
     @Override
-    public Color GetColor() {
+    public Color getColor() {
         return Theme.getCurrentTheme().Cable_Frac32;
     }
 
@@ -69,17 +69,17 @@ public class Frac32 implements DataType {
     }
 
     @Override
-    public String GenerateCopyCode(String dest, String source) {
+    public String generateCopyCode(String dest, String source) {
         return dest + " = " + source + ";\n";
     }
 
     @Override
-    public boolean HasDefaultValue() {
+    public boolean hasDefaultValue() {
         return true;
     }
 
     @Override
-    public String GenerateSetDefaultValueCode() {
+    public String generateSetDefaultValueCode() {
         return "0 ";
     }
 
@@ -95,7 +95,7 @@ public class Frac32 implements DataType {
     }
 
     @Override
-    public String UnconnectedSink() {
+    public String unconnectedSink() {
         return "UNCONNECTED_OUTPUT";
     }
 }

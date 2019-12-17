@@ -13,6 +13,7 @@ portaudio/*
 win32tools/
 chibios/
 chibios_2.6.5/
+ChibiOS_*/
 patch/xpatch.c
 patch/xpatch.cpp
 patch/xpatch.elf
@@ -94,6 +95,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+workbench.xmi
 
 # External tool builders
 .externalToolBuilders/

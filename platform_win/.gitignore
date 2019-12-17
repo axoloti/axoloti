@@ -8,12 +8,14 @@ man/
 manifest/
 chibios/
 apache-ant-1.9.4/
-ChibiOS_2.6.*/
+ChibiOS_*/
+gcc-arm-none-eabi-6-2017-q1-update-win32/
 
 coreutils-5.3.0-bin.zip
 make-3.81-bin.zip
 make-3.81-dep.zip
-ChibiOS_2.6.*.zip
+ChibiOS_*.zip
+src/ChibiOS_*.7z
 gcc-arm-none-eabi-*-win32.zip
 openocd-0.8.0.zip
 arm-none-eabi
