@@ -147,7 +147,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         });
         fileMenu1.add(menuItemNewSwingView);
 
-        JMenuItem menuItemNewPiccoloView = new JMenuItem("New Piccolo View");
+        JMenuItem menuItemNewPiccoloView = new JMenuItem("New Piccolo View (experimental)");
         menuItemNewPiccoloView.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,7 +161,7 @@ public class PatchFrame extends javax.swing.JFrame implements DocumentWindow, Co
         });
         fileMenu1.add(menuItemNewPiccoloView);
         
-        JMenuItem menuItemNewUndoListView = new JMenuItem("New UndoList View");
+        JMenuItem menuItemNewUndoListView = new JMenuItem("New Action List View");
         menuItemNewUndoListView.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

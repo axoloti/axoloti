@@ -350,10 +350,6 @@ public class MainFrame extends TJFrame implements ActionListener {
             }
         }
 
-        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE,
-                "Known issues: \n"
-                + "* piccolo view: nets do not update correctly (swing views are fine)\n"
-        );
         init();
         USBDeviceLister.getInstance().registerHotplugCallback(hotplugCallback);
     }
