@@ -111,3 +111,8 @@
   `midiSend3(vport,b0,b1,b2)`.
   Notice the lowercase m!
 
+* Objects that change a GPIO pin mode, must restore it to analog input on dispose
+
+  via `palSetPadMode(..., ..., PAL_MODE_INPUT_ANALOG);`
+  Since multiple patches can run, gpio pin modes are no longer initialized by firmware when starting a patch, 
+  as that could disrupt a running patch.
