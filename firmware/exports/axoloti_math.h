@@ -6,6 +6,8 @@
 #define EXPORTS_AXOLOTI_MATH_SYMBOLS \
     SYM(pitcht), \
     SYM(sine2t), \
+    SYM(expt), \
+    SYM(logt), \
     SYM(windowt), \
     SYM(atanf), \
     SYM(cosf), \
