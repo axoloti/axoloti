@@ -8,6 +8,7 @@
 
 #include <math.h>
 #include "axoloti_filters.h"
+#include "axoloti_legacy.h"
 #include "axoloti_math.h"
 #include "axoloti_memory.h"
 #include "axoloti_oscs.h"
