@@ -73,15 +73,45 @@ USBH_ClassTypeDef  MIDI_Class = {
 
 
 bool isValidInput(MIDI_HandleTypeDef* pH)
-{           
+{
     return pH!= NULL && pH->input_valid;
-}           
-            
+}
+
 bool isValidOutput(MIDI_HandleTypeDef* pH)
-{           
+{
     return pH!= NULL && pH->output_valid;
 }
 
+static char * getCSEPDesc(USBH_HandleTypeDef *phost, int intf, int ep) {
+    uint16_t ptr = USB_LEN_CFG_DESC;
+    int8_t if_ix = 0;
+    int8_t ep_ix = 0;
+    int8_t if_num = -1;
+    int8_t ep_num = -1;
+
+    char *buf = phost->device.CfgDesc_Raw;
+    USBH_DescHeader_t *pdesc = (USBH_DescHeader_t *)buf;
+    int cfg_desc_wTotalLength = LE16 (buf + 2);
+    while (ptr < cfg_desc_wTotalLength)  {
+        pdesc = USBH_GetNextDesc((uint8_t *)pdesc, &ptr);
+        if (pdesc->bDescriptorType == USB_DESC_TYPE_INTERFACE)
+        {
+            ep_ix = 0;
+            if_num = if_ix;
+            if_ix++;
+            //USBH_UsrLog("INTF %02x", if_ix);
+        } else if (pdesc->bDescriptorType == USB_DESC_TYPE_ENDPOINT) {
+            ep_num = ep_ix;
+            ep_ix++;
+            //USBH_UsrLog("ENDPOINT %02x", ep_num);
+        } else if (pdesc->bDescriptorType == 0x25 /* CS_ENDPOINT */) {
+            if ((ep_num == ep) && (if_num == intf)) {
+                return (char *)pdesc;
+            }
+        }
+    }
+    return 0;
+}
 
 /*-----------------------------------------------------------------------------------------*/
 /**
@@ -138,9 +168,14 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
 //                	USBH_UsrLog("USB Host Input interval : %i", MIDI_Handle->read_poll);
 //                    if(MIDI_Handle->read_poll<MIDI_MIN_READ_POLL) MIDI_Handle->read_poll = MIDI_MIN_READ_POLL;
                     MIDI_Handle->input_valid = true;
-                    ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)epDesc;
                     // TODO: remove USBHMIDIC[0] references
-                    USBHMIDIC[0].in_mapping->nports = ms_ep_desc->bNumEmbMIDIJack;
+                    char *b = getCSEPDesc(phost,interface,i);
+                    if (b) {
+                        //USBH_UsrLog("CS_ENDPOINT %08x %02x %02x %02x %02x", b, b[0], b[1], b[2], b[3]);
+                        USBHMIDIC[0].in_mapping->nports = b[3];
+                    } else {
+                        USBHMIDIC[0].in_mapping->nports = 1;
+                    }
                 }
                 if(!isValidOutput(MIDI_Handle) && !bInput) {
                 	USBH_EpDescTypeDef *epDesc = &phost->device.CfgDesc.Itf_Desc[phost->device.current_interface].Ep_Desc[i];
@@ -152,10 +187,14 @@ USBH_StatusTypeDef USBH_MIDI_InterfaceInit(USBH_HandleTypeDef *phost) {
 //                	USBH_UsrLog("USB Host Output interval : %i", MIDI_Handle->write_poll);
 //                    if(MIDI_Handle->write_poll<MIDI_MIN_WRITE_POLL) MIDI_Handle->write_poll = MIDI_MIN_WRITE_POLL;
                     MIDI_Handle->output_valid = true;
-                    ms_bulk_data_endpoint_descriptor_t *ms_ep_desc = (ms_bulk_data_endpoint_descriptor_t *)epDesc;
-                    USBHMIDIC[0].out_mapping->nports = ms_ep_desc->bNumEmbMIDIJack;
+                    char *b = getCSEPDesc(phost,interface,i);
+                    if (b) {
+                        //USBH_UsrLog("CS_ENDPOINT %08x %02x %02x %02x %02x", b,  b[0], b[1], b[2], b[3]);
+                        USBHMIDIC[0].out_mapping->nports = b[3];
+                    } else {
+                        USBHMIDIC[0].out_mapping->nports = 1;
+                    }
                 }
-                
             } // each endpoint, or until ive found both input and output endpoint
 
             if (isValidOutput(MIDI_Handle)) {
