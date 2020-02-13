@@ -152,6 +152,8 @@ static void midiSend3(int port, uint8_t b0, uint8_t b1, uint8_t b2) {
   midiSend(midiMessage(port, b0, b1, b2));
 }
 
+void midi_gpio_enable(int enable);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

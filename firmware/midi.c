@@ -20,7 +20,8 @@
 #include "axoloti_board.h"
 #include "midi.h"
 #include "midi_routing.h"
-#include "serial_midi.h"
+#include "midi_din.h"
+#include "midi_gpio.h"
 #include "midi_usbh.h"
 #include "midi_usb.h"
 #include "patch.h"
@@ -32,8 +33,11 @@ void midiSend(midi_message_t m) {
   int vport = m.fields.port;
   if (vport<8) {
     int vportmask = 1<<vport;
-    if (midi_outputmap_din.bmvports[0] & vportmask) {
-      midi_output_buffer_put(&midi_output_din, m);
+    if (midi_din_outputmap.bmvports[0] & vportmask) {
+      midi_output_buffer_put(&midi_din_output, m);
+    }
+    if (midi_gpio_outputmap.bmvports[0] & vportmask) {
+      midi_output_buffer_put(&midi_gpio_output, m);
     }
     int i;
     for (i=0;i<midi_outputmap_usbh1.nports;i++)
@@ -113,7 +117,18 @@ void midiSendSysEx(uint8_t port, uint8_t bytes[], uint8_t len) {
 	midiSend(endm);
 }
 
+void midi_input_dispatch(int32_t portmap, midi_message_t midi_msg) {
+	int v;
+	for (v=0;v<8;v++) {
+		if (portmap & 1) {
+			midi_msg.fields.port = v;
+			midi_input_buffer_put(&midi_input_buffer, midi_msg);
+		}
+		portmap = portmap>>1;
+	}
+}
+
 void midi_init(void) {
     midi_input_buffer_objinit(&midi_input_buffer);
-    serial_midi_init();
+    midi_din_init();
 }

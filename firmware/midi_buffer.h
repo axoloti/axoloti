@@ -16,6 +16,7 @@
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
 #ifndef MIDI_BUFFER_H
+#define MIDI_BUFFER_H
 
 #define MIDI_RING_BUFFER_SIZE 32
 
@@ -73,5 +74,6 @@ void midi_output_buffer_deinit(midi_output_buffer_t *obj);
 
 void midi_output_buffer_notify(midi_output_buffer_t *obj);
 
-#define MIDI_BUFFER_H
+void midi_input_dispatch(int32_t portmap, midi_message_t midi_msg);
+
 #endif

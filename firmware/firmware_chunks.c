@@ -27,7 +27,8 @@
 
 #include "midi.h"
 #include "midi_routing.h"
-#include "serial_midi.h"
+#include "midi_din.h"
+#include "midi_gpio.h"
 #include "midi_usbh.h"
 #include "midi_usb.h"
 #include "axoloti_control.h"
@@ -54,11 +55,11 @@ const chunk_fw_root_t chunk_fw_root = {
 	.fw_chunks = {
 		.midi_input_routing = {
 			.header = CHUNK_HEADER(midi_input_routing),
-			.routing_table = {&midi_inputmap_din, &midi_inputmap_usbd, &midi_inputmap_usbh1, &midi_inputmap_usbh2}
+			.routing_table = {&midi_din_inputmap, &midi_inputmap_usbd, &midi_inputmap_usbh1, &midi_inputmap_usbh2, &midi_gpio_inputmap}
 		},
 		.midi_output_routing = {
 			.header = CHUNK_HEADER(midi_output_routing),
-			.routing_table = {&midi_outputmap_din, &midi_outputmap_usbd, &midi_outputmap_usbh1, &midi_outputmap_usbh2}
+			.routing_table = {&midi_din_outputmap, &midi_outputmap_usbd, &midi_outputmap_usbh1, &midi_outputmap_usbh2, &midi_gpio_outputmap}
 		},
 		.gpio_adc = {
 			.header = CHUNK_HEADER(gpio_adc),

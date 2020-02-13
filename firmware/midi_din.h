@@ -15,21 +15,21 @@
  * You should have received a copy of the GNU General Public License along with
  * Axoloti. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __SERIAL_MIDI_H
-#define __SERIAL_MIDI_H
+#ifndef MIDI_DIN_H
+#define MIDI_DIN_H
 
 #include <stdint.h>
 #include "midi.h"
 #include "midi_buffer.h"
 
-void serial_midi_init(void);
+void midi_din_init(void);
 
-extern midi_output_buffer_t midi_output_din;
+extern midi_output_buffer_t midi_din_output;
 
 // report the number of bytes pending for transmission
-int  serial_MidiGetOutputBufferPending(void);
+int midi_din_GetOutputBufferPending(void);
 
-extern midi_routing_t midi_inputmap_din;
-extern midi_routing_t midi_outputmap_din;
+extern midi_routing_t midi_din_inputmap;
+extern midi_routing_t midi_din_outputmap;
 
 #endif

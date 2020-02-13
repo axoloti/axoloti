@@ -31,22 +31,22 @@ midi_routing_t midi_outputmap_usbh1 = {
 			.name = "not connected",
 			.nports = 0,
 			.bmvports = {
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010,
-					0b0000000000000010
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000
 			}
 };
 
@@ -55,22 +55,22 @@ midi_routing_t midi_inputmap_usbh2 = {
 			.name = "not connected",
 			.nports = 0,
 			.bmvports = {
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001,
-					0b0000000000000001
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000
 			}
 };
 
@@ -78,51 +78,44 @@ midi_routing_t midi_outputmap_usbh2 = {
 			.name = "not connected",
 			.nports = 0,
 			.bmvports = {
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100,
-					0b0000000000000100
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000,
+					0b0000000000000000
 			}
 };
 
 #define USBH_DbgLog(x)
 
-static void usbh_midi_dispatch(midi_message_t m, int32_t portmap[]) {
-	int32_t inputmap = portmap[m.fields.port];
-	  int v;
-	  for (v=0;v<16;v++) {
-		  if (inputmap&1) {
-			  m.fields.port = v;
-			  midi_input_buffer_put(&midi_input_buffer, m);
-		  }
-		  inputmap = inputmap>>1;
-	  }
+static void usbh_midi_dispatch(midi_message_t midi_msg, int32_t portmap[]) {
+	int32_t inputmap = portmap[midi_msg.fields.port];
+	midi_input_dispatch(inputmap, midi_msg);
 }
 
 static void usbhmidi_cb(USBHMIDIConfig *midic, uint32_t *buf, int len) {
-        USBHMIDIConfig_ext *midic_ext = (USBHMIDIConfig_ext *)midic;
-        int i;
-        for (i = 0; i < len; i ++) {
-                if (*buf) {
-                        midi_message_t m;
-                        m.word = *buf;
-                        usbh_midi_dispatch(m, midic_ext->in_mapping->bmvports);
-                        buf++;
-                        //usbDbgPuts("cb!");
-                }
-        }
+  USBHMIDIConfig_ext *midic_ext = (USBHMIDIConfig_ext*) midic;
+  int i;
+  for (i = 0; i < len; i++) {
+    if (*buf) {
+      midi_message_t m;
+      m.word = *buf;
+      usbh_midi_dispatch(m, midic_ext->in_mapping->bmvports);
+      buf++;
+      //usbDbgPuts("cb!");
+    }
+  }
 }
 
 void usbmidi_disconnect(USBHMIDIConfig *midic) {

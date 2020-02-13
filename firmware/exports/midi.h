@@ -4,6 +4,7 @@
 #include "../api/midi.h"
 
 #define EXPORTS_MIDI_SYMBOLS \
-  SYM(midiSend)
+  SYM(midiSend),\
+  SYM(midi_gpio_enable)
 
 #endif

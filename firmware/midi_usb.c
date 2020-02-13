@@ -93,14 +93,7 @@ static THD_FUNCTION(usbd_midi_in, arg) {
 						midi_usbd_rxbuf[i].bytes.b2);
 #endif
 	    		  int portmap = midi_inputmap_usbd.bmvports[0];
-	    		  int v;
-		    	  for (v=0;v<16;v++) {
-		    		  if (portmap & 1) {
-						  midi_usbd_rxbuf[i].fields.port = v;
-						  midi_input_buffer_put(&midi_input_buffer, midi_usbd_rxbuf[i]);
-		    		  }
-		    		  portmap = portmap>>1;
-		    	  }
+	    		  midi_input_dispatch(portmap, midi_usbd_rxbuf[i]);
 			}
 		} else {
 			chThdSleepMilliseconds(1000);

@@ -153,6 +153,10 @@ CSRC = $(ALLCSRC) \
        ${FIRMWARE}/flash.c \
        ${FIRMWARE}/firmware_chunks.c \
        ${FIRMWARE}/midi_buffer.c \
+       ${FIRMWARE}/midi_decoder.c \
+       ${FIRMWARE}/midi_din.c \
+       ${FIRMWARE}/midi_encoder.c \
+       ${FIRMWARE}/midi_gpio.c \
        ${FIRMWARE}/midi_usbh.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_core.c \
        ${FIRMWARE}/STM32_USB_Host_Library/Core/Src/usbh_ctlreq.c \
@@ -170,7 +174,6 @@ CSRC = $(ALLCSRC) \
        ${FIRMWARE}/usbh_midi_core.c \
        ${FIRMWARE}/usbh_vendor.c \
        ${FIRMWARE}/usbh_conf.c \
-       ${FIRMWARE}/serial_midi.c \
        ${FIRMWARE}/spilink.c \
        ${FIRMWARE}/spidb.c \
        ${FIRMWARE}/crc32.c \
